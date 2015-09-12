@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="active">@Html.ActionLink(User.Identity.GetUserName() + "!", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-gear"></i></a>
+                <ul class="dropdown-menu account-dropdown-menu">
+                    <li><a href="@Url.Action("Index", "Software")"><i class="fa fa-user"></i> Software</a></li>
+                    <hr class="divider" />
+                    <li><a href="@Url.Action("Login", "Account")"><i class="fa fa-user"></i> Profile</a></li>
+                    <li><a href="@Url.Action("Index", "Manage")"><i class="fa fa-gears"></i> Settings</a></li>
+                    <hr class="divider" />
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out"></i> Sign out</a></li>
+                </ul>
+            </li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="@Url.Action("Login", "Account")"><i class="fa fa-sign-in"></i> Sign in</a></li>
+        <!-- <li><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-sign-in"></i> Login</a></li> -->
+    </ul>
+
+    @*<ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>*@
+}

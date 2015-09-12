@@ -1,0 +1,307 @@
+﻿@Styles.Render("~/Content/css")
+@Styles.Render("~/Font-Awesome/css")
+@Styles.Render("~/Content/custom-css")
+
+<!-- Header -->
+<header>
+    <!-- navbar -->
+    <nav class="navbar navbar-transparent navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index", "Home")"><i class="fa fa-calculator"></i> ERP System</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="@Url.Action("Index", "Home")#home"><i class="fa fa-home"></i> Home</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-info-circle"></i> About</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#sales"><i class="fa fa-tags"></i> Sales</a></li>
+                            <li><a href="#purchases"><i class="fa fa-shopping-cart"></i> Purchases</a></li>
+                            <li><a href="#warehouseInventory"><i class="fa fa-th-large"></i> Warehouse Inventory</a></li>
+                            <li><a href="#productManagement"><i class="fa fa-archive"></i> Product Management</a></li>
+                            <li><a href="#bankManagement"><i class="fa fa-university"></i> Bank Management</a></li>
+                            <li><a href="#financials"><i class="fa fa-bar-chart"></i> Financials</a></li>
+                            <li><a href="#multiUserSetup"><i class="fa fa-users"></i> Mutli-user Setup</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#support"><i class="fa fa-phone"></i> Support</a></li>
+                    <li><a href="#"><i class="fa fa-newspaper-o"></i> News</a></li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+    <!-- end of navbar -->
+
+    <!-- cover page -->
+    <div class="cover-photo-custom">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="intro-message">
+                        <h1>Enterprise Resource Planning</h1>
+                        <h2>Simplified Accounting</h2>
+                        <p>The easiest way to manage your sales, purchases, disbursements, collections, warehouse inventories and financials in the cloud using any device.</p>
+                        <hr class="intro-divider">
+                        @Html.Partial("_IndexAfterLogin")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of cover page -->
+</header>
+
+<!-- About Section -->
+<section>
+    <div class="container">
+
+        <!-- About Simplified Accouting -->
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div class="col-md-12">
+                <center><h2 class="featurette-heading">ERP System</h2></center>
+                <p class="lead custom-lead">ERP System is a multi-tenant cloud-based Software-as-a-Service (SaaS) business app that caters to micro, small and medium trading businesses. You can manage your sales, purchases, disbursements, collections, warehouse inventories, banks and financials in the cloud using any device.</p>
+            </div>
+        </div>
+
+        <!-- Sales -->
+        <hr class="featurette-divider">
+        <div id="sales" class="row featurette section-padding-top">
+            <div class="col-md-7">
+                <center><h2 class="featurette-heading">Sales</h2></center>
+                <p class="lead custom-lead">You can perform customer orders and invoices of products and services in the cloud. You are provided with the list of products with its on-hand inventory in real-time. Automated posting of Accounts Receivable (AR), Journal Entries and Inventory. In-line tax computation and comprehensive discounting.</p>
+                <center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>
+            </div>
+            <div class="col-md-5">
+                <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/sales.jpg">
+            </div>
+        </div>
+
+        <!-- Purchases -->
+        <hr class="featurette-divider">
+        <div id="purchases" class="row featurette section-padding-top">
+            <div class="col-md-7 col-md-push-5">
+                <center><h2 class="featurette-heading">Purchases</h2></center>
+                <p class="lead custom-lead">You can perform supplier orders and invoices of your expenses in the cloud. Automated posting of Accounts Payable (AP), Journal Entries and Inventory. Automated inventory batch cost posting of products. In-line tax computation. Provides you with an order status report.</p>
+                <center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>
+            </div>
+            <div class="col-md-5 col-md-pull-7">
+                <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/purchase.jpg">
+            </div>
+        </div>
+
+        <!-- Warehouse Inventory -->
+        <hr class="featurette-divider">
+        <div id="warehouseInventory" class="row featurette section-padding-top">
+            <div class="col-md-7">
+                <center><h2 class="featurette-heading">Warehouse Inventory</h2></center>
+                <p class="lead custom-lead">Unlimited warehouse or branch creation. You can perform stock in and out as well as transfer of products from one warehouse or branch to another. You can perform consignment procedures.</p>
+                <center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>
+            </div>
+            <div class="col-md-5">
+                <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/warehouseInventory.jpg">
+            </div>
+        </div>
+
+        <!-- Product Management -->
+        <hr class="featurette-divider">
+        <div id="productManagement" class="row featurette section-padding-top">
+            <div class="col-md-7 col-md-push-5">
+                <center><h2 class="featurette-heading">Product Management</h2></center>
+                <p class="lead custom-lead">Allows multiple product prices, e.g., SRP, Wholesale, etc. Allows multiple units of measure. You can perform product ingredients and components.</p>
+                <center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>
+            </div>
+            <div class="col-md-5 col-md-pull-7">
+                <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/productManagement.jpg">
+            </div>
+        </div>
+
+        <!-- Bank Management -->
+        <hr class="featurette-divider">
+        <div id="bankManagement" class="row featurette section-padding-top">
+            <div class="col-md-7">
+                <center><h2 class="featurette-heading">Bank Management</h2></center>
+                <p class="lead custom-lead">Unlimited bank creation. Automated posting of deposit and withdrawal from collection and disbursement. Real-time bank reconciliation report.</p>
+                <center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>
+            </div>
+            <div class="col-md-5">
+                <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/bankManagement.jpg">
+            </div>
+        </div>
+
+        <!-- Financials -->
+        <hr class="featurette-divider">
+        <div id="financials" class="row featurette section-padding-top">
+            <div class="col-md-7 col-md-push-5">
+                <center><h2 class="featurette-heading">Financials</h2></center>
+                <p class="lead custom-lead">Real-time Balance Sheet and Income Statement report per branch or consolidated. Drill down report from Trial Balance to Ledger and then to the transaction itself. You can perform comprehensive account adjustments through Journal Voucher.</p>
+                <center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>
+            </div>
+            <div class="col-md-5 col-md-pull-7">
+                <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/financials.jpg">
+            </div>
+        </div>
+
+        <!-- Multi-User Set up -->
+        <hr class="featurette-divider">
+        <div id="multiUserSetup" class="row featurette section-padding-top">
+            <div class="col-md-7">
+                <center><h2 class="featurette-heading">Mutli-user Setup</h2></center>
+                <p class="lead custom-lead">If you have multiple user and staff, you can give rights and access to your company. Unlimited user registration. Automated transaction tagging of user, e.g., who first created the transaction and who last updated it.</p>
+                <center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>
+            </div>
+            <div class="col-md-5">
+                <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/multiUserSetUp.png">
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End of the About Section -->
+<!-- Modal for Login page -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <center><h4 class="modal-title">Login</h4></center>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">Email:</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control modal-form-border" id="email" placeholder="Enter email address as username..." required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="pwd">Password:</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control modal-form-border" id="pwd" placeholder="Enter password..." required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div>
+                                <label class="control-label"><input type="checkbox"> Remember me</label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-info"><i class="fa fa-sign-in"></i> Login</button>
+                            <button type="button" class="btn btn-info" data-dismiss="modal"><i class="fa fa-times-circle-o"></i> Cancel</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="alert alert-danger fade in">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong><i class="fa fa-times"></i> Invalid Email Password!</strong> This alert box is intended for user authentication
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="featurette-divider">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-primary"><i class="fa fa-facebook-official"></i> Login using Facebook Account</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="modal-footer-custom">Forgot Password?</a>
+                Not yet a member? <a href="#">Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<section id="support">
+    <!-- cover page support -->
+    <div class="cover-photo-support-custom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Annual Subscription Support: </h2>
+                    <br>
+                    <ul>
+                        <li><h4>Telephone Call, Call Ticket, Forum</h4></li>
+                        <li><h4>One-hour response time</h4></li>
+                        <li><h4>Remote support, e.g., Teamviewer, Logmein, etc.</h4></li>
+                        <li><h4>Deployment of on-site technical support if necessary</h4></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of cover page support -->
+</section>
+
+<!-- Footer -->
+<footer>
+    <!-- cover page support -->
+    <div class="cover-photo-footer-custom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <a href="#" class="btn btn-primary" data-placement="top" data-toggle="tooltip" title="Like us on Facebook"><i class="fa fa-facebook-official"></i> Facebook</a>
+                    <a href="#" class="btn btn-info" data-placement="right" data-toggle="tooltip" title="Follow us on twitter"><i class="fa fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Simplified Accounting Beta - v1.20140715 - © Innosoft Solutions - ERP System</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of cover page support -->
+</footer>
+
+@Scripts.Render("~/Scripts/js")
+@Scripts.Render("~/Scripts/custom-js")
+@*@Scripts.Render("~/bundles/jquery")*@
+@*@RenderSection("scripts", required: false)*@
+
+@*@{
+        ViewBag.Title = "Home Page";
+    }
+
+    <div class="jumbotron">
+        <h1>ASP.NET</h1>
+        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+        <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Getting started</h2>
+            <p>
+                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+                enables a clean separation of concerns and gives you full control over markup
+                for enjoyable, agile development.
+            </p>
+            <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Get more libraries</h2>
+            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+            <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Web Hosting</h2>
+            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+            <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        </div>
+    </div>*@

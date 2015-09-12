@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <a href="@Url.Action("Index", "Software")" class="btn btn-primary btn-lg btn-fill btn-round">Launch Software</a>
+    }
+}
+else
+{
+    <a href="@Url.Action("Login", "Account")" class="btn btn-primary btn-lg btn-fill btn-round">Get Started</a>
+}

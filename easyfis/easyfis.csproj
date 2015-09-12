@@ -1,0 +1,820 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A911620B-AF9F-4FA1-8F36-06A657DA85B8}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>easyfis</RootNamespace>
+    <AssemblyName>easyfis</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\SoftwareController.cs" />
+    <Compile Include="Data\easyfisdb.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>easyfisdb.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\style.css" />
+    <Content Include="ERP %28Back-up Homepage%29\css\bootstrap-theme.css" />
+    <Content Include="ERP %28Back-up Homepage%29\css\bootstrap-theme.min.css" />
+    <Content Include="ERP %28Back-up Homepage%29\css\bootstrap.css" />
+    <Content Include="ERP %28Back-up Homepage%29\css\bootstrap.min.css" />
+    <Content Include="ERP %28Back-up Homepage%29\css\css resources\gsdk-base.css" />
+    <Content Include="ERP %28Back-up Homepage%29\css\css resources\gsdk-checkbox-radio-switch.css" />
+    <Content Include="ERP %28Back-up Homepage%29\css\css resources\gsdk-sliders.css" />
+    <Content Include="ERP %28Back-up Homepage%29\css\gsdk-base.css" />
+    <Content Include="ERP %28Back-up Homepage%29\css\style.css" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\css\font-awesome.css" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\css\font-awesome.min.css" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\HELP-US-OUT.txt" />
+    <Content Include="ERP %28Back-up Homepage%29\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\coverImages\cover1.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\coverImages\cover2.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\coverImages\cover3.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\coverImages\cover4.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\coverImages\cover5.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\coverImages\cover6.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\coverImages\cover7.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\sectionImages\bankManagement.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\sectionImages\financials.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\sectionImages\multiUserSetUp.png" />
+    <Content Include="ERP %28Back-up Homepage%29\images\sectionImages\productManagement.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\sectionImages\purchase.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\sectionImages\sales.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\images\sectionImages\warehouseInventory.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\js\alert.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\bootstrap.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\bootstrap.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\collapse.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\custom-tooltip.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\custom.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\dropdown.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\jquery.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\js resources\get-shit-done.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\js resources\gsdk-bootstrapswitch.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\js resources\gsdk-checkbox.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\js resources\gsdk-radio.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\js resources\jquery-ui-1.10.4.custom.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\modal.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\npm.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\scrollspy.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\style.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\tooltip.js" />
+    <Content Include="ERP %28Back-up Homepage%29\js\transition.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\css\bootstrap-theme.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\css\bootstrap-theme.min.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\css\bootstrap.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\css\bootstrap.min.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\js\bootstrap.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\js\bootstrap.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\js\npm.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\about.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\apple-touch-icon.png" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\brand\bootstrap-outline.svg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\brand\bootstrap-punchout.svg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\brand\bootstrap-solid.svg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\css\docs.min.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\css\src\docs.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\css\src\pygments-manni.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\flash\ZeroClipboard.swf" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\img\components.png" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\img\devices.png" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\img\sass-less.png" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\customize.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\docs.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\ie-emulation-modes-warning.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\ie10-viewport-bug-workaround.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\ie8-responsive-file-warning.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\raw-files.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\src\application.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\src\customizer.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\vendor\anchor.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\vendor\autoprefixer.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\vendor\Blob.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\vendor\FileSaver.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\vendor\holder.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\vendor\jszip.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\vendor\less.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\vendor\uglify.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\assets\js\vendor\ZeroClipboard.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\browser-bugs.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\components.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\css.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\customize.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\css\bootstrap-theme.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\css\bootstrap-theme.min.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\css\bootstrap.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\css\bootstrap.min.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\js\bootstrap.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\js\bootstrap.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\js\npm.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\blog\blog.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\blog\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\carousel\carousel.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\carousel\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\cover\cover.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\cover\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\dashboard\dashboard.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\dashboard\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\grid\grid.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\grid\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\jumbotron-narrow\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\jumbotron-narrow\jumbotron-narrow.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\jumbotron\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\jumbotron\jumbotron.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\justified-nav\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\justified-nav\justified-nav.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\navbar-fixed-top\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\navbar-fixed-top\navbar-fixed-top.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\navbar-static-top\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\navbar-static-top\navbar-static-top.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\navbar\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\navbar\navbar.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\non-responsive\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\non-responsive\non-responsive.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\offcanvas\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\offcanvas\offcanvas.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\offcanvas\offcanvas.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\blog.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\carousel.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\cover.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\dashboard.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\equal-height-columns.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\grid.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\jumbotron-narrow.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\jumbotron.jpg.png" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\justified-nav.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\navbar-fixed.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\navbar-static.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\navbar.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\non-responsive.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\offcanvas.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\sign-in.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\starter-template.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\sticky-footer-navbar.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\sticky-footer.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\screenshots\theme.jpg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\signin\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\signin\signin.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\starter-template\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\starter-template\starter-template.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\sticky-footer-navbar\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\sticky-footer-navbar\sticky-footer-navbar.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\sticky-footer\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\sticky-footer\sticky-footer.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\theme\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\theme\theme.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\tooltip-viewport\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\tooltip-viewport\tooltip-viewport.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\examples\tooltip-viewport\tooltip-viewport.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\favicon.ico" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\getting-started.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\javascript.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\migration.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\robots.txt" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\sitemap.xml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\ads.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\alerts.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\badges.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\breadcrumbs.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\button-dropdowns.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\button-groups.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\dropdowns.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\glyphicons.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\input-groups.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\jumbotron.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\labels.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\list-group.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\media.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\navbar.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\navs.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\page-header.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\pagination.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\panels.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\progress-bars.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\responsive-embed.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\thumbnails.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\components\wells.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\buttons.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\code.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\forms.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\grid.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\helpers.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\images.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\less.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\overview.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\responsive-utilities.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\sass.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\tables.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\css\type.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\customizer-variables.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\footer.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\accessibility.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\browser-device-support.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\community.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\disabling-responsiveness.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\download.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\examples.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\grunt.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\license.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\template.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\third-party-support.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\tools.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\translations.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\getting-started\whats-included.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\header.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\affix.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\alerts.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\buttons.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\carousel.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\collapse.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\dropdowns.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\modal.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\overview.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\popovers.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\scrollspy.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\tabs.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\tooltips.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\js\transitions.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\nav\about.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\nav\components.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\nav\css.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\nav\customize.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\nav\getting-started.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\nav\javascript.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\nav\main.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\nav\migration.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_includes\social-buttons.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_layouts\default.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_layouts\home.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\Gruntfile.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\grunt\bs-commonjs-generator.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\grunt\bs-glyphicons-data-generator.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\grunt\bs-lessdoc-parser.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\grunt\bs-raw-files-generator.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\affix.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\alert.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\button.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\carousel.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\collapse.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\dropdown.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\modal.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\popover.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\scrollspy.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tab.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\affix.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\alert.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\button.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\carousel.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\collapse.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\dropdown.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\modal.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\phantom.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\popover.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\scrollspy.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\tab.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\tooltip.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\vendor\jquery.min.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\vendor\qunit.css" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\vendor\qunit.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\affix-with-sticky-footer.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\affix.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\alert.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\button.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\carousel.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\collapse.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\dropdown.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\modal.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\popover.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\scrollspy.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\tab.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\visual\tooltip.html" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tooltip.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\transition.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\package.js" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\test-infra\requirements.txt" />
+    <Content Include="ERP %28Back-up Homepage%29\views\index.html" />
+    <Content Include="ERP %28Back-up Homepage%29\views\login.html" />
+    <Content Include="ERP %28Back-up Homepage%29\views\register.html" />
+    <Content Include="favicon.ico" />
+    <Content Include="font-awesome\css\font-awesome.css" />
+    <Content Include="font-awesome\css\font-awesome.min.css" />
+    <Content Include="font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="font-awesome\HELP-US-OUT.txt" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="images\coverImages\cover1.jpg" />
+    <Content Include="images\coverImages\cover2.jpg" />
+    <Content Include="images\coverImages\cover3.jpg" />
+    <Content Include="images\coverImages\cover4.jpg" />
+    <Content Include="images\coverImages\cover5.jpg" />
+    <Content Include="images\coverImages\cover6.jpg" />
+    <Content Include="images\coverImages\cover7.jpg" />
+    <Content Include="images\sectionImages\bankManagement.jpg" />
+    <Content Include="images\sectionImages\financials.jpg" />
+    <Content Include="images\sectionImages\multiUserSetUp.png" />
+    <Content Include="images\sectionImages\productManagement.jpg" />
+    <Content Include="images\sectionImages\purchase.jpg" />
+    <Content Include="images\sectionImages\sales.jpg" />
+    <Content Include="images\sectionImages\warehouseInventory.jpg" />
+    <Content Include="Scripts\alert.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Data\easyfisdb.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>easyfisdb.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\animated.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\bordered-pulled.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\core.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\fixed-width.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\font-awesome.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\icons.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\larger.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\list.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\mixins.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\path.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\rotated-flipped.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\stacked.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\less\variables.less" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\font-awesome.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_animated.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_core.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_fixed-width.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_icons.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_larger.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_list.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_mixins.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_path.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_stacked.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\font-awesome\scss\_variables.scss" />
+    <Content Include="ERP %28Back-up Homepage%29\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="ERP %28Back-up Homepage%29\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="ERP %28Back-up Homepage%29\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="ERP %28Back-up Homepage%29\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5-dist.zip" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5.zip" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\bootstrap-theme.css.map" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\bootstrap.css.map" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\bower.json" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\CNAME" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\composer.json" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\CONTRIBUTING.md" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\css\bootstrap-theme.css.map" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\css\bootstrap.css.map" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\css\bootstrap-theme.css.map" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\css\bootstrap.css.map" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\dist\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\LICENSE" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_data\browser-bugs.yml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_data\core-team.yml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_data\glyphicons.yml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_data\sass-team.yml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_data\showcase.yml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_data\translations.yml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_jade\customizer-nav.jade" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_jade\customizer-variables.jade" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_plugins\bridge.rb" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\docs\_plugins\bugify.rb" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\grunt\configBridge.json" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\grunt\sauce_browsers.yml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\grunt\_jshintrc" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\README.md" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\tests\unit\_jshintrc" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\_jscsrc" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\js\_jshintrc" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\alerts.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\badges.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\bootstrap.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\breadcrumbs.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\button-groups.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\buttons.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\carousel.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\close.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\code.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\component-animations.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\dropdowns.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\forms.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\glyphicons.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\grid.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\input-groups.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\jumbotron.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\labels.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\list-group.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\media.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\alerts.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\background-variant.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\border-radius.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\buttons.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\center-block.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\clearfix.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\forms.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\gradients.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\grid-framework.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\grid.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\hide-text.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\image.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\labels.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\list-group.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\nav-divider.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\nav-vertical-align.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\opacity.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\pagination.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\panels.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\progress-bar.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\reset-filter.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\reset-text.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\resize.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\responsive-visibility.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\size.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\tab-focus.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\table-row.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\text-emphasis.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\text-overflow.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\mixins\vendor-prefixes.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\modals.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\navbar.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\navs.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\normalize.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\pager.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\pagination.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\panels.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\popovers.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\print.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\progress-bars.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\responsive-embed.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\responsive-utilities.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\scaffolding.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\tables.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\theme.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\thumbnails.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\tooltip.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\type.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\utilities.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\variables.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\wells.less" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\_csscomb.json" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\less\_csslintrc" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\LICENSE" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\package.json" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\README.md" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\test-infra\npm-shrinkwrap.json" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\test-infra\README.md" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\test-infra\S3Cachefile.json" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\test-infra\s3_cache.py" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\test-infra\uncached-npm-install.sh" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\_config.yml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\_editorconfig" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\_gitattributes" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\_gitignore" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\bootstrap-3.3.5\_travis.yml" />
+    <Content Include="ERP %28Back-up Homepage%29\resource files\font-awesome-4.4.0.zip" />
+    <Content Include="font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="font-awesome\less\animated.less" />
+    <Content Include="font-awesome\less\bordered-pulled.less" />
+    <Content Include="font-awesome\less\core.less" />
+    <Content Include="font-awesome\less\fixed-width.less" />
+    <Content Include="font-awesome\less\font-awesome.less" />
+    <Content Include="font-awesome\less\icons.less" />
+    <Content Include="font-awesome\less\larger.less" />
+    <Content Include="font-awesome\less\list.less" />
+    <Content Include="font-awesome\less\mixins.less" />
+    <Content Include="font-awesome\less\path.less" />
+    <Content Include="font-awesome\less\rotated-flipped.less" />
+    <Content Include="font-awesome\less\stacked.less" />
+    <Content Include="font-awesome\less\variables.less" />
+    <Content Include="font-awesome\scss\_animated.scss" />
+    <Content Include="font-awesome\scss\_bordered-pulled.scss" />
+    <Content Include="font-awesome\scss\_core.scss" />
+    <Content Include="font-awesome\scss\_fixed-width.scss" />
+    <Content Include="font-awesome\scss\_icons.scss" />
+    <Content Include="font-awesome\scss\_larger.scss" />
+    <Content Include="font-awesome\scss\_list.scss" />
+    <Content Include="font-awesome\scss\_mixins.scss" />
+    <Content Include="font-awesome\scss\_path.scss" />
+    <Content Include="font-awesome\scss\_rotated-flipped.scss" />
+    <Content Include="font-awesome\scss\_stacked.scss" />
+    <Content Include="font-awesome\scss\_variables.scss" />
+    <Content Include="font-awesome\scss\font-awesome.scss" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\collapse.js" />
+    <Content Include="Scripts\custom-tooltip.js" />
+    <Content Include="Scripts\dropdown.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modal.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\scrollspy.js" />
+    <Content Include="Scripts\style.js" />
+    <Content Include="Scripts\tooltip.js" />
+    <Content Include="Scripts\transition.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Software\Index.cshtml" />
+    <Content Include="Views\Shared\_AfterLogin.cshtml" />
+    <Content Include="Views\Shared\_RegisterAfterLogin.cshtml" />
+    <Content Include="Views\Shared\_IndexAfterLogin.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\easyfisdb.dbml.layout">
+      <DependentUpon>easyfisdb.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>2651</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:2651/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>
