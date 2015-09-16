@@ -51,26 +51,25 @@ namespace easyfis
             bundles.Add(new ScriptBundle("~/Scripts/custom-js").Include(
                      "~/Scripts/style.js"));
 
-            // ==========================================
-            // Custom Cascading Style Sheets - CSS (PAUL)
-            // ==========================================
-            bundles.Add(new StyleBundle("~/Content/software-custom-css").Include(
-                      "~/Content/demo.css",
-                      "~/Content/menu_elastic.css",
-                      "~/Content/normalize.css"));
 
-            // ==============================
-            // Custom JavaScripts - JS (PAUL)
-            // ==============================
-            bundles.Add(new ScriptBundle("~/Scripts/snap-js").Include(
-                     "~/Scripts/snap.svg-min.js"));
+            // ==============================================
+            // Custom Cascading Style Sheets - CSS (Software)
+            // ==============================================
+            bundles.Add(new StyleBundle("~/Content/Software-css").Include(
+                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap.min.css",
+                      "~/Content/dashboard.css"));
 
-            // ==============================
-            // Custom JavaScripts - JS (PAUL)
-            // ==============================
-            bundles.Add(new ScriptBundle("~/Scripts/software-custom-js").Include(
-                     "~/Scripts/classie.js",
-                      "~/Scripts/main3.js"));
+            // ==================================
+            // Custom JavaScripts - JS (Software)
+            // ==================================
+            bundles.Add(new ScriptBundle("~/Scripts/Software-js").Include(
+                     "~/Scripts/bootstrap.js",
+                     "~/Scripts/bootstrap.min.js",
+                     "~/Scripts/collapse.js",
+                      "~/Scripts/dropdown.js",
+                     "~/Scripts/sidebar-menu.js",
+                     "~/Scripts/push-left-menu.js"));
 
             // ========
             // JQueries
