@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.WebPages.Html;
 
 namespace easyfis.Models
 {
@@ -64,6 +66,23 @@ namespace easyfis.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "Frist Name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+
+        [Required]
+        [Display(Name = "Email Address")]
+        public string EmailAddress { get; set; }
+
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

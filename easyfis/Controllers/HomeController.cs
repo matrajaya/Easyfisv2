@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace easyfis.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : UserAccountController
     {
         public ActionResult Index()
         {

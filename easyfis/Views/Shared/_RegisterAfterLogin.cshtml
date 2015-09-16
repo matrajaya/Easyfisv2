@@ -1,6 +1,11 @@
 ﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+
 @if (Request.IsAuthenticated)
 {
+    string userId = User.Identity.GetUserId();
+
+
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
     {
         @Html.AntiForgeryToken()
@@ -10,11 +15,10 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8">
-                            <h2>Welcome</h2>
-                            @Html.Label(User.Identity.GetUserName())
-                            @Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+
                         </div>
                         <div class="col-md-4">
+                            @*@Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
                             <a href="@Url.Action("Index", "Software")" class="btn btn-primary btn-lg btn-block">Launch Software</a>
                         </div>
                     </div>
@@ -30,14 +34,14 @@ else
         <div class="cover-register-photo-custom">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-8 col-md-push-4">
-                        <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/purchase.jpg"><br>
+                    <div class="col-md-8">
+                        @*<img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/purchase.jpg"><br>*@
                     </div>
-                    <div class="col-md-4 col-md-pull-8">
+                    <div class="col-md-4">
                         <div class="panel-group">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title">Register</h4>
+                                    <h4 class="panel-title">Registration Form</h4>
                                 </div>
                                 <div>
                                     <div class="panel-body">
@@ -48,13 +52,43 @@ else
                                             @Html.AntiForgeryToken()
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email address" })
-                                                    @*<input type="email" class="form-control modal-form-border" id="email" placeholder="Email address">*@
+                                                    <label><i class="fa fa-pencil-square"></i> Basic Information</label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <input type="text" class="form-control modal-form-border" id="email" placeholder="Username">
+                                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First name" })
+                                                    @*<input type="text" class="form-control" id="firstName" placeholder="First name">*@
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last name" })
+                                                    @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @placeholder = "Address", @rows = 5, @style = "resize: none;" })
+                                                    @*<input class="form-control" placeholder="Birth Date" type="text" onfocus="(this.type='date')" id="date">*@
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", @placeholder = "Email Address" })
+                                                    @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
+                                                </div>
+                                            </div>
+                                            <hr class="divider" />
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <label><i class="fa fa-user"></i> ERP Account</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Username" })
+                                                    @*<input type="email" class="form-control modal-form-border" id="email" placeholder="Email address">*@
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -69,9 +103,15 @@ else
                                                     @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Confirm Password">*@
                                                 </div>
                                             </div>
+                                            <hr class="divider" />
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <input type="text" class="form-control modal-form-border" id="email" placeholder="Code">
+                                                    <label><i class="fa fa-codepen"></i>= Captcha Code</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <input type="text" class="form-control" id="code" placeholder="Code">
                                                 </div>
                                             </div>
                                             <br />
@@ -82,7 +122,6 @@ else
                                                     </span>
                                                 </div>
                                             </div>
-                                            <br>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     <input type="submit" class="btn btn-success btn-block btn-lg" value="Register">

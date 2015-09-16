@@ -10,12 +10,11 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8">
-                            <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/warehouseInventory.jpg">
+
                         </div>
                         <div class="col-md-4">
+                            @*@Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
                             <a href="@Url.Action("Index", "Software")" class="btn btn-primary btn-lg btn-block">Launch Software</a>
-                            <h2>Welcome</h2>
-                            @Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
                         </div>
                     </div>
                 </div>
@@ -32,7 +31,7 @@ else
             <div class="container">
                 <div class="row">
                     <div class="col-md-8">
-                        <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/productManagement.jpg">
+                        @*<img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/productManagement.jpg">*@
                     </div>
                     <div class="col-md-4">
                         <div class="panel-group">
@@ -86,7 +85,7 @@ else
                                                 </div>
                                             </div>
                                             <hr class="featurette-divider">
-                                            <div class="form-group">
+                                            <div class="form-group" align="center">
                                                 <div class="col-sm-12">
                                                     <button type="button" class="btn btn-primary btn-circle btn-lg" data-placement="top" data-toggle="tooltip" title="Login using Facebook Account"><i class="fa fa-facebook-official"></i></button>
                                                     <button type="button" class="btn btn-danger btn-circle btn-lg" data-placement="right" data-toggle="tooltip" title="Login using Google or Gmail Account"><i class="fa fa-google"></i></button>
