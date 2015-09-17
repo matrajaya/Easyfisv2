@@ -44,6 +44,7 @@ namespace easyfis
                       "~/Scripts/scrollspy.js",
                       "~/Scripts/modal.js",
                       "~/Scripts/alert.js",
+                      "~/Scripts/tab.js",
                       "~/Scripts/respond.js"));
 
             // =======================

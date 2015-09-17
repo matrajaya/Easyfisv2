@@ -14,13 +14,35 @@
             <div class="cover-login-photo-custom">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-8">
-
+                        <div class="col-md-12">
+                            <div class="container">
+                                <h2>Welcome User</h2>
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#BasicInfo">Basic Information</a></li>
+                                    <li><a data-toggle="tab" href="#LaunchSoftware">Launch your Software</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="BasicInfo" class="tab-pane fade in active">
+                                        <h3>BasicInfo</h3>
+                                        <a href="@Url.Action("Index", "Manage")" class="btn btn-default">Change Settings</a><br />
+                                        <ul>
+                                            <li>First name: blabla</li>
+                                            <li>Last name: blabla</li>
+                                            <li>Gender: blabla</li>
+                                            <li>Email Address: blabla</li>
+                                        </ul>
+                                    </div>
+                                    <div id="LaunchSoftware" class="tab-pane fade">
+                                        <br />
+                                        <a href="@Url.Action("Index", "Software")" class="btn btn-primary btn-lg">Launch Software</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            @*@Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
-                            <a href="@Url.Action("Index", "Software")" class="btn btn-primary btn-lg btn-block">Launch Software</a>
-                        </div>
+                        @*<div class="col-md-4">*@
+                        @*@Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
+                        @*<a href="@Url.Action("Index", "Software")" class="btn btn-primary btn-lg btn-block">Launch Software</a>*@
+                        @*</div>*@
                     </div>
                 </div>
             </div>
