@@ -1,36 +1,59 @@
-﻿/* ======================== */
+﻿/* ========================= */
+/* SOFTWARE DASHBOARD NAVBAR */
+/* ========================= */
+.navbar-inverse {
+    background-color: #003366;
+    transition: background-color 1s ease 0s;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #FFFFFF;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #FFFFFF;
+    transition: color 1s ease 0s;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: #FFFFFF;
+    background-color: #194775;
+    transition: background-color 1s ease 0s;
+}
+
+.navbar-inverse .navbar-nav > .active {
+    color: #FFFFFF;
+    background-color: #194775;
+}
+/* ======================== */
 /* SOFTWARE DASHBOARD STYLE */
 /* ======================== */
 .btn-dashboard {
 	font-family: Arial;
-	min-width: 150px;
-	max-width: 250px;
 	display: block;
-	margin: 1em;
-	padding: 1em 2em;
+    margin-bottom: 1em;
+    padding: 1em;
 	border: none;
 	background: none;
 	color: inherit;
-	vertical-align: middle;
 	position: relative;
 	z-index: 1;
 	-webkit-backface-visibility: hidden;
 	-moz-osx-font-smoothing: grayscale;
-
 	width: 100%;
 	height: 5em;
 	text-decoration: none;
 	text-align: center;
     font-size: 15px;
 	border-radius:5px;
+    font-weight: bold;
+    font-family: 'Arial Rounded MT';
 }
 .btn-sale {
 	font-family: Arial;
-	min-width: 150px;
-	max-width: 250px;
 	display: block;
-	margin: 1em;
-	padding: 1em 2em;
+    margin-bottom: 1em;
+	padding: 1em;
 	border: none;
 	background: none;
 	color: inherit;
@@ -39,14 +62,14 @@
 	z-index: 1;
 	-webkit-backface-visibility: hidden;
 	-moz-osx-font-smoothing: grayscale;
-
     font-size: 15px;
 	width: 100%;
 	height: 11em;
 	text-decoration: none;
-
 	text-align: center;
 	border-radius:5px;
+    font-weight: bold;
+    font-family: 'Arial Rounded MT';
 }
 .btn-masterlist {
 	color: #fff;
@@ -172,134 +195,138 @@ a:hover.btn-reports {
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
 }
-
+.jumbotron-custom {
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
 /* ================================= */
 /* SIDE BAR MENUS AND WITH BOOTSTRAP */
 /* ================================= */
 a.sidebar-menu-link {
-  color: #28aadc;
-  text-decoration: none;
+    color: #28aadc;
+    text-decoration: none;
 }
 
 a.sidebar-menu-link:hover {
-  color: #FFFFFF;
-  background-color: black;
-  text-decoration: none;
+    color: #FFFFFF;
+    background-color: #003366;
+    transition: background-color 1s ease 0s;
+    text-decoration: none;
 }
 
 a.sidebar-menu-link:focus {
-  color: #FFFFFF;
-  background-color: black;
-  text-decoration: none;
+    color: #FFFFFF;
+    background-color: black;
+    text-decoration: none;
 }
 
 .wrapper {
-  -webkit-transition: -webkit-transform 0.3s;
-          transition: transform 0.3s;
+    -webkit-transition: -webkit-transform 0.3s;
+    transition: transform 0.3s;
 }
 .c-menu {
-  position: fixed;
-  z-index: 200;
-  background-color: #343434;
-  -webkit-transition: -webkit-transform 0.3s;
-          transition: transform 0.3s;
+    position: fixed;
+    z-index: 200;
+    background-color: #194775;
+    transition: background-color 1s ease 0s;
+    -webkit-transition: -webkit-transform 0.3s;
+    /*transition: transform 0.3s;*/
 }
 .menu-items {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  text-indent: 5px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-indent: 5px;
 }
 .c-menu--push-left {
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
 }
 @media all and (min-width: 320px) {
-
-  .c-menu--push-left {
-    width: 300px;
-  }
+    .c-menu--push-left {
+        width: 300px;
+    }
 }
 .c-menu--push-left .c-menu__item {
-  display: block;
+    display: block;
 }
-.c-menu--push-left .c-menu__item:first-child{
-  border-top: none;
+.c-menu--push-left .c-menu__item:first-child {
+    border-top: none;
 }
 .c-menu--push-left .c-menu__item:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 .c-menu--push-left .menu-link{
-  display: block;
-  padding: 12px;
-  color: #fff;
+    display: block;
+    padding: 12px;
+    color: #fff;
 }
-.c-menu--push-left .c-menu__close{
-  display: block;
-  padding: 15px;
-  width: 100%;
+.c-menu--push-left .c-menu__close {
+    display: block;
+    padding: 15px;
+    width: 100%;
 }
 .c-menu--push-left {
-  top: 0;
-  left: 0;
-  -webkit-transform: translateX(-100%);
-      -ms-transform: translateX(-100%);
-          transform: translateX(-100%);
+    top: 0;
+    left: 0;
+    -webkit-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%);
 }
 @media all and (min-width: 320px) {
 /*  .c-menu--slide-left,*/
   .c-menu--push-left {
     -webkit-transform: translateX(-300px);
-        -ms-transform: translateX(-300px);
-            transform: translateX(-300px);
+    -ms-transform: translateX(-300px);
+    transform: translateX(-300px);
   }
 }
 /*.c-menu--slide-left.is-active,*/
 .c-menu--push-left.is-active {
-  -webkit-transform: translateX(0);
-      -ms-transform: translateX(0);
-          transform: translateX(0);
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    transform: translateX(0);
 }
 
 .wrapper.has-push-left {
-  -webkit-transform: translateX(100%);
-      -ms-transform: translateX(100%);
-          transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    transform: translateX(100%);
 }
 @media all and (min-width: 320px) {
   .wrapper.has-push-left {
     -webkit-transform: translateX(300px);
-        -ms-transform: translateX(300px);
-            transform: translateX(300px);
+    -ms-transform: translateX(300px);
+    transform: translateX(300px);
   }
 }
 
 .c-menu__close {
-  color: #fff;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  border-radius: none;
-
+    color: #fff;
+    background-color: #000846;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
 }
 .c-mask {
-  position: fixed;
-  z-index: 100;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  width: 0;
-  height: 0;
-  background-color: #000;
-  opacity: 0;
-  -webkit-transition: opacity 0.3s, width 0s 0.3s, height 0s 0.3s;
-          transition: opacity 0.3s, width 0s 0.3s, height 0s 0.3s;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    background-color: #000;
+    opacity: 0;
+    -webkit-transition: opacity 0.3s, width 0s 0.3s, height 0s 0.3s;
+    transition: opacity 0.3s, width 0s 0.3s, height 0s 0.3s;
 }
 .c-mask.is-active {
-  width: 100%;
-  height: 100%;
-  opacity: 0.7;
-  -webkit-transition: opacity 0.3s;
-          transition: opacity 0.3s;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
 }

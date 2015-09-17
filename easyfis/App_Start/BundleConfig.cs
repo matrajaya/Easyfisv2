@@ -8,6 +8,7 @@ namespace easyfis
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            // Homepage 
             // ====================================
             // Library Cascading Style Sheets - CSS
             // ====================================
@@ -52,6 +53,7 @@ namespace easyfis
                      "~/Scripts/style.js"));
 
 
+            // Software Dashboard Page Over here ...
             // ==============================================
             // Custom Cascading Style Sheets - CSS (Software)
             // ==============================================
@@ -66,8 +68,10 @@ namespace easyfis
             bundles.Add(new ScriptBundle("~/Scripts/Software-js").Include(
                      "~/Scripts/bootstrap.js",
                      "~/Scripts/bootstrap.min.js",
+                     "~/Scripts/jquery.min.js",
+                     "~/Scripts/transition.js",
                      "~/Scripts/collapse.js",
-                      "~/Scripts/dropdown.js",
+                     "~/Scripts/dropdown.js",
                      "~/Scripts/sidebar-menu.js",
                      "~/Scripts/push-left-menu.js"));
 
