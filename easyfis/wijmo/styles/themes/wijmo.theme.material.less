@@ -1,0 +1,64 @@
+// ----------------------------------------------------------------------
+//  Base theme colors & style settings
+// ----------------------------------------------------------------------
+
+@background: #ffffff;
+@text: #0f314d;
+@border-radius: 0px;
+
+@input-background: #edf1f3;
+@input-text: #0f314d;
+
+@header: #3076ae;
+@header-text: #ffffff;
+
+@selected: #349b91;
+@selected-text: #ffffff;
+@multi-selected: #4db6ac;
+@multi-selected-text: #ffffff;
+@grid-group-background: #835992;
+@grid-group-text: #ffffff;
+@grid-frozen-cell: #e4ecf2;
+@grid-frozen-cell-text: @text;
+@grid-left-side-col: @header;
+@grid-cell-border: 0px;
+
+@button: #5e9dce;
+@button-hover: #4db6ac;
+@button-text: #ffffff;
+@button-group-border: 0px;
+
+@tool-tip: #95a5a6;
+@tool-tip-text: #ffffff;
+
+@background-grad: false; // If 'true' will render background with gradient
+@button-grad: false; // if 'true' will render buttons with gradient
+@header-grad: false; // if 'true' will render grid headers with gradient
+@input-grad: false; // if 'true' will render input boxes with gradient
+
+// ----------------------------------------------------------------------
+//  Import external files
+// ----------------------------------------------------------------------
+
+@import "mixins/color-functions";
+@import "mixins/guards";
+@import "mixins/styles";
+
+// ---------------------------------------------------------------------------
+//  Additional theme-specific styling
+// ---------------------------------------------------------------------------
+
+.wj-cell, .wj-controll:not(.wj-pager) .wj-input-group .wj-form-control {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.wj-content.wj-dropdown-panel {
+	border: 0;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+	margin-left: 0 !important;
+}
+
+.wj-cell.wj-frozen {
+  border: 0;
+}

@@ -1,0 +1,91 @@
+// ----------------------------------------------------------------------
+//  Base theme colors & style settings
+// ----------------------------------------------------------------------
+
+@background: #000;
+@text: #ababab;
+@border-radius: 0px;
+
+@input-background: #000;
+@input-text: #ababab;
+
+@header: #000;
+@header-text: #ababab;
+
+@selected: #57728c;
+@selected-text: #d0d9e0;
+@multi-selected: #304253;
+@multi-selected-text: #c2c7cb;
+@grid-group-background: #333;
+@grid-group-text: #ababab;
+@grid-frozen-cell: #333;
+@grid-frozen-cell-text: @text;
+@grid-left-side-col: @header;
+@grid-cell-border: 0px;
+
+@button: #000;
+@button-hover: #444;
+@button-text: #ababab;
+@button-group-border: 1px;
+
+@tool-tip: #a9a9a9;
+@tool-tip-text: #ffffff;
+
+@background-grad: false; // If 'true' will render background with gradient
+@button-grad: false; // if 'true' will render buttons with gradient
+@header-grad: false; // if 'true' will render grid headers with gradient
+@input-grad: false; // if 'true' will render input boxes with gradient
+
+// ----------------------------------------------------------------------
+//  Import external files
+// ----------------------------------------------------------------------
+
+@import "mixins/color-functions";
+@import "mixins/guards";
+@import "mixins/styles";
+
+// ----------------------------------------------------------------------
+//  Additional theme-specific styling
+// ----------------------------------------------------------------------
+
+div[wj-part='ch'] {
+	border-bottom: 2px solid #666;
+}
+
+div[wj-part='chcells'] .wj-header {
+	border-bottom: 1px solid #999;
+}
+
+div[wj-part='rhcells'] .wj-header {
+	border-right: 0 !important;
+}
+
+.wj-dropdown-panel {
+	outline: none;
+	box-shadow: none;
+}
+
+.wj-cell.wj-frozen {
+	border: 0;
+}
+
+div[wj-part='root'] {
+	background: #000;
+}
+
+.wj-alt:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected) {
+	/* Alternate grid cell color */
+	background: #1a1a1a;
+}
+
+.wj-content:not(.customEdit):not(.wj-dropdown-panel):not(.wj-listbox):not(.wj-flexgrid):not(.wj-calendar-outer), .wj-btn-default, .wj-input-group-btn > .wj-btn {
+	border-color: #000;
+}
+
+.wj-pager .wj-form-control {
+	border: 0;
+}
+
+.grid {
+	border: 0 !important;
+}

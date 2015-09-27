@@ -1,0 +1,56 @@
+// ----------------------------------------------------------------------
+//  Base theme colors & style settings
+// ----------------------------------------------------------------------
+
+@background: #0d2c45;
+@text: #ffffff;
+@border-radius: 0;
+
+@input-background: @background;
+@input-text: @text;
+
+@header: #000000;
+@header-text: #ffffff;
+
+@selected: #19a26b;
+@selected-text: #ffffff;
+@multi-selected: #85cfb1;
+@multi-selected-text: #ffffff;
+@grid-group-background: #87acca;
+@grid-group-text: #000000;
+@grid-frozen-cell: #295744;
+@grid-frozen-cell-text: @text;
+@grid-left-side-col: @header;
+@grid-cell-border: 1px;
+
+@button: #3b546b;
+@button-hover: #4d6e8c;
+@button-text: #ffffff;
+@button-group-border: 0px;
+
+@tool-tip: #e6edf2;
+@tool-tip-text: #000000;
+
+@background-grad: false; // If 'true' will render background with gradient
+@button-grad: true; // if 'true' will render buttons with gradient
+@header-grad: true; // if 'true' will render grid headers with gradient
+@input-grad: false; // if 'true' will render input boxes with gradient
+
+// ----------------------------------------------------------------------
+//  Import external files
+// ----------------------------------------------------------------------
+
+@import "mixins/color-functions";
+@import "mixins/guards";
+@import "mixins/styles";
+
+// ---------------------------------------------------------------------------
+//  Additional theme-specific styling
+// ---------------------------------------------------------------------------
+
+.wj-frozen-row {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.wj-frozen-col {
+	border-right: 1px solid rgba(0, 0, 0, 0.2);
+}

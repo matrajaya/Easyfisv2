@@ -1,0 +1,81 @@
+// ---------------------------------------------------------------------------
+//  MIXIN GUARDS
+// ---------------------------------------------------------------------------
+
+.mixin-contrast-overlay(@color-value) when ( lightness(@color-value) >= 50% ) { 
+	background: rgba(0, 0, 0, 0.04); 
+}
+.mixin-contrast-overlay(@color-value) when ( lightness(@color-value) < 50% ) and ( lightness(@color-value) >= 10% ) { 
+	background: rgba(255, 255, 255, 0.05); 
+}
+.mixin-contrast-overlay(@color-value) when ( lightness(@color-value) < 10% ) { 
+	background: rgba(255, 255, 255, 0.5); 
+}
+.mixin-contrast-cell(@color-value) when ( lightness(@color-value) >= 50% ) { 
+	background: @grid-cell-dark; 
+}
+.mixin-contrast-cell(@color-value) when ( lightness(@color-value) < 50% ) and ( lightness(@color-value) > 0% ) { 
+	background: @grid-cell-light; 
+}
+.mixin-contrast-cell(@color-value) when ( lightness(@color-value) = 0% ) { 
+	background: @grid-cell-very-light; 
+}
+.mixin-contrast-frozen(@color-value) when ( lightness(@color-value) >= 50% ) { 
+	background: @grid-frozen-cell-dark; 
+}
+.mixin-contrast-frozen(@color-value) when ( lightness(@color-value) < 50% ) { 
+	background: @grid-frozen-cell-light; 
+}
+.mixin-contrast-group(@color-value) when ( lightness(@color-value) >= 80% ) { 
+	background: @header-dark; color: @text-light; 
+}
+.mixin-contrast-group(@color-value) when ( lightness(@color-value) < 80% ) and ( lightness(@color-value) >= 30% ) { 
+	background: @header-light; color: @text; 
+}
+.mixin-contrast-group(@color-value) when ( lightness(@color-value) < 30% ) { 
+	background: @header-very-light; color: @text-dark; 
+}
+.dark-grad(@color-value) {
+	background-image: -ms-linear-gradient(bottom, darken(@color-value, 12%) 0%, @color-value 100%);
+	background-image: -moz-linear-gradient(bottom, darken(@color-value, 12%) 0%, @color-value 100%);
+	background-image: -o-linear-gradient(bottom, darken(@color-value, 12%) 0%, @color-value 100%);
+	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, darken(@color-value, 12%)), color-stop(1, @color-value));
+	background-image: -webkit-linear-gradient(bottom, darken(@color-value, 12%) 0%, @color-value 100%);
+	background-image: linear-gradient(to top, darken(@color-value, 12%) 0%, @color-value 100%);
+}
+.light-grad(@color-value) {
+	background-image: -ms-linear-gradient(bottom, @color-value 0%, lighten(@color-value, 12%) 100%);
+	background-image: -moz-linear-gradient(bottom, @color-value 0%, lighten(@color-value, 12%) 100%);
+	background-image: -o-linear-gradient(bottom, @color-value 0%, lighten(@color-value, 12%) 100%);
+	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, @color-value), color-stop(1, lighten(@color-value, 12%)));
+	background-image: -webkit-linear-gradient(bottom, @color-value 0%, lighten(@color-value, 12%) 100%);
+	background-image: linear-gradient(to top, @color-value 0%, lighten(@color-value, 12%) 100%);
+}
+.mixin-grad-background(@color-value) when (@background-grad = true) and ( lightness(@color-value) >= 50% ) { 
+	.dark-grad(@color-value); 
+}
+.mixin-grad-background(@color-value) when (@background-grad = true) and ( lightness(@color-value) < 50% ) { 
+	.light-grad(@color-value); 
+}
+.mixin-grad-header(@color-value) when (@header-grad = true) and ( lightness(@color-value) >= 50% ) { 
+	.dark-grad(@color-value); 
+}
+.mixin-grad-header(@color-value) when (@header-grad = true) and ( lightness(@color-value) < 50% ) { 
+	.light-grad(@color-value); 
+}
+.mixin-grad-button(@color-value) when (@button-grad = true) and ( lightness(@color-value) >= 50% ) { 
+	.dark-grad(@color-value); 
+}
+.mixin-grad-button(@color-value) when (@button-grad = true) and ( lightness(@color-value) < 50% ) { 
+	.light-grad(@color-value); 
+}
+.mixin-grad-input(@color-value) when (@input-grad = true) and ( lightness(@color-value) >= 50% ) { 
+	.dark-grad(@color-value); 
+}
+.mixin-grad-input(@color-value) when (@input-grad = true) and ( lightness(@color-value) < 50% ) { 
+	.light-grad(@color-value); 
+}
+.mixin-grid-left-bg() when (iscolor(@grid-left-side-col)) { 
+	background: @grid-left-side-col;
+}
+

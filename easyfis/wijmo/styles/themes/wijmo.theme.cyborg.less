@@ -1,0 +1,53 @@
+// ----------------------------------------------------------------------
+//  Base theme colors & style settings
+// ----------------------------------------------------------------------
+
+@background: #424242;
+@text: #ffffff;
+@border-radius: 4px;
+
+@input-background: @background;
+@input-text: @text;
+
+@header: #222222;
+@header-text: #ffffff;
+
+@selected: #2a9fd6;
+@selected-text: #ffffff;
+@multi-selected: #77afc9;
+@multi-selected-text: #ffffff;
+@grid-group-background: #777777; 
+@grid-group-text: #dddddd;
+@grid-frozen-cell: #66b308;
+@grid-frozen-cell-text: @text;
+@grid-left-side-col: @header;
+@grid-cell-border: 0px;
+
+@button: #424242;
+@button-hover: #282828;
+@button-text: #ffffff;
+@button-group-border: 0px;
+
+@tool-tip: #202020;
+@tool-tip-text: #bbbbbb;
+
+@background-grad: false; // If 'true' will render background with gradient
+@button-grad: false; // if 'true' will render buttons with gradient
+@header-grad: false; // if 'true' will render grid headers with gradient
+@input-grad: false; // if 'true' will render input boxes with gradient
+
+// ----------------------------------------------------------------------
+//  Import external files
+// ----------------------------------------------------------------------
+
+@import "mixins/color-functions";
+@import "mixins/guards";
+@import "mixins/styles";
+
+// ---------------------------------------------------------------------------
+//  Additional theme-specific styling
+// ---------------------------------------------------------------------------
+
+.wj-cell.wj-frozen {
+  border: 0;
+}

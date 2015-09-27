@@ -50,10 +50,14 @@ namespace easyfis.Models
 
     public class LoginViewModel
     {
+        //[Required]
+        //[Display(Name = "Email")]
+        //[EmailAddress]
+        //public string Email { get; set; }
+
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -67,11 +71,11 @@ namespace easyfis.Models
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "Frist Name")]
+        [Display(Name = "Frist name")]
         public string FirstName { get; set; }
 
         [Required]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Last name")]
         public string LastName { get; set; }
 
         [Required]
@@ -79,14 +83,13 @@ namespace easyfis.Models
         public string Address { get; set; }
 
         [Required]
-        [Display(Name = "Email Address")]
-        public string EmailAddress { get; set; }
-
-
-        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]

@@ -138,6 +138,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult CompanyDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult FinancialStatements()
         {
             return View();

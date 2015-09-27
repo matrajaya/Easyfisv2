@@ -12,6 +12,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
+    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
     <div id="wrapper" class="wrapper">
@@ -38,10 +39,53 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>
-                <br /><br />
-                <h2>Company</h2>
+                <!-- Time List -->
+                <section id="companyList">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Company List</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" readonly>
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span> 
+                                <input type="text" class="form-control" id="InputFilter" placeholder="Search Company">
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <a href="@Url.Action("CompanyDetail","Software")" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Add</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="CompanyGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
             </div>
         </section>
     </div>
@@ -78,5 +122,199 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
+    @Scripts.Render("~/WijmoScripts/Wijmo-js")
+
+    <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var companies;
+        var companyGrid;
+
+        var btnFirstPageGrid;
+        var btnPreviousPageGrid;
+        var btnNextPageGrid;
+        var btnLastPageGrid;
+        var btnCurrentPageGrid;
+
+        // ================
+        // GET Company List
+        // ================
+        function getCompany() {
+            var companies = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listCompany',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            companies.push({
+                                EditId: "<a href='@Url.Action("CompanyDetail","Software")' class='btn btn-primary btn-xs btn-block'><i class='fa fa-pencil-square'></i> Edit</a>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                Company: Results[i]["Company"],
+                                Address: Results[i]["Address"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreateDateTime: Results[i]["CreateDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+
+            return companies;
+        }
+
+
+        // ==================
+        // Navigation Buttons
+        // ==================
+        function updateNavigateButtonsCompany() {
+            if (companies.pageSize <= 0) {
+                document.getElementById('naviagtionPageGrid').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGrid').style.display = 'block';
+            if (companies.pageIndex === 0) {
+                btnFirstPageGrid.setAttribute('disabled', 'disabled');
+                btnPreviousPageGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.removeAttribute('disabled');
+            } else if (companies.pageIndex === (companies.pageCount - 1)) {
+                btnFirstPageGrid.removeAttribute('disabled');
+                btnPreviousPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGrid.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGrid.removeAttribute('disabled');
+                btnPreviousPageGrid.removeAttribute('disabled');
+                btnNextPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.removeAttribute('disabled');
+            }
+            btnCurrentPageGrid.innerHTML = (companies.pageIndex + 1) + ' / ' + companies.pageCount;
+        }
+
+        // ============
+        // On Page Load
+        // ============
+        $(document).ready(function () {
+            companies = new wijmo.collections.CollectionView(getCompany());
+            companies.canFilter = true;
+            companies.pageSize = 10;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                companies.refresh();
+            });
+            companies.filter = function (item) {
+                return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+            }
+            companies.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsCompany();
+            });
+
+            // Flex Grid
+            companyGrid = new wijmo.grid.FlexGrid('#CompanyGrid');
+            companyGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Company",
+                                "binding": "Company",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*",
+                            },
+                            {
+                                "header": "Address",
+                                "binding": "Address",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "ContactNumber",
+                                "binding": "ContactNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "TaxNumber",
+                                "binding": "TaxNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: companies,
+                isReadOnly: true,
+                frozenColumns: 2,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                headersVisibility: wijmo.grid.HeadersVisibility.Column,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            companyGrid.trackChanges = true;
+
+            //Navigation button
+            btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
+            btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
+            btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
+            btnLastPageGrid = document.getElementById('btnMoveToLastPageGrid');
+            btnCurrentPageGrid = document.getElementById('btnCurrentPageGrid');
+
+            updateNavigateButtonsCompany();
+
+            btnFirstPageGrid.addEventListener('click', function () {
+                companies.moveToFirstPage();
+                updateNavigateButtonsCompany();
+            });
+            btnPreviousPageGrid.addEventListener('click', function () {
+                companies.moveToPreviousPage();
+                updateNavigateButtonsCompany();
+            });
+            btnNextPageGrid.addEventListener('click', function () {
+                companies.moveToNextPage();
+                updateNavigateButtonsCompany();
+            });
+            btnLastPageGrid.addEventListener('click', function () {
+                companies.moveToLastPage();
+                updateNavigateButtonsCompany();
+            });
+
+
+        });
+    </script>
 </body>
 </html>

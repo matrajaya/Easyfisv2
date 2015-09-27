@@ -1,0 +1,87 @@
+// ----------------------------------------------------------------------
+//  Base theme colors & style settings
+// ----------------------------------------------------------------------
+
+@background: #fff;
+@text: #444;
+@border-radius: 0;
+
+@input-background: #fff;
+@input-text: #444;
+
+@header: #49525d;
+@header-text: #fff;
+
+@selected: #70b3af;
+@selected-text: #ffffff;
+@multi-selected: #8cc2c0;
+@multi-selected-text: #ffffff;
+@grid-group-background: #e9ebed; 
+@grid-group-text: #3c434b;
+@grid-frozen-cell: #ebebeb;
+@grid-frozen-cell-text: @text;
+@grid-left-side-col: @header;
+@grid-cell-border: 1px;
+
+@button: #f48027;
+@button-hover: #db7323;
+@button-text: #fff;
+@button-group-border: 1px;
+
+@tool-tip: #a9a9a9;
+@tool-tip-text: #ffffff;
+
+@background-grad: false; // If 'true' will render background with gradient
+@button-grad: false; // if 'true' will render buttons with gradient
+@header-grad: false; // if 'true' will render grid headers with gradient
+@input-grad: false; // if 'true' will render input boxes with gradient
+
+// ----------------------------------------------------------------------
+//  Import external files
+// ----------------------------------------------------------------------
+
+@import "mixins/color-functions";
+@import "mixins/guards";
+@import "mixins/styles";
+
+// ----------------------------------------------------------------------
+//  Additional theme-specific styling
+// ----------------------------------------------------------------------
+
+
+
+div[wj-part='cells'] {
+	box-shadow: inset 30px 0px 100px #f8f8f8;
+}
+
+div[wj-part='chcells'] .wj-cell.wj-header {
+		border-bottom: 1px solid #e3e3e3;
+}
+
+.grid {
+	border: 1px solid #e3e3e3 !important;
+}
+
+.wj-cell, .wj-controll:not(.wj-pager) .wj-input-group .wj-form-control {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.wj-dropdown-panel {
+	outline: none;
+	box-shadow: none;
+}
+
+.wj-cell.wj-frozen {
+  border: 0;
+}
+
+.wj-alt:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected) {
+  /* Alternate grid cell color */
+  background: #fff
+}
+
+.wj-frozen-col {
+	border: 0;
+}
+

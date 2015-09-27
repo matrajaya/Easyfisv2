@@ -1,0 +1,152 @@
+// ---------------------------------------------------------------------------
+//  CSS OUTPUT - The rendered CSS when compiled. 
+// ---------------------------------------------------------------------------
+
+/* -- Backgrounds -- */
+
+.wj-content:not(.customEdit), div[wj-part='cells'] {
+	color: @text;
+	background: @background;
+	.mixin-grad-background(@background);
+}
+
+.wj-content:not(.customEdit) .wj-input-group .wj-form-control {
+	color: @input-text;
+	background: @input-background;
+	.mixin-grad-input(@input-background);
+}
+
+.wj-listbox-item:not(.wj-state-selected):hover {
+	.mixin-contrast-overlay(@background);
+}
+
+/* -- Headers -- */
+
+.wj-header {
+	background: @header;
+	color: @header-text;
+	.mixin-grad-header(@header);
+}
+
+.wj-flexgrid .wj-group {
+	background: @grid-group-background;
+	color: @grid-group-text;
+}
+
+.wj-flexgrid .wj-marker {
+	background: @selected;
+}
+
+/* -- Grid -- */
+
+div[wj-part='root'] {
+	background: @background-dark;
+}
+
+.wj-state-selected {
+	background: @selected;
+	color: @selected-text;
+}
+
+.wj-state-multi-selected {
+	background: @multi-selected;
+	color: @multi-selected-text;
+}
+
+.wj-input-group .wj-form-control, .wj-grid-editor {
+	background: #fff;
+	color: @text-dark;
+}
+
+div[wj-part='rhcells'] .wj-header {
+	.mixin-grid-left-bg();
+}
+
+.wj-cell:not(.wj-frozen-col):not(.wj-frozen-row):not(.wj-frozen) {
+	border-right: @grid-cell-border solid rgba(0, 0, 0, 0.2);
+	border-bottom: @grid-cell-border solid rgba(0, 0, 0, 0.2);
+}
+
+[dir="rtl"] .wj-cell {
+	border-left: @grid-cell-border solid rgba(0, 0, 0, 0.2);
+}
+
+.wj-cell:not(.wj-header):not(.wj-group):not(.wj-alt):not(.wj-state-selected):not(.wj-state-multi-selected) {
+	/* Default grid cell color */
+	background: @background;
+}
+
+.wj-alt:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected) {
+	/* Alternate grid cell color */
+	.mixin-contrast-cell(@background);
+}
+
+.wj-frozen:not(.wj-header):not(.wj-group):not(.wj-alt):not(.wj-state-selected):not(.wj-state-multi-selected) {
+	/* Default frozen cell color */
+	background: @grid-frozen-cell;
+	color: @grid-frozen-cell-text;
+}
+
+.wj-frozen.wj-alt:not(.wj-header):not(.wj-group):not(.wj-state-selected):not(.wj-state-multi-selected) {
+	/* Alternate frozen cell color */
+	.mixin-contrast-frozen(@grid-frozen-cell);
+	color: @grid-frozen-cell-text;
+}
+
+.wj-frozen-row {
+	border-bottom-color: @text;
+	border-width: @grid-cell-border;
+}
+
+.wj-frozen-col {
+	border-right-color: @text;
+	border-width: @grid-cell-border;
+}
+
+/* -- Buttons -- */
+
+.wj-content:not(.customEdit) .wj-input-group-btn > .wj-btn, .wj-content:not(.customEdit) .wj-btn-group > .wj-btn {
+	background: @button;
+	color: @button-text;
+	.mixin-grad-button(@button);
+}
+
+.wj-content:not(.customEdit) .wj-input-group-btn > .wj-btn:hover, .wj-content:not(.customEdit) .wj-btn-group > .wj-btn:hover {
+	background: @button-hover;
+	color: @button-text;
+}
+
+.wj-content:not(.customEdit) .wj-input-group-btn > .wj-btn:focus, .wj-content:not(.customEdit) .wj-btn-group > .wj-btn:focus {
+	background: @button-hover;
+	color: @button-text;
+}
+
+.wj-content:not(.customEdit):not(.wj-dropdown-panel):not(.wj-listbox):not(.wj-flexgrid):not(.wj-calendar-outer) {
+	border: @button-group-border solid rgba(0, 0, 0, 0.2);
+}
+.wj-btn-default {
+	border: @button-group-border solid rgba(0, 0, 0, 0.2);
+	}
+.wj-input-group-btn > .wj-btn {
+	border: @button-group-border
+}
+
+/* -- Border Radii -- */
+
+.wj-content, .wj-input-group, .wj-btn-group, .wj-btn-group-vertical, .wj-tooltip, .customEdit {
+	border-radius: @border-radius;
+}
+
+/* -- Tooltip -- */
+
+.wj-tooltip {
+	background: @tool-tip;
+	color: @tool-tip-text;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* -- Gauges -- */
+
+.wj-gauge .wj-pointer path {
+	fill: @selected;
+}

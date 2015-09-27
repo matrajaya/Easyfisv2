@@ -1,12 +1,15 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
     {
         @Html.AntiForgeryToken()
-
+        <ul class="nav navbar-nav">
+            <li><a href="@Url.Action("Index","Software")"><i class="fa fa-table"></i> DashBoard</a></li>
+            <li><a href="#" id="c-button--push-left"><i class="fa fa-bars"></i> Menu</a></li>
+        </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li>@Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "You" })</li>
+            <li>@Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["FullName"]) })</li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-gear"></i></a>
                 <ul class="dropdown-menu">

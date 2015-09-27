@@ -76,6 +76,23 @@ namespace easyfis
                      "~/Scripts/sidebar-menu.js",
                      "~/Scripts/push-left-menu.js"));
 
+            // =============
+            // WIJMO Scripts
+            // =============
+            bundles.Add(new ScriptBundle("~/WijmoScripts/Wijmo-js").Include(
+                     "~/wijmo/controls/wijmo.min.js",
+                     "~/wijmo/controls/wijmo.input.min.js",
+                     "~/wijmo/controls/wijmo.grid.min.js",
+                     "~/wijmo/controls/wijmo.chart.min.js"
+                     ));
+
+            // ==================
+            // WIJMO Style Sheets
+            // ==================
+            bundles.Add(new StyleBundle("~/WijmoCSS/Wijmo-css").Include(
+                      "~/wijmo/styles/wijmo.min.css"
+                      ));
+
             // ========
             // JQueries
             // ========

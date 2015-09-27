@@ -12,12 +12,20 @@ namespace easyfis
             // Web API configuration and services
 
             // Web API routes
+            //config.MapHttpAttributeRoutes();
+
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
+
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                defaults: new { Key = RouteParameter.Optional, id = RouteParameter.Optional, Action = "Get" }
             );
         }
     }

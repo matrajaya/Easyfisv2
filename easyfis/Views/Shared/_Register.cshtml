@@ -3,49 +3,12 @@
 
 @if (Request.IsAuthenticated)
 {
-    string userId = User.Identity.GetUserId();
-
-
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
     {
         @Html.AntiForgeryToken()
         <!-- Section -->
         <section>
-            <div class="cover-login-photo-custom">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="container">
-                                <h2>Welcome User</h2>
-                                <ul class="nav nav-tabs">
-                                    <li class="active"><a data-toggle="tab" href="#BasicInfo">Basic Information</a></li>
-                                    <li><a data-toggle="tab" href="#LaunchSoftware">Launch your Software</a></li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div id="BasicInfo" class="tab-pane fade in active">
-                                        <h3>BasicInfo</h3>
-                                        <a href="@Url.Action("Index", "Manage")" class="btn btn-default">Change Settings</a><br />
-                                        <ul>
-                                            <li>First name: blabla</li>
-                                            <li>Last name: blabla</li>
-                                            <li>Gender: blabla</li>
-                                            <li>Email Address: blabla</li>
-                                        </ul>
-                                    </div>
-                                    <div id="LaunchSoftware" class="tab-pane fade">
-                                        <br />
-                                        <a href="@Url.Action("Index", "Software")" class="btn btn-primary btn-lg">Launch Software</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @*<div class="col-md-4">*@
-                        @*@Html.ActionLink(User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
-                        @*<a href="@Url.Action("Index", "Software")" class="btn btn-primary btn-lg btn-block">Launch Software</a>*@
-                        @*</div>*@
-                    </div>
-                </div>
-            </div>
+            @{ Response.Redirect("~/Manage/Index");}
         </section>
     }
 }
@@ -63,7 +26,7 @@ else
                         <div class="panel-group">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title">Registration Form</h4>
+                                    <h4 class="panel-title">Registration Form: </h4>
                                 </div>
                                 <div>
                                     <div class="panel-body">
@@ -72,6 +35,13 @@ else
                                         @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                                         {
                                             @Html.AntiForgeryToken()
+                                            @*<div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <span class="help-block">
+                                                        @Html.ValidationSummary("", new { @class = "text-danger" })
+                                                    </span>
+                                                </div>
+                                            </div>*@
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     <label><i class="fa fa-pencil-square"></i> Basic Information</label>
@@ -80,24 +50,28 @@ else
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First name" })
+                                                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
                                                     @*<input type="text" class="form-control" id="firstName" placeholder="First name">*@
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last name" })
+                                                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
                                                     @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @placeholder = "Address", @rows = 5, @style = "resize: none;" })
+                                                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
                                                     @*<input class="form-control" placeholder="Birth Date" type="text" onfocus="(this.type='date')" id="date">*@
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    @Html.TextBoxFor(m => m.EmailAddress, new { @class = "form-control", @placeholder = "Email Address" })
+                                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email Address" })
+                                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                                     @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
                                                 </div>
                                             </div>
@@ -109,19 +83,22 @@ else
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Username" })
+                                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
+                                                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
                                                     @*<input type="email" class="form-control modal-form-border" id="email" placeholder="Email address">*@
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                                                     @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Password">*@
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm Password" })
+                                                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
                                                     @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Confirm Password">*@
                                                 </div>
                                             </div>
@@ -136,14 +113,7 @@ else
                                                     <input type="text" class="form-control" id="code" placeholder="Code">
                                                 </div>
                                             </div>
-                                            <br />
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <span class="help-block">
-                                                        @Html.ValidationSummary("", new { @class = "text-danger" })
-                                                    </span>
-                                                </div>
-                                            </div>
+                                            <br /><br />
                                             <div class="form-group">
                                                 <div class="col-sm-12">
                                                     <input type="submit" class="btn btn-success btn-block btn-lg" value="Register">
