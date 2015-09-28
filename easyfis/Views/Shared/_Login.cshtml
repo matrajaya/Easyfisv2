@@ -28,66 +28,64 @@ else
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Login</h3>
                                 </div>
-                                <div>
-                                    <div class="panel-body">
-                                        @*<form class="form-horizontal" role="form">*@
-                                        @using easyfis.Models
-                                        @model LoginViewModel
-                                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                                        {
-                                            @Html.AntiForgeryToken()
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
-                                                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
-                                                    @*<input type="email" class="form-control modal-form-border" id="email" placeholder="Username" required>*@
+                                <div class="panel-body">
+                                    @*<form class="form-horizontal" role="form">*@
+                                    @using easyfis.Models
+                                    @model LoginViewModel
+                                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
+                                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                                                @*<input type="email" class="form-control modal-form-border" id="email" placeholder="Username" required>*@
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                                @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Password..." required>*@
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <div>
+                                                    <label>
+                                                        @Html.CheckBoxFor(m => m.RememberMe)
+                                                        @Html.LabelFor(m => m.RememberMe)
+                                                    </label>
+                                                    @*<label class="control-label"><input type="checkbox"> Remember me</label>*@
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
-                                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                                    @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Password..." required>*@
-                                                </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @*@Html.ValidationSummary(true, "Incorrect username or password. Please try again.", new { @class = "text-danger" })*@
+                                                @Html.ValidationMessage("LoginError", new { @class = "text-danger" })
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <div>
-                                                        <label>
-                                                            @Html.CheckBoxFor(m => m.RememberMe)
-                                                            @Html.LabelFor(m => m.RememberMe)
-                                                        </label>
-                                                        @*<label class="control-label"><input type="checkbox"> Remember me</label>*@
-                                                    </div>
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="submit" value="Login" class="btn btn-primary btn-lg btn-block">
                                             </div>
-                                            <br>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @*@Html.ValidationSummary(true, "Incorrect username or password. Please try again.", new { @class = "text-danger" })*@
-                                                    @Html.ValidationMessage("LoginError", new { @class = "text-danger" })
-                                                </div>
+                                        </div>
+                                        <hr class="featurette-divider">
+                                        <div class="form-group" align="center">
+                                            <div class="col-sm-12">
+                                                <button type="button" class="btn btn-primary btn-circle btn-lg" data-placement="top" data-toggle="tooltip" title="Login using Facebook Account"><i class="fa fa-facebook-official"></i></button>
+                                                <button type="button" class="btn btn-danger btn-circle btn-lg" data-placement="right" data-toggle="tooltip" title="Login using Google or Gmail Account"><i class="fa fa-google"></i></button>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <input type="submit" value="Login" class="btn btn-primary btn-lg btn-block">
-                                                </div>
-                                            </div>
-                                            <hr class="featurette-divider">
-                                            <div class="form-group" align="center">
-                                                <div class="col-sm-12">
-                                                    <button type="button" class="btn btn-primary btn-circle btn-lg" data-placement="top" data-toggle="tooltip" title="Login using Facebook Account"><i class="fa fa-facebook-official"></i></button>
-                                                    <button type="button" class="btn btn-danger btn-circle btn-lg" data-placement="right" data-toggle="tooltip" title="Login using Google or Gmail Account"><i class="fa fa-google"></i></button>
-                                                </div>
-                                            </div>
-                                        }
-                                        @*</form>*@
-                                    </div>
-                                    <div class="panel-footer">
-                                        @*@Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })*@
-                                        <a href="#" data-placement="left" data-toggle="tooltip" title="Click here to remember your password">Forgot Password?</a>
-                                        <span class="panel-footer-custom">Not yet a member? <a href="@Url.Action("Register", "Account")" data-toggle="tooltip" title="Register account for free!">Register</a></span>
-                                    </div>
+                                        </div>
+                                    }
+                                    @*</form>*@
+                                </div>
+                                <div class="panel-footer">
+                                    @*@Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })*@
+                                    <a href="#" data-placement="left" data-toggle="tooltip" title="Click here to remember your password">Forgot Password?</a>
+                                    <span class="panel-footer-custom">Not yet a member? <a href="@Url.Action("Register", "Account")" data-toggle="tooltip" title="Register account for free!">Register</a></span>
                                 </div>
                             </div>
                         </div>

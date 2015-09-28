@@ -26,105 +26,103 @@ else
                         <div class="panel-group">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h4 class="panel-title">Registration Form: </h4>
+                                    <h4 class="panel-title">Registration Form</h4>
                                 </div>
-                                <div>
-                                    <div class="panel-body">
-                                        @*<form class="form-horizontal" role="form">*@
-                                        @model easyfis.Models.RegisterViewModel
-                                        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                                        {
-                                            @Html.AntiForgeryToken()
-                                            @*<div class="form-group">
+                                <div class="panel-body">
+                                    @*<form class="form-horizontal" role="form">*@
+                                    @model easyfis.Models.RegisterViewModel
+                                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @*<div class="form-group">
                                                 <div class="col-sm-12">
                                                     <span class="help-block">
                                                         @Html.ValidationSummary("", new { @class = "text-danger" })
                                                     </span>
                                                 </div>
                                             </div>*@
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <label><i class="fa fa-pencil-square"></i> Basic Information</label>
-                                                </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <label><i class="fa fa-pencil-square"></i> Basic Information</label>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First name" })
-                                                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
-                                                    @*<input type="text" class="form-control" id="firstName" placeholder="First name">*@
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First name" })
+                                                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                                                @*<input type="text" class="form-control" id="firstName" placeholder="First name">*@
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last name" })
-                                                    @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
-                                                    @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last name" })
+                                                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                                                @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @placeholder = "Address", @rows = 5, @style = "resize: none;" })
-                                                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
-                                                    @*<input class="form-control" placeholder="Birth Date" type="text" onfocus="(this.type='date')" id="date">*@
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @placeholder = "Address", @rows = 5, @style = "resize: none;" })
+                                                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+                                                @*<input class="form-control" placeholder="Birth Date" type="text" onfocus="(this.type='date')" id="date">*@
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email Address" })
-                                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                                                    @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email Address" })
+                                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                                @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
                                             </div>
-                                            <hr class="divider" />
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <label><i class="fa fa-user"></i> ERP Account</label>
-                                                </div>
+                                        </div>
+                                        <hr class="divider" />
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <label><i class="fa fa-user"></i> ERP Account</label>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
-                                                    @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
-                                                    @*<input type="email" class="form-control modal-form-border" id="email" placeholder="Email address">*@
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
+                                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                                                @*<input type="email" class="form-control modal-form-border" id="email" placeholder="Email address">*@
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
-                                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                                    @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Password">*@
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                                @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Password">*@
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm Password" })
-                                                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-                                                    @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Confirm Password">*@
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm Password" })
+                                                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                                                @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Confirm Password">*@
                                             </div>
-                                            <hr class="divider" />
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <label><i class="fa fa-codepen"></i>= Captcha Code</label>
-                                                </div>
+                                        </div>
+                                        <hr class="divider" />
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <label><i class="fa fa-codepen"></i>= Captcha Code</label>
                                             </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <input type="text" class="form-control" id="code" placeholder="Code">
-                                                </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="code" placeholder="Code">
                                             </div>
-                                            <br /><br />
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <input type="submit" class="btn btn-success btn-block btn-lg" value="Register">
-                                                </div>
+                                        </div>
+                                        <br /><br />
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                <input type="submit" class="btn btn-success btn-block btn-lg" value="Register">
                                             </div>
-                                        }
-                                        @*</form>*@
-                                    </div>
-                                    <div class="panel-footer">
-                                        <p>Do not forget to put captca in your registration</p>
-                                    </div>
+                                        </div>
+                                    }
+                                    @*</form>*@
+                                </div>
+                                <div class="panel-footer">
+                                    <p>Do not forget to put captca in your registration</p>
                                 </div>
                             </div>
                         </div>

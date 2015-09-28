@@ -11,58 +11,35 @@
         <section>
             <div class="cover-login-photo-custom">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <ul class="nav nav-pills nav-stacked">
-                                <li class="active"><a data-toggle="tab" href="#BasicInfo"><i class="fa fa-user"></i> User</a></li>
-                                <li><a data-toggle="tab" href="#LaunchSoftware"><i class="fa fa-table"></i> ERP System</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-md-10">
-                            <div class="tab-content">
-                                <div id="BasicInfo" class="tab-pane fade in active">
-                                    <div class="panel panel-info">
-                                        <div class="panel-heading">Basic Info</div>
-                                        <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="thumbnail">
-                                                        <img class="center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/sales.jpg">
-                                                        <div class="caption">
-                                                            <a href="#" class="btn btn-info btn-block" role="button">Change Photo</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" }) <br />
-                                                    Address: @Html.ActionLink((ViewData["Address"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["Address"]), @class = "profile-details" }) <br />
-                                                    Email Address: @Html.ActionLink((ViewData["Email"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["Email"]), @class = "profile-details" }) <br />
-                                                    Username: @Html.ActionLink((ViewData["UserName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["UserName"]), @class = "profile-details" })
-                                                </div>
-                                            </div>
-                                            <hr class="divider" />
-                                            @if (Model.HasPassword)
-                                            {
-                                                <a href="@Url.Action("Index", "Manage")" class="btn btn-info"> Edit Basic Info</a>
-                                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-info"> Change Your Password</a>
-                                                <p class="change-password-success">@ViewBag.StatusMessage</p>
-                                            }
-                                            else
-                                            {
-                                                @Html.ActionLink("Create", "SetPassword")
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="LaunchSoftware" class="tab-pane fade">
-                                    <div class="panel panel-info">
-                                        <div class="panel-heading">Launch Software</div>
-                                        <div class="panel-body">
-                                            <a href="@Url.Action("Index", "Software")" class="btn btn-primary">Launch Software</a>
-                                        </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Basic Info</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="well">
+                                        @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" }) <br />
+                                        Address: @Html.ActionLink((ViewData["Address"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["Address"]), @class = "profile-details" }) <br />
+                                        Email Address: @Html.ActionLink((ViewData["Email"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["Email"]), @class = "profile-details" }) <br />
+                                        Username: @Html.ActionLink((ViewData["UserName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["UserName"]), @class = "profile-details" })
                                     </div>
                                 </div>
                             </div>
+                            @if (Model.HasPassword)
+                            {
+                                <a href="@Url.Action("Index", "Manage")" class="btn btn-default"> Edit Info</a>
+                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default"> Change Your Password</a>
+                                <p class="change-password-success">@ViewBag.StatusMessage</p>
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Create", "SetPassword")
+                            }
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">ERP</div>
+                        <div class="panel-body">
+                            <a href="@Url.Action("Index", "Software")" class="btn btn-primary">Launch Software</a>
                         </div>
                     </div>
                 </div>
