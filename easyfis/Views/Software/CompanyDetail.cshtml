@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var id = Request.QueryString["id"];   
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -260,6 +263,8 @@
         // On Page Load
         // ============
         $(document).ready(function () {
+            var id = @id;
+
             branches = new wijmo.collections.CollectionView(getBranch());
             branches.canFilter = true;
             branches.pageSize = 10;
