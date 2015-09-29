@@ -40,9 +40,8 @@
             <br /><br /><br />
             <div class="container">
                 <a href="@Url.Action("Company","Software")" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
-                <hr class="divider" />
+                <hr />
                 <h4>Company Detail:</h4>
-
                 <div class="well">
                     <div class="row">
                         <div class="col-md-6">
@@ -74,21 +73,22 @@
                             </div>
                         </div>
                     </div>
-                    <hr class="divider"/>
+                    <hr />
                     <div class="row">
                         <div class="col-md-12" align="right">
-                            <button class="btn btn-success"><i class="fa fa-check"></i> Update Company Detail</button>
-                            <button class="btn btn-danger"><i class="fa fa-eraser"></i> Clear All Fields</button>
+                            <button class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-primary"><i class="fa fa-pencil"></i> Edit</button>
+                            <button class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
                         </div>
                     </div>
                 </div>
 
                 <hr class="divider" />
                 <!-- Time List -->
-                <section id="companyList">
+                <section id="branchList">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Company List</h4>
+                            <h4>Branch List</h4>
                         </div>
                     </div>
                     <div class="row">
@@ -103,13 +103,13 @@
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            @*<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Add</button>*@
+                            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> Add</button>
                         </div>
                     </div>
                     <br />
                     <div class="row" align="left">
                         <div class="col-lg-12">
-                            <div id="CompanyGrid" class="grid" align="left"></div>
+                            <div id="BranchGrid" class="grid" align="left"></div>
                         </div>
                     </div>
                     <br />
@@ -173,8 +173,8 @@
         // ================
         // Global Variables
         // ================
-        var companies;
-        var companyGrid;
+        var branches;
+        var branchGrid;
 
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
@@ -183,12 +183,12 @@
         var btnCurrentPageGrid;
 
         // ================
-        // GET Company List
+        // GET Branch List
         // ================
-        function getCompany() {
-            var companies = new wijmo.collections.ObservableArray;
+        function getBranch() {
+            var branches = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/listCompany',
+                url: '/api/listBranch',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -196,14 +196,21 @@
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            companies.push({
+                            branches.push({
+
+                                // GET data in api-ListBranch
                                 EditId: "<button class='btn btn-primary btn-xs btn-block'><i class='fa fa-pencil-square'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
+                                CompanyId: Results[i]["CompanyId"],
                                 Company: Results[i]["Company"],
+                                Branch: Results[i]["Branch"],
+                                BranchCode: Results[i]["BranchCode"],
                                 Address: Results[i]["Address"],
                                 ContactNumber: Results[i]["ContactNumber"],
                                 TaxNumber: Results[i]["TaxNumber"],
+
+                                // Users in the System
                                 IsLocked: Results[i]["IsLocked"],
                                 CreatedById: Results[i]["CreatedById"],
                                 CreateDateTime: Results[i]["CreateDateTime"],
@@ -217,25 +224,25 @@
                 alert(err);
             });
 
-            return companies;
+            return branches;
         }
 
 
-        // ==================
-        // Navigation Buttons
-        // ==================
-        function updateNavigateButtonsCompany() {
-            if (companies.pageSize <= 0) {
+        // =============================
+        // Navigation Buttons for Branch
+        // =============================
+        function updateNavigateButtonsBranch() {
+            if (branches.pageSize <= 0) {
                 document.getElementById('naviagtionPageGrid').style.display = 'none';
                 return;
             }
             document.getElementById('naviagtionPageGrid').style.display = 'block';
-            if (companies.pageIndex === 0) {
+            if (branches.pageIndex === 0) {
                 btnFirstPageGrid.setAttribute('disabled', 'disabled');
                 btnPreviousPageGrid.setAttribute('disabled', 'disabled');
                 btnNextPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.removeAttribute('disabled');
-            } else if (companies.pageIndex === (companies.pageCount - 1)) {
+            } else if (branches.pageIndex === (branches.pageCount - 1)) {
                 btnFirstPageGrid.removeAttribute('disabled');
                 btnPreviousPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.setAttribute('disabled', 'disabled');
@@ -246,32 +253,32 @@
                 btnNextPageGrid.removeAttribute('disabled');
                 btnLastPageGrid.removeAttribute('disabled');
             }
-            btnCurrentPageGrid.innerHTML = (companies.pageIndex + 1) + ' / ' + companies.pageCount;
+            btnCurrentPageGrid.innerHTML = (branches.pageIndex + 1) + ' / ' + branches.pageCount;
         }
 
         // ============
         // On Page Load
         // ============
         $(document).ready(function () {
-            companies = new wijmo.collections.CollectionView(getCompany());
-            companies.canFilter = true;
-            companies.pageSize = 10;
+            branches = new wijmo.collections.CollectionView(getBranch());
+            branches.canFilter = true;
+            branches.pageSize = 10;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                companies.refresh();
+                branches.refresh();
             });
-            companies.filter = function (item) {
+            branches.filter = function (item) {
                 return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
             }
-            companies.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsCompany();
+            branches.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsBranch();
             });
 
             // Flex Grid
-            companyGrid = new wijmo.grid.FlexGrid('#CompanyGrid');
-            companyGrid.initialize({
+            branchGrid = new wijmo.grid.FlexGrid('#BranchGrid');
+            branchGrid.initialize({
                 columns: [
                             {
                                 "header": "Edit",
@@ -299,6 +306,20 @@
                                 "width": "2*",
                             },
                             {
+                                "header": "Branch",
+                                "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*",
+                            },
+                            {
+                                "header": "Branch Code",
+                                "binding": "BranchCode",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
                                 "header": "Address",
                                 "binding": "Address",
                                 "align": "left",
@@ -321,7 +342,7 @@
                             }
                 ],
                 autoGenerateColumns: false,
-                itemsSource: companies,
+                itemsSource: branches,
                 isReadOnly: true,
                 frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
@@ -330,7 +351,7 @@
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
 
-            companyGrid.trackChanges = true;
+            branchGrid.trackChanges = true;
 
             //Navigation button
             btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
@@ -339,26 +360,24 @@
             btnLastPageGrid = document.getElementById('btnMoveToLastPageGrid');
             btnCurrentPageGrid = document.getElementById('btnCurrentPageGrid');
 
-            updateNavigateButtonsCompany();
+            updateNavigateButtonsBranch();
 
             btnFirstPageGrid.addEventListener('click', function () {
                 companies.moveToFirstPage();
-                updateNavigateButtonsCompany();
+                updateNavigateButtonsBranch();
             });
             btnPreviousPageGrid.addEventListener('click', function () {
                 companies.moveToPreviousPage();
-                updateNavigateButtonsCompany();
+                updateNavigateButtonsBranch();
             });
             btnNextPageGrid.addEventListener('click', function () {
                 companies.moveToNextPage();
-                updateNavigateButtonsCompany();
+                updateNavigateButtonsBranch();
             });
             btnLastPageGrid.addEventListener('click', function () {
                 companies.moveToLastPage();
-                updateNavigateButtonsCompany();
+                updateNavigateButtonsBranch();
             });
-
-
         });
     </script>
 </body>
