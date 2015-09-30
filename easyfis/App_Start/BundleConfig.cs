@@ -61,7 +61,8 @@ namespace easyfis
             bundles.Add(new StyleBundle("~/Content/Software-css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap.min.css",
-                      "~/Content/dashboard.css"));
+                      "~/Content/dashboard.css",
+                      "~/Content/toastr.css"));
 
             // ==================================
             // Custom JavaScripts - JS (Software)
@@ -73,8 +74,10 @@ namespace easyfis
                      "~/Scripts/transition.js",
                      "~/Scripts/collapse.js",
                      "~/Scripts/dropdown.js",
+                     "~/Scripts/modal.js",
                      "~/Scripts/sidebar-menu.js",
-                     "~/Scripts/push-left-menu.js"));
+                     "~/Scripts/push-left-menu.js",
+                     "~/Scripts/toastr.js"));
 
             // =============
             // WIJMO Scripts

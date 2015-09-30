@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -29,9 +30,10 @@ namespace easyfis.Controllers
         }
 
         [Route("api/company/{id}")]
-        public Models.MstCompany GetCompany(int id)
+        public Models.MstCompany GetCompany(String id)
         {
-            var company = from d in db.MstCompanies where d.Id == id select new Models.MstCompany
+            var companyId = Convert.ToInt32(id);
+            var company = from d in db.MstCompanies where d.Id == companyId select new Models.MstCompany
                           {
                               Id = d.Id,
                               Company = d.Company,
@@ -45,7 +47,7 @@ namespace easyfis.Controllers
                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                           };
 
-            return (Models.MstCompany)company;
+            return (Models.MstCompany)company.FirstOrDefault();
         }
 
         [Route("api/addCompany")]
@@ -55,7 +57,17 @@ namespace easyfis.Controllers
             {
                 Data.MstCompany newCompany = new Data.MstCompany();
 
+                // Company Fields
                 newCompany.Company = company.Company;
+                newCompany.Address = company.Address;
+                newCompany.ContactNumber = company.ContactNumber;
+                newCompany.TaxNumber = company.TaxNumber;
+
+                // User Fields
+                newCompany.CreatedById = company.CreatedById;
+                newCompany.CreatedDateTime = Convert.ToDateTime(company.CreateDateTime);
+                newCompany.UpdatedById = company.UpdatedById;
+                newCompany.UpdatedDateTime = Convert.ToDateTime(company.UpdatedDateTime);
 
                 db.MstCompanies.InsertOnSubmit(newCompany);
                 db.SubmitChanges();
@@ -70,19 +82,28 @@ namespace easyfis.Controllers
         }
 
         [Route("api/updateCompany/{id}")]
-        public HttpResponseMessage Put(int id, Models.MstCompany company)
+        public HttpResponseMessage Put(String id, Models.MstCompany company)
         {
             try
             {
-                var companies = from d in db.MstCompanies where d.Id == id select d;
+                var companyId = Convert.ToInt32(id);
+                var companies = from d in db.MstCompanies where d.Id == companyId select d;
 
                 if(companies.Any())
                 {
                     var updateCompany = companies.FirstOrDefault();
 
-
+                    // Company Fields
                     updateCompany.Company = company.Company;
+                    updateCompany.Address = company.Address;
+                    updateCompany.ContactNumber = company.ContactNumber;
+                    updateCompany.TaxNumber = company.TaxNumber;
 
+                    // User Fields
+                    //updateCompany.CreatedById = company.CreatedById;
+                    //updateCompany.CreatedDateTime = Convert.ToDateTime(company.CreateDateTime);
+                    //updateCompany.UpdatedById = company.UpdatedById;
+                    //updateCompany.UpdatedDateTime = Convert.ToDateTime(company.UpdatedDateTime);
                     
                     db.SubmitChanges();
 
@@ -101,11 +122,12 @@ namespace easyfis.Controllers
         }
 
         [Route("api/deleteCompany/{id}")]
-        public HttpResponseMessage Delete(int id)
+        public HttpResponseMessage Delete(String id)
         {
             try
             {
-                var companies = from d in db.MstCompanies where d.Id == id select d;
+                var companyId = Convert.ToInt32(id);
+                var companies = from d in db.MstCompanies where d.Id == companyId select d;
 
                 if (companies.Any())
                 {
