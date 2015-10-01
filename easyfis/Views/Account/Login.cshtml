@@ -3,68 +3,13 @@
 @Styles.Render("~/Content/custom-css")
 
 <!-- Header -->
-<header>
-    <!-- navbar -->
-    <nav class="navbar navbar opaque navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="@Url.Action("Index", "Home")"><i class="fa fa-calculator"></i> ERP System</a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li><a href="@Url.Action("Index", "Home")#home"><i class="fa fa-home"></i> Home</a></li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-info-circle"></i> About</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="@Url.Action("Index", "Home")#sales"><i class="fa fa-tags"></i> Sales</a></li>
-                            <li><a href="@Url.Action("Index", "Home")#purchases"><i class="fa fa-shopping-cart"></i> Purchases</a></li>
-                            <li><a href="@Url.Action("Index", "Home")#warehouseInventory"><i class="fa fa-th-large"></i> Warehouse Inventory</a></li>
-                            <li><a href="@Url.Action("Index", "Home")#productManagement"><i class="fa fa-archive"></i> Product Management</a></li>
-                            <li><a href="@Url.Action("Index", "Home")#bankManagement"><i class="fa fa-university"></i> Bank Management</a></li>
-                            <li><a href="@Url.Action("Index", "Home")#financials"><i class="fa fa-bar-chart"></i> Financials</a></li>
-                            <li><a href="@Url.Action("Index", "Home")#multiUserSetup"><i class="fa fa-users"></i> Mutli-user Setup</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="@Url.Action("Index", "Home")#support"><i class="fa fa-phone"></i> Support</a></li>
-                    <li><a href="#"><i class="fa fa-newspaper-o"></i> News</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    @Html.Partial("_LoginPartial")
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- end of navbar -->
-</header>
+@Html.Partial("_AccountHeader")
 
-@Html.Partial("_Login")
+<!-- After Login -->
+@Html.Partial("_AccountLogin")
 
 <!-- Footer -->
-<footer>
-    <!-- cover page support -->
-    <div class="cover-photo-footer-custom">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <a href="#" class="btn btn-primary" data-placement="top" data-toggle="tooltip" title="Like us on Facebook"><i class="fa fa-facebook-official"></i> Facebook</a>
-                    <a href="#" class="btn btn-info" data-placement="right" data-toggle="tooltip" title="Follow us on twitter"><i class="fa fa-twitter"></i> Twitter</a>
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Simplified Accounting Beta - v1.20140715 - © Innosoft Solutions - ERP System</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End of cover page support -->
-</footer>
+@Html.Partial("_AccountFooter")
 
 @Scripts.Render("~/Scripts/js")
 @Scripts.Render("~/bundles/jqueryval")

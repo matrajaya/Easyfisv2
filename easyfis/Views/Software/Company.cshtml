@@ -17,29 +17,13 @@
 <body>
     <div id="wrapper" class="wrapper">
         <!-- Header -->
-        <header>
-            <nav class="navbar navbar-inverse navbar-fixed-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a href="@Url.Action("Index","Home")" class="navbar-brand"> ERP System</a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="myNavbar">
-                        @Html.Partial("_SoftwareAfterLogin")
-                    </div>
-                </div>
-            </nav>
-        </header>
+        @Html.Partial("_SoftwareHeader")
 
         <!-- Section -->
         <section>
             <br /><br /><br />
             <div class="container">
-                <!-- Time List -->
+                <!-- Company List -->
                 <section id="companyList">
                     <div class="row">
                         <div class="col-lg-12">
@@ -58,7 +42,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <button class="btn btn-primary pull-right" onclick="cmdCompanyAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-primary pull-right" onclick="cmdCompanyAddButton_OnClick()"><i class="fa fa-plus"></i> Add Company</button>
                         </div>
                     </div>
                     <br />
@@ -111,39 +95,12 @@
     </div>
 
     <!-- SideBar Menu -->
-    <nav id="c-menu--push-left" class="c-menu c-menu--push-left">
-        <h3 class="c-menu__close"><i class="fa fa-bars"></i> Software Dashboard</h3>
-        <ul class="menu-items">
-            <li class="menu-items"><a href="@Url.Action("Supplier","Software")" class="menu-link sidebar-menu-link"><i class="fa fa-truck "></i> Supplier</a></li>
-            <li class="menu-items"><a href="@Url.Action("PurchaseOrder", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-tags"></i> Purchase Order</a></li>
-            <li class="menu-items"><a href="@Url.Action("ReceivingReceipt", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-file-text-o"></i> Receiving Receipt</a></li>
-            <li class="menu-items"><a href="@Url.Action("AccountsPayable", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-file-text-o"></i> Accounts Payable</a></li>
-            <li class="menu-items"><a href="@Url.Action("Disbursement", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-file-text-o"></i> Disbursement</a></li>
-            <li class="menu-items"><a href="@Url.Action("Bank", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-university"></i> Bank</a></li>
-            <li class="menu-items"><a href="@Url.Action("Customer", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-users"></i> Customer</a></li>
-            <li class="menu-items"><a href="@Url.Action("Sales", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-bar-chart"></i> Sales</a></li>
-            <li class="menu-items"><a href="@Url.Action("AccountsReceivable", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-file-text-o"></i> Accounts Receivable</a></li>
-            <li class="menu-items"><a href="@Url.Action("Collection", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-archive"></i> Collection</a></li>
-            <li class="menu-items"><a href="@Url.Action("BankReconciliation", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-university"></i> Bank Reconciliation</a></li>
-            <li class="menu-items"><a href="@Url.Action("Items", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-suitcase"></i> Items</a></li>
-            <li class="menu-items"><a href="@Url.Action("StockIn", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-cubes"></i> Stock In</a></li>
-            <li class="menu-items"><a href="@Url.Action("StockOut", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-cubes"></i> Stock Out</a></li>
-            <li class="menu-items"><a href="@Url.Action("InventoryReport", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-file-text-o"></i> Inventory Report</a></li>
-            <li class="menu-items"><a href="@Url.Action("StockTransfer", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-cubes"></i> Stock Transfer</a></li>
-            <li class="menu-items"><a href="@Url.Action("SystemTables", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-cubes"></i> System Tables</a></li>
-            <li class="menu-items"><a href="@Url.Action("ChartOfAccounts", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-line-chart"></i> Chart of Accounts</a></li>
-            <li class="menu-items"><a href="@Url.Action("JournalVoucher", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-book"></i> Journal Voucher</a></li>
-            <li class="menu-items"><a href="@Url.Action("Company", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-building"></i> Comapany</a></li>
-            <li class="menu-items"><a href="@Url.Action("FinancialStatements", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-money"></i> Financial Statements</a></li>
-            <li class="menu-items"><a href="@Url.Action("Users", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-user"></i> Users</a></li>
-            <li class="menu-items"><a href="@Url.Action("Settings", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-gears"></i> Settings</a></li>
-        </ul>
-    </nav><!-- /c-menu push-left -->
+    @Html.Partial("_SoftwareSideBarMenu")
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
-
     <script type="text/javascript">
         // ================
         // Global Variables
