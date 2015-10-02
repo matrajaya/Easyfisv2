@@ -123,7 +123,9 @@
                     </div>
                     <div class="modal-body">
                         <dl class="dl-horizontal">
-                            <dt>Company:</dt>
+                            <dd><input type="hidden" class="form-control" placeholder="Id" id="branch_Id" /></dd>
+                            <dd><input type="hidden" class="form-control" placeholder="Id" id="branch_companyId" /></dd>
+                            <dt>Company:</dt> 
                             <dd><input class="form-control" placeholder="Company" id="branch_company" /></dd>
                             <dt>Branch:</dt>
                             <dd><input class="form-control" placeholder="Branch" id="branch_branch" /></dd>
@@ -140,7 +142,7 @@
                     <div class="modal-footer">
                         @*<a href="#" class="modal-footer-custom">Forgot Password?</a>
                             Not yet a member? <a href="#">Register</a>*@
-                        <button class="btn btn-primary"><i class="fa fa-check"></i> Ok</button>
+                        <button class="btn btn-primary" onclick="cmdBranchUpdateButton_OnClick()"><i class="fa fa-check"></i> Ok</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -171,6 +173,9 @@
 
     <!-- SideBar Menu -->
     @Html.Partial("_SoftwareSideBarMenu")
+
+    <!-- Footer -->
+    @Html.Partial("_SoftwareFooter")
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
@@ -206,7 +211,6 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             branches.push({
-
                                 // GET data in api-ListBranch
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
@@ -359,9 +363,48 @@
             document.getElementById('branch_ContactNumber').value = "";
             document.getElementById('branch_TaxNumber').value = "";
         }
+     
+        // ===================
+        // Brach Update Button
+        // ===================
+        function cmdBranchUpdateButton_OnClick() {
+            var branchObject = new Object();
+            var branchId = document.getElementById('branch_Id').value;
+
+            branchObject.CompanyId = document.getElementById('branch_companyId').value;
+            branchObject.Branch = document.getElementById('branch_branch').value;
+            branchObject.BranchCode = document.getElementById('branch_Code').value;
+            branchObject.Address = document.getElementById('branch_Address').value;
+            branchObject.ContactNumber = document.getElementById('branch_ContactNumber').value;
+            branchObject.TaxNumber = document.getElementById('branch_TaxNumber').value;
+            
+            var data = JSON.stringify(branchObject);
+            $.ajax({
+                type: "PUT",
+                url: '/api/updateBranch/' + branchId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: data,
+                statusCode: {
+                    200: function () {
+                        toastr.success("Successfully Updated");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Can't Update");
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                    }
+                }
+            });
+
+        }
 
         // =================
-        // Brach Edit Button
+        // Branch Edit Button
         // =================
         function cmdBranchEditButton_OnClick() {
             branches.editItem(branches.currentItem);
@@ -372,7 +415,9 @@
             });
 
             var branch = branches.currentEditItem;
+            document.getElementById('branch_Id').value = branch.Id ? branch.Id : '';
             document.getElementById('branch_company').value = branch.Company ? branch.Company : '';
+            document.getElementById('branch_companyId').value = branch.CompanyId ? branch.CompanyId : '';
             document.getElementById('branch_branch').value = branch.Branch ? branch.Branch : '';
             document.getElementById('branch_Code').value = branch.BranchCode ? branch.BranchCode : '';
             document.getElementById('branch_Address').value = branch.Address ? branch.Address : '';
@@ -381,41 +426,43 @@
 
         }
 
-        // ===================
+        // ====================
         // Branch Delete Button
-        // ===================
+        // ====================
         function cmdBranchDeleteButton_OnClick() {
             $('#deleteBranchConfirm').modal({
                 show: true,
                 backdrop: 'static'
             });
         }
+
         // Branch Confirm Delete
         function cmdBranchConfirmDeleteButton_OnClick() {
             branches.editItem(branches.currentItem);
             var id = branches.currentEditItem.Id;
-
             $.ajax({
+                url: '/api/deleteBranch/' + id,
                 type: "DELETE",
-                url: '/api/company/' + id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        toastr.success(getMessage("S0001"));
+                        toastr.success("Successfully Deleted");
+                        $('#deleteCompanyConfirm').modal('hide');
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
                     },
                     404: function () {
-                        toastr.error(getMessage("E0004"));
+                        toastr.error("Request Not Found");
+                        $('#deleteCompanyConfirm').modal('hide');
                     },
                     400: function () {
-                        toastr.error(getMessage("E0003"));
+                        toastr.error("Bad Request");
+                        $('#deleteCompanyConfirm').modal('hide');
                     }
                 }
             });
-
         }
 
         // =============================
