@@ -3,27 +3,34 @@
     <!-- cover page support -->
     <div class="cover-photo-footer-custom">
         <div class="container">
+            <div align="center">                            
+                <img class="icon-custom" src="~/images/coverImages/cover9.png" alt="">
+                <br />
+                <label class="tittle-custom">easyFIS</label>
+                <br />
+                <label>Version:</label> 1.5
+            </div>
             <div class="row">
                 <div class="footer-space">
-                    <div class="col-md-3">
-
-                    </div>
-                    <div class="col-md-3">
-                        <div align="center">
-                            <img class="icon-custom" src="~/images/coverImages/cover9.png" alt="">
-                            <br />
-                            <label class="tittle-custom">easyFIS</label>
-                            <br />
-                            <label>Version:</label> 1.5
-                        </div>
-                    </div>
-                    <div class="col-md-6">
+                    @*<div class="col-md-4 col-md-offset-2">
                         <label>Current User:</label> @Html.ActionLink((ViewData["UserName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["UserName"]), @class = "profile-details" })
-                        <br />
+                    </div>*@
+                    <div class="col-md-3 col-md-offset-1 padding-label">
                         <label>Created by:</label> Full name
                         <br />
-                        <label>Created date:</label>:</label> Full name
+                        <label>Created date:</label> Full name
+                    </div>
+                    <div class="col-md-3 col-md-offset-1 padding-label">
+                        <label>Updated by:</label> Full name
                         <br />
+                        <label>Updated date:</label> Full name
+                    </div>
+                    <div class="col-md-3 col-md-offset-1 padding-label">
+                        <label>Updated by:</label> Full name
+                        <br />
+                        <label>Updated date:</label> Full name
+                    </div>
+                    <div class="col-md-3 col-md-offset-1">
                         <label>Updated by:</label> Full name
                         <br />
                         <label>Updated date:</label> Full name
