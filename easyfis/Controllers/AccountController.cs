@@ -171,6 +171,26 @@ namespace easyfis.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+                    Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+                    Data.MstUser newUser = new Data.MstUser();
+
+                    var users = from d in db.AspNetUsers where d.UserName == user.UserName select d;
+
+                    if (users.Any())
+                    {
+                        newUser.UserId = users.First().Id;
+                        newUser.UserName = model.UserName;
+                        newUser.Password = model.Password;
+                        newUser.Email = model.Email;
+                        newUser.FirstName = model.FirstName;
+                        newUser.LastName = model.LastName;
+                        newUser.Address = model.Address;
+                        newUser.IsLocked = true;
+
+                        db.MstUsers.InsertOnSubmit(newUser);
+                        db.SubmitChanges();
+                    }
+            
                     return RedirectToAction("Register", "Account");
                 }
                 //AddErrors(result);
