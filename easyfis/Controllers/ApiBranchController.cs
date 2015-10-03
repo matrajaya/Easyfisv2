@@ -14,8 +14,7 @@ namespace easyfis.Controllers
         [Route("api/listBranch")]
         public List<Models.MstBranch> Get()
         {
-            var branches = from d in db.MstBranches
-                            select new Models.MstBranch
+            var branches = from d in db.MstBranches select new Models.MstBranch
                             {
                                 Id = d.Id,
                                 CompanyId = d.CompanyId,

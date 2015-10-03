@@ -231,6 +231,19 @@ namespace easyfis.Controllers
             var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
+
+                Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+                var users = from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d;
+
+                if (users.Any())
+                {
+                    var updateUser = users.FirstOrDefault();
+
+                    updateUser.Password = model.NewPassword;
+
+                    db.SubmitChanges();
+                }
+
                 var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
