@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <button class="btn btn-primary pull-right" onclick="cmdCompanyAddButton_OnClick()"><i class="fa fa-plus"></i> Add Company</button>
+                            <button class="btn btn-primary pull-right" onclick="cmdCompanyAddCompanyButton_OnClick()"><i class="fa fa-plus"></i> Add Company</button>
                         </div>
                     </div>
                     <br />
@@ -86,8 +86,8 @@
                         Are you sure you want to delete this? <i class="fa fa-trash"></i>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-danger" onclick="cmdCompanyConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button class="btn btn-danger" id="cmdConfirmDeleteCompany" onclick="cmdCompanyConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button type="button" id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -151,7 +151,6 @@
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             });
-
             return companies;
         }
 
@@ -161,16 +160,14 @@
         function cmdCompanyEditButton_OnClick() {
             companies.editItem(companies.currentItem);
             var company = companies.currentEditItem;
-
             var id = company.Id !== null && typeof (company.Id) != 'undefined' ? wijmo.Globalize.format(company.Id) : 0;
-
             window.location = 'CompanyDetail/?Id=' + id;
         }
 
-        // ==================
-        // Company Add Button
-        // ==================
-        function cmdCompanyAddButton_OnClick() {
+        // ==========================
+        // Company Add-Company Button
+        // ==========================
+        function cmdCompanyAddCompanyButton_OnClick() {
             var id = 0;
             window.location = 'CompanyDetail/?Id=' + id;
         }
@@ -195,6 +192,8 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
+                        $("#cmdConfirmDeleteCompany").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
                         $('#deleteCompanyConfirm').modal('hide');
                         window.setTimeout(function () {
@@ -336,7 +335,6 @@
                 frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
-                headersVisibility: wijmo.grid.HeadersVisibility.Column,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
 
@@ -367,8 +365,6 @@
                 companies.moveToLastPage();
                 updateNavigateButtonsCompany();
             });
-
-
         });
     </script>
 </body>
