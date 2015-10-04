@@ -26,9 +26,9 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <a href="@Url.Action("Company","Software")" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
+                <a href="@Url.Action("Company","Software")" class="btn btn-default"><i class="fa fa-arrow-left"></i> Company List</a>
                 <hr />
-                <h4>Company Detail:</h4>
+                <h4 id="companyDetailLabel">Company Detail:</h4>
                 <div class="well">
                     <div class="row">
                         <div class="col-md-6">
@@ -55,8 +55,8 @@
                     <hr />
                     <div class="row">
                         <div class="col-md-12" align="right">
-                            <button class="btn btn-primary" onclick="cmdCompanyAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            <button class="btn btn-success" onclick="cmdCompanyUpdateButton_OnClick()"><i class="fa fa-pencil"></i> Update</button>
+                            <button class="btn btn-primary" id="cmdAddCompany" onclick="cmdCompanyAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-success" id="cmdUpdateCompany" onclick="cmdCompanyUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 <section id="branchList">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Branch List</h4>
+                            <h4 id="companyNameLabel">Branch List</h4>
                         </div>
                     </div>
                     <div class="row">
@@ -77,11 +77,11 @@
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" id="InputFilter" placeholder="Search Company">
+                                <input type="text" class="form-control" id="InputFilter" placeholder="Search Branch">
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <button type="submit" class="btn btn-primary pull-right" onclick="branchAddButton_OnClick()"><i class="fa fa-plus"></i> Add Branch</button>
+                            <button type="submit" class="btn btn-primary pull-right" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add Branch</button>
                         </div>
                     </div>
                     <br />
@@ -119,20 +119,20 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Branch edit detail</h4>
+                        <h4 class="modal-title" id="companyNameModalLabel">Branch Detail</h4>
                     </div>
                     <div class="modal-body">
                         <dl class="dl-horizontal">
                             <dd><input type="hidden" class="form-control" placeholder="Id" id="branch_Id" /></dd>
                             <dd><input type="hidden" class="form-control" placeholder="Id" id="branch_companyId" /></dd>
-                            <dt>Company:</dt> 
-                            <dd><input class="form-control" placeholder="Company" id="branch_company" /></dd>
+                            <dt>Company:</dt>
+                            <dd><input class="form-control" placeholder="Company" id="branch_company" readonly /></dd>
                             <dt>Branch:</dt>
                             <dd><input class="form-control" placeholder="Branch" id="branch_branch" /></dd>
                             <dt>Branch code:</dt>
                             <dd><input class="form-control" placeholder="Branch code" id="branch_Code" /></dd>
                             <dt>Address:</dt>
-                            <dd><textarea class="form-control textarea-custom-branch" placeholder="Address" id="branch_Address"></textarea></dd>
+                            <dd><textarea class="form-control textarea-custom-branch" placeholder="Branch address" id="branch_Address"></textarea></dd>
                             <dt>Contact Number:</dt>
                             <dd><input class="form-control" placeholder="Contact Number" id="branch_ContactNumber" /></dd>
                             <dt>Tax Number:</dt>
@@ -140,10 +140,9 @@
                         </dl>
                     </div>
                     <div class="modal-footer">
-                        @*<a href="#" class="modal-footer-custom">Forgot Password?</a>
-                            Not yet a member? <a href="#">Register</a>*@
-                        <button class="btn btn-primary" onclick="cmdBranchUpdateButton_OnClick()"><i class="fa fa-check"></i> Ok</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button class="btn btn-primary" id="cmdAddBranchButton" onclick="cmdBranchAddButton_OnClick"><i class="fa fa-plus"></i> Add</button>
+                        <button class="btn btn-success" id="cmdUpdateBranchButton" onclick="cmdBranchUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
+                        <button type="button" id="cmdBranchDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
             </div>
@@ -162,8 +161,8 @@
                         Are you sure you want to delete this? <i class="fa fa-trash"></i>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-danger" onclick="cmdBranchConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button class="btn btn-danger" id="cmdConfirmDeleteBranch" onclick="cmdBranchConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button type="button" id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -197,53 +196,9 @@
         var btnCurrentPageGrid;
 
         // ================
-        // GET Branch List
-        // ================
-        function getBranch() {
-            var branches = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/listBranch',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            branches.push({
-                                // GET data in api-ListBranch
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                CompanyId: Results[i]["CompanyId"],
-                                Company: Results[i]["Company"],
-                                Branch: Results[i]["Branch"],
-                                BranchCode: Results[i]["BranchCode"],
-                                Address: Results[i]["Address"],
-                                ContactNumber: Results[i]["ContactNumber"],
-                                TaxNumber: Results[i]["TaxNumber"],
-
-                                // Users in the System
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreateDateTime: Results[i]["CreateDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                            });
-                        }
-                    }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-
-            return branches;
-        }
-
-        // ================
         // GET Company List
         // ================
-        function getEditCompany() {
+        function getCompanyById() {
             var companies = new wijmo.collections.ObservableArray;
             var Id = @id
             $.ajax({
@@ -267,7 +222,10 @@
                             UpdatedDateTime: Results.UpdatedDateTime
                         });
                     }
-
+                    document.getElementById('companyDetailLabel').innerHTML = Results.Company + " Company Detail";
+                    document.getElementById('companyNameLabel').innerHTML = Results.Company + " Branch List";
+                    document.getElementById('companyNameModalLabel').innerHTML = Results.Company + " Branch Detail";
+                    document.getElementById('branch_company').value = Results.Company;
                     document.getElementById('company_Company').value = Results.Company;
                     document.getElementById('company_Address').value = Results.Address;
                     document.getElementById('company_ContactNumber').value = Results.ContactNumber;
@@ -276,7 +234,6 @@
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             });
-
             return companies;
         }
 
@@ -290,7 +247,6 @@
             companyObject.Address = document.getElementById('company_Address').value;
             companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
             companyObject.TaxNumber = document.getElementById('company_TaxNumber').value;
-
             var data = JSON.stringify(companyObject);
             $.ajax({
                 type: "POST",
@@ -317,12 +273,10 @@
         function cmdCompanyUpdateButton_OnClick() {
             var companyObject = new Object();
             var id = @id
-
             companyObject.Company = document.getElementById('company_Company').value;
             companyObject.Address = document.getElementById('company_Address').value;
             companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
             companyObject.TaxNumber = document.getElementById('company_TaxNumber').value;
-
             var data = JSON.stringify(companyObject);
             $.ajax({
                 type: "PUT",
@@ -332,6 +286,7 @@
                 data: data,
                 statusCode: {
                     200: function () {
+                        $("#cmdUpdateCompany").prop("disabled",true);
                         toastr.success("Successfully Updated");
                         window.setTimeout(function () {
                             location.reload()
@@ -347,37 +302,75 @@
             });
         }
 
-        // =================
-        // Branch Add Button
-        // =================
-        function branchAddButton_OnClick() {
+        // ================
+        // GET Branch List
+        // ================
+        function getBranch() {
+            var branches = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listBranch',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            branches.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                CompanyId: Results[i]["CompanyId"],
+                                Company: Results[i]["Company"],
+                                Branch: Results[i]["Branch"],
+                                BranchCode: Results[i]["BranchCode"],
+                                Address: Results[i]["Address"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreateDateTime: Results[i]["CreateDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return branches;
+        }
+
+        // ========================
+        // Branch Add-Branch Button
+        // ========================
+        function cmdbranchAddBranchButton_OnClick() {
             $('#branchEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
-
-            document.getElementById('branch_company').value = "";
+            $("#cmdUpdateBranchButton").hide();
+            $("#cmdAddBranchButton").show();
             document.getElementById('branch_branch').value = "";
             document.getElementById('branch_Code').value = "";
             document.getElementById('branch_Address').value = "";
             document.getElementById('branch_ContactNumber').value = "";
             document.getElementById('branch_TaxNumber').value = "";
         }
-     
+
         // ===================
-        // Brach Update Button
+        // Branch Update Button
         // ===================
         function cmdBranchUpdateButton_OnClick() {
             var branchObject = new Object();
             var branchId = document.getElementById('branch_Id').value;
-
             branchObject.CompanyId = document.getElementById('branch_companyId').value;
             branchObject.Branch = document.getElementById('branch_branch').value;
             branchObject.BranchCode = document.getElementById('branch_Code').value;
             branchObject.Address = document.getElementById('branch_Address').value;
             branchObject.ContactNumber = document.getElementById('branch_ContactNumber').value;
             branchObject.TaxNumber = document.getElementById('branch_TaxNumber').value;
-            
             var data = JSON.stringify(branchObject);
             $.ajax({
                 type: "PUT",
@@ -387,6 +380,8 @@
                 data: data,
                 statusCode: {
                     200: function () {
+                        $("#cmdUpdateBranchButton").prop("disabled",true);
+                        $("#cmdBranchDetailCloseButton").prop("disabled",true);
                         toastr.success("Successfully Updated");
                         window.setTimeout(function () {
                             location.reload()
@@ -408,12 +403,12 @@
         // =================
         function cmdBranchEditButton_OnClick() {
             branches.editItem(branches.currentItem);
-
             $('#branchEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
-
+            $("#cmdUpdateBranchButton").show();
+            $("#cmdAddBranchButton").hide();
             var branch = branches.currentEditItem;
             document.getElementById('branch_Id').value = branch.Id ? branch.Id : '';
             document.getElementById('branch_company').value = branch.Company ? branch.Company : '';
@@ -423,7 +418,6 @@
             document.getElementById('branch_Address').value = branch.Address ? branch.Address : '';
             document.getElementById('branch_ContactNumber').value = branch.ContactNumber ? branch.ContactNumber : '';
             document.getElementById('branch_TaxNumber').value = branch.TaxNumber ? branch.TaxNumber : '';
-
         }
 
         // ====================
@@ -435,7 +429,6 @@
                 backdrop: 'static'
             });
         }
-
         // Branch Confirm Delete
         function cmdBranchConfirmDeleteButton_OnClick() {
             branches.editItem(branches.currentItem);
@@ -447,8 +440,9 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        toastr.success("Successfully Deleted");
-                        $('#deleteCompanyConfirm').modal('hide');
+                        $("#cmdConfirmDeleteBranch").prop("disabled",true);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled",true);
+                        toastr.success("Successfully Deleted"); 
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
@@ -497,6 +491,12 @@
         // On Page Load
         // ============
         $(document).ready(function () {
+            if(@id == 0) {
+                $("#cmdUpdateCompany").prop("disabled", true);
+            } else {
+                $("#cmdAddCompany").prop("disabled", true);
+            }
+
             toastr.options = {
                 "closeButton": true,
                 "debug": true,
@@ -515,7 +515,7 @@
                 "hideMethod": "fadeOut"
             }
 
-            getEditCompany();
+            getCompanyById();
 
             branches = new wijmo.collections.CollectionView(getBranch());
             branches.canFilter = true;
@@ -527,7 +527,7 @@
                 branches.refresh();
             });
             branches.filter = function (item) {
-                return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1);
             }
             branches.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsBranch();
@@ -604,7 +604,6 @@
                 frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
-                headersVisibility: wijmo.grid.HeadersVisibility.Column,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
 
