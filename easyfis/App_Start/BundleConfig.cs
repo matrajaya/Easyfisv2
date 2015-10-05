@@ -79,6 +79,12 @@ namespace easyfis
                      "~/Scripts/push-left-menu.js",
                      "~/Scripts/toastr.js"));
 
+            // =================================
+            // Custom JavaScripts - JS (Profile)
+            // =================================
+            bundles.Add(new ScriptBundle("~/Scripts/Profile-js").Include(
+                    "~/Scripts/profile.js"));
+
             // =============
             // WIJMO Scripts
             // =============
