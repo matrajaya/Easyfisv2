@@ -14,38 +14,39 @@ namespace easyfis.Controllers
         [Route("api/listCompany")]
         public List<Models.MstCompany> Get()
         {
-            var companies = from d in db.MstCompanies select new Models.MstCompany { 
-                Id = d.Id, 
-                Company = d.Company,
-                Address = d.Address,
-                ContactNumber = d.ContactNumber,
-                TaxNumber = d.TaxNumber,
-                IsLocked = d.IsLocked,
-                CreatedById = d.CreatedById,
-                CreateDateTime = d.CreatedDateTime.ToShortDateString(),
-                UpdatedById = d.UpdatedById,
-                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-            };
+            var companies = from d in db.MstCompanies select new Models.MstCompany
+                { 
+                    Id = d.Id, 
+                    Company = d.Company,
+                    Address = d.Address,
+                    ContactNumber = d.ContactNumber,
+                    TaxNumber = d.TaxNumber,
+                    IsLocked = d.IsLocked,
+                    CreatedById = d.CreatedById,
+                    CreateDateTime = d.CreatedDateTime.ToShortDateString(),
+                    UpdatedById = d.UpdatedById,
+                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                };
             return companies.ToList();
         }
 
-        [Route("api/company/{id}")]
+        [Route("api/listCompany/{id}")]
         public Models.MstCompany GetCompany(String id)
         {
             var companyId = Convert.ToInt32(id);
             var company = from d in db.MstCompanies where d.Id == companyId select new Models.MstCompany
-                          {
-                              Id = d.Id,
-                              Company = d.Company,
-                              Address = d.Address,
-                              ContactNumber = d.ContactNumber,
-                              TaxNumber = d.TaxNumber,
-                              IsLocked = d.IsLocked,
-                              CreatedById = d.CreatedById,
-                              CreateDateTime = d.CreatedDateTime.ToShortDateString(),
-                              UpdatedById = d.UpdatedById,
-                              UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                          };
+                {
+                    Id = d.Id,
+                    Company = d.Company,
+                    Address = d.Address,
+                    ContactNumber = d.ContactNumber,
+                    TaxNumber = d.TaxNumber,
+                    IsLocked = d.IsLocked,
+                    CreatedById = d.CreatedById,
+                    CreateDateTime = d.CreatedDateTime.ToShortDateString(),
+                    UpdatedById = d.UpdatedById,
+                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                };
 
             return (Models.MstCompany)company.FirstOrDefault();
         }
@@ -57,13 +58,12 @@ namespace easyfis.Controllers
             {
                 Data.MstCompany newCompany = new Data.MstCompany();
 
-                // Company Fields
                 newCompany.Company = company.Company;
                 newCompany.Address = company.Address;
                 newCompany.ContactNumber = company.ContactNumber;
                 newCompany.TaxNumber = company.TaxNumber;
 
-                // User Fields
+                newCompany.IsLocked = company.IsLocked;
                 newCompany.CreatedById = company.CreatedById;
                 newCompany.CreatedDateTime = Convert.ToDateTime(company.CreateDateTime);
                 newCompany.UpdatedById = company.UpdatedById;
@@ -93,13 +93,12 @@ namespace easyfis.Controllers
                 {
                     var updateCompany = companies.FirstOrDefault();
 
-                    // Company Fields
                     updateCompany.Company = company.Company;
                     updateCompany.Address = company.Address;
                     updateCompany.ContactNumber = company.ContactNumber;
                     updateCompany.TaxNumber = company.TaxNumber;
 
-                    // User Fields
+                    //updateCompany.IsLocked = company.IsLocked;
                     //updateCompany.CreatedById = company.CreatedById;
                     //updateCompany.CreatedDateTime = Convert.ToDateTime(company.CreateDateTime);
                     //updateCompany.UpdatedById = company.UpdatedById;

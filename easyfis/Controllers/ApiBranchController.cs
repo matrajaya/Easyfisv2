@@ -15,22 +15,44 @@ namespace easyfis.Controllers
         public List<Models.MstBranch> Get()
         {
             var branches = from d in db.MstBranches select new Models.MstBranch
-                            {
-                                Id = d.Id,
-                                CompanyId = d.CompanyId,
-                                Company = d.MstCompany.Company,
-                                BranchCode = d.BranchCode,
-                                Branch = d.Branch,
-                                Address = d.Address,
-                                ContactNumber = d.ContactNumber,
-                                TaxNumber = d.TaxNumber,
-                                IsLocked = d.IsLocked,
-                                CreatedById = d.CreatedById,
-                                CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                UpdatedById = d.UpdatedById,
-                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                            };
+                {
+                    Id = d.Id,
+                    CompanyId = d.CompanyId,
+                    Company = d.MstCompany.Company,
+                    BranchCode = d.BranchCode,
+                    Branch = d.Branch,
+                    Address = d.Address,
+                    ContactNumber = d.ContactNumber,
+                    TaxNumber = d.TaxNumber,
+                    IsLocked = d.IsLocked,
+                    CreatedById = d.CreatedById,
+                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                    UpdatedById = d.UpdatedById,
+                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                };
+            return branches.ToList();
+        }
 
+        [Route("api/listBranch/{companyId}")]
+        public List<Models.MstBranch> GetBranch(String companyId)
+        {
+            var branchCompanyId = Convert.ToInt32(companyId);
+            var branches = from d in db.MstBranches where d.CompanyId == branchCompanyId select new Models.MstBranch
+                {
+                    Id = d.Id,
+                    CompanyId = d.CompanyId,
+                    Company = d.MstCompany.Company,
+                    BranchCode = d.BranchCode,
+                    Branch = d.Branch,
+                    Address = d.Address,
+                    ContactNumber = d.ContactNumber,
+                    TaxNumber = d.TaxNumber,
+                    IsLocked = d.IsLocked,
+                    CreatedById = d.CreatedById,
+                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                    UpdatedById = d.UpdatedById,
+                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                };
             return branches.ToList();
         }
 
@@ -46,16 +68,14 @@ namespace easyfis.Controllers
                 {
                     var updateBranch = branches.FirstOrDefault();
 
-                    // Company Fields
                     updateBranch.CompanyId = branch.CompanyId;
                     updateBranch.BranchCode = branch.BranchCode;
                     updateBranch.Branch = branch.Branch;
                     updateBranch.Address = branch.Address;
                     updateBranch.ContactNumber = branch.ContactNumber;
                     updateBranch.TaxNumber = branch.TaxNumber;
-                    
+
                     //updateBranch.IsLocked = branch.IsLocked;
-                    // User Fields
                     //updateBranch.CreatedById = company.CreatedById;
                     //updateBranch.CreatedDateTime = Convert.ToDateTime(company.CreateDateTime);
                     //updateBranch.UpdatedById = company.UpdatedById;
