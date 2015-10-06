@@ -1,55 +1,43 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Web;
+﻿using easyfis.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
+using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
-//namespace easyfis.Business
-//{
-//    public class Stamp
-//    {
+namespace easyfis.Business
+{
+    public class Stamp : Controller
+    {
+        public Boolean set(Object obj, String fieldName, Object fieldValue) 
+        {
+	        return false;
+        }
 
-//            public MstSecurityUser getCurrentUser() {
-//                User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//                String login = user.getUsername(); 
-//                return userDao.getUser(login);
-//            }
+        public Object stampCreated(Object stampCreatedObject)
+        {
+            var userId = User.Identity.GetUserId();
+            var username = User.Identity.Name;
 
-//            public Object stampCreated(Object object) {
-//                try {
-//                    this.set(object, "CREATED_DATE", new Date());
-//                    this.set(object, "CREATED_BY_USER_ID", this.getCurrentUser().getUSER_ID());
-//                    this.set(object, "UPDATED_DATE", new Date());
-//                    this.set(object, "UPDATED_BY_USER_ID", this.getCurrentUser().getUSER_ID());
-//                    this.set(object, "ISDELETED", 0);
-//                } catch(Exception e) {
-//                }
-    	
-//                return object;
-//            }
+            this.set(stampCreatedObject, "CreatedById", userId);
+            this.set(stampCreatedObject, "CreatedDateTime", new DateTime());
+            this.set(stampCreatedObject, "UpdatedById", userId);
+            this.set(stampCreatedObject, "UpdatedDateTime", new DateTime());
 
-//            public Object stampUpdated(Object object) {
-//                try {
-//                    this.set(object, "UPDATED_DATE", new Date());
-//                    this.set(object, "UPDATED_BY_USER_ID", this.getCurrentUser().getUSER_ID());
-//                    this.set(object, "ISDELETED", 0);
-//                } catch(Exception e) {
-//                }
-//                return object;
-//            }
+            return stampCreatedObject;
+        }
 
-//            public Object stampDeleted(Object object){
-//                try {
-//                    this.set(object, "UPDATED_DATE", new Date());
-//                    this.set(object, "UPDATED_BY_USER_ID", this.getCurrentUser().getUSER_ID());
-//                    this.set(object, "ISDELETED", 1);
-//                    this.set(object, "ISDELETED_DATE", new Date());
-//                    this.set(object, "ISDELETED_BY_USER_ID", this.getCurrentUser().getUSER_ID());
-//                } catch(Exception e) {
-//                }
-//                return object;
-//            }
-//        }
+        public Object stampUpdated(Object stampUpdatedObject)
+        {
+            var userId = User.Identity.GetUserId();
+            var username = User.Identity.Name;
 
+            this.set(stampUpdatedObject, "UpdatedById", userId);
+            this.set(stampUpdatedObject, "UpdatedDateTime", new DateTime());
 
-//    }
-//}
+            return stampUpdatedObject;
+        }
+    }
+
+}

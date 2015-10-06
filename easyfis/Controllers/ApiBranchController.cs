@@ -4,12 +4,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
     public class ApiBranchController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+        private Business.Stamp stamp;
 
         [Route("api/listBranch")]
         public List<Models.MstBranch> Get()
@@ -25,6 +27,7 @@ namespace easyfis.Controllers
                     ContactNumber = d.ContactNumber,
                     TaxNumber = d.TaxNumber,
                     IsLocked = d.IsLocked,
+
                     CreatedById = d.CreatedById,
                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                     UpdatedById = d.UpdatedById,
@@ -33,7 +36,7 @@ namespace easyfis.Controllers
             return branches.ToList();
         }
 
-        [Route("api/listBranch/{companyId}")]
+        [Route("api/listBranchByCompanyId/{companyId}")]
         public List<Models.MstBranch> GetBranch(String companyId)
         {
             var branchCompanyId = Convert.ToInt32(companyId);
@@ -48,6 +51,7 @@ namespace easyfis.Controllers
                     ContactNumber = d.ContactNumber,
                     TaxNumber = d.TaxNumber,
                     IsLocked = d.IsLocked,
+
                     CreatedById = d.CreatedById,
                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                     UpdatedById = d.UpdatedById,
@@ -59,6 +63,9 @@ namespace easyfis.Controllers
         [Route("api/updateBranch/{id}")]
         public HttpResponseMessage Put(String id, Models.MstBranch branch)
         {
+            var userId = User.Identity.GetUserId();
+            var username = User.Identity.Name;
+
             try
             {
                 var branchId = Convert.ToInt32(id);
@@ -74,12 +81,10 @@ namespace easyfis.Controllers
                     updateBranch.Address = branch.Address;
                     updateBranch.ContactNumber = branch.ContactNumber;
                     updateBranch.TaxNumber = branch.TaxNumber;
-
                     //updateBranch.IsLocked = branch.IsLocked;
-                    //updateBranch.CreatedById = company.CreatedById;
-                    //updateBranch.CreatedDateTime = Convert.ToDateTime(company.CreateDateTime);
-                    //updateBranch.UpdatedById = company.UpdatedById;
-                    //updateBranch.UpdatedDateTime = Convert.ToDateTime(company.UpdatedDateTime);
+
+                    //updateBranch.UpdatedById = userId;
+                    //updateBranch.UpdatedDateTime = Convert.ToDateTime(branch.UpdatedDateTime);
 
                     db.SubmitChanges();
 

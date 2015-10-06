@@ -196,14 +196,14 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // ================
-        // GET Company List
-        // ================
+        // ======================
+        // GET Company by Id
+        // ======================
         function getCompanyById() {
             var companies = new wijmo.collections.ObservableArray;
             var Id = @id
             $.ajax({
-                url: '/api/listCompany/' + Id,
+                url: '/api/companyById/' + Id,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -350,7 +350,7 @@
             var branches = new wijmo.collections.ObservableArray;
             var companyId = @id
             $.ajax({
-                url: '/api/listBranch/' + companyId,
+                url: '/api/listBranchByCompanyId/' + companyId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

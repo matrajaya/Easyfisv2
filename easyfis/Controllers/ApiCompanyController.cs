@@ -30,7 +30,7 @@ namespace easyfis.Controllers
             return companies.ToList();
         }
 
-        [Route("api/listCompany/{id}")]
+        [Route("api/companyById/{id}")]
         public Models.MstCompany GetCompany(String id)
         {
             var companyId = Convert.ToInt32(id);
