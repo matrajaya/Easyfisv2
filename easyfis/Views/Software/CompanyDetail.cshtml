@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <button type="submit" class="btn btn-primary pull-right" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add Branch</button>
+                            <button type="submit" class="btn btn-primary pull-right" id="cmdBranchAddBranchButton"onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add Branch</button>
                         </div>
                     </div>
                     <br />
@@ -140,7 +140,7 @@
                         </dl>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddBranchButton" onclick="cmdBranchAddButton_OnClick"><i class="fa fa-plus"></i> Add</button>
+                        <button class="btn btn-primary" id="cmdAddBranchButton" onclick="cmdBranchAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                         <button class="btn btn-success" id="cmdUpdateBranchButton" onclick="cmdBranchUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
                         <button type="button" id="cmdBranchDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
@@ -197,9 +197,9 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // ======================
+        // =================
         // GET Company by Id
-        // ======================
+        // =================
         function getCompanyById() {
             var companies = new wijmo.collections.ObservableArray;
             var Id = @id
@@ -244,7 +244,7 @@
         // ==================
         function cmdCompanyAddButton_OnClick() {
             var companyObject = new Object();
-            //companyObject.Id = parseInt(document.getElementById('companyId').value);
+
             companyObject.Company = document.getElementById('company_Company').value;
             companyObject.Address = document.getElementById('company_Address').value;
             companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
@@ -256,14 +256,17 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 data: data,
-                success: function (data) {
-                    if (data.Id > 0) {
+                statusCode: {
+                    200: function () {
+                        $("#cmdAddCompany").prop("disabled", true);
                         toastr.success("Successfully Added");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
-                    } else {
+                        window.location.href = '/Software/Company';
+                    },
+                    404: function () {
                         toastr.error("Can't Add");
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
                     }
                 }
             });
@@ -402,6 +405,44 @@
             document.getElementById('branch_TaxNumber').value = "";
         }
 
+        // =================
+        // Branch Add Button
+        // =================
+        function cmdBranchAddButton_OnClick() {
+            var branchObject = new Object();
+
+            branchObject.CompanyId = @id;
+            branchObject.Branch = document.getElementById('branch_branch').value;
+            branchObject.BranchCode = document.getElementById('branch_Code').value;
+            branchObject.Address = document.getElementById('branch_Address').value;
+            branchObject.ContactNumber = document.getElementById('branch_ContactNumber').value;
+            branchObject.TaxNumber = document.getElementById('branch_TaxNumber').value;
+            var data = JSON.stringify(branchObject);
+            $.ajax({
+                type: "POST",
+                url: '/api/addBranch',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: data,
+                statusCode: {
+                    200: function () {
+                        $("#cmdAddBranchButton").prop("disabled",true);
+                        $("#cmdBranchDetailCloseButton").prop("disabled",true);
+                        toastr.success("Successfully Added");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Can't Add");
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                    }
+                }
+            });
+        }
+
         // ===================
         // Branch Update Button
         // ===================
@@ -536,6 +577,7 @@
         $(document).ready(function () {
             if(@id == 0) {
                 $("#cmdUpdateCompany").prop("disabled", true);
+                $("#cmdBranchAddBranchButton").prop("disabled", true);
             } else {
                 $("#cmdAddCompany").prop("disabled", true);
             }

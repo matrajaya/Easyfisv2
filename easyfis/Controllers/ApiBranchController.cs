@@ -11,8 +11,10 @@ namespace easyfis.Controllers
     public class ApiBranchController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        private Business.Stamp stamp;
 
+        // ===========
+        // LIST Branch
+        // ===========
         [Route("api/listBranch")]
         public List<Models.MstBranch> Get()
         {
@@ -27,7 +29,6 @@ namespace easyfis.Controllers
                     ContactNumber = d.ContactNumber,
                     TaxNumber = d.TaxNumber,
                     IsLocked = d.IsLocked,
-
                     CreatedById = d.CreatedById,
                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                     UpdatedById = d.UpdatedById,
@@ -36,6 +37,9 @@ namespace easyfis.Controllers
             return branches.ToList();
         }
 
+        // =========================
+        // LIST Branch by Company Id
+        // =========================
         [Route("api/listBranchByCompanyId/{companyId}")]
         public List<Models.MstBranch> GetBranch(String companyId)
         {
@@ -60,14 +64,58 @@ namespace easyfis.Controllers
             return branches.ToList();
         }
 
+        // ==========
+        // ADD Branch
+        // ==========
+        [Route("api/addBranch")]
+        public int Post(Models.MstBranch branch)
+        {
+            try
+            {
+                var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                Data.MstBranch newBranch = new Data.MstBranch();
+
+                newBranch.CompanyId = branch.CompanyId;
+                newBranch.Branch = branch.Branch;
+                newBranch.BranchCode = branch.BranchCode;
+                newBranch.Address = branch.Address;
+                newBranch.ContactNumber = branch.ContactNumber;
+                newBranch.TaxNumber = branch.TaxNumber;
+                newBranch.IsLocked = isLocked;
+                newBranch.CreatedById = mstUserId;
+                newBranch.CreatedDateTime = date;
+                newBranch.UpdatedById = mstUserId;
+                newBranch.UpdatedDateTime = date;
+
+                db.MstBranches.InsertOnSubmit(newBranch);
+                db.SubmitChanges();
+
+                return newBranch.Id;
+
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // =============
+        // UPDATE Branch
+        // =============
         [Route("api/updateBranch/{id}")]
         public HttpResponseMessage Put(String id, Models.MstBranch branch)
         {
-            var userId = User.Identity.GetUserId();
-            var username = User.Identity.Name;
-
             try
             {
+                var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
                 var branchId = Convert.ToInt32(id);
                 var branches = from d in db.MstBranches where d.Id == branchId select d;
 
@@ -81,10 +129,9 @@ namespace easyfis.Controllers
                     updateBranch.Address = branch.Address;
                     updateBranch.ContactNumber = branch.ContactNumber;
                     updateBranch.TaxNumber = branch.TaxNumber;
-                    //updateBranch.IsLocked = branch.IsLocked;
-
-                    //updateBranch.UpdatedById = userId;
-                    //updateBranch.UpdatedDateTime = Convert.ToDateTime(branch.UpdatedDateTime);
+                    updateBranch.IsLocked = isLocked;
+                    updateBranch.UpdatedById = mstUserId;
+                    updateBranch.UpdatedDateTime = date;
 
                     db.SubmitChanges();
 
@@ -102,6 +149,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // =============
+        // DELETE Branch
+        // =============
         [Route("api/deleteBranch/{id}")]
         public HttpResponseMessage Delete(String id)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
@@ -11,6 +12,9 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // ============
+        // LIST Company
+        // ============
         [Route("api/listCompany")]
         public List<Models.MstCompany> Get()
         {
@@ -30,6 +34,9 @@ namespace easyfis.Controllers
             return companies.ToList();
         }
 
+        // ==================
+        // LIST Company by Id
+        // ==================
         [Route("api/companyById/{id}")]
         public Models.MstCompany GetCompany(String id)
         {
@@ -51,23 +58,30 @@ namespace easyfis.Controllers
             return (Models.MstCompany)company.FirstOrDefault();
         }
 
+        // ===========
+        // ADD Company
+        // ===========
         [Route("api/addCompany")]
         public int Post(Models.MstCompany company)
         {
             try
             {
+                var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
                 Data.MstCompany newCompany = new Data.MstCompany();
 
                 newCompany.Company = company.Company;
                 newCompany.Address = company.Address;
                 newCompany.ContactNumber = company.ContactNumber;
                 newCompany.TaxNumber = company.TaxNumber;
-
-                newCompany.IsLocked = company.IsLocked;
-                newCompany.CreatedById = company.CreatedById;
-                newCompany.CreatedDateTime = Convert.ToDateTime(company.CreateDateTime);
-                newCompany.UpdatedById = company.UpdatedById;
-                newCompany.UpdatedDateTime = Convert.ToDateTime(company.UpdatedDateTime);
+                newCompany.IsLocked = isLocked;
+                newCompany.CreatedById = mstUserId;
+                newCompany.CreatedDateTime = date;
+                newCompany.UpdatedById = mstUserId;
+                newCompany.UpdatedDateTime = date;
 
                 db.MstCompanies.InsertOnSubmit(newCompany);
                 db.SubmitChanges();
@@ -81,11 +95,19 @@ namespace easyfis.Controllers
             }
         }
 
+        // ==============
+        // UPDATE Company
+        // ==============
         [Route("api/updateCompany/{id}")]
         public HttpResponseMessage Put(String id, Models.MstCompany company)
         {
             try
             {
+                var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
                 var companyId = Convert.ToInt32(id);
                 var companies = from d in db.MstCompanies where d.Id == companyId select d;
 
@@ -98,11 +120,9 @@ namespace easyfis.Controllers
                     updateCompany.ContactNumber = company.ContactNumber;
                     updateCompany.TaxNumber = company.TaxNumber;
 
-                    //updateCompany.IsLocked = company.IsLocked;
-                    //updateCompany.CreatedById = company.CreatedById;
-                    //updateCompany.CreatedDateTime = Convert.ToDateTime(company.CreateDateTime);
-                    //updateCompany.UpdatedById = company.UpdatedById;
-                    //updateCompany.UpdatedDateTime = Convert.ToDateTime(company.UpdatedDateTime);
+                    updateCompany.IsLocked = isLocked;
+                    updateCompany.UpdatedById = mstUserId;
+                    updateCompany.UpdatedDateTime = date;
                     
                     db.SubmitChanges();
 
@@ -120,6 +140,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // ==============
+        // DELETE Company
+        // ==============
         [Route("api/deleteCompany/{id}")]
         public HttpResponseMessage Delete(String id)
         {
