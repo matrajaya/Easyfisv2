@@ -541,11 +541,6 @@
     <Content Include="Scripts\alert.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Data\easyfisdb.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>easyfisdb.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="ERP %28Back-up Homepage%29\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="ERP %28Back-up Homepage%29\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="ERP %28Back-up Homepage%29\font-awesome\fonts\fontawesome-webfont.woff" />
@@ -832,6 +827,11 @@
     <Content Include="wijmo\styles\themes\wijmo.theme.zen.min.css" />
     <Content Include="wijmo\styles\wijmo.css" />
     <Content Include="wijmo\styles\wijmo.min.css" />
+    <Content Include="Data\easyfisdb.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>easyfisdb.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\collapse.js" />
     <Content Include="Scripts\custom-tooltip.js" />
@@ -970,11 +970,6 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\easyfisdb.dbml.layout">
-      <DependentUpon>easyfisdb.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <TypeScriptCompile Include="wijmo\controls\cultures\wijmo.culture.de.d.ts" />
     <TypeScriptCompile Include="wijmo\controls\cultures\wijmo.culture.de.ts" />
     <TypeScriptCompile Include="wijmo\controls\cultures\wijmo.culture.en-GB.d.ts" />
@@ -1017,6 +1012,11 @@
     <TypeScriptCompile Include="wijmo\interop\angular\wijmo.angular.ts" />
     <TypeScriptCompile Include="wijmo\interop\knockout\wijmo.knockout.d.ts" />
     <TypeScriptCompile Include="wijmo\interop\knockout\wijmo.knockout.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\easyfisdb.dbml.layout">
+      <DependentUpon>easyfisdb.dbml</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
