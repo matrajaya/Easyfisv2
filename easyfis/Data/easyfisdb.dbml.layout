@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 18, 19.375" name="easyfisdb">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 18, 23.5" name="easyfisdb">
   <DataContextMoniker Name="/easyfisdbDataContext" />
   <nestedChildShapes>
     <classShape Id="0deec4f2-9fb2-4d37-b424-9acbf9cf7f4d" absoluteBounds="0.75, 1.125, 2, 1.1939925130208335">
@@ -104,12 +104,6 @@
         <elementListCompartment Id="c3f83a20-f653-46bd-9c2c-907a6c73138c" absoluteBounds="15.765, 4.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="dcdb1e12-3f98-4705-9eb8-02ab42dd4340" absoluteBounds="6, 1.625, 2, 2.7324039713541666">
-      <DataClassMoniker Name="/easyfisdbDataContext/MstCompany" />
-      <nestedChildShapes>
-        <elementListCompartment Id="5ce72aaf-2637-4786-9a3b-ebfda8bfda2f" absoluteBounds="6.015, 2.085, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
     <classShape Id="85a52d51-0881-4572-847f-c4681df35328" absoluteBounds="15.75, 6.75, 2, 2.7324039713541666">
       <DataClassMoniker Name="/easyfisdbDataContext/MstDiscount" />
       <nestedChildShapes>
@@ -181,31 +175,44 @@
         <classShapeMoniker Id="750bcead-36b8-4492-a370-49e9ac9f3274" />
       </nodes>
     </associationConnector>
-    <classShape Id="574ad0c2-b45a-456a-9c33-731797773ca5" absoluteBounds="6.25, 5.125, 2, 3.1170068359375">
-      <DataClassMoniker Name="/easyfisdbDataContext/MstBranch" />
+    <classShape Id="876f0803-c58d-43cd-98b2-de30ccea0043" absoluteBounds="6.25, 5.625, 2, 2.7324039713541675">
+      <DataClassMoniker Name="/easyfisdbDataContext/MstCompany" />
       <nestedChildShapes>
-        <elementListCompartment Id="013b9cb5-33bc-495f-9c55-b3847d4aaa3f" absoluteBounds="6.2650000000000006, 5.585, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="bee3ce14-4eff-4a17-8581-41b8f33e3ab1" absoluteBounds="6.265, 6.085, 1.9700000000000002, 2.1724039713541665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(7.125 : 4.35740397135417); (7.125 : 5.125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
-      <AssociationMoniker Name="/easyfisdbDataContext/MstCompany/MstCompany_MstBranch" />
+    <classShape Id="fedd3f8c-9e41-4a32-ad03-4c2f0f874c4f" absoluteBounds="6.25, 20.125, 2, 3.1170068359375023">
+      <DataClassMoniker Name="/easyfisdbDataContext/MstBranch" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b338b348-b13a-4b37-b241-22b09d428bc4" absoluteBounds="6.265, 20.585, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.5 : 9.03125); (6.40625 : 9.03125); (6.40625 : 8.35740397135417)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/easyfisdbDataContext/MstUser/MstUser_MstCompany" />
       <nodes>
-        <classShapeMoniker Id="dcdb1e12-3f98-4705-9eb8-02ab42dd4340" />
-        <classShapeMoniker Id="574ad0c2-b45a-456a-9c33-731797773ca5" />
+        <classShapeMoniker Id="750bcead-36b8-4492-a370-49e9ac9f3274" />
+        <classShapeMoniker Id="876f0803-c58d-43cd-98b2-de30ccea0043" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 9.03125); (6.40625 : 9.03125); (6.40625 : 8.2420068359375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 8.7968725); (6.2968725 : 8.7968725); (6.2968725 : 8.35740397135417)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/easyfisdbDataContext/MstUser/MstUser_MstCompany1" />
+      <nodes>
+        <classShapeMoniker Id="750bcead-36b8-4492-a370-49e9ac9f3274" />
+        <classShapeMoniker Id="876f0803-c58d-43cd-98b2-de30ccea0043" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(3.59375 : 11.1651025390625); (3.59375 : 21.6835034179688); (6.25 : 21.6835034179688)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/easyfisdbDataContext/MstUser/MstUser_MstBranch" />
       <nodes>
         <classShapeMoniker Id="750bcead-36b8-4492-a370-49e9ac9f3274" />
-        <classShapeMoniker Id="574ad0c2-b45a-456a-9c33-731797773ca5" />
+        <classShapeMoniker Id="fedd3f8c-9e41-4a32-ad03-4c2f0f874c4f" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 8.7968725); (6.2968725 : 8.7968725); (6.2968725 : 8.2420068359375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(3.6250025 : 11.1651025390625); (3.6250025 : 20.8729992089844); (6.25 : 20.8729992089844)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/easyfisdbDataContext/MstUser/MstUser_MstBranch1" />
       <nodes>
         <classShapeMoniker Id="750bcead-36b8-4492-a370-49e9ac9f3274" />
-        <classShapeMoniker Id="574ad0c2-b45a-456a-9c33-731797773ca5" />
+        <classShapeMoniker Id="fedd3f8c-9e41-4a32-ad03-4c2f0f874c4f" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>
