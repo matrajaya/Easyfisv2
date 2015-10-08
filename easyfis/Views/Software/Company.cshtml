@@ -163,8 +163,10 @@
                                 TaxNumber: Results[i]["TaxNumber"],
                                 IsLocked: Results[i]["IsLocked"],
                                 CreatedById: Results[i]["CreatedById"],
-                                CreateDateTime: Results[i]["CreateDateTime"],
+                                CreatedByIdUserName: Results[i]["CreatedByIdUserName"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
                                 UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedByIdUserName: Results[i]["UpdatedByIdUserName"],
                                 UpdatedDateTime: Results[i]["UpdatedDateTime"]
                             });
                         }
@@ -217,7 +219,6 @@
                         $("#cmdConfirmDeleteCompany").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        $('#deleteCompanyConfirm').modal('hide');
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
@@ -232,6 +233,17 @@
                     }
                 }
             });
+        }
+
+        // ===================
+        // FlexGrid Selection
+        // =================== 
+        function updateDetails() {
+            var item = companies.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedByIdUserName;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedByIdUserName;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
         }
 
         // ===============================
@@ -298,6 +310,9 @@
             }
             companies.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsCompany();
+            });
+            companies.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
             });
 
             // Flex Grid

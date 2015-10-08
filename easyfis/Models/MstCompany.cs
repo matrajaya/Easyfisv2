@@ -16,8 +16,10 @@ namespace easyfis.Models
         public String TaxNumber { get; set; }
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
-        public String CreateDateTime { get; set; }
+        public String CreatedByIdUserName { get; set; }
+        public String CreatedDateTime { get; set; }
         public Int32 UpdatedById { get; set; }
+        public String UpdatedByIdUserName { get; set; }
         public String UpdatedDateTime { get; set; }
     }
 }

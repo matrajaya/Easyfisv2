@@ -30,8 +30,10 @@ namespace easyfis.Controllers
                     TaxNumber = d.TaxNumber,
                     IsLocked = d.IsLocked,
                     CreatedById = d.CreatedById,
+                    CreatedByIdUserName = d.MstUser.UserName,
                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                     UpdatedById = d.UpdatedById,
+                    UpdatedByIdUserName = d.MstUser1.UserName,
                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                 };
             return branches.ToList();
@@ -55,10 +57,11 @@ namespace easyfis.Controllers
                     ContactNumber = d.ContactNumber,
                     TaxNumber = d.TaxNumber,
                     IsLocked = d.IsLocked,
-
                     CreatedById = d.CreatedById,
+                    CreatedByIdUserName = d.MstUser.UserName,
                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                     UpdatedById = d.UpdatedById,
+                    UpdatedByIdUserName = d.MstUser1.UserName,
                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                 };
             return branches.ToList();
