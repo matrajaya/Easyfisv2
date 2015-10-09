@@ -365,7 +365,6 @@ dd {
      padding-top:20px;
 }
 .cover-photo-footer-custom {
-    padding-top: 10px;
     padding-bottom: 20px;
     background-color: #e7eff6;
     margin-top: 25px;
@@ -387,7 +386,7 @@ dd {
 
 /* Menu Button */
 .menu-button {
-	position: fixed;
+	position: relative;
     bottom: 0;
 	z-index: 1000;
 	margin: 1em;
@@ -410,7 +409,7 @@ dd {
 
 /* Menu */
 .menu-wrap {
-	position: fixed;
+	position: absolute;
 	z-index: 999;
 	background: #b6d8cc;
 	-webkit-transition: width 0.3s, height 0.3s;
@@ -418,8 +417,10 @@ dd {
 	width: 0;
 	height: 0;
 	font-size: 1.5em;
-	bottom: 1em;
-	left: 1em;
+	bottom: auto;
+	left: auto;
+    margin-left: 120px;
+    margin-top: 10px;
 	-webkit-transform-origin: 0% 100%;
 	transform-origin: 0% 100%;
 }
@@ -439,7 +440,7 @@ dd {
 	opacity: 0;
 	font-size: 0.65em;
 	color: #64697d;
-	text-align: right;
+	text-align: center;
 }
 
 .profile {
@@ -474,23 +475,11 @@ dd {
 	vertical-align: middle;
 }
 
-.icon-list {
-	position: absolute;
-	right: 1em;
-	bottom: 0.9em;
-}
-
-.icon-list a {
-	font-size: 1.5em;
-	margin-left: 0.25em;
-	color: rgba(125,129,148,0.5);
-}
-
 /* Shown menu */
 
 .show-menu .menu-wrap {
 	width: 280px;
-	height: 340px;
+	height: auto;
 	-webkit-animation: anim-jelly 0.8s linear forwards;
 	animation: anim-jelly 0.8s linear forwards;
 }

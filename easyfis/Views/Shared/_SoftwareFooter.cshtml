@@ -4,23 +4,17 @@
     <div class="cover-photo-footer-custom">
         <div class="menu-wrap">
             <nav class="menu">
-                <div class="profile"><span>Matthew Greenberg</span></div>
+                <div class="profile"><span>Current User:</span></div>
                 <div class="link-list">
-                    <a href="#"><span>Latest stories</span></a>
-                    <a href="#"><span>Your friends</span></a>
-                    <a href="#"><span>Personal Settings</span></a>
-                    <a href="#"><span>Security &amp; Privacy</span></a>
-                </div>
-                <div class="icon-list">
-                    <a href="#"><i class="fa fa-fw fa-home"></i></a>
-                    <a href="#"><i class="fa fa-fw fa-question-circle"></i></a>
-                    <a href="#"><i class="fa fa-fw fa-power-off"></i></a>
+                    @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" }) 
                 </div>
             </nav>
         </div>
-        <button class="menu-button" id="open-button"><img class="icon-custom" src="~/images/Icons/icon-profile.png" alt=""></i></button>
         <div class="container">
-            <div align="center">                            
+            
+            <button class="menu-button" id="open-button"><img class="icon-custom" src="~/images/Icons/icon-profile.png" alt=""></i></button>
+
+            <div align="center">
                 <img class="icon-custom" src="~/images/coverImages/cover9.png" alt="">
                 <br />
                 <label class="tittle-custom">easyFIS</label>
@@ -30,27 +24,27 @@
             <div class="row">
                 <div class="footer-space">
                     @*<div class="col-md-4 col-md-offset-2">
-                        <label>Current User:</label> @Html.ActionLink((ViewData["UserName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["UserName"]), @class = "profile-details" })
-                    </div>*@
+                            <label>Current User:</label> @Html.ActionLink((ViewData["UserName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["UserName"]), @class = "profile-details" })
+                        </div>*@
                     <div class="col-md-3 col-md-offset-1 padding-label">
-                        <label>Created by:</label> 
+                        <label>Created by:</label>
                         <br />
                         <span class="footer-data-style" id="createdBy"></span>
                     </div>
                     <div class="col-md-3 col-md-offset-1 padding-label">
-                        <label>Created date:</label> 
+                        <label>Created date:</label>
                         <br />
                         <span class="footer-data-style" id="createdDate"></span>
                     </div>
                     <div class="col-md-3 col-md-offset-1 padding-label">
-                        <label>Updated by:</label> 
+                        <label>Updated by:</label>
                         <br />
                         <span class="footer-data-style" id="updatedBy"></span>
                     </div>
                     <div class="col-md-3 col-md-offset-1">
-                        <label>Updated date:</label> 
+                        <label>Updated date:</label>
                         <br />
-                        <span class="footer-data-style" id="updatedDate"></span>                  
+                        <span class="footer-data-style" id="updatedDate"></span>
                     </div>
                 </div>
             </div>
