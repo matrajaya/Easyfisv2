@@ -26,30 +26,31 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <a href="@Url.Action("Company","Software")" class="btn btn-default"><i class="fa fa-arrow-left"></i> Company List</a>
+                <a href="@Url.Action("Company","Software")" class="btn btn-info"><i class="fa fa-arrow-left"></i> Company List</a>
+                <button class="btn btn-info" id="cmdAddAnotherCompany" onclick="cmdCompanyAddAnotherCompanyButton_OnClick()"><i class="fa fa-plus"></i> Add New Company</button>
                 <hr />
-                <h4 id="companyDetailLabel">Company Detail:</h4>
+                <h4 id="companyDetailLabel">New Company</h4>
                 <div class="well">
                     <form id="companyDetailForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="usr">Company:</label>
-                                    <input type="text" class="form-control requiredCompany" placeholder="Comapny Name" id="company_Company">
+                                    <input type="text" class="form-control requiredCompany" id="company_Company">
                                 </div>
                                 <div class="form-group">
                                     <label for="usr">Contact Number:</label>
-                                    <input type="text" class="form-control requiredCompany" placeholder="Contact Number" id="company_ContactNumber">
+                                    <input type="text" class="form-control requiredCompany" id="company_ContactNumber">
                                 </div>
                                 <div class="form-group">
                                     <label for="usr">TAX Number:</label>
-                                    <input type="text" class="form-control requiredCompany" placeholder="TAX Number" id="company_TaxNumber">
+                                    <input type="text" class="form-control requiredCompany" id="company_TaxNumber">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="usr">Company address:</label>
-                                    <textarea class="form-control textarea-custom-company requiredCompany" placeholder="Comapny Address" id="company_Address"></textarea>
+                                    <textarea class="form-control textarea-custom-company requiredCompany" id="company_Address"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +89,7 @@
                 <section id="branchList">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4 id="companyNameLabel">Branch List</h4>
+                            <h4 id="companyNameLabel">Branch List (Empty)</h4>
                         </div>
                     </div>
                     <div class="row">
@@ -103,7 +104,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <button type="submit" class="btn btn-primary pull-right" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add Branch</button>
+                            <button type="submit" class="btn btn-info pull-right" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add Branch</button>
                         </div>
                     </div>
                     <br />
@@ -146,20 +147,20 @@
                     <div class="modal-body">
                         <form id="branchDetailForm">
                             <dl class="dl-horizontal">
-                                <dd><input type="hidden" class="form-control" placeholder="Id" id="branch_Id" /></dd>
-                                <dd><input type="hidden" class="form-control" placeholder="Id" id="branch_companyId" /></dd>
+                                <dd><input type="hidden" class="form-control" id="branch_Id" /></dd>
+                                <dd><input type="hidden" class="form-control" id="branch_companyId" /></dd>
                                 <dt>Company:</dt>
-                                <dd><input type="text" class="form-control" placeholder="Company" id="branch_company" readonly /></dd>
+                                <dd><input type="text" class="form-control" id="branch_company" readonly /></dd>
                                 <dt>Branch:</dt>
-                                <dd><input type="text" class="form-control requiredBranch" placeholder="Branch" id="branch_branch" /></dd>
+                                <dd><input type="text" class="form-control requiredBranch" id="branch_branch" /></dd>
                                 <dt>Branch code:</dt>
-                                <dd><input type="text" class="form-control requiredBranch" placeholder="Branch code" id="branch_Code" /></dd>
+                                <dd><input type="text" class="form-control requiredBranch" id="branch_Code" /></dd>
                                 <dt>Address:</dt>
-                                <dd><textarea class="form-control textarea-custom-branch requiredBranch" placeholder="Branch address" id="branch_Address"></textarea></dd>
+                                <dd><textarea class="form-control textarea-custom-branch requiredBranch" id="branch_Address"></textarea></dd>
                                 <dt>Contact Number:</dt>
-                                <dd><input type="text" class="form-control requiredBranch" placeholder="Contact Number" id="branch_ContactNumber" /></dd>
+                                <dd><input type="text" class="form-control requiredBranch" id="branch_ContactNumber" /></dd>
                                 <dt>Tax Number:</dt>
-                                <dd><input type="text" class="form-control requiredBranch" placeholder="Tax Number" id="branch_TaxNumber" /></dd>
+                                <dd><input type="text" class="form-control requiredBranch" id="branch_TaxNumber" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -177,12 +178,12 @@
             <div class="modal-dialog modal-sm">
                 <!-- Modal content-->
                 <div class="modal-content">
-                    @*<div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Delete Branch <i class="fa fa-trash"></i></h4>
-                        </div>*@
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Branch <i class="fa fa-trash"></i></h4>
+                    </div>
                     <div class="modal-body">
-                        Are you sure you want to delete this? <i class="fa fa-trash"></i>
+                        Are you sure you want to delete this?
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-danger" id="cmdConfirmDeleteBranch" onclick="cmdBranchConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
@@ -197,10 +198,6 @@
             <div class=" modal-dialog modal-sm">
                 <!-- Modal content-->
                 <div class="modal-content">
-                    @*<div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Delete Branch <i class="fa fa-trash"></i></h4>
-                        </div>*@
                     <div class="modal-body">
                         <h4>Loading ...</h4>
                     </div>
@@ -438,6 +435,11 @@
                     }
                 });
             }  
+        }
+
+        function cmdCompanyAddAnotherCompanyButton_OnClick() {
+            var id = 0;
+            window.location = '/Software/CompanyDetail/?Id=' + id; 
         }
 
         // ================
@@ -790,6 +792,7 @@
             if(Id == 0) {
                 $("#cmdUpdateCompany").prop("disabled", true);
                 $("#cmdBranchAddBranchButton").prop("disabled", true);
+                $("#cmdAddAnotherCompany").prop("disabled", true);
             } else {
                 $("#cmdAddCompany").prop("disabled", true);
             }
