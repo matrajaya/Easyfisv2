@@ -75,6 +75,7 @@ namespace easyfis
                      "~/Scripts/collapse.js",
                      "~/Scripts/dropdown.js",
                      "~/Scripts/modal.js",
+                     "~/Scripts/tab.js",
                      "~/Scripts/sidebar-menu.js",
                      "~/Scripts/push-left-menu.js",
                      "~/Scripts/toastr.js"));

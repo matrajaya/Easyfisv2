@@ -7,7 +7,7 @@
     <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
-    <title>Software Dashboard</title>
+    <title>Software - Chart of Accounts</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Font-Awesome/css")
@@ -22,10 +22,74 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>
-                <br /><br />
-                <h2>Chart of Accounts</h2>
+                <h4>Chart of Accounts</h4>
+                <hr />
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a data-toggle="tab" href="#Account">Account</a></li>
+                    <li><a data-toggle="tab" href="#AccountType">Account Type</a></li>
+                    <li><a data-toggle="tab" href="#AccountCashFlow">Account Cash Flow</a></li>
+                    <li><a data-toggle="tab" href="#AccountCategory">Account Category</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="Account" class="tab-pane fade in active">
+                        <br />
+                        <!-- Account List -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>Account</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" readonly>
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                    <input type="text" class="form-control" id="InputFilter" placeholder="Search Account">
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <button class="btn btn-info pull-right" onclick="cmdCompanyAddCompanyButton_OnClick()"><i class="fa fa-plus"></i> Add New Account</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="CompanyGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="AccountType" class="tab-pane fade">
+                        <h3>Account Type</h3>
+                    </div>
+                    <div id="AccountCashFlow" class="tab-pane fade">
+                        <h3>Account Cash Flow</h3>
+                    </div>
+                    <div id="AccountCategory" class="tab-pane fade">
+                        <h3>Account Category</h3>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
