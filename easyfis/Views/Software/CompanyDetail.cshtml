@@ -259,10 +259,10 @@
                                 TaxNumber: Results[i]["TaxNumber"],
                                 IsLocked: Results[i]["IsLocked"],
                                 CreatedById: Results[i]["CreatedById"],
-                                CreatedByIdUserName: Results[i]["CreatedByIdUserName"],
+                                CreatedBy: Results[i]["CreatedBy"],
                                 CreatedDateTime: Results[i]["CreatedDateTime"],
                                 UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedByIdUserName: Results[i]["UpdatedByIdUserName"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
                                 UpdatedDateTime: Results[i]["UpdatedDateTime"]
                             });
                             var companyId = Results[i]["Id"];
@@ -302,10 +302,10 @@
                             TaxNumber: Results.TaxNumber,
                             IsLocked: Results.IsLocked,
                             CreatedById: Results.CreatedById,
-                            CreatedByIdUserName: Results.CreatedByIdUserName,
+                            CreatedBy: Results.CreatedBy,
                             CreatedDateTime: Results.CreatedDateTime,
                             UpdatedById: Results.UpdatedById,
-                            UpdatedByIdUserName: Results.UpdatedByIdUserName,
+                            UpdatedBy: Results.UpdatedBy,
                             UpdatedDateTime: Results.UpdatedDateTime
                         });
                     }
@@ -318,9 +318,9 @@
                     document.getElementById('company_ContactNumber').value = Results.ContactNumber;
                     document.getElementById('company_TaxNumber').value = Results.TaxNumber;
 
-                    document.getElementById('CreatedBy').innerHTML = Results.CreatedByIdUserName;
+                    document.getElementById('CreatedBy').innerHTML = Results.CreatedBy;
                     document.getElementById('CreatedDate').innerHTML = Results.CreatedDateTime;
-                    document.getElementById('UpdatedBy').innerHTML = Results.UpdatedByIdUserName;
+                    document.getElementById('UpdatedBy').innerHTML = Results.UpdatedBy;
                     document.getElementById('UpdatedDate').innerHTML = Results.UpdatedDateTime;
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -472,10 +472,10 @@
                                 TaxNumber: Results[i]["TaxNumber"],
                                 IsLocked: Results[i]["IsLocked"],
                                 CreatedById: Results[i]["CreatedById"],
-                                CreatedByIdUserName: Results[i]["CreatedByIdUserName"],
+                                CreatedBy: Results[i]["CreatedBy"],
                                 CreatedDateTime: Results[i]["CreatedDateTime"],
                                 UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedByIdUserName: Results[i]["UpdatedByIdUserName"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
                                 UpdatedDateTime: Results[i]["UpdatedDateTime"]
                             });
                         }
@@ -517,10 +517,10 @@
                                 TaxNumber: Results[i]["TaxNumber"],
                                 IsLocked: Results[i]["IsLocked"],
                                 CreatedById: Results[i]["CreatedById"],
-                                CreatedByIdUserName: Results[i]["CreatedByIdUserName"],
+                                CreatedBy: Results[i]["CreatedBy"],
                                 CreatedDateTime: Results[i]["CreatedDateTime"],
                                 UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedByIdUserName: Results[i]["UpdatedByIdUserName"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
                                 UpdatedDateTime: Results[i]["UpdatedDateTime"]
                             });
                         }
@@ -751,9 +751,9 @@
         // =================== 
         function updateDetails() {
             var item = branches.currentItem;
-            document.getElementById('createdBy').innerHTML = item.CreatedByIdUserName;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
             document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
-            document.getElementById('updatedBy').innerHTML = item.UpdatedByIdUserName;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
             document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
         }
 

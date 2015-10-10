@@ -160,10 +160,10 @@
                                 TaxNumber: Results[i]["TaxNumber"],
                                 IsLocked: Results[i]["IsLocked"],
                                 CreatedById: Results[i]["CreatedById"],
-                                CreatedByIdUserName: Results[i]["CreatedByIdUserName"],
+                                CreatedBy: Results[i]["CreatedBy"],
                                 CreatedDateTime: Results[i]["CreatedDateTime"],
                                 UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedByIdUserName: Results[i]["UpdatedByIdUserName"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
                                 UpdatedDateTime: Results[i]["UpdatedDateTime"]
                             });
                         }
@@ -237,9 +237,9 @@
         // ===================
         function updateDetails() {
             var item = companies.currentItem;
-            document.getElementById('createdBy').innerHTML = item.CreatedByIdUserName;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
             document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
-            document.getElementById('updatedBy').innerHTML = item.UpdatedByIdUserName;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
             document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
         }
 
