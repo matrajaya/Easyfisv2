@@ -681,7 +681,7 @@
             $("#cmdUpdateBranchButton").show();
             $("#cmdAddBranchButton").hide();
             var branch = branches.currentEditItem;
-            document.getElementById('branch_Id').value = branch.Id ? branch.Id : '';
+            document.getElementById('branch_Id').value = branch.Id !== null && typeof (branch.Id) != 'undefined' ? wijmo.Globalize.format(branch.Id) : '';
             document.getElementById('branch_company').value = branch.Company ? branch.Company : '';
             document.getElementById('branch_companyId').value = branch.CompanyId ? branch.CompanyId : '';
             document.getElementById('branch_branch').value = branch.Branch ? branch.Branch : '';

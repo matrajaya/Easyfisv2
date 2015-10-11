@@ -2043,6 +2043,10 @@ namespace easyfis.Data
 		
 		private EntitySet<MstAccount> _MstAccounts;
 		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2068,6 +2072,8 @@ namespace easyfis.Data
 		public MstAccountCashFlow()
 		{
 			this._MstAccounts = new EntitySet<MstAccount>(new Action<MstAccount>(this.attach_MstAccounts), new Action<MstAccount>(this.detach_MstAccounts));
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
 			OnCreated();
 		}
 		
@@ -2162,6 +2168,10 @@ namespace easyfis.Data
 			{
 				if ((this._CreatedById != value))
 				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnCreatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._CreatedById = value;
@@ -2202,6 +2212,10 @@ namespace easyfis.Data
 			{
 				if ((this._UpdatedById != value))
 				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnUpdatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._UpdatedById = value;
@@ -2241,6 +2255,74 @@ namespace easyfis.Data
 			set
 			{
 				this._MstAccounts.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountCashFlow", Storage="_MstUser", ThisKey="CreatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.MstAccountCashFlows.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.MstAccountCashFlows.Add(this);
+						this._CreatedById = value.Id;
+					}
+					else
+					{
+						this._CreatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountCashFlow1", Storage="_MstUser1", ThisKey="UpdatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.MstAccountCashFlows1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.MstAccountCashFlows1.Add(this);
+						this._UpdatedById = value.Id;
+					}
+					else
+					{
+						this._UpdatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser1");
+				}
 			}
 		}
 		
@@ -2299,6 +2381,12 @@ namespace easyfis.Data
 		
 		private System.DateTime _UpdatedDateTime;
 		
+		private EntitySet<MstAccountType> _MstAccountTypes;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2323,6 +2411,9 @@ namespace easyfis.Data
 		
 		public MstAccountCategory()
 		{
+			this._MstAccountTypes = new EntitySet<MstAccountType>(new Action<MstAccountType>(this.attach_MstAccountTypes), new Action<MstAccountType>(this.detach_MstAccountTypes));
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
 			OnCreated();
 		}
 		
@@ -2417,6 +2508,10 @@ namespace easyfis.Data
 			{
 				if ((this._CreatedById != value))
 				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnCreatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._CreatedById = value;
@@ -2457,6 +2552,10 @@ namespace easyfis.Data
 			{
 				if ((this._UpdatedById != value))
 				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnUpdatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._UpdatedById = value;
@@ -2486,6 +2585,87 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstAccountCategory_MstAccountType", Storage="_MstAccountTypes", ThisKey="Id", OtherKey="AccountCategoryId")]
+		public EntitySet<MstAccountType> MstAccountTypes
+		{
+			get
+			{
+				return this._MstAccountTypes;
+			}
+			set
+			{
+				this._MstAccountTypes.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountCategory", Storage="_MstUser", ThisKey="CreatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.MstAccountCategories.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.MstAccountCategories.Add(this);
+						this._CreatedById = value.Id;
+					}
+					else
+					{
+						this._CreatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountCategory1", Storage="_MstUser1", ThisKey="UpdatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.MstAccountCategories1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.MstAccountCategories1.Add(this);
+						this._UpdatedById = value.Id;
+					}
+					else
+					{
+						this._UpdatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser1");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -2504,6 +2684,18 @@ namespace easyfis.Data
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_MstAccountTypes(MstAccountType entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstAccountCategory = this;
+		}
+		
+		private void detach_MstAccountTypes(MstAccountType entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstAccountCategory = null;
 		}
 	}
 	
@@ -2535,6 +2727,12 @@ namespace easyfis.Data
 		
 		private EntitySet<MstAccount> _MstAccounts;
 		
+		private EntityRef<MstAccountCategory> _MstAccountCategory;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2564,6 +2762,9 @@ namespace easyfis.Data
 		public MstAccountType()
 		{
 			this._MstAccounts = new EntitySet<MstAccount>(new Action<MstAccount>(this.attach_MstAccounts), new Action<MstAccount>(this.detach_MstAccounts));
+			this._MstAccountCategory = default(EntityRef<MstAccountCategory>);
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
 			OnCreated();
 		}
 		
@@ -2638,6 +2839,10 @@ namespace easyfis.Data
 			{
 				if ((this._AccountCategoryId != value))
 				{
+					if (this._MstAccountCategory.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnAccountCategoryIdChanging(value);
 					this.SendPropertyChanging();
 					this._AccountCategoryId = value;
@@ -2698,6 +2903,10 @@ namespace easyfis.Data
 			{
 				if ((this._CreatedById != value))
 				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnCreatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._CreatedById = value;
@@ -2738,6 +2947,10 @@ namespace easyfis.Data
 			{
 				if ((this._UpdatedById != value))
 				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnUpdatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._UpdatedById = value;
@@ -2777,6 +2990,108 @@ namespace easyfis.Data
 			set
 			{
 				this._MstAccounts.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstAccountCategory_MstAccountType", Storage="_MstAccountCategory", ThisKey="AccountCategoryId", OtherKey="Id", IsForeignKey=true)]
+		public MstAccountCategory MstAccountCategory
+		{
+			get
+			{
+				return this._MstAccountCategory.Entity;
+			}
+			set
+			{
+				MstAccountCategory previousValue = this._MstAccountCategory.Entity;
+				if (((previousValue != value) 
+							|| (this._MstAccountCategory.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstAccountCategory.Entity = null;
+						previousValue.MstAccountTypes.Remove(this);
+					}
+					this._MstAccountCategory.Entity = value;
+					if ((value != null))
+					{
+						value.MstAccountTypes.Add(this);
+						this._AccountCategoryId = value.Id;
+					}
+					else
+					{
+						this._AccountCategoryId = default(int);
+					}
+					this.SendPropertyChanged("MstAccountCategory");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountType", Storage="_MstUser", ThisKey="CreatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.MstAccountTypes.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.MstAccountTypes.Add(this);
+						this._CreatedById = value.Id;
+					}
+					else
+					{
+						this._CreatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountType1", Storage="_MstUser1", ThisKey="UpdatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.MstAccountTypes1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.MstAccountTypes1.Add(this);
+						this._UpdatedById = value.Id;
+					}
+					else
+					{
+						this._UpdatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser1");
+				}
 			}
 		}
 		
@@ -7196,6 +7511,18 @@ namespace easyfis.Data
 		
 		private EntitySet<MstAccount> _MstAccounts1;
 		
+		private EntitySet<MstAccountCashFlow> _MstAccountCashFlows;
+		
+		private EntitySet<MstAccountCashFlow> _MstAccountCashFlows1;
+		
+		private EntitySet<MstAccountCategory> _MstAccountCategories;
+		
+		private EntitySet<MstAccountCategory> _MstAccountCategories1;
+		
+		private EntitySet<MstAccountType> _MstAccountTypes;
+		
+		private EntitySet<MstAccountType> _MstAccountTypes1;
+		
 		private EntitySet<MstBranch> _MstBranches;
 		
 		private EntitySet<MstBranch> _MstBranches1;
@@ -7234,6 +7561,12 @@ namespace easyfis.Data
 		{
 			this._MstAccounts = new EntitySet<MstAccount>(new Action<MstAccount>(this.attach_MstAccounts), new Action<MstAccount>(this.detach_MstAccounts));
 			this._MstAccounts1 = new EntitySet<MstAccount>(new Action<MstAccount>(this.attach_MstAccounts1), new Action<MstAccount>(this.detach_MstAccounts1));
+			this._MstAccountCashFlows = new EntitySet<MstAccountCashFlow>(new Action<MstAccountCashFlow>(this.attach_MstAccountCashFlows), new Action<MstAccountCashFlow>(this.detach_MstAccountCashFlows));
+			this._MstAccountCashFlows1 = new EntitySet<MstAccountCashFlow>(new Action<MstAccountCashFlow>(this.attach_MstAccountCashFlows1), new Action<MstAccountCashFlow>(this.detach_MstAccountCashFlows1));
+			this._MstAccountCategories = new EntitySet<MstAccountCategory>(new Action<MstAccountCategory>(this.attach_MstAccountCategories), new Action<MstAccountCategory>(this.detach_MstAccountCategories));
+			this._MstAccountCategories1 = new EntitySet<MstAccountCategory>(new Action<MstAccountCategory>(this.attach_MstAccountCategories1), new Action<MstAccountCategory>(this.detach_MstAccountCategories1));
+			this._MstAccountTypes = new EntitySet<MstAccountType>(new Action<MstAccountType>(this.attach_MstAccountTypes), new Action<MstAccountType>(this.detach_MstAccountTypes));
+			this._MstAccountTypes1 = new EntitySet<MstAccountType>(new Action<MstAccountType>(this.attach_MstAccountTypes1), new Action<MstAccountType>(this.detach_MstAccountTypes1));
 			this._MstBranches = new EntitySet<MstBranch>(new Action<MstBranch>(this.attach_MstBranches), new Action<MstBranch>(this.detach_MstBranches));
 			this._MstBranches1 = new EntitySet<MstBranch>(new Action<MstBranch>(this.attach_MstBranches1), new Action<MstBranch>(this.detach_MstBranches1));
 			this._MstCompanies = new EntitySet<MstCompany>(new Action<MstCompany>(this.attach_MstCompanies), new Action<MstCompany>(this.detach_MstCompanies));
@@ -7452,6 +7785,84 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountCashFlow", Storage="_MstAccountCashFlows", ThisKey="Id", OtherKey="CreatedById")]
+		public EntitySet<MstAccountCashFlow> MstAccountCashFlows
+		{
+			get
+			{
+				return this._MstAccountCashFlows;
+			}
+			set
+			{
+				this._MstAccountCashFlows.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountCashFlow1", Storage="_MstAccountCashFlows1", ThisKey="Id", OtherKey="UpdatedById")]
+		public EntitySet<MstAccountCashFlow> MstAccountCashFlows1
+		{
+			get
+			{
+				return this._MstAccountCashFlows1;
+			}
+			set
+			{
+				this._MstAccountCashFlows1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountCategory", Storage="_MstAccountCategories", ThisKey="Id", OtherKey="CreatedById")]
+		public EntitySet<MstAccountCategory> MstAccountCategories
+		{
+			get
+			{
+				return this._MstAccountCategories;
+			}
+			set
+			{
+				this._MstAccountCategories.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountCategory1", Storage="_MstAccountCategories1", ThisKey="Id", OtherKey="UpdatedById")]
+		public EntitySet<MstAccountCategory> MstAccountCategories1
+		{
+			get
+			{
+				return this._MstAccountCategories1;
+			}
+			set
+			{
+				this._MstAccountCategories1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountType", Storage="_MstAccountTypes", ThisKey="Id", OtherKey="CreatedById")]
+		public EntitySet<MstAccountType> MstAccountTypes
+		{
+			get
+			{
+				return this._MstAccountTypes;
+			}
+			set
+			{
+				this._MstAccountTypes.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstAccountType1", Storage="_MstAccountTypes1", ThisKey="Id", OtherKey="UpdatedById")]
+		public EntitySet<MstAccountType> MstAccountTypes1
+		{
+			get
+			{
+				return this._MstAccountTypes1;
+			}
+			set
+			{
+				this._MstAccountTypes1.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstBranch", Storage="_MstBranches", ThisKey="Id", OtherKey="CreatedById")]
 		public EntitySet<MstBranch> MstBranches
 		{
@@ -7577,6 +7988,78 @@ namespace easyfis.Data
 		}
 		
 		private void detach_MstAccounts1(MstAccount entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_MstAccountCashFlows(MstAccountCashFlow entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_MstAccountCashFlows(MstAccountCashFlow entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_MstAccountCashFlows1(MstAccountCashFlow entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_MstAccountCashFlows1(MstAccountCashFlow entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_MstAccountCategories(MstAccountCategory entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_MstAccountCategories(MstAccountCategory entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_MstAccountCategories1(MstAccountCategory entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_MstAccountCategories1(MstAccountCategory entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_MstAccountTypes(MstAccountType entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_MstAccountTypes(MstAccountType entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_MstAccountTypes1(MstAccountType entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_MstAccountTypes1(MstAccountType entity)
 		{
 			this.SendPropertyChanging();
 			entity.MstUser1 = null;

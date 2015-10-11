@@ -91,6 +91,8 @@
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="MstAccountCashFlow_MstAccount" Member="MstAccounts" ThisKey="Id" OtherKey="AccountCashFlowId" Type="MstAccount" />
+      <Association Name="MstUser_MstAccountCashFlow" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_MstAccountCashFlow1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstAccountCategory" Member="MstAccountCategories">
@@ -103,6 +105,9 @@
       <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="MstAccountCategory_MstAccountType" Member="MstAccountTypes" ThisKey="Id" OtherKey="AccountCategoryId" Type="MstAccountType" />
+      <Association Name="MstUser_MstAccountCategory" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_MstAccountCategory1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstAccountType" Member="MstAccountTypes">
@@ -118,6 +123,9 @@
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="MstAccountType_MstAccount" Member="MstAccounts" ThisKey="Id" OtherKey="AccountTypeId" Type="MstAccount" />
+      <Association Name="MstAccountCategory_MstAccountType" Member="MstAccountCategory" ThisKey="AccountCategoryId" OtherKey="Id" Type="MstAccountCategory" IsForeignKey="true" />
+      <Association Name="MstUser_MstAccountType" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_MstAccountType1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstArticle" Member="MstArticles">
@@ -347,6 +355,12 @@
       <Column Name="IsLocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="MstUser_MstAccount" Member="MstAccounts" ThisKey="Id" OtherKey="CreatedById" Type="MstAccount" />
       <Association Name="MstUser_MstAccount1" Member="MstAccounts1" ThisKey="Id" OtherKey="UpdatedById" Type="MstAccount" />
+      <Association Name="MstUser_MstAccountCashFlow" Member="MstAccountCashFlows" ThisKey="Id" OtherKey="CreatedById" Type="MstAccountCashFlow" />
+      <Association Name="MstUser_MstAccountCashFlow1" Member="MstAccountCashFlows1" ThisKey="Id" OtherKey="UpdatedById" Type="MstAccountCashFlow" />
+      <Association Name="MstUser_MstAccountCategory" Member="MstAccountCategories" ThisKey="Id" OtherKey="CreatedById" Type="MstAccountCategory" />
+      <Association Name="MstUser_MstAccountCategory1" Member="MstAccountCategories1" ThisKey="Id" OtherKey="UpdatedById" Type="MstAccountCategory" />
+      <Association Name="MstUser_MstAccountType" Member="MstAccountTypes" ThisKey="Id" OtherKey="CreatedById" Type="MstAccountType" />
+      <Association Name="MstUser_MstAccountType1" Member="MstAccountTypes1" ThisKey="Id" OtherKey="UpdatedById" Type="MstAccountType" />
       <Association Name="MstUser_MstBranch" Member="MstBranches" ThisKey="Id" OtherKey="CreatedById" Type="MstBranch" />
       <Association Name="MstUser_MstBranch1" Member="MstBranches1" ThisKey="Id" OtherKey="UpdatedById" Type="MstBranch" />
       <Association Name="MstUser_MstCompany" Member="MstCompanies" ThisKey="Id" OtherKey="CreatedById" Type="MstCompany" />
