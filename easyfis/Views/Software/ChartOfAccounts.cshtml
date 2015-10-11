@@ -23,11 +23,11 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <ul class="nav nav-pills pull-right">
+                <ul class="nav nav-tabs pull-right">
                     <li class="active"><a data-toggle="pill" href="#Account">Account</a></li>
-                    <li><a data-toggle="pill" href="#AccountType">Account Type</a></li>
-                    <li><a data-toggle="pill" href="#AccountCashFlow">Account Cash Flow</a></li>
-                    <li><a data-toggle="pill" href="#AccountCategory">Account Category</a></li>
+                    <li><a data-toggle="tab" href="#AccountType">Account Type</a></li>
+                    <li><a data-toggle="tab" href="#AccountCashFlow">Account Cash Flow</a></li>
+                    <li><a data-toggle="tab" href="#AccountCategory">Account Category</a></li>
                 </ul>
                 <h4>Chart of Accounts</h4>
                 <hr />
@@ -47,7 +47,7 @@
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </span>
-                                    <input type="text" class="form-control" id="InputFilter" placeholder="Search Account">
+                                    <input type="text" class="form-control" id="InputFilterAccount" placeholder="Search Account">
                                 </div>
                             </div>
                             <div class="col-lg-8">
@@ -62,18 +62,18 @@
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
                                     <span class="glyphicon glyphicon-step-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
                                     <span class="glyphicon glyphicon-step-forward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
                             </div>
@@ -93,7 +93,7 @@
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </span>
-                                    <input type="text" class="form-control" id="InputFilter" placeholder="Search AccountType">
+                                    <input type="text" class="form-control" id="InputFilterAccountType" placeholder="Search Account Type">
                                 </div>
                             </div>
                             <div class="col-lg-8">
@@ -108,18 +108,18 @@
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridAccountType">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountType">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountType">
                                     <span class="glyphicon glyphicon-step-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountType"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountType">
                                     <span class="glyphicon glyphicon-step-forward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountType">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
                             </div>
@@ -313,25 +313,29 @@
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
+
+    <!-- =============== -->
+    <!-- Account Scripts -->
+    <!-- =============== -->
     <script type="text/javascript">
-        // ================
-        // Global Variables
-        // ================
+        // ===========================
+        // Global Variables for Account
+        // ============================
         var accounts;
         var accountGrid;
 
         var cboAccountType;
         var cboAccountCashFlow;
 
-        var btnFirstPageGrid;
-        var btnPreviousPageGrid;
-        var btnNextPageGrid;
-        var btnLastPageGrid;
-        var btnCurrentPageGrid;
+        var btnFirstPageGridAccount;
+        var btnPreviousPageGridAccount;
+        var btnNextPageGridAccount;
+        var btnLastPageGridAccount;
+        var btnCurrentPageGridAccount;
 
-        // ================
-        // GET Account Type
-        // ================
+        // ==============================
+        // GET Account Type for Combo Box
+        // ==============================
         function getAccountType() {
             var accountTypes = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -374,6 +378,7 @@
                 placeholder: "Select a Account Type",
                 itemsSource: accountList,
                 isEditable: false,
+                required: false,
                 selectedValue: document.getElementById('account_type_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#account_type_id_data").val(accountCollections.items[this.selectedIndex].AccountTypeId);
@@ -381,9 +386,9 @@
             });
         }
 
-        // =====================
-        // GET Account Cash Flow
-        // =====================
+        // ===================================
+        // GET Account Cash Flow for Combo Box
+        // ===================================
         function getAccountCashFlow() {
             var accountCashFlows = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -425,6 +430,7 @@
                 placeholder: "Select a Account Cash Flow",
                 itemsSource: accountCashFlowList,
                 isEditable: false,
+                required: false,
                 selectedValue: document.getElementById('account_cash_flow_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#account_cash_flow_id_data").val(accountCashFlowCollections.items[this.selectedIndex].AccountCashFlowId);
@@ -501,9 +507,9 @@
             cboAccountType.disable = true;
         }
 
-        // =================
-        // Account Add Button
-        // =================
+        // ==================
+        // ADD Account Button
+        // ==================
         function cmdAccountAddButton_OnClick() {
             var accountObject = new Object();
 
@@ -680,11 +686,11 @@
                 }
             });
         }
-
-        // ===================
-        // FlexGrid Selection
-        // ===================
-        function updateDetails() {
+        
+        // ==============================
+        // FlexGrid Selection for Account
+        // ==============================
+        function updateDetailsAccount() {
             var item = accounts.currentItem;
             document.getElementById('createdBy').innerHTML = item.CreatedBy;
             document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
@@ -693,36 +699,36 @@
         }
 
         // ===============================
-        // Navigation Buttons for Comapany
+        // Navigation Buttons for Account
         // ===============================
         function updateNavigateButtonsAccount() {
             if (accounts.pageSize <= 0) {
-                document.getElementById('naviagtionPageGrid').style.display = 'none';
+                document.getElementById('naviagtionPageGridAccount').style.display = 'none';
                 return;
             }
-            document.getElementById('naviagtionPageGrid').style.display = 'block';
+            document.getElementById('naviagtionPageGridAccount').style.display = 'block';
             if (accounts.pageIndex === 0) {
-                btnFirstPageGrid.setAttribute('disabled', 'disabled');
-                btnPreviousPageGrid.setAttribute('disabled', 'disabled');
-                btnNextPageGrid.removeAttribute('disabled');
-                btnLastPageGrid.removeAttribute('disabled');
+                btnFirstPageGridAccount.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridAccount.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccount.removeAttribute('disabled');
+                btnLastPageGridAccount.removeAttribute('disabled');
             } else if (accounts.pageIndex === (accounts.pageCount - 1)) {
-                btnFirstPageGrid.removeAttribute('disabled');
-                btnPreviousPageGrid.removeAttribute('disabled');
-                btnLastPageGrid.setAttribute('disabled', 'disabled');
-                btnNextPageGrid.setAttribute('disabled', 'disabled');
+                btnFirstPageGridAccount.removeAttribute('disabled');
+                btnPreviousPageGridAccount.removeAttribute('disabled');
+                btnLastPageGridAccount.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccount.setAttribute('disabled', 'disabled');
             } else {
-                btnFirstPageGrid.removeAttribute('disabled');
-                btnPreviousPageGrid.removeAttribute('disabled');
-                btnNextPageGrid.removeAttribute('disabled');
-                btnLastPageGrid.removeAttribute('disabled');
+                btnFirstPageGridAccount.removeAttribute('disabled');
+                btnPreviousPageGridAccount.removeAttribute('disabled');
+                btnNextPageGridAccount.removeAttribute('disabled');
+                btnLastPageGridAccount.removeAttribute('disabled');
             }
-            btnCurrentPageGrid.innerHTML = (accounts.pageIndex + 1) + ' / ' + accounts.pageCount;
+            btnCurrentPageGridAccount.innerHTML = (accounts.pageIndex + 1) + ' / ' + accounts.pageCount;
         }
 
-        // ============
-        // On Page Load
-        // ============
+        // ========================
+        // On Page Load for Account
+        // ========================
         $(document).ready(function () {
             document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
 
@@ -748,25 +754,25 @@
             accounts.canFilter = true;
             accounts.pageSize = 10;
 
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
+            var filterTextAccount = '';
+            $('#InputFilterAccount').keyup(function () {
+                filterTextAccount = this.value.toLowerCase();
                 accounts.refresh();
             });
             accounts.filter = function (item) {
-                return !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1);
+                return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
             }
             accounts.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsAccount();
             });
             accounts.currentChanged.addHandler(function (sender, args) {
-                updateDetails();
+                updateDetailsAccount();
             });
 
             cboAccountType = new wijmo.input.ComboBox('#account_type_id');
             cboAccountCashFlow = new wijmo.input.ComboBox('#account_cash_flow_id');
 
-            // Flex Grid
+            // Flex Grid for account
             accountGrid = new wijmo.grid.FlexGrid('#AccountGrid');
             accountGrid.initialize({
                 columns: [
@@ -828,30 +834,260 @@
 
             accountGrid.trackChanges = true;
 
-            //Navigation button
-            btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
-            btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
-            btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
-            btnLastPageGrid = document.getElementById('btnMoveToLastPageGrid');
-            btnCurrentPageGrid = document.getElementById('btnCurrentPageGrid');
+            //Navigation button for account
+            btnFirstPageGridAccount = document.getElementById('btnMoveToFirstPageGridAccount');
+            btnPreviousPageGridAccount = document.getElementById('btnMoveToPreviousPageGridAccount');
+            btnNextPageGridAccount = document.getElementById('btnMoveToNextPageGridAccount');
+            btnLastPageGridAccount = document.getElementById('btnMoveToLastPageGridAccount');
+            btnCurrentPageGridAccount = document.getElementById('btnCurrentPageGridAccount');
 
             updateNavigateButtonsAccount();
 
-            btnFirstPageGrid.addEventListener('click', function () {
+            btnFirstPageGridAccount.addEventListener('click', function () {
                 accounts.moveToFirstPage();
                 updateNavigateButtonsAccount();
             });
-            btnPreviousPageGrid.addEventListener('click', function () {
+            btnPreviousPageGridAccount.addEventListener('click', function () {
                 accounts.moveToPreviousPage();
                 updateNavigateButtonsAccount();
             });
-            btnNextPageGrid.addEventListener('click', function () {
+            btnNextPageGridAccount.addEventListener('click', function () {
                 accounts.moveToNextPage();
                 updateNavigateButtonsAccount();
             });
-            btnLastPageGrid.addEventListener('click', function () {
+            btnLastPageGridAccount.addEventListener('click', function () {
                 accounts.moveToLastPage();
                 updateNavigateButtonsAccount();
+            });
+        });
+    </script>
+
+    <!-- ==================== -->
+    <!-- Account Type Scripts -->
+    <!-- ==================== -->
+    <script type="text/javascript">
+        // =================================
+        // Global Variables for Account Type
+        // =================================
+        var accountTypes;
+        var accountTypeGrid;
+
+        var btnFirstPageGridAccountType;
+        var btnPreviousPageGridAccountType;
+        var btnNextPageGridAccountType;
+        var btnLastPageGridAccountType;
+        var btnCurrentPageGridAccountType;
+
+        // =====================
+        // GET Account Type List
+        // =====================
+        function getAccountType() {
+            var accountTypes = new wijmo.collections.ObservableArray;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listAccountType',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            accountTypes.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-pencil-square'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                AccountTypeCode: Results[i]["AccountTypeCode"],
+                                AccountType: Results[i]["AccountType"],
+                                AccountCategoryId: Results[i]["AccountCategoryId"],
+                                AccountCategory: Results[i]["AccountCategory"],
+                                SubCategoryDescription: Results[i]["SubCategoryDescription"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return accountTypes;
+        }
+
+        // ===============================
+        // FlexGrid Selection for Account Type
+        // ===============================
+        function updateDetailsAccountType() {
+            var item = accountTypes.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ===================================
+        // Navigation Buttons for Account Type
+        // ===================================
+        function updateNavigateButtonsAccountType() {
+            if (accountTypes.pageSize <= 0) {
+                document.getElementById('naviagtionPageGridAccountType').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGridAccountType').style.display = 'block';
+            if (accountTypes.pageIndex === 0) {
+                btnFirstPageGridAccountType.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridAccountType.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccountType.removeAttribute('disabled');
+                btnLastPageGridAccountType.removeAttribute('disabled');
+            } else if (accountTypes.pageIndex === (accountTypes.pageCount - 1)) {
+                btnFirstPageGridAccountType.removeAttribute('disabled');
+                btnPreviousPageGridAccountType.removeAttribute('disabled');
+                btnLastPageGridAccountType.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccountType.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridAccountType.removeAttribute('disabled');
+                btnPreviousPageGridAccountType.removeAttribute('disabled');
+                btnNextPageGridAccountType.removeAttribute('disabled');
+                btnLastPageGridAccountType.removeAttribute('disabled');
+            }
+            btnCurrentPageGridAccountType.innerHTML = (accountTypes.pageIndex + 1) + ' / ' + accountTypes.pageCount;
+        }
+
+        // =============================
+        // On Page Load for Account Type
+        // =============================
+        $(document).ready(function () {
+            document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
+
+            toastr.options = {
+                "closeButton": true,
+                "debug": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            accountTypes = new wijmo.collections.CollectionView(getAccountType());
+            accountTypes.canFilter = true;
+            accountTypes.pageSize = 10;
+
+            var filterTextAccountType = '';
+            $('#InputFilterAccountType').keyup(function () {
+                filterTextAccountType = this.value.toLowerCase();
+                accountTypes.refresh();
+            });
+            accountTypes.filter = function (item) {
+                return !filterTextAccountType || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1);
+            }
+            accountTypes.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountType();
+            });
+            accountTypes.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccountType();
+            });
+
+            // Flex Grid for account type
+            accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
+            accountTypeGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Code",
+                                "binding": "AccountTypeCode",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*",
+                            },
+                            {
+                                "header": "Account Type",
+                                "binding": "AccountType",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Category",
+                                "binding": "AccountCategory",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Category Description",
+                                "binding": "SubCategoryDescription",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: accountTypes,
+                isReadOnly: true,
+                frozenColumns: 2,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            accountTypeGrid.trackChanges = true;
+
+            // Navigation button for account type
+            btnFirstPageGridAccountType = document.getElementById('btnMoveToFirstPageGridAccountType');
+            btnPreviousPageGridAccountType = document.getElementById('btnMoveToPreviousPageGridAccountType');
+            btnNextPageGridAccountType = document.getElementById('btnMoveToNextPageGridAccountType');
+            btnLastPageGridAccountType = document.getElementById('btnMoveToLastPageGridAccountType');
+            btnCurrentPageGridAccountType = document.getElementById('btnCurrentPageGridAccountType');
+
+            updateNavigateButtonsAccountType();
+
+            btnFirstPageGridAccountType.addEventListener('click', function () {
+                accountTypes.moveToFirstPage();
+                updateNavigateButtonsAccountType();
+            });
+            btnPreviousPageGridAccountType.addEventListener('click', function () {
+                accountTypes.moveToPreviousPage();
+                updateNavigateButtonsAccountType();
+            });
+            btnNextPageGridAccountType.addEventListener('click', function () {
+                accountTypes.moveToNextPage();
+                updateNavigateButtonsAccountType();
+            });
+            btnLastPageGridAccountType.addEventListener('click', function () {
+                accountTypes.moveToLastPage();
+                updateNavigateButtonsAccountType();
             });
         });
     </script>
