@@ -23,11 +23,11 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <ul class="nav nav-tabs pull-right" id="myTab">
-                    <li class="active"><a data-toggle="tab" href="#Account">Account</a></li>
-                    <li><a data-toggle="tab" href="#AccountType" onclick="">Account Type</a></li>
-                    <li><a data-toggle="tab" href="#AccountCashFlow">Account Cash Flow</a></li>
-                    <li><a data-toggle="tab" href="#AccountCategory">Account Category</a></li>
+                <ul class="nav nav-tabs pull-right" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" onclick="accountTab()">Account</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountType" onclick="accountTypeTab()">Account Type</a></lirole>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" onclick="accountCashFlowTab()">Account Cash Flow</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" onclick="accountCategoryTab()">Account Category</a></li>
                 </ul>
                 <h4>Chart of Accounts</h4>
                 <hr />
@@ -143,7 +143,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8">
-                                <button class="btn btn-info pull-right" onclick=""><i class="fa fa-plus"></i> Add New Account Cash Flow</button>
+                                <button class="btn btn-info pull-right" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add New Account Cash Flow</button>
                             </div>
                         </div>
                         <br />
@@ -189,7 +189,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8">
-                                <button class="btn btn-info pull-right" onclick=""><i class="fa fa-plus"></i> Add New Account Category</button>
+                                <button class="btn btn-info pull-right" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add New Account Category</button>
                             </div>
                         </div>
                         <br />
@@ -233,14 +233,14 @@
                         <h4 class="modal-title" id="accountModalLabel">Account Detail</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="branchDetailForm">
+                        <form id="AccountDetailForm">
                             <dl class="dl-horizontal">
                                 <dd><input type="hidden" class="form-control" id="account_id" /></dd>
                                 <dt>Code:</dt>
                                 <dd><input type="text" class="form-control requiredAccount" id="account_code" /></dd>
                                 <dt>Account:</dt>
                                 <dd><input type="text" class="form-control requiredAccount" id="account_account" /></dd>
-                                <dt>Account Type:</dt>
+                                <dt>Type:</dt>
                                 <dd>
                                     <div id="account_type_id" class="comboBox-wide"></div>
 
@@ -282,7 +282,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-danger" id="cmdConfirmDeleteAccount" onclick="cmdAccountConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button type="button" id="cmdConfirmDeleteCloseButtonAccount" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -298,10 +298,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="accountTypeModalLabel">Account Detail</h4>
+                        <h4 class="modal-title" id="accountTypeModalLabel">Account Type Detail</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="branchDetailForm">
+                        <form id="AccountTypeDetailForm">
                             <dl class="dl-horizontal">
                                 <dd><input type="hidden" class="form-control" id="accountType_id" /></dd>
                                 <dt>Code:</dt>
@@ -345,13 +345,121 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-danger" id="cmdConfirmDeleteAccountType" onclick="cmdAccountTypeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button type="button" id="cmdConfirmDeleteCloseButtonAccountType" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- ============================= -->
+        <!-- Account Cash Flow Edit Detail -->
+        <!-- ============================= -->
+        <div class="modal fade" id="accountCashFlowEdit" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="accountCashFlowModalLabel">Account Cash Flow Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="AccountCashFlowDetailForm">
+                            <dl class="dl-horizontal">
+                                <dd><input type="hidden" class="form-control" id="accountCashFlow_Id" /></dd>
+                                <dt>Code:</dt>
+                                <dd><input type="text" class="form-control requiredAccountCashFlow" id="accountCashFlow_Code" /></dd>
+                                <dt>Cash Flow:</dt>
+                                <dd><input type="text" class="form-control requiredAccountCashFlow" id="accountCashFlow_CashFlow" /></dd>
+                            </dl>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="cmdAddAccountCashFlowButton" onclick="cmdAccountCashFlowAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        <button class="btn btn-success" id="cmdUpdateAccountCashFlowButton" onclick="cmdAccountCashFlowUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
+                        <button type="button" id="cmdAccountCashFlowDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================== -->
+        <!-- Account Cash Flow Delete -->
+        <!-- ======================== -->
+        <div class="modal fade" id="deleteAccountCashFlowConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Account Cash Flow <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" id="cmdConfirmDeleteAccountCashFlow" onclick="cmdAccountCashFlowConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button type="button" id="cmdConfirmDeleteCloseButtonAccountCashFlow" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================ -->
+        <!-- Account Category Edit Detail -->
+        <!-- ============================ -->
+        <div class="modal fade" id="accountCategoryEdit" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="accountCategoryModalLabel">Account Category Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="AccountCategoryDetailForm">
+                            <dl class="dl-horizontal">
+                                <dd><input type="hidden" class="form-control" id="accountCategory_Id" /></dd>
+                                <dt>Code:</dt>
+                                <dd><input type="text" class="form-control requiredAccountCategory" id="accountCategory_Code" /></dd>
+                                <dt>Category:</dt>
+                                <dd><input type="text" class="form-control requiredAccountCategory" id="accountCategory_Category" /></dd>
+                            </dl>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="cmdAddAccountCategoryButton" onclick="cmdAccountCategoryAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        <button class="btn btn-success" id="cmdUpdateAccountCategoryButton" onclick="cmdAccountCategoryUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
+                        <button type="button" id="cmdAccountCategoryDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================= -->
+        <!-- Account Category Delete -->
+        <!-- ======================= -->
+        <div class="modal fade" id="deleteAccountCategoryConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Account Category <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" id="cmdConfirmDeleteAccountCategory" onclick="cmdAccountCategoryConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button type="button" id="cmdConfirmDeleteCloseButtonAccountCategory" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============= -->
         <!-- Loading Modal -->
+        <!-- ============= -->
         <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class=" modal-dialog modal-sm">
                 <!-- Modal content-->
@@ -381,17 +489,13 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
-        $(function () {
-            // for bootstrap 3 use 'shown.bs.tab', for bootstrap 2 use 'shown' in the next line
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                // save the latest tab; use cookies if you like 'em better:
-                localStorage.setItem('lastTab', $(this).attr('href'));
+        $(document).ready(function () {
+            $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
             });
-
-            // go to the latest tab, if it exists:
-            var lastTab = localStorage.getItem('lastTab');
-            if (lastTab) {
-                $('[href="' + lastTab + '"]').tab('show');
+            var activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                $('#myTab a[href="' + activeTab + '"]').tab('show');
             }
         });
     </script>
@@ -749,7 +853,7 @@
                 statusCode: {
                     200: function () {
                         $("#cmdConfirmDeleteAccount").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", true);
                         toastr.success("Successfully Deleted");
                         window.setTimeout(function () {
                             location.reload()
@@ -889,7 +993,7 @@
                                 "width": "2*"
                             },
                             {
-                                "header": "Account Type",
+                                "header": "Type",
                                 "binding": "AccountType",
                                 "align": "left",
                                 "allowSorting": true,
@@ -960,9 +1064,9 @@
         var btnLastPageGridAccountType;
         var btnCurrentPageGridAccountType;
 
-        // ===================================
-        // GET Account
-        // ===================================
+        // ====================
+        // GET Account Category
+        // ====================
         function getAccountCategoryForComboBox() {
             var accountCategories = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -1017,6 +1121,7 @@
         // =====================
         function getAccountType() {
             var accountTypes = new wijmo.collections.ObservableArray;
+            $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/listAccountType',
                 cache: false,
@@ -1024,6 +1129,7 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
+                    $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             accountTypes.push({
@@ -1236,7 +1342,7 @@
                 statusCode: {
                     200: function () {
                         $("#cmdConfirmDeleteAccountType").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
                         toastr.success("Successfully Deleted");
                         window.setTimeout(function () {
                             location.reload()
@@ -1449,6 +1555,7 @@
         // ==========================
         function getAccountCashFlow() {
             var accountCashFlows = new wijmo.collections.ObservableArray;
+            $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/listAccountCashFlow',
                 cache: false,
@@ -1456,11 +1563,12 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
+                    $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             accountCashFlows.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-pencil-square'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 AccountCashFlowCode: Results[i]["AccountCashFlowCode"],
                                 AccountCashFlow: Results[i]["AccountCashFlow"],
@@ -1479,6 +1587,192 @@
                 alert(err);
             });
             return accountCashFlows;
+        }
+
+        // =========================
+        // ADD New Account Cash Flow
+        // =========================
+        function cmdAddNewAccountCashFlow_OnClick() {
+            $('#accountCashFlowEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#cmdAddAccountCashFlowButton").show();
+            $("#cmdUpdateAccountCashFlowButton").hide();
+
+            document.getElementById('accountCashFlow_Id').value = 0;
+            document.getElementById('accountCashFlow_Code').value = "";
+            document.getElementById('accountCashFlow_CashFlow').value = "";
+        }
+
+        // ============================
+        // ADD Account Cash Flow Button
+        // ============================
+        function cmdAccountCashFlowAddButton_OnClick() {
+            var accountCashFlowObject = new Object();
+
+            accountCashFlowObject.AccountCashFlowCode = document.getElementById('accountCashFlow_Code').value;
+            accountCashFlowObject.AccountCashFlow = document.getElementById('accountCashFlow_CashFlow').value;
+            var data = JSON.stringify(accountCashFlowObject);
+
+            var isValid = true;
+            $('.requiredAccountCashFlow').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "2px solid red",
+                        "transition": "border 1s ease 0s"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "1px solid blue",
+                    });
+                }
+            });
+            if (isValid == false) {
+                e.preventDefault();
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addAccountCashFlow',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdAddAccountCashFlowButton").prop("disabled", true);
+                            $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Added");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Add");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+            }
+        }
+
+        // ===============================
+        // UPDATE Account Cash Flow Button
+        // ===============================
+        function cmdAccountCashFlowUpdateButton_OnClick() {
+            var accountCashFlowObject = new Object();
+            var accountCashFlowId = document.getElementById('accountCashFlow_Id').value;
+
+            accountCashFlowObject.AccountCashFlowCode = document.getElementById('accountCashFlow_Code').value;
+            accountCashFlowObject.AccountCashFlow = document.getElementById('accountCashFlow_CashFlow').value;
+            var data = JSON.stringify(accountCashFlowObject);
+
+            var isValid = true;
+            $('.requiredAccountCashFlow').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "2px solid red",
+                        "transition": "border 1s ease 0s"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "1px solid blue",
+                    });
+                }
+            });
+            if (isValid == false) {
+                e.preventDefault();
+            }
+            else {
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateAccountCashFlow/' + accountCashFlowId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdUpdateAccountCashFlowButton").prop("disabled", true);
+                            $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Updated");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Update");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+            }
+        }
+
+        // =============================
+        // EDIT Account Cash FLow Button
+        // =============================
+        function cmdAccountCashFlowEditButton_OnClick() {
+            accountCashFlows.editItem(accountCashFlows.currentItem);
+            $('#accountCashFlowEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#cmdUpdateAccountCashFlowButton").show();
+            $("#cmdAddAccountCashFlowButton").hide();
+
+            var accountCashFlow = accountCashFlows.currentEditItem;
+            document.getElementById('accountCashFlow_Id').value = accountCashFlow.Id !== null && typeof (accountCashFlow.Id) != 'undefined' ? wijmo.Globalize.format(accountCashFlow.Id) : '';
+            document.getElementById('accountCashFlow_Code').value = accountCashFlow.AccountCashFlowCode ? accountCashFlow.AccountCashFlowCode : '';
+            document.getElementById('accountCashFlow_CashFlow').value = accountCashFlow.AccountCashFlow ? accountCashFlow.AccountCashFlow : '';
+        }
+
+        // ================================
+        // DELETE Account Cash Flow Buttons
+        // ================================
+        function cmdAccountCashFlowDeleteButton_OnClick() {
+            $('#deleteAccountCashFlowConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+        // Account Cash Flow Confirm Delete Button
+        function cmdAccountCashFlowConfirmDeleteButton_OnClick() {
+            accountCashFlows.editItem(accountCashFlows.currentItem);
+            var id = accountCashFlows.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteAccountCashFlow/' + id,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteAccountCashFlowConfirm').modal('hide');
+                    },
+                    400: function () {
+                        toastr.error("Can't be deleted");
+                        $('#deleteAccountCashFlowConfirm').modal('hide');
+                    }
+                }
+            });
         }
 
         // ===================================
@@ -1520,11 +1814,9 @@
             btnCurrentPageGridAccountCashFlow.innerHTML = (accountCashFlows.pageIndex + 1) + ' / ' + accountCashFlows.pageCount;
         }
 
-
-
-        // ========================================
-        // On Page Load for Account Type
-        // =============================
+        // ===================================
+        // On Page Load for Account Cash Flows
+        // ===================================
         $(document).ready(function () {
             document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
 
@@ -1588,7 +1880,7 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Cash Flow Code",
+                                "header": "Code",
                                 "binding": "AccountCashFlowCode",
                                 "align": "left",
                                 "allowSorting": true,
@@ -1622,29 +1914,28 @@
 
             updateNavigateButtonsAccountCashFlow();
 
-            btnFirstPageGridAccountType.addEventListener('click', function () {
+            btnFirstPageGridAccountCashFlow.addEventListener('click', function () {
                 accountCashFlows.moveToFirstPage();
                 updateNavigateButtonsAccountCashFlow();
             });
-            btnPreviousPageGridAccountType.addEventListener('click', function () {
+            btnPreviousPageGridAccountCashFlow.addEventListener('click', function () {
                 accountCashFlows.moveToPreviousPage();
                 updateNavigateButtonsAccountCashFlow();
             });
-            btnNextPageGridAccountType.addEventListener('click', function () {
+            btnNextPageGridAccountCashFlow.addEventListener('click', function () {
                 accountCashFlows.moveToNextPage();
                 updateNavigateButtonsAccountCashFlow();
             });
-            btnLastPageGridAccountType.addEventListener('click', function () {
+            btnLastPageGridAccountCashFlow.addEventListener('click', function () {
                 accountCashFlows.moveToLastPage();
                 updateNavigateButtonsAccountCashFlow();
             });
-
         });
     </script>
 
-    <!-- ========================= -->
+    <!-- ======================== -->
     <!-- Account Category Scripts -->
-    <!-- ========================= -->
+    <!-- ======================== -->
     <script type="text/javascript">
         // ================
         // GLOBAL Variables
@@ -1663,6 +1954,7 @@
         // ==========================
         function getAccountCategory() {
             var accountCategories = new wijmo.collections.ObservableArray;
+            $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/listAccountCategory',
                 cache: false,
@@ -1670,11 +1962,12 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
+                    $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             accountCategories.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-pencil-square'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 AccountCategoryCode: Results[i]["AccountCategoryCode"],
                                 AccountCategory: Results[i]["AccountCategory"],
@@ -1693,6 +1986,193 @@
                 alert(err);
             });
             return accountCategories;
+        }
+
+
+        // ========================
+        // ADD New Account Category
+        // ========================
+        function cmdAddNewAccountCategory_OnClick() {
+            $('#accountCategoryEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#cmdAddAccountCategoryButton").show();
+            $("#cmdUpdateAccountCategoryButton").hide();
+
+            document.getElementById('accountCategory_Id').value = 0;
+            document.getElementById('accountCategory_Code').value = "";
+            document.getElementById('accountCategory_Category').value = "";
+        }
+
+        // ===========================
+        // ADD Account Category Button
+        // ===========================
+        function cmdAccountCategoryAddButton_OnClick() {
+            var accountCategoryObject = new Object();
+
+            accountCategoryObject.AccountCategoryCode = document.getElementById('accountCategory_Code').value;
+            accountCategoryObject.AccountCategory = document.getElementById('accountCategory_Category').value;
+            var data = JSON.stringify(accountCategoryObject);
+
+            var isValid = true;
+            $('.requiredAccountCategory').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "2px solid red",
+                        "transition": "border 1s ease 0s"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "1px solid blue",
+                    });
+                }
+            });
+            if (isValid == false) {
+                e.preventDefault();
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addAccountCategory',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdAddAccountCategoryButton").prop("disabled", true);
+                            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Added");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Add");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+            }
+        }
+
+        // ==============================
+        // UPDATE Account Category Button
+        // ==============================
+        function cmdAccountCategoryUpdateButton_OnClick() {
+            var accountCategoryObject = new Object();
+            var accountCategoryId = document.getElementById('accountCategory_Id').value;
+
+            accountCategoryObject.AccountCategoryCode = document.getElementById('accountCategory_Code').value;
+            accountCategoryObject.AccountCategory = document.getElementById('accountCategory_Category').value;
+            var data = JSON.stringify(accountCategoryObject);
+
+            var isValid = true;
+            $('.requiredAccountCategory').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "2px solid red",
+                        "transition": "border 1s ease 0s"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "1px solid blue",
+                    });
+                }
+            });
+            if (isValid == false) {
+                e.preventDefault();
+            }
+            else {
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateAccountCategory/' + accountCategoryId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdUpdateAccountCategoryButton").prop("disabled", true);
+                            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Updated");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Update");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+            }
+        }
+
+        // ============================
+        // EDIT Account Category Button
+        // ============================
+        function cmdAccountCategoryEditButton_OnClick() {
+            accountCategories.editItem(accountCategories.currentItem);
+            $('#accountCategoryEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#cmdUpdateAccountCategoryButton").show();
+            $("#cmdAddAccountCategoryButton").hide();
+
+            var accountCategory = accountCategories.currentEditItem;
+            document.getElementById('accountCategory_Id').value = accountCategory.Id !== null && typeof (accountCategory.Id) != 'undefined' ? wijmo.Globalize.format(accountCategory.Id) : '';
+            document.getElementById('accountCategory_Code').value = accountCategory.AccountCategoryCode ? accountCategory.AccountCategoryCode : '';
+            document.getElementById('accountCategory_Category').value = accountCategory.AccountCategory ? accountCategory.AccountCategory : '';
+        }
+
+        // ================================
+        // DELETE Account Cash Flow Buttons
+        // ================================
+        function cmdAccountCategoryDeleteButton_OnClick() {
+            $('#deleteAccountCategoryConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+        // Account Category Confirm Delete Button
+        function cmdAccountCategoryConfirmDeleteButton_OnClick() {
+            accountCategories.editItem(accountCategories.currentItem);
+            var id = accountCategories.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteAccountCategory/' + id,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteAccountCategory").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteAccountCategoryConfirm').modal('hide');
+                    },
+                    400: function () {
+                        toastr.error("Can't be deleted");
+                        $('#deleteAccountCategoryConfirm').modal('hide');
+                    }
+                }
+            });
         }
 
         // =======================================
@@ -1800,7 +2280,7 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Category Code",
+                                "header": "Code",
                                 "binding": "AccountCategoryCode",
                                 "align": "left",
                                 "allowSorting": true,
@@ -1850,9 +2330,7 @@
                 accountCashFlows.moveToLastPage();
                 updateNavigateButtonsAccountCashFlow();
             });
-
         });
     </script>
-
 </body>
 </html>
