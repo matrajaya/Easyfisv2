@@ -139,7 +139,7 @@
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </span>
-                                    <input type="text" class="form-control" id="InputFilter" placeholder="Search Account Cash Flow">
+                                    <input type="text" class="form-control" id="InputFilterAccountCashFlow" placeholder="Search Account Cash Flow">
                                 </div>
                             </div>
                             <div class="col-lg-8">
@@ -154,18 +154,18 @@
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridAccountCashFlow">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountCashFlow">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountCashFlow">
                                     <span class="glyphicon glyphicon-step-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountCashFlow"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountCashFlow">
                                     <span class="glyphicon glyphicon-step-forward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountCashFlow">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
                             </div>
@@ -377,6 +377,9 @@
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
 
+    <!-- ================================ -->
+    <!-- Tab Current Page on Load Scripts -->
+    <!-- ================================ -->
     <script type="text/javascript">
         $(function () {
             // for bootstrap 3 use 'shown.bs.tab', for bootstrap 2 use 'shown' in the next line
@@ -1424,5 +1427,218 @@
             });
         });
     </script>
+
+    <!-- ========================= -->
+    <!-- Account Cash Flow Scripts -->
+    <!-- ========================= -->
+    <script type="text/javascript">
+        // ================
+        // GLOBAL Variables
+        // ================
+        var accountCashFlows;
+        var accountCashFlowGrid;
+
+        var btnFirstPageGridAccountCashFlow;
+        var btnPreviousPageGridAccountCashFlow;
+        var btnNextPageGridAccountCashFlow;
+        var btnLastPageGridAccountCashFlow;
+        var btnCurrentPageGridAccountCashFlow;
+
+        // ==========================
+        // GET Account Cash Flow List
+        // ==========================
+        function getAccountCashFlow() {
+            var accountCashFlows = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listAccountCashFlow',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            accountCashFlows.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-pencil-square'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                AccountCashFlowCode: Results[i]["AccountCashFlowCode"],
+                                AccountCashFlow: Results[i]["AccountCashFlow"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return accountCashFlows;
+        }
+
+        // ===================================
+        // FlexGrid Selection for Account Type
+        // ===================================
+        function updateDetailsAccountCashFlow() {
+            var item = accountCashFlows.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ========================================
+        // Navigation Buttons for Account Cash Flow
+        // ========================================
+        function updateNavigateButtonsAccountCashFlow() {
+            if (accountCashFlows.pageSize <= 0) {
+                document.getElementById('naviagtionPageGridAccountCashFlow').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGridAccountCashFlow').style.display = 'block';
+            if (accountCashFlows.pageIndex === 0) {
+                btnFirstPageGridAccountCashFlow.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridAccountCashFlow.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccountCashFlow.removeAttribute('disabled');
+                btnLastPageGridAccountCashFlow.removeAttribute('disabled');
+            } else if (accountCashFlows.pageIndex === (accountCashFlows.pageCount - 1)) {
+                btnFirstPageGridAccountCashFlow.removeAttribute('disabled');
+                btnPreviousPageGridAccountCashFlow.removeAttribute('disabled');
+                btnLastPageGridAccountCashFlow.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccountCashFlow.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridAccountCashFlow.removeAttribute('disabled');
+                btnPreviousPageGridAccountCashFlow.removeAttribute('disabled');
+                btnNextPageGridAccountCashFlow.removeAttribute('disabled');
+                btnLastPageGridAccountCashFlow.removeAttribute('disabled');
+            }
+            btnCurrentPageGridAccountCashFlow.innerHTML = (accountCashFlows.pageIndex + 1) + ' / ' + accountCashFlows.pageCount;
+        }
+
+        // =============================
+        // On Page Load for Account Type
+        // =============================
+        $(document).ready(function () {
+            document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
+
+            toastr.options = {
+                "closeButton": true,
+                "debug": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
+            accountCashFlows.canFilter = true;
+            accountCashFlows.pageSize = 10;
+
+            var filterTextAccountCashFlow = '';
+            $('#InputFilterAccountCashFlow').keyup(function () {
+                filterTextAccountCashFlow = this.value.toLowerCase();
+                accountCashFlows.refresh();
+            });
+            accountCashFlows.filter = function (item) {
+                return !filterTextAccountCashFlow || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+            }
+            accountCashFlows.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountCashFlow();
+            });
+            accountCashFlows.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccountCashFlow();
+            });
+
+            // Flex Grid for Account Cash Flow
+            accountCashFlowGrid = new wijmo.grid.FlexGrid('#AccountCashFlowGrid');
+            accountCashFlowGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Cash Flow Code",
+                                "binding": "AccountCashFlowCode",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*",
+                            },
+                            {
+                                "header": "Cash FLow",
+                                "binding": "AccountCashFlow",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: accountCashFlows,
+                isReadOnly: true,
+                frozenColumns: 2,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            accountCashFlowGrid.trackChanges = true;
+
+            // Navigation button for account cash flow
+            btnFirstPageGridAccountCashFlow = document.getElementById('btnMoveToFirstPageGridAccountCashFlow');
+            btnPreviousPageGridAccountCashFlow = document.getElementById('btnMoveToPreviousPageGridAccountCashFlow');
+            btnNextPageGridAccountCashFlow = document.getElementById('btnMoveToNextPageGridAccountCashFlow');
+            btnLastPageGridAccountCashFlow = document.getElementById('btnMoveToLastPageGridAccountCashFlow');
+            btnCurrentPageGridAccountCashFlow = document.getElementById('btnCurrentPageGridAccountCashFlow');
+
+            updateNavigateButtonsAccountCashFlow();
+
+            btnFirstPageGridAccountType.addEventListener('click', function () {
+                accountCashFlows.moveToFirstPage();
+                updateNavigateButtonsAccountCashFlow();
+            });
+            btnPreviousPageGridAccountType.addEventListener('click', function () {
+                accountCashFlows.moveToPreviousPage();
+                updateNavigateButtonsAccountCashFlow();
+            });
+            btnNextPageGridAccountType.addEventListener('click', function () {
+                accountCashFlows.moveToNextPage();
+                updateNavigateButtonsAccountCashFlow();
+            });
+            btnLastPageGridAccountType.addEventListener('click', function () {
+                accountCashFlows.moveToLastPage();
+                updateNavigateButtonsAccountCashFlow();
+            });
+
+        });
+    </script>
+
 </body>
 </html>
