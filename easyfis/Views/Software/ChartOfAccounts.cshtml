@@ -23,9 +23,9 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <ul class="nav nav-tabs pull-right">
-                    <li class="active"><a data-toggle="pill" href="#Account">Account</a></li>
-                    <li><a data-toggle="tab" href="#AccountType">Account Type</a></li>
+                <ul class="nav nav-tabs pull-right" id="myTab">
+                    <li class="active"><a data-toggle="tab" href="#Account">Account</a></li>
+                    <li><a data-toggle="tab" href="#AccountType" onclick="">Account Type</a></li>
                     <li><a data-toggle="tab" href="#AccountCashFlow">Account Cash Flow</a></li>
                     <li><a data-toggle="tab" href="#AccountCategory">Account Category</a></li>
                 </ul>
@@ -97,7 +97,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8">
-                                <button class="btn btn-info pull-right" onclick=""><i class="fa fa-plus"></i> Add New Account Type</button>
+                                <button class="btn btn-info pull-right" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add New Account Type</button>
                             </div>
                         </div>
                         <br />
@@ -288,6 +288,69 @@
             </div>
         </div>
 
+
+        <!-- ======================== -->
+        <!-- Account Type Edit Detail -->
+        <!-- ======================== -->
+        <div class="modal fade" id="accountTypeEdit" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="accountTypeModalLabel">Account Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="branchDetailForm">
+                            <dl class="dl-horizontal">
+                                <dd><input type="hidden" class="form-control" id="accountType_id" /></dd>
+                                <dt>Code:</dt>
+                                <dd><input type="text" class="form-control requiredAccountType" id="accountType_code" /></dd>
+                                <dt>Account Type:</dt>
+                                <dd><input type="text" class="form-control requiredAccountType" id="accountType_accountType" /></dd>
+                                <dt>Category:</dt>
+                                <dd>
+                                    <div id="accountType_CategoryId" class="comboBox-wide"></div>
+
+                                    <input type="hidden" class="requiredAccountType" id="accountType_CategoryId_Data" required />
+                                    <input type="hidden" id="accountType_Category_selectedValue" />
+                                </dd>
+                                <dt>Category Description:</dt>
+                                <dd><input type="text" class="form-control requiredAccountType" id="accountType_SubCategoryDescription" /></dd>
+                            </dl>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="cmdAddAccountTypeButton" onclick="cmdAccountTypeAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        <button class="btn btn-success" id="cmdUpdateAccountTypeButton" onclick="cmdAccountTypeUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
+                        <button type="button" id="cmdAccountTypeDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =================== -->
+        <!-- Account Type Delete -->
+        <!-- =================== -->
+        <div class="modal fade" id="deleteAccountTypeConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Account Type <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" id="cmdConfirmDeleteAccountType" onclick="cmdAccountTypeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button type="button" id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Loading Modal -->
         <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class=" modal-dialog modal-sm">
@@ -313,6 +376,22 @@
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
+
+    <script type="text/javascript">
+        $(function () {
+            // for bootstrap 3 use 'shown.bs.tab', for bootstrap 2 use 'shown' in the next line
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                // save the latest tab; use cookies if you like 'em better:
+                localStorage.setItem('lastTab', $(this).attr('href'));
+            });
+
+            // go to the latest tab, if it exists:
+            var lastTab = localStorage.getItem('lastTab');
+            if (lastTab) {
+                $('[href="' + lastTab + '"]').tab('show');
+            }
+        });
+    </script>
 
     <!-- =============== -->
     <!-- Account Scripts -->
@@ -870,11 +949,65 @@
         var accountTypes;
         var accountTypeGrid;
 
+        var cboAccountCategory;
+
         var btnFirstPageGridAccountType;
         var btnPreviousPageGridAccountType;
         var btnNextPageGridAccountType;
         var btnLastPageGridAccountType;
         var btnCurrentPageGridAccountType;
+
+        // ===================================
+        // GET Account 
+        // ===================================
+        function getAccountCategoryForComboBox() {
+            var accountCategories = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccountCategory',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            accountCategories.push({
+                                AccountCategoryId: results[i]["Id"],
+                                AccountCategoryCode: results[i]["AccountCategoryCode"],
+                                AccountCategory: results[i]["AccountCategory"]
+                            });
+                        }
+                        createCboAccountCategory(accountCategories);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+            );
+        }
+
+        // ==============================
+        // Combo Box for Account Category
+        // ==============================
+        function createCboAccountCategory(accountCategories) {
+            var accountCategoryCollection = new wijmo.collections.CollectionView(accountCategories);
+            var accountCategoryList = new Array();
+            for (var i = 0; i < accountCategoryCollection.items.length; i++) {
+                accountCategoryList.push(accountCategoryCollection.items[i].AccountCategory);
+            }
+
+            cboAccountCategory.dispose();
+            cboAccountCategory = new wijmo.input.ComboBox('#accountType_CategoryId', {
+                placeholder: "Select a Account Category",
+                itemsSource: accountCategoryList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('accountType_Category_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#accountType_CategoryId_Data").val(accountCategoryCollection.items[this.selectedIndex].AccountCategoryId);
+                }
+            });
+        }
 
         // =====================
         // GET Account Type List
@@ -891,8 +1024,8 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             accountTypes.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-pencil-square'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 AccountTypeCode: Results[i]["AccountTypeCode"],
                                 AccountType: Results[i]["AccountType"],
@@ -916,9 +1049,211 @@
             return accountTypes;
         }
 
-        // ===============================
+        // ====================
+        // ADD New Account Type
+        // ====================
+        function cmdAddNewAccountType_OnClick() {
+            $('#accountTypeEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#cmdAddAccountTypeButton").show();
+            $("#cmdUpdateAccountTypeButton").hide();
+ 
+            getAccountCategoryForComboBox();
+
+            document.getElementById('accountType_id').value = 0;
+            document.getElementById('accountType_code').value = "";
+            document.getElementById('accountType_accountType').value = "";
+            document.getElementById('accountType_CategoryId_Data').value = "";
+            document.getElementById('accountType_SubCategoryDescription').value = "";
+            document.getElementById('accountType_Category_selectedValue').value = "";
+        }
+
+        // =======================
+        // ADD Account Type Button
+        // =======================
+        function cmdAccountTypeAddButton_OnClick() {
+            var accountTypeObject = new Object();
+
+            accountTypeObject.AccountTypeCode = document.getElementById('accountType_code').value;
+            accountTypeObject.AccountType = document.getElementById('accountType_accountType').value;
+            accountTypeObject.AccountCategoryId = document.getElementById('accountType_CategoryId_Data').value;
+            accountTypeObject.SubCategoryDescription = document.getElementById('accountType_SubCategoryDescription').value;
+            var data = JSON.stringify(accountTypeObject);
+
+            var isValid = true;
+            $('.requiredAccountType').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "2px solid red",
+                        "transition": "border 1s ease 0s"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "1px solid blue",
+                    });
+                }
+            });
+            if (isValid == false) {
+                e.preventDefault();
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addAccountType',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdAddAccountTypeButton").prop("disabled", true);
+                            $("#cmdAccountDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Added");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Add");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+            }
+        }
+
+        // ========================
+        // EDIT Account Type Button
+        // ========================
+        function cmdAccountTypeEditButton_OnClick() {
+            accountTypes.editItem(accountTypes.currentItem);
+            $('#accountTypeEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#cmdUpdateAccountTypeButton").show();
+            $("#cmdAddAccountTypeButton").hide();
+
+            getAccountCategoryForComboBox();
+
+            var accountType = accountTypes.currentEditItem;
+            document.getElementById('accountType_id').value = accountType.Id !== null && typeof (accountType.Id) != 'undefined' ? wijmo.Globalize.format(accountType.Id) : '';
+            document.getElementById('accountType_code').value = accountType.AccountTypeCode ? accountType.AccountTypeCode : '';
+            document.getElementById('accountType_accountType').value = accountType.AccountType ? accountType.AccountType : '';
+            document.getElementById('accountType_CategoryId_Data').value = accountType.AccountCategoryId ? accountType.AccountCategoryId : '';
+            document.getElementById('accountType_SubCategoryDescription').value = accountType.SubCategoryDescription ? accountType.SubCategoryDescription : '';
+            document.getElementById('accountType_Category_selectedValue').value = accountType.AccountCategory ? accountType.AccountCategory : '';
+        }
+
+
+        // ==========================
+        // UPDATE Account Type Button
+        // ==========================
+        function cmdAccountTypeUpdateButton_OnClick() {
+            var accountTypeObject = new Object();
+            var accountTypeId = document.getElementById('accountType_id').value;
+
+            accountTypeObject.AccountTypeCode = document.getElementById('accountType_code').value;
+            accountTypeObject.AccountType = document.getElementById('accountType_accountType').value;
+            accountTypeObject.AccountCategoryId = document.getElementById('accountType_CategoryId_Data').value;
+            accountTypeObject.SubCategoryDescription = document.getElementById('accountType_SubCategoryDescription').value;
+            var data = JSON.stringify(accountTypeObject);
+
+            var isValid = true;
+            $('.requiredAccountType').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "2px solid red",
+                        "transition": "border 1s ease 0s"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "1px solid blue",
+                    });
+                }
+            });
+            if (isValid == false) {
+                e.preventDefault();
+            }
+            else {
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateAccountType/' + accountTypeId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdUpdateAccountTypeButton").prop("disabled", true);
+                            $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Updated");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Update");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+            }
+        }
+
+
+        // ===========================
+        // DELETE Account Type Buttons
+        // ===========================
+        function cmdAccountTypeDeleteButton_OnClick() {
+            $('#deleteAccountTypeConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+        // Account Type Confirm Delete Button
+        function cmdAccountTypeConfirmDeleteButton_OnClick() {
+            accountTypes.editItem(accountTypes.currentItem);
+            var id = accountTypes.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteAccountType/' + id,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteAccountType").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteAccountTypeConfirm').modal('hide');
+                    },
+                    400: function () {
+                        toastr.error("Can't be deleted");
+                        $('#deleteAccountTypeConfirm').modal('hide');
+                    }
+                }
+            });
+        }
+
+        // ===================================
         // FlexGrid Selection for Account Type
-        // ===============================
+        // ===================================
         function updateDetailsAccountType() {
             var item = accountTypes.currentItem;
             document.getElementById('createdBy').innerHTML = item.CreatedBy;
@@ -997,6 +1332,8 @@
             accountTypes.currentChanged.addHandler(function (sender, args) {
                 updateDetailsAccountType();
             });
+
+            cboAccountCategory = new wijmo.input.ComboBox('#accountType_CategoryId');
 
             // Flex Grid for account type
             accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
