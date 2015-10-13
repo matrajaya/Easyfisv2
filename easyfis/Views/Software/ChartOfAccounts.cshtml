@@ -24,10 +24,10 @@
             <br /><br /><br />
             <div class="container">
                 <ul class="nav nav-tabs pull-right" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" onclick="accountTab()">Account</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountType" onclick="accountTypeTab()">Account Type</a></lirole>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" onclick="accountCashFlowTab()">Account Cash Flow</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" onclick="accountCategoryTab()">Account Category</a></li>
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="äccountTabId" onclick="accountTab()">Account</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId" onclick="accountTypeTab()">Account Type</a></lirole>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId" onclick="accountCashFlowTab()">Account Cash Flow</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId" onclick="accountCategoryTab()">Account Category</a></li>
                 </ul>
                 <h4>Chart of Accounts</h4>
                 <hr />
@@ -489,6 +489,34 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
+        $('#äccountTabId').click(function() {
+            $('#Account').show();
+            $('#AccountType').hide();
+            $('#AccountCashFlow').hide();
+            $('#AccountCategory').hide();
+        });
+
+        $('#accountTypeTabId').click(function() {
+            $('#Account').hide();
+            $('#AccountType').show();
+            $('#AccountCashFlow').hide();
+            $('#AccountCategory').hide();
+        });
+
+        $('#accountCashFlowTabId').click(function() {
+            $('#Account').hide();
+            $('#AccountType').hide();
+            $('#AccountCashFlow').show();
+            $('#AccountCategory').hide();
+        });
+
+        $('#accountCategoryTabId').click(function() {
+            $('#Account').hide();
+            $('#AccountType').hide();
+            $('#AccountCashFlow').hide();
+            $('#AccountCategory').show();
+        });
+
         $(document).ready(function () {
             $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
                 localStorage.setItem('activeTab', $(e.target).attr('href'));
@@ -913,7 +941,7 @@
         // ========================
         // On Page Load for Account
         // ========================
-        $(document).ready(function () {
+        function accountTab() {
             document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
 
             toastr.options = {
@@ -1043,7 +1071,7 @@
                 accounts.moveToLastPage();
                 updateNavigateButtonsAccount();
             });
-        });
+        }
     </script>
 
     <!-- ==================== -->
@@ -1402,7 +1430,7 @@
         // =============================
         // On Page Load for Account Type
         // =============================
-        $(document).ready(function () {
+        function accountTypeTab() {
             document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
 
             toastr.options = {
@@ -1531,7 +1559,7 @@
                 accountTypes.moveToLastPage();
                 updateNavigateButtonsAccountType();
             });
-        });
+        }
     </script>
 
     <!-- ========================= -->
@@ -1817,7 +1845,7 @@
         // ===================================
         // On Page Load for Account Cash Flows
         // ===================================
-        $(document).ready(function () {
+        function accountCashFlowTab() {
             document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
 
             toastr.options = {
@@ -1930,7 +1958,7 @@
                 accountCashFlows.moveToLastPage();
                 updateNavigateButtonsAccountCashFlow();
             });
-        });
+        }
     </script>
 
     <!-- ======================== -->
@@ -2217,7 +2245,7 @@
         // =================================
         // On Page Load for Account Category
         // =================================
-        $(document).ready(function () {
+        function accountCategoryTab() {
             document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
 
             toastr.options = {
@@ -2330,7 +2358,7 @@
                 accountCashFlows.moveToLastPage();
                 updateNavigateButtonsAccountCashFlow();
             });
-        });
+        }
     </script>
 </body>
 </html>
