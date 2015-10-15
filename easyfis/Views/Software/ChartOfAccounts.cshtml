@@ -24,10 +24,11 @@
             <br /><br /><br />
             <div class="container">
                 <ul class="nav nav-tabs pull-right" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId" onclick="accountTab()">Account</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId" onclick="accountTypeTab()">Account Type</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId" onclick="accountCashFlowTab()">Account Cash Flow</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId" onclick="accountCategoryTab()">Account Category</a></li>
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Type</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Cash Flow</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Category</a></li>
+                    <li role="presentation"><a class="btn btn-default btn-sm" id="refresh" title="refresh"><i class="fa fa-refresh"></i></a></li>
                 </ul>
                 <h4>Chart of Accounts</h4>
                 <hr />
@@ -484,61 +485,6 @@
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
-
-    <!-- ================================ -->
-    <!-- Tab Current Page on Load Scripts -->
-    <!-- ================================ -->
-    <script type="text/javascript">
-        $('#accountTabId').click(function() {
-            $('#Account').show();
-            $('#AccountType').hide();
-            $('#AccountCashFlow').hide();
-            $('#AccountCategory').hide();
-            window.accountTab = function () {
-                return true;
-            };
-        });
-
-        $('#accountTypeTabId').click(function() {
-            $('#Account').hide();
-            $('#AccountType').show();
-            $('#AccountCashFlow').hide();
-            $('#AccountCategory').hide();
-            window.accountTypeTab = function () {
-                return true;
-            };
-        });
-
-        $('#accountCashFlowTabId').click(function() {
-            $('#Account').hide();
-            $('#AccountType').hide();
-            $('#AccountCashFlow').show();
-            $('#AccountCategory').hide();
-            window.accountCashFlowTab = function () {
-                return true;
-            };
-        });
-
-        $('#accountCategoryTabId').click(function() {
-            $('#Account').hide();
-            $('#AccountType').hide();
-            $('#AccountCashFlow').hide();
-            $('#AccountCategory').show();
-            window.accountCategoryTab = function () {
-                return true;
-            };
-        });
-
-        $(document).ready(function () {
-            $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-                localStorage.setItem('activeTab', $(e.target).attr('href'));
-            });
-            var activeTab = localStorage.getItem('activeTab');
-            if (activeTab) {
-                $('#myTab a[href="' + activeTab + '"]').tab('show');
-            }
-        });
-    </script>
 
     <!-- =============== -->
     <!-- Account Scripts -->
@@ -1050,7 +996,6 @@
                 autoGenerateColumns: false,
                 itemsSource: accounts,
                 isReadOnly: true,
-                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -1538,7 +1483,6 @@
                 autoGenerateColumns: false,
                 itemsSource: accountTypes,
                 isReadOnly: true,
-                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -1937,7 +1881,6 @@
                 autoGenerateColumns: false,
                 itemsSource: accountCashFlows,
                 isReadOnly: true,
-                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -2337,7 +2280,6 @@
                 autoGenerateColumns: false,
                 itemsSource: accountCategories,
                 isReadOnly: true,
-                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -2371,6 +2313,86 @@
                 updateNavigateButtonsAccountCashFlow();
             });
         }
+    </script>
+
+     <!-- ================================ -->
+    <!-- Tab Current Page on Load Scripts -->
+    <!-- ================================ -->
+    <script type="text/javascript">
+        $('#refresh').click(function () {
+            $('#Account').hide();
+            $('#AccountType').hide();
+            $('#AccountCashFlow').hide();
+            $('#AccountCategory').hide();
+            location.reload();
+        });
+
+        $(document).on('click', '#refresh', function () {
+            var $link = $('li.active a[data-toggle="tab"]');
+            $link.parent().removeClass('active');
+            var tabLink = $link.attr('href');
+            $('#mainTabs a[href="' + tabLink + '"]').tab('show');
+        });
+
+        $('#accountTabId').click(function() {
+            $('#Account').show();
+            $('#AccountType').hide();
+            $('#AccountCashFlow').hide();
+            $('#AccountCategory').hide();
+            window.accountTab = function () {
+                return true;
+            };
+        });
+
+        $('#accountTypeTabId').click(function() {
+            $('#Account').hide();
+            $('#AccountType').show();
+            $('#AccountCashFlow').hide();
+            $('#AccountCategory').hide();
+            accountTypeTab();
+            window.accountTypeTab = function () {
+                return true;
+            };
+        });
+
+        $('#accountCashFlowTabId').click(function() {
+            $('#Account').hide();
+            $('#AccountType').hide();
+            $('#AccountCashFlow').show();
+            $('#AccountCategory').hide();
+            accountCashFlowTab();
+            window.accountCashFlowTab = function () {
+                return true;
+            };
+        });
+
+        $('#accountCategoryTabId').click(function() {
+            $('#Account').hide();
+            $('#AccountType').hide();
+            $('#AccountCashFlow').hide();
+            $('#AccountCategory').show();
+            accountCategoryTab();
+            window.accountCategoryTab = function () {
+                return true;
+            };
+        });
+
+        $(document).ready(function () {
+            $('#Account').show();
+            $('#AccountType').hide();
+            $('#AccountCashFlow').hide();
+            $('#AccountCategory').hide();
+
+            accountTab();
+
+            $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                $('#myTab a[href="' + activeTab + '"]').tab('show');
+            }
+        });
     </script>
 </body>
 </html>
