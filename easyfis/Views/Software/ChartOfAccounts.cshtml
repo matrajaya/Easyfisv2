@@ -1204,12 +1204,15 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $("#cmdAddAccountTypeButton").prop("disabled", true);
-                            $("#cmdAccountDetailCloseButton").prop("disabled", true);
+                            //$("#cmdAddAccountTypeButton").prop("disabled", true);
+                            //$("#cmdAccountDetailCloseButton").prop("disabled", true);
+                            $('#accountTypeEdit').modal('hide');
                             toastr.success("Successfully Added");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
+                            //window.setTimeout(function () {
+                            //    location.reload()
+                            //}, 1000);
+                            getAccountType();
+                            accountTypeTab();
                         },
                         404: function () {
                             toastr.error("Can't Add");
@@ -1287,12 +1290,15 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $("#cmdUpdateAccountTypeButton").prop("disabled", true);
-                            $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+                            //$("#cmdUpdateAccountTypeButton").prop("disabled", true);
+                            //$("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+                            $('#accountTypeEdit').modal('hide');
                             toastr.success("Successfully Updated");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
+                            //window.setTimeout(function () {
+                            //    location.reload()
+                            //}, 1000);
+                            getAccountType();
+                            accountTypeTab();
                         },
                         404: function () {
                             toastr.error("Can't Update");
@@ -1326,12 +1332,15 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteAccountType").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
+                        //$("#cmdConfirmDeleteAccountType").prop("disabled", true);
+                        //$("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
+                        $('#deleteAccountTypeConfirm').modal('hide');
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                        //window.setTimeout(function () {
+                        //    location.reload()
+                        //}, 1000);
+                        getAccountType();
+                        accountTypeTab();
                     },
                     404: function () {
                         toastr.error("Request Not Found");
