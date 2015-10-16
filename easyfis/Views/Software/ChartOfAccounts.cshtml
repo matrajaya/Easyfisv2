@@ -2441,26 +2441,6 @@
         // On Page Load for Account Category
         // =================================
         function accountCategoryTab() {
-            document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
-
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
             accountCategories.canFilter = true;
             accountCategories.pageSize = 10;
@@ -2559,6 +2539,7 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
+        // refresh button
         $('#refresh').click(function () {
             $('#Account').hide();
             $('#AccountType').hide();
@@ -2567,6 +2548,7 @@
             location.reload();
         });
 
+        // refresh remove tab
         $(document).on('click', '#refresh', function () {
             var $link = $('li.active a[data-toggle="tab"]');
             $link.parent().removeClass('active');
@@ -2574,6 +2556,9 @@
             $('#mainTabs a[href="' + tabLink + '"]').tab('show');
         });
 
+        // ====
+        // TABS
+        // ====
         $('#accountTabId').click(function () {
             $('#Account').show();
             $('#AccountType').hide();
