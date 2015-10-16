@@ -1379,8 +1379,89 @@
                             //window.setTimeout(function () {
                             //    location.reload()
                             //}, 1000);
-                            getAccountType();
-                            accountTypeTab();
+
+                            accountTypeGrid.dispose();
+                            accountTypes = new wijmo.collections.CollectionView(getAccountType());
+                            accountTypes.canFilter = true;
+                            accountTypes.pageSize = 10;
+
+                            var filterTextAccountType = '';
+                            $('#InputFilterAccountType').keyup(function () {
+                                filterTextAccountType = this.value.toLowerCase();
+                                accountTypes.refresh();
+                            });
+                            accountTypes.filter = function (item) {
+                                return !filterTextAccountType || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1);
+                            }
+                            accountTypes.collectionChanged.addHandler(function (sender, args) {
+                                updateNavigateButtonsAccountType();
+                            });
+                            accountTypes.currentChanged.addHandler(function (sender, args) {
+                                updateDetailsAccountType();
+                            });
+
+                            // Flex Grid for account type
+                            accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
+                            accountTypeGrid.initialize({
+                                columns: [
+                                            {
+                                                "header": "Edit",
+                                                "binding": "EditId",
+                                                "width": 60,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Delete",
+                                                "binding": "DeleteId",
+                                                "width": 70,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Code",
+                                                "binding": "AccountTypeCode",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*",
+                                            },
+                                            {
+                                                "header": "Account Type",
+                                                "binding": "AccountType",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            },
+                                            {
+                                                "header": "Category",
+                                                "binding": "AccountCategory",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            },
+                                            {
+                                                "header": "Category Description",
+                                                "binding": "SubCategoryDescription",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            }
+                                ],
+                                autoGenerateColumns: false,
+                                itemsSource: accountTypes,
+                                isReadOnly: true,
+                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                                allowDragging: wijmo.grid.AllowDragging.None,
+                                selectionMode: wijmo.grid.SelectionMode.Row
+                            });
+
+                            accountTypeGrid.trackChanges = true;
+                           // getAccountType();
+                           // accountTypeTab();
                         },
                         404: function () {
                             toastr.error("Can't Update");
@@ -1421,8 +1502,89 @@
                         //window.setTimeout(function () {
                         //    location.reload()
                         //}, 1000);
-                        getAccountType();
-                        accountTypeTab();
+
+                        accountTypeGrid.dispose();
+                        accountTypes = new wijmo.collections.CollectionView(getAccountType());
+                        accountTypes.canFilter = true;
+                        accountTypes.pageSize = 10;
+
+                        var filterTextAccountType = '';
+                        $('#InputFilterAccountType').keyup(function () {
+                            filterTextAccountType = this.value.toLowerCase();
+                            accountTypes.refresh();
+                        });
+                        accountTypes.filter = function (item) {
+                            return !filterTextAccountType || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1);
+                        }
+                        accountTypes.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsAccountType();
+                        });
+                        accountTypes.currentChanged.addHandler(function (sender, args) {
+                            updateDetailsAccountType();
+                        });
+
+                        // Flex Grid for account type
+                        accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
+                        accountTypeGrid.initialize({
+                            columns: [
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 60,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                        {
+                                            "header": "Code",
+                                            "binding": "AccountTypeCode",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*",
+                                        },
+                                        {
+                                            "header": "Account Type",
+                                            "binding": "AccountType",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*"
+                                        },
+                                        {
+                                            "header": "Category",
+                                            "binding": "AccountCategory",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*"
+                                        },
+                                        {
+                                            "header": "Category Description",
+                                            "binding": "SubCategoryDescription",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*"
+                                        }
+                            ],
+                            autoGenerateColumns: false,
+                            itemsSource: accountTypes,
+                            isReadOnly: true,
+                            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                            allowDragging: wijmo.grid.AllowDragging.None,
+                            selectionMode: wijmo.grid.SelectionMode.Row
+                        });
+
+                        accountTypeGrid.trackChanges = true;
+                       // getAccountType();
+                       // accountTypeTab();
                     },
                     404: function () {
                         toastr.error("Request Not Found");
