@@ -716,12 +716,92 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $("#cmdAddAccountButton").prop("disabled", true);
-                            $("#cmdAccountDetailCloseButton").prop("disabled", true);
+                            //  $("#cmdAddAccountButton").prop("disabled", true);
+                            // $("#cmdAccountDetailCloseButton").prop("disabled", true);
                             toastr.success("Successfully Added");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
+                            $('#accountEdit').modal('hide');
+                            //window.setTimeout(function () {
+                            //    location.reload()
+                            //}, 1000);
+                            accountGrid.dispose();
+                            accounts = new wijmo.collections.CollectionView(getAccount());
+                            accounts.canFilter = true;
+                            accounts.pageSize = 10;
+
+                            var filterTextAccount = '';
+                            $('#InputFilterAccount').keyup(function () {
+                                filterTextAccount = this.value.toLowerCase();
+                                accounts.refresh();
+                            });
+                            accounts.filter = function (item) {
+                                return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                            }
+                            accounts.collectionChanged.addHandler(function (sender, args) {
+                                updateNavigateButtonsAccount();
+                            });
+                            accounts.currentChanged.addHandler(function (sender, args) {
+                                updateDetailsAccount();
+                            });
+
+                            // Flex Grid for account
+                            accountGrid = new wijmo.grid.FlexGrid('#AccountGrid');
+                            accountGrid.initialize({
+                                columns: [
+                                            {
+                                                "header": "Edit",
+                                                "binding": "EditId",
+                                                "width": 60,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Delete",
+                                                "binding": "DeleteId",
+                                                "width": 70,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Code",
+                                                "binding": "AccountCode",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*",
+                                            },
+                                            {
+                                                "header": "Account",
+                                                "binding": "Account",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            },
+                                            {
+                                                "header": "Type",
+                                                "binding": "AccountType",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            },
+                                            {
+                                                "header": "Cash Flow",
+                                                "binding": "AccountCashFlow",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            }
+                                ],
+                                autoGenerateColumns: false,
+                                itemsSource: accounts,
+                                isReadOnly: true,
+                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                                allowDragging: wijmo.grid.AllowDragging.None,
+                                selectionMode: wijmo.grid.SelectionMode.Row
+                            });
+                            accountGrid.trackChanges = true;
                         },
                         404: function () {
                             toastr.error("Can't Add");
@@ -774,12 +854,94 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $("#cmdUpdateAccountButton").prop("disabled", true);
-                            $("#cmdAccountDetailCloseButton").prop("disabled", true);
+                            // $("#cmdUpdateAccountButton").prop("disabled", true);
+                            //  $("#cmdAccountDetailCloseButton").prop("disabled", true);
                             toastr.success("Successfully Updated");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
+                            $('#accountEdit').modal('hide');
+                            // window.setTimeout(function () {
+                            //    location.reload()
+                            // }, 1000);
+
+                            accountGrid.dispose();
+                            accounts = new wijmo.collections.CollectionView(getAccount());
+                            accounts.canFilter = true;
+                            accounts.pageSize = 10;
+
+                            var filterTextAccount = '';
+                            $('#InputFilterAccount').keyup(function () {
+                                filterTextAccount = this.value.toLowerCase();
+                                accounts.refresh();
+                            });
+                            accounts.filter = function (item) {
+                                return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                            }
+                            accounts.collectionChanged.addHandler(function (sender, args) {
+                                updateNavigateButtonsAccount();
+                            });
+                            accounts.currentChanged.addHandler(function (sender, args) {
+                                updateDetailsAccount();
+                            });
+
+                            // Flex Grid for account
+                            accountGrid = new wijmo.grid.FlexGrid('#AccountGrid');
+                            accountGrid.initialize({
+                                columns: [
+                                            {
+                                                "header": "Edit",
+                                                "binding": "EditId",
+                                                "width": 60,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Delete",
+                                                "binding": "DeleteId",
+                                                "width": 70,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Code",
+                                                "binding": "AccountCode",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*",
+                                            },
+                                            {
+                                                "header": "Account",
+                                                "binding": "Account",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            },
+                                            {
+                                                "header": "Type",
+                                                "binding": "AccountType",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            },
+                                            {
+                                                "header": "Cash Flow",
+                                                "binding": "AccountCashFlow",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            }
+                                ],
+                                autoGenerateColumns: false,
+                                itemsSource: accounts,
+                                isReadOnly: true,
+                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                                allowDragging: wijmo.grid.AllowDragging.None,
+                                selectionMode: wijmo.grid.SelectionMode.Row
+                            });
+
+                            accountGrid.trackChanges = true;
                         },
                         404: function () {
                             toastr.error("Can't Update");
@@ -838,12 +1000,94 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteAccount").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", true);
+                        //$("#cmdConfirmDeleteAccount").prop("disabled", true);
+                        // $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                        $('#deleteAccountConfirm').modal('hide');
+                        //window.setTimeout(function () {
+                        //     location.reload()
+                        //}, 1000);
+
+                        accountGrid.dispose();
+                        accounts = new wijmo.collections.CollectionView(getAccount());
+                        accounts.canFilter = true;
+                        accounts.pageSize = 10;
+
+                        var filterTextAccount = '';
+                        $('#InputFilterAccount').keyup(function () {
+                            filterTextAccount = this.value.toLowerCase();
+                            accounts.refresh();
+                        });
+                        accounts.filter = function (item) {
+                            return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                        }
+                        accounts.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsAccount();
+                        });
+                        accounts.currentChanged.addHandler(function (sender, args) {
+                            updateDetailsAccount();
+                        });
+
+                        // Flex Grid for account
+                        accountGrid = new wijmo.grid.FlexGrid('#AccountGrid');
+                        accountGrid.initialize({
+                            columns: [
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 60,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                        {
+                                            "header": "Code",
+                                            "binding": "AccountCode",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*",
+                                        },
+                                        {
+                                            "header": "Account",
+                                            "binding": "Account",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*"
+                                        },
+                                        {
+                                            "header": "Type",
+                                            "binding": "AccountType",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*"
+                                        },
+                                        {
+                                            "header": "Cash Flow",
+                                            "binding": "AccountCashFlow",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*"
+                                        }
+                            ],
+                            autoGenerateColumns: false,
+                            itemsSource: accounts,
+                            isReadOnly: true,
+                            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                            allowDragging: wijmo.grid.AllowDragging.None,
+                            selectionMode: wijmo.grid.SelectionMode.Row
+                        });
+
+                        accountGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");
@@ -1208,9 +1452,6 @@
                             //$("#cmdAccountDetailCloseButton").prop("disabled", true);
                             $('#accountTypeEdit').modal('hide');
                             toastr.success("Successfully Added");
-                            //window.setTimeout(function () {
-                            //    location.reload()
-                            //}, 1000);
 
                             accountTypeGrid.dispose();
                             accountTypes = new wijmo.collections.CollectionView(getAccountType());
@@ -1292,9 +1533,6 @@
                             });
 
                             accountTypeGrid.trackChanges = true;
-
-
-                            //accountTypeTab();
                         },
                         404: function () {
                             toastr.error("Can't Add");
@@ -1376,9 +1614,6 @@
                             //$("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
                             $('#accountTypeEdit').modal('hide');
                             toastr.success("Successfully Updated");
-                            //window.setTimeout(function () {
-                            //    location.reload()
-                            //}, 1000);
 
                             accountTypeGrid.dispose();
                             accountTypes = new wijmo.collections.CollectionView(getAccountType());
@@ -1460,8 +1695,6 @@
                             });
 
                             accountTypeGrid.trackChanges = true;
-                           // getAccountType();
-                           // accountTypeTab();
                         },
                         404: function () {
                             toastr.error("Can't Update");
@@ -1499,10 +1732,6 @@
                         //$("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
                         $('#deleteAccountTypeConfirm').modal('hide');
                         toastr.success("Successfully Deleted");
-                        //window.setTimeout(function () {
-                        //    location.reload()
-                        //}, 1000);
-
                         accountTypeGrid.dispose();
                         accountTypes = new wijmo.collections.CollectionView(getAccountType());
                         accountTypes.canFilter = true;
@@ -1583,8 +1812,6 @@
                         });
 
                         accountTypeGrid.trackChanges = true;
-                       // getAccountType();
-                       // accountTypeTab();
                     },
                     404: function () {
                         toastr.error("Request Not Found");
@@ -1885,34 +2112,32 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                           // $("#cmdAddAccountCashFlowButton").prop("disabled", true);
-                          //  $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+                            // $("#cmdAddAccountCashFlowButton").prop("disabled", true);
+                            //  $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
                             toastr.success("Successfully Added");
-                           // window.setTimeout(function () {
-                          //      location.reload()
-                            // }, 1000);
+                            $('#accountCashFlowEdit').modal('hide');
 
                             accountCashFlowGrid.dispose();
-                            accountCashFlow = new wijmo.collections.CollectionView(getAccountCashFlow());
-                            accountCashFlow.canFilter = true;
-                            accountCashFlow.pageSize = 10;
+                            accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
+                            accountCashFlows.canFilter = true;
+                            accountCashFlows.pageSize = 10;
 
-                            var filterTextAccountType = '';
+                            var filterTextAccountCashFlow = '';
                             $('#InputFilterAccountCashFlow').keyup(function () {
-                                filterTextAccountType = this.value.toLowerCase();
+                                filterTextAccountCashFlow = this.value.toLowerCase();
                                 accountCashFlows.refresh();
                             });
-                            accountCashFlow.filter = function (item) {
-                                return !filterTextAccountType || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+                            accountCashFlows.filter = function (item) {
+                                return !filterTextAccountCashFlow || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
                             }
-                            accountCashFlow.collectionChanged.addHandler(function (sender, args) {
+                            accountCashFlows.collectionChanged.addHandler(function (sender, args) {
                                 updateNavigateButtonsAccountCashFlow();
                             });
-                            accountCashFlow.currentChanged.addHandler(function (sender, args) {
+                            accountCashFlows.currentChanged.addHandler(function (sender, args) {
                                 updateDetailsAccountCashFlow();
                             });
 
-                            // Flex Grid for account type
+                            // Flex Grid for Account Cash Flow
                             accountCashFlowGrid = new wijmo.grid.FlexGrid('#AccountCashFlowGrid');
                             accountCashFlowGrid.initialize({
                                 columns: [
@@ -1942,29 +2167,15 @@
                                                 "width": "2*",
                                             },
                                             {
-                                                "header": "Cash Flow",
+                                                "header": "Cash FLow",
                                                 "binding": "AccountCashFlow",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Category",
-                                                "binding": "AccountCategory",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Category Description",
-                                                "binding": "SubCategoryDescription",
                                                 "align": "left",
                                                 "allowSorting": true,
                                                 "width": "2*"
                                             }
                                 ],
                                 autoGenerateColumns: false,
-                                itemsSource: accountCashFlow,
+                                itemsSource: accountCashFlows,
                                 isReadOnly: true,
                                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                                 allowDragging: wijmo.grid.AllowDragging.None,
@@ -1972,8 +2183,6 @@
                             });
 
                             accountCashFlowGrid.trackChanges = true;
-
-                            //accountCashFlowTab();
                         },
                         404: function () {
                             toastr.error("Can't Add");
@@ -2027,30 +2236,28 @@
                             //$("#cmdUpdateAccountCashFlowButton").prop("disabled", true);
                             //$("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
                             toastr.success("Successfully Updated");
-                            //window.setTimeout(function () {
-                            //    location.reload()
-                            //}, 1000);
+                            $('#accountCashFlowEdit').modal('hide')
                             accountCashFlowGrid.dispose();
-                            accountCashFlow = new wijmo.collections.CollectionView(getAccountCashFlow());
-                            accountCashFlow.canFilter = true;
-                            accountCashFlow.pageSize = 10;
+                            accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
+                            accountCashFlows.canFilter = true;
+                            accountCashFlows.pageSize = 10;
 
-                            var filterTextAccountType = '';
+                            var filterTextAccountCashFlow = '';
                             $('#InputFilterAccountCashFlow').keyup(function () {
-                                filterTextAccountType = this.value.toLowerCase();
+                                filterTextAccountCashFlow = this.value.toLowerCase();
                                 accountCashFlows.refresh();
                             });
-                            accountCashFlow.filter = function (item) {
-                                return !filterTextAccountType || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+                            accountCashFlows.filter = function (item) {
+                                return !filterTextAccountCashFlow || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
                             }
-                            accountCashFlow.collectionChanged.addHandler(function (sender, args) {
+                            accountCashFlows.collectionChanged.addHandler(function (sender, args) {
                                 updateNavigateButtonsAccountCashFlow();
                             });
-                            accountCashFlow.currentChanged.addHandler(function (sender, args) {
+                            accountCashFlows.currentChanged.addHandler(function (sender, args) {
                                 updateDetailsAccountCashFlow();
                             });
 
-                            // Flex Grid for account type
+                            // Flex Grid for Account Cash Flow
                             accountCashFlowGrid = new wijmo.grid.FlexGrid('#AccountCashFlowGrid');
                             accountCashFlowGrid.initialize({
                                 columns: [
@@ -2080,29 +2287,15 @@
                                                 "width": "2*",
                                             },
                                             {
-                                                "header": "Cash Flow",
+                                                "header": "Cash FLow",
                                                 "binding": "AccountCashFlow",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Category",
-                                                "binding": "AccountCategory",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Category Description",
-                                                "binding": "SubCategoryDescription",
                                                 "align": "left",
                                                 "allowSorting": true,
                                                 "width": "2*"
                                             }
                                 ],
                                 autoGenerateColumns: false,
-                                itemsSource: accountCashFlow,
+                                itemsSource: accountCashFlows,
                                 isReadOnly: true,
                                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                                 allowDragging: wijmo.grid.AllowDragging.None,
@@ -2164,31 +2357,29 @@
                         //$("#cmdConfirmDeleteAccountCashFlow").prop("disabled", true);
                         //$("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        //window.setTimeout(function () {
-                        //    location.reload()
-                        //}, 1000);
+                        $('#deleteAccountCashFlowConfirm').modal('hide');
 
                         accountCashFlowGrid.dispose();
-                        accountCashFlow = new wijmo.collections.CollectionView(getAccountCashFlow());
-                        accountCashFlow.canFilter = true;
-                        accountCashFlow.pageSize = 10;
+                        accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
+                        accountCashFlows.canFilter = true;
+                        accountCashFlows.pageSize = 10;
 
-                        var filterTextAccountType = '';
+                        var filterTextAccountCashFlow = '';
                         $('#InputFilterAccountCashFlow').keyup(function () {
-                            filterTextAccountType = this.value.toLowerCase();
+                            filterTextAccountCashFlow = this.value.toLowerCase();
                             accountCashFlows.refresh();
                         });
-                        accountCashFlow.filter = function (item) {
-                            return !filterTextAccountType || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+                        accountCashFlows.filter = function (item) {
+                            return !filterTextAccountCashFlow || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
                         }
-                        accountCashFlow.collectionChanged.addHandler(function (sender, args) {
+                        accountCashFlows.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsAccountCashFlow();
                         });
-                        accountCashFlow.currentChanged.addHandler(function (sender, args) {
+                        accountCashFlows.currentChanged.addHandler(function (sender, args) {
                             updateDetailsAccountCashFlow();
                         });
 
-                        // Flex Grid for account type
+                        // Flex Grid for Account Cash Flow
                         accountCashFlowGrid = new wijmo.grid.FlexGrid('#AccountCashFlowGrid');
                         accountCashFlowGrid.initialize({
                             columns: [
@@ -2218,29 +2409,15 @@
                                             "width": "2*",
                                         },
                                         {
-                                            "header": "Cash Flow",
+                                            "header": "Cash FLow",
                                             "binding": "AccountCashFlow",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        },
-                                        {
-                                            "header": "Category",
-                                            "binding": "AccountCategory",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        },
-                                        {
-                                            "header": "Category Description",
-                                            "binding": "SubCategoryDescription",
                                             "align": "left",
                                             "allowSorting": true,
                                             "width": "2*"
                                         }
                             ],
                             autoGenerateColumns: false,
-                            itemsSource: accountCashFlow,
+                            itemsSource: accountCashFlows,
                             isReadOnly: true,
                             autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                             allowDragging: wijmo.grid.AllowDragging.None,
@@ -2512,7 +2689,7 @@
                 }
                 else {
                     $(this).css({
-                        "border": "1px solid blue",
+                        "border": "",
                     });
                 }
             });
@@ -2528,12 +2705,76 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $("#cmdAddAccountCategoryButton").prop("disabled", true);
-                            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+                            //$("#cmdAddAccountCategoryButton").prop("disabled", true);
+                            //$("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
                             toastr.success("Successfully Added");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
+                            $('#accountCategoryEdit').modal('hide');
+                            accountCategoryGrid.dispose();
+                            accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
+                            accountCategories.canFilter = true;
+                            accountCategories.pageSize = 10;
+
+                            var filterTextAccountCategory = '';
+                            $('#InputFilterAccountCategory').keyup(function () {
+                                filterTextAccountCategory = this.value.toLowerCase();
+                                accountCategories.refresh();
+                            });
+                            accountCategories.filter = function (item) {
+                                return !filterTextAccountCategory || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
+                            }
+                            accountCategories.collectionChanged.addHandler(function (sender, args) {
+                                updateNavigateButtonsAccountCategory();
+                            });
+                            accountCategories.currentChanged.addHandler(function (sender, args) {
+                                updateDetailsAccountCategory();
+                            });
+
+                            // Flex Grid for Account Category
+                            accountCategoryGrid = new wijmo.grid.FlexGrid('#AccountCategoryGrid');
+                            accountCategoryGrid.initialize({
+                                columns: [
+                                            {
+                                                "header": "Edit",
+                                                "binding": "EditId",
+                                                "width": 60,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Delete",
+                                                "binding": "DeleteId",
+                                                "width": 70,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Code",
+                                                "binding": "AccountCategoryCode",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*",
+                                            },
+                                            {
+                                                "header": "Category",
+                                                "binding": "AccountCategory",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            }
+                                ],
+                                autoGenerateColumns: false,
+                                itemsSource: accountCategories,
+                                isReadOnly: true,
+                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                                allowDragging: wijmo.grid.AllowDragging.None,
+                                selectionMode: wijmo.grid.SelectionMode.Row
+                            });
+
+                            accountCategoryGrid.trackChanges = true;
                         },
                         404: function () {
                             toastr.error("Can't Add");
@@ -2584,12 +2825,76 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $("#cmdUpdateAccountCategoryButton").prop("disabled", true);
-                            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+                            //$("#cmdUpdateAccountCategoryButton").prop("disabled", true);
+                            //$("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
                             toastr.success("Successfully Updated");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
+                            $('#accountCategoryEdit').modal('hide');
+                            accountCategoryGrid.dispose();
+                            accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
+                            accountCategories.canFilter = true;
+                            accountCategories.pageSize = 10;
+
+                            var filterTextAccountCategory = '';
+                            $('#InputFilterAccountCategory').keyup(function () {
+                                filterTextAccountCategory = this.value.toLowerCase();
+                                accountCategories.refresh();
+                            });
+                            accountCategories.filter = function (item) {
+                                return !filterTextAccountCategory || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
+                            }
+                            accountCategories.collectionChanged.addHandler(function (sender, args) {
+                                updateNavigateButtonsAccountCategory();
+                            });
+                            accountCategories.currentChanged.addHandler(function (sender, args) {
+                                updateDetailsAccountCategory();
+                            });
+
+                            // Flex Grid for Account Category
+                            accountCategoryGrid = new wijmo.grid.FlexGrid('#AccountCategoryGrid');
+                            accountCategoryGrid.initialize({
+                                columns: [
+                                            {
+                                                "header": "Edit",
+                                                "binding": "EditId",
+                                                "width": 60,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Delete",
+                                                "binding": "DeleteId",
+                                                "width": 70,
+                                                "align": "center",
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Code",
+                                                "binding": "AccountCategoryCode",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*",
+                                            },
+                                            {
+                                                "header": "Category",
+                                                "binding": "AccountCategory",
+                                                "align": "left",
+                                                "allowSorting": true,
+                                                "width": "2*"
+                                            }
+                                ],
+                                autoGenerateColumns: false,
+                                itemsSource: accountCategories,
+                                isReadOnly: true,
+                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                                allowDragging: wijmo.grid.AllowDragging.None,
+                                selectionMode: wijmo.grid.SelectionMode.Row
+                            });
+
+                            accountCategoryGrid.trackChanges = true;
                         },
                         404: function () {
                             toastr.error("Can't Update");
@@ -2641,12 +2946,77 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteAccountCategory").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", true);
+                        //$("#cmdConfirmDeleteAccountCategory").prop("disabled", true);
+                        //$("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                        $('#deleteAccountCategoryConfirm').modal('hide');
+
+                        accountCategoryGrid.dispose();
+                        accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
+                        accountCategories.canFilter = true;
+                        accountCategories.pageSize = 10;
+
+                        var filterTextAccountCategory = '';
+                        $('#InputFilterAccountCategory').keyup(function () {
+                            filterTextAccountCategory = this.value.toLowerCase();
+                            accountCategories.refresh();
+                        });
+                        accountCategories.filter = function (item) {
+                            return !filterTextAccountCategory || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
+                        }
+                        accountCategories.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsAccountCategory();
+                        });
+                        accountCategories.currentChanged.addHandler(function (sender, args) {
+                            updateDetailsAccountCategory();
+                        });
+
+                        // Flex Grid for Account Category
+                        accountCategoryGrid = new wijmo.grid.FlexGrid('#AccountCategoryGrid');
+                        accountCategoryGrid.initialize({
+                            columns: [
+                                        {
+                                            "header": "Edit",
+                                            "binding": "EditId",
+                                            "width": 60,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                        {
+                                            "header": "Delete",
+                                            "binding": "DeleteId",
+                                            "width": 70,
+                                            "align": "center",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                        {
+                                            "header": "Code",
+                                            "binding": "AccountCategoryCode",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*",
+                                        },
+                                        {
+                                            "header": "Category",
+                                            "binding": "AccountCategory",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*"
+                                        }
+                            ],
+                            autoGenerateColumns: false,
+                            itemsSource: accountCategories,
+                            isReadOnly: true,
+                            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                            allowDragging: wijmo.grid.AllowDragging.None,
+                            selectionMode: wijmo.grid.SelectionMode.Row
+                        });
+
+                        accountCategoryGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");
