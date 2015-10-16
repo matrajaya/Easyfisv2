@@ -2841,6 +2841,7 @@
             $('#AccountType').hide();
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
+            accountTab();
             window.accountTab = function () {
                 return true;
             };
@@ -2880,12 +2881,10 @@
         });
 
         $(document).ready(function () {
-            $('#Account').show();
+            $('#Account').hide();
             $('#AccountType').hide();
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
-
-            accountTab();
 
             $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
                 localStorage.setItem('activeTab', $(e.target).attr('href'));
