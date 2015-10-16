@@ -186,7 +186,7 @@
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </span>
-                                    <input type="text" class="form-control" id="InputFilterAccountCategory" placeholder="Search AccountCategory">
+                                    <input type="text" class="form-control" id="InputFilterAccountCategory" placeholder="Search Account Category">
                                 </div>
                             </div>
                             <div class="col-lg-8">
@@ -668,6 +668,9 @@
             $("#cmdAddAccountButton").show();
             $("#cmdUpdateAccountButton").hide();
 
+            $("#cmdAddAccountButton").prop("disabled", false);
+            $("#cmdAccountDetailCloseButton").prop("disabled", false);
+
             document.getElementById('account_id').value = 0;
             document.getElementById('account_code').value = "";
             document.getElementById('account_account').value = "";
@@ -716,14 +719,13 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            //  $("#cmdAddAccountButton").prop("disabled", true);
-                            // $("#cmdAccountDetailCloseButton").prop("disabled", true);
+                            $("#cmdAddAccountButton").prop("disabled", true);
+                            $("#cmdAccountDetailCloseButton").prop("disabled", true);
+
                             toastr.success("Successfully Added");
+
                             $('#accountEdit').modal('hide');
-                            //window.setTimeout(function () {
-                            //    location.reload()
-                            //}, 1000);
-                            accountGrid.dispose();
+
                             accounts = new wijmo.collections.CollectionView(getAccount());
                             accounts.canFilter = true;
                             accounts.pageSize = 10;
@@ -743,64 +745,7 @@
                                 updateDetailsAccount();
                             });
 
-                            // Flex Grid for account
-                            accountGrid = new wijmo.grid.FlexGrid('#AccountGrid');
-                            accountGrid.initialize({
-                                columns: [
-                                            {
-                                                "header": "Edit",
-                                                "binding": "EditId",
-                                                "width": 60,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Delete",
-                                                "binding": "DeleteId",
-                                                "width": 70,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Code",
-                                                "binding": "AccountCode",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*",
-                                            },
-                                            {
-                                                "header": "Account",
-                                                "binding": "Account",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Type",
-                                                "binding": "AccountType",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Cash Flow",
-                                                "binding": "AccountCashFlow",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            }
-                                ],
-                                autoGenerateColumns: false,
-                                itemsSource: accounts,
-                                isReadOnly: true,
-                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                                allowDragging: wijmo.grid.AllowDragging.None,
-                                selectionMode: wijmo.grid.SelectionMode.Row
-                            });
+                            accountGrid.itemsSource = accounts;
                             accountGrid.trackChanges = true;
                         },
                         404: function () {
@@ -854,15 +799,13 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            // $("#cmdUpdateAccountButton").prop("disabled", true);
-                            //  $("#cmdAccountDetailCloseButton").prop("disabled", true);
-                            toastr.success("Successfully Updated");
-                            $('#accountEdit').modal('hide');
-                            // window.setTimeout(function () {
-                            //    location.reload()
-                            // }, 1000);
+                            $("#cmdUpdateAccountButton").prop("disabled", true);
+                            $("#cmdAccountDetailCloseButton").prop("disabled", true);
 
-                            accountGrid.dispose();
+                            toastr.success("Successfully Updated");
+
+                            $('#accountEdit').modal('hide');
+
                             accounts = new wijmo.collections.CollectionView(getAccount());
                             accounts.canFilter = true;
                             accounts.pageSize = 10;
@@ -882,65 +825,7 @@
                                 updateDetailsAccount();
                             });
 
-                            // Flex Grid for account
-                            accountGrid = new wijmo.grid.FlexGrid('#AccountGrid');
-                            accountGrid.initialize({
-                                columns: [
-                                            {
-                                                "header": "Edit",
-                                                "binding": "EditId",
-                                                "width": 60,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Delete",
-                                                "binding": "DeleteId",
-                                                "width": 70,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Code",
-                                                "binding": "AccountCode",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*",
-                                            },
-                                            {
-                                                "header": "Account",
-                                                "binding": "Account",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Type",
-                                                "binding": "AccountType",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Cash Flow",
-                                                "binding": "AccountCashFlow",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            }
-                                ],
-                                autoGenerateColumns: false,
-                                itemsSource: accounts,
-                                isReadOnly: true,
-                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                                allowDragging: wijmo.grid.AllowDragging.None,
-                                selectionMode: wijmo.grid.SelectionMode.Row
-                            });
-
+                            accountGrid.itemsSource = accounts;
                             accountGrid.trackChanges = true;
                         },
                         404: function () {
@@ -970,6 +855,9 @@
             getAccountTypeForComboBox();
             getAccountCashFlowForComboBox();
 
+            $("#cmdUpdateAccountButton").prop("disabled", false);
+            $("#cmdAccountDetailCloseButton").prop("disabled", false);
+
             var account = accounts.currentEditItem;
             document.getElementById('account_id').value = account.Id !== null && typeof (account.Id) != 'undefined' ? wijmo.Globalize.format(account.Id) : '';
             document.getElementById('account_code').value = account.AccountCode ? account.AccountCode : '';
@@ -988,6 +876,9 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdConfirmDeleteAccount").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", false);
         }
         // Account Confirm Delete Button
         function cmdAccountConfirmDeleteButton_OnClick() {
@@ -1000,15 +891,13 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        //$("#cmdConfirmDeleteAccount").prop("disabled", true);
-                        // $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
-                        $('#deleteAccountConfirm').modal('hide');
-                        //window.setTimeout(function () {
-                        //     location.reload()
-                        //}, 1000);
+                        $("#cmdConfirmDeleteAccount").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", true);
 
-                        accountGrid.dispose();
+                        toastr.success("Successfully Deleted");
+
+                        $('#deleteAccountConfirm').modal('hide');
+
                         accounts = new wijmo.collections.CollectionView(getAccount());
                         accounts.canFilter = true;
                         accounts.pageSize = 10;
@@ -1028,65 +917,7 @@
                             updateDetailsAccount();
                         });
 
-                        // Flex Grid for account
-                        accountGrid = new wijmo.grid.FlexGrid('#AccountGrid');
-                        accountGrid.initialize({
-                            columns: [
-                                        {
-                                            "header": "Edit",
-                                            "binding": "EditId",
-                                            "width": 60,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Delete",
-                                            "binding": "DeleteId",
-                                            "width": 70,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Code",
-                                            "binding": "AccountCode",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*",
-                                        },
-                                        {
-                                            "header": "Account",
-                                            "binding": "Account",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        },
-                                        {
-                                            "header": "Type",
-                                            "binding": "AccountType",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        },
-                                        {
-                                            "header": "Cash Flow",
-                                            "binding": "AccountCashFlow",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        }
-                            ],
-                            autoGenerateColumns: false,
-                            itemsSource: accounts,
-                            isReadOnly: true,
-                            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                            allowDragging: wijmo.grid.AllowDragging.None,
-                            selectionMode: wijmo.grid.SelectionMode.Row
-                        });
-
+                        accountGrid.itemsSource = accounts;
                         accountGrid.trackChanges = true;
                     },
                     404: function () {
@@ -1144,26 +975,6 @@
         // On Page Load for Account
         // ========================
         function accountTab() {
-            document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
-
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             accounts = new wijmo.collections.CollectionView(getAccount());
             accounts.canFilter = true;
             accounts.pageSize = 10;
@@ -1399,6 +1210,9 @@
             $("#cmdAddAccountTypeButton").show();
             $("#cmdUpdateAccountTypeButton").hide();
 
+            $("#cmdAddAccountTypeButton").prop("disabled", false);
+            $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
+
             getAccountCategoryForComboBox();
 
             document.getElementById('accountType_id').value = 0;
@@ -1448,12 +1262,13 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            //$("#cmdAddAccountTypeButton").prop("disabled", true);
-                            //$("#cmdAccountDetailCloseButton").prop("disabled", true);
+                            $("#cmdAddAccountTypeButton").prop("disabled", true);
+                            $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+
                             $('#accountTypeEdit').modal('hide');
+
                             toastr.success("Successfully Added");
 
-                            accountTypeGrid.dispose();
                             accountTypes = new wijmo.collections.CollectionView(getAccountType());
                             accountTypes.canFilter = true;
                             accountTypes.pageSize = 10;
@@ -1473,65 +1288,7 @@
                                 updateDetailsAccountType();
                             });
 
-                            // Flex Grid for account type
-                            accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
-                            accountTypeGrid.initialize({
-                                columns: [
-                                            {
-                                                "header": "Edit",
-                                                "binding": "EditId",
-                                                "width": 60,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Delete",
-                                                "binding": "DeleteId",
-                                                "width": 70,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Code",
-                                                "binding": "AccountTypeCode",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*",
-                                            },
-                                            {
-                                                "header": "Account Type",
-                                                "binding": "AccountType",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Category",
-                                                "binding": "AccountCategory",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Category Description",
-                                                "binding": "SubCategoryDescription",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            }
-                                ],
-                                autoGenerateColumns: false,
-                                itemsSource: accountTypes,
-                                isReadOnly: true,
-                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                                allowDragging: wijmo.grid.AllowDragging.None,
-                                selectionMode: wijmo.grid.SelectionMode.Row
-                            });
-
+                            accountTypeGrid.itemsSource = accountTypes;
                             accountTypeGrid.trackChanges = true;
                         },
                         404: function () {
@@ -1557,6 +1314,9 @@
 
             $("#cmdUpdateAccountTypeButton").show();
             $("#cmdAddAccountTypeButton").hide();
+
+            $("#cmdUpdateAccountTypeButton").prop("disabled", false);
+            $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
 
             getAccountCategoryForComboBox();
 
@@ -1610,12 +1370,13 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            //$("#cmdUpdateAccountTypeButton").prop("disabled", true);
-                            //$("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+                            $("#cmdUpdateAccountTypeButton").prop("disabled", true);
+                            $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+
                             $('#accountTypeEdit').modal('hide');
+
                             toastr.success("Successfully Updated");
 
-                            accountTypeGrid.dispose();
                             accountTypes = new wijmo.collections.CollectionView(getAccountType());
                             accountTypes.canFilter = true;
                             accountTypes.pageSize = 10;
@@ -1635,65 +1396,7 @@
                                 updateDetailsAccountType();
                             });
 
-                            // Flex Grid for account type
-                            accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
-                            accountTypeGrid.initialize({
-                                columns: [
-                                            {
-                                                "header": "Edit",
-                                                "binding": "EditId",
-                                                "width": 60,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Delete",
-                                                "binding": "DeleteId",
-                                                "width": 70,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Code",
-                                                "binding": "AccountTypeCode",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*",
-                                            },
-                                            {
-                                                "header": "Account Type",
-                                                "binding": "AccountType",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Category",
-                                                "binding": "AccountCategory",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            },
-                                            {
-                                                "header": "Category Description",
-                                                "binding": "SubCategoryDescription",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            }
-                                ],
-                                autoGenerateColumns: false,
-                                itemsSource: accountTypes,
-                                isReadOnly: true,
-                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                                allowDragging: wijmo.grid.AllowDragging.None,
-                                selectionMode: wijmo.grid.SelectionMode.Row
-                            });
-
+                            accountTypeGrid.itemsSource = accountTypes;
                             accountTypeGrid.trackChanges = true;
                         },
                         404: function () {
@@ -1716,6 +1419,9 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdConfirmDeleteAccountType").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", false);
         }
         // Account Type Confirm Delete Button
         function cmdAccountTypeConfirmDeleteButton_OnClick() {
@@ -1728,11 +1434,13 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        //$("#cmdConfirmDeleteAccountType").prop("disabled", true);
-                        //$("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
+                        $("#cmdConfirmDeleteAccountType").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
+
                         $('#deleteAccountTypeConfirm').modal('hide');
+
                         toastr.success("Successfully Deleted");
-                        accountTypeGrid.dispose();
+
                         accountTypes = new wijmo.collections.CollectionView(getAccountType());
                         accountTypes.canFilter = true;
                         accountTypes.pageSize = 10;
@@ -1752,65 +1460,7 @@
                             updateDetailsAccountType();
                         });
 
-                        // Flex Grid for account type
-                        accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
-                        accountTypeGrid.initialize({
-                            columns: [
-                                        {
-                                            "header": "Edit",
-                                            "binding": "EditId",
-                                            "width": 60,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Delete",
-                                            "binding": "DeleteId",
-                                            "width": 70,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Code",
-                                            "binding": "AccountTypeCode",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*",
-                                        },
-                                        {
-                                            "header": "Account Type",
-                                            "binding": "AccountType",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        },
-                                        {
-                                            "header": "Category",
-                                            "binding": "AccountCategory",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        },
-                                        {
-                                            "header": "Category Description",
-                                            "binding": "SubCategoryDescription",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        }
-                            ],
-                            autoGenerateColumns: false,
-                            itemsSource: accountTypes,
-                            isReadOnly: true,
-                            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                            allowDragging: wijmo.grid.AllowDragging.None,
-                            selectionMode: wijmo.grid.SelectionMode.Row
-                        });
-
+                        accountTypeGrid.itemsSource = accountTypes;
                         accountTypeGrid.trackChanges = true;
                     },
                     404: function () {
@@ -1868,26 +1518,6 @@
         // On Page Load for Account Type
         // =============================
         function accountTypeTab() {
-            document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
-
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             accountTypes = new wijmo.collections.CollectionView(getAccountType());
             accountTypes.canFilter = true;
             accountTypes.pageSize = 10;
@@ -2065,6 +1695,9 @@
             $("#cmdAddAccountCashFlowButton").show();
             $("#cmdUpdateAccountCashFlowButton").hide();
 
+            $("#cmdAddAccountCashFlowButton").prop("disabled", false);
+            $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
+
             document.getElementById('accountCashFlow_Id').value = 0;
             document.getElementById('accountCashFlow_Code').value = "";
             document.getElementById('accountCashFlow_CashFlow').value = "";
@@ -2107,12 +1740,13 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            // $("#cmdAddAccountCashFlowButton").prop("disabled", true);
-                            //  $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+                            $("#cmdAddAccountCashFlowButton").prop("disabled", true);
+                            $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+
                             toastr.success("Successfully Added");
+
                             $('#accountCashFlowEdit').modal('hide');
 
-                            accountCashFlowGrid.dispose();
                             accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
                             accountCashFlows.canFilter = true;
                             accountCashFlows.pageSize = 10;
@@ -2132,51 +1766,7 @@
                                 updateDetailsAccountCashFlow();
                             });
 
-                            // Flex Grid for Account Cash Flow
-                            accountCashFlowGrid = new wijmo.grid.FlexGrid('#AccountCashFlowGrid');
-                            accountCashFlowGrid.initialize({
-                                columns: [
-                                            {
-                                                "header": "Edit",
-                                                "binding": "EditId",
-                                                "width": 60,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Delete",
-                                                "binding": "DeleteId",
-                                                "width": 70,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Code",
-                                                "binding": "AccountCashFlowCode",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*",
-                                            },
-                                            {
-                                                "header": "Cash FLow",
-                                                "binding": "AccountCashFlow",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            }
-                                ],
-                                autoGenerateColumns: false,
-                                itemsSource: accountCashFlows,
-                                isReadOnly: true,
-                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                                allowDragging: wijmo.grid.AllowDragging.None,
-                                selectionMode: wijmo.grid.SelectionMode.Row
-                            });
-
+                            accountCashFlowGrid.itemsSource = accountCashFlows;
                             accountCashFlowGrid.trackChanges = true;
                         },
                         404: function () {
@@ -2228,11 +1818,13 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            //$("#cmdUpdateAccountCashFlowButton").prop("disabled", true);
-                            //$("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+                            $("#cmdUpdateAccountCashFlowButton").prop("disabled", true);
+                            $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+
                             toastr.success("Successfully Updated");
-                            $('#accountCashFlowEdit').modal('hide')
-                            accountCashFlowGrid.dispose();
+
+                            $('#accountCashFlowEdit').modal('hide');
+
                             accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
                             accountCashFlows.canFilter = true;
                             accountCashFlows.pageSize = 10;
@@ -2252,51 +1844,7 @@
                                 updateDetailsAccountCashFlow();
                             });
 
-                            // Flex Grid for Account Cash Flow
-                            accountCashFlowGrid = new wijmo.grid.FlexGrid('#AccountCashFlowGrid');
-                            accountCashFlowGrid.initialize({
-                                columns: [
-                                            {
-                                                "header": "Edit",
-                                                "binding": "EditId",
-                                                "width": 60,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Delete",
-                                                "binding": "DeleteId",
-                                                "width": 70,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Code",
-                                                "binding": "AccountCashFlowCode",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*",
-                                            },
-                                            {
-                                                "header": "Cash FLow",
-                                                "binding": "AccountCashFlow",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            }
-                                ],
-                                autoGenerateColumns: false,
-                                itemsSource: accountCashFlows,
-                                isReadOnly: true,
-                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                                allowDragging: wijmo.grid.AllowDragging.None,
-                                selectionMode: wijmo.grid.SelectionMode.Row
-                            });
-
+                            accountCashFlowGrid.itemsSource = accountCashFlows;
                             accountCashFlowGrid.trackChanges = true;
                         },
                         404: function () {
@@ -2323,6 +1871,9 @@
             $("#cmdUpdateAccountCashFlowButton").show();
             $("#cmdAddAccountCashFlowButton").hide();
 
+            $("#cmdUpdateAccountCashFlowButton").prop("disabled", false);
+            $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
+
             var accountCashFlow = accountCashFlows.currentEditItem;
             document.getElementById('accountCashFlow_Id').value = accountCashFlow.Id !== null && typeof (accountCashFlow.Id) != 'undefined' ? wijmo.Globalize.format(accountCashFlow.Id) : '';
             document.getElementById('accountCashFlow_Code').value = accountCashFlow.AccountCashFlowCode ? accountCashFlow.AccountCashFlowCode : '';
@@ -2337,6 +1888,9 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", false);
         }
         // Account Cash Flow Confirm Delete Button
         function cmdAccountCashFlowConfirmDeleteButton_OnClick() {
@@ -2349,12 +1903,13 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        //$("#cmdConfirmDeleteAccountCashFlow").prop("disabled", true);
-                        //$("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", true);
+                        $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", true);
+
                         toastr.success("Successfully Deleted");
+
                         $('#deleteAccountCashFlowConfirm').modal('hide');
 
-                        accountCashFlowGrid.dispose();
                         accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
                         accountCashFlows.canFilter = true;
                         accountCashFlows.pageSize = 10;
@@ -2374,51 +1929,7 @@
                             updateDetailsAccountCashFlow();
                         });
 
-                        // Flex Grid for Account Cash Flow
-                        accountCashFlowGrid = new wijmo.grid.FlexGrid('#AccountCashFlowGrid');
-                        accountCashFlowGrid.initialize({
-                            columns: [
-                                        {
-                                            "header": "Edit",
-                                            "binding": "EditId",
-                                            "width": 60,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Delete",
-                                            "binding": "DeleteId",
-                                            "width": 70,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Code",
-                                            "binding": "AccountCashFlowCode",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*",
-                                        },
-                                        {
-                                            "header": "Cash FLow",
-                                            "binding": "AccountCashFlow",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        }
-                            ],
-                            autoGenerateColumns: false,
-                            itemsSource: accountCashFlows,
-                            isReadOnly: true,
-                            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                            allowDragging: wijmo.grid.AllowDragging.None,
-                            selectionMode: wijmo.grid.SelectionMode.Row
-                        });
-
+                        accountCashFlowGrid.itemsSource = accountCashFlows;
                         accountCashFlowGrid.trackChanges = true;
                     },
                     404: function () {
@@ -2476,26 +1987,6 @@
         // On Page Load for Account Cash Flows
         // ===================================
         function accountCashFlowTab() {
-            document.getElementById('StampSecurity').innerHTML = 'Chart of Account Stamp';
-
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
             accountCashFlows.canFilter = true;
             accountCashFlows.pageSize = 10;
@@ -2658,6 +2149,9 @@
             $("#cmdAddAccountCategoryButton").show();
             $("#cmdUpdateAccountCategoryButton").hide();
 
+            $("#cmdAddAccountCategoryButton").prop("disabled", false);
+            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
+
             document.getElementById('accountCategory_Id').value = 0;
             document.getElementById('accountCategory_Code').value = "";
             document.getElementById('accountCategory_Category').value = "";
@@ -2700,11 +2194,13 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            //$("#cmdAddAccountCategoryButton").prop("disabled", true);
-                            //$("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+                            $("#cmdAddAccountCategoryButton").prop("disabled", true);
+                            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+
                             toastr.success("Successfully Added");
+
                             $('#accountCategoryEdit').modal('hide');
-                            accountCategoryGrid.dispose();
+
                             accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
                             accountCategories.canFilter = true;
                             accountCategories.pageSize = 10;
@@ -2724,51 +2220,7 @@
                                 updateDetailsAccountCategory();
                             });
 
-                            // Flex Grid for Account Category
-                            accountCategoryGrid = new wijmo.grid.FlexGrid('#AccountCategoryGrid');
-                            accountCategoryGrid.initialize({
-                                columns: [
-                                            {
-                                                "header": "Edit",
-                                                "binding": "EditId",
-                                                "width": 60,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Delete",
-                                                "binding": "DeleteId",
-                                                "width": 70,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Code",
-                                                "binding": "AccountCategoryCode",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*",
-                                            },
-                                            {
-                                                "header": "Category",
-                                                "binding": "AccountCategory",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            }
-                                ],
-                                autoGenerateColumns: false,
-                                itemsSource: accountCategories,
-                                isReadOnly: true,
-                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                                allowDragging: wijmo.grid.AllowDragging.None,
-                                selectionMode: wijmo.grid.SelectionMode.Row
-                            });
-
+                            accountCategoryGrid.itemsSource = accountCategories;
                             accountCategoryGrid.trackChanges = true;
                         },
                         404: function () {
@@ -2820,11 +2272,13 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            //$("#cmdUpdateAccountCategoryButton").prop("disabled", true);
-                            //$("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+                            $("#cmdUpdateAccountCategoryButton").prop("disabled", true);
+                            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+
                             toastr.success("Successfully Updated");
+
                             $('#accountCategoryEdit').modal('hide');
-                            accountCategoryGrid.dispose();
+
                             accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
                             accountCategories.canFilter = true;
                             accountCategories.pageSize = 10;
@@ -2844,51 +2298,7 @@
                                 updateDetailsAccountCategory();
                             });
 
-                            // Flex Grid for Account Category
-                            accountCategoryGrid = new wijmo.grid.FlexGrid('#AccountCategoryGrid');
-                            accountCategoryGrid.initialize({
-                                columns: [
-                                            {
-                                                "header": "Edit",
-                                                "binding": "EditId",
-                                                "width": 60,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Delete",
-                                                "binding": "DeleteId",
-                                                "width": 70,
-                                                "align": "center",
-                                                "allowResizing": false,
-                                                "allowSorting": false,
-                                                "isContentHtml": true
-                                            },
-                                            {
-                                                "header": "Code",
-                                                "binding": "AccountCategoryCode",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*",
-                                            },
-                                            {
-                                                "header": "Category",
-                                                "binding": "AccountCategory",
-                                                "align": "left",
-                                                "allowSorting": true,
-                                                "width": "2*"
-                                            }
-                                ],
-                                autoGenerateColumns: false,
-                                itemsSource: accountCategories,
-                                isReadOnly: true,
-                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                                allowDragging: wijmo.grid.AllowDragging.None,
-                                selectionMode: wijmo.grid.SelectionMode.Row
-                            });
-
+                            accountCategoryGrid.itemsSource = accountCategories;
                             accountCategoryGrid.trackChanges = true;
                         },
                         404: function () {
@@ -2915,6 +2325,9 @@
             $("#cmdUpdateAccountCategoryButton").show();
             $("#cmdAddAccountCategoryButton").hide();
 
+            $("#cmdUpdateAccountCategoryButton").prop("disabled", false);
+            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
+
             var accountCategory = accountCategories.currentEditItem;
             document.getElementById('accountCategory_Id').value = accountCategory.Id !== null && typeof (accountCategory.Id) != 'undefined' ? wijmo.Globalize.format(accountCategory.Id) : '';
             document.getElementById('accountCategory_Code').value = accountCategory.AccountCategoryCode ? accountCategory.AccountCategoryCode : '';
@@ -2929,6 +2342,9 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdConfirmDeleteAccountCategory").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", false);
         }
         // Account Category Confirm Delete Button
         function cmdAccountCategoryConfirmDeleteButton_OnClick() {
@@ -2941,12 +2357,13 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        //$("#cmdConfirmDeleteAccountCategory").prop("disabled", true);
-                        //$("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", true);
+                        $("#cmdConfirmDeleteAccountCategory").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", true);
+
                         toastr.success("Successfully Deleted");
+
                         $('#deleteAccountCategoryConfirm').modal('hide');
 
-                        accountCategoryGrid.dispose();
                         accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
                         accountCategories.canFilter = true;
                         accountCategories.pageSize = 10;
@@ -2966,51 +2383,7 @@
                             updateDetailsAccountCategory();
                         });
 
-                        // Flex Grid for Account Category
-                        accountCategoryGrid = new wijmo.grid.FlexGrid('#AccountCategoryGrid');
-                        accountCategoryGrid.initialize({
-                            columns: [
-                                        {
-                                            "header": "Edit",
-                                            "binding": "EditId",
-                                            "width": 60,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Delete",
-                                            "binding": "DeleteId",
-                                            "width": 70,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Code",
-                                            "binding": "AccountCategoryCode",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*",
-                                        },
-                                        {
-                                            "header": "Category",
-                                            "binding": "AccountCategory",
-                                            "align": "left",
-                                            "allowSorting": true,
-                                            "width": "2*"
-                                        }
-                            ],
-                            autoGenerateColumns: false,
-                            itemsSource: accountCategories,
-                            isReadOnly: true,
-                            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                            allowDragging: wijmo.grid.AllowDragging.None,
-                            selectionMode: wijmo.grid.SelectionMode.Row
-                        });
-
+                        accountCategoryGrid.itemsSource = accountCategories;
                         accountCategoryGrid.trackChanges = true;
                     },
                     404: function () {
@@ -3206,7 +2579,7 @@
             $('#AccountType').hide();
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
-            accountTab();
+            document.getElementById('StampSecurity').innerHTML = 'Account Stamp';
             window.accountTab = function () {
                 return true;
             };
@@ -3218,6 +2591,7 @@
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
             accountTypeTab();
+            document.getElementById('StampSecurity').innerHTML = 'Account Type Stamp';
             window.accountTypeTab = function () {
                 return true;
             };
@@ -3229,6 +2603,7 @@
             $('#AccountCashFlow').show();
             $('#AccountCategory').hide();
             accountCashFlowTab();
+            document.getElementById('StampSecurity').innerHTML = 'Account Cash Flow Stamp';
             window.accountCashFlowTab = function () {
                 return true;
             };
@@ -3240,24 +2615,46 @@
             $('#AccountCashFlow').hide();
             $('#AccountCategory').show();
             accountCategoryTab();
+            document.getElementById('StampSecurity').innerHTML = 'Account Category Stamp';
             window.accountCategoryTab = function () {
                 return true;
             };
         });
 
         $(document).ready(function () {
-            $('#Account').hide();
+            toastr.options = {
+                "closeButton": true,
+                "debug": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            $('#Account').show();
             $('#AccountType').hide();
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
 
-            $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-                localStorage.setItem('activeTab', $(e.target).attr('href'));
-            });
-            var activeTab = localStorage.getItem('activeTab');
-            if (activeTab) {
-                $('#myTab a[href="' + activeTab + '"]').tab('show');
-            }
+            accountTab();
+            document.getElementById('StampSecurity').innerHTML = 'Account Stamp';
+
+            //$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+            //    localStorage.setItem('activeTab', $(e.target).attr('href'));
+            //});
+            //var activeTab = localStorage.getItem('activeTab');
+            //if (activeTab) {
+            //    $('#myTab a[href="' + activeTab + '"]').tab('show');
+            //}
         });
     </script>
 </body>
