@@ -23,95 +23,250 @@
     <!-- Footer -->
     @Html.Partial("_ManageFooter")
 
+    <!-- User Edit Detail -->
+    <div class="modal fade" id="userEdit" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Profile Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="userDetailForm">
+                        <dl class="dl-horizontal">
+                            <dd><input type="hidden" id="userId" value="@ViewData["UserId"]" /></dd>
+                            <dt>First Name:</dt>
+                            <dd><input type="text" class="form-control requiredUser" id="profileDetail_firstName" value="@ViewData["FirstName"]" /></dd>
+                            <dt>Last Name:</dt>
+                            <dd><input type="text" class="form-control requiredUser" id="profileDetail_lastName" value="@ViewData["LastName"]" /></dd>
+                            <dt>Address:</dt>
+                            <dd><input type="text" class="form-control requiredUser" id="profileDetail_address" value="@ViewData["Address"]" /></dd>
+                            <dt>Email Address:</dt>
+                            <dd><input type="text" class="form-control requiredUser" id="profileDetail_email" value="@ViewData["Email"]" /></dd>
+                            <dt>Username:</dt>
+                            <dd><input type="text" class="form-control requiredUser" id="profileDetail_userName" value="@ViewData["UserName"]" readonly /></dd>
+                        </dl>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info" id="cmdUpdateUserButton" onclick="cmdUserUpdateButton_OnClick()"><i class="fa fa-check"></i> Update Profile</button>
+                    <button type="button" id="cmdUserDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts JavaScripts -->
     @Scripts.Render("~/Scripts/js")
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        // =================
+        // Modal User Detail
+        // =================
+        function cmdEditProfileDetails_OnClickButton() {
+            $('#userEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // ==================
+        // Update User Detail
+        // ==================
+        function cmdUserUpdateButton_OnClick() {
+            var userObject = new Object();
+            var id = document.getElementById('userId').value;
+
+            userObject.FirstName = document.getElementById('profileDetail_firstName').value;
+            userObject.LastName = document.getElementById('profileDetail_lastName').value;
+            userObject.Address = document.getElementById('profileDetail_address').value;
+            userObject.Email = document.getElementById('profileDetail_email').value;
+            var data = JSON.stringify(userObject);
+
+            var isValid = true;
+            $('.requiredUser').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "2px solid red",
+                        "transition": "border 1s ease 0s"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                e.preventDefault();
+            }
+            else {
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateAspUser/' + id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdUpdateUserButton").prop("disabled", true);
+                            $("#cmdUserDetailCloseButton").prop("disabled", true);
+                            toastr.info("Successfully Updated Profile");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Update");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                        },
+                        500: function () {
+                            toastr.error("Server Error");
+                        }
+                    }
+                });
+
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateMstUser/' + id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdUpdateUserButton").prop("disabled", true);
+                            $("#cmdUserDetailCloseButton").prop("disabled", true);
+                            //toastr.success("Successfully Updated");
+                            //window.setTimeout(function () {
+                            //    location.reload()
+                            //}, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Update");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                        },
+                        500: function () {
+                            toastr.error("Server Error");
+                        }
+                    }
+                });
+            }
+        }
+        // =======
+        // On Load
+        // =======
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": true,
+                "debug": true,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": true,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        });
+    </script>
 </body>
 </html>
 
-    @*@model easyfis.Models.IndexViewModel
-        @{
-            ViewBag.Title = "Manage";
-        }
+@*@model easyfis.Models.IndexViewModel
+    @{
+        ViewBag.Title = "Manage";
+    }
 
-        <h2>@ViewBag.Title.</h2>
+    <h2>@ViewBag.Title.</h2>
 
-        <p class="text-success">@ViewBag.StatusMessage</p>
-        <div>
-            <h4>Change your account settings</h4>
-            <hr />
-            <dl class="dl-horizontal">
-                <dt>Password:</dt>
-                <dd>
-                    [*@
-    @*<p class="text-success">@ViewBag.StatusMessage</p>
-        @if (Model.HasPassword)
+    <p class="text-success">@ViewBag.StatusMessage</p>
+    <div>
+        <h4>Change your account settings</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>Password:</dt>
+            <dd>
+                [*@
+@*<p class="text-success">@ViewBag.StatusMessage</p>
+    @if (Model.HasPassword)
+    {
+        //Response.Redirect("~/Manage/AccountSettings");
+        @Html.ActionLink("Change your password", "ChangePassword")
+    }
+    else
+    {
+        @Html.ActionLink("Create", "SetPassword")
+    }*@
+@*]*@
+@*</dd>*@
+@*<dt>External Logins:</dt>
+    <dd>
+        @Model.Logins.Count [
+        @Html.ActionLink("Manage", "ManageLogins") ]
+    </dd>*@
+@*
+    Phone Numbers can used as a second factor of verification in a two-factor authentication system.
+
+     See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+        for details on setting up this ASP.NET application to support two-factor authentication using SMS.
+
+     Uncomment the following block after you have set up two-factor authentication
+*@
+@*
+    <dt>Phone Number:</dt>
+    <dd>
+        @(Model.PhoneNumber ?? "None") [
+        @if (Model.PhoneNumber != null)
         {
-            //Response.Redirect("~/Manage/AccountSettings");
-            @Html.ActionLink("Change your password", "ChangePassword")
-        }
-        else
-        {
-            @Html.ActionLink("Create", "SetPassword")
-        }*@
-    @*]*@
-    @*</dd>*@
-    @*<dt>External Logins:</dt>
-        <dd>
-            @Model.Logins.Count [
-            @Html.ActionLink("Manage", "ManageLogins") ]
-        </dd>*@
-    @*
-        Phone Numbers can used as a second factor of verification in a two-factor authentication system.
-
-         See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-            for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-
-         Uncomment the following block after you have set up two-factor authentication
-    *@
-    @*
-        <dt>Phone Number:</dt>
-        <dd>
-            @(Model.PhoneNumber ?? "None") [
-            @if (Model.PhoneNumber != null)
-            {
-                @Html.ActionLink("Change", "AddPhoneNumber")
-                @: &nbsp;|&nbsp;
-                @Html.ActionLink("Remove", "RemovePhoneNumber")
-            }
-            else
-            {
-                @Html.ActionLink("Add", "AddPhoneNumber")
-            }
-            ]
-        </dd>
-    *@
-    @*<dt>Two-Factor Authentication:</dt>
-        <dd>
-            <p>
-                There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication.
-            </p>*@
-    @*@if (Model.TwoFactor)
-        {
-            using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <text>Enabled
-                <input type="submit" value="Disable" class="btn btn-link" />
-                </text>
-            }
+            @Html.ActionLink("Change", "AddPhoneNumber")
+            @: &nbsp;|&nbsp;
+            @Html.ActionLink("Remove", "RemovePhoneNumber")
         }
         else
         {
-            using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <text>Disabled
-                <input type="submit" value="Enable" class="btn btn-link" />
-                </text>
-            }
-        }*@
-    @*</dd>*@
-    @*</dl>
-        </div>*@
+            @Html.ActionLink("Add", "AddPhoneNumber")
+        }
+        ]
+    </dd>
+*@
+@*<dt>Two-Factor Authentication:</dt>
+    <dd>
+        <p>
+            There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+            for details on setting up this ASP.NET application to support two-factor authentication.
+        </p>*@
+@*@if (Model.TwoFactor)
+    {
+        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <text>Enabled
+            <input type="submit" value="Disable" class="btn btn-link" />
+            </text>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <text>Disabled
+            <input type="submit" value="Enable" class="btn btn-link" />
+            </text>
+        }
+    }*@
+@*</dd>*@
+@*</dl>
+    </div>*@

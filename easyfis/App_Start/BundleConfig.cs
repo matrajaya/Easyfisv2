@@ -14,7 +14,8 @@ namespace easyfis
             // ====================================
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/bootstrap.min.css"));
+                      "~/Content/bootstrap.min.css",
+                      "~/Content/toastr.css"));
 
             // ====================================================
             // Library Cascading Style Sheets for Fontawesome - CSS
@@ -45,7 +46,8 @@ namespace easyfis
                       "~/Scripts/modal.js",
                       "~/Scripts/alert.js",
                       "~/Scripts/tab.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                      "~/Scripts/toastr.js"));
 
             // =======================
             // Custom JavaScripts - JS

@@ -3,49 +3,37 @@
 
 @if (Request.IsAuthenticated)
 {
-    string userId = User.Identity.GetUserId();
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-    {
-        @Html.AntiForgeryToken()
-        <!-- Section -->
-        <section>
-            <div class="cover-login-photo-custom">
-                <div class="container">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">Basic Info</div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="well">
-                                        @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" }) <br />
-                                        Address: @Html.ActionLink((ViewData["Address"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["Address"]), @class = "profile-details" }) <br />
-                                        Email Address: @Html.ActionLink((ViewData["Email"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["Email"]), @class = "profile-details" }) <br />
-                                        Username: @Html.ActionLink((ViewData["UserName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["UserName"]), @class = "profile-details" })
-                                    </div>
+    <!-- Section -->
+    <section>
+        <div class="cover-login-photo-custom">
+            <div class="container">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Basic Info</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="well">
+                                    @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" }) <br />
+                                    Address: <span class="profile-details">@ViewData["Address"]  <br /></span>
+                                    Email Address: <span class="profile-details">@ViewData["Email"] <br /></span>
+                                    Username:<span class="profile-details"> @ViewData["UserName"]</span>
                                 </div>
                             </div>
-                            @if (Model.HasPassword)
-                            {
-                                <a href="@Url.Action("Index", "Manage")" class="btn btn-default"> Edit Info</a>
-                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default"> Change Your Password</a>
-                                <p class="change-password-success">@ViewBag.StatusMessage</p>
-                            }
-                            else
-                            {
-                                @Html.ActionLink("Create", "SetPassword")
-                            }
                         </div>
+                        <button class="btn btn-default" onclick="cmdEditProfileDetails_OnClickButton()"> Edit Info</button>
+                        <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default"> Change Your Password</a>
+                        <p class="change-password-success">@ViewBag.StatusMessage</p>
                     </div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading">ERP</div>
-                        <div class="panel-body">
-                            <a href="@Url.Action("Index", "Software")" class="btn btn-primary">Launch Software</a>
-                        </div>
+                </div>
+                <div class="panel panel-info">
+                    <div class="panel-heading">ERP</div>
+                    <div class="panel-body">
+                        <a href="@Url.Action("Index", "Software")" class="btn btn-primary">Launch Software</a>
                     </div>
                 </div>
             </div>
-        </section>
-    }
+        </div>
+    </section>
 }
 else
 {

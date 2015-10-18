@@ -1,19 +1,32 @@
-﻿@Styles.Render("~/Content/css")
-@Styles.Render("~/Font-Awesome/css")
-@Styles.Render("~/Content/custom-css")
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta Tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Header -->
-@Html.Partial("_AccountHeader")
+    <!-- Title of the Page -->
+    <title>EasyFIS Login</title>
 
-<!-- After Login -->
-@Html.Partial("_AccountLogin")
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Font-Awesome/css")
+    @Styles.Render("~/Content/custom-css")
+</head>
+<body data-spy="scroll" data-offset="100" id="home">
+    <!-- Header -->
+    @Html.Partial("_AccountHeader")
 
-<!-- Footer -->
-@Html.Partial("_AccountFooter")
+    <!-- After Login -->
+    @Html.Partial("_AccountLogin")
 
-@Scripts.Render("~/Scripts/js")
-@Scripts.Render("~/bundles/jqueryval")
+    <!-- Footer -->
+    @Html.Partial("_AccountFooter")
 
+    @Scripts.Render("~/Scripts/js")
+    @Scripts.Render("~/bundles/jqueryval")
+</body>
+</html>
 @*@using easyfis.Models
     @model LoginViewModel
     @{
