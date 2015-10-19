@@ -28,6 +28,7 @@
                     <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Type</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Cash Flow</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Category</a></li>
+                    <li role="presentation"><a class="btn btn-default btn-sm" id="refresh" title="refresh"><i class="fa fa-refresh"></i></a></li>
                 </ul>
                 <h4>Chart of Accounts</h4>
                 <hr />
@@ -2538,22 +2539,22 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
-        //// refresh button
-        //$('#refresh').click(function () {
-        //    $('#Account').hide();
-        //    $('#AccountType').hide();
-        //    $('#AccountCashFlow').hide();
-        //    $('#AccountCategory').hide();
-        //    location.reload();
-        //});
+        // refresh button
+        $('#refresh').click(function () {
+            $('#Account').hide();
+            $('#AccountType').hide();
+            $('#AccountCashFlow').hide();
+            $('#AccountCategory').hide();
+            location.reload();
+        });
 
-        //// refresh remove tab
-        //$(document).on('click', '#refresh', function () {
-        //    var $link = $('li.active a[data-toggle="tab"]');
-        //    $link.parent().removeClass('active');
-        //    var tabLink = $link.attr('href');
-        //    $('#mainTabs a[href="' + tabLink + '"]').tab('show');
-        //});
+        // refresh remove tab
+        $(document).on('click', '#refresh', function () {
+            var $link = $('li.active a[data-toggle="tab"]');
+            $link.parent().removeClass('active');
+            var tabLink = $link.attr('href');
+            $('#mainTabs a[href="' + tabLink + '"]').tab('show');
+        });
 
         // ====
         // TABS
@@ -2605,9 +2606,6 @@
             };
         });
 
-        // =======
-        // On Load
-        // =======
         $(document).ready(function () {
             toastr.options = {
                 "closeButton": true,
