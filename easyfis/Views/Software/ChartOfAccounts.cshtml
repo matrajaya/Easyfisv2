@@ -25,12 +25,11 @@
             <div class="container">
                 <ul class="nav nav-tabs pull-right" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Type</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Cash Flow</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Category</a></li>
-                    <li role="presentation"><a class="btn btn-default btn-sm" id="refresh" title="refresh"><i class="fa fa-refresh"></i></a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Account Cash Flow</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Account Category</a></li>
                 </ul>
-                <h4>Chart of Accounts</h4>
+                <h4><img src='~/images/Icons/iChart.png'> Chart of Accounts</h4>
                 <hr />
                 <div class="tab-content">
                     <div id="Account" class="tab-pane fade in active">
@@ -52,7 +51,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8">
-                                <button class="btn btn-info pull-right" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add New Account</button>
+                                <button class="btn btn-primary pull-right" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
@@ -98,7 +97,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8">
-                                <button class="btn btn-info pull-right" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add New Account Type</button>
+                                <button class="btn btn-primary pull-right" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
@@ -144,7 +143,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8">
-                                <button class="btn btn-info pull-right" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add New Account Cash Flow</button>
+                                <button class="btn btn-primary pull-right" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
@@ -190,7 +189,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8">
-                                <button class="btn btn-info pull-right" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add New Account Category</button>
+                                <button class="btn btn-primary pull-right" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
@@ -627,7 +626,7 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             accounts.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 AccountCode: Results[i]["AccountCode"],
@@ -722,12 +721,11 @@
                         200: function () {
                             $("#cmdAddAccountButton").prop("disabled", true);
                             $("#cmdAccountDetailCloseButton").prop("disabled", true);
-                            
-                            toastr.success("Successfully Added");
-                            $('#accountEdit').modal('hide');
 
-                            
-                            accounts.dispose();
+                            toastr.success("Successfully Added");
+
+                            $('#accountEdit').modal('hide');
+                        
                             accounts = new wijmo.collections.CollectionView(getAccount());
                             accounts.canFilter = true;
                             accounts.pageSize = 10;
@@ -747,7 +745,6 @@
                                 updateDetailsAccount();
                             });
 
-                           
                             accountGrid.itemsSource = accounts;
                             accountGrid.trackChanges = true;
                         },
@@ -900,8 +897,7 @@
                         toastr.success("Successfully Deleted");
 
                         $('#deleteAccountConfirm').modal('hide');
-
-                        
+  
                         accounts = new wijmo.collections.CollectionView(getAccount());
                         accounts.canFilter = true;
                         accounts.pageSize = 10;
@@ -1177,7 +1173,7 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             accountTypes.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 AccountTypeCode: Results[i]["AccountTypeCode"],
@@ -1665,7 +1661,7 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             accountCashFlows.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 AccountCashFlowCode: Results[i]["AccountCashFlowCode"],
@@ -2118,7 +2114,7 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             accountCategories.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()'><i class='fa fa-pencil-square'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 AccountCategoryCode: Results[i]["AccountCategoryCode"],
@@ -2543,22 +2539,22 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
-        // refresh button
-        $('#refresh').click(function () {
-            $('#Account').hide();
-            $('#AccountType').hide();
-            $('#AccountCashFlow').hide();
-            $('#AccountCategory').hide();
-            location.reload();
-        });
+        //// refresh button
+        //$('#refresh').click(function () {
+        //    $('#Account').hide();
+        //    $('#AccountType').hide();
+        //    $('#AccountCashFlow').hide();
+        //    $('#AccountCategory').hide();
+        //    location.reload();
+        //});
 
-        // refresh remove tab
-        $(document).on('click', '#refresh', function () {
-            var $link = $('li.active a[data-toggle="tab"]');
-            $link.parent().removeClass('active');
-            var tabLink = $link.attr('href');
-            $('#mainTabs a[href="' + tabLink + '"]').tab('show');
-        });
+        //// refresh remove tab
+        //$(document).on('click', '#refresh', function () {
+        //    var $link = $('li.active a[data-toggle="tab"]');
+        //    $link.parent().removeClass('active');
+        //    var tabLink = $link.attr('href');
+        //    $('#mainTabs a[href="' + tabLink + '"]').tab('show');
+        //});
 
         // ====
         // TABS
@@ -2568,7 +2564,6 @@
             $('#AccountType').hide();
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
-            document.getElementById('StampSecurity').innerHTML = 'Account Stamp';
             window.accountTab = function () {
                 return true;
             };
@@ -2580,7 +2575,6 @@
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
             accountTypeTab();
-            document.getElementById('StampSecurity').innerHTML = 'Account Type Stamp';
             window.accountTypeTab = function () {
                 return true;
             };
@@ -2592,7 +2586,6 @@
             $('#AccountCashFlow').show();
             $('#AccountCategory').hide();
             accountCashFlowTab();
-            document.getElementById('StampSecurity').innerHTML = 'Account Cash Flow Stamp';
             window.accountCashFlowTab = function () {
                 return true;
             };
@@ -2604,13 +2597,14 @@
             $('#AccountCashFlow').hide();
             $('#AccountCategory').show();
             accountCategoryTab();
-            document.getElementById('StampSecurity').innerHTML = 'Account Category Stamp';
             window.accountCategoryTab = function () {
                 return true;
             };
         });
 
         $(document).ready(function () {
+            document.getElementById('currentPage').innerHTML = 'Chart of Account';
+
             toastr.options = {
                 "closeButton": true,
                 "debug": true,
@@ -2635,7 +2629,6 @@
             $('#AccountCategory').hide();
 
             accountTab();
-            document.getElementById('StampSecurity').innerHTML = 'Account Stamp';
 
             //$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
             //    localStorage.setItem('activeTab', $(e.target).attr('href'));

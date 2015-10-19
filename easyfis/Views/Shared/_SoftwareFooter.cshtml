@@ -5,53 +5,59 @@
         <div class="container">
             <div class="row">
                 <div class="footer-space">
-                    <div class="col-md-4">
-                        <label class="lead" id="StampSecurity">Stamp Security</label>
-                        <hr class="stamp-divider" />
-
-                        <label>Created by:</label>
-                        <span class="footer-data-style" id="createdBy"></span>
-                        <hr class="stamp-divider" />
-
-                        <label>Created date:</label>
-                        <span class="footer-data-style" id="createdDate"></span>
-                        <hr class="stamp-divider" />
-
-                        <label>Updated by:</label>
-                        <span class="footer-data-style" id="updatedBy"></span>
-                        <hr class="stamp-divider" />
-
-                        <label>Updated date:</label>
-                        <span class="footer-data-style" id="updatedDate"></span>
-                        <hr class="stamp-divider" />
-                    </div>
-                    <div class="col-md-4 V-align" align="center">
-                        @*<img class="icon-custom" src="~/images/coverImages/cover9.png" alt="">*@
+                    <div class="col-md-6">
+                        @*<label class="lead" id="StampSecurity">Easy FIS 2</label>*@
+                        <label class="stampDetailCustom">Easy Financial Income Statement</label>
                         <br />
+                        <label class="labelUserDetailCustom">Version: </label><span class="stampDetailCustom"> 2.0</span>
+                        <br /> 
+                        <label class="labelUserDetailCustom">Current Page:</label> <span id="currentPage" class="stampDetailCustom"></span>
+                        @*<hr class="stamp-divider" />
+                        Simplified Accounting Beta - v1.20140715 - © Innosoft Solutions - ERP System*@
+                    </div>
+                    <div class="col-md-6">
+                        <label class="labelUserDetailCustom">Created by:</label>
+                        <span class="stampDetailCustom" id="createdBy"></span>
+                        <br />
+
+                        <label class="labelUserDetailCustom">Created date:</label>
+                        <span class="stampDetailCustom" id="createdDate"></span>
+                        <br />
+
+                        <label class="labelUserDetailCustom">Updated by:</label>
+                        <span class="stampDetailCustom" id="updatedBy"></span>
+                        <br />
+
+                        <label class="labelUserDetailCustom">Updated date:</label>
+                        <span class="stampDetailCustom" id="updatedDate"></span>
+                        <br />
+                    </div>
+                </div>
+                @*<div class="col-md-4 V-align" align="center">*@
+                @*<img class="icon-custom" src="~/images/coverImages/cover9.png" alt="">*@
+                @*<br />
                         <label class="tittle-custom">easyFIS</label>
                         <br />
                         <label>Version:</label> 2.0
-                    </div>
-                    <div class="col-md-4" align="center">
-                        <div class="lead"><span>Current User</span></div>
-                        <div class="link-list">
-                            <i class="fa fa-user fa-4x"></i>
-                            @*<img class="img-circle img-responsive img-thumbnail" src='~/images/sectionImages/Sony.jpg' width="75" height="120">*@
-                            @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" })
-                        </div>
-                    </div>
-                </div>
+                    </div>*@
+                @*<div class="col-md-4" align="center">
+                    <div class="lead"><span>Current User</span></div>
+                    <div class="link-list">
+                        <i class="fa fa-user fa-4x"></i>*@
+                @*<img class="img-circle img-responsive img-thumbnail" src='~/images/sectionImages/Sony.jpg' width="75" height="120">*@
+                @*@Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" })*@
+                @*</div>
+                    </div>*@
             </div>
         </div>
-        <br>
-        <hr class="footer-divider" />
-        <div class="row">
+    </div>
+    @*<div class="row">
             <div class="footer-right">
                 <div class="col-lg-12" align="center">
                     <p>Simplified Accounting Beta - v1.20140715 - © Innosoft Solutions - ERP System</p>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
     <!-- End of cover page support -->
 </footer>

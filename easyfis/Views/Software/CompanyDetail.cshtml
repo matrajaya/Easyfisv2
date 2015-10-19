@@ -26,8 +26,13 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <a href="@Url.Action("Company","Software")" class="btn btn-info"><i class="fa fa-arrow-left"></i> Company List</a>
-                <button class="btn btn-info" id="cmdAddAnotherCompany" onclick="cmdCompanyAddAnotherCompanyButton_OnClick()"><i class="fa fa-plus"></i> Add New Company</button>
+                <div class="row">
+                    <div class="col-md-12" align="right">
+                        <button class="btn btn-primary" id="cmdAddCompany" onclick="cmdCompanyAddButton_OnClick()"><i class="fa fa-check"></i> Save</button>
+                        <button class="btn btn-success" id="cmdUpdateCompany" onclick="cmdCompanyUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
+                        <a href="@Url.Action("Company","Software")" class="btn btn-danger"><i class="fa fa-times"></i> Close</a>
+                    </div>
+                </div>
                 <hr />
                 <h4 id="companyDetailLabel">New Company</h4>
                 <div class="well">
@@ -39,6 +44,12 @@
                                     <input type="text" class="form-control requiredCompany" id="company_Company">
                                 </div>
                                 <div class="form-group">
+                                    <label for="usr">Address:</label>
+                                    <textarea class="form-control textarea-custom-company requiredCompany" id="company_Address"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label for="usr">Contact Number:</label>
                                     <input type="text" class="form-control requiredCompany" id="company_ContactNumber">
                                 </div>
@@ -47,41 +58,8 @@
                                     <input type="text" class="form-control requiredCompany" id="company_TaxNumber">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="usr">Company address:</label>
-                                    <textarea class="form-control textarea-custom-company requiredCompany" id="company_Address"></textarea>
-                                </div>
-                            </div>
                         </div>
                     </form>
-                    <hr />
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label>Created by:</label>
-                            <br /> 
-                            <span id="CreatedBy"></span>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Created date:</label> 
-                            <br /> 
-                            <span id="CreatedDate"></span>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Updated by:</label> 
-                            <br /> 
-                            <span id="UpdatedBy"></span>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Updated date:</label> 
-                            <br /> 
-                            <span id="UpdatedDate"></span>
-                        </div>
-                        <div class="col-md-4" align="right">
-                            <button class="btn btn-primary" id="cmdAddCompany" onclick="cmdCompanyAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            <button class="btn btn-success" id="cmdUpdateCompany" onclick="cmdCompanyUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
-                        </div>
-                    </div>
                 </div>
 
                 <hr class="divider" />
@@ -104,7 +82,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <button type="submit" class="btn btn-info pull-right" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add Branch</button>
+                            <button type="submit" class="btn btn-primary pull-right" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                         </div>
                     </div>
                     <br />
@@ -165,7 +143,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddBranchButton" onclick="cmdBranchAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        <button class="btn btn-primary" id="cmdAddBranchButton" onclick="cmdBranchAddButton_OnClick()"><i class="fa fa-check"></i> Save</button>
                         <button class="btn btn-success" id="cmdUpdateBranchButton" onclick="cmdBranchUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
                         <button type="button" id="cmdBranchDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
@@ -216,7 +194,6 @@
     @Html.Partial("_SoftwareSideBarMenu")
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
-
     <!-- Scripts JavaScripts -->
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/Scripts/Profile-js")
@@ -309,7 +286,7 @@
                             UpdatedDateTime: Results.UpdatedDateTime
                         });
                     }
-                    document.getElementById('companyDetailLabel').innerHTML = Results.Company + " Company Detail";
+                    document.getElementById('companyDetailLabel').innerHTML = Results.Company + " Detail";
                     document.getElementById('companyNameLabel').innerHTML = Results.Company + " Branch List";
                     document.getElementById('companyNameModalLabel').innerHTML = Results.Company + " Branch Detail";
                     document.getElementById('branch_company').value = Results.Company;
@@ -318,10 +295,10 @@
                     document.getElementById('company_ContactNumber').value = Results.ContactNumber;
                     document.getElementById('company_TaxNumber').value = Results.TaxNumber;
 
-                    document.getElementById('CreatedBy').innerHTML = Results.CreatedBy;
-                    document.getElementById('CreatedDate').innerHTML = Results.CreatedDateTime;
-                    document.getElementById('UpdatedBy').innerHTML = Results.UpdatedBy;
-                    document.getElementById('UpdatedDate').innerHTML = Results.UpdatedDateTime;
+                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -340,7 +317,7 @@
             companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
             companyObject.TaxNumber = document.getElementById('company_TaxNumber').value;
             var data = JSON.stringify(companyObject);
-            
+
             var isValid = true;
             $('.requiredCompany').each(function() {
                 if ($.trim($(this).val()) == '') {
@@ -379,7 +356,7 @@
                         }
                     }
                 });
-            }  
+            }
         }
 
         // =====================
@@ -435,12 +412,12 @@
                         }
                     }
                 });
-            }  
+            }
         }
 
         function cmdCompanyAddAnotherCompanyButton_OnClick() {
             var id = 0;
-            window.location = '/Software/CompanyDetail/?Id=' + id; 
+            window.location = '/Software/CompanyDetail/?Id=' + id;
         }
 
         // ================
@@ -605,7 +582,7 @@
                         }
                     }
                 });
-            }  
+            }
         }
 
         // ===================
@@ -621,7 +598,7 @@
             branchObject.ContactNumber = document.getElementById('branch_ContactNumber').value;
             branchObject.TaxNumber = document.getElementById('branch_TaxNumber').value;
             var data = JSON.stringify(branchObject);
-           
+
             var isValid = true;
             $('.requiredBranch').each(function() {
                 if ($.trim($(this).val()) == '') {
@@ -666,7 +643,7 @@
                         }
                     }
                 });
-            }  
+            }
         }
 
         // =================
@@ -746,16 +723,16 @@
             });
         }
 
-        // ===================
-        // FlexGrid Selection
-        // =================== 
-        function updateDetails() {
-            var item = branches.currentItem;
-            document.getElementById('createdBy').innerHTML = item.CreatedBy;
-            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
-            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
-            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
-        }
+        //// ===================
+        //// FlexGrid Selection
+        //// ===================
+        //function updateDetails() {
+        //    var item = branches.currentItem;
+        //    document.getElementById('createdBy').innerHTML = item.CreatedBy;
+        //    document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+        //    document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+        //    document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        //}
 
         // =============================
         // Navigation Buttons for Branch
@@ -789,15 +766,15 @@
         // On Page Load
         // ============
         $(document).ready(function () {
-            document.getElementById('StampSecurity').innerHTML = 'Branch List Stamp';
+            document.getElementById('currentPage').innerHTML = 'Company Detail';
 
             var Id = @id;
             if(Id == 0) {
-                $("#cmdUpdateCompany").prop("disabled", true);
-                $("#cmdBranchAddBranchButton").prop("disabled", true);
-                $("#cmdAddAnotherCompany").prop("disabled", true);
+                $("#cmdUpdateCompany").hide();
+                $("#cmdBranchAddBranchButton").hide();
+                $("#cmdAddAnotherCompany").hide();
             } else {
-                $("#cmdAddCompany").prop("disabled", true);
+                $("#cmdAddCompany").hide();
             }
 
             toastr.options = {
@@ -835,9 +812,9 @@
             branches.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsBranch();
             });
-            branches.currentChanged.addHandler(function (sender, args) {
-                updateDetails();
-            });
+            //branches.currentChanged.addHandler(function (sender, args) {
+            //    updateDetails();
+            //});
 
             // Flex Grid
             branchGrid = new wijmo.grid.FlexGrid('#BranchGrid');
