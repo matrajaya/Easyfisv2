@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace easyfis.Controllers
 {
-    public class TrnJournalVoucherController : ApiController
+    public class ApiJournalVoucherController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
