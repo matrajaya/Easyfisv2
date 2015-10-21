@@ -685,7 +685,7 @@
         function cmdAccountAddButton_OnClick() {
             var accountObject = new Object();
 
-            
+
             accountObject.AccountCode = document.getElementById('account_code').value;
             accountObject.Account = document.getElementById('account_account').value;
             accountObject.AccountTypeId = document.getElementById('account_type_id_data').value;
@@ -725,7 +725,7 @@
                             toastr.success("Successfully Added");
 
                             $('#accountEdit').modal('hide');
-                        
+
                             accounts = new wijmo.collections.CollectionView(getAccount());
                             accounts.canFilter = true;
                             accounts.pageSize = 10;
@@ -824,7 +824,7 @@
                             accounts.currentChanged.addHandler(function (sender, args) {
                                 updateDetailsAccount();
                             });
-                           
+
                             accountGrid.itemsSource = accounts;
                             accountGrid.trackChanges = true;
                         },
@@ -897,7 +897,7 @@
                         toastr.success("Successfully Deleted");
 
                         $('#deleteAccountConfirm').modal('hide');
-  
+
                         accounts = new wijmo.collections.CollectionView(getAccount());
                         accounts.canFilter = true;
                         accounts.pageSize = 10;
@@ -916,7 +916,7 @@
                         accounts.currentChanged.addHandler(function (sender, args) {
                             updateDetailsAccount();
                         });
-                         
+
                         accountGrid.itemsSource = accounts;
                         accountGrid.trackChanges = true;
                     },

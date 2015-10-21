@@ -12,11 +12,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =================
-        // LIST Account Type
-        // =================
-        [Route("api/listUser")]
-        public List<Models.ApplicationUser> Get()
+        // =============
+        // LIST ASP User
+        // =============
+        [Route("api/listAspUser")]
+        public List<Models.ApplicationUser> GetAspUsers()
         {
             var users = from d in db.AspNetUsers select new Models.ApplicationUser
                                {
@@ -27,6 +27,25 @@ namespace easyfis.Controllers
                                    Address = d.Address,
                                    UserName = d.UserName
                                };
+            return users.ToList();
+        }
+
+        // =============
+        // LIST Mst User
+        // =============
+        [Route("api/listUser")]
+        public List<Models.MstUser> GetMstUsers()
+        {
+            var users = from d in db.MstUsers select new Models.MstUser
+                        {
+                            Id = d.Id,
+                            FirstName = d.FirstName,
+                            LastName = d.LastName,
+                            Email = d.Email,
+                            Address = d.Address,
+                            UserName = d.UserName,
+                            IsLocked = d.IsLocked
+                        };
             return users.ToList();
         }
 
