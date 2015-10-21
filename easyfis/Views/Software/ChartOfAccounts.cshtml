@@ -236,18 +236,18 @@
                         <form id="AccountDetailForm">
                             <dl class="dl-horizontal">
                                 <dd><input type="hidden" class="form-control" id="account_id" /></dd>
-                                <dt>Code:</dt>
+                                <dt>Account Code:</dt>
                                 <dd><input type="text" class="form-control requiredAccount" id="account_code" /></dd>
                                 <dt>Account:</dt>
                                 <dd><input type="text" class="form-control requiredAccount" id="account_account" /></dd>
-                                <dt>Type:</dt>
+                                <dt>Account Type:</dt>
                                 <dd>
                                     <div id="account_type_id" class="comboBox-wide"></div>
 
                                     <input type="hidden" class="requiredAccount" id="account_type_id_data" required />
                                     <input type="hidden" id="account_type_selectedValue" />
                                 </dd>
-                                <dt>Cash Flow:</dt>
+                                <dt>Account Cash Flow:</dt>
                                 <dd>
                                     <div id="account_cash_flow_id" class="comboBox-wide"></div>
 
@@ -258,8 +258,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddAccountButton" onclick="cmdAccountAddButton_OnClick()"><i class="fa fa-check"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateAccountButton" onclick="cmdAccountUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
+                        <button class="btn btn-primary" id="cmdAddAccountButton" onclick="cmdAccountAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-success" id="cmdUpdateAccountButton" onclick="cmdAccountUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
                         <button type="button" id="cmdAccountDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -304,11 +304,11 @@
                         <form id="AccountTypeDetailForm">
                             <dl class="dl-horizontal">
                                 <dd><input type="hidden" class="form-control" id="accountType_id" /></dd>
-                                <dt>Code:</dt>
+                                <dt>Account Type Code:</dt>
                                 <dd><input type="text" class="form-control requiredAccountType" id="accountType_code" /></dd>
                                 <dt>Account Type:</dt>
                                 <dd><input type="text" class="form-control requiredAccountType" id="accountType_accountType" /></dd>
-                                <dt>Category:</dt>
+                                <dt>Account Category:</dt>
                                 <dd>
                                     <div id="accountType_CategoryId" class="comboBox-wide"></div>
 
@@ -321,8 +321,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddAccountTypeButton" onclick="cmdAccountTypeAddButton_OnClick()"><i class="fa fa-check"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateAccountTypeButton" onclick="cmdAccountTypeUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
+                        <button class="btn btn-primary" id="cmdAddAccountTypeButton" onclick="cmdAccountTypeAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-success" id="cmdUpdateAccountTypeButton" onclick="cmdAccountTypeUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
                         <button type="button" id="cmdAccountTypeDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -366,16 +366,16 @@
                         <form id="AccountCashFlowDetailForm">
                             <dl class="dl-horizontal">
                                 <dd><input type="hidden" class="form-control" id="accountCashFlow_Id" /></dd>
-                                <dt>Code:</dt>
+                                <dt>Account Cash Flow Code:</dt>
                                 <dd><input type="text" class="form-control requiredAccountCashFlow" id="accountCashFlow_Code" /></dd>
-                                <dt>Cash Flow:</dt>
+                                <dt>Account Cash Flow:</dt>
                                 <dd><input type="text" class="form-control requiredAccountCashFlow" id="accountCashFlow_CashFlow" /></dd>
                             </dl>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddAccountCashFlowButton" onclick="cmdAccountCashFlowAddButton_OnClick()"><i class="fa fa-check"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateAccountCashFlowButton" onclick="cmdAccountCashFlowUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
+                        <button class="btn btn-primary" id="cmdAddAccountCashFlowButton" onclick="cmdAccountCashFlowAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-success" id="cmdUpdateAccountCashFlowButton" onclick="cmdAccountCashFlowUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
                         <button type="button" id="cmdAccountCashFlowDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -419,16 +419,16 @@
                         <form id="AccountCategoryDetailForm">
                             <dl class="dl-horizontal">
                                 <dd><input type="hidden" class="form-control" id="accountCategory_Id" /></dd>
-                                <dt>Code:</dt>
+                                <dt>Account Category Code:</dt>
                                 <dd><input type="text" class="form-control requiredAccountCategory" id="accountCategory_Code" /></dd>
-                                <dt>Category:</dt>
+                                <dt>Account Category:</dt>
                                 <dd><input type="text" class="form-control requiredAccountCategory" id="accountCategory_Category" /></dd>
                             </dl>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddAccountCategoryButton" onclick="cmdAccountCategoryAddButton_OnClick()"><i class="fa fa-check"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateAccountCategoryButton" onclick="cmdAccountCategoryUpdateButton_OnClick()"><i class="fa fa-check"></i> Update</button>
+                        <button class="btn btn-primary" id="cmdAddAccountCategoryButton" onclick="cmdAccountCategoryAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-success" id="cmdUpdateAccountCategoryButton" onclick="cmdAccountCategoryUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
                         <button type="button" id="cmdAccountCategoryDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -1020,7 +1020,7 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Code",
+                                "header": "Account Code",
                                 "binding": "AccountCode",
                                 "align": "left",
                                 "allowSorting": true,
@@ -1034,14 +1034,14 @@
                                 "width": "2*"
                             },
                             {
-                                "header": "Type",
+                                "header": "Account Type",
                                 "binding": "AccountType",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
-                                "header": "Cash Flow",
+                                "header": "Account Cash Flow",
                                 "binding": "AccountCashFlow",
                                 "align": "left",
                                 "allowSorting": true,
@@ -1562,7 +1562,7 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Code",
+                                "header": "Account Type Code",
                                 "binding": "AccountTypeCode",
                                 "align": "left",
                                 "allowSorting": true,
@@ -1576,7 +1576,7 @@
                                 "width": "2*"
                             },
                             {
-                                "header": "Category",
+                                "header": "Account Category",
                                 "binding": "AccountCategory",
                                 "align": "left",
                                 "allowSorting": true,
@@ -2029,14 +2029,14 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Code",
+                                "header": "Account Cash Flow Code",
                                 "binding": "AccountCashFlowCode",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*",
                             },
                             {
-                                "header": "Cash FLow",
+                                "header": "Account Cash FLow",
                                 "binding": "AccountCashFlow",
                                 "align": "left",
                                 "allowSorting": true,
@@ -2483,14 +2483,14 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Code",
+                                "header": "Account Category Code",
                                 "binding": "AccountCategoryCode",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*",
                             },
                             {
-                                "header": "Category",
+                                "header": "Account Category",
                                 "binding": "AccountCategory",
                                 "align": "left",
                                 "allowSorting": true,
@@ -2603,7 +2603,7 @@
         });
 
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = 'Chart of Account';
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> ' + ' / Chart of Accounts';
 
             toastr.options = {
                 "closeButton": true,

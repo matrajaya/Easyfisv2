@@ -132,6 +132,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult JournalVoucherDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult Company()
         {
             return View();

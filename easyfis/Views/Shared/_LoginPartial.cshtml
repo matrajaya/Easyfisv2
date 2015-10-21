@@ -6,7 +6,7 @@
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="@Url.Action("Login", "Account")">@ViewData["FirstName"]</a></li>
+            <li><a href="@Url.Action("Login", "Account")">@ViewData["FirstName"]</a></li>
             @*<li class="active">@Html.ActionLink((ViewData["FirstName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["FullName"]) })</li>*@
             @*@Html.ActionLink(User.Identity.GetUserName() + "!", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })</li>*@
             <li class="dropdown">
@@ -16,10 +16,19 @@
                     <hr class="divider" />
                     <li><a href="@Url.Action("Index", "Manage")">Settings</a></li>
                     @*<li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out"></i> Sign out</a></li>*@
-                    <li><a href="#" data-toggle="modal" data-target="#modalLogout">Logout</a></li>
+                    <li><a href="#" data-toggle="modal" onclick="cmdLogoutModal_OnClick()">Logout</a></li>
                 </ul>
             </li>
         </ul>
+    
+        <script type="text/javascript">
+            function cmdLogoutModal_OnClick() {
+                $('#modalLogout').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+            }
+        </script>
     }
 }
 else

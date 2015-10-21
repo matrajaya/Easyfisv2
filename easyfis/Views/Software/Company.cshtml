@@ -274,7 +274,7 @@
         // On Page Load
         // ============
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = 'Company';
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> ' + ' / Company';
 
             toastr.options = {
                 "closeButton": true,

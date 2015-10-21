@@ -161,6 +161,24 @@
             return journalVouchers;
         }
 
+        // ===========================
+        // Journal Voucher Edit Button
+        // ===========================
+        function cmdJournalVoucherEditButton_OnClick() {
+            journalVouchers.editItem(journalVouchers.currentItem);
+            var journalVoucher = journalVouchers.currentEditItem;
+            var id = journalVoucher.Id !== null && typeof (journalVoucher.Id) != 'undefined' ? wijmo.Globalize.format(journalVoucher.Id) : 0;
+            window.location = 'JournalVoucherDetail/?Id=' + id;
+        }
+
+        // =========================================
+        // Journal Voucher Add-JournalVoucher Button
+        // =========================================
+        function cmdAddJournalVoucherButton_OnClick() {
+            var id = 0;
+            window.location = 'JournalVoucherDetail/?Id=' + id;
+        }
+
         // ===================
         // FlexGrid Selection
         // ===================
@@ -205,7 +223,7 @@
         // On Load Page
         // ============
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = 'Journal Voucher';
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> ' + ' / Journal Voucher';
 
             journalVouchers = new wijmo.collections.CollectionView(getJournalVoucher());
             journalVouchers.canFilter = true;
