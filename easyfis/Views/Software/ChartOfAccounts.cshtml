@@ -247,7 +247,7 @@
                                     <input type="hidden" class="requiredAccount" id="account_type_id_data" required />
                                     <input type="hidden" id="account_type_selectedValue" />
                                 </dd>
-                                <dt>Account Cash Flow:</dt>
+                                <dt>Cash Flow:</dt>
                                 <dd>
                                     <div id="account_cash_flow_id" class="comboBox-wide"></div>
 
@@ -258,8 +258,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddAccountButton" onclick="cmdAccountAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateAccountButton" onclick="cmdAccountUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
+                        <button class="btn btn-primary" id="cmdSaveAccountButton" onclick="cmdAccountSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button type="button" id="cmdAccountDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -308,7 +307,7 @@
                                 <dd><input type="text" class="form-control requiredAccountType" id="accountType_code" /></dd>
                                 <dt>Account Type:</dt>
                                 <dd><input type="text" class="form-control requiredAccountType" id="accountType_accountType" /></dd>
-                                <dt>Account Category:</dt>
+                                <dt>Category:</dt>
                                 <dd>
                                     <div id="accountType_CategoryId" class="comboBox-wide"></div>
 
@@ -321,8 +320,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddAccountTypeButton" onclick="cmdAccountTypeAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateAccountTypeButton" onclick="cmdAccountTypeUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
+                        <button class="btn btn-primary" id="cmdSaveAccountTypeButton" onclick="cmdAccountTypeSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button type="button" id="cmdAccountTypeDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -366,16 +364,15 @@
                         <form id="AccountCashFlowDetailForm">
                             <dl class="dl-horizontal">
                                 <dd><input type="hidden" class="form-control" id="accountCashFlow_Id" /></dd>
-                                <dt>Account Cash Flow Code:</dt>
+                                <dt>Cash Flow Code:</dt>
                                 <dd><input type="text" class="form-control requiredAccountCashFlow" id="accountCashFlow_Code" /></dd>
-                                <dt>Account Cash Flow:</dt>
+                                <dt>Cash Flow:</dt>
                                 <dd><input type="text" class="form-control requiredAccountCashFlow" id="accountCashFlow_CashFlow" /></dd>
                             </dl>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddAccountCashFlowButton" onclick="cmdAccountCashFlowAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateAccountCashFlowButton" onclick="cmdAccountCashFlowUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
+                        <button class="btn btn-primary" id="cmdSaveAccountCashFlowButton" onclick="cmdAccountCashFlowSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button type="button" id="cmdAccountCashFlowDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -419,16 +416,15 @@
                         <form id="AccountCategoryDetailForm">
                             <dl class="dl-horizontal">
                                 <dd><input type="hidden" class="form-control" id="accountCategory_Id" /></dd>
-                                <dt>Account Category Code:</dt>
+                                <dt>Category Code:</dt>
                                 <dd><input type="text" class="form-control requiredAccountCategory" id="accountCategory_Code" /></dd>
-                                <dt>Account Category:</dt>
+                                <dt>Category:</dt>
                                 <dd><input type="text" class="form-control requiredAccountCategory" id="accountCategory_Category" /></dd>
                             </dl>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddAccountCategoryButton" onclick="cmdAccountCategoryAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateAccountCategoryButton" onclick="cmdAccountCategoryUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
+                        <button class="btn btn-primary" id="cmdSaveAccountCategoryButton" onclick="cmdAccountCategorySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button type="button" id="cmdAccountCategoryDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -664,10 +660,7 @@
             getAccountTypeForComboBox();
             getAccountCashFlowForComboBox();
 
-            $("#cmdAddAccountButton").show();
-            $("#cmdUpdateAccountButton").hide();
-
-            $("#cmdAddAccountButton").prop("disabled", false);
+            $("#cmdSaveAccountButton").prop("disabled", false);
             $("#cmdAccountDetailCloseButton").prop("disabled", false);
 
             document.getElementById('account_id').value = 0;
@@ -679,90 +672,10 @@
             document.getElementById('account_cash_flow_selectedValue').value = "";
         }
 
-        // ==================
-        // ADD Account Button
-        // ==================
-        function cmdAccountAddButton_OnClick() {
-            var accountObject = new Object();
-
-
-            accountObject.AccountCode = document.getElementById('account_code').value;
-            accountObject.Account = document.getElementById('account_account').value;
-            accountObject.AccountTypeId = document.getElementById('account_type_id_data').value;
-            accountObject.AccountCashFlowId = document.getElementById('account_cash_flow_id_data').value;
-            var data = JSON.stringify(accountObject);
-
-            var isValid = true;
-            $('.requiredAccount').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-            if (isValid == false) {
-                e.preventDefault();
-            }
-            else {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addAccount',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdAddAccountButton").prop("disabled", true);
-                            $("#cmdAccountDetailCloseButton").prop("disabled", true);
-
-                            toastr.success("Successfully Added");
-
-                            $('#accountEdit').modal('hide');
-
-                            accounts = new wijmo.collections.CollectionView(getAccount());
-                            accounts.canFilter = true;
-                            accounts.pageSize = 10;
-
-                            var filterTextAccount = '';
-                            $('#InputFilterAccount').keyup(function () {
-                                filterTextAccount = this.value.toLowerCase();
-                                accounts.refresh();
-                            });
-                            accounts.filter = function (item) {
-                                return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
-                            }
-                            accounts.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsAccount();
-                            });
-                            accounts.currentChanged.addHandler(function (sender, args) {
-                                updateDetailsAccount();
-                            });
-
-                            accountGrid.itemsSource = accounts;
-                            accountGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Add");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                        }
-                    }
-                });
-            }
-        }
-
-        // =====================
-        // UPDATE Account Button
-        // =====================
-        function cmdAccountUpdateButton_OnClick() {
+        // =====-=============
+        // SAVE Account Button
+        // ===================
+        function cmdAccountSaveButton_OnClick() {
             var accountObject = new Object();
             var accountId = document.getElementById('account_id').value;
 
@@ -791,51 +704,99 @@
                 e.preventDefault();
             }
             else {
-                $.ajax({
-                    type: "PUT",
-                    url: '/api/updateAccount/' + accountId,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdUpdateAccountButton").prop("disabled", true);
-                            $("#cmdAccountDetailCloseButton").prop("disabled", true);
+                if (accountId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addAccount',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveAccountButton").prop("disabled", true);
+                                $("#cmdAccountDetailCloseButton").prop("disabled", true);
 
-                            toastr.success("Successfully Updated");
+                                toastr.success("Successfully Saved");
 
-                            $('#accountEdit').modal('hide');
+                                $('#accountEdit').modal('hide');
 
-                            accounts = new wijmo.collections.CollectionView(getAccount());
-                            accounts.canFilter = true;
-                            accounts.pageSize = 10;
+                                accounts = new wijmo.collections.CollectionView(getAccount());
+                                accounts.canFilter = true;
+                                accounts.pageSize = 10;
 
-                            var filterTextAccount = '';
-                            $('#InputFilterAccount').keyup(function () {
-                                filterTextAccount = this.value.toLowerCase();
-                                accounts.refresh();
-                            });
-                            accounts.filter = function (item) {
-                                return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                                var filterTextAccount = '';
+                                $('#InputFilterAccount').keyup(function () {
+                                    filterTextAccount = this.value.toLowerCase();
+                                    accounts.refresh();
+                                });
+                                accounts.filter = function (item) {
+                                    return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                                }
+                                accounts.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccount();
+                                });
+                                accounts.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsAccount();
+                                });
+
+                                accountGrid.itemsSource = accounts;
+                                accountGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Saved");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
                             }
-                            accounts.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsAccount();
-                            });
-                            accounts.currentChanged.addHandler(function (sender, args) {
-                                updateDetailsAccount();
-                            });
-
-                            accountGrid.itemsSource = accounts;
-                            accountGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
                         }
-                    }
-                });
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateAccount/' + accountId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdUpdateAccountButton").prop("disabled", true);
+                                $("#cmdAccountDetailCloseButton").prop("disabled", true);
+
+                                toastr.success("Successfully Updated");
+
+                                $('#accountEdit').modal('hide');
+
+                                accounts = new wijmo.collections.CollectionView(getAccount());
+                                accounts.canFilter = true;
+                                accounts.pageSize = 10;
+
+                                var filterTextAccount = '';
+                                $('#InputFilterAccount').keyup(function () {
+                                    filterTextAccount = this.value.toLowerCase();
+                                    accounts.refresh();
+                                });
+                                accounts.filter = function (item) {
+                                    return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                                }
+                                accounts.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccount();
+                                });
+                                accounts.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsAccount();
+                                });
+
+                                accountGrid.itemsSource = accounts;
+                                accountGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
+                        }
+                    });
+                }
             }
         }
 
@@ -849,13 +810,10 @@
                 backdrop: 'static'
             });
 
-            $("#cmdUpdateAccountButton").show();
-            $("#cmdAddAccountButton").hide();
-
             getAccountTypeForComboBox();
             getAccountCashFlowForComboBox();
 
-            $("#cmdUpdateAccountButton").prop("disabled", false);
+            $("#cmdSaveAccountButton").prop("disabled", false);
             $("#cmdAccountDetailCloseButton").prop("disabled", false);
 
             var account = accounts.currentEditItem;
@@ -1207,10 +1165,7 @@
                 backdrop: 'static'
             });
 
-            $("#cmdAddAccountTypeButton").show();
-            $("#cmdUpdateAccountTypeButton").hide();
-
-            $("#cmdAddAccountTypeButton").prop("disabled", false);
+            $("#cmdSaveAccountTypeButton").prop("disabled", false);
             $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
 
             getAccountCategoryForComboBox();
@@ -1223,117 +1178,10 @@
             document.getElementById('accountType_Category_selectedValue').value = "";
         }
 
-        // =======================
-        // ADD Account Type Button
-        // =======================
-        function cmdAccountTypeAddButton_OnClick() {
-            var accountTypeObject = new Object();
-
-            accountTypeObject.AccountTypeCode = document.getElementById('accountType_code').value;
-            accountTypeObject.AccountType = document.getElementById('accountType_accountType').value;
-            accountTypeObject.AccountCategoryId = document.getElementById('accountType_CategoryId_Data').value;
-            accountTypeObject.SubCategoryDescription = document.getElementById('accountType_SubCategoryDescription').value;
-            var data = JSON.stringify(accountTypeObject);
-
-            var isValid = true;
-            $('.requiredAccountType').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-            if (isValid == false) {
-                e.preventDefault();
-            }
-            else {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addAccountType',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdAddAccountTypeButton").prop("disabled", true);
-                            $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
-
-                            $('#accountTypeEdit').modal('hide');
-
-                            toastr.success("Successfully Added");
-
-                            accountTypes = new wijmo.collections.CollectionView(getAccountType());
-                            accountTypes.canFilter = true;
-                            accountTypes.pageSize = 10;
-
-                            var filterTextAccountType = '';
-                            $('#InputFilterAccountType').keyup(function () {
-                                filterTextAccountType = this.value.toLowerCase();
-                                accountTypes.refresh();
-                            });
-                            accountTypes.filter = function (item) {
-                                return !filterTextAccountType || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1);
-                            }
-                            accountTypes.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsAccountType();
-                            });
-                            accountTypes.currentChanged.addHandler(function (sender, args) {
-                                updateDetailsAccountType();
-                            });
-
-                            accountTypeGrid.itemsSource = accountTypes;
-                            accountTypeGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Add");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                        }
-                    }
-                });
-            }
-        }
-
         // ========================
-        // EDIT Account Type Button
+        // Save Account Type Button
         // ========================
-        function cmdAccountTypeEditButton_OnClick() {
-            accountTypes.editItem(accountTypes.currentItem);
-            $('#accountTypeEdit').modal({
-                show: true,
-                backdrop: 'static'
-            });
-
-            $("#cmdUpdateAccountTypeButton").show();
-            $("#cmdAddAccountTypeButton").hide();
-
-            $("#cmdUpdateAccountTypeButton").prop("disabled", false);
-            $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
-
-            getAccountCategoryForComboBox();
-
-            var accountType = accountTypes.currentEditItem;
-            document.getElementById('accountType_id').value = accountType.Id !== null && typeof (accountType.Id) != 'undefined' ? wijmo.Globalize.format(accountType.Id) : '';
-            document.getElementById('accountType_code').value = accountType.AccountTypeCode ? accountType.AccountTypeCode : '';
-            document.getElementById('accountType_accountType').value = accountType.AccountType ? accountType.AccountType : '';
-            document.getElementById('accountType_CategoryId_Data').value = accountType.AccountCategoryId ? accountType.AccountCategoryId : '';
-            document.getElementById('accountType_SubCategoryDescription').value = accountType.SubCategoryDescription ? accountType.SubCategoryDescription : '';
-            document.getElementById('accountType_Category_selectedValue').value = accountType.AccountCategory ? accountType.AccountCategory : '';
-        }
-
-
-        // ==========================
-        // UPDATE Account Type Button
-        // ==========================
-        function cmdAccountTypeUpdateButton_OnClick() {
+        function cmdAccountTypeSaveButton_OnClick() {
             var accountTypeObject = new Object();
             var accountTypeId = document.getElementById('accountType_id').value;
 
@@ -1362,54 +1210,125 @@
                 e.preventDefault();
             }
             else {
-                $.ajax({
-                    type: "PUT",
-                    url: '/api/updateAccountType/' + accountTypeId,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdUpdateAccountTypeButton").prop("disabled", true);
-                            $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+                if (accountTypeId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addAccountType',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveAccountTypeButton").prop("disabled", true);
+                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
 
-                            $('#accountTypeEdit').modal('hide');
+                                $('#accountTypeEdit').modal('hide');
 
-                            toastr.success("Successfully Updated");
+                                toastr.success("Successfully Saved");
 
-                            accountTypes = new wijmo.collections.CollectionView(getAccountType());
-                            accountTypes.canFilter = true;
-                            accountTypes.pageSize = 10;
+                                accountTypes = new wijmo.collections.CollectionView(getAccountType());
+                                accountTypes.canFilter = true;
+                                accountTypes.pageSize = 10;
 
-                            var filterTextAccountType = '';
-                            $('#InputFilterAccountType').keyup(function () {
-                                filterTextAccountType = this.value.toLowerCase();
-                                accountTypes.refresh();
-                            });
-                            accountTypes.filter = function (item) {
-                                return !filterTextAccountType || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1);
+                                var filterTextAccountType = '';
+                                $('#InputFilterAccountType').keyup(function () {
+                                    filterTextAccountType = this.value.toLowerCase();
+                                    accountTypes.refresh();
+                                });
+                                accountTypes.filter = function (item) {
+                                    return !filterTextAccountType || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1);
+                                }
+                                accountTypes.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccountType();
+                                });
+                                accountTypes.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsAccountType();
+                                });
+
+                                accountTypeGrid.itemsSource = accountTypes;
+                                accountTypeGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
                             }
-                            accountTypes.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsAccountType();
-                            });
-                            accountTypes.currentChanged.addHandler(function (sender, args) {
-                                updateDetailsAccountType();
-                            });
-
-                            accountTypeGrid.itemsSource = accountTypes;
-                            accountTypeGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
                         }
-                    }
-                });
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateAccountType/' + accountTypeId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveAccountTypeButton").prop("disabled", true);
+                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+
+                                $('#accountTypeEdit').modal('hide');
+
+                                toastr.success("Successfully Updated");
+
+                                accountTypes = new wijmo.collections.CollectionView(getAccountType());
+                                accountTypes.canFilter = true;
+                                accountTypes.pageSize = 10;
+
+                                var filterTextAccountType = '';
+                                $('#InputFilterAccountType').keyup(function () {
+                                    filterTextAccountType = this.value.toLowerCase();
+                                    accountTypes.refresh();
+                                });
+                                accountTypes.filter = function (item) {
+                                    return !filterTextAccountType || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1);
+                                }
+                                accountTypes.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccountType();
+                                });
+                                accountTypes.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsAccountType();
+                                });
+
+                                accountTypeGrid.itemsSource = accountTypes;
+                                accountTypeGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
+                        }
+                    });
+                }
             }
         }
 
+        // ========================
+        // EDIT Account Type Button
+        // ========================
+        function cmdAccountTypeEditButton_OnClick() {
+            accountTypes.editItem(accountTypes.currentItem);
+            $('#accountTypeEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#cmdSaveAccountTypeButton").prop("disabled", false);
+            $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
+
+            getAccountCategoryForComboBox();
+
+            var accountType = accountTypes.currentEditItem;
+            document.getElementById('accountType_id').value = accountType.Id !== null && typeof (accountType.Id) != 'undefined' ? wijmo.Globalize.format(accountType.Id) : '';
+            document.getElementById('accountType_code').value = accountType.AccountTypeCode ? accountType.AccountTypeCode : '';
+            document.getElementById('accountType_accountType').value = accountType.AccountType ? accountType.AccountType : '';
+            document.getElementById('accountType_CategoryId_Data').value = accountType.AccountCategoryId ? accountType.AccountCategoryId : '';
+            document.getElementById('accountType_SubCategoryDescription').value = accountType.SubCategoryDescription ? accountType.SubCategoryDescription : '';
+            document.getElementById('accountType_Category_selectedValue').value = accountType.AccountCategory ? accountType.AccountCategory : '';
+        }
 
         // ===========================
         // DELETE Account Type Buttons
@@ -1692,10 +1611,7 @@
                 backdrop: 'static'
             });
 
-            $("#cmdAddAccountCashFlowButton").show();
-            $("#cmdUpdateAccountCashFlowButton").hide();
-
-            $("#cmdAddAccountCashFlowButton").prop("disabled", false);
+            $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
             $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
 
             document.getElementById('accountCashFlow_Id').value = 0;
@@ -1706,84 +1622,7 @@
         // ============================
         // ADD Account Cash Flow Button
         // ============================
-        function cmdAccountCashFlowAddButton_OnClick() {
-            var accountCashFlowObject = new Object();
-
-            accountCashFlowObject.AccountCashFlowCode = document.getElementById('accountCashFlow_Code').value;
-            accountCashFlowObject.AccountCashFlow = document.getElementById('accountCashFlow_CashFlow').value;
-            var data = JSON.stringify(accountCashFlowObject);
-
-            var isValid = true;
-            $('.requiredAccountCashFlow').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-            if (isValid == false) {
-                e.preventDefault();
-            }
-            else {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addAccountCashFlow',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdAddAccountCashFlowButton").prop("disabled", true);
-                            $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
-
-                            toastr.success("Successfully Added");
-
-                            $('#accountCashFlowEdit').modal('hide');
-
-                            accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
-                            accountCashFlows.canFilter = true;
-                            accountCashFlows.pageSize = 10;
-
-                            var filterTextAccountCashFlow = '';
-                            $('#InputFilterAccountCashFlow').keyup(function () {
-                                filterTextAccountCashFlow = this.value.toLowerCase();
-                                accountCashFlows.refresh();
-                            });
-                            accountCashFlows.filter = function (item) {
-                                return !filterTextAccountCashFlow || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
-                            }
-                            accountCashFlows.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsAccountCashFlow();
-                            });
-                            accountCashFlows.currentChanged.addHandler(function (sender, args) {
-                                updateDetailsAccountCashFlow();
-                            });
-
-                            accountCashFlowGrid.itemsSource = accountCashFlows;
-                            accountCashFlowGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Add");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                        }
-                    }
-                });
-            }
-        }
-
-        // ===============================
-        // UPDATE Account Cash Flow Button
-        // ===============================
-        function cmdAccountCashFlowUpdateButton_OnClick() {
+        function cmdAccountCashFlowSaveButton_OnClick() {
             var accountCashFlowObject = new Object();
             var accountCashFlowId = document.getElementById('accountCashFlow_Id').value;
 
@@ -1810,51 +1649,99 @@
                 e.preventDefault();
             }
             else {
-                $.ajax({
-                    type: "PUT",
-                    url: '/api/updateAccountCashFlow/' + accountCashFlowId,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdUpdateAccountCashFlowButton").prop("disabled", true);
-                            $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+                if (accountCashFlowId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addAccountCashFlow',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
+                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
 
-                            toastr.success("Successfully Updated");
+                                toastr.success("Successfully Saved");
 
-                            $('#accountCashFlowEdit').modal('hide');
+                                $('#accountCashFlowEdit').modal('hide');
 
-                            accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
-                            accountCashFlows.canFilter = true;
-                            accountCashFlows.pageSize = 10;
+                                accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
+                                accountCashFlows.canFilter = true;
+                                accountCashFlows.pageSize = 10;
 
-                            var filterTextAccountCashFlow = '';
-                            $('#InputFilterAccountCashFlow').keyup(function () {
-                                filterTextAccountCashFlow = this.value.toLowerCase();
-                                accountCashFlows.refresh();
-                            });
-                            accountCashFlows.filter = function (item) {
-                                return !filterTextAccountCashFlow || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+                                var filterTextAccountCashFlow = '';
+                                $('#InputFilterAccountCashFlow').keyup(function () {
+                                    filterTextAccountCashFlow = this.value.toLowerCase();
+                                    accountCashFlows.refresh();
+                                });
+                                accountCashFlows.filter = function (item) {
+                                    return !filterTextAccountCashFlow || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+                                }
+                                accountCashFlows.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccountCashFlow();
+                                });
+                                accountCashFlows.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsAccountCashFlow();
+                                });
+
+                                accountCashFlowGrid.itemsSource = accountCashFlows;
+                                accountCashFlowGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Saved");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
                             }
-                            accountCashFlows.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsAccountCashFlow();
-                            });
-                            accountCashFlows.currentChanged.addHandler(function (sender, args) {
-                                updateDetailsAccountCashFlow();
-                            });
-
-                            accountCashFlowGrid.itemsSource = accountCashFlows;
-                            accountCashFlowGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
                         }
-                    }
-                });
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateAccountCashFlow/' + accountCashFlowId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
+                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+
+                                toastr.success("Successfully Updated");
+
+                                $('#accountCashFlowEdit').modal('hide');
+
+                                accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
+                                accountCashFlows.canFilter = true;
+                                accountCashFlows.pageSize = 10;
+
+                                var filterTextAccountCashFlow = '';
+                                $('#InputFilterAccountCashFlow').keyup(function () {
+                                    filterTextAccountCashFlow = this.value.toLowerCase();
+                                    accountCashFlows.refresh();
+                                });
+                                accountCashFlows.filter = function (item) {
+                                    return !filterTextAccountCashFlow || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+                                }
+                                accountCashFlows.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccountCashFlow();
+                                });
+                                accountCashFlows.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsAccountCashFlow();
+                                });
+
+                                accountCashFlowGrid.itemsSource = accountCashFlows;
+                                accountCashFlowGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
+                        }
+                    });
+                }
             }
         }
 
@@ -1868,10 +1755,7 @@
                 backdrop: 'static'
             });
 
-            $("#cmdUpdateAccountCashFlowButton").show();
-            $("#cmdAddAccountCashFlowButton").hide();
-
-            $("#cmdUpdateAccountCashFlowButton").prop("disabled", false);
+            $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
             $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
 
             var accountCashFlow = accountCashFlows.currentEditItem;
@@ -2146,10 +2030,7 @@
                 backdrop: 'static'
             });
 
-            $("#cmdAddAccountCategoryButton").show();
-            $("#cmdUpdateAccountCategoryButton").hide();
-
-            $("#cmdAddAccountCategoryButton").prop("disabled", false);
+            $("#cmdSaveAccountCategoryButton").prop("disabled", false);
             $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
 
             document.getElementById('accountCategory_Id').value = 0;
@@ -2160,84 +2041,7 @@
         // ===========================
         // ADD Account Category Button
         // ===========================
-        function cmdAccountCategoryAddButton_OnClick() {
-            var accountCategoryObject = new Object();
-
-            accountCategoryObject.AccountCategoryCode = document.getElementById('accountCategory_Code').value;
-            accountCategoryObject.AccountCategory = document.getElementById('accountCategory_Category').value;
-            var data = JSON.stringify(accountCategoryObject);
-
-            var isValid = true;
-            $('.requiredAccountCategory').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-            if (isValid == false) {
-                e.preventDefault();
-            }
-            else {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addAccountCategory',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdAddAccountCategoryButton").prop("disabled", true);
-                            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
-
-                            toastr.success("Successfully Added");
-
-                            $('#accountCategoryEdit').modal('hide');
-
-                            accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
-                            accountCategories.canFilter = true;
-                            accountCategories.pageSize = 10;
-
-                            var filterTextAccountCategory = '';
-                            $('#InputFilterAccountCategory').keyup(function () {
-                                filterTextAccountCategory = this.value.toLowerCase();
-                                accountCategories.refresh();
-                            });
-                            accountCategories.filter = function (item) {
-                                return !filterTextAccountCategory || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
-                            }
-                            accountCategories.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsAccountCategory();
-                            });
-                            accountCategories.currentChanged.addHandler(function (sender, args) {
-                                updateDetailsAccountCategory();
-                            });
-
-                            accountCategoryGrid.itemsSource = accountCategories;
-                            accountCategoryGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Add");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                        }
-                    }
-                });
-            }
-        }
-
-        // ==============================
-        // UPDATE Account Category Button
-        // ==============================
-        function cmdAccountCategoryUpdateButton_OnClick() {
+        function cmdAccountCategorySaveButton_OnClick() {
             var accountCategoryObject = new Object();
             var accountCategoryId = document.getElementById('accountCategory_Id').value;
 
@@ -2264,51 +2068,100 @@
                 e.preventDefault();
             }
             else {
-                $.ajax({
-                    type: "PUT",
-                    url: '/api/updateAccountCategory/' + accountCategoryId,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdUpdateAccountCategoryButton").prop("disabled", true);
-                            $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+                if (accountCategoryId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addAccountCategory',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveAccountCategoryButton").prop("disabled", true);
+                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
 
-                            toastr.success("Successfully Updated");
+                                toastr.success("Successfully Saved");
 
-                            $('#accountCategoryEdit').modal('hide');
+                                $('#accountCategoryEdit').modal('hide');
 
-                            accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
-                            accountCategories.canFilter = true;
-                            accountCategories.pageSize = 10;
+                                accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
+                                accountCategories.canFilter = true;
+                                accountCategories.pageSize = 10;
 
-                            var filterTextAccountCategory = '';
-                            $('#InputFilterAccountCategory').keyup(function () {
-                                filterTextAccountCategory = this.value.toLowerCase();
-                                accountCategories.refresh();
-                            });
-                            accountCategories.filter = function (item) {
-                                return !filterTextAccountCategory || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
+                                var filterTextAccountCategory = '';
+                                $('#InputFilterAccountCategory').keyup(function () {
+                                    filterTextAccountCategory = this.value.toLowerCase();
+                                    accountCategories.refresh();
+                                });
+                                accountCategories.filter = function (item) {
+                                    return !filterTextAccountCategory || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
+                                }
+                                accountCategories.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccountCategory();
+                                });
+                                accountCategories.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsAccountCategory();
+                                });
+
+                                accountCategoryGrid.itemsSource = accountCategories;
+                                accountCategoryGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
                             }
-                            accountCategories.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsAccountCategory();
-                            });
-                            accountCategories.currentChanged.addHandler(function (sender, args) {
-                                updateDetailsAccountCategory();
-                            });
-
-                            accountCategoryGrid.itemsSource = accountCategories;
-                            accountCategoryGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
                         }
-                    }
-                });
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateAccountCategory/' + accountCategoryId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveAccountCategoryButton").prop("disabled", true);
+                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+
+                                toastr.success("Successfully Updated");
+
+                                $('#accountCategoryEdit').modal('hide');
+
+                                accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
+                                accountCategories.canFilter = true;
+                                accountCategories.pageSize = 10;
+
+                                var filterTextAccountCategory = '';
+                                $('#InputFilterAccountCategory').keyup(function () {
+                                    filterTextAccountCategory = this.value.toLowerCase();
+                                    accountCategories.refresh();
+                                });
+                                accountCategories.filter = function (item) {
+                                    return !filterTextAccountCategory || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
+                                }
+                                accountCategories.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccountCategory();
+                                });
+                                accountCategories.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsAccountCategory();
+                                });
+
+                                accountCategoryGrid.itemsSource = accountCategories;
+                                accountCategoryGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
+                        }
+                    });
+                }
+                
             }
         }
 
@@ -2322,10 +2175,7 @@
                 backdrop: 'static'
             });
 
-            $("#cmdUpdateAccountCategoryButton").show();
-            $("#cmdAddAccountCategoryButton").hide();
-
-            $("#cmdUpdateAccountCategoryButton").prop("disabled", false);
+            $("#cmdSaveAccountCategoryButton").prop("disabled", false);
             $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
 
             var accountCategory = accountCategories.currentEditItem;
@@ -2539,23 +2389,6 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
-        //// refresh button
-        //$('#refresh').click(function () {
-        //    $('#Account').hide();
-        //    $('#AccountType').hide();
-        //    $('#AccountCashFlow').hide();
-        //    $('#AccountCategory').hide();
-        //    location.reload();
-        //});
-
-        //// refresh remove tab
-        //$(document).on('click', '#refresh', function () {
-        //    var $link = $('li.active a[data-toggle="tab"]');
-        //    $link.parent().removeClass('active');
-        //    var tabLink = $link.attr('href');
-        //    $('#mainTabs a[href="' + tabLink + '"]').tab('show');
-        //});
-
         // ====
         // TABS
         // ====
@@ -2629,14 +2462,6 @@
             $('#AccountCategory').hide();
 
             accountTab();
-
-            //$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-            //    localStorage.setItem('activeTab', $(e.target).attr('href'));
-            //});
-            //var activeTab = localStorage.getItem('activeTab');
-            //if (activeTab) {
-            //    $('#myTab a[href="' + activeTab + '"]').tab('show');
-            //}
         });
     </script>
 </body>

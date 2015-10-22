@@ -37,8 +37,7 @@
                         <h4 id="companyDetailLabel">New Company</h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary" id="cmdAddCompany" onclick="cmdCompanyAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateCompany" onclick="cmdCompanyUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
+                        <button class="btn btn-primary" id="cmdSaveCompany" onclick="cmdCompanySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <a href="@Url.Action("Company","Software")" class="btn btn-danger"><i class="fa fa-times"></i> Close</a>
                     </div>
                 </div>
@@ -151,8 +150,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdAddBranchButton" onclick="cmdBranchAddButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-success" id="cmdUpdateBranchButton" onclick="cmdBranchUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
+                        <button class="btn btn-primary" id="cmdSaveBranchButton" onclick="cmdBranchSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button type="button" id="cmdBranchDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
@@ -252,7 +250,7 @@
                             var companyId = Results[i]["Id"];
                             var company = Results[i]["Company"];
                         }
-                        if(company == document.getElementById('company_Company').value) {
+                        if (company == document.getElementById('company_Company').value) {
                             window.location.href = '/Software/CompanyDetail/?Id=' + companyId;
                             window.setTimeout(function () { location.reload() }, 1000);
                         }
@@ -270,108 +268,56 @@
         function getCompanyById() {
             var companies = new wijmo.collections.ObservableArray;
             var Id = @id
-            $.ajax({
-                url: '/api/companyById/' + Id,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        companies.push({
-                            Id: Results.Id,
-                            Company: Results.Company,
-                            Address: Results.Address,
-                            ContactNumber: Results.ContactNumber,
-                            TaxNumber: Results.TaxNumber,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
-                        });
-                    }
-                    document.getElementById('companyDetailLabel').innerHTML = Results.Company + " Company Detail";
-                    document.getElementById('companyNameLabel').innerHTML = Results.Company + " Branch List";
-                    document.getElementById('companyNameModalLabel').innerHTML = Results.Company + " Branch Detail";
-                    document.getElementById('branch_company').value = Results.Company;
-                    document.getElementById('company_Company').value = Results.Company;
-                    document.getElementById('company_Address').value = Results.Address;
-                    document.getElementById('company_ContactNumber').value = Results.ContactNumber;
-                    document.getElementById('company_TaxNumber').value = Results.TaxNumber;
+                $.ajax({
+                    url: '/api/companyById/' + Id,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            companies.push({
+                                Id: Results.Id,
+                                Company: Results.Company,
+                                Address: Results.Address,
+                                ContactNumber: Results.ContactNumber,
+                                TaxNumber: Results.TaxNumber,
+                                IsLocked: Results.IsLocked,
+                                CreatedById: Results.CreatedById,
+                                CreatedBy: Results.CreatedBy,
+                                CreatedDateTime: Results.CreatedDateTime,
+                                UpdatedById: Results.UpdatedById,
+                                UpdatedBy: Results.UpdatedBy,
+                                UpdatedDateTime: Results.UpdatedDateTime
+                            });
+                        }
+                        document.getElementById('companyDetailLabel').innerHTML = Results.Company + " Company Detail";
+                        document.getElementById('companyNameLabel').innerHTML = Results.Company + " Branch List";
+                        document.getElementById('companyNameModalLabel').innerHTML = Results.Company + " Branch Detail";
+                        document.getElementById('branch_company').value = Results.Company;
+                        document.getElementById('company_Company').value = Results.Company;
+                        document.getElementById('company_Address').value = Results.Address;
+                        document.getElementById('company_ContactNumber').value = Results.ContactNumber;
+                        document.getElementById('company_TaxNumber').value = Results.TaxNumber;
 
-                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
+                        document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                        document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                        document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                        document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+                    }
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
             return companies;
         }
 
         // ==================
-        // Company Add Button
+        // Company Save Button
         // ==================
-        function cmdCompanyAddButton_OnClick() {
-            var companyObject = new Object();
-
-            companyObject.Company = document.getElementById('company_Company').value;
-            companyObject.Address = document.getElementById('company_Address').value;
-            companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
-            companyObject.TaxNumber = document.getElementById('company_TaxNumber').value;
-            var data = JSON.stringify(companyObject);
-
-            var isValid = true;
-            $('.requiredCompany').each(function() {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "1px solid blue",
-                    });
-                }
-            });
-            if (isValid == false) {
-                e.preventDefault();
-            }
-            else {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addCompany',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdAddCompany").prop("disabled", true);
-                            getCompanyLastInsertedId();
-                        },
-                        404: function () {
-                            toastr.error("Can't Add");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                        }
-                    }
-                });
-            }
-        }
-
-        // =====================
-        // Company Update Button
-        // =====================
-        function cmdCompanyUpdateButton_OnClick() {
+        function cmdCompanySaveButton_OnClick() {
             var companyObject = new Object();
             var id = @id
+
             companyObject.Company = document.getElementById('company_Company').value;
             companyObject.Address = document.getElementById('company_Address').value;
             companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
@@ -379,7 +325,7 @@
             var data = JSON.stringify(companyObject);
 
             var isValid = true;
-            $('.requiredCompany').each(function() {
+            $('.requiredCompany').each(function () {
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
@@ -389,7 +335,7 @@
                 }
                 else {
                     $(this).css({
-                        "border": "1px solid blue",
+                        "border": "",
                     });
                 }
             });
@@ -397,28 +343,52 @@
                 e.preventDefault();
             }
             else {
-                $.ajax({
-                    type: "PUT",
-                    url: '/api/updateCompany/' + id,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdUpdateCompany").prop("disabled",true);
-                            toastr.success("Successfully Updated");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
+                if (id == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addCompany',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveCompany").prop("disabled", true);
+                                getCompanyLastInsertedId();
+                            },
+                            404: function () {
+                                toastr.error("Can't Add");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateCompany/' + id,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveCompany").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
+                        }
+                    });
+                }
+
+
             }
         }
 
@@ -524,8 +494,8 @@
                 show: true,
                 backdrop: 'static'
             });
-            $("#cmdUpdateBranchButton").hide();
-            $("#cmdAddBranchButton").show();
+
+            document.getElementById('branch_Id').value = 0;
             document.getElementById('branch_branch').value = "";
             document.getElementById('branch_Code').value = "";
             document.getElementById('branch_Address').value = "";
@@ -533,11 +503,12 @@
             document.getElementById('branch_TaxNumber').value = "";
         }
 
-        // =================
-        // Branch Add Button
-        // =================
-        function cmdBranchAddButton_OnClick() {
+        // ==================
+        // Branch Save Button
+        // ==================
+        function cmdBranchSaveButton_OnClick() {
             var branchObject = new Object();
+            var id = document.getElementById('branch_Id').value;
 
             branchObject.CompanyId = @id
             branchObject.Branch = document.getElementById('branch_branch').value;
@@ -548,7 +519,7 @@
             var data = JSON.stringify(branchObject);
 
             var isValid = true;
-            $('.requiredBranch').each(function() {
+            $('.requiredBranch').each(function () {
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
@@ -558,7 +529,7 @@
                 }
                 else {
                     $(this).css({
-                        "border": "1px solid blue",
+                        "border": "",
                     });
                 }
             });
@@ -566,104 +537,68 @@
                 e.preventDefault();
             }
             else {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addBranch',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdAddBranchButton").prop("disabled",true);
-                            $("#cmdBranchDetailCloseButton").prop("disabled",true);
-                            toastr.success("Successfully Added");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
-                        },
-                        404: function () {
-                            toastr.error("Can't Add");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
+                if (id == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addBranch',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveBranchButton").prop("disabled", true);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Add");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateBranch/' + id,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveBranchButton").prop("disabled", true);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
+                        }
+                    });
+                }
             }
         }
 
-        // ===================
-        // Branch Update Button
-        // ===================
-        function cmdBranchUpdateButton_OnClick() {
-            var branchObject = new Object();
-            var branchId = document.getElementById('branch_Id').value;
-            branchObject.CompanyId = document.getElementById('branch_companyId').value;
-            branchObject.Branch = document.getElementById('branch_branch').value;
-            branchObject.BranchCode = document.getElementById('branch_Code').value;
-            branchObject.Address = document.getElementById('branch_Address').value;
-            branchObject.ContactNumber = document.getElementById('branch_ContactNumber').value;
-            branchObject.TaxNumber = document.getElementById('branch_TaxNumber').value;
-            var data = JSON.stringify(branchObject);
-
-            var isValid = true;
-            $('.requiredBranch').each(function() {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "1px solid blue",
-                    });
-                }
-            });
-            if (isValid == false) {
-                e.preventDefault();
-                console.log("invalid Entry");
-                toastr.error("Invalid entry");
-            }
-            else {
-                $.ajax({
-                    type: "PUT",
-                    url: '/api/updateBranch/' + branchId,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdUpdateBranchButton").prop("disabled",true);
-                            $("#cmdBranchDetailCloseButton").prop("disabled",true);
-                            toastr.success("Successfully Updated");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                        }
-                    }
-                });
-            }
-        }
-
-        // =================
+        // ==================
         // Branch Edit Button
-        // =================
+        // ==================
         function cmdBranchEditButton_OnClick() {
             branches.editItem(branches.currentItem);
             $('#branchEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
-            $("#cmdUpdateBranchButton").show();
-            $("#cmdAddBranchButton").hide();
+
             var branch = branches.currentEditItem;
             document.getElementById('branch_Id').value = branch.Id !== null && typeof (branch.Id) != 'undefined' ? wijmo.Globalize.format(branch.Id) : '';
             document.getElementById('branch_company').value = branch.Company ? branch.Company : '';
@@ -675,7 +610,7 @@
             document.getElementById('branch_TaxNumber').value = branch.TaxNumber ? branch.TaxNumber : '';
 
             var isValid = true;
-            $('.requiredBranch').each(function() {
+            $('.requiredBranch').each(function () {
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
@@ -711,8 +646,8 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteBranch").prop("disabled",true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled",true);
+                        $("#cmdConfirmDeleteBranch").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
                         window.setTimeout(function () {
                             location.reload()
@@ -729,17 +664,6 @@
                 }
             });
         }
-
-        //// ===================
-        //// FlexGrid Selection
-        //// ===================
-        //function updateDetails() {
-        //    var item = branches.currentItem;
-        //    document.getElementById('createdBy').innerHTML = item.CreatedBy;
-        //    document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
-        //    document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
-        //    document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
-        //}
 
         // =============================
         // Navigation Buttons for Branch
@@ -775,13 +699,10 @@
         $(document).ready(function () {
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> / ' + ' <a href="@Url.Action("Company", "Software")" class="currentPageLinkCustom">Company</a> ' + ' / Company Detail';
 
-            var Id = @id;
-            if(Id == 0) {
-                $("#cmdUpdateCompany").hide();
-                $("#cmdBranchAddBranchButton").hide();
-                $("#cmdAddAnotherCompany").hide();
+            if(@id == 0) {
+                $("#cmdBranchAddBranchButton").prop("disabled", true);
             } else {
-                $("#cmdAddCompany").hide();
+                $("#cmdBranchAddBranchButton").prop("disabled", false);
             }
 
             toastr.options = {

@@ -109,5 +109,35 @@ namespace easyfis.Controllers
                                   };
             return journalVouchers.ToList();
         }
+
+        // ==============
+        // DELETE Company
+        // ==============
+        [Route("api/deleteJournalVoucher/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var journalVoucherId = Convert.ToInt32(id);
+                var journalVouchers = from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d;
+
+                if (journalVouchers.Any())
+                {
+                    db.TrnJournalVouchers.DeleteOnSubmit(journalVouchers.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
     }
 }
