@@ -48,7 +48,7 @@ namespace easyfis.Controllers
         // LIST Journal Voucher by Id
         // ==========================
         [Route("api/journalVoucherById/{Id}")]
-        public List<Models.TrnJournalVoucher> GetJournalVoucherById(String Id)
+        public Models.TrnJournalVoucher GetJournalVoucherById(String Id)
         {
             var journalVoucherId = Convert.ToInt32(Id);
             var journalVouchers = from d in db.TrnJournalVouchers where d.Id == journalVoucherId select new Models.TrnJournalVoucher
@@ -74,7 +74,7 @@ namespace easyfis.Controllers
                                       UpdatedBy = d.MstUser4.UserName,
                                       UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                   };
-            return journalVouchers.ToList();
+            return (Models.TrnJournalVoucher)journalVouchers.FirstOrDefault();
         }
 
         // =================================

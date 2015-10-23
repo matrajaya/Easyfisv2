@@ -34,14 +34,14 @@
                 <div class="row">
                     <hr />
                     <div class="col-md-6">
-                        <h4 id="companyDetailLabel">New Journal Voucher</h4>
+                        <h4 id="journalVoucherDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary" id="cmdAddJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary" id="" onclick=""><i class="fa fa-edit"></i> Edit</button>
                         <button class="btn btn-primary" id="" onclick=""><i class="fa fa-search"></i> Preview</button>
                         <button class="btn btn-primary" id="" onclick=""><i class="fa fa-print"></i> Print</button>
-                        <a href="@Url.Action("JournalVoucher", "Software")" class="btn btn-danger"><i class="fa fa-times"></i> Close</a>
+                        <button class="btn btn-danger" onclick="cmdJournalVoucherCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -187,10 +187,84 @@
         var btnLastPageGridJournalVoucher;
         var btnCurrentPageGridJournalVoucher;
 
+        // =========================
+        // GET Journal Voucher by Id
+        // =========================
+        function getJournalVoucherById() {
+            var journalVouchers = new wijmo.collections.ObservableArray;
+            var journalVoucherId = @id
+            $.ajax({
+                url: '/api/journalVoucherById/' + journalVoucherId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        journalVouchers.push({
+                            Id: Results.Id,
+                            BranchId: Results.BranchId,
+                            Branch: Results.Branch,
+                            JVNumber: Results.JVNumber,
+                            ManualJVNumber: Results.ManualJVNumber,
+                            JVDate: Results.JVDate,
+                            Particulars: Results.Particulars,
+                            PreparedById: Results.PreparedById,
+                            PreparedBy: Results.PreparedBy,
+                            CheckedById: Results.CheckedById,
+                            CheckedBy: Results.CheckedBy,
+                            ApprovedById: Results.ApprovedById,
+                            ApprovedBy: Results.ApprovedBy,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+                    document.getElementById('branch_selectedValue').value = Results.Branch;
+                    document.getElementById('journalVoucher_No').value = Results.JVNumber;
+                    document.getElementById('manual_JournalVoucher_No').value = Results.ManualJVNumber;
+                    document.getElementById('journalVoucher_date_Data').value = Results.JVDate;
+                    document.getElementById('journalVoucher_Particulars').value = Results.Particulars;
+
+                    document.getElementById('preparedByUserId_selectedValue').value = Results.PreparedBy;
+                    document.getElementById('checkedByUserId_selectedValue').value = Results.CheckedBy;
+                    document.getElementById('approvedByUserId_selectedValue').value = Results.ApprovedBy;
+
+                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                    var splitDate = Results.JVDate.split("-");
+
+                    journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date',
+                        {
+                            format: 'MM/dd/yyyy',
+                            value: new Date(splitDate[0], splitDate[1] - 1, splitDate[2]),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('journalVoucher_date_Data').value = this.value.toString("yyyy-MM-dd");
+                                console.log(this.value);
+                            }
+                        });
+
+                    getBranchesForComboBox();
+                    getUsersForComboBox();
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return journalVouchers;
+        }
+
         // ========================
         // GET Branch for Combo Box
         // ========================
-        function getBranchesoForComboBox() {
+        function getBranchesForComboBox() {
             branches = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listBranch',
@@ -341,53 +415,11 @@
             });
         }
 
-        // =================
-        // GET Company by Id
-        // =================
-        function getCompanyById() {
-            var companies = new wijmo.collections.ObservableArray;
-            var Id = @id
-            $.ajax({
-                url: '/api/companyById/' + Id,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        companies.push({
-                            Id: Results.Id,
-                            Company: Results.Company,
-                            Address: Results.Address,
-                            ContactNumber: Results.ContactNumber,
-                            TaxNumber: Results.TaxNumber,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
-                        });
-                    }
-                    document.getElementById('companyDetailLabel').innerHTML = Results.Company + " Company Detail";
-                    document.getElementById('companyNameLabel').innerHTML = Results.Company + " Branch List";
-                    document.getElementById('companyNameModalLabel').innerHTML = Results.Company + " Branch Detail";
-                    document.getElementById('branch_company').value = Results.Company;
-                    document.getElementById('company_Company').value = Results.Company;
-                    document.getElementById('company_Address').value = Results.Address;
-                    document.getElementById('company_ContactNumber').value = Results.ContactNumber;
-                    document.getElementById('company_TaxNumber').value = Results.TaxNumber;
-
-                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return companies;
+        // ============================
+        // Journal Voucher Close Button
+        // ============================
+        function cmdJournalVoucherCloseButton_OnClick() {
+            window.location = '/Software/JournalVoucher';
         }
 
         // ============
@@ -396,8 +428,7 @@
         $(document).ready(function () {
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> ' + ' / ' + '<a href="@Url.Action("JournalVoucher", "Software")" class="currentPageLinkCustom">Journal Voucher</a> ' + ' / Journal Voucher Detail';
 
-            getUsersForComboBox();
-            getBranchesoForComboBox();
+            getJournalVoucherById();
 
             cboBranch = new wijmo.input.ComboBox('#branch_Id');
 
@@ -421,6 +452,6 @@
             //});
 
         });
-</script>
+    </script>
 </body>
 </html>

@@ -38,7 +38,7 @@
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary" id="cmdSaveCompany" onclick="cmdCompanySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <a href="@Url.Action("Company","Software")" class="btn btn-danger"><i class="fa fa-times"></i> Close</a>
+                        <button class="btn btn-danger" id="cmdCloseButtonCompany" onclick="cmdCompanyCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -267,9 +267,9 @@
         // =================
         function getCompanyById() {
             var companies = new wijmo.collections.ObservableArray;
-            var Id = @id
+            var companyId = @id
                 $.ajax({
-                    url: '/api/companyById/' + Id,
+                    url: '/api/companyById/' + companyId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
@@ -316,7 +316,7 @@
         // ==================
         function cmdCompanySaveButton_OnClick() {
             var companyObject = new Object();
-            var id = @id
+            var companyId = @id
 
             companyObject.Company = document.getElementById('company_Company').value;
             companyObject.Address = document.getElementById('company_Address').value;
@@ -343,7 +343,7 @@
                 e.preventDefault();
             }
             else {
-                if (id == 0) {
+                if (companyId == 0) {
                     $.ajax({
                         type: "POST",
                         url: '/api/addCompany',
@@ -353,6 +353,7 @@
                         statusCode: {
                             200: function () {
                                 $("#cmdSaveCompany").prop("disabled", true);
+                                $("#cmdCloseButtonCompany").prop("disabled", true);
                                 getCompanyLastInsertedId();
                             },
                             404: function () {
@@ -366,13 +367,14 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateCompany/' + id,
+                        url: '/api/updateCompany/' + companyId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
                         statusCode: {
                             200: function () {
                                 $("#cmdSaveCompany").prop("disabled", true);
+                                $("#cmdCloseButtonCompany").prop("disabled", true);
                                 toastr.success("Successfully Updated");
                                 window.setTimeout(function () {
                                     location.reload()
@@ -508,7 +510,7 @@
         // ==================
         function cmdBranchSaveButton_OnClick() {
             var branchObject = new Object();
-            var id = document.getElementById('branch_Id').value;
+            var branchId = document.getElementById('branch_Id').value;
 
             branchObject.CompanyId = @id
             branchObject.Branch = document.getElementById('branch_branch').value;
@@ -537,7 +539,7 @@
                 e.preventDefault();
             }
             else {
-                if (id == 0) {
+                if (branchId == 0) {
                     $.ajax({
                         type: "POST",
                         url: '/api/addBranch',
@@ -554,7 +556,7 @@
                                 }, 1000);
                             },
                             404: function () {
-                                toastr.error("Can't Add");
+                                toastr.error("Can't Save");
                             },
                             400: function () {
                                 toastr.error("Bad Request");
@@ -564,7 +566,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateBranch/' + id,
+                        url: '/api/updateBranch/' + branchId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -627,6 +629,13 @@
         }
 
         // ====================
+        // Company Close Button
+        // ====================
+        function cmdCompanyCloseButton_OnClick() {
+            window.location = '/Software/Company';
+        }
+
+        // ====================
         // Branch Delete Button
         // ====================
         function cmdBranchDeleteButton_OnClick() {
@@ -638,9 +647,9 @@
         // Branch Confirm Delete
         function cmdBranchConfirmDeleteButton_OnClick() {
             branches.editItem(branches.currentItem);
-            var id = branches.currentEditItem.Id;
+            var branchId = branches.currentEditItem.Id;
             $.ajax({
-                url: '/api/deleteBranch/' + id,
+                url: '/api/deleteBranch/' + branchId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
