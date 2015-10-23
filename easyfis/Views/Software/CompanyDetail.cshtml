@@ -34,7 +34,7 @@
                 <div class="row">
                     <hr />
                     <div class="col-md-6">
-                        <h4 id="companyDetailLabel">New Company</h4>
+                        <h4 id="companyDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary" id="cmdSaveCompany" onclick="cmdCompanySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
@@ -202,7 +202,6 @@
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- Scripts JavaScripts -->
     @Scripts.Render("~/Scripts/Software-js")
-    @Scripts.Render("~/Scripts/Profile-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
         // ================
@@ -269,7 +268,7 @@
             var companies = new wijmo.collections.ObservableArray;
             var companyId = @id
                 $.ajax({
-                    url: '/api/companyById/' + companyId,
+                    url: '/api/company/' + companyId,
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
@@ -291,7 +290,7 @@
                                 UpdatedDateTime: Results.UpdatedDateTime
                             });
                         }
-                        document.getElementById('companyDetailLabel').innerHTML = Results.Company + " Company Detail";
+                        document.getElementById('companyDetailLabel').innerHTML = Results.Company;
                         document.getElementById('companyNameLabel').innerHTML = Results.Company + " Branch List";
                         document.getElementById('companyNameModalLabel').innerHTML = Results.Company + " Branch Detail";
                         document.getElementById('branch_company').value = Results.Company;
@@ -311,9 +310,9 @@
             return companies;
         }
 
-        // ==================
+        // ===================
         // Company Save Button
-        // ==================
+        // ===================
         function cmdCompanySaveButton_OnClick() {
             var companyObject = new Object();
             var companyId = @id
@@ -354,7 +353,8 @@
                             200: function () {
                                 $("#cmdSaveCompany").prop("disabled", true);
                                 $("#cmdCloseButtonCompany").prop("disabled", true);
-                                getCompanyLastInsertedId();
+                                toastr.success("Successfully Saved");
+                                setTimeout(getCompanyLastInsertedId,1000)
                             },
                             404: function () {
                                 toastr.error("Can't Add");

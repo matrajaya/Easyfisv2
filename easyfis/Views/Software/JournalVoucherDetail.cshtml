@@ -10,7 +10,7 @@
     <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
-    <title>Software - Journal Voucher</title>
+    <title>Journal Voucher</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Font-Awesome/css")
@@ -37,11 +37,11 @@
                         <h4 id="journalVoucherDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary" id="cmdAddJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary" id="" onclick=""><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary" id="" onclick=""><i class="fa fa-search"></i> Preview</button>
-                        <button class="btn btn-primary" id="" onclick=""><i class="fa fa-print"></i> Print</button>
-                        <button class="btn btn-danger" onclick="cmdJournalVoucherCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary" id="cmdEditJournalVoucher" onclick=""><i class="fa fa-pencil"></i> Edit</button>
+                        <button class="btn btn-primary" id="cmdPreviewJournalVoucher" onclick=""><i class="fa fa-search"></i> Preview</button>
+                        <button class="btn btn-primary" id="cmdPrintJournalVoucher" onclick=""><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-danger" id="cmdCloseJournalVoucher" onclick="cmdJournalVoucherCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -53,26 +53,26 @@
                                     <label>Branch:</label>
                                     <div id="branch_Id" class="comboBox-wide"></div>
 
-                                    <input type="text" id="branch_Id_data" class="requiredJournalVoucher" required />
-                                    <input type="text" id="branch_selectedValue" />
+                                    <input type="hidden" id="branch_Id_data" class="requiredJournalVoucher" required />
+                                    <input type="hidden" id="branch_selectedValue" />
                                 </div>
                                 <div class="form-group">
                                     <label>Journal Voucher Number:</label>
-                                    <input type="text" class="form-control requiredJournalVoucher" id="journalVoucher_No">
+                                    <input type="text" id="journalVoucher_No" class="form-control requiredJournalVoucher">
+                                </div>
+                                <div class="form-group">
+                                    <label>Manual Journal Voucher Number:</label>
+                                    <input type="text" id="manual_JournalVoucher_No" class="form-control requiredJournalVoucher">
                                 </div>
                                 <div class="form-group">
                                     <label>Journal Voucher Date:</label>
 
                                     <div id="journalVoucher_Date" class="comboBox-wide"></div>
-                                    <input type="text" id="journalVoucher_date_Data" required />
+                                    <input type="hidden" id="journalVoucher_date_Data" class="requiredJournalVoucher" required />
                                 </div>
                                 <div class="form-group">
                                     <label>Particulars:</label>
-                                    <input type="text" id="journalVoucher_Particulars" class="form-control requiredJournalVoucher">
-                                </div>
-                                <div class="form-group">
-                                    <label>Manual Journal Voucher Number:</label>
-                                    <input type="text" id="manual_JournalVoucher_No" class="form-control requiredJournalVoucher">
+                                    <textarea type="text" id="journalVoucher_Particulars" class="form-control textarea-custom-JV requiredJournalVoucher"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -80,22 +80,22 @@
                                     <label>Prepared by:</label>
                                     <div id="preparedByUserId" class="comboBox-wide"></div>
 
-                                    <input type="text" id="preparedByUserId_Data" class="requiredJournalVoucher" required />
-                                    <input type="text" id="preparedByUserId_selectedValue" />
+                                    <input type="hidden" id="preparedByUserId_Data" class="requiredJournalVoucher" required />
+                                    <input type="hidden" id="preparedByUserId_selectedValue" />
                                 </div>
                                 <div class="form-group">
                                     <label>Checked by:</label>
                                     <div id="checkedByUserId" class="comboBox-wide"></div>
 
-                                    <input type="text" id="checkedByUserId_Data" class="requiredJournalVoucher" required />
-                                    <input type="text" id="checkedByUserId_selectedValue" />
+                                    <input type="hidden" id="checkedByUserId_Data" class="requiredJournalVoucher" required />
+                                    <input type="hidden" id="checkedByUserId_selectedValue" />
                                 </div>
                                 <div class="form-group">
                                     <label>Approved by:</label>
                                     <div id="approvedByUserId" class="comboBox-wide"></div>
 
-                                    <input type="text" id="approvedByUserId_Data" class="requiredJournalVoucher" required />
-                                    <input type="text" id="approvedByUserId_selectedValue" />
+                                    <input type="hidden" id="approvedByUserId_Data" class="requiredJournalVoucher" required />
+                                    <input type="hidden" id="approvedByUserId_selectedValue" />
                                 </div>
                             </div>
                         </div>
@@ -118,7 +118,7 @@
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" id="InputFilterJournalVoucher" placeholder="Search Journal Voucher Number">
+                                <input type="text" class="form-control" id="InputFilterJournalVoucherLine" placeholder="Search Journal Voucher Number">
                             </div>
                         </div>
                         <div class="col-lg-8">
@@ -153,6 +153,21 @@
             </div>
         </section>
 
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class=" modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4>Loading ...</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -171,6 +186,9 @@
         var journalVouchers;
         var journalVoucherGrid;
 
+        var journalVoucherLines;
+        var journalVoucherLineGrid;
+
         var branches;
         var cboBranch;
 
@@ -181,11 +199,63 @@
         var cboUserCheckedBy;
         var cboUserApprovedBy;
 
-        var btnFirstPageGridJournalVoucher;
-        var btnPreviousPageGridJournalVoucher;
-        var btnNextPageGridJournalVoucher;
-        var btnLastPageGridJournalVoucher;
-        var btnCurrentPageGridJournalVoucher;
+        var btnFirstPageGridJournalVoucherLine;
+        var btnPreviousPageGridJournalVoucherLine;
+        var btnNextPageGridJournalVoucherLine;
+        var btnLastPageGridJournalVoucherLine;
+        var btnCurrentPageGridJournalVoucherLine;
+
+        // =========================
+        // GET Journal Voucher by Id
+        // =========================
+        function getJournalVoucherLastInsertedId() {
+            var journalVouchers = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listJournalVoucher',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            journalVouchers.push({
+                                Id: Results.Id,
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                JVNumber: Results[i]["JVNumber"],
+                                ManualJVNumber: Results[i]["ManualJVNumber"],
+                                JVDate: Results[i]["JVDate"],
+                                Particulars: Results[i]["Particulars"],
+                                PreparedById: Results[i]["PreparedById"],
+                                PreparedBy: Results[i]["PreparedBy"],
+                                CheckedById: Results[i]["CheckedById"],
+                                CheckedBy: Results[i]["CheckedBy"],
+                                ApprovedById: Results[i]["ApprovedById"],
+                                ApprovedBy: Results[i]["ApprovedBy"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });                           
+                            var journalVoucherId = Results[i]["Id"];
+                            var JournalVoucherNumber = Results[i]["JVNumber"];
+                        }
+                        if (JournalVoucherNumber == document.getElementById('journalVoucher_No').value) {
+                            window.location.href = '/Software/JournalVoucherDetail/?Id=' + journalVoucherId;
+                            window.setTimeout(function () { location.reload() }, 1000);
+                        }
+                    }
+
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return journalVouchers;
+        }
 
         // =========================
         // GET Journal Voucher by Id
@@ -194,7 +264,7 @@
             var journalVouchers = new wijmo.collections.ObservableArray;
             var journalVoucherId = @id
             $.ajax({
-                url: '/api/journalVoucherById/' + journalVoucherId,
+                url: '/api/journalVoucher/' + journalVoucherId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -224,14 +294,22 @@
                             UpdatedDateTime: Results.UpdatedDateTime
                         });
                     }
+
+                    getBranchesForComboBox();
+                    getUsersForComboBox();
+
+                    document.getElementById('branch_Id_data').value = Results.BranchId;
                     document.getElementById('branch_selectedValue').value = Results.Branch;
                     document.getElementById('journalVoucher_No').value = Results.JVNumber;
                     document.getElementById('manual_JournalVoucher_No').value = Results.ManualJVNumber;
                     document.getElementById('journalVoucher_date_Data').value = Results.JVDate;
                     document.getElementById('journalVoucher_Particulars').value = Results.Particulars;
 
+                    document.getElementById('preparedByUserId_Data').value = Results.PreparedById;
                     document.getElementById('preparedByUserId_selectedValue').value = Results.PreparedBy;
+                    document.getElementById('checkedByUserId_Data').value = Results.CheckedById;
                     document.getElementById('checkedByUserId_selectedValue').value = Results.CheckedBy;
+                    document.getElementById('approvedByUserId_Data').value = Results.ApprovedById;
                     document.getElementById('approvedByUserId_selectedValue').value = Results.ApprovedBy;
 
                     document.getElementById('createdBy').innerHTML = Results.CreatedBy;
@@ -239,21 +317,15 @@
                     document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
                     document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
-                    var splitDate = Results.JVDate.split("-");
-
-                    journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date',
-                        {
-                            format: 'MM/dd/yyyy',
-                            value: new Date(splitDate[0], splitDate[1] - 1, splitDate[2]),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('journalVoucher_date_Data').value = this.value.toString("yyyy-MM-dd");
-                                console.log(this.value);
-                            }
-                        });
-
-                    getBranchesForComboBox();
-                    getUsersForComboBox();
+                    var journalVoucherDate = Results.JVDate;
+                    journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
+                        format: 'MM/dd/yyyy',
+                        value: new Date(journalVoucherDate),
+                        mask: '99/99/9999',
+                        onValueChanged: function () {
+                            document.getElementById('journalVoucher_date_Data').value = this.value.toLocaleDateString();
+                        }
+                    });
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -422,6 +494,171 @@
             window.location = '/Software/JournalVoucher';
         }
 
+        // ===========================
+        // Journal Voucher Save Button
+        // ===========================
+        function cmdJournalVoucherSaveButton_OnClick() {
+            var journalVoucherObject = new Object();
+            var journalVoucherId = @id
+
+            journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
+            journalVoucherObject.JVNumber = document.getElementById('journalVoucher_No').value;
+            journalVoucherObject.ManualJVNumber = document.getElementById('manual_JournalVoucher_No').value;
+            journalVoucherObject.JVDate = document.getElementById('journalVoucher_date_Data').value;
+            journalVoucherObject.Particulars = document.getElementById('journalVoucher_Particulars').value;
+            journalVoucherObject.PreparedById = document.getElementById('preparedByUserId_Data').value;
+            journalVoucherObject.CheckedById = document.getElementById('checkedByUserId_Data').value;
+            journalVoucherObject.ApprovedById = document.getElementById('approvedByUserId_Data').value;
+            var data = JSON.stringify(journalVoucherObject);
+
+            var isValid = true;
+            $('.requiredJournalVoucher').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "2px solid red",
+                        "transition": "border 1s ease 0s"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                e.preventDefault();
+            }
+            else {
+                if (journalVoucherId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addJournalVoucher',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveJournalVoucher").prop("disabled", true);
+                                $("#cmdEditJournalVoucher").prop("disabled", true);
+                                $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                                $("#cmdPrintJournalVoucher").prop("disabled", true);
+                                $("#cmdCloseJournalVoucher").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getJournalVoucherLastInsertedId,1000)
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateJournalVoucher/' + journalVoucherId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveJournalVoucher").prop("disabled", true);
+                                $("#cmdEditJournalVoucher").prop("disabled", true);
+                                $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                                $("#cmdPrintJournalVoucher").prop("disabled", true);
+                                $("#cmdCloseJournalVoucher").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                            }
+                        }
+                    });
+                }
+
+
+            }
+        }
+
+
+        // ================================================
+        // Get Journal Voucher Line LIST / or / By Branch Id
+        // =================================================
+        function getJournalVoucherLineByBranchId() {
+            var journalVoucherLines = new wijmo.collections.ObservableArray;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listJournalVoucherLine',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            journalVoucherLines.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdJournalVoucherLineDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
+                                Particulars: Results[i]["Particulars"],
+                                DebitAmount: Results[i]["DebitAmount"],
+                                CreditAmount: Results[i]["CreditAmount"],
+                                APRRId: Results[i]["APRRId"],
+                                APSIId: Results[i]["APSIId"],
+                                IsClear: Results[i]["IsClear"],
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return journalVoucherLines;
+        }
+
+        // ===========================================
+        // Navigation Buttons for Journal Voucher Line
+        // ===========================================
+        function updateNavigateButtonsJournalVoucherLine() {
+            if (journalVoucherLines.pageSize <= 0) {
+                document.getElementById('naviagtionPageGridJournalVoucherLine').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGridJournalVoucherLine').style.display = 'block';
+            if (journalVoucherLines.pageIndex === 0) {
+                btnFirstPageGridJournalVoucherLine.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridJournalVoucherLine.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournalVoucherLine.removeAttribute('disabled');
+                btnLastPageGridJournalVoucherLine.removeAttribute('disabled');
+            } else if (journalVoucherLines.pageIndex === (journalVoucherLines.pageCount - 1)) {
+                btnFirstPageGridJournalVoucherLine.removeAttribute('disabled');
+                btnPreviousPageGridJournalVoucherLine.removeAttribute('disabled');
+                btnLastPageGridJournalVoucherLine.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournalVoucherLine.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridJournalVoucherLine.removeAttribute('disabled');
+                btnPreviousPageGridJournalVoucherLine.removeAttribute('disabled');
+                btnNextPageGridJournalVoucherLine.removeAttribute('disabled');
+                btnLastPageGridJournalVoucherLine.removeAttribute('disabled');
+            }
+            btnCurrentPageGridJournalVoucherLine.innerHTML = (journalVoucherLines.pageIndex + 1) + ' / ' + journalVoucherLines.pageCount;
+        }
+
         // ============
         // On load Page
         // ============
@@ -429,29 +666,164 @@
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> ' + ' / ' + '<a href="@Url.Action("JournalVoucher", "Software")" class="currentPageLinkCustom">Journal Voucher</a> ' + ' / Journal Voucher Detail';
 
             getJournalVoucherById();
+            getBranchesForComboBox();
+            getUsersForComboBox();
+
+            if (@id == 0) {
+                journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
+                    format: 'MM/dd/yyyy',
+                    value: new Date(),
+                    mask: '99/99/9999',
+                    onValueChanged: function () {
+                        document.getElementById('journalVoucher_date_Data').value = this.value.toLocaleDateString();
+                    }
+                });
+            }
 
             cboBranch = new wijmo.input.ComboBox('#branch_Id');
-
-            journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
-                format: 'MM/dd/yyyy',
-                value: new Date()
-            });
-
             cboUserPreparedBy = new wijmo.input.ComboBox('#preparedByUserId');
             cboUserCheckedBy = new wijmo.input.ComboBox('#checkedByUserId');
             cboUserApprovedBy = new wijmo.input.ComboBox('#approvedByUserId');
 
-            //journalVoucherDate.dispose();
-            //journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
-            //    format: 'MM/dd/yyyy',
-            //    value: currentDate,
-            //    mask: '99/99/9999',
-            //    onValueChanged: function () {
-            //        document.getElementById('journalVoucher_Date_Data').value = this.value.toString("yyyy-MM-dd");
-            //    }
-            //});
+            journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLineByBranchId());
+            journalVoucherLines.canFilter = true;
+            journalVoucherLines.pageSize = 10;
 
+            var filterTextJournalVoucherLine = '';
+            $('#InputFilterJournalVoucherLine').keyup(function () {
+                filterTextJournalVoucherLine = this.value.toLowerCase();
+                journalVoucherLines.refresh();
+            });
+            journalVoucherLines.filter = function (item) {
+                return !filterTextJournalVoucherLine || (item.Branch.toLowerCase().indexOf(filterTextJournalVoucherLine) > -1);
+            }
+            journalVoucherLines.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsJournalVoucherLine();
+            });
+
+            // Flex Grid
+            journalVoucherLineGrid = new wijmo.grid.FlexGrid('#JournalVoucherLineGrid');
+            journalVoucherLineGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Branch",
+                                "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*",
+                            },
+                            {
+                                "header": "Account",
+                                "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Article",
+                                "binding": "Article",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                "binding": "Particulars",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "DebitAmount.",
+                                "binding": "DebitAmount",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "CreditAmount",
+                                "binding": "CreditAmount",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "APRRId",
+                                "binding": "APRRId",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "APSIId",
+                                "binding": "APSIId",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Is Clear",
+                                "binding": "IsClear",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: journalVoucherLines,
+                isReadOnly: true,
+                frozenColumns: 2,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            journalVoucherLineGrid.trackChanges = true;
+
+            //Navigation button
+            btnFirstPageGridJournalVoucherLine = document.getElementById('btnMoveToFirstPageGridJournalVoucherLine');
+            btnPreviousPageGridJournalVoucherLine = document.getElementById('btnMoveToPreviousPageGridJournalVoucherLine');
+            btnNextPageGridJournalVoucherLine = document.getElementById('btnMoveToNextPageGridJournalVoucherLine');
+            btnLastPageGridJournalVoucherLine = document.getElementById('btnMoveToLastPageGridJournalVoucherLine');
+            btnCurrentPageGridJournalVoucherLine = document.getElementById('btnCurrentPageGridJournalVoucherLine');
+
+            updateNavigateButtonsJournalVoucherLine();
+
+            btnFirstPageGridJournalVoucherLine.addEventListener('click', function () {
+                journalVoucherLines.moveToFirstPage();
+                updateNavigateButtonsJournalVoucherLine();
+            });
+            btnPreviousPageGridJournalVoucherLine.addEventListener('click', function () {
+                journalVoucherLines.moveToPreviousPage();
+                updateNavigateButtonsJournalVoucherLine();
+            });
+            btnNextPageGridJournalVoucherLine.addEventListener('click', function () {
+                journalVoucherLines.moveToNextPage();
+                updateNavigateButtonsJournalVoucherLine();
+            });
+            btnLastPageGridJournalVoucherLine.addEventListener('click', function () {
+                journalVoucherLines.moveToLastPage();
+                updateNavigateButtonsJournalVoucherLine();
+            });
         });
-    </script>
+</script>
 </body>
 </html>

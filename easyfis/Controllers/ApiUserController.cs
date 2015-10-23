@@ -18,15 +18,16 @@ namespace easyfis.Controllers
         [Route("api/listAspUser")]
         public List<Models.ApplicationUser> GetAspUsers()
         {
-            var users = from d in db.AspNetUsers select new Models.ApplicationUser
-                               {
-                                   Id = d.Id,
-                                   FirstName = d.FirstName,
-                                   LastName = d.LastName,
-                                   Email = d.Email,
-                                   Address = d.Address,
-                                   UserName = d.UserName
-                               };
+            var users = from d in db.AspNetUsers
+                        select new Models.ApplicationUser
+                            {
+                                Id = d.Id,
+                                FirstName = d.FirstName,
+                                LastName = d.LastName,
+                                Email = d.Email,
+                                Address = d.Address,
+                                UserName = d.UserName
+                            };
             return users.ToList();
         }
 
@@ -36,16 +37,17 @@ namespace easyfis.Controllers
         [Route("api/listUser")]
         public List<Models.MstUser> GetMstUsers()
         {
-            var users = from d in db.MstUsers select new Models.MstUser
-                        {
-                            Id = d.Id,
-                            FirstName = d.FirstName,
-                            LastName = d.LastName,
-                            Email = d.Email,
-                            Address = d.Address,
-                            UserName = d.UserName,
-                            IsLocked = d.IsLocked
-                        };
+            var users = from d in db.MstUsers
+                        select new Models.MstUser
+                            {
+                                Id = d.Id,
+                                FirstName = d.FirstName,
+                                LastName = d.LastName,
+                                Email = d.Email,
+                                Address = d.Address,
+                                UserName = d.UserName,
+                                IsLocked = d.IsLocked
+                            };
             return users.ToList();
         }
 
@@ -93,7 +95,7 @@ namespace easyfis.Controllers
             {
                 var isLocked = true;
                 var mstUsers = from d in db.MstUsers where d.UserId == id select d;
-                
+
                 if (mstUsers.Any())
                 {
                     var updateMstUsers = mstUsers.FirstOrDefault();

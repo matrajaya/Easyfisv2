@@ -75,8 +75,8 @@ namespace easyfis
                      "~/Scripts/bootstrap.js",
                      "~/Scripts/bootstrap.min.js",
                      "~/Scripts/jquery.min.js",
-                      "~/Scripts/jquery-1.10.2.js",
-                      "~/Scripts/jquery-1.10.2.min.js",
+                     "~/Scripts/jquery-1.10.2.js",
+                     "~/Scripts/jquery-1.10.2.min.js",
                      "~/Scripts/transition.js",
                      "~/Scripts/collapse.js",
                      "~/Scripts/dropdown.js",
@@ -85,12 +85,6 @@ namespace easyfis
                      "~/Scripts/sidebar-menu.js",
                      "~/Scripts/push-left-menu.js",
                      "~/Scripts/toastr.js"));
-
-            // =================================
-            // Custom JavaScripts - JS (Profile)
-            // =================================
-            bundles.Add(new ScriptBundle("~/Scripts/Profile-js").Include(
-                    "~/Scripts/profile.js"));
 
             // =============
             // WIJMO Scripts
@@ -114,7 +108,7 @@ namespace easyfis
             // ========
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
-            
+
             // =================
             // JQuery Validation
             // =================

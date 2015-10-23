@@ -18,23 +18,24 @@ namespace easyfis.Controllers
         [Route("api/listAccount")]
         public List<Models.MstAccount> Get()
         {
-            var accounts = from d in db.MstAccounts select new Models.MstAccount
-                {
-                    Id = d.Id,
-                    AccountCode = d.AccountCode,
-                    Account = d.Account,
-                    AccountTypeId = d.AccountTypeId,
-                    AccountType = d.MstAccountType.AccountType,
-                    AccountCashFlowId = d.AccountCashFlowId,
-                    AccountCashFlow = d.MstAccountCashFlow.AccountCashFlow,
-                    IsLocked = d.IsLocked,
-                    CreatedById = d.CreatedById,
-                    CreatedBy = d.MstUser.UserName,
-                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                    UpdatedById = d.UpdatedById,
-                    UpdatedBy = d.MstUser1.UserName,
-                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                };
+            var accounts = from d in db.MstAccounts
+                           select new Models.MstAccount
+                               {
+                                   Id = d.Id,
+                                   AccountCode = d.AccountCode,
+                                   Account = d.Account,
+                                   AccountTypeId = d.AccountTypeId,
+                                   AccountType = d.MstAccountType.AccountType,
+                                   AccountCashFlowId = d.AccountCashFlowId,
+                                   AccountCashFlow = d.MstAccountCashFlow.AccountCashFlow,
+                                   IsLocked = d.IsLocked,
+                                   CreatedById = d.CreatedById,
+                                   CreatedBy = d.MstUser.UserName,
+                                   CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                   UpdatedById = d.UpdatedById,
+                                   UpdatedBy = d.MstUser1.UserName,
+                                   UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                               };
             return accounts.ToList();
         }
 
