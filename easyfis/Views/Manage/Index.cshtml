@@ -50,7 +50,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" id="cmdUpdateUserButton" onclick="cmdUserUpdateButton_OnClick()"><i class="fa fa-save"></i> Update and Save</button>
+                    <button class="btn btn-primary" id="cmdSaveUserButton" onclick="cmdUserSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                     <button type="button" id="cmdUserDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
@@ -74,7 +74,7 @@
         // ==================
         // Update User Detail
         // ==================
-        function cmdUserUpdateButton_OnClick() {
+        function cmdUserSaveButton_OnClick() {
             var userObject = new Object();
             var id = document.getElementById('userId').value;
 
@@ -111,9 +111,9 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $("#cmdUpdateUserButton").prop("disabled", true);
+                            $("#cmdSaveUserButton").prop("disabled", true);
                             $("#cmdUserDetailCloseButton").prop("disabled", true);
-                            toastr.info("Successfully Updated Profile");
+                            toastr.success("Successfully Updated Profile");
                             window.setTimeout(function () {
                                 location.reload()
                             }, 1000);
@@ -138,12 +138,11 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $("#cmdUpdateUserButton").prop("disabled", true);
+                            $("#cmdSaveUserButton").prop("disabled", true);
                             $("#cmdUserDetailCloseButton").prop("disabled", true);
-                            //toastr.success("Successfully Updated");
-                            //window.setTimeout(function () {
-                            //    location.reload()
-                            //}, 1000);
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
                         },
                         404: function () {
                             toastr.error("Can't Update");

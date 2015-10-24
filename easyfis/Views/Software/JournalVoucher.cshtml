@@ -41,8 +41,10 @@
                                 <input type="text" class="form-control" id="InputFilterJournalVoucher" placeholder="Search Journal Voucher Number">
                             </div>
                         </div>
-                        <div class="col-lg-8">
-                            <button class="btn btn-primary pull-right" onclick="cmdAddJournalVoucherButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        <div class="col-lg-8" align="right">
+                            <button class="btn btn-primary" onclick="cmdAddJournalVoucherButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-danger" id="cmdCloseButtonJV" onclick="cmdJVCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+
                         </div>
                     </div>
                     <br />
@@ -208,7 +210,7 @@
                 backdrop: 'static'
             });
         }
-        // Company Confirm Delete Button
+        // Journal Voucher Confirm Delete Button
         function cmdJournalVoucherConfirmDeleteButton_OnClick() {
             journalVouchers.editItem(journalVouchers.currentItem);
             var id = journalVouchers.currentEditItem.Id;
@@ -236,6 +238,13 @@
                     }
                 }
             });
+        }
+
+        // ====================
+        // Journal Voucher Close Button
+        // ====================
+        function cmdJVCloseButton_OnClick() {
+            window.location = '/Software';
         }
 
         // ===================

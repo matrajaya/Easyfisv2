@@ -23,7 +23,7 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <ul class="nav nav-pills pull-right" role="tablist" id="myTab">
+                <ul class="nav nav-tabs pull-right" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Account Cash Flow</a></li>
@@ -50,8 +50,9 @@
                                     <input type="text" class="form-control" id="InputFilterAccount" placeholder="Search Account">
                                 </div>
                             </div>
-                            <div class="col-lg-8">
-                                <button class="btn btn-primary pull-right" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-danger" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -96,8 +97,9 @@
                                     <input type="text" class="form-control" id="InputFilterAccountType" placeholder="Search Account Type">
                                 </div>
                             </div>
-                            <div class="col-lg-8">
-                                <button class="btn btn-primary pull-right" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-danger" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -142,8 +144,9 @@
                                     <input type="text" class="form-control" id="InputFilterAccountCashFlow" placeholder="Search Account Cash Flow">
                                 </div>
                             </div>
-                            <div class="col-lg-8">
-                                <button class="btn btn-primary pull-right" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-danger" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -188,8 +191,9 @@
                                     <input type="text" class="form-control" id="InputFilterAccountCategory" placeholder="Search Account Category">
                                 </div>
                             </div>
-                            <div class="col-lg-8">
-                                <button class="btn btn-primary pull-right" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-danger" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -890,6 +894,13 @@
             });
         }
 
+        // ====================
+        // Account Close Button
+        // ====================
+        function cmdChartOfAccountsCloseButton_OnClick() {
+            window.location = '/Software';
+        }
+
         // ==============================
         // FlexGrid Selection for Account
         // ==============================
@@ -1394,6 +1405,13 @@
             });
         }
 
+        // =========================
+        // Account Type Close Button
+        // =========================
+        function cmdChartOfAccountsCloseButton_OnClick() {
+            window.location = '/Software';
+        }
+
         // ===================================
         // FlexGrid Selection for Account Type
         // ===================================
@@ -1828,6 +1846,13 @@
             });
         }
 
+        // ==============================
+        // Account Cash Flow Close Button
+        // ==============================
+        function cmdChartOfAccountsCloseButton_OnClick() {
+            window.location = '/Software';
+        }
+
         // ===================================
         // FlexGrid Selection for Account Type
         // ===================================
@@ -2246,6 +2271,13 @@
                     }
                 }
             });
+        }
+
+        // ==================================
+        // Account Cash Category Close Button
+        // ==================================
+        function cmdChartOfAccountsCloseButton_OnClick() {
+            window.location = '/Software';
         }
 
         // =======================================

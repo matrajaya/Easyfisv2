@@ -41,8 +41,9 @@
                                 <input type="text" class="form-control" id="InputFilter" placeholder="Search Company">
                             </div>
                         </div>
-                        <div class="col-lg-8">
-                            <button class="btn btn-primary pull-right" onclick="cmdCompanyAddCompanyButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        <div class="col-lg-8" align="right">
+                            <button class="btn btn-primary" onclick="cmdCompanyAddCompanyButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-danger" id="cmdCloseButtonCompany" onclick="cmdCompanyCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                         </div>
                     </div>
                     <br />
@@ -228,6 +229,13 @@
                     }
                 }
             });
+        }
+
+        // ====================
+        // Company Close Button
+        // ====================
+        function cmdCompanyCloseButton_OnClick() {
+            window.location = '/Software';
         }
 
         // ===================
