@@ -156,9 +156,9 @@ namespace easyfis.Controllers
             }
         }
 
-        // ==============
-        // UPDATE Company
-        // ==============
+        // ======================
+        // UPDATE Journal Voucher
+        // ======================
         [Route("api/updateJournalVoucher/{id}")]
         public HttpResponseMessage Put(String id, Models.TrnJournalVoucher journalVoucher)
         {

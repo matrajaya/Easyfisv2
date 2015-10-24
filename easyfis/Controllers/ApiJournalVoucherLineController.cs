@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
@@ -31,7 +32,7 @@ namespace easyfis.Controllers
                                               DebitAmount = d.DebitAmount,
                                               CreditAmount = d.CreditAmount,
                                               APRRId = d.APRRId,
-                                              APSIId = d.ARSIId,
+                                              ARSIId = d.ARSIId,
                                               IsClear = d.IsClear
                                           };
             return journalVoucherLines.ToList();
@@ -59,10 +60,114 @@ namespace easyfis.Controllers
                                               DebitAmount = d.DebitAmount,
                                               CreditAmount = d.CreditAmount,
                                               APRRId = d.APRRId,
-                                              APSIId = d.ARSIId,
+                                              ARSIId = d.ARSIId,
                                               IsClear = d.IsClear
                                           };
             return journalVoucherLines.ToList();
+        }
+
+        // ========================
+        // ADD Journal Voucher Line
+        // ========================
+        [Route("api/addJournalVoucherLine")]
+        public int Post(Models.TrnJournalVoucherLine journalVoucherLine)
+        {
+            try
+            {
+
+                Data.TrnJournalVoucherLine newJournalVoucherLine = new Data.TrnJournalVoucherLine();
+
+                newJournalVoucherLine.BranchId = journalVoucherLine.BranchId;
+                newJournalVoucherLine.AccountId = journalVoucherLine.AccountId;
+                newJournalVoucherLine.ArticleId = journalVoucherLine.ArticleId;
+                newJournalVoucherLine.Particulars = journalVoucherLine.Particulars;
+                newJournalVoucherLine.DebitAmount = journalVoucherLine.DebitAmount;
+                newJournalVoucherLine.CreditAmount = journalVoucherLine.CreditAmount;
+                newJournalVoucherLine.APRRId = journalVoucherLine.APRRId;
+                newJournalVoucherLine.ARSIId = journalVoucherLine.ARSIId;
+                newJournalVoucherLine.IsClear = journalVoucherLine.IsClear;
+
+                db.TrnJournalVoucherLines.InsertOnSubmit(newJournalVoucherLine);
+                db.SubmitChanges();
+
+                return newJournalVoucherLine.Id;
+
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // ===========================
+        // UPDATE Journal Voucher Line
+        // ===========================
+        [Route("api/updateJournalVoucherLine/{id}")]
+        public HttpResponseMessage Put(String id, Models.TrnJournalVoucherLine journalVoucherLine)
+        {
+            try
+            {
+                var journalVoucherLineId = Convert.ToInt32(id);
+                var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.Id == journalVoucherLineId select d;
+
+                if (journalVoucherLines.Any())
+                {
+                    var updatejournalVoucherLine = journalVoucherLines.FirstOrDefault();
+
+                    updatejournalVoucherLine.BranchId = journalVoucherLine.BranchId;
+                    updatejournalVoucherLine.AccountId = journalVoucherLine.AccountId;
+                    updatejournalVoucherLine.ArticleId = journalVoucherLine.ArticleId;
+                    updatejournalVoucherLine.Particulars = journalVoucherLine.Particulars;
+                    updatejournalVoucherLine.DebitAmount = journalVoucherLine.DebitAmount;
+                    updatejournalVoucherLine.CreditAmount = journalVoucherLine.CreditAmount;
+                    updatejournalVoucherLine.APRRId = journalVoucherLine.APRRId;
+                    updatejournalVoucherLine.ARSIId = journalVoucherLine.ARSIId;
+                    updatejournalVoucherLine.IsClear = journalVoucherLine.IsClear;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // ===========================
+        // DELETE Journal Voucher Line
+        // ===========================
+        [Route("api/deleteJournalVoucherLine/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var journalVoucherLineId = Convert.ToInt32(id);
+                var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.Id == journalVoucherLineId select d;
+
+                if (journalVoucherLines.Any())
+                {
+                    db.TrnJournalVoucherLines.DeleteOnSubmit(journalVoucherLines.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

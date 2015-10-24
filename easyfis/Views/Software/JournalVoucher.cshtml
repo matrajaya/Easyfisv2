@@ -89,7 +89,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-danger" id="cmdJournalVoucherDeleteCompany" onclick="cmdJournalVoucherConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button type="button" id="cmdConfirmDeleteCloseButtonJournalVoucher" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -222,7 +222,7 @@
                 statusCode: {
                     200: function () {
                         $("#cmdJournalVoucherDeleteCompany").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonJournalVoucher").prop("disabled", true);
                         toastr.success("Successfully Deleted");
                         window.setTimeout(function () {
                             location.reload()

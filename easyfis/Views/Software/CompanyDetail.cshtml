@@ -610,22 +610,6 @@
             document.getElementById('branch_Address').value = branch.Address ? branch.Address : '';
             document.getElementById('branch_ContactNumber').value = branch.ContactNumber ? branch.ContactNumber : '';
             document.getElementById('branch_TaxNumber').value = branch.TaxNumber ? branch.TaxNumber : '';
-
-            var isValid = true;
-            $('.requiredBranch').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
         }
 
         // ====================
