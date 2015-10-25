@@ -42,7 +42,7 @@ namespace easyfis.Controllers
         // ======================================
         // LIST Journal Voucher Line by branch Id
         // ======================================
-        [Route("api/listJournalVoucherLineByBranchId/{JVId}")]
+        [Route("api/listJournalVoucherLineByJVId/{JVId}")]
         public List<Models.TrnJournalVoucherLine> GetJournalVoucherLineById(String JVId)
         {
             var journalVoucherLineJVId = Convert.ToInt32(JVId);
