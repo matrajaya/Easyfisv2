@@ -1,5 +1,5 @@
 ﻿@{
-    var id = Request.QueryString["id"];
+    var JVId = Request.QueryString["id"];
 }
 <!DOCTYPE html>
 <html>
@@ -163,42 +163,43 @@
                         <h4 class="modal-title" id="JournalVoucherLineNameModalLabel">Journal Voucher Line - Detail</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="branchDetailForm">
+                        <form id="journalVoucherDetailForm">
                             <dl class="dl-horizontal">
-                                <dd><input type="text" class="form-control" id="JVL_Id" /></dd>
+                                <dd><input type="hidden" class="form-control" id="JVL_Id" /></dd>
+                                <dd><input type="hidden" class="form-control" id="JVL_JVId" /></dd>
                                 <dt>Branch:</dt>
                                 <dd>
                                     <div id="JVL_Branch_Id" class="comboBox-wide"></div>
 
-                                    <input type="text" id="JVL_Branch_Id_Data" class="requiredJournalVoucherLine" required />
-                                    <input type="text" id="JVL_Branch_Id_selectedValue" />
+                                    <input type="hidden" id="JVL_Branch_Id_Data" class="requiredJournalVoucherLine" />
+                                    <input type="hidden" id="JVL_Branch_Id_selectedValue" />
                                 </dd>
                                 <dt>Account:</dt>
                                 <dd>
                                     <div id="JVL_Account_Id" class="comboBox-wide"></div>
 
-                                    <input type="text" id="JVL_Account_Id_Data" class="requiredJournalVoucherLine" required />
-                                    <input type="text" id="JVL_Account_Id_selectedValue" />
+                                    <input type="hidden" id="JVL_Account_Id_Data" class="requiredJournalVoucherLine" />
+                                    <input type="hidden" id="JVL_Account_Id_selectedValue" />
                                 </dd>
                                 <dt>Aritcle</dt>
                                 <dd>
                                     <div id="JVL_Aritcle_Id" class="comboBox-wide"></div>
 
-                                    <input type="text" id="JVL_Aritcle_Id_Data" class="requiredJournalVoucherLine" required />
-                                    <input type="text" id="JVL_Aritcle_Id_selectedValue" />
+                                    <input type="hidden" id="JVL_Aritcle_Id_Data" class="requiredJournalVoucherLine" />
+                                    <input type="hidden" id="JVL_Aritcle_Id_selectedValue" />
                                 </dd>
                                 <dt>Particulars:</dt>
-                                <dd><textarea class="form-control textarea-custom-JV requiredJournalVoucherLine" id="JVL_Particulars"></textarea></dd>
+                                <dd><textarea id="JVL_Particulars" class="form-control textarea-custom-JV requiredJournalVoucherLine"></textarea></dd>
                                 <dt>Debit Amount:</dt>
-                                <dd><input type="text" class="form-control requiredJournalVoucherLine" id="JVL_DebitAmount" /></dd>
+                                <dd><input type="text" id="JVL_DebitAmount" class="form-control requiredJournalVoucherLine" /></dd>
                                 <dt>Credit Amount:</dt>
-                                <dd><input type="text" class="form-control requiredJournalVoucherLine" id="JVL_CreditAmount" /></dd>
+                                <dd><input type="text" id="JVL_CreditAmount" class="form-control requiredJournalVoucherLine" /></dd>
                                 <dt>APRRId:</dt>
-                                <dd><input type="text" class="form-control requiredJournalVoucherLine" id="JVL_APRRId" /></dd>
+                                <dd><input type="text" id="JVL_APRRId" class="form-control requiredJournalVoucherLine" /></dd>
                                 <dt>ARSIId:</dt>
-                                <dd><input type="text" class="form-control requiredJournalVoucherLine" id="JVL_ARSIId" /></dd>
+                                <dd><input type="text" id="JVL_ARSIId" class="form-control requiredJournalVoucherLine" /></dd>
                                 <dt>Is Clear:</dt>
-                                <dd><input type="checkbox" class="requiredJournalVoucherLine" id="JVL_IsClear" /></dd>
+                                <dd><input type="checkbox" id="JVL_IsClear" class="requiredJournalVoucherLine" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -267,18 +268,20 @@
 
         var branches;
         var cboBranch;
-        var cboBranchJVL;
 
         var journalVoucherDate;
 
         var users;
+
         var cboUserPreparedBy;
         var cboUserCheckedBy;
         var cboUserApprovedBy;
 
         var accounts;
-        var cboAccountJVL;
         var articles;
+
+        var cboBranchJVL;
+        var cboAccountJVL;
         var cboArticleJVL;
 
         var btnFirstPageGridJournalVoucherLine;
@@ -322,7 +325,7 @@
                                 UpdatedById: Results[i]["UpdatedById"],
                                 UpdatedBy: Results[i]["UpdatedBy"],
                                 UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                            });                           
+                            });
                             var journalVoucherId = Results[i]["Id"];
                             var JournalVoucherNumber = Results[i]["JVNumber"];
                         }
@@ -344,7 +347,7 @@
         // =========================
         function getJournalVoucherById() {
             var journalVouchers = new wijmo.collections.ObservableArray;
-            var journalVoucherId = @id
+            var journalVoucherId = @JVId
             $.ajax({
                 url: '/api/journalVoucher/' + journalVoucherId,
                 cache: false,
@@ -581,7 +584,7 @@
         // ===========================
         function cmdJournalVoucherSaveButton_OnClick() {
             var journalVoucherObject = new Object();
-            var journalVoucherId = @id
+            var journalVoucherId = @JVId
 
             journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
             journalVoucherObject.JVNumber = document.getElementById('journalVoucher_No').value;
@@ -690,6 +693,7 @@
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdJournalVoucherLineDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
+                                JVId: Results[i]["JVId"],
                                 BranchId: Results[i]["BranchId"],
                                 Branch: Results[i]["Branch"],
                                 AccountId: Results[i]["AccountId"],
@@ -854,7 +858,7 @@
 
             cboArticleJVL.dispose();
             cboArticleJVL = new wijmo.input.ComboBox('#JVL_Aritcle_Id', {
-                placeholder: "Select Account",
+                placeholder: "Select Article",
                 itemsSource: articleList,
                 isEditable: false,
                 required: false,
@@ -879,6 +883,7 @@
             getArticlesForComboBoxInJournalVoucherLine();
 
             document.getElementById('JVL_Id').value = 0;
+            document.getElementById('JVL_JVId').value = @JVId;
             document.getElementById('JVL_Branch_Id_Data').value = '';
             document.getElementById('JVL_Branch_Id_selectedValue').value = '';
             document.getElementById('JVL_Account_Id_Data').value = '';
@@ -909,6 +914,7 @@
 
             var journalVoucherLine = journalVoucherLines.currentEditItem;
             document.getElementById('JVL_Id').value = journalVoucherLine.Id !== null && typeof (journalVoucherLine.Id) != 'undefined' ? wijmo.Globalize.format(journalVoucherLine.Id) : '';
+            document.getElementById('JVL_JVId').value = @JVId;
             document.getElementById('JVL_Branch_Id_Data').value = journalVoucherLine.BranchId ? journalVoucherLine.BranchId : '';
             document.getElementById('JVL_Branch_Id_selectedValue').value = journalVoucherLine.Branch ? journalVoucherLine.Branch : '';
             document.getElementById('JVL_Account_Id_Data').value = journalVoucherLine.AccountId ? journalVoucherLine.AccountId : '';
@@ -934,6 +940,7 @@
             var journalVoucherLineObject = new Object();
             var journalVoucherLineId = document.getElementById('JVL_Id').value;
 
+            journalVoucherLineObject.JVId = document.getElementById('JVL_JVId').value;
             journalVoucherLineObject.BranchId = document.getElementById('JVL_Branch_Id_Data').value;
             journalVoucherLineObject.AccountId = document.getElementById('JVL_Account_Id_Data').value;
             journalVoucherLineObject.ArticleId = document.getElementById('JVL_Aritcle_Id_Data').value;
@@ -1089,7 +1096,7 @@
         $(document).ready(function () {
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> ' + ' / ' + '<a href="@Url.Action("JournalVoucher", "Software")" class="currentPageLinkCustom">Journal Voucher</a> ' + ' / Journal Voucher Detail';
 
-            if(@id == 0) {
+            if(@JVId == 0) {
                 $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", true);
             } else {
                 $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", false);
@@ -1099,7 +1106,7 @@
             getBranchesForComboBox();
             getUsersForComboBox();
 
-            if (@id == 0) {
+            if (@JVId == 0) {
                 journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
                     format: 'MM/dd/yyyy',
                     value: new Date(),
@@ -1258,6 +1265,6 @@
                 updateNavigateButtonsJournalVoucherLine();
             });
         });
-</script>
+    </script>
 </body>
 </html>

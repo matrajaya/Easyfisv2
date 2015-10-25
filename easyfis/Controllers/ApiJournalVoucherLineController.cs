@@ -22,6 +22,7 @@ namespace easyfis.Controllers
                                       select new Models.TrnJournalVoucherLine
                                           {
                                               Id = d.Id,
+                                              JVId = d.JVId,
                                               BranchId = d.BranchId,
                                               Branch = d.MstBranch.Branch,
                                               AccountId = d.AccountId,
@@ -41,15 +42,16 @@ namespace easyfis.Controllers
         // ======================================
         // LIST Journal Voucher Line by branch Id
         // ======================================
-        [Route("api/listJournalVoucherLineByBranchId/{branchId}")]
-        public List<Models.TrnJournalVoucherLine> GetJournalVoucherLineById(String branchId)
+        [Route("api/listJournalVoucherLineByBranchId/{JVId}")]
+        public List<Models.TrnJournalVoucherLine> GetJournalVoucherLineById(String JVId)
         {
-            var journalVoucherLineBranchId = Convert.ToInt32(branchId);
+            var journalVoucherLineJVId = Convert.ToInt32(JVId);
             var journalVoucherLines = from d in db.TrnJournalVoucherLines
-                                      where d.BranchId == journalVoucherLineBranchId
+                                      where d.JVId == journalVoucherLineJVId
                                       select new Models.TrnJournalVoucherLine
                                           {
                                               Id = d.Id,
+                                              JVId = d.JVId,
                                               BranchId = d.BranchId,
                                               Branch = d.MstBranch.Branch,
                                               AccountId = d.AccountId,
@@ -74,9 +76,9 @@ namespace easyfis.Controllers
         {
             try
             {
-
                 Data.TrnJournalVoucherLine newJournalVoucherLine = new Data.TrnJournalVoucherLine();
 
+                newJournalVoucherLine.JVId = journalVoucherLine.JVId;
                 newJournalVoucherLine.BranchId = journalVoucherLine.BranchId;
                 newJournalVoucherLine.AccountId = journalVoucherLine.AccountId;
                 newJournalVoucherLine.ArticleId = journalVoucherLine.ArticleId;
@@ -91,7 +93,6 @@ namespace easyfis.Controllers
                 db.SubmitChanges();
 
                 return newJournalVoucherLine.Id;
-
             }
             catch
             {
@@ -114,6 +115,7 @@ namespace easyfis.Controllers
                 {
                     var updatejournalVoucherLine = journalVoucherLines.FirstOrDefault();
 
+                    updatejournalVoucherLine.JVId = journalVoucherLine.JVId;
                     updatejournalVoucherLine.BranchId = journalVoucherLine.BranchId;
                     updatejournalVoucherLine.AccountId = journalVoucherLine.AccountId;
                     updatejournalVoucherLine.ArticleId = journalVoucherLine.ArticleId;

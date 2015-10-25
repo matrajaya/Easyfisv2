@@ -30,6 +30,9 @@ namespace easyfis.Data
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
+    partial void Insert__MigrationHistory(__MigrationHistory instance);
+    partial void Update__MigrationHistory(__MigrationHistory instance);
+    partial void Delete__MigrationHistory(__MigrationHistory instance);
     partial void InsertAspNetRole(AspNetRole instance);
     partial void UpdateAspNetRole(AspNetRole instance);
     partial void DeleteAspNetRole(AspNetRole instance);
@@ -147,6 +150,14 @@ namespace easyfis.Data
 				base(connection, mappingSource)
 		{
 			OnCreated();
+		}
+		
+		public System.Data.Linq.Table<@__MigrationHistory> @__MigrationHistories
+		{
+			get
+			{
+				return this.GetTable<@__MigrationHistory>();
+			}
 		}
 		
 		public System.Data.Linq.Table<AspNetRole> AspNetRoles
@@ -378,6 +389,140 @@ namespace easyfis.Data
 			get
 			{
 				return this.GetTable<TrnJournalVoucherLine>();
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[__MigrationHistory]")]
+	public partial class @__MigrationHistory : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _MigrationId;
+		
+		private string _ContextKey;
+		
+		private System.Data.Linq.Binary _Model;
+		
+		private string _ProductVersion;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnMigrationIdChanging(string value);
+    partial void OnMigrationIdChanged();
+    partial void OnContextKeyChanging(string value);
+    partial void OnContextKeyChanged();
+    partial void OnModelChanging(System.Data.Linq.Binary value);
+    partial void OnModelChanged();
+    partial void OnProductVersionChanging(string value);
+    partial void OnProductVersionChanged();
+    #endregion
+		
+		public @__MigrationHistory()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MigrationId", DbType="NVarChar(150) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string MigrationId
+		{
+			get
+			{
+				return this._MigrationId;
+			}
+			set
+			{
+				if ((this._MigrationId != value))
+				{
+					this.OnMigrationIdChanging(value);
+					this.SendPropertyChanging();
+					this._MigrationId = value;
+					this.SendPropertyChanged("MigrationId");
+					this.OnMigrationIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContextKey", DbType="NVarChar(300) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string ContextKey
+		{
+			get
+			{
+				return this._ContextKey;
+			}
+			set
+			{
+				if ((this._ContextKey != value))
+				{
+					this.OnContextKeyChanging(value);
+					this.SendPropertyChanging();
+					this._ContextKey = value;
+					this.SendPropertyChanged("ContextKey");
+					this.OnContextKeyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Model", DbType="VarBinary(MAX) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public System.Data.Linq.Binary Model
+		{
+			get
+			{
+				return this._Model;
+			}
+			set
+			{
+				if ((this._Model != value))
+				{
+					this.OnModelChanging(value);
+					this.SendPropertyChanging();
+					this._Model = value;
+					this.SendPropertyChanged("Model");
+					this.OnModelChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductVersion", DbType="NVarChar(32) NOT NULL", CanBeNull=false)]
+		public string ProductVersion
+		{
+			get
+			{
+				return this._ProductVersion;
+			}
+			set
+			{
+				if ((this._ProductVersion != value))
+				{
+					this.OnProductVersionChanging(value);
+					this.SendPropertyChanging();
+					this._ProductVersion = value;
+					this.SendPropertyChanged("ProductVersion");
+					this.OnProductVersionChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
 	}
