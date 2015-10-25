@@ -37,11 +37,11 @@
                         <h4 id="journalVoucherDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary" id="cmdEditJournalVoucher" onclick=""><i class="fa fa-pencil"></i> Edit</button>
-                        <button class="btn btn-primary" id="cmdPreviewJournalVoucher" onclick=""><i class="fa fa-search"></i> Preview</button>
-                        <button class="btn btn-primary" id="cmdPrintJournalVoucher" onclick=""><i class="fa fa-print"></i> Print</button>
-                        <button class="btn btn-danger" id="cmdCloseJournalVoucher" onclick="cmdJournalVoucherCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick=""><i class="fa fa-pencil"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher" onclick=""><i class="fa fa-search"></i> Preview</button>
+                        <button class="btn btn-primary btn-sm" id="cmdPrintJournalVoucher" onclick=""><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-danger btn-sm" id="cmdCloseJournalVoucher" onclick="cmdJournalVoucherCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -58,17 +58,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Journal Voucher Number:</label>
-                                    <input type="text" id="journalVoucher_No" class="form-control requiredJournalVoucher">
+                                    <input type="text" id="journalVoucher_No" class="form-control input-sm requiredJournalVoucher">
                                 </div>
                                 <div class="form-group">
                                     <label>Manual Journal Voucher Number:</label>
-                                    <input type="text" id="manual_JournalVoucher_No" class="form-control requiredJournalVoucher">
-                                </div>
-                                <div class="form-group">
-                                    <label>Journal Voucher Date:</label>
-
-                                    <div id="journalVoucher_Date" class="comboBox-wide"></div>
-                                    <input type="hidden" id="journalVoucher_date_Data" class="requiredJournalVoucher" required />
+                                    <input type="text" id="manual_JournalVoucher_No" class="form-control input-sm requiredJournalVoucher">
                                 </div>
                                 <div class="form-group">
                                     <label>Particulars:</label>
@@ -97,6 +91,12 @@
                                     <input type="hidden" id="approvedByUserId_Data" class="requiredJournalVoucher" required />
                                     <input type="hidden" id="approvedByUserId_selectedValue" />
                                 </div>
+                                <div class="form-group">
+                                    <label>Journal Voucher Date:</label>
+
+                                    <div id="journalVoucher_Date" class="comboBox-wide"></div>
+                                    <input type="hidden" id="journalVoucher_date_Data" class="input-sm requiredJournalVoucher" required />
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -114,15 +114,15 @@
                         <div class="col-lg-4">
                             <div class="input-group">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" readonly>
+                                    <button class="btn btn-default btn-sm" type="button" readonly>
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" id="InputFilterJournalVoucherLine" placeholder="Search Journal Voucher Number">
+                                <input type="text" class="form-control input-sm" id="InputFilterJournalVoucherLine" placeholder="Search Journal Voucher Number">
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <button type="submit" class="btn btn-primary pull-right" id="cmdJournalVoucherLineAddJournalVoucherLineButton" onclick="cmdJournalVoucherLineAddJournalVoucherLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-primary btn-sm pull-right" id="cmdJournalVoucherLineAddJournalVoucherLineButton" onclick="cmdJournalVoucherLineAddJournalVoucherLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                         </div>
                     </div>
                     <br />
@@ -164,9 +164,9 @@
                     </div>
                     <div class="modal-body">
                         <form id="journalVoucherDetailForm">
+                            <input type="hidden" class="form-control" id="JVL_Id" />
+                            <input type="hidden" class="form-control" id="JVL_JVId" />
                             <dl class="dl-horizontal">
-                                <dd><input type="hidden" class="form-control" id="JVL_Id" /></dd>
-                                <dd><input type="hidden" class="form-control" id="JVL_JVId" /></dd>
                                 <dt>Branch:</dt>
                                 <dd>
                                     <div id="JVL_Branch_Id" class="comboBox-wide"></div>
@@ -191,21 +191,21 @@
                                 <dt>Particulars:</dt>
                                 <dd><textarea id="JVL_Particulars" class="form-control textarea-custom-JV requiredJournalVoucherLine"></textarea></dd>
                                 <dt>Debit Amount:</dt>
-                                <dd><input type="text" id="JVL_DebitAmount" class="form-control requiredJournalVoucherLine" /></dd>
+                                <dd><input type="text" id="JVL_DebitAmount" class="form-control input-sm requiredJournalVoucherLine" /></dd>
                                 <dt>Credit Amount:</dt>
-                                <dd><input type="text" id="JVL_CreditAmount" class="form-control requiredJournalVoucherLine" /></dd>
+                                <dd><input type="text" id="JVL_CreditAmount" class="form-control input-sm requiredJournalVoucherLine" /></dd>
                                 <dt>APRRId:</dt>
-                                <dd><input type="text" id="JVL_APRRId" class="form-control requiredJournalVoucherLine" /></dd>
+                                <dd><input type="text" id="JVL_APRRId" class="form-control input-sm requiredJournalVoucherLine" /></dd>
                                 <dt>ARSIId:</dt>
-                                <dd><input type="text" id="JVL_ARSIId" class="form-control requiredJournalVoucherLine" /></dd>
+                                <dd><input type="text" id="JVL_ARSIId" class="form-control input-sm requiredJournalVoucherLine" /></dd>
                                 <dt>Is Clear:</dt>
                                 <dd><input type="checkbox" id="JVL_IsClear" class="requiredJournalVoucherLine" /></dd>
                             </dl>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" id="cmdJournalVoucherLineDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button type="button" id="cmdJournalVoucherLineDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
             </div>
@@ -224,8 +224,8 @@
                         Are you sure you want to delete this?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-danger" id="cmdConfirmDeleteJournalVoucherLine" onclick="cmdJournalVoucherConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" id="cmdConfirmDeleteCloseButtonJournalVoucherLine" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteJournalVoucherLine" onclick="cmdJournalVoucherConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button type="button" id="cmdConfirmDeleteCloseButtonJournalVoucherLine" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -629,8 +629,10 @@
                                 $("#cmdPreviewJournalVoucher").prop("disabled", true);
                                 $("#cmdPrintJournalVoucher").prop("disabled", true);
                                 $("#cmdCloseJournalVoucher").prop("disabled", true);
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
-                                setTimeout(getJournalVoucherLastInsertedId,1000)
+                                setTimeout(getJournalVoucherLastInsertedId, 1000)
                             },
                             404: function () {
                                 toastr.error("Can't Save");
@@ -654,6 +656,8 @@
                                 $("#cmdPreviewJournalVoucher").prop("disabled", true);
                                 $("#cmdPrintJournalVoucher").prop("disabled", true);
                                 $("#cmdCloseJournalVoucher").prop("disabled", true);
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Updated");
                                 window.setTimeout(function () {
                                     location.reload()

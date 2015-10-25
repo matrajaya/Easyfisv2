@@ -37,8 +37,8 @@
                         <h4 id="companyDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary" id="cmdSaveCompany" onclick="cmdCompanySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-danger" id="cmdCloseButtonCompany" onclick="cmdCompanyCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSaveCompany" onclick="cmdCompanySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-danger btn-sm" id="cmdCloseButtonCompany" onclick="cmdCompanyCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -48,7 +48,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Company:</label>
-                                    <input type="text" class="form-control requiredCompany" id="company_Company">
+                                    <input type="text" class="form-control input-sm requiredCompany" id="company_Company">
                                 </div>
                                 <div class="form-group">
                                     <label>Address:</label>
@@ -58,11 +58,11 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Contact Number:</label>
-                                    <input type="text" class="form-control requiredCompany" id="company_ContactNumber">
+                                    <input type="text" class="form-control input-sm requiredCompany" id="company_ContactNumber">
                                 </div>
                                 <div class="form-group">
                                     <label>TAX Number:</label>
-                                    <input type="text" class="form-control requiredCompany" id="company_TaxNumber">
+                                    <input type="text" class="form-control input-sm requiredCompany" id="company_TaxNumber">
                                 </div>
                             </div>
                         </div>
@@ -81,15 +81,15 @@
                         <div class="col-lg-4">
                             <div class="input-group">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" readonly>
+                                    <button class="btn btn-default btn-sm" type="button" readonly>
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" id="InputFilter" placeholder="Search Branch">
+                                <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search Branch">
                             </div>
                         </div>
                         <div class="col-lg-8">
-                            <button type="submit" class="btn btn-primary pull-right" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button type="submit" class="btn btn-primary pull-right btn-sm" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                         </div>
                     </div>
                     <br />
@@ -131,27 +131,27 @@
                     </div>
                     <div class="modal-body">
                         <form id="branchDetailForm">
+                            <input type="hidden" class="form-control" id="branch_Id" />
+                            <input type="hidden" class="form-control" id="branch_companyId" />
                             <dl class="dl-horizontal">
-                                <dd><input type="hidden" class="form-control" id="branch_Id" /></dd>
-                                <dd><input type="hidden" class="form-control" id="branch_companyId" /></dd>
                                 <dt>Company:</dt>
-                                <dd><input type="text" class="form-control" id="branch_company" readonly /></dd>
+                                <dd><input type="text" class="form-control input-sm" id="branch_company" readonly /></dd>
                                 <dt>Branch:</dt>
-                                <dd><input type="text" class="form-control requiredBranch" id="branch_branch" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredBranch" id="branch_branch" /></dd>
                                 <dt>Branch code:</dt>
-                                <dd><input type="text" class="form-control requiredBranch" id="branch_Code" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredBranch" id="branch_Code" /></dd>
                                 <dt>Address:</dt>
                                 <dd><textarea class="form-control textarea-custom-branch requiredBranch" id="branch_Address"></textarea></dd>
                                 <dt>Contact Number:</dt>
-                                <dd><input type="text" class="form-control requiredBranch" id="branch_ContactNumber" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredBranch" id="branch_ContactNumber" /></dd>
                                 <dt>Tax Number:</dt>
-                                <dd><input type="text" class="form-control requiredBranch" id="branch_TaxNumber" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredBranch" id="branch_TaxNumber" /></dd>
                             </dl>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdSaveBranchButton" onclick="cmdBranchSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" id="cmdBranchDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSaveBranchButton" onclick="cmdBranchSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdBranchDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
             </div>
@@ -170,8 +170,8 @@
                         Are you sure you want to delete this?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-danger" id="cmdConfirmDeleteBranch" onclick="cmdBranchConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" id="cmdConfirmDeleteCloseButton" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteBranch" onclick="cmdBranchConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -353,8 +353,10 @@
                             200: function () {
                                 $("#cmdSaveCompany").prop("disabled", true);
                                 $("#cmdCloseButtonCompany").prop("disabled", true);
+                                $("#cmdSaveBranchButton").prop("disabled", true);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
-                                setTimeout(getCompanyLastInsertedId,1000)
+                                setTimeout(getCompanyLastInsertedId, 1000)
                             },
                             404: function () {
                                 toastr.error("Can't Add");
@@ -375,6 +377,8 @@
                             200: function () {
                                 $("#cmdSaveCompany").prop("disabled", true);
                                 $("#cmdCloseButtonCompany").prop("disabled", true);
+                                $("#cmdSaveBranchButton").prop("disabled", true);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Updated");
                                 window.setTimeout(function () {
                                     location.reload()
@@ -461,8 +465,8 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             branches.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='cmd_BranchEditButton' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='cmd_BranchEditButton' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 CompanyId: Results[i]["CompanyId"],
                                 Company: Results[i]["Company"],
@@ -648,11 +652,11 @@
                     },
                     404: function () {
                         toastr.error("Request Not Found");
-                        $('#deleteCompanyConfirm').modal('hide');
+                        $('#deleteBranchConfirm').modal('hide');
                     },
                     400: function () {
                         toastr.error("Bad Request");
-                        $('#deleteCompanyConfirm').modal('hide');
+                        $('#deleteBranchConfirm').modal('hide');
                     }
                 }
             });

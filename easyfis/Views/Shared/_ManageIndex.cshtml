@@ -20,15 +20,21 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-default" onclick="cmdEditProfileDetails_OnClickButton()"> Edit Info</button>
-                        <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default"> Change Your Password</a>
+                        <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit Info</button>
+                        <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default btn-sm"> Change Your Password</a>
                         <p class="change-password-success">@ViewBag.StatusMessage</p>
                     </div>
                 </div>
                 <div class="panel panel-info">
                     <div class="panel-heading">ERP</div>
                     <div class="panel-body">
-                        <a href="@Url.Action("Index", "Software")" class="btn btn-primary">Launch Software</a>
+                        <div class="col-md-6">
+                            <div id="branch_Id" class="comboBox-wide"></div>
+                            <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
+                        </div>
+                        <div class="col-md-6">
+                            <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
+                        </div>
                     </div>
                 </div>
             </div>

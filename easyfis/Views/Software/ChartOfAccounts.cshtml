@@ -43,16 +43,16 @@
                             <div class="col-lg-4">
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" readonly>
+                                        <button class="btn btn-default btn-sm" type="button" readonly>
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </span>
-                                    <input type="text" class="form-control" id="InputFilterAccount" placeholder="Search Account">
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search Account">
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -90,16 +90,16 @@
                             <div class="col-lg-4">
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" readonly>
+                                        <button class="btn btn-default btn-sm" type="button" readonly>
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </span>
-                                    <input type="text" class="form-control" id="InputFilterAccountType" placeholder="Search Account Type">
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccountType" placeholder="Search Account Type">
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -137,16 +137,16 @@
                             <div class="col-lg-4">
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" readonly>
+                                        <button class="btn btn-default btn-sm" type="button" readonly>
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </span>
-                                    <input type="text" class="form-control" id="InputFilterAccountCashFlow" placeholder="Search Account Cash Flow">
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccountCashFlow" placeholder="Search Account Cash Flow">
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -184,16 +184,16 @@
                             <div class="col-lg-4">
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" readonly>
+                                        <button class="btn btn-default btn-sm" type="button" readonly>
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </span>
-                                    <input type="text" class="form-control" id="InputFilterAccountCategory" placeholder="Search Account Category">
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccountCategory" placeholder="Search Account Category">
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -238,12 +238,12 @@
                     </div>
                     <div class="modal-body">
                         <form id="AccountDetailForm">
+                            <input type="hidden" class="form-control input-sm" id="account_id" />
                             <dl class="dl-horizontal">
-                                <dd><input type="hidden" class="form-control" id="account_id" /></dd>
                                 <dt>Account Code:</dt>
-                                <dd><input type="text" class="form-control requiredAccount" id="account_code" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredAccount" id="account_code" /></dd>
                                 <dt>Account:</dt>
-                                <dd><input type="text" class="form-control requiredAccount" id="account_account" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredAccount" id="account_account" /></dd>
                                 <dt>Account Type:</dt>
                                 <dd>
                                     <div id="account_type_id" class="comboBox-wide"></div>
@@ -262,8 +262,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdSaveAccountButton" onclick="cmdAccountSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" id="cmdAccountDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSaveAccountButton" onclick="cmdAccountSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdAccountDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
             </div>
@@ -284,8 +284,8 @@
                         Are you sure you want to delete this?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-danger" id="cmdConfirmDeleteAccount" onclick="cmdAccountConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" id="cmdConfirmDeleteCloseButtonAccount" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccount" onclick="cmdAccountConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteCloseButtonAccount" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -304,13 +304,13 @@
                         <h4 class="modal-title" id="accountTypeModalLabel">Account Type Detail</h4>
                     </div>
                     <div class="modal-body">
+                        <input type="hidden" class="form-control input-sm" id="accountType_id" />
                         <form id="AccountTypeDetailForm">
                             <dl class="dl-horizontal">
-                                <dd><input type="hidden" class="form-control" id="accountType_id" /></dd>
                                 <dt>Account Type Code:</dt>
-                                <dd><input type="text" class="form-control requiredAccountType" id="accountType_code" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_code" /></dd>
                                 <dt>Account Type:</dt>
-                                <dd><input type="text" class="form-control requiredAccountType" id="accountType_accountType" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_accountType" /></dd>
                                 <dt>Category:</dt>
                                 <dd>
                                     <div id="accountType_CategoryId" class="comboBox-wide"></div>
@@ -319,13 +319,13 @@
                                     <input type="hidden" id="accountType_Category_selectedValue" />
                                 </dd>
                                 <dt>Category Description:</dt>
-                                <dd><input type="text" class="form-control requiredAccountType" id="accountType_SubCategoryDescription" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_SubCategoryDescription" /></dd>
                             </dl>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdSaveAccountTypeButton" onclick="cmdAccountTypeSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" id="cmdAccountTypeDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSaveAccountTypeButton" onclick="cmdAccountTypeSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdAccountTypeDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
             </div>
@@ -346,8 +346,8 @@
                         Are you sure you want to delete this?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-danger" id="cmdConfirmDeleteAccountType" onclick="cmdAccountTypeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" id="cmdConfirmDeleteCloseButtonAccountType" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountType" onclick="cmdAccountTypeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteCloseButtonAccountType" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -366,18 +366,18 @@
                     </div>
                     <div class="modal-body">
                         <form id="AccountCashFlowDetailForm">
+                            <input type="hidden" class="form-control input-sm" id="accountCashFlow_Id" />
                             <dl class="dl-horizontal">
-                                <dd><input type="hidden" class="form-control" id="accountCashFlow_Id" /></dd>
                                 <dt>Cash Flow Code:</dt>
-                                <dd><input type="text" class="form-control requiredAccountCashFlow" id="accountCashFlow_Code" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredAccountCashFlow" id="accountCashFlow_Code" /></dd>
                                 <dt>Cash Flow:</dt>
-                                <dd><input type="text" class="form-control requiredAccountCashFlow" id="accountCashFlow_CashFlow" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredAccountCashFlow" id="accountCashFlow_CashFlow" /></dd>
                             </dl>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdSaveAccountCashFlowButton" onclick="cmdAccountCashFlowSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" id="cmdAccountCashFlowDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSaveAccountCashFlowButton" onclick="cmdAccountCashFlowSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdAccountCashFlowDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
             </div>
@@ -398,8 +398,8 @@
                         Are you sure you want to delete this?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-danger" id="cmdConfirmDeleteAccountCashFlow" onclick="cmdAccountCashFlowConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" id="cmdConfirmDeleteCloseButtonAccountCashFlow" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountCashFlow" onclick="cmdAccountCashFlowConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteCloseButtonAccountCashFlow" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -418,18 +418,18 @@
                     </div>
                     <div class="modal-body">
                         <form id="AccountCategoryDetailForm">
+                            <input type="hidden" class="form-control input-sm" id="accountCategory_Id" />
                             <dl class="dl-horizontal">
-                                <dd><input type="hidden" class="form-control" id="accountCategory_Id" /></dd>
                                 <dt>Category Code:</dt>
-                                <dd><input type="text" class="form-control requiredAccountCategory" id="accountCategory_Code" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredAccountCategory" id="accountCategory_Code" /></dd>
                                 <dt>Category:</dt>
-                                <dd><input type="text" class="form-control requiredAccountCategory" id="accountCategory_Category" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredAccountCategory" id="accountCategory_Category" /></dd>
                             </dl>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="cmdSaveAccountCategoryButton" onclick="cmdAccountCategorySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button type="button" id="cmdAccountCategoryDetailCloseButton" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSaveAccountCategoryButton" onclick="cmdAccountCategorySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdAccountCategoryDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
             </div>
@@ -450,8 +450,8 @@
                         Are you sure you want to delete this?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-danger" id="cmdConfirmDeleteAccountCategory" onclick="cmdAccountCategoryConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button type="button" id="cmdConfirmDeleteCloseButtonAccountCategory" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountCategory" onclick="cmdAccountCategoryConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteCloseButtonAccountCategory" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -2471,7 +2471,7 @@
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> ' + ' / Chart of Accounts';
 
             toastr.options = {
-                "closeButton": true,
+                "closeButton": false,
                 "debug": true,
                 "newestOnTop": true,
                 "progressBar": true,
