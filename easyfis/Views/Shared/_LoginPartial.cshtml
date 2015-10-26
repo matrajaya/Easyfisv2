@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity
 @{
-    var branchId = Request.QueryString["branchId"];
+    var branchId = Request.QueryString["BranchId"];
 }
 @if (Request.IsAuthenticated)
 {
@@ -33,7 +33,7 @@
             }
 
             function mainMenuByBranchId() {
-                window.location = '/Software/?branchId=' + @branchId;
+                window.location = '/Software?branchId=' + @branchId;
            } 
         </script>
     }

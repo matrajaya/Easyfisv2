@@ -194,9 +194,9 @@
             );
         }
 
-        // ==============================================
-        // Combo Box for Branches in Journal Voucher Line
-        // ==============================================
+        // ======================
+        // Combo Box for Branches
+        // ======================
         function createCboBranch(branches) {
             var branchCollections = new wijmo.collections.CollectionView(branches);
             var branchList = new Array();
@@ -214,7 +214,6 @@
                 onSelectedIndexChanged: function () {
                     $("#branch_Id_Data").val(branchCollections.items[this.selectedIndex].BranchId);
                     $('#LaunchSoftware').prop('disabled', false);
-                    $('#mainMenuId').show();
                 }
             });
         }
@@ -224,7 +223,7 @@
         // ===============
         function cmdLaunchSoftware_OnClick() {
             var branchId = document.getElementById('branch_Id_Data').value;
-            window.location = '/Software/?branchId=' + branchId;
+            window.location = '/Software?BranchId=' + branchId;
         }
 
         // =======
@@ -251,8 +250,6 @@
 
             getBranchesForComboBox();
             $('#LaunchSoftware').prop('disabled', true);
-            $('#mainMenuId').hide();
-
         });
     </script>
 </body>

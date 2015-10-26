@@ -1,6 +1,6 @@
 ﻿@{
-    var JVId = Request.QueryString["id"];
-    var branchId = Request.QueryString["?branchId"];
+    var JVId = Request.QueryString["JournalVoucherId"];
+    var branchId = Request.QueryString["BranchId"];
 }
 <!DOCTYPE html>
 <html>
@@ -42,7 +42,7 @@
                         <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick=""><i class="fa fa-pencil"></i> Edit</button>
                         <button class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher" onclick=""><i class="fa fa-search"></i> Preview</button>
                         <button class="btn btn-primary btn-sm" id="cmdPrintJournalVoucher" onclick=""><i class="fa fa-print"></i> Print</button>
-                        <button class="btn btn-danger btn-sm" id="cmdCloseJournalVoucher" onclick="cmdJournalVoucherCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                        <button onclick="window.location.href = '@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseJournalVoucher"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -331,7 +331,8 @@
                         var JournalVoucherNumber = Results[i]["JVNumber"];
                     }
                     if (JournalVoucherNumber == document.getElementById('journalVoucher_No').value) {
-                        window.location.href = '/Software/JournalVoucherDetail/?Id=' + journalVoucherId;
+                        //window.location.href = '/Software/JournalVoucherDetail/?Id=' + journalVoucherId;
+                        window.location = '/Software/JournalVoucherDetail?JournalVoucherId=' + journalVoucherId + '&branchId=' + @branchId;
                         window.setTimeout(function () { location.reload() }, 1000);
                     }
                 }
@@ -573,13 +574,6 @@
         });
     }
 
-    // ============================
-    // Journal Voucher Close Button
-    // ============================
-    function cmdJournalVoucherCloseButton_OnClick() {
-        window.location = '/Software/JournalVoucher/?branchId=' + @branchId + '';
-    }
-
     // ===========================
     // Journal Voucher Save Button
     // ===========================
@@ -587,104 +581,104 @@
         var journalVoucherObject = new Object();
         var journalVoucherId = @JVId
 
-            journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
-            journalVoucherObject.JVNumber = document.getElementById('journalVoucher_No').value;
-            journalVoucherObject.ManualJVNumber = document.getElementById('manual_JournalVoucher_No').value;
-            journalVoucherObject.JVDate = document.getElementById('journalVoucher_date_Data').value;
-            journalVoucherObject.Particulars = document.getElementById('journalVoucher_Particulars').value;
-            journalVoucherObject.PreparedById = document.getElementById('preparedByUserId_Data').value;
-            journalVoucherObject.CheckedById = document.getElementById('checkedByUserId_Data').value;
-            journalVoucherObject.ApprovedById = document.getElementById('approvedByUserId_Data').value;
-            var data = JSON.stringify(journalVoucherObject);
+        journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
+        journalVoucherObject.JVNumber = document.getElementById('journalVoucher_No').value;
+        journalVoucherObject.ManualJVNumber = document.getElementById('manual_JournalVoucher_No').value;
+        journalVoucherObject.JVDate = document.getElementById('journalVoucher_date_Data').value;
+        journalVoucherObject.Particulars = document.getElementById('journalVoucher_Particulars').value;
+        journalVoucherObject.PreparedById = document.getElementById('preparedByUserId_Data').value;
+        journalVoucherObject.CheckedById = document.getElementById('checkedByUserId_Data').value;
+        journalVoucherObject.ApprovedById = document.getElementById('approvedByUserId_Data').value;
+        var data = JSON.stringify(journalVoucherObject);
 
-            var isValid = true;
-            $('.requiredJournalVoucher').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-            if (isValid == false) {
-                e.preventDefault();
+        var isValid = true;
+        $('.requiredJournalVoucher').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "2px solid red",
+                    "transition": "border 1s ease 0s"
+                });
             }
             else {
-                if (journalVoucherId == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addJournalVoucher',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdSaveJournalVoucher").prop("disabled", true);
-                                $("#cmdEditJournalVoucher").prop("disabled", true);
-                                $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                                $("#cmdPrintJournalVoucher").prop("disabled", true);
-                                $("#cmdCloseJournalVoucher").prop("disabled", true);
-                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
-                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getJournalVoucherLastInsertedId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                            }
+                $(this).css({
+                    "border": "",
+                });
+            }
+        });
+        if (isValid == false) {
+            e.preventDefault();
+        }
+        else {
+            if (journalVoucherId == 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addJournalVoucher',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdSaveJournalVoucher").prop("disabled", true);
+                            $("#cmdEditJournalVoucher").prop("disabled", true);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                            $("#cmdPrintJournalVoucher").prop("disabled", true);
+                            $("#cmdCloseJournalVoucher").prop("disabled", true);
+                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Saved");
+                            setTimeout(getJournalVoucherLastInsertedId, 1000)
+                        },
+                        404: function () {
+                            toastr.error("Can't Save");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
                         }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateJournalVoucher/' + journalVoucherId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdSaveJournalVoucher").prop("disabled", true);
-                                $("#cmdEditJournalVoucher").prop("disabled", true);
-                                $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                                $("#cmdPrintJournalVoucher").prop("disabled", true);
-                                $("#cmdCloseJournalVoucher").prop("disabled", true);
-                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
-                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Update");
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                            }
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateJournalVoucher/' + journalVoucherId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdSaveJournalVoucher").prop("disabled", true);
+                            $("#cmdEditJournalVoucher").prop("disabled", true);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                            $("#cmdPrintJournalVoucher").prop("disabled", true);
+                            $("#cmdCloseJournalVoucher").prop("disabled", true);
+                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Updated");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Update");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
                         }
-                    });
-                }
+                    }
+                });
             }
         }
+    }
 
-        // =================================================
-        // Get Journal Voucher Line LIST / or / By Branch Id
-        // =================================================
-        function getJournalVoucherLineByJVId() {
-            var journalVoucherLines = new wijmo.collections.ObservableArray;
-            var JVId = @JVId
-            $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listJournalVoucherLineByJVId/' + JVId,
+    // =================================================
+    // Get Journal Voucher Line LIST / or / By Branch Id
+    // =================================================
+    function getJournalVoucherLineByJVId() {
+        var journalVoucherLines = new wijmo.collections.ObservableArray;
+        var JVId = @JVId
+        $('#loadingModal').modal('show');
+        $.ajax({
+            url: '/api/listJournalVoucherLineByJVId/' + JVId,
             cache: false,
             type: 'GET',
             contentType: 'application/json; charset=utf-8',

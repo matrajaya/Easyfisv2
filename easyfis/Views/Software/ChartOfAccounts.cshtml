@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var branchId = Request.QueryString["BranchId"];
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -52,7 +55,7 @@
                             </div>
                             <div class="col-lg-8" align="right">
                                 <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                                <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -99,7 +102,7 @@
                             </div>
                             <div class="col-lg-8" align="right">
                                 <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                                <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -146,7 +149,7 @@
                             </div>
                             <div class="col-lg-8" align="right">
                                 <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                                <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -193,7 +196,7 @@
                             </div>
                             <div class="col-lg-8" align="right">
                                 <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts" onclick="cmdChartOfAccountsCloseButton_OnClick()"><i class="fa fa-times"></i> Close</button>
+                                <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                         <br />
@@ -894,13 +897,6 @@
             });
         }
 
-        // ====================
-        // Account Close Button
-        // ====================
-        function cmdChartOfAccountsCloseButton_OnClick() {
-            window.location = '/Software';
-        }
-
         // ==============================
         // FlexGrid Selection for Account
         // ==============================
@@ -1405,13 +1401,6 @@
             });
         }
 
-        // =========================
-        // Account Type Close Button
-        // =========================
-        function cmdChartOfAccountsCloseButton_OnClick() {
-            window.location = '/Software';
-        }
-
         // ===================================
         // FlexGrid Selection for Account Type
         // ===================================
@@ -1846,13 +1835,6 @@
             });
         }
 
-        // ==============================
-        // Account Cash Flow Close Button
-        // ==============================
-        function cmdChartOfAccountsCloseButton_OnClick() {
-            window.location = '/Software';
-        }
-
         // ===================================
         // FlexGrid Selection for Account Type
         // ===================================
@@ -2186,7 +2168,7 @@
                         }
                     });
                 }
-                
+
             }
         }
 
@@ -2271,13 +2253,6 @@
                     }
                 }
             });
-        }
-
-        // ==================================
-        // Account Cash Category Close Button
-        // ==================================
-        function cmdChartOfAccountsCloseButton_OnClick() {
-            window.location = '/Software';
         }
 
         // =======================================

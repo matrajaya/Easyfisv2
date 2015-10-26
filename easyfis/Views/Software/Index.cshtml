@@ -1,5 +1,5 @@
 ﻿@{
-    var branchId = Request.QueryString["branchId"];
+    var branchId = Request.QueryString["BranchId"];
 }
 <!DOCTYPE html>
 <html>
@@ -53,9 +53,9 @@
                             <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("SystemTables", "Software")"><img src='~/images/Icons/iTables.png'><br /> System Tables</a>
                         </div>
                         <div class="col-md-3">
-                            <a class="btn-masterlist btn-dashboard button--masterlist" href="@Url.Action("ChartOfAccounts", "Software")"><img src='~/images/Icons/iChart.png'><br /> Chart of Accounts</a>
-                            <a class="btn-submenu btn-dashboard button--submenu" href="#" onclick="cmdJournalVoucherByBranchId_OnClick()"><img src='~/images/Icons/iJournal.png'><br /> Journal Voucher</a>
-                            <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("Company", "Software")"><img src='~/images/Icons/iCompany.png'><br /> Comapany</a>
+                            <a class="btn-masterlist btn-dashboard button--masterlist" href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iChart.png'><br /> Chart of Accounts</a>
+                            <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iJournal.png'><br /> Journal Voucher</a>
+                            <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("Company", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iCompany.png'><br /> Comapany</a>
                             <a class="btn-reports btn-dashboard button--reports" href="@Url.Action("FinancialStatements", "Software")"><img src='~/images/Icons/iStatement.png'><br /> Financial Statements</a>
                             <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("Users", "Software")"><img src='~/images/Icons/iUsers.png'><br /> Users</a>
                             <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("Settings", "Software")"><img src='~/images/Icons/iSettings.png'><br /> Settings</a>
@@ -71,10 +71,5 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
-    <script type="text/javascript">
-        function cmdJournalVoucherByBranchId_OnClick() {
-            window.location = '/Software/JournalVoucher/?branchId=' + @branchId;
-        }
-    </script>
 </body>
 </html>
