@@ -1,6 +1,9 @@
-﻿<!-- SideBar Menu -->
+﻿@{
+    var branchId = Request.QueryString["BranchId"];
+}
+<!-- SideBar Menu -->
 <nav id="c-menu--push-left" class="c-menu c-menu--push-left">
-    <h3 class="c-menu__close"> Software Dashboard   <i class="fa fa-times"></i></h3>
+    <h4 class="c-menu__close">Menu  <a href="#" style="float: right;"><i class="fa fa-times sidebar-menu-close"></i></a></h4>
     <ul class="menu-items">
         <li class="menu-items"><a href="@Url.Action("Supplier","Software")" class="menu-link sidebar-menu-link"><i class="fa fa-truck "></i> Supplier</a></li>
         <li class="menu-items"><a href="@Url.Action("PurchaseOrder", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-tags"></i> Purchase Order</a></li>
@@ -19,9 +22,9 @@
         <li class="menu-items"><a href="@Url.Action("InventoryReport", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-file-text-o"></i> Inventory Report</a></li>
         <li class="menu-items"><a href="@Url.Action("StockTransfer", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-cubes"></i> Stock Transfer</a></li>
         <li class="menu-items"><a href="@Url.Action("SystemTables", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-cubes"></i> System Tables</a></li>
-        <li class="menu-items"><a href="@Url.Action("ChartOfAccounts", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-line-chart"></i> Chart of Accounts</a></li>
-        <li class="menu-items"><a href="@Url.Action("JournalVoucher", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-book"></i> Journal Voucher</a></li>
-        <li class="menu-items"><a href="@Url.Action("Company", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-building"></i> Comapany</a></li>
+        <li class="menu-items"><a href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link"><i class="fa fa-line-chart"></i> Chart of Accounts</a></li>
+        <li class="menu-items"><a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link"><i class="fa fa-book"></i> Journal Voucher</a></li>
+        <li class="menu-items"><a href="@Url.Action("Company", "Software", new { BranchId = branchId })" class=" menu-link sidebar-menu-link"><i class="fa fa-building"></i> Comapany</a></li>
         <li class="menu-items"><a href="@Url.Action("FinancialStatements", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-money"></i> Financial Statements</a></li>
         <li class="menu-items"><a href="@Url.Action("Users", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-user"></i> Users</a></li>
         <li class="menu-items"><a href="@Url.Action("Settings", "Software")" class="menu-link sidebar-menu-link"><i class="fa fa-gears"></i> Settings</a></li>

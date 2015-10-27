@@ -4,25 +4,27 @@
 }
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "nav navbar-nav navbar-right" }))
     {
         @Html.AntiForgeryToken()
 
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="@Url.Action("Login", "Account")">@ViewData["FirstName"]</a></li>
+
+            <li class="active"><a href="@Url.Action("Login", "Account")">@ViewData["FirstName"]</a></li>
             @*<li class="active">@Html.ActionLink((ViewData["FirstName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["FullName"]) })</li>*@
             @*@Html.ActionLink(User.Identity.GetUserName() + "!", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })</li>*@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-chevron-down"></i></a>
                 <ul class="dropdown-menu account-dropdown-menu">
-                    <li><a href="#" id="mainMenuId" onclick="mainMenuByBranchId()">Main Menu</a></li>
-                    <li class="divider"></li>
+                    @*<li><a href="#" id="mainMenuId" onclick="mainMenuByBranchId()">Main Menu</a></li>*@
+                    @*<li class="divider"></li>*@
+                    <li><a href="@Url.Action("Index", "Manage")">Help</a></li>
+                    <li><a href="@Url.Action("Index", "Manage")">Report a problem</a></li>
                     <li><a href="@Url.Action("Index", "Manage")">Settings</a></li>
                     @*<li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out"></i> Sign out</a></li>*@
                     <li><a href="#" data-toggle="modal" onclick="cmdLogoutModal_OnClick()">Logout</a></li>
                 </ul>
             </li>
-        </ul>
+ 
     
         <script type="text/javascript">
             function cmdLogoutModal_OnClick() {
@@ -32,9 +34,9 @@
                 });
             }
 
-            function mainMenuByBranchId() {
+            @*function mainMenuByBranchId() {
                 window.location = '/Software?branchId=' + @branchId;
-           } 
+           }*@ 
         </script>
     }
 }

@@ -4,7 +4,7 @@
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
     {
         @Html.AntiForgeryToken()
-        <a href="@Url.Action("Index", "Software")" class="btn btn-primary btn-lg btn-fill btn-round">Launch Software</a>
+        <a href="@Url.Action("Index", "Manage")" class="btn btn-primary btn-lg btn-fill btn-round">Manage</a>
     }
 }
 else

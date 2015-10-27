@@ -12,7 +12,7 @@
                 <a class="navbar-brand" href="@Url.Action("Index", "Home")">EasyFIS</a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav navbar-right">
                     @*<li><a href="@Url.Action("Index", "Home")#home">Home</a></li>*@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">About</a>
@@ -28,8 +28,6 @@
                     </li>
                     <li><a href="@Url.Action("Index", "Home")#support">Support</a></li>
                     <li><a href="#">News</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
                     @Html.Partial("_LoginPartial")
                 </ul>
             </div>

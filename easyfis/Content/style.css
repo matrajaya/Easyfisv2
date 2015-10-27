@@ -13,17 +13,16 @@
     color: #FFFFFF;
 }
 
-.navbar-transparent .navbar-nav > li > a:hover {
-    color: #0099CC;
-    text-shadow: 1px 1px 2px #FFFFFF;
-    background-color: transparent;
-    transition: color 1s ease 0s;
-}
+    .navbar-transparent .navbar-nav > li > a:hover {
+        color: #0099CC;
+        background-color: transparent;
+        /*transition: color 1s ease 0s;*/
+    }
 
-.navbar-transparent .navbar-nav > li > a:focus {
-    background-color: transparent;
-    transition: color 1s ease 0s;
-}
+    .navbar-transparent .navbar-nav > li > a:focus {
+        background-color: transparent;
+        /*transition: color 1s ease 0s;*/
+    }
 
 .navbar-transparent .navbar-nav > .active {
     color: #FFFFFF;
@@ -33,38 +32,39 @@
 /* Navbar with opaque class which will be attached on scroll */
 .navbar.opaque {
     background-color: #003366;
+    color: #FFFFFF;
     transition: background-color 1s ease 0s;
 }
 
-.navbar.opaque .navbar-brand {
-    color: #FFFFFF;
-}
+    .navbar.opaque .navbar-brand {
+        color: #FFFFFF;
+    }
 
-.navbar.opaque .navbar-nav > li > a {
-    color: #FFFFFF;
-    transition: color 1s ease 0s;
-}
+    .navbar.opaque .navbar-nav > li > a {
+        color: #FFFFFF;
+        /*transition: color 1s ease 0s;*/
+    }
 
-.navbar.opaque .navbar-nav > li > a:hover {
-    color: #FFFFFF;
-    background-color: #194775;
-    transition: background-color 1s ease 0s;
-}
+        .navbar.opaque .navbar-nav > li > a:hover {
+            color: #FFFFFF;
+            background-color: #194775;
+            /*transition: background-color 1s ease 0s;*/
+        }
 
-.navbar.opaque .navbar-nav > .active {
-    color: #FFFFFF;
-    background-color: #194775;
-}
+    .navbar.opaque .navbar-nav > .active {
+        color: #FFFFFF;
+        background-color: #194775;
+    }
 
 /* Navbar and Dropdown */
 .navbar .nav li.dropdown.open > .dropdown-toggle,
 .navbar .nav li.dropdown.active > .dropdown-toggle {
     background-color: transparent;
+    color: #FFFFFF;
 }
 
 .dropdown-menu > li > a {
     padding: 7px 20px;
-    color: #333333;
 }
 
 .navbar-toggle {
@@ -147,7 +147,7 @@
         content: "";
         display: inline-block;
         position: absolute;
-        left: 130px;
+        left: 237px;
         margin-left: -60%;
         top: -11px;
     }
@@ -159,7 +159,7 @@
         content: "";
         display: inline-block;
         position: absolute;
-        left: 130px;
+        left: 237px;
         margin-left: -60%;
         top: -10px;
     }
@@ -204,23 +204,23 @@
         background-color: rgba(0, 0, 0, 0.50);
     }
 
-    .navbar-transparent .navbar-nav .open .dropdown-menu > li > a:focus,
-    .navbar-transparent .navbar-nav .open .dropdown-menu > li > a:hover,
-    .navbar-transparent .dropdown-menu > li > a:focus,
-    .navbar-transparent .dropdown-menu > li > a:hover,
-    [class*="navbar-ct"] .dropdown-menu > li > a:focus,
-    [class*="navbar-ct"] .dropdown-menu > li > a:hover {
-        transition: color 1s ease 0s;
-        background-color: transparent;
-        color: #FFFFFF;
-        opacity: 1;
-    }
+        .navbar-transparent .navbar-nav .open .dropdown-menu > li > a:focus,
+        .navbar-transparent .navbar-nav .open .dropdown-menu > li > a:hover,
+        .navbar-transparent .dropdown-menu > li > a:focus,
+        .navbar-transparent .dropdown-menu > li > a:hover,
+        [class*="navbar-ct"] .dropdown-menu > li > a:focus,
+        [class*="navbar-ct"] .dropdown-menu > li > a:hover {
+            transition: color 1s ease 0s;
+            background-color: transparent;
+            color: #FFFFFF;
+            opacity: 1;
+        }
 
-    .navbar-transparent .navbar-nav .open .dropdown-menu > li > a,
-    [class*="navbar-ct"] .dropdown-menu > li > a {
-        color: #FFFFFF;
-        opacity: 0.8;
-    }
+        .navbar-transparent .navbar-nav .open .dropdown-menu > li > a,
+        [class*="navbar-ct"] .dropdown-menu > li > a {
+            color: #FFFFFF;
+            opacity: 0.8;
+        }
 
     .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
         background-color: rgba(0,0,0,0);
@@ -232,20 +232,20 @@
 /* COVER PHOTO IN THE HEADER PAGE */
 /* ============================== */
 .cover-photo-custom {
-    padding-top: 250px;
-    padding-bottom: 250px;
+    padding-top: 300px;
+    padding-bottom: 300px;
     width: 100%;
     text-align: center;
     color: #f8f8f8;
     font-family: Georgia;
-    background: url(../images/coverImages/cover7.jpg) no-repeat center center;
+    background: url(../images/coverImages/cover8.jpg) no-repeat center center;
     background-size: cover;
     background-position: center;
 }
 /* Header row width */
 .intro-divider {
-    max-width:50px;
-    border-style:solid;
+    max-width: 400px;
+    border-style: solid;
     border-color: #63ace5;
     border-width: 2px;
 }
@@ -280,9 +280,9 @@
 /* FOOTER ICON */
 /* =========== */
 icon-custom {
-   display: block;
-   padding-left: 50%;
-   padding-right: -50%;
+    display: block;
+    padding-left: 50%;
+    padding-right: -50%;
 }
 
 /* ============================= */
@@ -304,7 +304,7 @@ icon-custom {
     padding-top: 65px;
     padding-bottom: 5px;
     width: 100%;
-    background: url(../images/coverImages/cover3.jpg) no-repeat center center;
+    /*background: url(../images/coverImages/cover3.jpg) no-repeat center center;*/
     background-size: cover;
     background-position: center;
 }
@@ -355,23 +355,23 @@ icon-custom {
     border-radius: 15px;
 }
 
-.btn-circle.btn-lg {
-    width: 50px;
-    height: 50px;
-    padding: 10px 16px;
-    font-size: 18px;
-    line-height: 1.33;
-    border-radius: 25px;
-}
+    .btn-circle.btn-lg {
+        width: 50px;
+        height: 50px;
+        padding: 10px 16px;
+        font-size: 18px;
+        line-height: 1.33;
+        border-radius: 25px;
+    }
 
-.btn-circle.btn-xl {
-    width: 70px;
-    height: 70px;
-    padding: 10px 16px;
-    font-size: 24px;
-    line-height: 1.33;
-    border-radius: 35px;
-}
+    .btn-circle.btn-xl {
+        width: 70px;
+        height: 70px;
+        padding: 10px 16px;
+        font-size: 24px;
+        line-height: 1.33;
+        border-radius: 35px;
+    }
 
 .help-block ul {
     list-style-type: none;
@@ -391,6 +391,7 @@ a:link.profile-name, a:visited.profile-name {
     font-family: Georgia;
     font-weight: 400;
 }
+
 a:hover.profile-name, a:active.profile-name, a:focus.profile-name {
     text-decoration: none;
 }
@@ -411,13 +412,14 @@ a:hover.profile-name, a:active.profile-name, a:focus.profile-name {
 dt {
     margin-top: 5px;
 }
+
 dd {
     margin-bottom: 10px;
 }
 
 .textarea-custom-profile {
     resize: initial;
-    min-height: 7em;  
+    min-height: 7em;
 }
 
 .comboBox-wide {
@@ -427,6 +429,3 @@ dd {
 .input-sm {
     font-size: 14px;
 }
-
-
-
