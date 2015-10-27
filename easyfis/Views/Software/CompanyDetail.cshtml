@@ -689,7 +689,7 @@
     // On Page Load
     // ============
     $(document).ready(function () {
-        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> / ' + ' <a href="@Url.Action("Company", "Software")" class="currentPageLinkCustom">Company</a> ' + ' / Company Detail';
+        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> / ' + ' <a href="@Url.Action("Company", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Company</a> ' + ' / Company Detail';
 
         if(@id == 0) {
             $("#cmdBranchAddBranchButton").prop("disabled", true);
