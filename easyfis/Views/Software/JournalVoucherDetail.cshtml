@@ -1,5 +1,6 @@
 ﻿@{
     var JVId = Request.QueryString["id"];
+    var branchId = Request.QueryString["?branchId"];
 }
 <!DOCTYPE html>
 <html>
@@ -34,7 +35,7 @@
                 <div class="row">
                     <hr />
                     <div class="col-md-6">
-                        <h4 id="journalVoucherDetailLabel"></h4>
+                        <h4 id="journalVoucherDetailLabel">Your Branch</h4>
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary btn-sm" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
@@ -576,7 +577,7 @@
     // Journal Voucher Close Button
     // ============================
     function cmdJournalVoucherCloseButton_OnClick() {
-        window.location = '/Software/JournalVoucher';
+        window.location = '/Software/JournalVoucher/?branchId=' + @branchId + '';
     }
 
     // ===========================

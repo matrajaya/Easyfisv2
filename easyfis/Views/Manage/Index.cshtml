@@ -214,6 +214,7 @@
                 onSelectedIndexChanged: function () {
                     $("#branch_Id_Data").val(branchCollections.items[this.selectedIndex].BranchId);
                     $('#LaunchSoftware').prop('disabled', false);
+                    $('#mainMenuId').show();
                 }
             });
         }
@@ -250,6 +251,7 @@
 
             getBranchesForComboBox();
             $('#LaunchSoftware').prop('disabled', true);
+            $('#mainMenuId').hide();
 
         });
     </script>

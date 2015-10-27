@@ -1,4 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
+@{
+    var branchId = Request.QueryString["branchId"];
+}
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
@@ -14,14 +17,21 @@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-chevron-down"></i></a>
                 <ul class="dropdown-menu">
-                    <li><a href="@Url.Action("Index", "Software")">Main Menu</a></li>
-                    <hr class="divider" />
+                    <li><a href="#" id="mainMenuId" onclick="mainMenuByBranchId()">Main Menu</a></li>
+                    <li class="divider"></li>
                     <li><a href="@Url.Action("Index", "Manage")">Settings</a></li>
                     @*<li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out"></i> Sign out</a></li>*@
                     <li><a href="#" data-toggle="modal" data-target="#modalLogout">Logout</a></li>
                 </ul>
             </li>
         </ul>
+    
+        <script type="text/javascript">
+            // main menu navigate
+            function mainMenuByBranchId() {
+                window.location = '/Software/?branchId=' + @branchId;
+            }
+        </script>
     }
 }
 else
