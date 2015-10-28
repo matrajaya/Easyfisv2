@@ -41,7 +41,7 @@
                         <button class="btn btn-primary btn-sm" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick=""><i class="fa fa-pencil"></i> Edit</button>
                         <button onclick="window.location.href = '@Url.Action("JournalVoucherPDF", "Software")'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-search"></i> Preview</button>
-                        <button onclick="window.location.href = '@Url.Action("JournalVoucherPDFDownload", "Software")'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-search"></i> Download PDF</button>
+                        <button onclick="window.location.href = '@Url.Action("JournalVoucherPDFDownload", "Software")'" class="btn btn-primary btn-sm" id="cmdDownloadJournalVoucher"><i class="fa fa-download"></i> Download PDF</button>
                         <button class="btn btn-primary btn-sm" id="cmdPrintJournalVoucher" onclick=""><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseJournalVoucher"><i class="fa fa-times"></i> Close</button>
                     </div>
@@ -624,6 +624,7 @@
                             $("#cmdEditJournalVoucher").prop("disabled", true);
                             $("#cmdPreviewJournalVoucher").prop("disabled", true);
                             $("#cmdPrintJournalVoucher").prop("disabled", true);
+                            $("#cmdDownloadJournalVoucher").prop("disabled", true);
                             $("#cmdCloseJournalVoucher").prop("disabled", true);
                             $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                             $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
@@ -651,6 +652,7 @@
                             $("#cmdEditJournalVoucher").prop("disabled", true);
                             $("#cmdPreviewJournalVoucher").prop("disabled", true);
                             $("#cmdPrintJournalVoucher").prop("disabled", true);
+                            $("#cmdDownloadJournalVoucher").prop("disabled", true);
                             $("#cmdCloseJournalVoucher").prop("disabled", true);
                             $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                             $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
