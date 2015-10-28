@@ -7,33 +7,41 @@
     <section>
         <div class="cover-login-photo-custom">
             <div class="container">
-                <div class="panel panel-info">
-                    <div class="panel-heading">Basic Info</div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="well">
-                                    @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" }) <br />
-                                    Address: <span class="profile-details">@ViewData["Address"]  <br /></span>
-                                    Email Address: <span class="profile-details">@ViewData["Email"] <br /></span>
-                                    Username:<span class="profile-details"> @ViewData["UserName"]</span>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Basic Info</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="well">
+                                            @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" }) <br />
+                                            Address: <span class="profile-details">@ViewData["Address"]  <br /></span>
+                                            Email Address: <span class="profile-details">@ViewData["Email"] <br /></span>
+                                            Username:<span class="profile-details"> @ViewData["UserName"]</span>
+                                        </div>
+                                    </div>
                                 </div>
+                                <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit Info</button>
+                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default btn-sm"> Change Your Password</a>
+                                <p class="change-password-success">@ViewBag.StatusMessage</p>
                             </div>
                         </div>
-                        <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit Info</button>
-                        <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default btn-sm"> Change Your Password</a>
-                        <p class="change-password-success">@ViewBag.StatusMessage</p>
                     </div>
-                </div>
-                <div class="panel panel-info">
-                    <div class="panel-heading">ERP</div>
-                    <div class="panel-body">
-                        <div class="col-md-6">
-                            <div id="branch_Id" class="comboBox-wide"></div>
-                            <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
-                        </div>
-                        <div class="col-md-6">
-                            <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
+                    <div class="col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">ERP</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div id="branch_Id" class="comboBox-wide"></div>
+                                        <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

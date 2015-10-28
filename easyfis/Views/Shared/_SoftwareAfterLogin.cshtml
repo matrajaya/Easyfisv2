@@ -4,12 +4,12 @@
 }
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+    using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         <ul class="nav navbar-nav">
             @*<li><a href="@Url.Action("Index","Software")"><i class="fa fa-table"></i> DashBoard</a></li>*@
-            <li><a href="#" id="c-button--push-left">Menu</a></li>
+            <li><a href="#" id="c-button--push-left">Menu <i class="fa fa-arrow-right"></i></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="@Url.Action("Login", "Account")">@ViewData["FirstName"]</a></li>
