@@ -40,6 +40,36 @@ namespace easyfis.Controllers
             return branches.ToList();
         }
 
+        // =================
+        // LIST Branch by Id
+        // =================
+        [Route("api/listBranchById/{Id}")]
+        public Models.MstBranch GetBranchById(String Id)
+        {
+            var branchId = Convert.ToInt32(Id);
+            var branches = from d in db.MstBranches
+                           where d.Id == branchId
+                           select new Models.MstBranch
+                           {
+                               Id = d.Id,
+                               CompanyId = d.CompanyId,
+                               Company = d.MstCompany.Company,
+                               BranchCode = d.BranchCode,
+                               Branch = d.Branch,
+                               Address = d.Address,
+                               ContactNumber = d.ContactNumber,
+                               TaxNumber = d.TaxNumber,
+                               IsLocked = d.IsLocked,
+                               CreatedById = d.CreatedById,
+                               CreatedBy = d.MstUser.UserName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                               UpdatedById = d.UpdatedById,
+                               UpdatedBy = d.MstUser1.UserName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                           };
+            return (Models.MstBranch)branches.FirstOrDefault();
+        }
+
         // =========================
         // LIST Branch by Company Id
         // =========================

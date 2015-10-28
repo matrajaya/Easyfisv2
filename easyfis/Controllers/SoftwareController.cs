@@ -135,8 +135,14 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult JournalVoucherDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult JournalVoucherPDF()
-        { 
+        {
             MemoryStream workStream = new MemoryStream();
             Document document = new Document();
             PdfWriter.GetInstance(document, workStream).CloseStream = false;
@@ -150,38 +156,32 @@ namespace easyfis.Controllers
             workStream.Write(byteInfo, 0, byteInfo.Length);
             workStream.Position = 0;
 
-            return new FileStreamResult(workStream, "application/pdf");  
+            return new FileStreamResult(workStream, "application/pdf");
         }
 
-        [Authorize]
-        public ActionResult JournalVoucherPDFDownload()
-        {
-            // Create PDF
-            var document = new Document();
-            MemoryStream workStream = new MemoryStream();
-            PdfWriter writer = PdfWriter.GetInstance(document, workStream);
+        //[Authorize]
+        //public ActionResult JournalVoucherPDFDownload()
+        //{
+        //    // Create PDF
+        //    var document = new Document();
+        //    MemoryStream workStream = new MemoryStream();
+        //    PdfWriter writer = PdfWriter.GetInstance(document, workStream);
 
-            document.Open();
-            document.Add(new Paragraph("Journal Voucher Data"));
-            document.Add(new Paragraph(DateTime.Now.ToString()));
-            document.Close();
+        //    document.Open();
+        //    document.Add(new Paragraph("Journal Voucher Data"));
+        //    document.Add(new Paragraph(DateTime.Now.ToString()));
+        //    document.Close();
 
-            byte[] documentData = workStream.GetBuffer(); // get the generated PDF as raw data
+        //    byte[] documentData = workStream.GetBuffer(); // get the generated PDF as raw data
 
-            // write the data to response stream and set appropriate headers:
-            Response.AppendHeader("Content-Disposition", "attachment; filename=JournalVoucher.pdf");
-            Response.ContentType = "application/pdf";
-            Response.BinaryWrite(documentData);
-            Response.End();
+        //    // write the data to response stream and set appropriate headers:
+        //    Response.AppendHeader("Content-Disposition", "attachment; filename=JournalVoucher.pdf");
+        //    Response.ContentType = "application/pdf";
+        //    Response.BinaryWrite(documentData);
+        //    Response.End();
 
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult JournalVoucherDetail()
-        {
-            return View();
-        }
+        //    return View();
+        //}
 
         [Authorize]
         public ActionResult Company()

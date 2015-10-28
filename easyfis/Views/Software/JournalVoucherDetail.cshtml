@@ -38,10 +38,10 @@
                         <h4 id="journalVoucherDetailLabel">Your Branch</h4>
                     </div>
                     <div class="col-md-6" align="right">
+                        <button class="btn btn-info btn-sm" id="cmdJournaleJournalVoucher" onclick="cmdJournalVoucherJournalButton_OnClick()"><i class="fa fa-save"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick=""><i class="fa fa-pencil"></i> Edit</button>
                         <button onclick="window.location.href = '@Url.Action("JournalVoucherPDF", "Software")'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-search"></i> Preview</button>
-                        <button onclick="window.location.href = '@Url.Action("JournalVoucherPDFDownload", "Software")'" class="btn btn-primary btn-sm" id="cmdDownloadJournalVoucher"><i class="fa fa-download"></i> Download PDF</button>
                         <button class="btn btn-primary btn-sm" id="cmdPrintJournalVoucher" onclick=""><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseJournalVoucher"><i class="fa fa-times"></i> Close</button>
                     </div>
@@ -61,6 +61,12 @@
                                 <div class="form-group">
                                     <label>Journal Voucher Number:</label>
                                     <input type="text" id="journalVoucher_No" class="form-control input-sm requiredJournalVoucher">
+                                </div>
+                                <div class="form-group">
+                                    <label>Journal Voucher Date:</label>
+
+                                    <div id="journalVoucher_Date" class="comboBox-wide"></div>
+                                    <input type="hidden" id="journalVoucher_date_Data" class="input-sm requiredJournalVoucher" required />
                                 </div>
                                 <div class="form-group">
                                     <label>Manual Journal Voucher Number:</label>
@@ -92,12 +98,6 @@
 
                                     <input type="hidden" id="approvedByUserId_Data" class="requiredJournalVoucher" required />
                                     <input type="hidden" id="approvedByUserId_selectedValue" />
-                                </div>
-                                <div class="form-group">
-                                    <label>Journal Voucher Date:</label>
-
-                                    <div id="journalVoucher_Date" class="comboBox-wide"></div>
-                                    <input type="hidden" id="journalVoucher_date_Data" class="input-sm requiredJournalVoucher" required />
                                 </div>
                             </div>
                         </div>
@@ -386,8 +386,9 @@
                 getBranchesForComboBox();
                 getUsersForComboBox();
 
-                document.getElementById('branch_Id_data').value = Results.BranchId;
-                document.getElementById('branch_selectedValue').value = Results.Branch;
+
+                //document.getElementById('branch_Id_data').value = Results.BranchId;
+                //document.getElementById('branch_selectedValue').value = Results.Branch;
                 document.getElementById('journalVoucher_No').value = Results.JVNumber;
                 document.getElementById('manual_JournalVoucher_No').value = Results.ManualJVNumber;
                 document.getElementById('journalVoucher_date_Data').value = Results.JVDate;
@@ -440,7 +441,28 @@
                             BranchBranch: results[i]["Branch"]
                         });
                     }
-                    createCboBranch(branches);
+
+                    $.ajax({
+                        url: '/api/listBranchById/' + @branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            if (results.length > 0) {
+                                branches.push({
+                                    BranchId: results.Id,
+                                    BranchBranch: results.Branch
+                                });
+                            }
+
+                            document.getElementById('branch_Id_data').value = @branchId;
+                            document.getElementById('branch_selectedValue').value = results.Branch;
+                            createCboBranch(branches);
+
+                        }
+                    });
+
                 }
             }
         }).fail(function (xhr, textStatus, err) {
@@ -461,6 +483,7 @@
 
         cboBranch.dispose();
         cboBranch = new wijmo.input.ComboBox('#branch_Id', {
+            disabled: true,
             placeholder: "Select Branch",
             itemsSource: branchList,
             isEditable: false,
@@ -1266,6 +1289,6 @@
             updateNavigateButtonsJournalVoucherLine();
         });
     });
-    </script>
+</script>
 </body>
 </html>
