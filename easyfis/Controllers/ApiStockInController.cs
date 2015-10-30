@@ -22,31 +22,61 @@ namespace easyfis.Controllers
                            {
                                Id = d.Id,
                                BranchId = d.BranchId,
-                               //Branch = d.Branch,
+                               Branch = d.MstBranch.Branch,
                                INNumber = d.INNumber,
-                               //INDate = d.INDate,
+                               INDate = d.INDate.ToShortDateString(),
                                AccountId = d.AccountId,
-                               //Account = d.Account,
+                               Account = d.MstAccount.Account,
                                ArticleId = d.ArticleId,
-                               //Article = d.Article,
+                               Article = d.MstArticle.Article,
                                Particulars = d.Particulars,
-                               //ManualInNumber = d.ManualInNumber,
+                               ManualINNumber = d.ManualINNumber,
                                IsProduced = d.IsProduced,
-                               //PreparedBy = d.PreparedBy,
                                PreparedById = d.PreparedById,
-                               //CheckedBy = d.CheckedBy,
+                               PreparedBy = d.MstUser3.FullName,
                                CheckedById = d.CheckedById,
-                               //ApprovedBy = d.ApprovedBy,
+                               CheckedBy = d.MstUser1.FullName,
                                ApprovedById = d.ApprovedById,
+                               ApprovedBy = d.MstUser.FullName,
                                IsLocked = d.IsLocked,
                                CreatedById = d.CreatedById,
-                               //CreatedBy = d.CreatedBy,
-                               //CreatedDateTime = d.CreatedDateTime,
+                               CreatedBy = d.MstUser2.FullName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                UpdatedById = d.UpdatedById,
-                               //UpdatedBy = d.UpdatedBy,
-                               //UpdatedDateTime = d.UpdatedDateTime
+                               UpdatedBy = d.MstUser4.FullName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                            };
             return stockIns.ToList();
+        }
+
+        // ==============
+        // DELETE Company
+        // ==============
+        [Route("api/deleteStockIn/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var stockInId = Convert.ToInt32(id);
+                var stockIns = from d in db.TrnStockIns where d.Id == stockInId select d;
+
+                if (stockIns.Any())
+                {
+                    db.TrnStockIns.DeleteOnSubmit(stockIns.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

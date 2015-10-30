@@ -22,34 +22,109 @@ namespace easyfis.Controllers
                                  {
                                      Id = d.Id,
                                      BranchId = d.BranchId,
-                                     //Branch = d.Branch,
+                                     Branch = d.MstBranch.Branch,
                                      PONumber = d.PONumber,
-                                     //PODate = d.PODate,
+                                     PODate = d.PODate.ToShortDateString(),
                                      SupplierId = d.SupplierId,
-                                     //Supplier = d.Supplier,
+                                     Supplier = d.MstArticle.Article,
                                      TermId = d.TermId,
-                                     //Term = d.Term,
+                                     Term = d.MstTerm.Term,
                                      ManualRequestNumber = d.ManualRequestNumber,
                                      ManualPONumber = d.ManualPONumber,
-                                     //DateNeeded = d.DateNeeded,
+                                     DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
                                      RequestedById = d.RequestedById,
-                                     //RequestedBy = d.RequestedBy,
-                                     //PreparedBy = d.PreparedBy,
-                                     //CheckedBy = d.CheckedBy,
+                                     RequestedBy = d.MstUser4.FullName,
+                                     PreparedById = d.PreparedById,
+                                     PreparedBy = d.MstUser3.FullName,
                                      CheckedById = d.CheckedById,
-                                     //ApprovedBy = d.ApprovedBy,
+                                     CheckedBy = d.MstUser1.FullName,
                                      ApprovedById = d.ApprovedById,
+                                     ApprovedBy = d.MstUser.FullName,
                                      IsLocked = d.IsLocked,
                                      CreatedById = d.CreatedById,
-                                     //CreatedBy = d.CreatedBy,
-                                     //CreatedDateTime = d.CreatedDateTime,
+                                     CreatedBy = d.MstUser2.FullName,
+                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                      UpdatedById = d.UpdatedById,
-                                     //UpdatedBy = d.UpdatedBy,
-                                     //UpdatedDateTime = d.UpdatedDateTime
+                                     UpdatedBy = d.MstUser5.FullName,
+                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                  };
             return purchaseOrders.ToList();
+        }
+
+        // =========================
+        // LIST Purchase Order by Id
+        // =========================
+        [Route("api/listPurchaseOrderById/{id}")]
+        public Models.TrnPurchaseOrder GetPurchaseOrderById(String id)
+        {
+            var POId = Convert.ToInt32(id);
+            var purchaseOrders = from d in db.TrnPurchaseOrders
+                                 where d.Id == POId
+                                 select new Models.TrnPurchaseOrder
+                                 {
+                                     Id = d.Id,
+                                     BranchId = d.BranchId,
+                                     Branch = d.MstBranch.Branch,
+                                     PONumber = d.PONumber,
+                                     PODate = d.PODate.ToShortDateString(),
+                                     SupplierId = d.SupplierId,
+                                     Supplier = d.MstArticle.Article,
+                                     TermId = d.TermId,
+                                     Term = d.MstTerm.Term,
+                                     ManualRequestNumber = d.ManualRequestNumber,
+                                     ManualPONumber = d.ManualPONumber,
+                                     DateNeeded = d.DateNeeded.ToShortDateString(),
+                                     Remarks = d.Remarks,
+                                     IsClose = d.IsClose,
+                                     RequestedById = d.RequestedById,
+                                     RequestedBy = d.MstUser4.FullName,
+                                     PreparedById = d.PreparedById,
+                                     PreparedBy = d.MstUser3.FullName,
+                                     CheckedById = d.CheckedById,
+                                     CheckedBy = d.MstUser1.FullName,
+                                     ApprovedById = d.ApprovedById,
+                                     ApprovedBy = d.MstUser.FullName,
+                                     IsLocked = d.IsLocked,
+                                     CreatedById = d.CreatedById,
+                                     CreatedBy = d.MstUser2.FullName,
+                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                     UpdatedById = d.UpdatedById,
+                                     UpdatedBy = d.MstUser5.FullName,
+                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                 };
+            return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
+        }
+
+        // =========
+        // DELETE PO
+        // =========
+        [Route("api/deletePO/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var POId = Convert.ToInt32(id);
+                var POs = from d in db.TrnPurchaseOrders where d.Id == POId select d;
+
+                if (POs.Any())
+                {
+                    db.TrnPurchaseOrders.DeleteOnSubmit(POs.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

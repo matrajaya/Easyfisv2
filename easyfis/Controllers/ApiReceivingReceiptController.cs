@@ -22,38 +22,69 @@ namespace easyfis.Controllers
                                     {
                                         Id = d.Id,
                                         BranchId = d.BranchId,
-                                        //Branch = d.Branch,
-                                        //RRDate = d.RRDate,
+                                        Branch = d.MstBranch.Branch,
+                                        RRDate = d.RRDate.ToShortDateString(),
                                         RRNumber = d.RRNumber,
                                         SupplierId = d.SupplierId,
-                                        //Supplier = d.Supplier,
+                                        Supplier = d.MstArticle.Article,
                                         TermId = d.TermId,
-                                        //Term = d.Term,
+                                        Term = d.MstTerm.Term,
                                         DocumentReference = d.DocumentReference,
                                         ManualRRNumber = d.ManualRRNumber,
                                         Remarks = d.Remarks,
-                                        //Amount = d.Amount,
-                                        //WTaxAmount = d.WTaxAmount,
-                                        //PaidAmount = d.PaidAmount,
-                                        //AdjustmentAmount = d.AdjustmentAmount,
-                                        //BalanceAmount = d.BalanceAmount,
+                                        Amount = d.Amount,
+                                        WTaxAmount = d.WTaxAmount,
+                                        PaidAmount = d.PaidAmount,
+                                        AdjustmentAmount = d.AdjustmentAmount,
+                                        BalanceAmount = d.BalanceAmount,
                                         ReceivedById = d.ReceivedById,
-                                        //ReceivedBy = d.ReceivedBy,
-                                        //PreparedBy = d.PreparedBy,
+                                        ReceivedBy = d.MstUser4.FullName,
                                         PreparedById = d.PreparedById,
-                                        //CheckedBy = d.CheckedBy,
+                                        PreparedBy = d.MstUser3.FullName,
                                         CheckedById = d.CheckedById,
-                                        //ApprovedBy = d.ApprovedBy,
+                                        CheckedBy = d.MstUser1.FullName,
                                         ApprovedById = d.ApprovedById,
+                                        ApprovedBy = d.MstUser.FullName,
                                         IsLocked = d.IsLocked,
                                         CreatedById = d.CreatedById,
-                                        //CreatedBy = d.CreatedBy,
-                                        //CreatedDateTime = d.CreatedDateTime,
+                                        CreatedBy = d.MstUser2.FullName,
+                                        CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                         UpdatedById = d.UpdatedById,
-                                        //UpdatedBy = d.UpdatedBy,
-                                        //UpdatedDateTime = d.UpdatedDateTime
+                                        UpdatedBy = d.MstUser5.FullName,
+                                        UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                     };
             return receivingReceipts.ToList();
         }
+
+        // =========
+        // DELETE RR
+        // =========
+        [Route("api/deleteRR/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var RRId = Convert.ToInt32(id);
+                var RRs = from d in db.TrnReceivingReceipts where d.Id == RRId select d;
+
+                if (RRs.Any())
+                {
+                    db.TrnReceivingReceipts.DeleteOnSubmit(RRs.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
     }
 }

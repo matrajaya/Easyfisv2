@@ -22,11 +22,11 @@ namespace easyfis.Models
         public String DocumentReference { get; set; }
         public String ManualRRNumber { get; set; }
         public String Remarks { get; set; }
-        public Boolean Amount { get; set; }
-        public Boolean WTaxAmount { get; set; }
-        public Boolean PaidAmount { get; set; }
-        public Boolean AdjustmentAmount { get; set; }
-        public Boolean BalanceAmount { get; set; }
+        public Decimal Amount { get; set; }
+        public Decimal WTaxAmount { get; set; }
+        public Decimal PaidAmount { get; set; }
+        public Decimal AdjustmentAmount { get; set; }
+        public Decimal BalanceAmount { get; set; }
         public Int32 ReceivedById { get; set; }
         public String ReceivedBy { get; set; }
         public String PreparedBy { get; set; }

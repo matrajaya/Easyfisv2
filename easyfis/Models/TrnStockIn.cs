@@ -20,7 +20,7 @@ namespace easyfis.Models
         public Int32 ArticleId { get; set; }
         public String Article { get; set; }
         public String Particulars { get; set; }
-        public String ManualInNumber { get; set; }
+        public String ManualINNumber { get; set; }
         public Boolean IsProduced { get; set; }
         public String PreparedBy { get; set; }
         public Int32 PreparedById { get; set; }
