@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="easyfis" Class="easyfisdbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=NOAH;Initial Catalog=easyfis;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=USER-1\SQLEXPRESS;Initial Catalog=easyfis;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
   <Table Name="dbo.[__MigrationHistory]" Member="__MigrationHistories">
     <Type Name="__MigrationHistory">
       <Column Name="MigrationId" Type="System.String" DbType="NVarChar(150) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -75,8 +75,8 @@
       <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="MstAccount_TrnJournal" Member="TrnJournals" ThisKey="Id" OtherKey="AccountId" Type="TrnJournal" />
       <Association Name="MstAccount_TrnJournalVoucherLine" Member="TrnJournalVoucherLines" ThisKey="Id" OtherKey="AccountId" Type="TrnJournalVoucherLine" />
+      <Association Name="MstAccount_TrnJournal" Member="TrnJournals" ThisKey="Id" OtherKey="AccountId" Type="TrnJournal" />
       <Association Name="MstAccountCashFlow_MstAccount" Member="MstAccountCashFlow" ThisKey="AccountCashFlowId" OtherKey="Id" Type="MstAccountCashFlow" IsForeignKey="true" />
       <Association Name="MstAccountType_MstAccount" Member="MstAccountType" ThisKey="AccountTypeId" OtherKey="Id" Type="MstAccountType" IsForeignKey="true" />
       <Association Name="MstUser_MstAccount" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
@@ -175,8 +175,8 @@
       <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="MstArticle_TrnJournal" Member="TrnJournals" ThisKey="Id" OtherKey="ArticleId" Type="TrnJournal" />
       <Association Name="MstArticle_TrnJournalVoucherLine" Member="TrnJournalVoucherLines" ThisKey="Id" OtherKey="ArticleId" Type="TrnJournalVoucherLine" />
+      <Association Name="MstArticle_TrnJournal" Member="TrnJournals" ThisKey="Id" OtherKey="ArticleId" Type="TrnJournal" />
     </Type>
   </Table>
   <Table Name="dbo.MstArticleComponent" Member="MstArticleComponents">
@@ -269,9 +269,9 @@
       <Column Name="CreatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="MstBranch_TrnJournal" Member="TrnJournals" ThisKey="Id" OtherKey="BranchId" Type="TrnJournal" />
       <Association Name="MstBranch_TrnJournalVoucher" Member="TrnJournalVouchers" ThisKey="Id" OtherKey="BranchId" Type="TrnJournalVoucher" />
       <Association Name="MstBranch_TrnJournalVoucherLine" Member="TrnJournalVoucherLines" ThisKey="Id" OtherKey="BranchId" Type="TrnJournalVoucherLine" />
+      <Association Name="MstBranch_TrnJournal" Member="TrnJournals" ThisKey="Id" OtherKey="BranchId" Type="TrnJournal" />
       <Association Name="MstCompany_MstBranch" Member="MstCompany" ThisKey="CompanyId" OtherKey="Id" Type="MstCompany" IsForeignKey="true" />
       <Association Name="MstUser_MstBranch" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
       <Association Name="MstUser_MstBranch1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
@@ -388,32 +388,6 @@
       <Association Name="AspNetUser_MstUser" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.TrnJournal" Member="TrnJournals">
-    <Type Name="TrnJournal">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="JournalDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="BranchId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="AccountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ArticleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Particulars" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="DebitAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
-      <Column Name="CreditAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
-      <Column Name="ORId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CVId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="JVId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="RRId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="SIId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="INId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="OTId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="STId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="DocumentReference" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="APRRId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ARSIId" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="MstAccount_TrnJournal" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
-      <Association Name="MstArticle_TrnJournal" Member="MstArticle" ThisKey="ArticleId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
-      <Association Name="MstBranch_TrnJournal" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.TrnJournalVoucher" Member="TrnJournalVouchers">
     <Type Name="TrnJournalVoucher">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -456,6 +430,32 @@
       <Association Name="MstArticle_TrnJournalVoucherLine" Member="MstArticle" ThisKey="ArticleId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstBranch_TrnJournalVoucherLine" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
       <Association Name="TrnJournalVoucher_TrnJournalVoucherLine" Member="TrnJournalVoucher" ThisKey="JVId" OtherKey="Id" Type="TrnJournalVoucher" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TrnJournal" Member="TrnJournals">
+    <Type Name="TrnJournal">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="JournalDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="BranchId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AccountId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ArticleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Particulars" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="DebitAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="CreditAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="ORId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CVId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="JVId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RRId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SIId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="INId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OTId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="STId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DocumentReference" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="APRRId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ARSIId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="MstAccount_TrnJournal" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
+      <Association Name="MstArticle_TrnJournal" Member="MstArticle" ThisKey="ArticleId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
+      <Association Name="MstBranch_TrnJournal" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
