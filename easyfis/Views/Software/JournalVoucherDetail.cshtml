@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <br />
-                    <div class="row">
+                    @*<div class="row">
                         <div class="btn-group col-md-7" id="naviagtionPageGridJournalVoucherLine">
                             <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournalVoucherLine">
                                 <span class="glyphicon glyphicon-fast-backward"></span>
@@ -149,7 +149,7 @@
                             <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournalVoucherLine">
                                 <span class="glyphicon glyphicon-fast-forward"></span>
                             </button>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>
@@ -1414,7 +1414,7 @@
 
             journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLineByJVId());
             journalVoucherLines.canFilter = true;
-            journalVoucherLines.pageSize = 10;
+            //journalVoucherLines.pageSize = 10;
 
             var filterTextJournalVoucherLine = '';
             $('#InputFilterJournalVoucherLine').keyup(function () {
