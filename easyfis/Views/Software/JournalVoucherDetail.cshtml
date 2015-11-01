@@ -35,10 +35,10 @@
                 <div class="row">
                     <hr />
                     <div class="col-md-6">
-                        <h4 id="journalVoucherDetailLabel">Your Branch</h4>
+                        <h4 id="journalVoucherDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-info btn-sm" id="cmdJournaleJournalVoucher" onclick="cmdJournalVoucherJournalButton_OnClick()"><i class="fa fa-save"></i> Journal</button>
+                        <button class="btn btn-info btn-sm" id="cmdJournalJournalVoucher" onclick="cmdJournalVoucherJournalButton_OnClick()"><i class="fa fa-save"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick=""><i class="fa fa-pencil"></i> Edit</button>
                         <button onclick="window.location.href = '@Url.Action("JournalVoucherPDF", "Software")'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-search"></i> Preview</button>
@@ -115,12 +115,13 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group">
-                                <span class="input-group-btn">
+                                <label>Branch: </label> <span id="currentBranchName" class="branch-name-custom-style"></span>
+                                @*<span class="input-group-btn">
                                     <button class="btn btn-default btn-sm" type="button" readonly>
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control input-sm" id="InputFilterJournalVoucherLine" placeholder="Search Journal Voucher Number">
+                                <input type="text" class="form-control input-sm" id="InputFilterJournalVoucherLine" placeholder="Search Journal Voucher Number">*@
                             </div>
                         </div>
                         <div class="col-lg-8">
@@ -134,7 +135,7 @@
                         </div>
                     </div>
                     <br />
-                    @*<div class="row">
+                    <div class="row">
                         <div class="btn-group col-md-7" id="naviagtionPageGridJournalVoucherLine">
                             <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournalVoucherLine">
                                 <span class="glyphicon glyphicon-fast-backward"></span>
@@ -149,7 +150,7 @@
                             <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournalVoucherLine">
                                 <span class="glyphicon glyphicon-fast-forward"></span>
                             </button>
-                        </div>*@
+                        </div>
                     </div>
                 </div>
             </div>
@@ -248,6 +249,24 @@
                                 <div id="journalListGrid" class="grid" align="left"></div>
                             </div>
                         </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridJournal">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournal"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
@@ -292,14 +311,12 @@
         var journalVoucherLines;
         var journalVoucherLineGrid;
         var journals;
-
-        var branches;
-        var cboBranch;
+        var journalListGrid;
 
         var journalVoucherDate;
-
         var users;
-
+        var branches;
+        var cboBranch;
         var cboUserPreparedBy;
         var cboUserCheckedBy;
         var cboUserApprovedBy;
@@ -317,6 +334,11 @@
         var btnLastPageGridJournalVoucherLine;
         var btnCurrentPageGridJournalVoucherLine;
 
+        var btnFirstPageGridJournal;
+        var btnPreviousPageGridJournal;
+        var btnNextPageGridJournal;
+        var btnLastPageGridJournal;
+        var btnCurrentPageGridJournal;
         // =========================
         // GET Journal Voucher by Id
         // =========================
@@ -725,9 +747,9 @@
         // Get Journal Voucher Line LIST / or / By Branch Id
         // =================================================
         function getJournalVoucherLineByJVId() {
-            journalVoucherLines = new wijmo.collections.ObservableArray;
+            var journalVoucherLines = new wijmo.collections.ObservableArray;
             var JVId = @JVId
-            $('#loadingModal').modal('show');
+                $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/listJournalVoucherLineByJVId/' + JVId,
                 cache: false,
@@ -784,7 +806,26 @@
                                 BranchBranch: results[i]["Branch"]
                             });
                         }
-                        createCboBranchForJournalVoucherLine(branches);
+
+                        $.ajax({
+                            url: '/api/listBranchById/' + @branchId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (results) {
+                                if (results.length > 0) {
+                                    branches.push({
+                                        BranchId: results.Id,
+                                        BranchBranch: results.Branch
+                                    });
+                                }
+
+                                document.getElementById('JVL_Branch_Id_Data').value = @branchId;
+                                document.getElementById('JVL_Branch_Id_selectedValue').value = results.Branch;
+                                createCboBranchForJournalVoucherLine(branches);
+                            }
+                        });
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -805,6 +846,7 @@
 
             cboBranchJVL.dispose();
             cboBranchJVL = new wijmo.input.ComboBox('#JVL_Branch_Id', {
+                disabled: true,
                 placeholder: "Select Branch",
                 itemsSource: branchList,
                 isEditable: false,
@@ -964,8 +1006,8 @@
             var journalVoucherLine = journalVoucherLines.currentEditItem;
             document.getElementById('JVL_Id').value = journalVoucherLine.Id !== null && typeof (journalVoucherLine.Id) != 'undefined' ? wijmo.Globalize.format(journalVoucherLine.Id) : '';
             document.getElementById('JVL_JVId').value = @JVId;
-            document.getElementById('JVL_Branch_Id_Data').value = journalVoucherLine.BranchId ? journalVoucherLine.BranchId : '';
-            document.getElementById('JVL_Branch_Id_selectedValue').value = journalVoucherLine.Branch ? journalVoucherLine.Branch : '';
+            //document.getElementById('JVL_Branch_Id_Data').value = journalVoucherLine.BranchId ? journalVoucherLine.BranchId : '';
+            //document.getElementById('JVL_Branch_Id_selectedValue').value = journalVoucherLine.Branch ? journalVoucherLine.Branch : '';
             document.getElementById('JVL_Account_Id_Data').value = journalVoucherLine.AccountId ? journalVoucherLine.AccountId : '';
             document.getElementById('JVL_Account_Id_selectedValue').value = journalVoucherLine.Account ? journalVoucherLine.Account : '';
             document.getElementById('JVL_Aritcle_Id_Data').value = journalVoucherLine.ArticleId ? journalVoucherLine.ArticleId : '';
@@ -1111,14 +1153,15 @@
             });
         }
 
-        // ================
-        // get Journal List
-        // ================
-        function getJournalList() {
+        // =========================
+        // get Journal List by JV Id
+        // =========================
+        function getJournalListByJVId() {
             var journals = new wijmo.collections.ObservableArray;
+            var JVId = @JVId
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listTrnJournal',
+                url: '/api/listJournal/' + JVId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1133,8 +1176,11 @@
                                 Id: Results[i]["Id"],
                                 JournalDate: Results[i]["JournalDate"],
                                 BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
                                 AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
                                 ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
                                 Particulars: Results[i]["Particulars"],
                                 DebitAmount: Results[i]["DebitAmount"],
                                 CreditAmount: Results[i]["CreditAmount"],
@@ -1148,7 +1194,7 @@
                                 STId: Results[i]["STId"],
                                 DocumentReference: Results[i]["DocumentReference"],
                                 APRRId: Results[i]["APRRId"],
-                                ARSIId: Results[i]["ARSIId"]                   
+                                ARSIId: Results[i]["ARSIId"]
                             });
                         }
                     }
@@ -1163,12 +1209,7 @@
         // Journal List
         // ============
         function cmdJournalVoucherJournalButton_OnClick() {
-            $('#journalList').modal({
-                show: true,
-                backdrop: 'static'
-            });
-
-            journals = new wijmo.collections.CollectionView(getJournalList());
+            journals = new wijmo.collections.CollectionView(getJournalListByJVId());
             journals.pageSize = 10;
 
             // Flex Grid
@@ -1194,30 +1235,30 @@
                             //    "isContentHtml": true
                             //},
                             {
-                                "header": "JournalDate",
+                                "header": "Journal Date",
                                 "binding": "JournalDate",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*",
                             },
                             {
-                                "header": "BranchId",
-                                "binding": "BranchId",
+                                "header": "Branch",
+                                "binding": "Branch",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
-                                "header": "AccountId",
-                                "binding": "AccountId",
+                                "header": "Account",
+                                "binding": "Account",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             }
                               ,
                             {
-                                "header": "ArticleId",
-                                "binding": "ArticleId",
+                                "header": "Article",
+                                "binding": "Article",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
@@ -1232,7 +1273,7 @@
                             }
                             ,
                             {
-                                "header": "DebitAmount",
+                                "header": "Debit Amount",
                                 "binding": "DebitAmount",
                                 "align": "left",
                                 "allowSorting": true,
@@ -1240,18 +1281,17 @@
                             }
                             ,
                             {
-                                "header": "CreditAmount",
+                                "header": "Credit Amount",
                                 "binding": "CreditAmount",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             }
-                            
+
                 ],
                 autoGenerateColumns: false,
                 itemsSource: journals,
                 isReadOnly: true,
-                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -1259,7 +1299,61 @@
 
             journalListGrid.trackChanges = true;
 
+            //Navigation button
+            btnFirstPageGridJournal = document.getElementById('btnMoveToFirstPageGridJournal');
+            btnPreviousPageGridJournal = document.getElementById('btnMoveToPreviousPageGridJournal');
+            btnNextPageGridJournal = document.getElementById('btnMoveToNextPageGridJournal');
+            btnLastPageGridJournal = document.getElementById('btnMoveToLastPageGridJournal');
+            btnCurrentPageGridJournal = document.getElementById('btnCurrentPageGridJournal');
+
+            updateNavigateButtonsJournal();
+
+            btnFirstPageGridJournal.addEventListener('click', function () {
+                journals.moveToFirstPage();
+                updateNavigateButtonsJournal();
+            });
+            btnPreviousPageGridJournal.addEventListener('click', function () {
+                journals.moveToPreviousPage();
+                updateNavigateButtonsJournal();
+            });
+            btnNextPageGridJournal.addEventListener('click', function () {
+                journals.moveToNextPage();
+                updateNavigateButtonsJournal();
+            });
+            btnLastPageGridJournal.addEventListener('click', function () {
+                journals.moveToLastPage();
+                updateNavigateButtonsJournal();
+            });
         }
+
+        // ==============================
+        // Navigation Buttons for Journal
+        // ==============================
+        function updateNavigateButtonsJournal() {
+            if (journals.pageSize <= 0) {
+                document.getElementById('naviagtionPageGridJournal').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGridJournal').style.display = 'block';
+            if (journals.pageIndex === 0) {
+                btnFirstPageGridJournal.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            } else if (journals.pageIndex === (journals.pageCount - 1)) {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            }
+            btnCurrentPageGridJournal.innerHTML = (journals.pageIndex + 1) + ' / ' + journals.pageCount;
+        }
+
 
         // ===========================================
         // Navigation Buttons for Journal Voucher Line
@@ -1293,6 +1387,34 @@
         // On load Page
         // ============
         $(document).ready(function () {
+            $.ajax({
+                url: '/api/listBranchById/' + @branchId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        branches.push({
+                            BranchId: results.Id,
+                            BranchBranch: results.Branch
+                        });
+                    }
+                    document.getElementById('currentBranchName').innerHTML = " " + results.Branch;
+                }
+            });
+
+            $('#cmdJournalJournalVoucher').click(function () {
+                $('#journalList').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+
+                window.cmdJournalVoucherJournalButton_OnClick = function () {
+                    return true;
+                };
+            });
+
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' / ' + '<a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Journal Voucher</a> ' + ' / Journal Voucher Detail';
 
             if(@JVId == 0) {
@@ -1327,7 +1449,7 @@
 
             journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLineByJVId());
             journalVoucherLines.canFilter = true;
-            //journalVoucherLines.pageSize = 10;
+            journalVoucherLines.pageSize = 10;
 
             var filterTextJournalVoucherLine = '';
             $('#InputFilterJournalVoucherLine').keyup(function () {
@@ -1363,13 +1485,13 @@
                                 "allowSorting": false,
                                 "isContentHtml": true
                             },
-                            {
-                                "header": "Branch",
-                                "binding": "Branch",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": "2*",
-                            },
+                            //{
+                            //    "header": "Branch",
+                            //    "binding": "Branch",
+                            //    "align": "left",
+                            //    "allowSorting": true,
+                            //    "width": "2*",
+                            //},
                             {
                                 "header": "Account",
                                 "binding": "Account",

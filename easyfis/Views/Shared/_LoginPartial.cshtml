@@ -4,12 +4,11 @@
 }
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "nav navbar-nav navbar-right" }))
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
     {
         @Html.AntiForgeryToken()
-
-
-            <li class="active"><a href="@Url.Action("Login", "Account")">@ViewData["FirstName"]</a></li>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="@Url.Action("Login", "Account")">@ViewData["FirstName"]</a></li>
             @*<li class="active">@Html.ActionLink((ViewData["FirstName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = (ViewData["FullName"]) })</li>*@
             @*@Html.ActionLink(User.Identity.GetUserName() + "!", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })</li>*@
             <li class="dropdown">
@@ -24,31 +23,32 @@
                     <li><a href="#" data-toggle="modal" onclick="cmdLogoutModal_OnClick()">Logout</a></li>
                 </ul>
             </li>
- 
-    
-        <script type="text/javascript">
-            function cmdLogoutModal_OnClick() {
-                $('#modalLogout').modal({
-                    show: true,
-                    backdrop: 'static'
-                });
-            }
+        </ul>
 
-            @*function mainMenuByBranchId() {
-                window.location = '/Software?branchId=' + @branchId;
-           }*@ 
-        </script>
+
     }
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
         <li><a href="@Url.Action("Login", "Account")">Sign in</a></li>
-        <!-- <li><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-sign-in"></i> Login</a></li> -->
     </ul>
-
+        <!-- <li><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-sign-in"></i> Login</a></li> -->
     @*<ul class="nav navbar-nav navbar-right">
             <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
             <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
         </ul>*@
 }
+
+<script type="text/javascript">
+    function cmdLogoutModal_OnClick() {
+        $('#modalLogout').modal({
+            show: true,
+            backdrop: 'static'
+        });
+    }
+
+    @*function mainMenuByBranchId() {
+                window.location = '/Software?branchId=' + @branchId;
+           }*@
+</script>

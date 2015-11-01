@@ -28,7 +28,7 @@
                     <a class="navbar-brand" href="@Url.Action("Index", "Home")">EasyFIS</a>
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav">
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">About</a>
                             <ul class="dropdown-menu">
@@ -42,14 +42,15 @@
                             </ul>
                         </li>
                         <li><a href="#support">Support</a></li>
-                        <li><a href="#">News</a></li>
-                        @Html.Partial("_LoginPartial")
+                        <li><a href="#">News</a></li> 
                     </ul>
+
+                        @Html.Partial("_LoginPartial")
+                    
                 </div>
             </div>
         </nav>
         <!-- end of navbar -->
-
         <!-- cover page -->
         <div class="cover-photo-custom">
             <div class="container">
@@ -175,7 +176,6 @@
         </div>
     </section>
     <!-- End of the About Section -->
-
     <!-- Modal for Login page -->
     <div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">
