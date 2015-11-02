@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -123,7 +124,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = true;
+                var isLocked = false;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -164,13 +165,15 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = true;
+                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
 
                 var journalVoucherId = Convert.ToInt32(id);
                 var journalVouchers = from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d;
+
+                Business.PostJournal postJournal = new Business.PostJournal();
 
                 if (journalVouchers.Any())
                 {
@@ -184,11 +187,13 @@ namespace easyfis.Controllers
                     updateJournalVoucher.PreparedById = journalVoucher.PreparedById;
                     updateJournalVoucher.CheckedById = journalVoucher.CheckedById;
                     updateJournalVoucher.ApprovedById = journalVoucher.ApprovedById;
-                    updateJournalVoucher.IsLocked = isLocked;
+                    updateJournalVoucher.IsLocked = journalVoucher.IsLocked;
                     updateJournalVoucher.UpdatedById = mstUserId;
                     updateJournalVoucher.UpdatedDateTime = date;
 
                     db.SubmitChanges();
+
+                    postJournal.postJournalVoucher(journalVoucherId);
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
