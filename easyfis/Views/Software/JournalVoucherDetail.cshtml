@@ -46,7 +46,7 @@
                         <!-- Save Button to Update JV -->
                         <button class="btn btn-primary btn-sm" id="cmdSaveAndUpdateJournalVoucher" onclick="cmdJournalVoucherSaveAndUpdateButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick="cmdJournalVoucherEditEnableButton_OnClick()"><i class="fa fa-pencil"></i> Edit</button>
-                        <button onclick="window.location.href ='@Url.Action("JournalVoucherPDF", "Software")'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-search"></i> Preview</button>
+                        <button onclick="window.location.href ='@Url.Action("JournalVoucherPDF", "Software", new { JVId = JVId })'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-search"></i> Preview</button>
                         <button class="btn btn-primary btn-sm" id="cmdPrintJournalVoucher" onclick=""><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href ='@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseJournalVoucher"><i class="fa fa-times"></i> Close</button>
                     </div>
@@ -87,8 +87,8 @@
                                     <label>Prepared by:</label>
                                     <div id="preparedByUserId" class="comboBox-wide"></div>
 
-                                    <input type="hidden" id="preparedByUserId_Data" class="requiredJournalVoucher" required />
-                                    <input type="hidden" id="preparedByUserId_selectedValue" />
+                                    <input type="text" id="preparedByUserId_Data" class="requiredJournalVoucher" required />
+                                    <input type="text" id="preparedByUserId_selectedValue" value="@ViewData["UserName"]" />
                                 </div>
                                 <div class="form-group">
                                     <label>Checked by:</label>
@@ -450,7 +450,7 @@
                     document.getElementById('journalVoucher_Particulars').value = Results.Particulars;
 
                     document.getElementById('preparedByUserId_Data').value = Results.PreparedById;
-                    document.getElementById('preparedByUserId_selectedValue').value = Results.PreparedBy;
+                    //document.getElementById('preparedByUserId_selectedValue').value = Results.PreparedBy;
                     document.getElementById('checkedByUserId_Data').value = Results.CheckedById;
                     document.getElementById('checkedByUserId_selectedValue').value = Results.CheckedBy;
                     document.getElementById('approvedByUserId_Data').value = Results.ApprovedById;
@@ -721,45 +721,18 @@
                 userList.push(usersCollection.items[i].UserUserName);
             }
 
-            if(document.getElementById('JV_IsLocked').value == 'true') {
-                cboUserPreparedBy.dispose();
-                cboUserPreparedBy = new wijmo.input.ComboBox('#preparedByUserId', {
-                    disabled: true,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('preparedByUserId_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#preparedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            }  else if(document.getElementById('JV_IsLocked').value == 'false') {
-                cboUserPreparedBy.dispose();
-                cboUserPreparedBy = new wijmo.input.ComboBox('#preparedByUserId', {
-                    disabled: false,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('preparedByUserId_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#preparedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            }  else {
-                cboUserPreparedBy.dispose();
-                cboUserPreparedBy = new wijmo.input.ComboBox('#preparedByUserId', {
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('preparedByUserId_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#preparedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            }
+            cboUserPreparedBy.dispose();
+            cboUserPreparedBy = new wijmo.input.ComboBox('#preparedByUserId', {
+                disabled: false,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('preparedByUserId_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#preparedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
         }
 
         // ================================
@@ -1182,7 +1155,6 @@
                         $('#cmdSaveAndUpdateJournalVoucher').hide();
                     } else {
                         document.getElementById('status_LockedOrUnlocked_JVLEmpty').innerHTML = ' - Cannot lock if JV Line is empty.';
-                        $('#cmdSaveAndUpdateJournalVoucher').show();
                         $('#cmdSaveAndLockJournalVoucher').hide();
                     }
                 }
@@ -1824,6 +1796,7 @@
 
             if (@JVId == 0) {
                 $('#cmdSaveJournalVoucher').show();
+                $('#cmdSaveAndUpdateJournalVoucher').hide();
                 $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", true);
 
                 $("#cmdEditJournalVoucher").prop("disabled", true);
@@ -1840,6 +1813,7 @@
                 });
             }  else {
                 $('#cmdSaveJournalVoucher').hide();
+                $('#cmdSaveAndUpdateJournalVoucher').show();
                 $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", false);
             }
 

@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -141,8 +142,40 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult JournalVoucherPDF()
+        public ActionResult JournalVoucherPDF(int JVId)
         {
+            Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+            var journalVoucherId = (from d in db.TrnJournalVouchers where d.Id == JVId select d.Id).SingleOrDefault();
+
+            // Company and Branch Id Filter by Journal Vouchers
+            var branchId = (from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d.BranchId).SingleOrDefault();
+            var companyId = (from d in db.MstBranches where d.Id == branchId select d.CompanyId).SingleOrDefault();
+
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == companyId select d.Company).SingleOrDefault();
+            var companyAddress = (from d in db.MstCompanies where d.Id == companyId select d.Address).SingleOrDefault();
+            var companyContactNo = (from d in db.MstCompanies where d.Id == companyId select d.ContactNumber).SingleOrDefault();
+
+            // Branch Filter by Comapny Id
+            var branchName = (from d in db.MstBranches where d.Id == branchId select d.Branch).SingleOrDefault();
+            var branchAddress = (from d in db.MstBranches where d.Id == branchId select d.Address).SingleOrDefault();
+            var branchContactNo = (from d in db.MstBranches where d.Id == branchId select d.ContactNumber).SingleOrDefault();
+
+            // JV Date and other Details for Journal Voucher
+            var JVNumber = (from d in db.TrnJournalVouchers where d.Id == JVId select d.JVNumber).SingleOrDefault();
+            var JVDate = (from d in db.TrnJournalVouchers where d.Id == JVId select d.JVDate).SingleOrDefault();
+            var JVParticulars = (from d in db.TrnJournalVouchers where d.Id == JVId select d.Particulars).SingleOrDefault();
+
+            // Users Signature Data
+            var preparedByUserId = (from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d.PreparedById).SingleOrDefault();
+            var checkedByUserId = (from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d.CheckedById).SingleOrDefault();
+            var approvedByUserId = (from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d.ApprovedById).SingleOrDefault();
+
+            var preparedBy = (from d in db.MstUsers where d.Id == preparedByUserId select d.UserName).SingleOrDefault();
+            var checkedBy = (from d in db.MstUsers where d.Id == checkedByUserId select d.UserName).SingleOrDefault();
+            var approvedBy = (from d in db.MstUsers where d.Id == approvedByUserId select d.UserName).SingleOrDefault();
+
+            // Pauls Work and Layouts in PDF journal
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
             Document document = new Document(rec, 72, 72, 72, 72);
@@ -151,31 +184,31 @@ namespace easyfis.Controllers
             document.Open();
 
             Chunk glue = new Chunk(new iTextSharp.text.pdf.draw.VerticalPositionMark());
-            Paragraph para = new Paragraph("Sonnets Catering Services Inc.");
-            Paragraph para1 = new Paragraph("Tabok Road, Tingub, Mandaue City");
-            Paragraph para2 = new Paragraph("239-5972");
-            Paragraph p = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            Paragraph para3 = new Paragraph("Particulars:");
-            Paragraph para4 = new Paragraph("NA");
+            Paragraph company = new Paragraph(companyName);
+            Paragraph address = new Paragraph(companyAddress);
+            Paragraph contactNo = new Paragraph(companyContactNo);
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            Paragraph particularsLabel = new Paragraph("Particulars:");
+            Paragraph particularsValue = new Paragraph(JVParticulars);
 
-            para.Add(new Chunk(glue));
-            para1.Add(new Chunk(glue));
-            para2.Add(new Chunk(glue));
-            para3.Add(new Chunk(glue));
-            para4.Add(new Chunk(glue));
+            company.Add(new Chunk(glue));
+            address.Add(new Chunk(glue));
+            contactNo.Add(new Chunk(glue));
+            particularsLabel.Add(new Chunk(glue));
+            particularsValue.Add(new Chunk(glue));
 
-            para.Add("Journal Voucher");
-            para1.Add("Main Warehouse - Supply Chain");
-            para2.Add(DateTime.Now.ToString());
-            para3.Add("JV NO.:      00000000001");
-            para4.Add("JV DATE:     10/08/2015");
-                                
-            document.Add(para);
-            document.Add(para1);
-            document.Add(para2);
-            document.Add(p);
-            document.Add(para3);
-            document.Add(para4);
+            company.Add("Journal Voucher");
+            address.Add(branchName);
+            contactNo.Add(DateTime.Now.ToString());
+            particularsLabel.Add("JV Number: " + JVNumber);
+            particularsValue.Add("JV Date:   " + JVDate.ToString("MM/dd/yyyy"));
+
+            document.Add(company);
+            document.Add(address);
+            document.Add(contactNo);
+            document.Add(line);
+            document.Add(particularsLabel);
+            document.Add(particularsValue);
             document.Add(Chunk.NEWLINE);
             document.Add(Chunk.NEWLINE);
 
@@ -205,7 +238,7 @@ namespace easyfis.Controllers
             table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
             document.Add(table);
 
-            document.Add(p);
+            document.Add(line);
             table = new PdfPTable(6);
             table.WidthPercentage = 100;
             cell = new PdfPCell();
@@ -218,7 +251,15 @@ namespace easyfis.Controllers
             table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
             table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
             document.Add(table);
-            document.Add(p);
+            document.Add(line);
+
+            Paragraph preparedByUser = new Paragraph("Prepared by: " + preparedBy);
+            Paragraph checkedByUser = new Paragraph("Checked by: " + checkedBy);
+            Paragraph approvedByUser = new Paragraph("Approved by: " + approvedBy);
+
+            document.Add(preparedByUser);
+            document.Add(checkedByUser);
+            document.Add(approvedByUser);
 
             document.Close();
 
