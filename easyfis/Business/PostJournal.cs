@@ -14,69 +14,45 @@ namespace easyfis.Business
         {
             try
             {
-                Models.TrnJournal journal = new Models.TrnJournal();
-                Models.TrnJournalVoucher journalVoucher = new Models.TrnJournalVoucher();
-                Models.TrnJournalVoucherLine journalVoucherLine = new Models.TrnJournalVoucherLine();
-
                 Data.TrnJournal postJournal = new Data.TrnJournal();
+
                 Debug.WriteLine("lapos sa Update. Id = " + JVId);
 
-                var journals = from d in db.TrnJournals where d.JVId == JVId select d;
-
                 var journalDate = (from d in db.TrnJournalVouchers where d.Id == JVId select d.JVDate).SingleOrDefault();
-                Debug.WriteLine("lapos. date = " + journalDate);
+                var branchId = (from d in db.TrnJournalVoucherLines.OrderByDescending(d => d.Id) where d.JVId == JVId select d.BranchId).FirstOrDefault();
+                var accountId = (from d in db.TrnJournalVoucherLines where d.JVId == JVId select d.AccountId).FirstOrDefault();
+                var articleId = (from d in db.TrnJournalVoucherLines.OrderByDescending(d => d.Id) where d.JVId == JVId select d.ArticleId).FirstOrDefault();
+                var particulars = (from d in db.TrnJournalVoucherLines.OrderByDescending(d => d.Id) where d.JVId == JVId select d.Particulars).FirstOrDefault();
+                var debitAmount = (from d in db.TrnJournalVoucherLines.OrderByDescending(d => d.Id) where d.JVId == JVId select d.DebitAmount).FirstOrDefault();
+                var creditAmount = (from d in db.TrnJournalVoucherLines.OrderByDescending(d => d.Id) where d.JVId == JVId select d.CreditAmount).FirstOrDefault();
+                var journalVoucherId = (from d in db.TrnJournalVouchers where d.Id == JVId select d.Id).FirstOrDefault();
+                var APRRId = (from d in db.TrnJournalVoucherLines.OrderByDescending(d => d.Id) where d.JVId == JVId select d.APRRId).FirstOrDefault();
+                var ARSIId = (from d in db.TrnJournalVoucherLines.OrderByDescending(d => d.Id) where d.JVId == JVId select d.ARSIId).FirstOrDefault();
 
-                var branchId = (from d in db.TrnJournalVoucherLines where d.JVId == JVId select d.BranchId).SingleOrDefault();
-                Debug.WriteLine("lapos. branchId = " + branchId);
+                Debug.WriteLine(JVId);
+                postJournal.JournalDate = journalDate;
+                postJournal.BranchId = branchId;
+                postJournal.AccountId = accountId;
+                postJournal.ArticleId = articleId;
+                postJournal.Particulars = particulars;
+                postJournal.DebitAmount = debitAmount;
+                postJournal.CreditAmount = creditAmount;
+                postJournal.ORId = 0;
+                postJournal.CVId = 0;
+                postJournal.JVId = journalVoucherId;
+                postJournal.RRId = 0;
+                postJournal.SIId = 0;
+                postJournal.INId = 0;
+                postJournal.OTId = 0;
+                postJournal.STId = 0;
+                postJournal.DocumentReference = "document Reference";
+                postJournal.APRRId = APRRId;
+                postJournal.ARSIId = ARSIId;
 
-                var accountId = (from d in db.TrnJournalVoucherLines where d.JVId == JVId select d.AccountId).SingleOrDefault();
-                Debug.WriteLine("lapos. accountId = " + accountId);
+                db.TrnJournals.InsertOnSubmit(postJournal);
+                db.SubmitChanges();
+                Debug.WriteLine("lapos dri sa Submit ng update");   
 
-                var articleId = (from d in db.TrnJournalVoucherLines where d.JVId == JVId select d.ArticleId).SingleOrDefault();
-                Debug.WriteLine("lapos. articleId = " + articleId);
-
-                var particulars = (from d in db.TrnJournalVoucherLines where d.JVId == JVId select d.Particulars).SingleOrDefault();
-                Debug.WriteLine("lapos. particulars = " + particulars);
-
-                var debitAmount = (from d in db.TrnJournalVoucherLines where d.JVId == JVId select d.DebitAmount).SingleOrDefault();
-                Debug.WriteLine("lapos. debitAmount = " + debitAmount);
-
-                var journalVoucherId = (from d in db.TrnJournalVouchers where d.Id == JVId select d.Id).SingleOrDefault();
-                Debug.WriteLine("lapos. journalVoucherId = " + journalVoucherId);
-
-                var APRRId = (from d in db.TrnJournalVoucherLines where d.JVId == JVId select d.APRRId).SingleOrDefault();
-                Debug.WriteLine("lapos. APRRId = " + APRRId);
-
-                var ARSIId = (from d in db.TrnJournalVoucherLines where d.JVId == JVId select d.ARSIId).SingleOrDefault();
-                Debug.WriteLine("lapos. ARSIId = " + ARSIId);
-
-
-                //if (journals.Any())
-                //{
-                //    Debug.WriteLine(JVId);
-
-                //    postJournal.JournalDate = Convert.ToDateTime(journalVoucher.JVDate);
-                //    postJournal.BranchId = journalVoucherLine.BranchId;
-                //    postJournal.AccountId = journalVoucherLine.AccountId;
-                //    postJournal.ArticleId = journalVoucherLine.ArticleId;
-                //    postJournal.Particulars = journalVoucherLine.Particulars;
-                //    postJournal.DebitAmount = journalVoucherLine.DebitAmount;
-                //    postJournal.CreditAmount = journalVoucherLine.CreditAmount;
-                //    postJournal.ORId = journal.ORId;
-                //    postJournal.CVId = journal.CVId;
-                //    postJournal.JVId = journal.JVId;
-                //    postJournal.RRId = journal.RRId;
-                //    postJournal.SIId = journal.SIId;
-                //    postJournal.INId = journal.INId;
-                //    postJournal.OTId = journal.OTId;
-                //    postJournal.STId = journal.STId;
-                //    postJournal.DocumentReference = journal.DocumentReference;
-                //    postJournal.APRRId = journalVoucherLine.APRRId;
-                //    postJournal.ARSIId = journalVoucherLine.ARSIId;
-
-                //    db.SubmitChanges();
-                //    Debug.WriteLine("lapos dri sa Submit ng update");
-                //}
             }
             catch (Exception e)
             {
