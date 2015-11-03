@@ -144,12 +144,82 @@ namespace easyfis.Controllers
         public ActionResult JournalVoucherPDF()
         {
             MemoryStream workStream = new MemoryStream();
-            Document document = new Document();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
             PdfWriter.GetInstance(document, workStream).CloseStream = false;
-
+      
             document.Open();
-            document.Add(new Paragraph("Journal Voucher Data"));
-            document.Add(new Paragraph(DateTime.Now.ToString()));
+
+            Chunk glue = new Chunk(new iTextSharp.text.pdf.draw.VerticalPositionMark());
+            Paragraph para = new Paragraph("Sonnets Catering Services Inc.");
+            Paragraph para1 = new Paragraph("Tabok Road, Tingub, Mandaue City");
+            Paragraph para2 = new Paragraph("239-5972");
+            Paragraph p = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            Paragraph para3 = new Paragraph("Particulars:");
+            Paragraph para4 = new Paragraph("NA");
+
+            para.Add(new Chunk(glue));
+            para1.Add(new Chunk(glue));
+            para2.Add(new Chunk(glue));
+            para3.Add(new Chunk(glue));
+            para4.Add(new Chunk(glue));
+
+            para.Add("Journal Voucher");
+            para1.Add("Main Warehouse - Supply Chain");
+            para2.Add(DateTime.Now.ToString());
+            para3.Add("JV NO.:      00000000001");
+            para4.Add("JV DATE:     10/08/2015");
+                                
+            document.Add(para);
+            document.Add(para1);
+            document.Add(para2);
+            document.Add(p);
+            document.Add(para3);
+            document.Add(para4);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable table = new PdfPTable(6);
+            table.WidthPercentage = 100;
+            PdfPCell cell = new PdfPCell();
+            cell.Colspan = 6;
+            table.AddCell("Branch");
+            table.AddCell("Code");
+            table.AddCell("Account");
+            table.AddCell("Article");
+            table.AddCell("Debit");
+            table.AddCell("Credit");
+
+            table.AddCell(new PdfPCell(new Phrase("Main Warehouse")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("1010")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("Cash in Bank")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("BDO")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
+
+            table.AddCell(new PdfPCell(new Phrase("Main Warehouse")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("3000")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("Common Stock")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("Investor")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
+            document.Add(table);
+
+            document.Add(p);
+            table = new PdfPTable(6);
+            table.WidthPercentage = 100;
+            cell = new PdfPCell();
+            cell.Colspan = 6;
+
+            table.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("Total")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
+            document.Add(table);
+            document.Add(p);
+
             document.Close();
 
             byte[] byteInfo = workStream.ToArray();
@@ -212,5 +282,7 @@ namespace easyfis.Controllers
         {
             return View();
         }
+
+        public BaseColor ColorGrey { get; set; }
     }
 }
