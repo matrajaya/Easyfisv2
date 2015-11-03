@@ -193,7 +193,7 @@ namespace easyfis.Controllers
 
                     db.SubmitChanges();
 
-                    postJournal.postJournalVoucher(journalVoucherId);
+                    // postJournal.postJournalVoucher(journalVoucherId);
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
