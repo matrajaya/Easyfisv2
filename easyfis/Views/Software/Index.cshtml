@@ -25,6 +25,9 @@
         <section>
             <br /><br /><br />
             <div class="container">
+                <div class="div_Current_Page">
+                    <label id="currentBranchName"></label>
+                </div>
                 @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button><br /><br />*@
                 @*<h3>Software Dashboard</h3>*@
                 <div class="well">
@@ -71,5 +74,25 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                url: '/api/listBranchById/' + @branchId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        branches.push({
+                            BranchId: results.Id,
+                            BranchBranch: results.Branch
+                        });
+                    }
+                    document.getElementById('currentBranchName').innerHTML = results.Branch;
+                }
+            });
+        });
+    </script>
 </body>
 </html>

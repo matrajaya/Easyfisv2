@@ -116,6 +116,18 @@ namespace easyfis.Controllers
             return journalVouchers.ToList();
         }
 
+        public String getMaxJournalVoucherNo()
+        {
+            var maxJVNo = (from d in db.TrnJournalVouchers select d.JVNumber).Max();
+            Debug.WriteLine(maxJVNo);
+
+            if (maxJVNo == null) 
+            {
+                maxJVNo = "0";
+            }
+            return maxJVNo;
+        }
+
         // ===================
         // ADD Journal Voucher
         // ===================
@@ -147,6 +159,12 @@ namespace easyfis.Controllers
 
                 db.TrnJournalVouchers.InsertOnSubmit(newJournalVoucher);
                 db.SubmitChanges();
+
+                this.getMaxJournalVoucherNo();
+                var getMax = Convert.ToInt32(getMaxJournalVoucherNo());
+                var sum = getMax + 1;
+
+                Debug.WriteLine(sum);
 
                 return newJournalVoucher.Id;
 
@@ -194,6 +212,11 @@ namespace easyfis.Controllers
                     db.SubmitChanges();
 
                     // postJournal.postJournalVoucher(journalVoucherId);
+                    this.getMaxJournalVoucherNo();
+                    var getMax = Convert.ToInt32(getMaxJournalVoucherNo());
+                    var sum = getMax + 1;
+
+                    Debug.WriteLine(sum);
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

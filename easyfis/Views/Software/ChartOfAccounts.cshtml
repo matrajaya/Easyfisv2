@@ -26,13 +26,16 @@
         <section>
             <br /><br /><br />
             <div class="container">
+                <div class="div_Current_Page">
+                    <label id="currentBranchName"></label> <span id="currentPage"></span>
+                </div>
                 <ul class="nav nav-tabs pull-right" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Account Cash Flow</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Account Category</a></li>
                 </ul>
-                <h4><img src='~/images/Icons/iChart.png'> Chart of Accounts</h4>
+                <h4 style="margin-top: 20px"><img src='~/images/Icons/iChart.png'> Chart of Accounts</h4>
                 <hr />
                 <div class="tab-content">
                     <div id="Account" class="tab-pane fade in active">
@@ -2443,6 +2446,23 @@
         });
 
         $(document).ready(function () {
+            $.ajax({
+                url: '/api/listBranchById/' + @branchId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        branches.push({
+                            BranchId: results.Id,
+                            BranchBranch: results.Branch
+                        });
+                    }
+                    document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
+                }
+            });
+
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' / Chart of Accounts';
 
             toastr.options = {
