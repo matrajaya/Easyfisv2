@@ -42,11 +42,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         @*<h4 id="journalVoucherDetailLabel"></h4>*@
                         <label>Status: </label> <span id="status_LockedOrUnlocked" class="branch-name-custom-style"></span> <span id="status_LockedOrUnlocked_JVLEmpty" style="color: red"></span>
                     </div>
-                    <div class="col-md-6" align="right">
+                    <div class="col-md-8" align="right">
                         <button class="btn btn-primary btn-sm" id="cmdJournalJournalVoucher" onclick="cmdJournalVoucherJournalButton_OnClick()"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdSaveAndLockJournalVoucher" onclick="cmdJournalVoucherSaveAndLockButton_OnClick()"><i class="fa fa-lock"></i> Save and Lock</button>
                         <!-- Save Button to Add JV -->
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Journal Voucher Number:</label>
-                                    <input type="text" id="journalVoucher_No_Display" class="form-control input-sm requiredJournalVoucher">
+                                    <input type="text" id="journalVoucher_No_Display" class="form-control input-sm">
                                     <input type="hidden" id="journalVoucher_No">
                                 </div>
                                 <div class="form-group">
@@ -457,8 +457,8 @@
                 document.getElementById('journalVoucher_No').value = Results.JVNumber;
 
                 var JV_Number = Results.JVNumber;
-                var JV_Number_Display = JV_Number.replace(/(\d{3})(\d+)/, '$1-$2');
-                document.getElementById('journalVoucher_No_Display').value = JV_Number_Display;
+                //var JV_Number_Display = JV_Number.replace(/(\d{3})(\d+)/, '$1-$2');
+                document.getElementById('journalVoucher_No_Display').value = JV_Number;
 
                 document.getElementById('manual_JournalVoucher_No').value = Results.ManualJVNumber;
                 document.getElementById('journalVoucher_date_Data').value = Results.JVDate;
@@ -476,6 +476,7 @@
 
                 if(document.getElementById('JV_IsLocked').value == 'true') {
                     $("#cmdJournalJournalVoucher").prop("disabled", false);
+                    $("#cmdPreviewJournalVoucher").prop("disabled", false);
                     $('#cmdSaveAndLockJournalVoucher').prop('disabled', true);
                     document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-lock"></i> Locked';
 
@@ -581,6 +582,7 @@
 
                 } else if(document.getElementById('JV_IsLocked').value == 'false') {
                     $("#cmdJournalJournalVoucher").prop("disabled", true);
+                    $("#cmdPreviewJournalVoucher").prop("disabled", true);
                     $('#cmdSaveAndLockJournalVoucher').prop('disabled', false);
                     document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-unlock"></i> Not Lock ';
                     $("#cmdEditJournalVoucher").prop("disabled", true);
@@ -689,7 +691,6 @@
             required: false,
             selectedValue: document.getElementById('branch_selectedValue').value.toString(),
             onSelectedIndexChanged: function () {
-                console.log(branchCollections.items[this.selectedIndex].BranchId);
                 $("#branch_Id_data").val(branchCollections.items[this.selectedIndex].BranchId);
             }
         });
@@ -1803,6 +1804,19 @@
     //    btnCurrentPageGridJournalVoucherLine.innerHTML = (journalVoucherLines.pageIndex + 1) + ' / ' + journalVoucherLines.pageCount;
     //}
 
+    // ==================================================================
+    // Function with leading zeroes to display the journal voucher number
+    // ==================================================================
+    function zerofill(number, length) {
+        var result = number.toString();
+        var pad = length - result.length;
+        while(pad > 0) {
+            result = '0' + result;
+            pad--;
+        }
+        return result;
+    }
+
     // ============
     // On load Page
     // ============
@@ -1844,10 +1858,15 @@
             };
         });
 
-        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' / ' + '<a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Journal Voucher</a> ' + ' / Journal Voucher Detail';
+        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > ' + '<a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Journal Voucher</a> ' + ' > Journal Voucher Detail';
 
         if (@JVId == 0) {
-            //document.getElementById('journalVoucher_No').value = "000-000000";
+
+            if(document.getElementById('journalVoucher_No').value == 0) {
+                document.getElementById('journalVoucher_No_Display').value = "0000000001";
+            }
+
+            document.getElementById('journalVoucher_No').value = 0;
             //document.getElementById('journalVoucher_No_Display').value = "000-000000";
             var journalVouchers = new wijmo.collections.ObservableArray;
             $.ajax({
@@ -1860,16 +1879,16 @@
                     if (Results.length > 0) {
                         journalVouchers.push({
                             Id: Results.Id,
-                            JVNumber: Results.JVNumber + 1
+                            JVNumber: Results.JVNumber
                         });
                     }
                     var JV_Number = parseInt(Results.JVNumber);
-                    var JV_Number_PlusOne = 1;
+                    var JV_Number_PlusOne = 0000000001;
                     var JV_Num_Results = JV_Number + JV_Number_PlusOne;
-                    var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+                    //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
 
-                    document.getElementById('journalVoucher_No').value = JV_Number_Display;
-                    document.getElementById('journalVoucher_No_Display').value = JV_Number_Display;
+                    document.getElementById('journalVoucher_No').value = zerofill(JV_Num_Results, 10);
+                    document.getElementById('journalVoucher_No_Display').value = zerofill(JV_Num_Results, 10);
                 }
             });
 
@@ -2046,6 +2065,6 @@
         //    updateNavigateButtonsJournalVoucherLine();
         //});
     });
-</script>
+    </script>
 </body>
 </html>

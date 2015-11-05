@@ -182,23 +182,11 @@ namespace easyfis.Controllers
                 var getMax = Convert.ToInt32(getMaxJournalVoucherNo());
                 var sumOfMaxJVNoPlusOne = getMax + 1;
 
-                var nubmerZeroSequenceOfBranchId = String.Format("{0:000}", journalVoucher.BranchId);
-                var numberZeroSequenceOfJVNo = String.Format("{0:000000}", sumOfMaxJVNoPlusOne);
-                var numberZeroSequenceOfJVNoGetMaxNotNull = String.Format("{0:000000000}", sumOfMaxJVNoPlusOne);
-
-                var sequnceNumberForJVNoWithBranch = "";
-                if (getMax == 0)
-                {
-                    sequnceNumberForJVNoWithBranch = nubmerZeroSequenceOfBranchId + numberZeroSequenceOfJVNo;
-                }
-                else
-                {
-                    sequnceNumberForJVNoWithBranch = numberZeroSequenceOfJVNoGetMaxNotNull;
-                }
+                var numberZeroSequenceOfJVNoGetMaxNo = String.Format("{0:0000000000}", sumOfMaxJVNoPlusOne);
 
                 newJournalVoucher.BranchId = journalVoucher.BranchId;
                 //newJournalVoucher.JVNumber = journalVoucher.JVNumber;
-                newJournalVoucher.JVNumber = sequnceNumberForJVNoWithBranch;
+                newJournalVoucher.JVNumber = numberZeroSequenceOfJVNoGetMaxNo;
                 newJournalVoucher.ManualJVNumber = journalVoucher.ManualJVNumber;
                 newJournalVoucher.JVDate = Convert.ToDateTime(journalVoucher.JVDate);
                 newJournalVoucher.Particulars = journalVoucher.Particulars;
