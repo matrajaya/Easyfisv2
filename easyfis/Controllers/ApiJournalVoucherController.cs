@@ -13,6 +13,21 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // ==============================================
+        // Get the Max Journal Voucher Number in Database
+        // ==============================================
+        public String getMaxJournalVoucherNo()
+        {
+            var maxJVNo = (from d in db.TrnJournalVouchers select d.JVNumber).Max();
+            Debug.WriteLine(maxJVNo);
+
+            if (maxJVNo == null)
+            {
+                maxJVNo = "0";
+            }
+            return maxJVNo;
+        }
+
         // ====================
         // LIST Journal Voucher
         // ====================
@@ -116,18 +131,6 @@ namespace easyfis.Controllers
             return journalVouchers.ToList();
         }
 
-        public String getMaxJournalVoucherNo()
-        {
-            var maxJVNo = (from d in db.TrnJournalVouchers select d.JVNumber).Max();
-            Debug.WriteLine(maxJVNo);
-
-            if (maxJVNo == null) 
-            {
-                maxJVNo = "0";
-            }
-            return maxJVNo;
-        }
-
         // ===================
         // ADD Journal Voucher
         // ===================
@@ -136,15 +139,33 @@ namespace easyfis.Controllers
         {
             try
             {
+                Data.TrnJournalVoucher newJournalVoucher = new Data.TrnJournalVoucher();
+
                 var isLocked = false;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
 
-                Data.TrnJournalVoucher newJournalVoucher = new Data.TrnJournalVoucher();
+                var getMax = Convert.ToInt32(getMaxJournalVoucherNo());
+                var sumOfMaxJVNoPlusOne = getMax + 1;
+
+                var nubmerZeroSequenceOfBranchId = String.Format("{0:000}", journalVoucher.BranchId);
+                var numberZeroSequenceOfJVNo = String.Format("{0:000000}", sumOfMaxJVNoPlusOne);
+                var numberZeroSequenceOfJVNoGetMaxNotNull = String.Format("{0:000000000}", sumOfMaxJVNoPlusOne);
+
+                var sequnceNumberForJVNoWithBranch = "";
+                if (getMax == 0)
+                {
+                    sequnceNumberForJVNoWithBranch = nubmerZeroSequenceOfBranchId + numberZeroSequenceOfJVNo;
+                }
+                else
+                {
+                    sequnceNumberForJVNoWithBranch = numberZeroSequenceOfJVNoGetMaxNotNull;
+                }
 
                 newJournalVoucher.BranchId = journalVoucher.BranchId;
-                newJournalVoucher.JVNumber = journalVoucher.JVNumber;
+                //newJournalVoucher.JVNumber = journalVoucher.JVNumber;
+                newJournalVoucher.JVNumber = sequnceNumberForJVNoWithBranch;
                 newJournalVoucher.ManualJVNumber = journalVoucher.ManualJVNumber;
                 newJournalVoucher.JVDate = Convert.ToDateTime(journalVoucher.JVDate);
                 newJournalVoucher.Particulars = journalVoucher.Particulars;
@@ -160,14 +181,7 @@ namespace easyfis.Controllers
                 db.TrnJournalVouchers.InsertOnSubmit(newJournalVoucher);
                 db.SubmitChanges();
 
-                this.getMaxJournalVoucherNo();
-                var getMax = Convert.ToInt32(getMaxJournalVoucherNo());
-                var sum = getMax + 1;
-
-                Debug.WriteLine(sum);
-
                 return newJournalVoucher.Id;
-
             }
             catch
             {
@@ -212,11 +226,6 @@ namespace easyfis.Controllers
                     db.SubmitChanges();
 
                     // postJournal.postJournalVoucher(journalVoucherId);
-                    this.getMaxJournalVoucherNo();
-                    var getMax = Convert.ToInt32(getMaxJournalVoucherNo());
-                    var sum = getMax + 1;
-
-                    Debug.WriteLine(sum);
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

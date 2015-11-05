@@ -73,7 +73,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Journal Voucher Number:</label>
-                                    <input type="text" id="journalVoucher_No" class="form-control input-sm requiredJournalVoucher">
+                                    <input type="text" id="journalVoucher_No_Display" class="form-control input-sm requiredJournalVoucher">
+                                    <input type="text" id="journalVoucher_No">
                                 </div>
                                 <div class="form-group">
                                     <label>Journal Voucher Date:</label>
@@ -397,9 +398,9 @@
                             UpdatedDateTime: Results[i]["UpdatedDateTime"]
                         });
                         var journalVoucherId = Results[i]["Id"];
-                        var JournalVoucherNumber = Results[i]["JVNumber"];
+                        var manualJournalVoucherNumber = Results[i]["ManualJVNumber"];
                     }
-                    if (JournalVoucherNumber == document.getElementById('journalVoucher_No').value) {
+                    if (manualJournalVoucherNumber == document.getElementById('manual_JournalVoucher_No').value) {
                         window.location = '/Software/JournalVoucherDetail?JournalVoucherId=' + journalVoucherId + '&branchId=' + @branchId;
                         window.setTimeout(function () { location.reload() }, 1000);
                     }
@@ -454,6 +455,11 @@
                 getUsersForComboBox();
 
                 document.getElementById('journalVoucher_No').value = Results.JVNumber;
+
+                var JV_Number = Results.JVNumber;
+                var JV_Number_Display = JV_Number.replace(/(\d{3})(\d+)/, '$1-$2');
+                document.getElementById('journalVoucher_No_Display').value = JV_Number_Display;                
+
                 document.getElementById('manual_JournalVoucher_No').value = Results.ManualJVNumber;
                 document.getElementById('journalVoucher_date_Data').value = Results.JVDate;
                 document.getElementById('journalVoucher_Particulars').value = Results.Particulars;
@@ -475,7 +481,7 @@
                     $("#cmdSaveJournalVoucher").prop("disabled", true);
                     $("#cmdEditJournalVoucher").prop("disabled", false);
 
-                    document.getElementById('journalVoucher_No').disabled = true;
+                    //document.getElementById('journalVoucher_No').disabled = true;
                     document.getElementById('manual_JournalVoucher_No').disabled = true;
                     document.getElementById('journalVoucher_Particulars').disabled = true;
 
@@ -577,7 +583,7 @@
                     document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-unlock"></i> Not Lock ';
                     $("#cmdEditJournalVoucher").prop("disabled", true);
                     $("#cmdSaveJournalVoucher").prop("disabled", false);
-                    document.getElementById('journalVoucher_No').disabled = false;
+                    //document.getElementById('journalVoucher_No').disabled = false;
                     document.getElementById('manual_JournalVoucher_No').disabled = false;
                     document.getElementById('journalVoucher_Particulars').disabled = false;
                     $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", false);
@@ -881,7 +887,7 @@
         var journalVoucherObject = new Object();
         var journalVoucherId = @JVId;
         journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
-        journalVoucherObject.JVNumber = document.getElementById('journalVoucher_No').value;
+        //journalVoucherObject.JVNumber = document.getElementById('journalVoucher_No').value;
         journalVoucherObject.ManualJVNumber = document.getElementById('manual_JournalVoucher_No').value;
         journalVoucherObject.JVDate = document.getElementById('journalVoucher_date_Data').value;
         journalVoucherObject.Particulars = document.getElementById('journalVoucher_Particulars').value;
@@ -1800,7 +1806,9 @@
     $(document).ready(function () {
         document.getElementById('JV_IsLocked_defaultTrue').value = 'true';
         document.getElementById('JV_IsLocked_defaultFalse').value = 'false';
-
+        $("#journalVoucher_No_Display").prop("disabled", true);
+        $("#journalVoucher_No").prop("disabled", true);
+        
         $.ajax({
             url: '/api/listBranchById/' + @branchId,
             cache: false,
@@ -1833,6 +1841,8 @@
         document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' / ' + '<a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Journal Voucher</a> ' + ' / Journal Voucher Detail';
 
         if (@JVId == 0) {
+            document.getElementById('journalVoucher_No').value = "000-000000";
+            document.getElementById('journalVoucher_No_Display').value = "000-000000";
             $("#cmdJournalJournalVoucher").prop("disabled", true);
             $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
             $("#cmdEditJournalVoucher").prop("disabled", true);

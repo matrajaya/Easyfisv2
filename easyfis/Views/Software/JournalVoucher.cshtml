@@ -159,6 +159,10 @@
     function getJournalVoucher() {
         var journalVouchers = new wijmo.collections.ObservableArray;
         $('#loadingModal').modal('show');
+        //var JV_Number = Results.JVNumber;
+        //var JV_Number_Display = JV_Number.replace(/(\d{3})(\d+)/, '$1-$2');
+        //document.getElementById('journalVoucher_No_Display').value = JV_Number_Display; 
+
         $.ajax({
             url: '/api/listJournalVoucherByBranchId/' + @branchId,
             cache: false,
@@ -175,7 +179,7 @@
                             Id: Results[i]["Id"],
                             BranchId: Results[i]["BranchId"],
                             Branch: Results[i]["Branch"],
-                            JVNumber: Results[i]["JVNumber"],
+                            JVNumber: Results[i]["JVNumber"].replace(/(\d{3})(\d+)/, '$1-$2'),
                             JVDate: Results[i]["JVDate"],
                             Particulars: Results[i]["Particulars"],
                             ManualJVNumber: Results[i]["ManualJVNumber"],

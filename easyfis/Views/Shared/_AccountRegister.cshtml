@@ -3,14 +3,12 @@
 
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-    {
-        @Html.AntiForgeryToken()
+
+    @Html.AntiForgeryToken()
         <!-- Section -->
-        <section>
-            @{ Response.Redirect("~/Manage/Index");}
-        </section>
-    }
+    <section>
+        @{ Response.Redirect("~/Manage/Index");}
+    </section>
 }
 else
 {
@@ -122,8 +120,8 @@ else
                                     @*</form>*@
                                 </div>
                                 @*<div class="panel-footer">
-                                    <p>Do not forget to put captca in your registration</p>
-                                </div>*@
+                                        <p>Do not forget to put captca in your registration</p>
+                                    </div>*@
                             </div>
                         </div>
                     </div>

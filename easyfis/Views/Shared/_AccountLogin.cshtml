@@ -3,14 +3,11 @@
 
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-    {
-        @Html.AntiForgeryToken()
-        <!-- Section -->
-        <section>
-            @{ Response.Redirect("~/Manage/Index");}
-        </section>
-    }
+    @Html.AntiForgeryToken()
+    <!-- Section -->
+    <section>
+        @{ Response.Redirect("~/Manage/Index");}
+    </section>
 }
 else
 {

@@ -1,11 +1,8 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-    {
-        @Html.AntiForgeryToken()
-        <a href="@Url.Action("Index", "Manage")" class="btn btn-primary btn-lg btn-fill btn-round">Manage</a>
-    }
+    @Html.AntiForgeryToken()
+    <a href="@Url.Action("Index", "Manage")" class="btn btn-primary btn-lg btn-fill btn-round">Start</a>
 }
 else
 {
