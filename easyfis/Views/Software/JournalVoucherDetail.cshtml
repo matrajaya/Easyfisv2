@@ -74,7 +74,7 @@
                                 <div class="form-group">
                                     <label>Journal Voucher Number:</label>
                                     <input type="text" id="journalVoucher_No_Display" class="form-control input-sm requiredJournalVoucher">
-                                    <input type="text" id="journalVoucher_No">
+                                    <input type="hidden" id="journalVoucher_No">
                                 </div>
                                 <div class="form-group">
                                     <label>Journal Voucher Date:</label>
@@ -458,7 +458,7 @@
 
                 var JV_Number = Results.JVNumber;
                 var JV_Number_Display = JV_Number.replace(/(\d{3})(\d+)/, '$1-$2');
-                document.getElementById('journalVoucher_No_Display').value = JV_Number_Display;                
+                document.getElementById('journalVoucher_No_Display').value = JV_Number_Display;
 
                 document.getElementById('manual_JournalVoucher_No').value = Results.ManualJVNumber;
                 document.getElementById('journalVoucher_date_Data').value = Results.JVDate;
@@ -475,6 +475,7 @@
 
 
                 if(document.getElementById('JV_IsLocked').value == 'true') {
+                    $("#cmdJournalJournalVoucher").prop("disabled", false);
                     $('#cmdSaveAndLockJournalVoucher').prop('disabled', true);
                     document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-lock"></i> Locked';
 
@@ -579,6 +580,7 @@
                     journalVoucherLineGrid.trackChanges = true;
 
                 } else if(document.getElementById('JV_IsLocked').value == 'false') {
+                    $("#cmdJournalJournalVoucher").prop("disabled", true);
                     $('#cmdSaveAndLockJournalVoucher').prop('disabled', false);
                     document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-unlock"></i> Not Lock ';
                     $("#cmdEditJournalVoucher").prop("disabled", true);
@@ -1199,6 +1201,7 @@
                 } else {
                     document.getElementById('status_LockedOrUnlocked_JVLEmpty').innerHTML = ' - Cannot lock if JV Line is empty.';
                     $('#cmdSaveAndLockJournalVoucher').hide();
+                    $("#cmdJournalJournalVoucher").prop("disabled", true);
                 }
             }
         }).fail(function (xhr, textStatus, err) {
@@ -1804,11 +1807,14 @@
     // On load Page
     // ============
     $(document).ready(function () {
+        // =========================
+        // GET Journal Voucher by Id
+        // =========================
         document.getElementById('JV_IsLocked_defaultTrue').value = 'true';
         document.getElementById('JV_IsLocked_defaultFalse').value = 'false';
         $("#journalVoucher_No_Display").prop("disabled", true);
         $("#journalVoucher_No").prop("disabled", true);
-        
+
         $.ajax({
             url: '/api/listBranchById/' + @branchId,
             cache: false,
@@ -1841,8 +1847,32 @@
         document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' / ' + '<a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Journal Voucher</a> ' + ' / Journal Voucher Detail';
 
         if (@JVId == 0) {
-            document.getElementById('journalVoucher_No').value = "000-000000";
-            document.getElementById('journalVoucher_No_Display').value = "000-000000";
+            //document.getElementById('journalVoucher_No').value = "000-000000";
+            //document.getElementById('journalVoucher_No_Display').value = "000-000000";
+            var journalVouchers = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listJournalVoucherLast',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        journalVouchers.push({
+                            Id: Results.Id,
+                            JVNumber: Results.JVNumber + 1
+                        });
+                    }
+                    var JV_Number = parseInt(Results.JVNumber);
+                    var JV_Number_PlusOne = 1;
+                    var JV_Num_Results = JV_Number + JV_Number_PlusOne;
+                    var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+
+                    document.getElementById('journalVoucher_No').value = JV_Number_Display;
+                    document.getElementById('journalVoucher_No_Display').value = JV_Number_Display;
+                }
+            });
+
             $("#cmdJournalJournalVoucher").prop("disabled", true);
             $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
             $("#cmdEditJournalVoucher").prop("disabled", true);
