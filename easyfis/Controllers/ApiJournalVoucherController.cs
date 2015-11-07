@@ -226,8 +226,6 @@ namespace easyfis.Controllers
                 var journalVoucherId = Convert.ToInt32(id);
                 var journalVouchers = from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d;
 
-                Business.PostJournal postJournal = new Business.PostJournal();
-
                 if (journalVouchers.Any())
                 {
                     var updateJournalVoucher = journalVouchers.FirstOrDefault();
@@ -245,8 +243,6 @@ namespace easyfis.Controllers
                     updateJournalVoucher.UpdatedDateTime = date;
 
                     db.SubmitChanges();
-
-                    // postJournal.postJournalVoucher(journalVoucherId);
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

@@ -1083,6 +1083,26 @@
                     }
                 }
             });
+
+            $.ajax({
+                type: "PUT",
+                url: '/api/postJournal/' + journalVoucherId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: data,
+                statusCode: {
+                    200: function () {                     
+                        toastr.success("Saved to Journal");
+                    },
+                    404: function () {
+                        toastr.error("Can't Update");
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                    }
+                }
+            });
+
         }
     }
 

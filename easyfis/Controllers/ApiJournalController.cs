@@ -83,5 +83,25 @@ namespace easyfis.Controllers
             return journals.ToList();
         }
 
+        // ===========
+        // Add Journal
+        // ===========
+        [Route("api/postJournal/{JVId}")]
+        public HttpResponseMessage Put(String JVId)
+        {
+            try
+            {
+                var journalVoucherId = Convert.ToInt32(JVId);
+
+                Business.PostJournal journal = new Business.PostJournal();
+                journal.postJournal(journalVoucherId);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
     }
 }
