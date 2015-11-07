@@ -172,8 +172,19 @@ namespace easyfis.Controllers
             var approvedByUserId = (from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d.ApprovedById).SingleOrDefault();
 
             var preparedBy = (from d in db.MstUsers where d.Id == preparedByUserId select d.UserName).SingleOrDefault();
+            var preparedByFirstName = (from d in db.MstUsers where d.Id == preparedByUserId select d.FirstName).SingleOrDefault();
+            var preparedByLastName = (from d in db.MstUsers where d.Id == preparedByUserId select d.LastName).SingleOrDefault();
+            var preparedByFullName = preparedByFirstName + " " + preparedByLastName;
+
             var checkedBy = (from d in db.MstUsers where d.Id == checkedByUserId select d.UserName).SingleOrDefault();
+            var checkedByFirstName = (from d in db.MstUsers where d.Id == checkedByUserId select d.FirstName).SingleOrDefault();
+            var checkedByLastName = (from d in db.MstUsers where d.Id == checkedByUserId select d.LastName).SingleOrDefault();
+            var checkedByFullName = checkedByFirstName + " " + checkedByLastName;
+
             var approvedBy = (from d in db.MstUsers where d.Id == approvedByUserId select d.UserName).SingleOrDefault();
+            var approvedByFirstName = (from d in db.MstUsers where d.Id == approvedByUserId select d.FirstName).SingleOrDefault();
+            var approvedByLastName = (from d in db.MstUsers where d.Id == approvedByUserId select d.LastName).SingleOrDefault();
+            var approvedByFullName = approvedByFirstName + " " + approvedByLastName;
 
             // Pauls Work and Layouts in PDF journal
             MemoryStream workStream = new MemoryStream();
@@ -253,9 +264,9 @@ namespace easyfis.Controllers
             document.Add(table);
             document.Add(line);
 
-            Paragraph preparedByUser = new Paragraph("Prepared by: " + preparedBy);
-            Paragraph checkedByUser = new Paragraph("Checked by: " + checkedBy);
-            Paragraph approvedByUser = new Paragraph("Approved by: " + approvedBy);
+            Paragraph preparedByUser = new Paragraph("Prepared by: " + preparedByFullName);
+            Paragraph checkedByUser = new Paragraph("Checked by: " + checkedByFullName);
+            Paragraph approvedByUser = new Paragraph("Approved by: " + approvedByFullName);
 
             document.Add(preparedByUser);
             document.Add(checkedByUser);
