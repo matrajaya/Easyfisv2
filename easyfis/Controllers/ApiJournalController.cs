@@ -103,5 +103,26 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
+
+        // =========================
+        // Update and Delete Journal
+        // =========================
+        [Route("api/deleteJournal/{JVId}")]
+        public HttpResponseMessage delete(String JVId)
+        {
+            try
+            {
+                var journalVoucherId = Convert.ToInt32(JVId);
+
+                Business.PostJournal journal = new Business.PostJournal();
+                journal.deleteJournal(journalVoucherId);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
     }
 }

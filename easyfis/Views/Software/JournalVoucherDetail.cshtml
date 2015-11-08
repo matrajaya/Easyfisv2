@@ -1002,9 +1002,6 @@
                         $("#cmdCloseJournalVoucher").prop("disabled", true);
                         $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                         $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
                         toastr.info("Unlocked");
                     },
                     404: function () {
@@ -1015,6 +1012,27 @@
                     }
                 }
             });
+
+            setInterval(function(){
+                $.ajax({
+                    type: "DELETE",
+                    url: '/api/deleteJournal/' + journalVoucherId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: {},
+                    statusCode: {
+                        200: function () {
+                            location.reload();
+                        },
+                        404: function () {
+                            toastr.error("Can't Update");
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+            }, 1000);
         }
 
         // ====================

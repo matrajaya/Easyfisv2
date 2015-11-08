@@ -83,11 +83,27 @@ namespace easyfis.Business
                     newJournal.ARSIId = JVLs.ARSIId;
 
                     db.TrnJournals.InsertOnSubmit(newJournal);
+                    db.SubmitChanges();
                 }
-
-                db.SubmitChanges();
             }
             catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
+
+        public void deleteJournal(Int32 JVId)
+        {
+            try
+            {
+                var journals = db.TrnJournals.Where(d => d.JVId == JVId).ToList();
+                foreach(var j in journals)
+                {
+                    db.TrnJournals.DeleteOnSubmit(j);
+                    db.SubmitChanges();
+                }
+            }
+            catch(Exception e)
             {
                 Debug.WriteLine(e);
             }
