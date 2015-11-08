@@ -200,9 +200,14 @@
             show: true,
             backdrop: 'static'
         });
+        $("#cmdConfirmDeleteCompany").prop("disabled", false);
+        $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
     }
     // Company Confirm Delete Button
     function cmdCompanyConfirmDeleteButton_OnClick() {
+        $("#cmdConfirmDeleteCompany").prop("disabled", true);
+        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+
         companies.editItem(companies.currentItem);
         var id = companies.currentEditItem.Id;
         $.ajax({

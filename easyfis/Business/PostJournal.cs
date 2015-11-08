@@ -62,6 +62,13 @@ namespace easyfis.Business
                 {
                     Data.TrnJournal newJournal = new Data.TrnJournal();
 
+                    journalVoucherLines.GroupBy(i => i.BranchId).Select(g => new
+                    {
+                        BranchId = g.Key,
+                        CreditAmount = g.Sum(i => i.CreditAmount),
+                        DebitAmount = g.Sum(i => i.DebitAmount)
+                    });
+
                     newJournal.JournalDate = Convert.ToDateTime(JournalDate);
                     newJournal.BranchId = JVLs.BranchId;
                     newJournal.JVId = JVLs.JVId;
@@ -97,13 +104,13 @@ namespace easyfis.Business
             try
             {
                 var journals = db.TrnJournals.Where(d => d.JVId == JVId).ToList();
-                foreach(var j in journals)
+                foreach (var j in journals)
                 {
                     db.TrnJournals.DeleteOnSubmit(j);
                     db.SubmitChanges();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
             }

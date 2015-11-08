@@ -42,13 +42,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         @*<h4 id="journalVoucherDetailLabel"></h4>*@
                         <label>Status: </label> <span id="status_LockedOrUnlocked" class="branch-name-custom-style"></span> <span id="status_LockedOrUnlocked_JVLEmpty" style="color: red"></span>
                     </div>
-                    <div class="col-md-8" align="right">
+                    <div class="col-md-7" align="right">
                         <button class="btn btn-primary btn-sm" id="cmdJournalJournalVoucher" onclick="cmdJournalVoucherJournalButton_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                        <button class="btn btn-primary btn-sm" id="cmdSaveAndLockJournalVoucher" onclick="cmdJournalVoucherSaveAndLockButton_OnClick()"><i class="fa fa-lock"></i> Save and Lock</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSaveAndLockJournalVoucher" onclick="cmdJournalVoucherSaveAndLockButton_OnClick()"><i class="fa fa-save"></i> Save Journal</button>
                         <!-- Save Button to Add JV -->
                         <button class="btn btn-primary btn-sm" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <!-- Save Button to Update JV -->
@@ -153,6 +153,10 @@
                     <div class="row" align="left">
                         <div class="col-lg-12">
                             <div id="JournalVoucherLineGrid" class="grid" align="left"></div>
+                            <br /><br />
+                            <label>Total Debit: </label> <span id="totalDebit">0</span>
+                            <br />
+                            <label>Total Credit: </label> <span id="totalCredit">0</span>
                         </div>
                     </div>
                     <br />
@@ -479,7 +483,7 @@
                         $("#cmdPrintJournalVoucher").prop("disabled", false);
                         $("#cmdPreviewJournalVoucher").prop("disabled", false);
                         $('#cmdSaveAndLockJournalVoucher').prop('disabled', true);
-                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-lock"></i> Locked';
+                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-lock"></i> Saved and Locked';
 
                         $("#cmdSaveJournalVoucher").prop("disabled", true);
                         $("#cmdEditJournalVoucher").prop("disabled", false);
@@ -893,6 +897,18 @@
         // Journal Voucher Save Button
         // ===========================
         function cmdJournalVoucherSaveButton_OnClick() {
+            $("#cmdJournalJournalVoucher").prop("disabled", true);
+            $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
+            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
+            $("#cmdSaveJournalVoucher").prop("disabled", true);
+            $("#cmdEditJournalVoucher").prop("disabled", true);
+            $("#cmdPreviewJournalVoucher").prop("disabled", true);
+            $("#cmdPrintJournalVoucher").prop("disabled", true);
+            $("#cmdDownloadJournalVoucher").prop("disabled", true);
+            $("#cmdCloseJournalVoucher").prop("disabled", true);
+            $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+
             var journalVoucherObject = new Object();
             var journalVoucherId = @JVId;
             journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
@@ -966,6 +982,18 @@
         // EDIT Journal Voucher / Enable its Controls
         // ==========================================
         function cmdJournalVoucherEditEnableButton_OnClick() {
+            $("#cmdJournalJournalVoucher").prop("disabled", true);
+            $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
+            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
+            $("#cmdSaveJournalVoucher").prop("disabled", true);
+            $("#cmdEditJournalVoucher").prop("disabled", true);
+            $("#cmdPreviewJournalVoucher").prop("disabled", true);
+            $("#cmdPrintJournalVoucher").prop("disabled", true);
+            $("#cmdDownloadJournalVoucher").prop("disabled", true);
+            $("#cmdCloseJournalVoucher").prop("disabled", true);
+            $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+
             var journalVoucherObject = new Object();
             var journalVoucherId = @JVId;
             journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
@@ -1075,6 +1103,18 @@
                 e.preventDefault();
             }
             else {
+                $("#cmdJournalJournalVoucher").prop("disabled", true);
+                $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
+                $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
+                $("#cmdSaveJournalVoucher").prop("disabled", true);
+                $("#cmdEditJournalVoucher").prop("disabled", true);
+                $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                $("#cmdPrintJournalVoucher").prop("disabled", true);
+                $("#cmdDownloadJournalVoucher").prop("disabled", true);
+                $("#cmdCloseJournalVoucher").prop("disabled", true);
+                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+
                 $.ajax({
                     type: "PUT",
                     url: '/api/updateJournalVoucher/' + journalVoucherId,
@@ -1094,8 +1134,8 @@
                             $("#cmdCloseJournalVoucher").prop("disabled", true);
                             $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                             $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-                            toastr.success("Saved and Locked");
-                            toastr.success("Saved to Journal");
+                            //toastr.success("Saved and Locked");
+                            toastr.success("Saved Journal");
                         },
                         404: function () {
                             toastr.error("Can't Update");
@@ -1169,6 +1209,18 @@
                 e.preventDefault();
             }
             else {
+                $("#cmdJournalJournalVoucher").prop("disabled", true);
+                $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
+                $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
+                $("#cmdSaveJournalVoucher").prop("disabled", true);
+                $("#cmdEditJournalVoucher").prop("disabled", true);
+                $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                $("#cmdPrintJournalVoucher").prop("disabled", true);
+                $("#cmdDownloadJournalVoucher").prop("disabled", true);
+                $("#cmdCloseJournalVoucher").prop("disabled", true);
+                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+
                 $.ajax({
                     type: "PUT",
                     url: '/api/updateJournalVoucher/' + journalVoucherId,
@@ -1239,11 +1291,24 @@
                                 ARSIId: Results[i]["ARSIId"],
                                 IsClear: Results[i]["IsClear"],
                             });
+                            var debitAmountTotal = 0;
+                            var creditAmountTotal = 0;
+
+                            var a = 0;
+                            while (a < Results.length) {
+                                debitAmountTotal += Results[a]["DebitAmount"];
+                                creditAmountTotal += Results[a]["CreditAmount"];
+                                a++;
+                            }
                         }
+
+                        document.getElementById('totalDebit').innerHTML = "&#8369 " + debitAmountTotal.toLocaleString();
+                        document.getElementById('totalCredit').innerHTML = "&#8369 " + creditAmountTotal.toLocaleString();
+
                         document.getElementById('journalVoucherLineNameLabel').innerHTML = 'Journal Voucher Line List';
                         $('#cmdSaveAndUpdateJournalVoucher').hide();
                     } else {
-                        document.getElementById('status_LockedOrUnlocked_JVLEmpty').innerHTML = ' - Cannot lock if JV Line is empty.';
+                        document.getElementById('status_LockedOrUnlocked_JVLEmpty').innerHTML = ' - Cannot save journal if JV Line is empty.';
                         $('#cmdSaveAndLockJournalVoucher').hide();
                         $("#cmdJournalJournalVoucher").prop("disabled", true);
                     }
@@ -1439,6 +1504,9 @@
             getAccountsForComboBoxInJournalVoucherLine();
             getArticlesForComboBoxInJournalVoucherLine();
 
+            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
+
             document.getElementById('JVL_Id').value = 0;
             document.getElementById('JVL_JVId').value = @JVId;
             document.getElementById('JVL_Branch_Id_Data').value = '';
@@ -1468,6 +1536,9 @@
             getBranchesForComboBoxInJournalVoucherLine();
             getAccountsForComboBoxInJournalVoucherLine();
             getArticlesForComboBoxInJournalVoucherLine();
+
+            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
 
             var journalVoucherLine = journalVoucherLines.currentEditItem;
             document.getElementById('JVL_Id').value = journalVoucherLine.Id !== null && typeof (journalVoucherLine.Id) != 'undefined' ? wijmo.Globalize.format(journalVoucherLine.Id) : '';
@@ -1527,6 +1598,9 @@
                 e.preventDefault();
             }
             else {
+                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+
                 if (journalVoucherLineId == 0) {
                     $.ajax({
                         type: "POST",
@@ -1587,9 +1661,14 @@
                 show: true,
                 backdrop: 'static'
             });
+            $("#cmdConfirmDeleteJournalVoucherLine").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButtonJournalVoucherLine").prop("disabled", false);
         }
         // delete confirm journal voucher line
         function cmdJournalVoucherConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteJournalVoucherLine").prop("disabled", true);
+            $("#cmdConfirmDeleteCloseButtonJournalVoucherLine").prop("disabled", true);
+
             journalVoucherLines.editItem(journalVoucherLines.currentItem);
             var journalVoucherLineId = journalVoucherLines.currentEditItem.Id;
             $.ajax({

@@ -13,6 +13,7 @@ namespace easyfis.Models
         public String JournalDate { get; set; }
         public Int32 BranchId { get; set; }
         public String Branch { get; set; }
+        public String BranchCode { get; set; }
         public Int32 AccountId { get; set; }
         public String Account { get; set; }
         public Int32 ArticleId { get; set; }

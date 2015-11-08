@@ -191,32 +191,32 @@ namespace easyfis.Controllers
             Rectangle rec = new Rectangle(PageSize.A3);
             Document document = new Document(rec, 72, 72, 72, 72);
             PdfWriter.GetInstance(document, workStream).CloseStream = false;
-      
+
             document.Open();
 
             Chunk glue = new Chunk(new iTextSharp.text.pdf.draw.VerticalPositionMark());
-            Paragraph company = new Paragraph(companyName);
-            Paragraph address = new Paragraph(companyAddress);
-            Paragraph contactNo = new Paragraph(companyContactNo);
+            Paragraph companyAndJV = new Paragraph(companyName);
+            Paragraph addressAndBranch = new Paragraph(companyAddress);
+            Paragraph contactNoAndDateNow = new Paragraph(companyContactNo);
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             Paragraph particularsLabel = new Paragraph("Particulars:");
             Paragraph particularsValue = new Paragraph(JVParticulars);
 
-            company.Add(new Chunk(glue));
-            address.Add(new Chunk(glue));
-            contactNo.Add(new Chunk(glue));
+            companyAndJV.Add(new Chunk(glue));
+            addressAndBranch.Add(new Chunk(glue));
+            contactNoAndDateNow.Add(new Chunk(glue));
             particularsLabel.Add(new Chunk(glue));
             particularsValue.Add(new Chunk(glue));
 
-            company.Add("Journal Voucher");
-            address.Add(branchName);
-            contactNo.Add(DateTime.Now.ToString());
+            companyAndJV.Add("Journal Voucher");
+            addressAndBranch.Add(branchName);
+            contactNoAndDateNow.Add("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"));
             particularsLabel.Add("JV Number: " + JVNumber);
             particularsValue.Add("JV Date:   " + JVDate.ToString("MM/dd/yyyy"));
 
-            document.Add(company);
-            document.Add(address);
-            document.Add(contactNo);
+            document.Add(companyAndJV);
+            document.Add(addressAndBranch);
+            document.Add(contactNoAndDateNow);
             document.Add(line);
             document.Add(particularsLabel);
             document.Add(particularsValue);
@@ -234,19 +234,51 @@ namespace easyfis.Controllers
             table.AddCell("Debit");
             table.AddCell("Credit");
 
-            table.AddCell(new PdfPCell(new Phrase("Main Warehouse")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("1010")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("Cash in Bank")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("BDO")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
+            var journals = from d in db.TrnJournals
+                           where d.JVId == JVId
+                           select new Models.TrnJournal
+                           {
+                               Id = d.Id,
+                               JournalDate = d.JournalDate.ToShortDateString(),
+                               BranchId = d.BranchId,
+                               Branch = d.MstBranch.Branch,
+                               BranchCode = d.MstBranch.BranchCode,
+                               AccountId = d.AccountId,
+                               Account = d.MstAccount.Account,
+                               ArticleId = d.ArticleId,
+                               Article = d.MstArticle.Article,
+                               Particulars = d.Particulars,
+                               DebitAmount = d.DebitAmount,
+                               CreditAmount = d.CreditAmount,
+                               ORId = d.ORId,
+                               CVId = d.CVId,
+                               JVId = d.JVId,
+                               RRId = d.RRId,
+                               SIId = d.SIId,
+                               INId = d.INId,
+                               OTId = d.OTId,
+                               STId = d.STId,
+                               DocumentReference = d.DocumentReference,
+                               APRRId = d.APRRId,
+                               ARSIId = d.ARSIId,
+                           };
+            decimal debitTotal = journals.Sum(d => d.DebitAmount);
+            decimal creditTotal = journals.Sum(d => d.CreditAmount);
 
-            table.AddCell(new PdfPCell(new Phrase("Main Warehouse")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("3000")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("Common Stock")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("Investor")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
+            Debug.WriteLine(debitTotal);
+            foreach (var j in journals)
+            {
+                var debit = j.DebitAmount.ToString("#,##0.00");
+                var credit = j.CreditAmount.ToString("#,##0.00");
+
+                table.AddCell(new PdfPCell(new Phrase(j.Branch)) { Border = 0 });
+                table.AddCell(new PdfPCell(new Phrase(j.BranchCode)) { Border = 0 });
+                table.AddCell(new PdfPCell(new Phrase(j.Account)) { Border = 0 });
+                table.AddCell(new PdfPCell(new Phrase(j.Article)) { Border = 0 });
+                table.AddCell(new PdfPCell(new Phrase("P " + debit)) { Border = 0 });
+                table.AddCell(new PdfPCell(new Phrase("P " + credit)) { Border = 0 });
+            }
+
             document.Add(table);
 
             document.Add(line);
@@ -255,12 +287,15 @@ namespace easyfis.Controllers
             cell = new PdfPCell();
             cell.Colspan = 6;
 
+            var debitTotalCurrency = debitTotal.ToString("#,##0.00");
+            var creditTotalCurrency = creditTotal.ToString("#,##0.00");
+
             table.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
             table.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
             table.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("Total")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("100,000.00")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("Total: ")) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("P " +  Convert.ToString(debitTotalCurrency))) { Border = 0 });
+            table.AddCell(new PdfPCell(new Phrase("P " +  Convert.ToString(creditTotalCurrency))) { Border = 0 });
             document.Add(table);
             document.Add(line);
 
