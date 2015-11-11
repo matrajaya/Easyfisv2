@@ -36,7 +36,7 @@ namespace easyfis
             bundles.Add(new ScriptBundle("~/Scripts/js").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/bootstrap.min.js",
-                      "~/Scripts/jquery.min.js",
+                      //"~/Scripts/jquery.min.js",
                       "~/Scripts/jquery-1.10.2.js",
                       "~/Scripts/jquery-1.10.2.min.js",
                       "~/Scripts/collapse.js",
@@ -49,7 +49,8 @@ namespace easyfis
                       "~/Scripts/alert.js",
                       "~/Scripts/tab.js",
                       "~/Scripts/respond.js",
-                      "~/Scripts/toastr.js"));
+                      "~/Scripts/toastr.js"
+                      ));
 
             // =======================
             // Custom JavaScripts - JS
@@ -74,7 +75,7 @@ namespace easyfis
             bundles.Add(new ScriptBundle("~/Scripts/Software-js").Include(
                      "~/Scripts/bootstrap.js",
                      "~/Scripts/bootstrap.min.js",
-                     "~/Scripts/jquery.min.js",
+                     //"~/Scripts/jquery.min.js",
                      "~/Scripts/jquery-1.10.2.js",
                      "~/Scripts/jquery-1.10.2.min.js",
                      "~/Scripts/transition.js",
