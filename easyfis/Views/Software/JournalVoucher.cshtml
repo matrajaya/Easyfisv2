@@ -25,22 +25,23 @@
         <!-- Section -->
         <section>
             <br /><br /><br />
-            <div class="container">
-                <div class="div_Current_Page">
-                    <label id="currentBranchName"></label> <span id="currentPage"></span>
-                </div>
+            <div class="container">            
                 <!-- Journal Voucher List -->
                 <div id="journalVoucherList">
                     <div class="row">
                         <div class="col-lg-12">
                             <h4><img src='~/images/Icons/iJournal.png'> Journal Voucher</h4>
                             <hr />
-                            <label>Change branch </label>
+                            <div class="div_Current_Page">
+                                <span id="currentPage"></span>
+                            </div>
+                            <label>Branch </label>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div id="branch_Id" class="comboBox-wide-custom"></div>
                                     <input type="hidden" id="branch_Id_data" />
-                                    <input type="hidden" id="branch_Id_selectedValue" />
+                                    <input type="hidden" id="currentBranchName" />
+                                    @*<input type="hidden" id="branch_Id_selectedValue" />*@
                                     <button class="btn btn-primary btn-sm" id="cmdGoGetBranch" onclick="cmdGoButton_OnClick()"><i class="fa fa-arrow-circle-right"></i> Go</button>
                                 </div>
                             </div>
@@ -161,7 +162,7 @@
         $('#loadingModal').modal('show');
         //var JV_Number = Results.JVNumber;
         //var JV_Number_Display = JV_Number.replace(/(\d{3})(\d+)/, '$1-$2');
-        //document.getElementById('journalVoucher_No_Display').value = JV_Number_Display; 
+        //document.getElementById('journalVoucher_No_Display').value = JV_Number_Display;
 
         $.ajax({
             url: '/api/listJournalVoucherByBranchId/' + @branchId,
@@ -298,7 +299,7 @@
             itemsSource: branchList,
             isEditable: false,
             required: false,
-            selectedValue: document.getElementById('branch_Id_selectedValue').value.toString(),
+            selectedValue: document.getElementById('currentBranchName').value.toString(),
             onSelectedIndexChanged: function () {
                 $("#branch_Id_data").val(branchCollections.items[this.selectedIndex].BranchId);
                 $('#cmdGoGetBranch').prop('disabled', false);
@@ -371,7 +372,8 @@
                         BranchBranch: results.Branch
                     });
                 }
-                document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
+                //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
+                document.getElementById('currentBranchName').value = results.Branch;
             }
         });
 
@@ -516,6 +518,6 @@
             updateNavigateButtonsJournalVoucher();
         });
     });
-    </script>
+</script>
 </body>
 </html>

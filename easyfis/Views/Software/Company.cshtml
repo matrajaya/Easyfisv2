@@ -26,16 +26,16 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <div class="div_Current_Page">
-                    <label id="currentBranchName"></label> <span id="currentPage"></span>
-                </div>
-
                 <!-- Company List -->
                 <div id="companyList">
                     <div class="row">
                         <div class="col-lg-12">
                             <h4><img src='~/images/Icons/iCompany.png'> Company</h4>
                             <hr />
+                            <div class="div_Current_Page">
+                                @*<label id="currentBranchName"></label>*@ 
+                                <span id="currentPage"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -292,7 +292,7 @@
                             BranchBranch: results.Branch
                         });
                     }
-                    document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
+                    //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
                 }
             });
 

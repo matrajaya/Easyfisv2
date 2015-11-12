@@ -15,10 +15,14 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="well">
-                                            @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" }) <br />
-                                            Address: <span class="profile-details">@ViewData["Address"]  <br /></span>
-                                            Email Address: <span class="profile-details">@ViewData["Email"] <br /></span>
-                                            Username:<span class="profile-details"> @ViewData["UserName"]</span>
+                                            @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" })
+                                            <br />
+                                            <br />
+                                            Email: <span class="profile-details">@ViewData["Email"] <br /></span>
+                                            <br />
+                                            Username: <span class="profile-details"> @ViewData["UserName"] <br /></span>
+                                            <br />
+                                            Lives in <span class="profile-details">@ViewData["Address"]</span>
                                         </div>
                                     </div>
                                 </div>
@@ -30,14 +34,17 @@
                     </div>
                     <div class="col-md-6">
                         <div class="panel panel-info">
-                            <div class="panel-heading">ERP</div>
+                            <div class="panel-heading">Software</div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-8">
+                                    <div class="col-md-12">
                                         <div id="branch_Id" class="comboBox-wide"></div>
                                         <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
-                                    </div>
-                                    <div class="col-md-4">
+                                   </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12" align="right">
                                         <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
                                     </div>
                                 </div>

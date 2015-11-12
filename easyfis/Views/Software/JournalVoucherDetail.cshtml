@@ -31,14 +31,14 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <div class="div_Current_Page">
-                    <label id="currentBranchName"></label> <span id="currentPage"></span>
-                </div>
-
                 <div class="row">
                     <div class="col-lg-12">
                         <h4><img src='~/images/Icons/iJournal.png'> Journal Voucher - Detail</h4>
                         <hr />
+                        <div class="div_Current_Page">
+                            @*<label id="currentBranchName"></label>*@ 
+                            <span id="currentPage"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -54,8 +54,7 @@
                         <!-- Save Button to Update JV -->
                         <button class="btn btn-primary btn-sm" id="cmdSaveAndUpdateJournalVoucher" onclick="cmdJournalVoucherSaveAndUpdateButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick="cmdJournalVoucherEditEnableButton_OnClick()"><i class="fa fa-pencil"></i> Edit</button>
-                        <button onclick="window.location.href ='@Url.Action("JournalVoucherPDF", "Software", new { JVId = JVId })'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-search"></i> Preview</button>
-                        <button class="btn btn-primary btn-sm" id="cmdPrintJournalVoucher" onclick=""><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href ='@Url.Action("JournalVoucherPDF", "Software", new { JVId = JVId })'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href ='@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseJournalVoucher"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
@@ -897,18 +896,6 @@
         // Journal Voucher Save Button
         // ===========================
         function cmdJournalVoucherSaveButton_OnClick() {
-            $("#cmdJournalJournalVoucher").prop("disabled", true);
-            $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
-            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
-            $("#cmdSaveJournalVoucher").prop("disabled", true);
-            $("#cmdEditJournalVoucher").prop("disabled", true);
-            $("#cmdPreviewJournalVoucher").prop("disabled", true);
-            $("#cmdPrintJournalVoucher").prop("disabled", true);
-            $("#cmdDownloadJournalVoucher").prop("disabled", true);
-            $("#cmdCloseJournalVoucher").prop("disabled", true);
-            $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
-            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-
             var journalVoucherObject = new Object();
             var journalVoucherId = @JVId;
             journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
@@ -945,6 +932,18 @@
                 e.preventDefault();
             }
             else {
+                $("#cmdJournalJournalVoucher").prop("disabled", true);
+                $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
+                $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
+                $("#cmdSaveJournalVoucher").prop("disabled", true);
+                $("#cmdEditJournalVoucher").prop("disabled", true);
+                $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                $("#cmdPrintJournalVoucher").prop("disabled", true);
+                $("#cmdDownloadJournalVoucher").prop("disabled", true);
+                $("#cmdCloseJournalVoucher").prop("disabled", true);
+                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+
                 $.ajax({
                     type: "POST",
                     url: '/api/addJournalVoucher',
@@ -1302,8 +1301,8 @@
                             }
                         }
 
-                        document.getElementById('totalDebit').innerHTML = "&#8369 " + debitAmountTotal.toLocaleString();
-                        document.getElementById('totalCredit').innerHTML = "&#8369 " + creditAmountTotal.toLocaleString();
+                        document.getElementById('totalDebit').innerHTML = debitAmountTotal.toLocaleString();
+                        document.getElementById('totalCredit').innerHTML = creditAmountTotal.toLocaleString();
 
                         document.getElementById('journalVoucherLineNameLabel').innerHTML = 'Journal Voucher Line List';
                         $('#cmdSaveAndUpdateJournalVoucher').hide();
@@ -1965,7 +1964,7 @@
                         });
                     }
                     document.getElementById('currentBranch_Name').innerHTML =  " " + results.Branch;
-                    document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
+                    //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
                 }
             });
 

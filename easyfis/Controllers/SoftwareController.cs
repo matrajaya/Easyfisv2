@@ -194,13 +194,19 @@ namespace easyfis.Controllers
 
             document.Open();
 
+            BaseFont bfTimes = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
+            Font times = new Font(bfTimes, 20, Font.BOLD);
+
+            BaseFont boldOnly = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
+            Font boldFont = new Font(boldOnly, 14, Font.BOLD);
+
             Chunk glue = new Chunk(new iTextSharp.text.pdf.draw.VerticalPositionMark());
-            Paragraph companyAndJV = new Paragraph(companyName);
+            Paragraph companyAndJV = new Paragraph(companyName, times);
             Paragraph addressAndBranch = new Paragraph(companyAddress);
             Paragraph contactNoAndDateNow = new Paragraph(companyContactNo);
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            Paragraph particularsLabel = new Paragraph("Particulars:");
-            Paragraph particularsValue = new Paragraph(JVParticulars);
+            Paragraph particularsLabel = new Paragraph("Particulars:", boldFont);
+            Paragraph particularsValue = new Paragraph(JVParticulars, boldFont);
 
             companyAndJV.Add(new Chunk(glue));
             addressAndBranch.Add(new Chunk(glue));
@@ -211,8 +217,8 @@ namespace easyfis.Controllers
             companyAndJV.Add("Journal Voucher");
             addressAndBranch.Add(branchName);
             contactNoAndDateNow.Add("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"));
-            particularsLabel.Add("JV Number: " + JVNumber);
-            particularsValue.Add("JV Date:   " + JVDate.ToString("MM/dd/yyyy"));
+            particularsLabel.Add("JV Number:   " + JVNumber);
+            particularsValue.Add("JV Date:     " + JVDate.ToString("MM/dd/yyyy"));
 
             document.Add(companyAndJV);
             document.Add(addressAndBranch);
@@ -221,18 +227,22 @@ namespace easyfis.Controllers
             document.Add(particularsLabel);
             document.Add(particularsValue);
             document.Add(Chunk.NEWLINE);
-            document.Add(Chunk.NEWLINE);
 
+            BaseFont boldOnlyCell = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
+            Font boldFontCell = new Font(boldOnly, 13, Font.BOLD);
+            
             PdfPTable table = new PdfPTable(6);
+            float[] widths = new float[] { 100f, 40f, 60f, 50f, 45f, 45f };
+            table.SetWidths(widths);
             table.WidthPercentage = 100;
-            PdfPCell cell = new PdfPCell();
-            cell.Colspan = 6;
-            table.AddCell("Branch");
-            table.AddCell("Code");
-            table.AddCell("Account");
-            table.AddCell("Article");
-            table.AddCell("Debit");
-            table.AddCell("Credit");
+
+            // table Cells in header
+            table.AddCell(new PdfPCell(new Phrase("Branch", boldFontCell)) { HorizontalAlignment = 1, PaddingBottom = 10f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            table.AddCell(new PdfPCell(new Phrase("Code", boldFontCell)) { HorizontalAlignment = 1, PaddingBottom = 10f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            table.AddCell(new PdfPCell(new Phrase("Account", boldFontCell)) { HorizontalAlignment = 1, PaddingBottom = 10f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            table.AddCell(new PdfPCell(new Phrase("Article", boldFontCell)) { HorizontalAlignment = 1, PaddingBottom = 10f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            table.AddCell(new PdfPCell(new Phrase("Debit", boldFontCell)) { HorizontalAlignment = 1, PaddingBottom = 10f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            table.AddCell(new PdfPCell(new Phrase("Credit", boldFontCell)) { HorizontalAlignment = 1, PaddingBottom = 10f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
             var journals = from d in db.TrnJournals
                            where d.JVId == JVId
@@ -245,6 +255,7 @@ namespace easyfis.Controllers
                                BranchCode = d.MstBranch.BranchCode,
                                AccountId = d.AccountId,
                                Account = d.MstAccount.Account,
+                               AccountCode = d.MstAccount.AccountCode,
                                ArticleId = d.ArticleId,
                                Article = d.MstArticle.Article,
                                Particulars = d.Particulars,
@@ -265,39 +276,47 @@ namespace easyfis.Controllers
             decimal debitTotal = journals.Sum(d => d.DebitAmount);
             decimal creditTotal = journals.Sum(d => d.CreditAmount);
 
-            Debug.WriteLine(debitTotal);
             foreach (var j in journals)
             {
                 var debit = j.DebitAmount.ToString("#,##0.00");
                 var credit = j.CreditAmount.ToString("#,##0.00");
 
-                table.AddCell(new PdfPCell(new Phrase(j.Branch)) { Border = 0 });
-                table.AddCell(new PdfPCell(new Phrase(j.BranchCode)) { Border = 0 });
-                table.AddCell(new PdfPCell(new Phrase(j.Account)) { Border = 0 });
-                table.AddCell(new PdfPCell(new Phrase(j.Article)) { Border = 0 });
-                table.AddCell(new PdfPCell(new Phrase("P " + debit)) { Border = 0 });
-                table.AddCell(new PdfPCell(new Phrase("P " + credit)) { Border = 0 });
+                table.AddCell(new PdfPCell(new Phrase(j.Branch)) { PaddingBottom = 5f });
+                table.AddCell(new PdfPCell(new Phrase(j.AccountCode)) { PaddingBottom = 5f });
+                table.AddCell(new PdfPCell(new Phrase(j.Account)) { PaddingBottom = 5f });
+                table.AddCell(new PdfPCell(new Phrase(j.Article)) { PaddingBottom = 5f });
+                table.AddCell(new PdfPCell(new Phrase(debit)) { HorizontalAlignment = 2, PaddingBottom = 5f });
+                table.AddCell(new PdfPCell(new Phrase(credit)) { HorizontalAlignment = 2, PaddingBottom = 5f });
             }
 
             document.Add(table);
 
-            document.Add(line);
-            table = new PdfPTable(6);
-            table.WidthPercentage = 100;
-            cell = new PdfPCell();
-            cell.Colspan = 6;
-
             var debitTotalCurrency = debitTotal.ToString("#,##0.00");
             var creditTotalCurrency = creditTotal.ToString("#,##0.00");
 
-            table.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("Total: ")) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("P " +  Convert.ToString(debitTotalCurrency))) { Border = 0 });
-            table.AddCell(new PdfPCell(new Phrase("P " +  Convert.ToString(creditTotalCurrency))) { Border = 0 });
-            document.Add(table);
-            document.Add(line);
+            PdfPTable table2 = new PdfPTable(6);
+            float[] widthsCells = new float[] { 100f, 40f, 60f, 50f, 45f, 45f };
+            table2.SetWidths(widthsCells);
+            table2.WidthPercentage = 100;
+
+            table2.WidthPercentage = 100;
+            table2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f });
+            table2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f });
+            table2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f });
+            table2.AddCell(new PdfPCell(new Phrase("Total:", boldFontCell)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 2 });
+            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(debitTotalCurrency))) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 2 });
+            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(creditTotalCurrency))) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 2 });
+            document.Add(table2);
+
+            //var doc = new Document();
+            //MemoryStream stream = new MemoryStream();
+            //PdfWriter writer = PdfWriter.GetInstance(doc, stream);
+
+            //PdfPTable tabFot = new PdfPTable(new float[] { 50F });
+            //PdfPCell cell;
+            //tabFot.TotalWidth = 300F;
+            //cell = new PdfPCell(new Phrase("Footer"));
+            //tabFot.AddCell(cell);
 
             Paragraph preparedByUser = new Paragraph("Prepared by: " + preparedByFullName);
             Paragraph checkedByUser = new Paragraph("Checked by: " + checkedByFullName);
