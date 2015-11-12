@@ -62,13 +62,6 @@ namespace easyfis.Business
                 {
                     Data.TrnJournal newJournal = new Data.TrnJournal();
 
-                    journalVoucherLines.GroupBy(i => i.BranchId).Select(g => new
-                    {
-                        BranchId = g.Key,
-                        CreditAmount = g.Sum(i => i.CreditAmount),
-                        DebitAmount = g.Sum(i => i.DebitAmount)
-                    });
-
                     newJournal.JournalDate = Convert.ToDateTime(JournalDate);
                     newJournal.BranchId = JVLs.BranchId;
                     newJournal.JVId = JVLs.JVId;
@@ -90,8 +83,9 @@ namespace easyfis.Business
                     newJournal.ARSIId = JVLs.ARSIId;
 
                     db.TrnJournals.InsertOnSubmit(newJournal);
-                    db.SubmitChanges();
                 }
+
+                db.SubmitChanges();
             }
             catch (Exception e)
             {

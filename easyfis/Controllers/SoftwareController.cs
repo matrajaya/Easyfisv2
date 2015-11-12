@@ -308,23 +308,28 @@ namespace easyfis.Controllers
             table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(creditTotalCurrency))) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 2 });
             document.Add(table2);
 
-            //var doc = new Document();
-            //MemoryStream stream = new MemoryStream();
-            //PdfWriter writer = PdfWriter.GetInstance(doc, stream);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
 
-            //PdfPTable tabFot = new PdfPTable(new float[] { 50F });
-            //PdfPCell cell;
-            //tabFot.TotalWidth = 300F;
-            //cell = new PdfPCell(new Phrase("Footer"));
-            //tabFot.AddCell(cell);
+            // Table for Footer
+            PdfPTable table3 = new PdfPTable(5);
+            table3.WidthPercentage = 100;
+            float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
+            table3.SetWidths(widthsCells2);
 
-            Paragraph preparedByUser = new Paragraph("Prepared by: " + preparedByFullName);
-            Paragraph checkedByUser = new Paragraph("Checked by: " + checkedByFullName);
-            Paragraph approvedByUser = new Paragraph("Approved by: " + approvedByFullName);
+            table3.AddCell(new PdfPCell(new Phrase(preparedByFullName)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            table3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            table3.AddCell(new PdfPCell(new Phrase(checkedByFullName)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            table3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            table3.AddCell(new PdfPCell(new Phrase(approvedByFullName)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
 
-            document.Add(preparedByUser);
-            document.Add(checkedByUser);
-            document.Add(approvedByUser);
+            table3.AddCell(new PdfPCell(new Phrase("Prepared by:", boldFontCell)) { Border = 1, HorizontalAlignment = 1 });
+            table3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            table3.AddCell(new PdfPCell(new Phrase("Checked by:", boldFontCell)) { Border = 1, HorizontalAlignment = 1 });
+            table3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            table3.AddCell(new PdfPCell(new Phrase("Approved by:", boldFontCell)) { Border = 1, HorizontalAlignment = 1 });
+            document.Add(table3);
 
             document.Close();
 
