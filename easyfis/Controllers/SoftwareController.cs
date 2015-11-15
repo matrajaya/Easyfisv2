@@ -171,20 +171,9 @@ namespace easyfis.Controllers
             var checkedByUserId = (from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d.CheckedById).SingleOrDefault();
             var approvedByUserId = (from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d.ApprovedById).SingleOrDefault();
 
-            var preparedBy = (from d in db.MstUsers where d.Id == preparedByUserId select d.UserName).SingleOrDefault();
-            var preparedByFirstName = (from d in db.MstUsers where d.Id == preparedByUserId select d.FirstName).SingleOrDefault();
-            var preparedByLastName = (from d in db.MstUsers where d.Id == preparedByUserId select d.LastName).SingleOrDefault();
-            var preparedByFullName = preparedByFirstName + " " + preparedByLastName;
-
-            var checkedBy = (from d in db.MstUsers where d.Id == checkedByUserId select d.UserName).SingleOrDefault();
-            var checkedByFirstName = (from d in db.MstUsers where d.Id == checkedByUserId select d.FirstName).SingleOrDefault();
-            var checkedByLastName = (from d in db.MstUsers where d.Id == checkedByUserId select d.LastName).SingleOrDefault();
-            var checkedByFullName = checkedByFirstName + " " + checkedByLastName;
-
-            var approvedBy = (from d in db.MstUsers where d.Id == approvedByUserId select d.UserName).SingleOrDefault();
-            var approvedByFirstName = (from d in db.MstUsers where d.Id == approvedByUserId select d.FirstName).SingleOrDefault();
-            var approvedByLastName = (from d in db.MstUsers where d.Id == approvedByUserId select d.LastName).SingleOrDefault();
-            var approvedByFullName = approvedByFirstName + " " + approvedByLastName;
+            var preparedBy = (from d in db.MstUsers where d.Id == preparedByUserId select d.FullName).SingleOrDefault();
+            var checkedBy = (from d in db.MstUsers where d.Id == checkedByUserId select d.FullName).SingleOrDefault();
+            var approvedBy = (from d in db.MstUsers where d.Id == approvedByUserId select d.FullName).SingleOrDefault();
 
             // Pauls Work and Layouts in PDF journal
             MemoryStream workStream = new MemoryStream();
@@ -281,12 +270,12 @@ namespace easyfis.Controllers
                 var debit = j.DebitAmount.ToString("#,##0.00");
                 var credit = j.CreditAmount.ToString("#,##0.00");
 
-                table.AddCell(new PdfPCell(new Phrase(j.Branch)) { PaddingBottom = 5f });
-                table.AddCell(new PdfPCell(new Phrase(j.AccountCode)) { PaddingBottom = 5f });
-                table.AddCell(new PdfPCell(new Phrase(j.Account)) { PaddingBottom = 5f });
-                table.AddCell(new PdfPCell(new Phrase(j.Article)) { PaddingBottom = 5f });
-                table.AddCell(new PdfPCell(new Phrase(debit)) { HorizontalAlignment = 2, PaddingBottom = 5f });
-                table.AddCell(new PdfPCell(new Phrase(credit)) { HorizontalAlignment = 2, PaddingBottom = 5f });
+                table.AddCell(new PdfPCell(new Phrase(j.Branch)) { PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                table.AddCell(new PdfPCell(new Phrase(j.AccountCode)) { PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                table.AddCell(new PdfPCell(new Phrase(j.Account)) { PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                table.AddCell(new PdfPCell(new Phrase(j.Article)) { PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                table.AddCell(new PdfPCell(new Phrase(debit)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                table.AddCell(new PdfPCell(new Phrase(credit)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
             }
 
             document.Add(table);
@@ -303,9 +292,9 @@ namespace easyfis.Controllers
             table2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f });
             table2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f });
             table2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f });
-            table2.AddCell(new PdfPCell(new Phrase("Total:", boldFontCell)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 2 });
-            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(debitTotalCurrency))) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 2 });
-            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(creditTotalCurrency))) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 2 });
+            table2.AddCell(new PdfPCell(new Phrase("Total:", boldFontCell)) { Border = 0, PaddingTop = 15f, HorizontalAlignment = 2 });
+            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(debitTotalCurrency))) { Border = 0, PaddingTop = 15f, HorizontalAlignment = 2 });
+            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(creditTotalCurrency))) { Border = 0, PaddingTop = 15f, HorizontalAlignment = 2 });
             document.Add(table2);
 
             document.Add(Chunk.NEWLINE);
@@ -318,11 +307,11 @@ namespace easyfis.Controllers
             float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
             table3.SetWidths(widthsCells2);
 
-            table3.AddCell(new PdfPCell(new Phrase(preparedByFullName)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            table3.AddCell(new PdfPCell(new Phrase(preparedBy)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
             table3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-            table3.AddCell(new PdfPCell(new Phrase(checkedByFullName)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            table3.AddCell(new PdfPCell(new Phrase(checkedBy)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
             table3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-            table3.AddCell(new PdfPCell(new Phrase(approvedByFullName)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            table3.AddCell(new PdfPCell(new Phrase(approvedBy)) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
 
             table3.AddCell(new PdfPCell(new Phrase("Prepared by:", boldFontCell)) { Border = 1, HorizontalAlignment = 1 });
             table3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });

@@ -718,11 +718,7 @@
                         for (i = 0; i < results.length; i++) {
                             users.push({
                                 UserId: results[i]["Id"],
-                                UserFirstName: results[i]["FirstName"],
-                                UserLastName: results[i]["LastName"],
-                                UserUserName: results[i]["UserName"],
-                                FullName: results[i]["FirstName"] + " " + results[i]["LastName"],
-                                UserEmail: results[i]["Email"]
+                                UserFullName: results[i]["FullName"]
                             });
                         }
 
@@ -738,15 +734,12 @@
                                     if (results.length > 0) {
                                         users.push({
                                             UserId: results.Id,
-                                            UserUsername: results.UserName,
-                                            UserFirstName: results.FirstName,
-                                            UserLastName: results.LastName,
-                                            FullName: results.FirstName + " " + results.LastName
+                                            UserFullName: results.FullName
                                         });
                                     }
 
                                     document.getElementById('preparedByUserId_Data').value = results.Id;
-                                    document.getElementById('preparedByUserId_selectedValue').value =  results.FirstName + " " + results.LastName;
+                                    document.getElementById('preparedByUserId_selectedValue').value =  results.FullName;
 
                                     createCboUserPreparedBy(users)
                                     createCboUserCheckedBy(users);
@@ -773,7 +766,7 @@
             var usersCollection = new wijmo.collections.CollectionView(users);
             var userList = new Array();
             for (var i = 0; i < usersCollection.items.length; i++) {
-                userList.push(usersCollection.items[i].FullName);
+                userList.push(usersCollection.items[i].UserFullName);
             }
 
             cboUserPreparedBy.dispose();
@@ -797,7 +790,7 @@
             var usersCollection = new wijmo.collections.CollectionView(users);
             var userList = new Array();
             for (var i = 0; i < usersCollection.items.length; i++) {
-                userList.push(usersCollection.items[i].FullName);
+                userList.push(usersCollection.items[i].UserFullName);
             }
 
             if(document.getElementById('JV_IsLocked').value == 'true') {
@@ -848,7 +841,7 @@
             var usersCollection = new wijmo.collections.CollectionView(users);
             var userList = new Array();
             for (var i = 0; i < usersCollection.items.length; i++) {
-                userList.push(usersCollection.items[i].FullName);
+                userList.push(usersCollection.items[i].UserFullName);
             }
 
             if(document.getElementById('JV_IsLocked').value == 'true') {

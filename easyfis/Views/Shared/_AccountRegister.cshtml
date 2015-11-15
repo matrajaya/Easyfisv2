@@ -41,41 +41,14 @@ else
                                             </div>*@
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                                <label>Basic Information</label>
+                                                <label>Basic Info and Account Credentials</label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "First name" })
-                                                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
-                                                @*<input type="text" class="form-control" id="firstName" placeholder="First name">*@
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-                                                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @placeholder = "Last name" })
-                                                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                                                @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", @placeholder = "Full name" })
+                                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
                                                 @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-                                                @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @placeholder = "Address", @rows = 5, @style = "resize: none;" })
-                                                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
-                                                @*<input class="form-control" placeholder="Birth Date" type="text" onfocus="(this.type='date')" id="date">*@
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-                                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email Address" })
-                                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                                                @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
-                                            </div>
-                                        </div>
-                                        <hr class="divider" />
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-                                                <label>Account Crredentials</label>
                                             </div>
                                         </div>
                                         <div class="form-group">

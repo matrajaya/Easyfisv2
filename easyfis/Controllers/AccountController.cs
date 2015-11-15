@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using easyfis.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -153,10 +155,7 @@ namespace easyfis.Controllers
             {
                 var user = new ApplicationUser
                 {
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Address = model.Address,
-                    Email = model.Email,
+                    FullName = model.FullName,
                     UserName = model.UserName
                 };
                 //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -175,20 +174,47 @@ namespace easyfis.Controllers
                     Data.MstUser newUser = new Data.MstUser();
 
                     var users = from d in db.AspNetUsers where d.UserName == user.UserName select d;
+                    //var mstUserId = (from d in db.MstUsers where d.UserId == users.First().Id select d.Id).SingleOrDefault();
+                    var isLocked = true;
+                   
+                    //int mstUserId = Convert.ToInt32(mstUserIdLastValue) + 1;
+
+
+                    var date = DateTime.Now;    
 
                     if (users.Any())
                     {
                         newUser.UserId = users.First().Id;
                         newUser.UserName = model.UserName;
                         newUser.Password = model.Password;
-                        newUser.Email = model.Email;
-                        newUser.FirstName = model.FirstName;
-                        newUser.LastName = model.LastName;
-                        newUser.Address = model.Address;
-                        newUser.IsLocked = true;
+                        newUser.FullName = model.FullName;
+
+                        newUser.IsLocked = isLocked;
+                        newUser.CreatedById = 0;
+                        newUser.CreatedDateTime = date;
+                        newUser.UpdatedById = 0;
+                        newUser.UpdatedDateTime = date;
 
                         db.MstUsers.InsertOnSubmit(newUser);
                         db.SubmitChanges();
+
+                        // after submit, get last inserted Id and update the userid for created by and updated by.
+                        var identityUserId = User.Identity.GetUserId();
+                        var mstUserIdLastValue = (from d in db.MstUsers.OrderByDescending(d => d.Id) select d.Id).FirstOrDefault();
+                        var mstUsersData = from d in db.MstUsers where d.Id == mstUserIdLastValue select d;
+
+                        if (mstUsersData.Any())
+                        {
+                            newUser.CreatedById = mstUserIdLastValue;
+                            newUser.UpdatedById = mstUserIdLastValue;
+
+                            db.SubmitChanges();
+
+                            Debug.WriteLine(newUser.CreatedById);
+                            Debug.WriteLine(newUser.UpdatedById);
+                            Debug.WriteLine(mstUserIdLastValue);
+                        }
+                        //db.SubmitChanges();
                     }
             
                     return RedirectToAction("Register", "Account");

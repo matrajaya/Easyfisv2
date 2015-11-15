@@ -37,14 +37,12 @@
                     <form id="userDetailForm">
                         <input type="hidden" id="userId" value="@ViewData["UserId"]" />
                         <dl class="dl-horizontal">
-                            <dt>First Name:</dt>
-                            <dd><input type="text" class="form-control input-sm requiredUser" id="profileDetail_firstName" value="@ViewData["FirstName"]" /></dd>
-                            <dt>Last Name:</dt>
-                            <dd><input type="text" class="form-control input-sm requiredUser" id="profileDetail_lastName" value="@ViewData["LastName"]" /></dd>
+                            <dt>Full Name:</dt>
+                            <dd><input type="text" class="form-control input-sm requiredUser" id="profileDetail_fullName" value="@ViewData["FullName"]" /></dd>
                             <dt>Address:</dt>
-                            <dd><textarea type="text" class="form-control textarea-custom-profile requiredUser" id="profileDetail_address">@ViewData["Address"]</textarea></dd>
-                            <dt>Email Address:</dt>
-                            <dd><input type="text" class="form-control input-sm requiredUser" id="profileDetail_email" value="@ViewData["Email"]" /></dd>
+                            <dd><input type="text" class="form-control input-sm " /></dd>
+                            <dt>Email address:</dt>
+                            <dd><input type="text" class="form-control input-sm " /></dd>
                             <dt>Username:</dt>
                             <dd><input type="text" class="form-control input-sm requiredUser" id="profileDetail_userName" value="@ViewData["UserName"]" readonly /></dd>
                         </dl>
@@ -86,10 +84,7 @@
             var userObject = new Object();
             var id = document.getElementById('userId').value;
 
-            userObject.FirstName = document.getElementById('profileDetail_firstName').value;
-            userObject.LastName = document.getElementById('profileDetail_lastName').value;
-            userObject.Address = document.getElementById('profileDetail_address').value;
-            userObject.Email = document.getElementById('profileDetail_email').value;
+            userObject.FullName = document.getElementById('profileDetail_fullName').value;
             var data = JSON.stringify(userObject);
 
             var isValid = true;

@@ -70,17 +70,17 @@ namespace easyfis.Business
                     newJournal.Particulars = JVLs.Particulars;
                     newJournal.DebitAmount = JVLs.DebitAmount;
                     newJournal.CreditAmount = JVLs.CreditAmount;
-                    newJournal.ORId = 0;
-                    newJournal.CVId = 0;
+                    newJournal.ORId = null;
+                    newJournal.CVId = null;
                     newJournal.JVId = JVId;
-                    newJournal.RRId = 0;
-                    newJournal.SIId = 0;
-                    newJournal.INId = 0;
-                    newJournal.OTId = 0;
-                    newJournal.STId = 0;
+                    newJournal.RRId = null;
+                    newJournal.SIId = null;
+                    newJournal.INId = null;
+                    newJournal.OTId = null;
+                    newJournal.STId = null;
                     newJournal.DocumentReference = "document reference";
-                    newJournal.APRRId = JVLs.APRRId;
-                    newJournal.ARSIId = JVLs.ARSIId;
+                    newJournal.APRRId = null;
+                    newJournal.ARSIId = null;
 
                     db.TrnJournals.InsertOnSubmit(newJournal);
                 }

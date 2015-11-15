@@ -22,10 +22,7 @@ namespace easyfis.Controllers
                         select new Models.ApplicationUser
                             {
                                 Id = d.Id,
-                                FirstName = d.FirstName,
-                                LastName = d.LastName,
-                                Email = d.Email,
-                                Address = d.Address,
+                                FullName = d.FullName,
                                 UserName = d.UserName
                             };
             return users.ToList();
@@ -41,10 +38,7 @@ namespace easyfis.Controllers
                         select new Models.MstUser
                             {
                                 Id = d.Id,
-                                FirstName = d.FirstName,
-                                LastName = d.LastName,
-                                Email = d.Email,
-                                Address = d.Address,
+                                FullName = d.FullName,
                                 UserName = d.UserName,
                                 IsLocked = d.IsLocked
                             };
@@ -65,10 +59,7 @@ namespace easyfis.Controllers
                         select new Models.MstUser
                                   {
                                       Id = d.Id,
-                                      FirstName = d.FirstName,
-                                      LastName = d.LastName,
-                                      Email = d.Email,
-                                      Address = d.Address,
+                                      FullName = d.FullName,
                                       UserName = d.UserName,
                                       IsLocked = d.IsLocked
                                   };
@@ -88,10 +79,7 @@ namespace easyfis.Controllers
                 {
                     var updateAspUsers = aspUsers.FirstOrDefault();
 
-                    updateAspUsers.FirstName = aspUser.FirstName;
-                    updateAspUsers.LastName = aspUser.LastName;
-                    updateAspUsers.Address = aspUser.Address;
-                    updateAspUsers.Email = aspUser.Email;
+                    updateAspUsers.FullName = aspUser.FullName;
 
                     db.SubmitChanges();
 
@@ -124,10 +112,7 @@ namespace easyfis.Controllers
                 {
                     var updateMstUsers = mstUsers.FirstOrDefault();
 
-                    updateMstUsers.FirstName = mstUser.FirstName;
-                    updateMstUsers.LastName = mstUser.LastName;
-                    updateMstUsers.Address = mstUser.Address;
-                    updateMstUsers.Email = mstUser.Email;
+                    updateMstUsers.FullName = mstUser.FullName;
                     updateMstUsers.IsLocked = isLocked;
 
                     db.SubmitChanges();

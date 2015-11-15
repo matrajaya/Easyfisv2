@@ -31,10 +31,10 @@ namespace easyfis.Controllers
                                    TaxNumber = d.TaxNumber,
                                    IsLocked = d.IsLocked,
                                    CreatedById = d.CreatedById,
-                                   CreatedBy = d.MstUser.UserName,
+                                   CreatedBy = d.MstUser.FullName,
                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                    UpdatedById = d.UpdatedById,
-                                   UpdatedBy = d.MstUser1.UserName,
+                                   UpdatedBy = d.MstUser1.FullName,
                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                };
             return branches.ToList();
@@ -61,10 +61,10 @@ namespace easyfis.Controllers
                                TaxNumber = d.TaxNumber,
                                IsLocked = d.IsLocked,
                                CreatedById = d.CreatedById,
-                               CreatedBy = d.MstUser.UserName,
+                               CreatedBy = d.MstUser.FullName,
                                CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                UpdatedById = d.UpdatedById,
-                               UpdatedBy = d.MstUser1.UserName,
+                               UpdatedBy = d.MstUser1.FullName,
                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                            };
             return (Models.MstBranch)branches.FirstOrDefault();
@@ -91,10 +91,10 @@ namespace easyfis.Controllers
                                    TaxNumber = d.TaxNumber,
                                    IsLocked = d.IsLocked,
                                    CreatedById = d.CreatedById,
-                                   CreatedBy = d.MstUser.UserName,
+                                   CreatedBy = d.MstUser.FullName,
                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                    UpdatedById = d.UpdatedById,
-                                   UpdatedBy = d.MstUser1.UserName,
+                                   UpdatedBy = d.MstUser1.FullName,
                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                };
             return branches.ToList();

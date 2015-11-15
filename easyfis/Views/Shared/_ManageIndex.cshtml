@@ -10,23 +10,16 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="panel panel-info">
-                            <div class="panel-heading">Basic Info</div>
+                            <div class="panel-heading">You Login as: </div>
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="well">
                                             @Html.ActionLink((ViewData["FullName"]) + "", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Your Name", @class = "profile-name" })
-                                            <br />
-                                            <br />
-                                            Email: <span class="profile-details">@ViewData["Email"] <br /></span>
-                                            <br />
-                                            Username: <span class="profile-details"> @ViewData["UserName"] <br /></span>
-                                            <br />
-                                            Lives in <span class="profile-details">@ViewData["Address"]</span>
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit Info</button>
+                                <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
                                 <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default btn-sm"> Change Your Password</a>
                                 <p class="change-password-success">@ViewBag.StatusMessage</p>
                             </div>

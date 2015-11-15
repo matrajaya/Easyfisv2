@@ -15,7 +15,7 @@ namespace easyfis.Models
         public String Article { get; set; }
         public String Category { get; set; }
         public Int32 ArticleTypeId { get; set; }
-        public Int32 ArticleGroupId { get; set; }
+        public Int32? ArticleGroupId { get; set; }
         public Int32 AccountId { get; set; }
         public Int32 SalesAccountId { get; set; }
         public Int32 CostAccountId { get; set; }
@@ -26,7 +26,7 @@ namespace easyfis.Models
         public Int32 InputTaxId { get; set; }
         public Int32 WTaxTypeId { get; set; }
         public Decimal Price { get; set; }
-        public Decimal Cost { get; set; }
+        public Decimal? Cost { get; set; }
         public Boolean IsInventory { get; set; }
         public String Particulars { get; set; }
         public String Address { get; set; }

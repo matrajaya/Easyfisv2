@@ -70,22 +70,26 @@ namespace easyfis.Models
 
     public class RegisterViewModel
     {
-        [Required]
-        [Display(Name = "Frist name")]
-        public string FirstName { get; set; }
+        //[Required]
+        //[Display(Name = "Frist name")]
+        //public string FirstName { get; set; }
+
+        //[Required]
+        //[Display(Name = "Last name")]
+        //public string LastName { get; set; }
+
+        //[Required]
+        //[Display(Name = "Address")]
+        //public string Address { get; set; }
+
+        //[Required]
+        //[EmailAddress]
+        //[Display(Name = "Email")]
+        //public string Email { get; set; }
 
         [Required]
-        [Display(Name = "Last name")]
-        public string LastName { get; set; }
-
-        [Required]
-        [Display(Name = "Address")]
-        public string Address { get; set; }
-
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
+        [Display(Name = "Full Name")]
+        public string FullName { get; set; }
 
         [Required]
         [Display(Name = "Username")]
