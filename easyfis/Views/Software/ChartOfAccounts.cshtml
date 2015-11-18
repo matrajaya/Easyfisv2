@@ -33,7 +33,7 @@
                     <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Account Category</a></li>
                 </ul>
                 <h4><img src='~/images/Icons/iChart.png'> Chart of Accounts</h4>
-                <hr />
+                <br />
                 <div class="div_Current_Page">
                     @*<label id="currentBranchName"></label>*@ 
                     <span id="currentPage"></span>
@@ -712,6 +712,7 @@
                 }
             });
             if (isValid == false) {
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {
@@ -1218,6 +1219,7 @@
                 }
             });
             if (isValid == false) {
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {
@@ -1657,6 +1659,7 @@
                 }
             });
             if (isValid == false) {
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {
@@ -2076,6 +2079,7 @@
                 }
             });
             if (isValid == false) {
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {

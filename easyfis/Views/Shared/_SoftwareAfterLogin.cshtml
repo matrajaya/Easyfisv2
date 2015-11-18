@@ -20,7 +20,7 @@
                     <li><a href="@Url.Action("Index", "Manage")">Help</a></li>
                     <li><a href="@Url.Action("Index", "Manage")">Report a problem</a></li>
                     <li><a href="@Url.Action("Index", "Manage")">Settings</a></li>
-                    <li><a href="#" data-toggle="modal" data-target="#modalLogout">Logout</a></li>
+                    <li><a href="#" data-toggle="modal" onclick="cmdLogoutModal_OnClick()">Logout</a></li>
                 </ul>
             </li>
         </ul>
@@ -32,3 +32,12 @@ else
         <li><a href="@Url.Action("Login", "Account")"><i class="fa fa-sign-in"></i> Sign in</a></li>
     </ul>
 }
+
+<script type="text/javascript">
+    function cmdLogoutModal_OnClick() {
+        $('#modalLogout').modal({
+            show: true,
+            backdrop: 'static'
+        });
+    }
+</script>

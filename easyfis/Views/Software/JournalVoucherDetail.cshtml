@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h4><img src='~/images/Icons/iJournal.png'> Journal Voucher - Detail</h4>
-                        <hr />
+                        <br />
                         <div class="div_Current_Page">
                             @*<label id="currentBranchName"></label>*@ 
                             <span id="currentPage"></span>
@@ -922,6 +922,7 @@
                 }
             });
             if (isValid == false) {
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {
@@ -961,9 +962,31 @@
                         },
                         404: function () {
                             toastr.error("Can't Save");
+                            $("#cmdJournalJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucher").prop("disabled", false);
+                            $("#cmdEditJournalVoucher").prop("disabled", false);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                            $("#cmdPrintJournalVoucher").prop("disabled", false);
+                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                            $("#cmdCloseJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                         },
                         400: function () {
                             toastr.error("Bad Request");
+                            $("#cmdJournalJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucher").prop("disabled", false);
+                            $("#cmdEditJournalVoucher").prop("disabled", false);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                            $("#cmdPrintJournalVoucher").prop("disabled", false);
+                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                            $("#cmdCloseJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                         }
                     }
                 });
@@ -1026,9 +1049,31 @@
                     },
                     404: function () {
                         toastr.error("Can't Edit");
+                        $("#cmdJournalJournalVoucher").prop("disabled", false);
+                        $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                        $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
+                        $("#cmdSaveJournalVoucher").prop("disabled", false);
+                        $("#cmdEditJournalVoucher").prop("disabled", false);
+                        $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                        $("#cmdPrintJournalVoucher").prop("disabled", false);
+                        $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                        $("#cmdCloseJournalVoucher").prop("disabled", false);
+                        $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                        $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
+                        $("#cmdJournalJournalVoucher").prop("disabled", false);
+                        $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                        $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
+                        $("#cmdSaveJournalVoucher").prop("disabled", false);
+                        $("#cmdEditJournalVoucher").prop("disabled", false);
+                        $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                        $("#cmdPrintJournalVoucher").prop("disabled", false);
+                        $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                        $("#cmdCloseJournalVoucher").prop("disabled", false);
+                        $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                        $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                     }
                 }
             });
@@ -1045,7 +1090,7 @@
                             location.reload();
                         },
                         404: function () {
-                            toastr.error("Can't Update");
+                            toastr.error("Can't Edit");
                         },
                         400: function () {
                             toastr.error("Bad Request");
@@ -1092,6 +1137,7 @@
                 }
             });
             if (isValid == false) {
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {
@@ -1131,9 +1177,31 @@
                         },
                         404: function () {
                             toastr.error("Can't Update");
+                            $("#cmdJournalJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucher").prop("disabled", false);
+                            $("#cmdEditJournalVoucher").prop("disabled", false);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                            $("#cmdPrintJournalVoucher").prop("disabled", false);
+                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                            $("#cmdCloseJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                         },
                         400: function () {
                             toastr.error("Bad Request");
+                            $("#cmdJournalJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucher").prop("disabled", false);
+                            $("#cmdEditJournalVoucher").prop("disabled", false);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                            $("#cmdPrintJournalVoucher").prop("disabled", false);
+                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                            $("#cmdCloseJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                         }
                     }
                 });
@@ -1150,7 +1218,7 @@
                                 location.reload();
                             },
                             404: function () {
-                                toastr.error("Can't Update");
+                                toastr.error("Can't Edit");
                             },
                             400: function () {
                                 toastr.error("Bad Request");
@@ -1198,6 +1266,7 @@
                 }
             });
             if (isValid == false) {
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {
@@ -1239,9 +1308,31 @@
                         },
                         404: function () {
                             toastr.error("Can't Update");
+                            $("#cmdJournalJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucher").prop("disabled", false);
+                            $("#cmdEditJournalVoucher").prop("disabled", false);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                            $("#cmdPrintJournalVoucher").prop("disabled", false);
+                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                            $("#cmdCloseJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                         },
                         400: function () {
                             toastr.error("Bad Request");
+                            $("#cmdJournalJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucher").prop("disabled", false);
+                            $("#cmdEditJournalVoucher").prop("disabled", false);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                            $("#cmdPrintJournalVoucher").prop("disabled", false);
+                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                            $("#cmdCloseJournalVoucher").prop("disabled", false);
+                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                         }
                     }
                 });
@@ -1533,7 +1624,7 @@
             $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
 
             var journalVoucherLine = journalVoucherLines.currentEditItem;
-            document.getElementById('JVL_Id').value = journalVoucherLine.Id !== null && typeof (journalVoucherLine.Id) != 'undefined' ? wijmo.Globalize.format(journalVoucherLine.Id) : '';
+            document.getElementById('JVL_Id').value =  journalVoucherLine.Id ? journalVoucherLine.Id : '';;
             document.getElementById('JVL_JVId').value = @JVId;
             document.getElementById('JVL_Branch_Id_Data').value = journalVoucherLine.BranchId ? journalVoucherLine.BranchId : '';
             document.getElementById('JVL_Branch_Id_selectedValue').value = journalVoucherLine.Branch ? journalVoucherLine.Branch : '';
@@ -1587,6 +1678,7 @@
                 }
             });
             if (isValid == false) {
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {
@@ -1611,9 +1703,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Save");
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -1635,9 +1731,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Update");
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });

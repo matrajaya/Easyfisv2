@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h4><img src='~/images/Icons/iCompany.png'> Company - Detail</h4>
-                        <hr />
+                        <br />
                         <div class="div_Current_Page">
                             @*<label id="currentBranchName"></label>*@
                             <span id="currentPage"></span>
@@ -344,7 +344,8 @@
                     });
                 }
             });
-            if (isValid == false) {
+            if (isValid == false) {   
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {
@@ -370,10 +371,18 @@
                                 setTimeout(getCompanyLastInsertedId, 1000)
                             },
                             404: function () {
-                                toastr.error("Can't Add");
+                                toastr.error("Can't Save");
+                                $("#cmdSaveCompany").prop("disabled", false);
+                                $("#cmdCloseButtonCompany").prop("disabled", false);
+                                $("#cmdSaveBranchButton").prop("disabled", false);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveCompany").prop("disabled", false);
+                                $("#cmdCloseButtonCompany").prop("disabled", false);
+                                $("#cmdSaveBranchButton").prop("disabled", false);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -397,9 +406,17 @@
                             },
                             404: function () {
                                 toastr.error("Can't Update");
+                                $("#cmdSaveCompany").prop("disabled", false);
+                                $("#cmdCloseButtonCompany").prop("disabled", false);
+                                $("#cmdSaveBranchButton").prop("disabled", false);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveCompany").prop("disabled", false);
+                                $("#cmdCloseButtonCompany").prop("disabled", false);
+                                $("#cmdSaveBranchButton").prop("disabled", false);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -554,6 +571,7 @@
                 }
             });
             if (isValid == false) {
+                toastr.error("Invalid Entry");
                 e.preventDefault();
             }
             else {
@@ -578,9 +596,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Save");
+                                $("#cmdSaveBranchButton").prop("disabled", false);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveBranchButton").prop("disabled", false);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -602,9 +624,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Update");
+                                $("#cmdSaveBranchButton").prop("disabled", false);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveBranchButton").prop("disabled", false);
+                                $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -626,7 +652,7 @@
             $("#cmdBranchDetailCloseButton").prop("disabled", false);
 
             var branch = branches.currentEditItem;
-            document.getElementById('branch_Id').value = branch.Id !== null && typeof (branch.Id) != 'undefined' ? wijmo.Globalize.format(branch.Id) : '';
+            document.getElementById('branch_Id').value = branch.Id ? branch.Id : '';
             document.getElementById('branch_company').value = branch.Company ? branch.Company : '';
             document.getElementById('branch_companyId').value = branch.CompanyId ? branch.CompanyId : '';
             document.getElementById('branch_branch').value = branch.Branch ? branch.Branch : '';
@@ -671,10 +697,14 @@
                     404: function () {
                         toastr.error("Request Not Found");
                         $('#deleteBranchConfirm').modal('hide');
+                        $("#cmdConfirmDeleteBranch").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deleteBranchConfirm').modal('hide');
+                        $("#cmdConfirmDeleteBranch").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     }
                 }
             });

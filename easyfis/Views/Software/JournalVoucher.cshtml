@@ -31,7 +31,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <h4><img src='~/images/Icons/iJournal.png'> Journal Voucher</h4>
-                            <hr />
+                            <br />
                             <div class="div_Current_Page">
                                 <span id="currentPage"></span>
                             </div>
@@ -228,6 +228,9 @@
     }
     // Journal Voucher Confirm Delete Button
     function cmdJournalVoucherConfirmDeleteButton_OnClick() {
+        $("#cmdJournalVoucherDeleteCompany").prop("disabled", true);
+        $("#cmdConfirmDeleteCloseButtonJournalVoucher").prop("disabled", true);
+
         journalVouchers.editItem(journalVouchers.currentItem);
         var id = journalVouchers.currentEditItem.Id;
         $.ajax({
@@ -247,10 +250,14 @@
                 404: function () {
                     toastr.error("Request Not Found");
                     $('#deleteJournalVoucherConfirm').modal('hide');
+                    $("#cmdJournalVoucherDeleteCompany").prop("disabled", false);
+                    $("#cmdConfirmDeleteCloseButtonJournalVoucher").prop("disabled", false);
                 },
                 400: function () {
                     toastr.error("Can't be deleted");
                     $('#deleteJournalVoucherConfirm').modal('hide');
+                    $("#cmdJournalVoucherDeleteCompany").prop("disabled", false);
+                    $("#cmdConfirmDeleteCloseButtonJournalVoucher").prop("disabled", false);
                 }
             }
         });

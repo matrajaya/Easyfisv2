@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -85,8 +86,8 @@ namespace easyfis.Controllers
                 newJournalVoucherLine.Particulars = journalVoucherLine.Particulars;
                 newJournalVoucherLine.DebitAmount = journalVoucherLine.DebitAmount;
                 newJournalVoucherLine.CreditAmount = journalVoucherLine.CreditAmount;
-                newJournalVoucherLine.APRRId = Convert.ToInt32(journalVoucherLine.APRRId);
-                newJournalVoucherLine.ARSIId = Convert.ToInt32(journalVoucherLine.ARSIId);
+                newJournalVoucherLine.APRRId = journalVoucherLine.APRRId;
+                newJournalVoucherLine.ARSIId = journalVoucherLine.ARSIId;
                 newJournalVoucherLine.IsClear = journalVoucherLine.IsClear;
 
                 db.TrnJournalVoucherLines.InsertOnSubmit(newJournalVoucherLine);
@@ -122,8 +123,8 @@ namespace easyfis.Controllers
                     updatejournalVoucherLine.Particulars = journalVoucherLine.Particulars;
                     updatejournalVoucherLine.DebitAmount = journalVoucherLine.DebitAmount;
                     updatejournalVoucherLine.CreditAmount = journalVoucherLine.CreditAmount;
-                    updatejournalVoucherLine.APRRId = Convert.ToInt32(journalVoucherLine.APRRId);
-                    updatejournalVoucherLine.ARSIId = Convert.ToInt32(journalVoucherLine.ARSIId);
+                    updatejournalVoucherLine.APRRId = journalVoucherLine.APRRId;
+                    updatejournalVoucherLine.ARSIId = journalVoucherLine.ARSIId;
                     updatejournalVoucherLine.IsClear = journalVoucherLine.IsClear;
 
                     db.SubmitChanges();
@@ -136,8 +137,9 @@ namespace easyfis.Controllers
                 }
 
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
