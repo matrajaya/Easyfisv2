@@ -716,6 +716,9 @@
                 e.preventDefault();
             }
             else {
+                $("#cmdSaveAccountButton").prop("disabled", true);
+                $("#cmdAccountDetailCloseButton").prop("disabled", true);
+
                 if (accountId == 0) {
                     $.ajax({
                         type: "POST",
@@ -756,9 +759,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Saved");
+                                $("#cmdSaveAccountButton").prop("disabled", false);
+                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveAccountButton").prop("disabled", false);
+                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -802,9 +809,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Update");
+                                $("#cmdUpdateAccountButton").prop("disabled", false);
+                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdUpdateAccountButton").prop("disabled", false);
+                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -852,6 +863,9 @@
         }
         // Account Confirm Delete Button
         function cmdAccountConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteAccount").prop("disabled", true);
+            $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", true);
+
             accounts.editItem(accounts.currentItem);
             var id = accounts.currentEditItem.Id;
             $.ajax({
@@ -893,10 +907,14 @@
                     404: function () {
                         toastr.error("Request Not Found");
                         $('#deleteAccountConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccount").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Can't be deleted");
                         $('#deleteAccountConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccount").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", false);
                     }
                 }
             });
@@ -1223,6 +1241,9 @@
                 e.preventDefault();
             }
             else {
+                $("#cmdSaveAccountTypeButton").prop("disabled", true);
+                $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+
                 if (accountTypeId == 0) {
                     $.ajax({
                         type: "POST",
@@ -1263,9 +1284,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Save");
+                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
+                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
+                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -1309,9 +1334,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Update");
+                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
+                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
+                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -1357,6 +1386,9 @@
         }
         // Account Type Confirm Delete Button
         function cmdAccountTypeConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteAccountType").prop("disabled", true);
+            $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
+
             accountTypes.editItem(accountTypes.currentItem);
             var id = accountTypes.currentEditItem.Id;
             $.ajax({
@@ -1398,10 +1430,14 @@
                     404: function () {
                         toastr.error("Request Not Found");
                         $('#deleteAccountTypeConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccountType").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Can't be deleted");
                         $('#deleteAccountTypeConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccountType").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", false);
                     }
                 }
             });
@@ -1663,6 +1699,9 @@
                 e.preventDefault();
             }
             else {
+                $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
+                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
+
                 if (accountCashFlowId == 0) {
                     $.ajax({
                         type: "POST",
@@ -1703,9 +1742,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Saved");
+                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
+                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
+                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -1749,9 +1792,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Update");
+                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
+                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
+                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -1792,6 +1839,9 @@
         }
         // Account Cash Flow Confirm Delete Button
         function cmdAccountCashFlowConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", true);
+            $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", true);
+
             accountCashFlows.editItem(accountCashFlows.currentItem);
             var id = accountCashFlows.currentEditItem.Id;
             $.ajax({
@@ -1833,10 +1883,14 @@
                     404: function () {
                         toastr.error("Request Not Found");
                         $('#deleteAccountCashFlowConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Can't be deleted");
                         $('#deleteAccountCashFlowConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", false);
                     }
                 }
             });
@@ -2083,6 +2137,9 @@
                 e.preventDefault();
             }
             else {
+                $("#cmdSaveAccountCategoryButton").prop("disabled", true);
+                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
+
                 if (accountCategoryId == 0) {
                     $.ajax({
                         type: "POST",
@@ -2123,9 +2180,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Save");
+                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
+                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
+                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -2169,9 +2230,13 @@
                             },
                             404: function () {
                                 toastr.error("Can't Update");
+                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
+                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
+                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
                             }
                         }
                     });
@@ -2213,6 +2278,9 @@
         }
         // Account Category Confirm Delete Button
         function cmdAccountCategoryConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteAccountCategory").prop("disabled", true);
+            $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", true);
+
             accountCategories.editItem(accountCategories.currentItem);
             var id = accountCategories.currentEditItem.Id;
             $.ajax({
@@ -2254,10 +2322,14 @@
                     404: function () {
                         toastr.error("Request Not Found");
                         $('#deleteAccountCategoryConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccountCategory").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Can't be deleted");
                         $('#deleteAccountCategoryConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccountCategory").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", false);
                     }
                 }
             });
