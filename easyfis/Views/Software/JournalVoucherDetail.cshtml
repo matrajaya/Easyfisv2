@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Particulars:</label>
-                                    <textarea type="text" id="journalVoucher_Particulars" class="form-control textarea-custom-JV requiredJournalVoucher"></textarea>
+                                    <textarea type="text" id="journalVoucher_Particulars" class="form-control textarea-custom requiredJournalVoucher"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -216,7 +216,7 @@
                                     <input type="hidden" id="JVL_Aritcle_Id_selectedValue" />
                                 </dd>
                                 <dt>Particulars:</dt>
-                                <dd><textarea id="JVL_Particulars" class="form-control textarea-custom-JV requiredJournalVoucherLine"></textarea></dd>
+                                <dd><textarea id="JVL_Particulars" class="form-control textarea-custom requiredJournalVoucherLine"></textarea></dd>
                                 <dt>Debit Amount:</dt>
                                 <dd><input type="text" id="JVL_DebitAmount" class="form-control input-sm requiredJournalVoucherLine" /></dd>
                                 <dt>Credit Amount:</dt>
@@ -1344,8 +1344,8 @@
                                         BranchBranch: results.Branch
                                     });
                                 }
-                                document.getElementById('JVL_Branch_Id_Data').value = @branchId;
-                                document.getElementById('JVL_Branch_Id_selectedValue').value = results.Branch;
+                                //document.getElementById('JVL_Branch_Id_Data').value = @branchId;
+                                //document.getElementById('JVL_Branch_Id_selectedValue').value = results.Branch;
                                 createCboBranchForJournalVoucherLine(branches);
                             }
                         });
@@ -1369,7 +1369,7 @@
 
             cboBranchJVL.dispose();
             cboBranchJVL = new wijmo.input.ComboBox('#JVL_Branch_Id', {
-                disabled: true,
+                disabled: false,
                 placeholder: "Select Branch",
                 itemsSource: branchList,
                 isEditable: false,
@@ -1535,8 +1535,8 @@
             var journalVoucherLine = journalVoucherLines.currentEditItem;
             document.getElementById('JVL_Id').value = journalVoucherLine.Id !== null && typeof (journalVoucherLine.Id) != 'undefined' ? wijmo.Globalize.format(journalVoucherLine.Id) : '';
             document.getElementById('JVL_JVId').value = @JVId;
-            //document.getElementById('JVL_Branch_Id_Data').value = journalVoucherLine.BranchId ? journalVoucherLine.BranchId : '';
-            //document.getElementById('JVL_Branch_Id_selectedValue').value = journalVoucherLine.Branch ? journalVoucherLine.Branch : '';
+            document.getElementById('JVL_Branch_Id_Data').value = journalVoucherLine.BranchId ? journalVoucherLine.BranchId : '';
+            document.getElementById('JVL_Branch_Id_selectedValue').value = journalVoucherLine.Branch ? journalVoucherLine.Branch : '';
             document.getElementById('JVL_Account_Id_Data').value = journalVoucherLine.AccountId ? journalVoucherLine.AccountId : '';
             document.getElementById('JVL_Account_Id_selectedValue').value = journalVoucherLine.Account ? journalVoucherLine.Account : '';
             document.getElementById('JVL_Aritcle_Id_Data').value = journalVoucherLine.ArticleId ? journalVoucherLine.ArticleId : '';
@@ -2084,6 +2084,13 @@
                                 "allowResizing": false,
                                 "allowSorting": false,
                                 "isContentHtml": true
+                            },
+                            {
+                                "header": "Branch",
+                                "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
                             },
                             {
                                 "header": "Account",

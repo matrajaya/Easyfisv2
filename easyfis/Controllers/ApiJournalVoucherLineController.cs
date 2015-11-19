@@ -85,8 +85,8 @@ namespace easyfis.Controllers
                 newJournalVoucherLine.Particulars = journalVoucherLine.Particulars;
                 newJournalVoucherLine.DebitAmount = journalVoucherLine.DebitAmount;
                 newJournalVoucherLine.CreditAmount = journalVoucherLine.CreditAmount;
-                newJournalVoucherLine.APRRId = journalVoucherLine.APRRId;
-                newJournalVoucherLine.ARSIId = journalVoucherLine.ARSIId;
+                newJournalVoucherLine.APRRId = Convert.ToInt32(journalVoucherLine.APRRId);
+                newJournalVoucherLine.ARSIId = Convert.ToInt32(journalVoucherLine.ARSIId);
                 newJournalVoucherLine.IsClear = journalVoucherLine.IsClear;
 
                 db.TrnJournalVoucherLines.InsertOnSubmit(newJournalVoucherLine);
@@ -122,8 +122,8 @@ namespace easyfis.Controllers
                     updatejournalVoucherLine.Particulars = journalVoucherLine.Particulars;
                     updatejournalVoucherLine.DebitAmount = journalVoucherLine.DebitAmount;
                     updatejournalVoucherLine.CreditAmount = journalVoucherLine.CreditAmount;
-                    updatejournalVoucherLine.APRRId = journalVoucherLine.APRRId;
-                    updatejournalVoucherLine.ARSIId = journalVoucherLine.ARSIId;
+                    updatejournalVoucherLine.APRRId = Convert.ToInt32(journalVoucherLine.APRRId);
+                    updatejournalVoucherLine.ARSIId = Convert.ToInt32(journalVoucherLine.ARSIId);
                     updatejournalVoucherLine.IsClear = journalVoucherLine.IsClear;
 
                     db.SubmitChanges();

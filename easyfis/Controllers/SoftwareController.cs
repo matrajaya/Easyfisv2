@@ -28,6 +28,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult SupplierDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult PurchaseOrder()
         {
             return View();
@@ -64,6 +70,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult CustomerDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult Sales()
         {
             return View();
@@ -89,6 +101,12 @@ namespace easyfis.Controllers
 
         [Authorize]
         public ActionResult Items()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ItemDetail()
         {
             return View();
         }

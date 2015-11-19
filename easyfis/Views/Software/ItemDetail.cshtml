@@ -1,0 +1,130 @@
+﻿@{
+    var branchId = Request.QueryString["BranchId"];
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
+
+    <!-- Title of the Page -->
+    <title>Item Detail</title>
+
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Font-Awesome/css")
+    @Styles.Render("~/Content/Software-css")
+    @Styles.Render("~/WijmoCSS/Wijmo-css")
+</head>
+<body>
+    <div id="wrapper" class="wrapper">
+        <!-- Header -->
+        @Html.Partial("_SoftwareHeader")
+
+        <!-- Section -->
+        <section>
+            <br /><br /><br />
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4><img src='~/images/Icons/iItems.png'> Item Detail</h4>
+                        <hr />
+                        <div class="div_Current_Page">
+                            @*<label id="currentBranchName"></label>*@
+                            <span id="currentPage"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 id="companyDetailLabel"></h4>
+                    </div>
+                    <div class="col-md-6" align="right">
+                        <button class="btn btn-primary btn-sm" id=""><i class="fa fa-save"></i> Save</button>
+                        <button onclick="window.location.href = '@Url.Action("Items", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</button>
+                    </div>
+                </div>
+                @*<hr />*@
+                <div class="well">
+                    <form id="companyDetailForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Item Code:</label>
+                                    <input type="text" class="form-control input-sm" id="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Item:</label>
+                                    <textarea class="form-control textarea-custom" id=""></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Barcode:</label>
+                                    <input type="text" class="form-control input-sm" id="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category:</label>
+                                    <input type="text" class="form-control input-sm" id="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Unit:</label>
+                                    <input type="text" class="form-control input-sm" id="" > <!-- Drop down list ni-->
+                                </div>
+                                <div class="form-group">
+                                    <label>Remarks:</label>
+                                    <input type="text" class="form-control input-sm" id="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Purchase Tax:</label>
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                </div>
+                                <div class="form-group">
+                                    <label>Sales Tax:</label>
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                </div>
+                                <div class="form-group">
+                                    <label>Default Account:</label>
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                </div>
+                                <div class="form-group">
+                                    <label>Purchase Account:</label>
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                </div>
+                                <div class="form-group">
+                                    <label>Sales Account:</label>
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                </div>
+                                <div class="form-group">
+                                    <label>Cost Account:</label>
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                </div>
+                                <div class="form-group">
+                                    <input type="checkbox" id="JVL_IsClear" class="requiredJournalVoucherLine" /> <span> Is Asset (e.g., Inventory, Fixed Asset, etc.)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- SideBar Menu -->
+    @Html.Partial("_SoftwareSideBarMenu")
+
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    @Scripts.Render("~/Scripts/Software-js")
+    @Scripts.Render("~/WijmoScripts/Wijmo-js")
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Items", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Items</a> ' + ' > Item Detail';
+    });
+
+    </script>
+
+</body>
+</html>
