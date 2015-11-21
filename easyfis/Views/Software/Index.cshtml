@@ -25,7 +25,8 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <div class="div_Current_Page">
+                <h2>Main Menu</h2>
+                <div class="div_Current_Page">                
                     <label id="currentBranchName"></label>
                 </div>
                 @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button><br /><br />*@
@@ -65,500 +66,501 @@
                         </div>*@
                     @*</div>
                 </div>*@
-
-                <div class="row">
-                    <div class="col-md-3">
-                        <a href="@Url.Action("Supplier","Software", new { BranchId = branchId })">
-                            <div class="panel panel-green">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-truck fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Supplier</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel-footer panel-green-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-shopping-cart fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Purchase Order</div>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="@Url.Action("Supplier","Software", new { BranchId = branchId })">
+                                <div class="panel panel-green">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-truck fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Supplier</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-file-text fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Receiving Receipt</div>
-                                        </div>
+                                    <div class="panel-footer panel-green-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
 
-                        <a href="@Url.Action("AccountsPayable", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-orange">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            @*<i class="fa fa-file-text-o fa-4x"></i>*@
-                                            <span class="accountReports">AP</span>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Accounts Payable</div>
+                            <a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-shopping-cart fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Purchase Order</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-orange-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-credit-card fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Disbursement</div>
-                                        </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
 
-                        <a href="@Url.Action("Bank", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-green">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-bank fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Bank</div>
+                            <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-file-text fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Receiving Receipt</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-green-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-md-3">
-                        <a href="@Url.Action("Customer", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-green">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-users fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Customer</div>
-                                        </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-green-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
 
-                        <a href="@Url.Action("Sales", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-bar-chart fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Sales</div>
+                            <a href="@Url.Action("AccountsPayable", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-orange">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                @*<i class="fa fa-file-text-o fa-4x"></i>*@
+                                                <span class="accountReports">AP</span>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Accounts Payable</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-blue-footer panel-sales-custom-footer">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("AccountsReceivable", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-orange">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            @*<i class="fa fa-file-text-o fa-4x"></i>*@
-                                            <span class="accountReports">AR</span>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Accounts Receivable</div>
-                                        </div>
+                                    <div class="panel-footer panel-orange-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-orange-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
 
-                        <a href="@Url.Action("Collection", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-cc-visa fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Collection</div>
+                            <a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-credit-card fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Disbursement</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("BankReconciliation", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-check fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Bank Reconciliation</div>
-                                        </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
 
-                    <div class="col-md-3">
-                        <a href="@Url.Action("Items", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-green">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-cart-arrow-down fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Items</div>
+                            <a href="@Url.Action("Bank", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-green">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-bank fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Bank</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-green-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("StockIn", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-archive fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Stock In</div>
-                                        </div>
+                                    <div class="panel-footer panel-green-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
 
-                        <a href="@Url.Action("StockOut", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-dropbox fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Stock Out</div>
+                        <div class="col-md-3">
+                            <a href="@Url.Action("Customer", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-green">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-users fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Customer</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("InventoryReport", "Software", new { BranchId = branchId })">
-                            <div class=" panel panel-orange">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-print fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Inventory Report</div>
-                                        </div>
+                                    <div class="panel-footer panel-green-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-orange-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
 
-                        <a href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-exchange fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Stock Transfer</div>
+                            <a href="@Url.Action("Sales", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-bar-chart fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Sales</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("SystemTables", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-table fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>System Tables</div>
-                                        </div>
+                                    <div class="panel-footer panel-blue-footer panel-sales-custom-footer">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
 
-                    <div class="col-md-3">
-                        <a href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-green">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-area-chart fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Chart of Accounts</div>
+                            <a href="@Url.Action("AccountsReceivable", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-orange">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                @*<i class="fa fa-file-text-o fa-4x"></i>*@
+                                                <span class="accountReports">AR</span>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Accounts Receivable</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-green-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-book fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Journal Voucher</div>
-                                        </div>
+                                    <div class="panel-footer panel-orange-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
 
-                        <a href="@Url.Action("Company", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-building fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Company</div>
+                            <a href="@Url.Action("Collection", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-cc-visa fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Collection</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("FinancialStatements", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-orange">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            @*<i class="fa fa-money fa-4x"></i>*@
-                                            <span class="accountReports">FS</span>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Financial Statements</div>
-                                        </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-orange-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
 
-                        <a href="@Url.Action("Users", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-user fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Users</div>
+                            <a href="@Url.Action("BankReconciliation", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-check fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Bank Reconciliation</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </a>
-
-                        <a href="@Url.Action("Settings", "Software", new { BranchId = branchId })">
-                            <div class="panel panel-blue">
-                                <div class="panel-heading">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <i class="fa fa-gears fa-4x"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-right">
-                                            <div class="" id="">&nbsp;</div>
-                                            <div>Settings</div>
-                                        </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
                                     </div>
                                 </div>
-                                <div class="panel-footer panel-blue-footer ">
-                                    <span class="pull-left">View Details</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-3">
+                            <a href="@Url.Action("Items", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-green">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-cart-arrow-down fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Items</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-green-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+
+                            <a href="@Url.Action("StockIn", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-archive fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Stock In</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="@Url.Action("StockOut", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-dropbox fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Stock Out</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="@Url.Action("InventoryReport", "Software", new { BranchId = branchId })">
+                                <div class=" panel panel-orange">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-print fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Inventory Report</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-orange-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-exchange fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Stock Transfer</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="@Url.Action("SystemTables", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-table fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>System Tables</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col-md-3">
+                            <a href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-green">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-area-chart fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Chart of Accounts</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-green-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-book fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Journal Voucher</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="@Url.Action("Company", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-building fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Company</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="@Url.Action("FinancialStatements", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-orange">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                @*<i class="fa fa-money fa-4x"></i>*@
+                                                <span class="accountReports">FS</span>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Financial Statements</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-orange-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="@Url.Action("Users", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-user fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Users</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <a href="@Url.Action("Settings", "Software", new { BranchId = branchId })">
+                                <div class="panel panel-blue">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-gears fa-4x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="" id="">&nbsp;</div>
+                                                <div>Settings</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer panel-blue-footer ">
+                                        <span class="pull-left">View Details</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

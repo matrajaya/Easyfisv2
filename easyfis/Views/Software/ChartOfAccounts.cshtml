@@ -26,18 +26,19 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <ul class="nav nav-pills pull-right" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Account Cash Flow</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Account Category</a></li>
-                </ul>
-                <h4><img src='~/images/Icons/iChart.png'> Chart of Accounts</h4>
+                @*<h4><img src='~/images/Icons/iChart.png'> Chart of Accounts</h4>*@
+                <h4><i class="fa fa-area-chart fa-2x"></i> Chart of Accounts</h4>
                 <br />
                 <div class="div_Current_Page">
                     @*<label id="currentBranchName"></label>*@ 
                     <span id="currentPage"></span>
                 </div>
+                <ul class="nav nav-pills pull-right pill-custom" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Account Cash Flow</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Account Category</a></li>
+                </ul>
                 <div class="tab-content">
                     <div id="Account" class="tab-pane fade in active">
                         <!-- Account List -->
