@@ -12,6 +12,8 @@ namespace easyfis.Models
         public Int32 Id { get; set; }
         public Int32 JVId { get; set; }
         public String JournalVoucher { get; set; }
+        public String JVDate { get; set; }
+        public String JVParticulars { get; set; }
         public Int32 BranchId { get; set; }
         public String Branch { get; set; }
         public Int32 AccountId { get; set; }

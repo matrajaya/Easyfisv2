@@ -207,37 +207,74 @@ namespace easyfis.Controllers
             BaseFont boldOnly = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
             Font boldFont = new Font(boldOnly, 14, Font.BOLD);
 
-            Chunk glue = new Chunk(new iTextSharp.text.pdf.draw.VerticalPositionMark());
-            Paragraph companyAndJV = new Paragraph(companyName, times);
-            Paragraph addressAndBranch = new Paragraph(companyAddress);
-            Paragraph contactNoAndDateNow = new Paragraph(companyContactNo);
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            Paragraph particularsLabel = new Paragraph("Particulars:", boldFont);
-            Paragraph particularsValue = new Paragraph(JVParticulars, boldFont);
+            //Chunk glue = new Chunk(new iTextSharp.text.pdf.draw.VerticalPositionMark());
+            //Paragraph companyAndJV = new Paragraph(companyName, times);
+            //Paragraph addressAndBranch = new Paragraph(companyAddress);
+            //Paragraph contactNoAndDateNow = new Paragraph(companyContactNo);
+            //Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            //Paragraph particularsLabel = new Paragraph("Particulars:", boldFont);
+            //Paragraph particularsValue = new Paragraph(JVParticulars, boldFont);
 
-            companyAndJV.Add(new Chunk(glue));
-            addressAndBranch.Add(new Chunk(glue));
-            contactNoAndDateNow.Add(new Chunk(glue));
-            particularsLabel.Add(new Chunk(glue));
-            particularsValue.Add(new Chunk(glue));
+            //companyAndJV.Add(new Chunk(glue));
+            //addressAndBranch.Add(new Chunk(glue));
+            //contactNoAndDateNow.Add(new Chunk(glue));
+            //particularsLabel.Add(new Chunk(glue));
+            //particularsValue.Add(new Chunk(glue));
 
-            companyAndJV.Add("Journal Voucher");
-            addressAndBranch.Add(branchName);
-            contactNoAndDateNow.Add("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"));
-            particularsLabel.Add("JV Number:   " + JVNumber);
-            particularsValue.Add("JV Date:     " + JVDate.ToString("MM/dd/yyyy"));
+            //companyAndJV.Add("Journal Voucher");
+            //addressAndBranch.Add(branchName);
+            //contactNoAndDateNow.Add("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"));
+            //particularsLabel.Add("JV Number:   " + JVNumber);
+            //particularsValue.Add("JV Date:     " + JVDate.ToString("MM/dd/yyyy"));
 
-            document.Add(companyAndJV);
-            document.Add(addressAndBranch);
-            document.Add(contactNoAndDateNow);
-            document.Add(line);
-            document.Add(particularsLabel);
-            document.Add(particularsValue);
-            document.Add(Chunk.NEWLINE);
+            //document.Add(companyAndJV);
+            //document.Add(addressAndBranch);
+            //document.Add(contactNoAndDateNow);
+            //document.Add(line);
+            //document.Add(particularsLabel);
+            //document.Add(particularsValue);
+            //document.Add(Chunk.NEWLINE);
 
             BaseFont boldOnlyCell = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);
             Font boldFontCell = new Font(boldOnly, 13, Font.BOLD);
-            
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(3);
+            float[] widthscellsheader = new float[] { 100f, 10f, 100f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, times)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Journal Voucher", times)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyAddress)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(branchName)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyContactNo)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"))) { Border = 0, HorizontalAlignment = 2 });
+            document.Add(tableHeader);
+
+            document.Add(line);
+
+            // table header 2 under the separator
+            PdfPTable tableHeader2 = new PdfPTable(3);
+            float[] widthscellsheader2 = new float[] { 100f, 70f, 25f };
+            tableHeader2.SetWidths(widthscellsheader2);
+            tableHeader2.WidthPercentage = 100;
+            tableHeader2.WidthPercentage = 100;
+            tableHeader2.AddCell(new PdfPCell(new Phrase("Particulars: ", boldFont)) { PaddingTop = 10f, Border = 0 });
+            tableHeader2.AddCell(new PdfPCell(new Phrase("JV Number: ", boldFont)) { PaddingTop = 10f, Border = 0, HorizontalAlignment = 2 });
+            tableHeader2.AddCell(new PdfPCell(new Phrase(JVNumber)) { PaddingTop = 10f, Border = 0, HorizontalAlignment = 2 });
+            tableHeader2.AddCell(new PdfPCell(new Phrase(JVParticulars)) { Border = 0 });
+            tableHeader2.AddCell(new PdfPCell(new Phrase("JV Date: ", boldFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader2.AddCell(new PdfPCell(new Phrase(JVDate.ToString("MM/dd/yyyy"))) { Border = 0, HorizontalAlignment = 2 });
+            document.Add(tableHeader2);
+
+            document.Add(Chunk.NEWLINE);
+
             PdfPTable table = new PdfPTable(6);
             float[] widths = new float[] { 100f, 40f, 60f, 50f, 45f, 45f };
             table.SetWidths(widths);
@@ -280,6 +317,7 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+            
             decimal debitTotal = journals.Sum(d => d.DebitAmount);
             decimal creditTotal = journals.Sum(d => d.CreditAmount);
 
@@ -311,8 +349,8 @@ namespace easyfis.Controllers
             table2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f });
             table2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f });
             table2.AddCell(new PdfPCell(new Phrase("Total:", boldFontCell)) { Border = 0, PaddingTop = 15f, HorizontalAlignment = 2 });
-            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(debitTotalCurrency))) { Border = 0, PaddingTop = 15f, HorizontalAlignment = 2 });
-            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(creditTotalCurrency))) { Border = 0, PaddingTop = 15f, HorizontalAlignment = 2 });
+            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(debitTotalCurrency))) { Border = 0, PaddingTop = 15f, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
+            table2.AddCell(new PdfPCell(new Phrase(Convert.ToString(creditTotalCurrency))) { Border = 0, PaddingTop = 15f, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f, HorizontalAlignment = 2 });
             document.Add(table2);
 
             document.Add(Chunk.NEWLINE);

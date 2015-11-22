@@ -34,6 +34,8 @@ namespace easyfis.Business
                                       {
                                           Id = d.Id,
                                           JVId = d.JVId,
+                                          JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                          JVParticulars = d.TrnJournalVoucher.Particulars,
                                           BranchId = d.BranchId,
                                           AccountId = d.AccountId,
                                           ArticleId = d.ArticleId,
@@ -45,16 +47,16 @@ namespace easyfis.Business
                                           IsClear = d.IsClear
                                       };
 
-            var JournalDate = "";
-            var branchId = 0;
-            for (var i = 0; i < journalVoucherLines.Count(); i++)
-            {
-                foreach (var JVs in journalVouchers)
-                {
-                    JournalDate = JVs.JVDate;
-                    branchId = JVs.BranchId;
-                }
-            }
+            //var JournalDate = "";
+            //var branchId = 0;
+            //for (var i = 0; i < journalVoucherLines.Count(); i++)
+            //{
+            //    foreach (var JVs in journalVouchers)
+            //    {
+            //        JournalDate = JVs.JVDate;
+            //        branchId = JVs.BranchId;
+            //    }
+            //}
 
             try
             {
@@ -62,7 +64,7 @@ namespace easyfis.Business
                 {
                     Data.TrnJournal newJournal = new Data.TrnJournal();
 
-                    newJournal.JournalDate = Convert.ToDateTime(JournalDate);
+                    newJournal.JournalDate = Convert.ToDateTime(JVLs.JVDate);
                     newJournal.BranchId = JVLs.BranchId;
                     newJournal.JVId = JVLs.JVId;
                     newJournal.AccountId = JVLs.AccountId;

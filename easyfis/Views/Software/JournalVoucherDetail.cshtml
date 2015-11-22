@@ -37,7 +37,7 @@
                         <h4><i class="fa fa-book fa-2x"></i> Journal Voucher Detail</h4>
                         <br />
                         <div class="div_Current_Page">
-                            @*<label id="currentBranchName"></label>*@ 
+                            @*<label id="currentBranchName"></label>*@
                             <span id="currentPage"></span>
                         </div>
                     </div>
@@ -271,12 +271,17 @@
                     <div class="modal-body">
                         <div class="row" align="left">
                             <div class="col-lg-12">
+                                <center>
+                                    <h3>
+                                        <span id="loadingJournalGridList"></span>
+                                    </h3>
+                                </center>
                                 <div id="journalListGrid" class="grid" align="left"></div>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridJournal">
+                        <br /><br />
+                        <div class="row" id="footerSideModalJournalList">
+                            <div class="btn-group col-md-9" id="naviagtionPageGridJournal">
                                 <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournal">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
@@ -290,6 +295,20 @@
                                 <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournal">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
+                            </div>
+                            <div class="col-md-3">
+                                <table>
+                                    <tr>
+                                        <td align="right"> <b>Total Debit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalCreditInJournal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"> <b>Total Credit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalDebitInJournal"></span></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -517,6 +536,13 @@
                                             "isContentHtml": true
                                         },
                                         {
+                                            "header": "Branch",
+                                            "binding": "Branch",
+                                            "align": "left",
+                                            "allowSorting": true,
+                                            "width": "2*"
+                                        },
+                                        {
                                             "header": "Account",
                                             "binding": "Account",
                                             "align": "left",
@@ -540,14 +566,14 @@
                                         {
                                             "header": "DebitAmount.",
                                             "binding": "DebitAmount",
-                                            "align": "left",
+                                            "align": "right",
                                             "allowSorting": true,
                                             "width": "2*"
                                         },
                                         {
                                             "header": "CreditAmount",
                                             "binding": "CreditAmount",
-                                            "align": "left",
+                                            "align": "right",
                                             "allowSorting": true,
                                             "width": "2*"
                                         },
@@ -1833,7 +1859,20 @@
                                 APRRId: Results[i]["APRRId"],
                                 ARSIId: Results[i]["ARSIId"]
                             });
+
+                            var debitAmountTotal = 0;
+                            var creditAmountTotal = 0;
+
+                            var a = 0;
+                            while (a < Results.length) {
+                                debitAmountTotal += Results[a]["DebitAmount"];
+                                creditAmountTotal += Results[a]["CreditAmount"];
+                                a++;
+                            }
                         }
+
+                        document.getElementById('totalDebitInJournal').innerHTML = debitAmountTotal.toLocaleString();
+                        document.getElementById('totalCreditInJournal').innerHTML = creditAmountTotal.toLocaleString();
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1849,117 +1888,128 @@
             journals = new wijmo.collections.CollectionView(getJournalListByJVId());
             journals.pageSize = 10;
 
-            // Flex Grid
-            journalListGrid = new wijmo.grid.FlexGrid('#journalListGrid');
-            journalListGrid.initialize({
-                columns: [
-                            //{
-                            //    "header": "Edit",
-                            //    "binding": "EditId",
-                            //    "width": 60,
-                            //    "align": "center",
-                            //    "allowResizing": false,
-                            //    "allowSorting": false,
-                            //    "isContentHtml": true
-                            //},
-                            //{
-                            //    "header": "Delete",
-                            //    "binding": "DeleteId",
-                            //    "width": 70,
-                            //    "align": "center",
-                            //    "allowResizing": false,
-                            //    "allowSorting": false,
-                            //    "isContentHtml": true
-                            //},
-                            {
-                                "header": "Journal Date",
-                                "binding": "JournalDate",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": "2*",
-                            },
-                            {
-                                "header": "Branch",
-                                "binding": "Branch",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": "2*"
-                            },
-                            {
-                                "header": "Account",
-                                "binding": "Account",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": "2*"
-                            },
-                            {
-                                "header": "Article",
-                                "binding": "Article",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": "2*"
-                            }
-                            ,
-                            {
-                                "header": "Particulars",
-                                "binding": "Particulars",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": "2*"
-                            }
-                            ,
-                            {
-                                "header": "Debit Amount",
-                                "binding": "DebitAmount",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": "2*"
-                            }
-                            ,
-                            {
-                                "header": "Credit Amount",
-                                "binding": "CreditAmount",
-                                "align": "left",
-                                "allowSorting": true,
-                                "width": "2*"
-                            }
+            loadingJournalGridList
 
-                ],
-                autoGenerateColumns: false,
-                itemsSource: journals,
-                isReadOnly: true,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
+            document.getElementById("loadingJournalGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Journal...';
 
-            journalListGrid.trackChanges = true;
+            $("#loadingJournalGridList").show();
+            $("#footerSideModalJournalList").hide();
+            setTimeout(function() {
+                $("#loadingJournalGridList").hide();
+                $("#footerSideModalJournalList").show();
+                // Flex Grid
+                journalListGrid = new wijmo.grid.FlexGrid('#journalListGrid');
+                journalListGrid.initialize({
+                    columns: [
+                                //{
+                                //    "header": "Edit",
+                                //    "binding": "EditId",
+                                //    "width": 60,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                //{
+                                //    "header": "Delete",
+                                //    "binding": "DeleteId",
+                                //    "width": 70,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                {
+                                    "header": "Journal Date",
+                                    "binding": "JournalDate",
+                                    "align": "left",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                },
+                                {
+                                    "header": "Branch",
+                                    "binding": "Branch",
+                                    "align": "left",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Account",
+                                    "binding": "Account",
+                                    "align": "left",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Article",
+                                    "binding": "Article",
+                                    "align": "left",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                }
+                                ,
+                                {
+                                    "header": "Particulars",
+                                    "binding": "Particulars",
+                                    "align": "left",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                }
+                                ,
+                                {
+                                    "header": "Debit Amount",
+                                    "binding": "DebitAmount",
+                                    "align": "right",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                }
+                                ,
+                                {
+                                    "header": "Credit Amount",
+                                    "binding": "CreditAmount",
+                                    "align": "right",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                }
 
-            //Navigation button
-            btnFirstPageGridJournal = document.getElementById('btnMoveToFirstPageGridJournal');
-            btnPreviousPageGridJournal = document.getElementById('btnMoveToPreviousPageGridJournal');
-            btnNextPageGridJournal = document.getElementById('btnMoveToNextPageGridJournal');
-            btnLastPageGridJournal = document.getElementById('btnMoveToLastPageGridJournal');
-            btnCurrentPageGridJournal = document.getElementById('btnCurrentPageGridJournal');
+                    ],
+                    autoGenerateColumns: false,
+                    itemsSource: journals,
+                    isReadOnly: true,
+                    autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                    allowDragging: wijmo.grid.AllowDragging.None,
+                    selectionMode: wijmo.grid.SelectionMode.Row
+                });
 
-            updateNavigateButtonsJournal();
+                journalListGrid.trackChanges = true;
 
-            btnFirstPageGridJournal.addEventListener('click', function () {
-                journals.moveToFirstPage();
+                //Navigation button
+                btnFirstPageGridJournal = document.getElementById('btnMoveToFirstPageGridJournal');
+                btnPreviousPageGridJournal = document.getElementById('btnMoveToPreviousPageGridJournal');
+                btnNextPageGridJournal = document.getElementById('btnMoveToNextPageGridJournal');
+                btnLastPageGridJournal = document.getElementById('btnMoveToLastPageGridJournal');
+                btnCurrentPageGridJournal = document.getElementById('btnCurrentPageGridJournal');
+
                 updateNavigateButtonsJournal();
-            });
-            btnPreviousPageGridJournal.addEventListener('click', function () {
-                journals.moveToPreviousPage();
-                updateNavigateButtonsJournal();
-            });
-            btnNextPageGridJournal.addEventListener('click', function () {
-                journals.moveToNextPage();
-                updateNavigateButtonsJournal();
-            });
-            btnLastPageGridJournal.addEventListener('click', function () {
-                journals.moveToLastPage();
-                updateNavigateButtonsJournal();
-            });
+
+                btnFirstPageGridJournal.addEventListener('click', function () {
+                    journals.moveToFirstPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnPreviousPageGridJournal.addEventListener('click', function () {
+                    journals.moveToPreviousPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnNextPageGridJournal.addEventListener('click', function () {
+                    journals.moveToNextPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnLastPageGridJournal.addEventListener('click', function () {
+                    journals.moveToLastPage();
+                    updateNavigateButtonsJournal();
+                });
+
+            }, 1000);
         }
 
         // ==============================
@@ -2217,14 +2267,14 @@
                             {
                                 "header": "Debit",
                                 "binding": "DebitAmount",
-                                "align": "left",
+                                "align": "right",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Credit",
                                 "binding": "CreditAmount",
-                                "align": "left",
+                                "align": "right",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
