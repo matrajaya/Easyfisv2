@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -92,14 +93,61 @@ namespace easyfis.Controllers
             try
             {
                 var journalVoucherId = Convert.ToInt32(JVId);
+                //Business.PostJournal journal = new Business.PostJournal();
+                //journal.postJournal(journalVoucherId);
 
-                Business.PostJournal journal = new Business.PostJournal();
-                journal.postJournal(journalVoucherId);
+                var journalVoucherLines = from d in db.TrnJournalVoucherLines
+                                          where d.JVId == journalVoucherId
+                                          select new Models.TrnJournalVoucherLine
+                                          {
+                                              Id = d.Id,
+                                              JVId = d.JVId,
+                                              JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                              JVParticulars = d.TrnJournalVoucher.Particulars,
+                                              BranchId = d.BranchId,
+                                              AccountId = d.AccountId,
+                                              ArticleId = d.ArticleId,
+                                              Particulars = d.Particulars,
+                                              DebitAmount = d.DebitAmount,
+                                              CreditAmount = d.CreditAmount,
+                                              APRRId = d.APRRId,
+                                              ARSIId = d.ARSIId,
+                                              IsClear = d.IsClear
+                                          };
 
+                foreach (var JVLs in journalVoucherLines)
+                {
+                    Data.TrnJournal newJournal = new Data.TrnJournal();
+
+                    newJournal.JournalDate = Convert.ToDateTime(JVLs.JVDate);
+                    newJournal.BranchId = JVLs.BranchId;
+                    newJournal.JVId = JVLs.JVId;
+                    newJournal.AccountId = JVLs.AccountId;
+                    newJournal.ArticleId = JVLs.ArticleId;
+                    newJournal.Particulars = JVLs.Particulars;
+                    newJournal.DebitAmount = JVLs.DebitAmount;
+                    newJournal.CreditAmount = JVLs.CreditAmount;
+                    newJournal.ORId = null;
+                    newJournal.CVId = null;
+                    newJournal.JVId = journalVoucherId;
+                    newJournal.RRId = null;
+                    newJournal.SIId = null;
+                    newJournal.INId = null;
+                    newJournal.OTId = null;
+                    newJournal.STId = null;
+                    newJournal.DocumentReference = "document reference";
+                    newJournal.APRRId = null;
+                    newJournal.ARSIId = null;
+
+                    db.TrnJournals.InsertOnSubmit(newJournal);
+                }
+
+                db.SubmitChanges();
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
@@ -113,14 +161,21 @@ namespace easyfis.Controllers
             try
             {
                 var journalVoucherId = Convert.ToInt32(JVId);
+                //Business.PostJournal journal = new Business.PostJournal();
+                //journal.deleteJournal(journalVoucherId);
 
-                Business.PostJournal journal = new Business.PostJournal();
-                journal.deleteJournal(journalVoucherId);
+                var journals = db.TrnJournals.Where(d => d.JVId == journalVoucherId).ToList();
+                foreach (var j in journals)
+                {
+                    db.TrnJournals.DeleteOnSubmit(j);
+                    db.SubmitChanges();
+                }
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
