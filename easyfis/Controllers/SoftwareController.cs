@@ -100,6 +100,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult CollectionDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult BankReconciliation()
         {
             return View();
