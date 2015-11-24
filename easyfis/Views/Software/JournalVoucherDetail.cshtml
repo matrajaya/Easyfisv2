@@ -1233,26 +1233,26 @@
                     }
                 });
 
-                setInterval(function(){
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/postJournal/' + journalVoucherId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                location.reload();
-                            },
-                            404: function () {
-                                toastr.error("Can't Edit");
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                            }
-                        }
-                    });
-                }, 1000);
+                //setInterval(function(){
+                //    $.ajax({
+                //        type: "PUT",
+                //        url: '/api/postJournal/' + journalVoucherId,
+                //        contentType: "application/json; charset=utf-8",
+                //        dataType: "json",
+                //        data: data,
+                //        statusCode: {
+                //            200: function () {
+                //                location.reload();
+                //            },
+                //            404: function () {
+                //                toastr.error("Can't Edit");
+                //            },
+                //            400: function () {
+                //                toastr.error("Bad Request");
+                //            }
+                //        }
+                //    });
+                //}, 1000);
             }
         }
 
@@ -1416,10 +1416,10 @@
                         document.getElementById('totalCredit').innerHTML = creditAmountTotal.toLocaleString();
 
                         document.getElementById('journalVoucherLineNameLabel').innerHTML = 'Journal Voucher Line List';
-                        $('#cmdSaveAndUpdateJournalVoucher').hide();
+                        //$('#cmdSaveAndUpdateJournalVoucher').hide();
                     } else {
                         document.getElementById('status_LockedOrUnlocked_JVLEmpty').innerHTML = ' - Cannot save journal if JV Line is empty.';
-                        $('#cmdSaveAndLockJournalVoucher').hide();
+                        //$('#cmdSaveAndLockJournalVoucher').hide();
                         $("#cmdJournalJournalVoucher").prop("disabled", true);
                     }
                 }

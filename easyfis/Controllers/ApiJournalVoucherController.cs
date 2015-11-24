@@ -12,6 +12,7 @@ namespace easyfis.Controllers
     public class ApiJournalVoucherController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+        private Business.PostJournal postJournal = new Business.PostJournal();
 
         // ==============================================
         // Get the Max Journal Voucher Number in Database
@@ -253,6 +254,18 @@ namespace easyfis.Controllers
                     updateJournalVoucher.IsLocked = journalVoucher.IsLocked;
                     updateJournalVoucher.UpdatedById = mstUserId;
                     updateJournalVoucher.UpdatedDateTime = date;
+
+
+                    if (updateJournalVoucher.IsLocked == true)
+                    {
+                        Debug.WriteLine(updateJournalVoucher.IsLocked);
+                        postJournal.postJournal(journalVoucherId);
+                    }
+                    else
+                    {
+                        Debug.WriteLine(updateJournalVoucher.IsLocked);
+                        postJournal.deleteJournal(journalVoucherId);
+                    }
 
                     db.SubmitChanges();
 

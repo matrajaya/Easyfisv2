@@ -82,6 +82,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult SalesDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult AccountsReceivable()
         {
             return View();

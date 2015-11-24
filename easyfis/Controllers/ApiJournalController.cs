@@ -87,70 +87,70 @@ namespace easyfis.Controllers
         // ===========
         // Add Journal
         // ===========
-        [Route("api/postJournal/{JVId}")]
-        public HttpResponseMessage Put(String JVId)
-        {
-            try
-            {
-                var journalVoucherId = Convert.ToInt32(JVId);
-                //Business.PostJournal journal = new Business.PostJournal();
-                //journal.postJournal(journalVoucherId);
+        //[Route("api/postJournal/{JVId}")]
+        //public HttpResponseMessage Put(String JVId)
+        //{
+        //    try
+        //    {
+        //        var journalVoucherId = Convert.ToInt32(JVId);
+        //        //Business.PostJournal journal = new Business.PostJournal();
+        //        //journal.postJournal(journalVoucherId);
 
-                var journalVoucherLines = from d in db.TrnJournalVoucherLines
-                                          where d.JVId == journalVoucherId
-                                          select new Models.TrnJournalVoucherLine
-                                          {
-                                              Id = d.Id,
-                                              JVId = d.JVId,
-                                              JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
-                                              JVParticulars = d.TrnJournalVoucher.Particulars,
-                                              BranchId = d.BranchId,
-                                              AccountId = d.AccountId,
-                                              ArticleId = d.ArticleId,
-                                              Particulars = d.Particulars,
-                                              DebitAmount = d.DebitAmount,
-                                              CreditAmount = d.CreditAmount,
-                                              APRRId = d.APRRId,
-                                              ARSIId = d.ARSIId,
-                                              IsClear = d.IsClear
-                                          };
+        //        var journalVoucherLines = from d in db.TrnJournalVoucherLines
+        //                                  where d.JVId == journalVoucherId
+        //                                  select new Models.TrnJournalVoucherLine
+        //                                  {
+        //                                      Id = d.Id,
+        //                                      JVId = d.JVId,
+        //                                      JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+        //                                      JVParticulars = d.TrnJournalVoucher.Particulars,
+        //                                      BranchId = d.BranchId,
+        //                                      AccountId = d.AccountId,
+        //                                      ArticleId = d.ArticleId,
+        //                                      Particulars = d.Particulars,
+        //                                      DebitAmount = d.DebitAmount,
+        //                                      CreditAmount = d.CreditAmount,
+        //                                      APRRId = d.APRRId,
+        //                                      ARSIId = d.ARSIId,
+        //                                      IsClear = d.IsClear
+        //                                  };
 
-                foreach (var JVLs in journalVoucherLines)
-                {
-                    Data.TrnJournal newJournal = new Data.TrnJournal();
+        //        foreach (var JVLs in journalVoucherLines)
+        //        {
+        //            Data.TrnJournal newJournal = new Data.TrnJournal();
 
-                    newJournal.JournalDate = Convert.ToDateTime(JVLs.JVDate);
-                    newJournal.BranchId = JVLs.BranchId;
-                    newJournal.JVId = JVLs.JVId;
-                    newJournal.AccountId = JVLs.AccountId;
-                    newJournal.ArticleId = JVLs.ArticleId;
-                    newJournal.Particulars = JVLs.Particulars;
-                    newJournal.DebitAmount = JVLs.DebitAmount;
-                    newJournal.CreditAmount = JVLs.CreditAmount;
-                    newJournal.ORId = null;
-                    newJournal.CVId = null;
-                    newJournal.JVId = journalVoucherId;
-                    newJournal.RRId = null;
-                    newJournal.SIId = null;
-                    newJournal.INId = null;
-                    newJournal.OTId = null;
-                    newJournal.STId = null;
-                    newJournal.DocumentReference = "document reference";
-                    newJournal.APRRId = null;
-                    newJournal.ARSIId = null;
+        //            newJournal.JournalDate = Convert.ToDateTime(JVLs.JVDate);
+        //            newJournal.BranchId = JVLs.BranchId;
+        //            newJournal.JVId = JVLs.JVId;
+        //            newJournal.AccountId = JVLs.AccountId;
+        //            newJournal.ArticleId = JVLs.ArticleId;
+        //            newJournal.Particulars = JVLs.Particulars;
+        //            newJournal.DebitAmount = JVLs.DebitAmount;
+        //            newJournal.CreditAmount = JVLs.CreditAmount;
+        //            newJournal.ORId = null;
+        //            newJournal.CVId = null;
+        //            newJournal.JVId = journalVoucherId;
+        //            newJournal.RRId = null;
+        //            newJournal.SIId = null;
+        //            newJournal.INId = null;
+        //            newJournal.OTId = null;
+        //            newJournal.STId = null;
+        //            newJournal.DocumentReference = "document reference";
+        //            newJournal.APRRId = null;
+        //            newJournal.ARSIId = null;
 
-                    db.TrnJournals.InsertOnSubmit(newJournal);
-                }
+        //            db.TrnJournals.InsertOnSubmit(newJournal);
+        //        }
 
-                db.SubmitChanges();
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
+        //        db.SubmitChanges();
+        //        return Request.CreateResponse(HttpStatusCode.OK);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine(e);
+        //        return Request.CreateResponse(HttpStatusCode.BadRequest);
+        //    }
+        //}
 
         // =========================
         // Update and Delete Journal
