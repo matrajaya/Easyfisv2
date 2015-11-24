@@ -49,11 +49,10 @@
                     </div>
                     <div class="col-md-7" align="right">
                         <button class="btn btn-primary btn-sm" id="cmdJournalJournalVoucher" onclick="cmdJournalVoucherJournalButton_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                        <!-- Save Button to Add Journal -->
                         <button class="btn btn-primary btn-sm" id="cmdSaveAndLockJournalVoucher" onclick="cmdJournalVoucherSaveAndLockButton_OnClick()"><i class="fa fa-save"></i> Save Journal</button>
                         <!-- Save Button to Add JV -->
                         <button class="btn btn-primary btn-sm" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <!-- Save Button to Update JV -->
-                        <button class="btn btn-primary btn-sm" id="cmdSaveAndUpdateJournalVoucher" onclick="cmdJournalVoucherSaveAndUpdateButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick="cmdJournalVoucherEditEnableButton_OnClick()"><i class="fa fa-pencil"></i> Edit</button>
                         <button onclick="window.location.href ='@Url.Action("JournalVoucherPDF", "Software", new { JVId = JVId })'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href ='@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseJournalVoucher"><i class="fa fa-times"></i> Close</button>
@@ -301,12 +300,12 @@
                                     <tr>
                                         <td align="right"> <b>Total Debit:</b> </td>
                                         <td style="padding-left: 15px"></td>
-                                        <td> <span id="totalCreditInJournal"></span></td>
+                                        <td> <span id="totalDebitInJournal"></span></td>
                                     </tr>
                                     <tr>
                                         <td align="right"> <b>Total Credit:</b> </td>
                                         <td style="padding-left: 15px"></td>
-                                        <td> <span id="totalDebitInJournal"></span></td>
+                                        <td> <span id="totalCreditInJournal"></span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -499,7 +498,6 @@
 
                     if(document.getElementById('JV_IsLocked').value == 'true') {
                         $("#cmdJournalJournalVoucher").prop("disabled", false);
-                        $("#cmdPrintJournalVoucher").prop("disabled", false);
                         $("#cmdPreviewJournalVoucher").prop("disabled", false);
                         $('#cmdSaveAndLockJournalVoucher').prop('disabled', true);
                         document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-lock"></i> Saved and Locked';
@@ -613,7 +611,6 @@
 
                     } else if(document.getElementById('JV_IsLocked').value == 'false') {
                         $("#cmdJournalJournalVoucher").prop("disabled", true);
-                        $("#cmdPrintJournalVoucher").prop("disabled", true);
                         $("#cmdPreviewJournalVoucher").prop("disabled", true);
                         $('#cmdSaveAndLockJournalVoucher').prop('disabled', false);
                         document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-unlock"></i> Not Lock ';
@@ -931,7 +928,7 @@
             } else {
                 journalVoucherObject.IsLocked = document.getElementById('JV_IsLocked_defaultFalse').value;
             }
-            var data = JSON.stringify(journalVoucherObject);
+            var dataJVAdd = JSON.stringify(journalVoucherObject);
 
             var isValid = true;
             $('.requiredJournalVoucher').each(function () {
@@ -953,70 +950,142 @@
                 e.preventDefault();
             }
             else {
-                $("#cmdJournalJournalVoucher").prop("disabled", true);
-                $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
-                $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
-                $("#cmdSaveJournalVoucher").prop("disabled", true);
-                $("#cmdEditJournalVoucher").prop("disabled", true);
-                $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                $("#cmdPrintJournalVoucher").prop("disabled", true);
-                $("#cmdDownloadJournalVoucher").prop("disabled", true);
-                $("#cmdCloseJournalVoucher").prop("disabled", true);
-                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
-                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+                if(journalVoucherId == 0) {
+                    $("#cmdJournalJournalVoucher").prop("disabled", true);
+                    $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
+                    $("#cmdSaveJournalVoucher").prop("disabled", true);
+                    $("#cmdEditJournalVoucher").prop("disabled", true);
+                    $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                    $("#cmdDownloadJournalVoucher").prop("disabled", true);
+                    $("#cmdCloseJournalVoucher").prop("disabled", true);
+                    $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                    $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
 
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addJournalVoucher',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdJournalJournalVoucher").prop("disabled", true);
-                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
-                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
-                            $("#cmdSaveJournalVoucher").prop("disabled", true);
-                            $("#cmdEditJournalVoucher").prop("disabled", true);
-                            $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                            $("#cmdPrintJournalVoucher").prop("disabled", true);
-                            $("#cmdDownloadJournalVoucher").prop("disabled", true);
-                            $("#cmdCloseJournalVoucher").prop("disabled", true);
-                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
-                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-                            toastr.success("Successfully Saved");
-                            setTimeout(getJournalVoucherLastInsertedId, 1000)
-                        },
-                        404: function () {
-                            toastr.error("Can't Save");
-                            $("#cmdJournalJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveJournalVoucher").prop("disabled", false);
-                            $("#cmdEditJournalVoucher").prop("disabled", false);
-                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                            $("#cmdPrintJournalVoucher").prop("disabled", false);
-                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
-                            $("#cmdCloseJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
-                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                            $("#cmdJournalJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveJournalVoucher").prop("disabled", false);
-                            $("#cmdEditJournalVoucher").prop("disabled", false);
-                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                            $("#cmdPrintJournalVoucher").prop("disabled", false);
-                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
-                            $("#cmdCloseJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
-                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addJournalVoucher',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: dataJVAdd,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdJournalJournalVoucher").prop("disabled", true);
+                                $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
+                                $("#cmdSaveJournalVoucher").prop("disabled", true);
+                                $("#cmdEditJournalVoucher").prop("disabled", true);
+                                $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                                $("#cmdDownloadJournalVoucher").prop("disabled", true);
+                                $("#cmdCloseJournalVoucher").prop("disabled", true);
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getJournalVoucherLastInsertedId, 1000)
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdJournalJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveJournalVoucher").prop("disabled", false);
+                                $("#cmdEditJournalVoucher").prop("disabled", false);
+                                $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                                $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                                $("#cmdCloseJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdJournalJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveJournalVoucher").prop("disabled", false);
+                                $("#cmdEditJournalVoucher").prop("disabled", false);
+                                $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                                $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                                $("#cmdCloseJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
+                            }
                         }
+                    });
+                } else {
+                    $("#cmdJournalJournalVoucher").prop("disabled", true);
+                    $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
+                    $("#cmdSaveJournalVoucher").prop("disabled", true);
+                    $("#cmdEditJournalVoucher").prop("disabled", true);
+                    $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                    $("#cmdDownloadJournalVoucher").prop("disabled", true);
+                    $("#cmdCloseJournalVoucher").prop("disabled", true);
+                    $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                    $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+
+                    var journalVoucherObject = new Object();
+                    var journalVoucherId = @JVId;
+                    journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
+                    journalVoucherObject.JVNumber = document.getElementById('journalVoucher_No').value;
+                    journalVoucherObject.ManualJVNumber = document.getElementById('manual_JournalVoucher_No').value;
+                    journalVoucherObject.JVDate = document.getElementById('journalVoucher_date_Data').value;
+                    journalVoucherObject.Particulars = document.getElementById('journalVoucher_Particulars').value;
+                    journalVoucherObject.PreparedById = document.getElementById('preparedByUserId_Data').value;
+                    journalVoucherObject.CheckedById = document.getElementById('checkedByUserId_Data').value;
+                    journalVoucherObject.ApprovedById = document.getElementById('approvedByUserId_Data').value;
+                    if(journalVoucherId > 0) {
+                        journalVoucherObject.IsLocked = document.getElementById('JV_IsLocked_defaultFalse').value;
+                    } else {
+                        journalVoucherObject.IsLocked = document.getElementById('JV_IsLocked_defaultTrue').value;
                     }
-                });
+                    var dataJVUpdate= JSON.stringify(journalVoucherObject);
+
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateJournalVoucher/' + journalVoucherId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: dataJVUpdate,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdJournalJournalVoucher").prop("disabled", true);
+                                $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
+                                $("#cmdSaveJournalVoucher").prop("disabled", true);
+                                $("#cmdEditJournalVoucher").prop("disabled", true);
+                                $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                                $("#cmdDownloadJournalVoucher").prop("disabled", true);
+                                $("#cmdCloseJournalVoucher").prop("disabled", true);
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $("#cmdJournalJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveJournalVoucher").prop("disabled", false);
+                                $("#cmdEditJournalVoucher").prop("disabled", false);
+                                $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                                $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                                $("#cmdCloseJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdJournalJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveJournalVoucher").prop("disabled", false);
+                                $("#cmdEditJournalVoucher").prop("disabled", false);
+                                $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                                $("#cmdDownloadJournalVoucher").prop("disabled", false);
+                                $("#cmdCloseJournalVoucher").prop("disabled", false);
+                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
+                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+
+
             }
         }
 
@@ -1026,11 +1095,9 @@
         function cmdJournalVoucherEditEnableButton_OnClick() {
             $("#cmdJournalJournalVoucher").prop("disabled", true);
             $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
-            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
             $("#cmdSaveJournalVoucher").prop("disabled", true);
             $("#cmdEditJournalVoucher").prop("disabled", true);
             $("#cmdPreviewJournalVoucher").prop("disabled", true);
-            $("#cmdPrintJournalVoucher").prop("disabled", true);
             $("#cmdDownloadJournalVoucher").prop("disabled", true);
             $("#cmdCloseJournalVoucher").prop("disabled", true);
             $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
@@ -1063,26 +1130,25 @@
                     200: function () {
                         $("#cmdJournalJournalVoucher").prop("disabled", true);
                         $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
-                        $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
                         $("#cmdSaveJournalVoucher").prop("disabled", true);
                         $("#cmdEditJournalVoucher").prop("disabled", true);
                         $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                        $("#cmdPrintJournalVoucher").prop("disabled", true);
                         $("#cmdDownloadJournalVoucher").prop("disabled", true);
                         $("#cmdCloseJournalVoucher").prop("disabled", true);
                         $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                         $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-                        toastr.info("Unlocked");
+                        toastr.success("Unlocked");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
                     },
                     404: function () {
                         toastr.error("Can't Edit");
                         $("#cmdJournalJournalVoucher").prop("disabled", false);
                         $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                        $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
                         $("#cmdSaveJournalVoucher").prop("disabled", false);
                         $("#cmdEditJournalVoucher").prop("disabled", false);
                         $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                        $("#cmdPrintJournalVoucher").prop("disabled", false);
                         $("#cmdDownloadJournalVoucher").prop("disabled", false);
                         $("#cmdCloseJournalVoucher").prop("disabled", false);
                         $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
@@ -1092,11 +1158,9 @@
                         toastr.error("Bad Request");
                         $("#cmdJournalJournalVoucher").prop("disabled", false);
                         $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                        $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
                         $("#cmdSaveJournalVoucher").prop("disabled", false);
                         $("#cmdEditJournalVoucher").prop("disabled", false);
                         $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                        $("#cmdPrintJournalVoucher").prop("disabled", false);
                         $("#cmdDownloadJournalVoucher").prop("disabled", false);
                         $("#cmdCloseJournalVoucher").prop("disabled", false);
                         $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
@@ -1104,27 +1168,6 @@
                     }
                 }
             });
-
-            setInterval(function(){
-                $.ajax({
-                    type: "DELETE",
-                    url: '/api/deleteJournal/' + journalVoucherId,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: {},
-                    statusCode: {
-                        200: function () {
-                            location.reload();
-                        },
-                        404: function () {
-                            toastr.error("Can't Edit");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                        }
-                    }
-                });
-            }, 1000);
         }
 
         // ====================
@@ -1170,11 +1213,9 @@
             else {
                 $("#cmdJournalJournalVoucher").prop("disabled", true);
                 $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
-                $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
                 $("#cmdSaveJournalVoucher").prop("disabled", true);
                 $("#cmdEditJournalVoucher").prop("disabled", true);
                 $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                $("#cmdPrintJournalVoucher").prop("disabled", true);
                 $("#cmdDownloadJournalVoucher").prop("disabled", true);
                 $("#cmdCloseJournalVoucher").prop("disabled", true);
                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
@@ -1190,145 +1231,14 @@
                         200: function () {
                             $("#cmdJournalJournalVoucher").prop("disabled", true);
                             $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
-                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
                             $("#cmdSaveJournalVoucher").prop("disabled", true);
                             $("#cmdEditJournalVoucher").prop("disabled", true);
                             $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                            $("#cmdPrintJournalVoucher").prop("disabled", true);
                             $("#cmdDownloadJournalVoucher").prop("disabled", true);
                             $("#cmdCloseJournalVoucher").prop("disabled", true);
                             $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                             $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-                            //toastr.success("Saved and Locked");
                             toastr.success("Saved Journal");
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                            $("#cmdJournalJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveJournalVoucher").prop("disabled", false);
-                            $("#cmdEditJournalVoucher").prop("disabled", false);
-                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                            $("#cmdPrintJournalVoucher").prop("disabled", false);
-                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
-                            $("#cmdCloseJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
-                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                            $("#cmdJournalJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveJournalVoucher").prop("disabled", false);
-                            $("#cmdEditJournalVoucher").prop("disabled", false);
-                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                            $("#cmdPrintJournalVoucher").prop("disabled", false);
-                            $("#cmdDownloadJournalVoucher").prop("disabled", false);
-                            $("#cmdCloseJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
-                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
-                        }
-                    }
-                });
-
-                //setInterval(function(){
-                //    $.ajax({
-                //        type: "PUT",
-                //        url: '/api/postJournal/' + journalVoucherId,
-                //        contentType: "application/json; charset=utf-8",
-                //        dataType: "json",
-                //        data: data,
-                //        statusCode: {
-                //            200: function () {
-                //                location.reload();
-                //            },
-                //            404: function () {
-                //                toastr.error("Can't Edit");
-                //            },
-                //            400: function () {
-                //                toastr.error("Bad Request");
-                //            }
-                //        }
-                //    });
-                //}, 1000);
-            }
-        }
-
-        // ======================
-        // Save and Update Button
-        // ======================
-        function cmdJournalVoucherSaveAndUpdateButton_OnClick() {
-            var journalVoucherObject = new Object();
-            var journalVoucherId = @JVId;
-            journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
-            journalVoucherObject.JVNumber = document.getElementById('journalVoucher_No').value;
-            journalVoucherObject.ManualJVNumber = document.getElementById('manual_JournalVoucher_No').value;
-            journalVoucherObject.JVDate = document.getElementById('journalVoucher_date_Data').value;
-            journalVoucherObject.Particulars = document.getElementById('journalVoucher_Particulars').value;
-            journalVoucherObject.PreparedById = document.getElementById('preparedByUserId_Data').value;
-            journalVoucherObject.CheckedById = document.getElementById('checkedByUserId_Data').value;
-            journalVoucherObject.ApprovedById = document.getElementById('approvedByUserId_Data').value;
-            if(journalVoucherId > 0) {
-                journalVoucherObject.IsLocked = document.getElementById('JV_IsLocked_defaultFalse').value;
-            } else {
-                journalVoucherObject.IsLocked = document.getElementById('JV_IsLocked_defaultTrue').value;
-            }
-            var data = JSON.stringify(journalVoucherObject);
-
-            var isValid = true;
-            $('.requiredJournalVoucher').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-                e.preventDefault();
-            }
-            else {
-                $("#cmdJournalJournalVoucher").prop("disabled", true);
-                $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
-                $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
-                $("#cmdSaveJournalVoucher").prop("disabled", true);
-                $("#cmdEditJournalVoucher").prop("disabled", true);
-                $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                $("#cmdPrintJournalVoucher").prop("disabled", true);
-                $("#cmdDownloadJournalVoucher").prop("disabled", true);
-                $("#cmdCloseJournalVoucher").prop("disabled", true);
-                $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
-                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-
-                $.ajax({
-                    type: "PUT",
-                    url: '/api/updateJournalVoucher/' + journalVoucherId,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdJournalJournalVoucher").prop("disabled", true);
-                            $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
-                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", true);
-                            $("#cmdSaveJournalVoucher").prop("disabled", true);
-                            $("#cmdEditJournalVoucher").prop("disabled", true);
-                            $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                            $("#cmdPrintJournalVoucher").prop("disabled", true);
-                            $("#cmdDownloadJournalVoucher").prop("disabled", true);
-                            $("#cmdCloseJournalVoucher").prop("disabled", true);
-                            $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
-                            $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-                            toastr.success("Successfully Updated");
                             window.setTimeout(function () {
                                 location.reload()
                             }, 1000);
@@ -1337,11 +1247,9 @@
                             toastr.error("Can't Update");
                             $("#cmdJournalJournalVoucher").prop("disabled", false);
                             $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
                             $("#cmdSaveJournalVoucher").prop("disabled", false);
                             $("#cmdEditJournalVoucher").prop("disabled", false);
                             $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                            $("#cmdPrintJournalVoucher").prop("disabled", false);
                             $("#cmdDownloadJournalVoucher").prop("disabled", false);
                             $("#cmdCloseJournalVoucher").prop("disabled", false);
                             $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
@@ -1351,11 +1259,9 @@
                             toastr.error("Bad Request");
                             $("#cmdJournalJournalVoucher").prop("disabled", false);
                             $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                            $("#cmdSaveAndUpdateJournalVoucher").prop("disabled", false);
                             $("#cmdSaveJournalVoucher").prop("disabled", false);
                             $("#cmdEditJournalVoucher").prop("disabled", false);
                             $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                            $("#cmdPrintJournalVoucher").prop("disabled", false);
                             $("#cmdDownloadJournalVoucher").prop("disabled", false);
                             $("#cmdCloseJournalVoucher").prop("disabled", false);
                             $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
@@ -1416,10 +1322,10 @@
                         document.getElementById('totalCredit').innerHTML = creditAmountTotal.toLocaleString();
 
                         document.getElementById('journalVoucherLineNameLabel').innerHTML = 'Journal Voucher Line List';
-                        //$('#cmdSaveAndUpdateJournalVoucher').hide();
+                        $('#cmdSaveJournalVoucher').hide();
                     } else {
                         document.getElementById('status_LockedOrUnlocked_JVLEmpty').innerHTML = ' - Cannot save journal if JV Line is empty.';
-                        //$('#cmdSaveAndLockJournalVoucher').hide();
+                        $('#cmdSaveAndLockJournalVoucher').hide();
                         $("#cmdJournalJournalVoucher").prop("disabled", true);
                     }
                 }
@@ -2147,7 +2053,7 @@
                                 JVNumber: Results.JVNumber
                             });
                         }
-                        var JV_Number = parseInt(Results.JVNumber);
+                        var JV_Number = parseInt(Results.JVNumber);saveandupdatejournalvoucher
                         var JV_Number_PlusOne = 0000000001;
                         var JV_Num_Results = JV_Number + JV_Number_PlusOne;
                         //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
@@ -2161,10 +2067,7 @@
                 $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
                 $("#cmdEditJournalVoucher").prop("disabled", true);
                 $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                $("#cmdPrintJournalVoucher").prop("disabled", true);
 
-                $('#cmdSaveJournalVoucher').show();
-                $('#cmdSaveAndUpdateJournalVoucher').hide();
                 $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", true);
 
                 $("#cmdEditJournalVoucher").prop("disabled", true);
@@ -2180,8 +2083,6 @@
                     }
                 });
             }  else {
-                $('#cmdSaveJournalVoucher').hide();
-                $('#cmdSaveAndUpdateJournalVoucher').show();
                 $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", false);
             }
 

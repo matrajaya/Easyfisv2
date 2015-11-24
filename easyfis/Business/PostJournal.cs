@@ -12,21 +12,6 @@ namespace easyfis.Business
 
         public void postJournal(Int32 JVId)
         {
-            //var journalVouchers = from d in db.TrnJournalVouchers
-            //                      where d.Id == JVId
-            //                      select new Models.TrnJournalVoucher
-            //                        {
-            //                            Id = d.Id,
-            //                            BranchId = d.BranchId,
-            //                            JVNumber = d.JVNumber,
-            //                            JVDate = d.JVDate.ToShortDateString(),
-            //                            Particulars = d.Particulars,
-            //                            ManualJVNumber = d.ManualJVNumber,
-            //                            PreparedById = d.PreparedById,
-            //                            CheckedById = d.CheckedById,
-            //                            ApprovedById = d.ApprovedById,
-            //                            IsLocked = d.IsLocked
-            //                        };
 
             var journalVoucherLines = from d in db.TrnJournalVoucherLines
                                       where d.JVId == JVId

@@ -82,13 +82,10 @@ namespace easyfis.Controllers
                                       Particulars = d.Particulars,
                                       ManualJVNumber = d.ManualJVNumber,
                                       PreparedById = d.PreparedById,
-                                      //PreparedBy = d.MstUser3.UserName,
                                       PreparedBy = d.MstUser.FullName,
                                       CheckedById = d.CheckedById,
-                                      //CheckedBy = d.MstUser1.UserName,
                                       CheckedBy = d.MstUser1.FullName,
                                       ApprovedById = d.ApprovedById,
-                                      //ApprovedBy = d.MstUser.UserName,
                                       ApprovedBy = d.MstUser2.FullName,
                                       IsLocked = d.IsLocked,
                                       CreatedById = d.CreatedById,
@@ -120,13 +117,10 @@ namespace easyfis.Controllers
                                           Particulars = d.Particulars,
                                           ManualJVNumber = d.ManualJVNumber,
                                           PreparedById = d.PreparedById,
-                                          //PreparedBy = d.MstUser3.UserName,
                                           PreparedBy = d.MstUser.FullName,
                                           CheckedById = d.CheckedById,
-                                          //CheckedBy = d.MstUser1.UserName,
                                           CheckedBy = d.MstUser1.FullName,
                                           ApprovedById = d.ApprovedById,
-                                          //ApprovedBy = d.MstUser.UserName,
                                           ApprovedBy = d.MstUser2.FullName,
                                           IsLocked = d.IsLocked,
                                           CreatedById = d.CreatedById,
@@ -158,13 +152,10 @@ namespace easyfis.Controllers
                                           Particulars = d.Particulars,
                                           ManualJVNumber = d.ManualJVNumber,
                                           PreparedById = d.PreparedById,
-                                          //PreparedBy = d.MstUser3.UserName,
                                           PreparedBy = d.MstUser.FullName,
                                           CheckedById = d.CheckedById,
-                                          //CheckedBy = d.MstUser1.UserName,
                                           CheckedBy = d.MstUser1.FullName,
                                           ApprovedById = d.ApprovedById,
-                                          //ApprovedBy = d.MstUser.UserName,
                                           ApprovedBy = d.MstUser2.FullName,
                                           IsLocked = d.IsLocked,
                                           CreatedById = d.CreatedById,
@@ -231,7 +222,6 @@ namespace easyfis.Controllers
         {
             try
             {
-                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
