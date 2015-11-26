@@ -517,7 +517,7 @@
                             columns: [
                                         {
                                             "header": "Edit",
-                                            "binding": "EditId",
+                                            "binding": "EditIdDisabled",
                                             "width": 60,
                                             "align": "center",
                                             "allowResizing": false,
@@ -526,7 +526,7 @@
                                         },
                                         {
                                             "header": "Delete",
-                                            "binding": "DeleteId",
+                                            "binding": "DeleteIdDisabled",
                                             "width": 70,
                                             "align": "center",
                                             "allowResizing": false,
@@ -603,8 +603,7 @@
                             frozenColumns: 2,
                             autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                             allowDragging: wijmo.grid.AllowDragging.None,
-                            selectionMode: wijmo.grid.SelectionMode.Row,
-                            disabled: true
+                            selectionMode: wijmo.grid.SelectionMode.Row
                         });
 
                         journalVoucherLineGrid.trackChanges = true;
@@ -1292,6 +1291,8 @@
                             journalVoucherLines.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='cmdJournalVoucherLineEditButton' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' id = 'cmdJournalVoucherLineDeleteButton' onclick='cmdJournalVoucherLineDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                EditIdDisabled: "<button class='btn btn-primary btn-xs btn-block' id='cmdJournalVoucherLineEditButtonDisabled' disabled><i class='fa fa-pencil'></i> Edit</button>",
+                                DeleteIdDisabled: "<button class='btn btn-danger btn-xs btn-block' id = 'cmdJournalVoucherLineDeleteButtonDisabled' disabled><i class='fa fa-trash'></i> Delete</button>",                                
                                 Id: Results[i]["Id"],
                                 JVId: Results[i]["JVId"],
                                 BranchId: Results[i]["BranchId"],
