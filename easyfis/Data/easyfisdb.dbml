@@ -43,11 +43,11 @@
   <Table Name="dbo.AspNetUsers" Member="AspNetUsers">
     <Type Name="AspNetUser">
       <Column Name="Id" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="FirstName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
-      <Column Name="LastName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FullName" Type="System.String" DbType="NChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="Address" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="Email" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
       <Column Name="EmailConfirmed" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="PasswordHash" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="SecurityStamp" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
       <Column Name="PhoneNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
@@ -56,8 +56,6 @@
       <Column Name="LockoutEndDateUtc" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="LockoutEnabled" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="AccessFailedCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="UserName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
-      <Column Name="FullName" Type="System.String" DbType="NChar(255) NOT NULL" CanBeNull="false" />
       <Association Name="AspNetUser_AspNetUserClaim" Member="AspNetUserClaims" ThisKey="Id" OtherKey="UserId" Type="AspNetUserClaim" />
       <Association Name="AspNetUser_AspNetUserLogin" Member="AspNetUserLogins" ThisKey="Id" OtherKey="UserId" Type="AspNetUserLogin" />
       <Association Name="AspNetUser_AspNetUserRole" Member="AspNetUserRoles" ThisKey="Id" OtherKey="UserId" Type="AspNetUserRole" />
@@ -736,13 +734,13 @@
       <Column Name="Particulars" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="DebitAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
       <Column Name="CreditAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
-      <Column Name="APRRId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ARSIId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="APRRId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ARSIId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="IsClear" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="MstAccount_TrnJournalVoucherLine" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstArticle_TrnJournalVoucherLine" Member="MstArticle" ThisKey="ArticleId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstBranch_TrnJournalVoucherLine" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
-      <Association Name="TrnJournalVoucher_TrnJournalVoucherLine" Member="TrnJournalVoucher" ThisKey="JVId" OtherKey="Id" Type="TrnJournalVoucher" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="TrnJournalVoucher_TrnJournalVoucherLine" Member="TrnJournalVoucher" ThisKey="JVId" OtherKey="Id" Type="TrnJournalVoucher" IsForeignKey="true" />
       <Association Name="TrnReceivingReceipt_TrnJournalVoucherLine" Member="TrnReceivingReceipt" ThisKey="APRRId" OtherKey="Id" Type="TrnReceivingReceipt" IsForeignKey="true" />
       <Association Name="TrnSalesInvoice_TrnJournalVoucherLine" Member="TrnSalesInvoice" ThisKey="ARSIId" OtherKey="Id" Type="TrnSalesInvoice" IsForeignKey="true" />
     </Type>

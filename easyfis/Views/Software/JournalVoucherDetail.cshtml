@@ -123,8 +123,7 @@
                         </div>
                     </form>
                 </div>
-
-                <hr class="divider" />
+                <br />
                 <!-- Branch List -->
                 <div id="JournalVoucherLineList">
                     <div class="row">
@@ -515,24 +514,24 @@
                         journalVoucherLineGrid = new wijmo.grid.FlexGrid('#JournalVoucherLineGrid');
                         journalVoucherLineGrid.initialize({
                             columns: [
-                                        {
-                                            "header": "Edit",
-                                            "binding": "EditIdDisabled",
-                                            "width": 60,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Delete",
-                                            "binding": "DeleteIdDisabled",
-                                            "width": 70,
-                                            "align": "center",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
+                                        //{
+                                        //    "header": "Edit",
+                                        //    "binding": "EditIdDisabled",
+                                        //    "width": 60,
+                                        //    "align": "center",
+                                        //    "allowResizing": false,
+                                        //    "allowSorting": false,
+                                        //    "isContentHtml": true
+                                        //},
+                                        //{
+                                        //    "header": "Delete",
+                                        //    "binding": "DeleteIdDisabled",
+                                        //    "width": 70,
+                                        //    "align": "center",
+                                        //    "allowResizing": false,
+                                        //    "allowSorting": false,
+                                        //    "isContentHtml": true
+                                        //},
                                         {
                                             "header": "Branch",
                                             "binding": "Branch",
@@ -600,7 +599,7 @@
                             autoGenerateColumns: false,
                             itemsSource: journalVoucherLines,
                             isReadOnly: true,
-                            frozenColumns: 2,
+                            //frozenColumns: 2,
                             autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                             allowDragging: wijmo.grid.AllowDragging.None,
                             selectionMode: wijmo.grid.SelectionMode.Row
@@ -2205,7 +2204,7 @@
                 autoGenerateColumns: false,
                 itemsSource: journalVoucherLines,
                 isReadOnly: true,
-                frozenColumns: 2,
+                //frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row

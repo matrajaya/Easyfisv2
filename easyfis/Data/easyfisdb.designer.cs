@@ -1385,15 +1385,15 @@ namespace easyfis.Data
 		
 		private string _Id;
 		
-		private string _FirstName;
-		
-		private string _LastName;
+		private string _FullName;
 		
 		private string _Address;
 		
 		private string _Email;
 		
 		private System.Nullable<bool> _EmailConfirmed;
+		
+		private string _UserName;
 		
 		private string _PasswordHash;
 		
@@ -1411,10 +1411,6 @@ namespace easyfis.Data
 		
 		private System.Nullable<int> _AccessFailedCount;
 		
-		private string _UserName;
-		
-		private string _FullName;
-		
 		private EntitySet<AspNetUserClaim> _AspNetUserClaims;
 		
 		private EntitySet<AspNetUserLogin> _AspNetUserLogins;
@@ -1427,16 +1423,16 @@ namespace easyfis.Data
     partial void OnCreated();
     partial void OnIdChanging(string value);
     partial void OnIdChanged();
-    partial void OnFirstNameChanging(string value);
-    partial void OnFirstNameChanged();
-    partial void OnLastNameChanging(string value);
-    partial void OnLastNameChanged();
+    partial void OnFullNameChanging(string value);
+    partial void OnFullNameChanged();
     partial void OnAddressChanging(string value);
     partial void OnAddressChanged();
     partial void OnEmailChanging(string value);
     partial void OnEmailChanged();
     partial void OnEmailConfirmedChanging(System.Nullable<bool> value);
     partial void OnEmailConfirmedChanged();
+    partial void OnUserNameChanging(string value);
+    partial void OnUserNameChanged();
     partial void OnPasswordHashChanging(string value);
     partial void OnPasswordHashChanged();
     partial void OnSecurityStampChanging(string value);
@@ -1453,10 +1449,6 @@ namespace easyfis.Data
     partial void OnLockoutEnabledChanged();
     partial void OnAccessFailedCountChanging(System.Nullable<int> value);
     partial void OnAccessFailedCountChanged();
-    partial void OnUserNameChanging(string value);
-    partial void OnUserNameChanged();
-    partial void OnFullNameChanging(string value);
-    partial void OnFullNameChanged();
     #endregion
 		
 		public AspNetUser()
@@ -1487,42 +1479,22 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FirstName", DbType="NVarChar(MAX)")]
-		public string FirstName
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullName", DbType="NChar(255) NOT NULL", CanBeNull=false)]
+		public string FullName
 		{
 			get
 			{
-				return this._FirstName;
+				return this._FullName;
 			}
 			set
 			{
-				if ((this._FirstName != value))
+				if ((this._FullName != value))
 				{
-					this.OnFirstNameChanging(value);
+					this.OnFullNameChanging(value);
 					this.SendPropertyChanging();
-					this._FirstName = value;
-					this.SendPropertyChanged("FirstName");
-					this.OnFirstNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LastName", DbType="NVarChar(MAX)")]
-		public string LastName
-		{
-			get
-			{
-				return this._LastName;
-			}
-			set
-			{
-				if ((this._LastName != value))
-				{
-					this.OnLastNameChanging(value);
-					this.SendPropertyChanging();
-					this._LastName = value;
-					this.SendPropertyChanged("LastName");
-					this.OnLastNameChanged();
+					this._FullName = value;
+					this.SendPropertyChanged("FullName");
+					this.OnFullNameChanged();
 				}
 			}
 		}
@@ -1583,6 +1555,26 @@ namespace easyfis.Data
 					this._EmailConfirmed = value;
 					this.SendPropertyChanged("EmailConfirmed");
 					this.OnEmailConfirmedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
+		public string UserName
+		{
+			get
+			{
+				return this._UserName;
+			}
+			set
+			{
+				if ((this._UserName != value))
+				{
+					this.OnUserNameChanging(value);
+					this.SendPropertyChanging();
+					this._UserName = value;
+					this.SendPropertyChanged("UserName");
+					this.OnUserNameChanged();
 				}
 			}
 		}
@@ -1743,46 +1735,6 @@ namespace easyfis.Data
 					this._AccessFailedCount = value;
 					this.SendPropertyChanged("AccessFailedCount");
 					this.OnAccessFailedCountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(256) NOT NULL", CanBeNull=false)]
-		public string UserName
-		{
-			get
-			{
-				return this._UserName;
-			}
-			set
-			{
-				if ((this._UserName != value))
-				{
-					this.OnUserNameChanging(value);
-					this.SendPropertyChanging();
-					this._UserName = value;
-					this.SendPropertyChanged("UserName");
-					this.OnUserNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FullName", DbType="NChar(255) NOT NULL", CanBeNull=false)]
-		public string FullName
-		{
-			get
-			{
-				return this._FullName;
-			}
-			set
-			{
-				if ((this._FullName != value))
-				{
-					this.OnFullNameChanging(value);
-					this.SendPropertyChanging();
-					this._FullName = value;
-					this.SendPropertyChanged("FullName");
-					this.OnFullNameChanged();
 				}
 			}
 		}
@@ -18053,9 +18005,9 @@ namespace easyfis.Data
 		
 		private decimal _CreditAmount;
 		
-		private int _APRRId;
+		private System.Nullable<int> _APRRId;
 		
-		private int _ARSIId;
+		private System.Nullable<int> _ARSIId;
 		
 		private bool _IsClear;
 		
@@ -18091,9 +18043,9 @@ namespace easyfis.Data
     partial void OnDebitAmountChanged();
     partial void OnCreditAmountChanging(decimal value);
     partial void OnCreditAmountChanged();
-    partial void OnAPRRIdChanging(int value);
+    partial void OnAPRRIdChanging(System.Nullable<int> value);
     partial void OnAPRRIdChanged();
-    partial void OnARSIIdChanging(int value);
+    partial void OnARSIIdChanging(System.Nullable<int> value);
     partial void OnARSIIdChanged();
     partial void OnIsClearChanging(bool value);
     partial void OnIsClearChanged();
@@ -18286,8 +18238,8 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_APRRId", DbType="Int NOT NULL")]
-		public int APRRId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_APRRId", DbType="Int")]
+		public System.Nullable<int> APRRId
 		{
 			get
 			{
@@ -18310,8 +18262,8 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ARSIId", DbType="Int NOT NULL")]
-		public int ARSIId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ARSIId", DbType="Int")]
+		public System.Nullable<int> ARSIId
 		{
 			get
 			{
@@ -18456,7 +18408,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnJournalVoucher_TrnJournalVoucherLine", Storage="_TrnJournalVoucher", ThisKey="JVId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="TrnJournalVoucher_TrnJournalVoucherLine", Storage="_TrnJournalVoucher", ThisKey="JVId", OtherKey="Id", IsForeignKey=true)]
 		public TrnJournalVoucher TrnJournalVoucher
 		{
 			get
@@ -18517,7 +18469,7 @@ namespace easyfis.Data
 					}
 					else
 					{
-						this._APRRId = default(int);
+						this._APRRId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("TrnReceivingReceipt");
 				}
@@ -18551,7 +18503,7 @@ namespace easyfis.Data
 					}
 					else
 					{
-						this._ARSIId = default(int);
+						this._ARSIId = default(Nullable<int>);
 					}
 					this.SendPropertyChanged("TrnSalesInvoice");
 				}

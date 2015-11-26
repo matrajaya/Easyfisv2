@@ -23,8 +23,8 @@ namespace easyfis.Models
         public String Particulars { get; set; }
         public Decimal DebitAmount { get; set; }
         public Decimal CreditAmount { get; set; }
-        public Int32 APRRId { get; set; }
-        public Int32 ARSIId { get; set; }
+        public Int32? APRRId { get; set; }
+        public Int32? ARSIId { get; set; }
         public Boolean IsClear { get; set; }
     }
 }
