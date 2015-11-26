@@ -51,7 +51,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
+                            <a href="@Url.Action("StockOutDetail", "Software", new { BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
                             <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                         </div>
                     </div>
@@ -82,6 +82,9 @@
                 </div>
             </div>
         </section>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->
@@ -95,6 +98,7 @@
         // ================
         // Global Variables
         // ================
+        var stockOuts;
         var stockOutGrid;
 
 
@@ -136,22 +140,22 @@
                 "hideMethod": "fadeOut"
             }
 
-            companies = new wijmo.collections.CollectionView();
-            companies.canFilter = true;
-            companies.pageSize = 15;
+            stockOuts = new wijmo.collections.CollectionView();
+            stockOuts.canFilter = true;
+            stockOuts.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                companies.refresh();
+                stockOuts.refresh();
             });
-            companies.filter = function (item) {
-                return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+            stockOuts.filter = function (item) {
+                return !filterText || (item.StockOut.toLowerCase().indexOf(filterText) > -1);
             }
-            companies.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsCompany();
+            stockOuts.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsStockOut();
             });
-            companies.currentChanged.addHandler(function (sender, args) {
+            stockOuts.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
@@ -178,36 +182,36 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "OUT Date",
+                                "header": "OUT Number",
                                 //"binding": "Company",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*",
                             },
                             {
-                                "header": "OUT Number",
+                                "header": "OUT Date",
                                 //"binding": "Address",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
-                                "header": "Particulars",
+                                "header": "Account",
                                 //"binding": "ContactNumber",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
-                             {
-                                 "header": "Approved",
-                                 //"binding": "ContactNumber",
-                                 "align": "left",
-                                 "allowSorting": true,
-                                 "width": "2*"
-                             }
+                            {
+                                "header": "Lock",
+                                //"binding": "ContactNumber",
+                                "align": "center",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
                 ],
                 autoGenerateColumns: false,
-                //itemsSource: items,
+                //itemsSource: stockOuts,
                 isReadOnly: true,
                 frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,

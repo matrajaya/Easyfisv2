@@ -39,7 +39,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <h4 id="companyDetailLabel"></h4>
+                        <h4 id="itemDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary btn-sm" id=""><i class="fa fa-save"></i> Save</button>
@@ -48,61 +48,66 @@
                 </div>
                 @*<hr />*@
                 <div class="well">
-                    <form id="companyDetailForm">
+                    <form id="itemDetailForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Item Code:</label>
-                                    <input type="text" class="form-control input-sm" id="">
+                                    <label>Code:</label>
+                                    <input type="text" class="form-control input-sm" id="" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Manual Code:</label>
+                                    <input type="text" class="form-control input-sm" id="" />
                                 </div>
                                 <div class="form-group">
                                     <label>Item:</label>
                                     <textarea class="form-control textarea-custom" id=""></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>Barcode:</label>
-                                    <input type="text" class="form-control input-sm" id="">
+                                    <label>Item Group:</label>
+                                    <input type="text" class="form-control input-sm" id="" /> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
                                     <label>Category:</label>
-                                    <input type="text" class="form-control input-sm" id="">
+                                    <input type="text" class="form-control input-sm" id="" /> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
                                     <label>Unit:</label>
-                                    <input type="text" class="form-control input-sm" id="" > <!-- Drop down list ni-->
+                                    <input type="text" class="form-control input-sm" id="" />  <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
-                                    <label>Remarks:</label>
-                                    <input type="text" class="form-control input-sm" id="">
+                                    <label>Price:</label>
+                                    <input type="text" class="form-control input-sm" id="" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Particulars:</label>
+                                    <textarea class="form-control textarea-custom" id=""></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Purchase Tax:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    <label>Input Tax:</label>
+                                    <input type="text" class="form-control input-sm" id="" /> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
-                                    <label>Sales Tax:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    <label>Output Tax:</label>
+                                    <input type="text" class="form-control input-sm" id="" /> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
-                                    <label>Default Account:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    <label>Withholding Tax:</label>
+                                    <input type="text" class="form-control input-sm" id="" /> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
-                                    <label>Purchase Account:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    <label>Inventory:</label><br />
+                                    <input type="checkbox" id="" />
                                 </div>
                                 <div class="form-group">
-                                    <label>Sales Account:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    <label>Old Manual Code:</label>
+                                    <input type="text" class="form-control input-sm" id="" />
                                 </div>
                                 <div class="form-group">
-                                    <label>Cost Account:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" id="JVL_IsClear" class="requiredJournalVoucherLine" /> <span> Is Asset (e.g., Inventory, Fixed Asset, etc.)</span>
+                                    <label>Manual Cost:</label>
+                                    <input type="text" class="form-control input-sm" id="" />
                                 </div>
                             </div>
                         </div>
@@ -111,6 +116,8 @@
             </div>
         </section>
 
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->

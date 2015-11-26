@@ -47,12 +47,12 @@
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search Stocks">
+                                <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search PO">
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                            <a href="@Url.Action("PurchaseOrderDetail", "Software", new { BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</a>
                         </div>
                     </div>
                     <br />
@@ -82,6 +82,9 @@
                 </div>
             </div>
         </section>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->
@@ -96,7 +99,7 @@
         // Global Variables
         // ================
         var POGrid;
-
+        var POs;
 
         $(document).ready(function () {
             $.ajax({
@@ -136,22 +139,22 @@
                 "hideMethod": "fadeOut"
             }
 
-            companies = new wijmo.collections.CollectionView();
-            companies.canFilter = true;
-            companies.pageSize = 15;
+            POs = new wijmo.collections.CollectionView();
+            POs.canFilter = true;
+            POs.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                companies.refresh();
+                POs.refresh();
             });
-            companies.filter = function (item) {
-                return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+            POs.filter = function (item) {
+                return !filterText || (item.PO.toLowerCase().indexOf(filterText) > -1);
             }
-            companies.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsCompany();
+            POs.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsPO();
             });
-            companies.currentChanged.addHandler(function (sender, args) {
+            POs.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
@@ -178,14 +181,14 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "PO Date",
+                                "header": "PO Number",
                                 //"binding": "Company",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*",
                             },
                             {
-                                "header": "PO Number",
+                                "header": "PO Date",
                                 //"binding": "Address",
                                 "align": "left",
                                 "allowSorting": true,
@@ -199,22 +202,29 @@
                                 "width": "2*"
                             },
                             {
-                                "header": "Particulars",
+                                "header": "Amount",
                                 //"binding": "ContactNumber",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
-                             {
-                                 "header": "Approved",
-                                 //"binding": "ContactNumber",
-                                 "align": "left",
-                                 "allowSorting": true,
-                                 "width": "2*"
-                             }
+                            {
+                                "header": "Close",
+                                //"binding": "ContactNumber",
+                                "align": "center",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Lock",
+                                //"binding": "ContactNumber",
+                                "align": "center",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
                 ],
                 autoGenerateColumns: false,
-                //itemsSource: items,
+                //itemsSource: POs,
                 isReadOnly: true,
                 frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,

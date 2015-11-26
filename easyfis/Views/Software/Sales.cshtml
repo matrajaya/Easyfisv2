@@ -10,7 +10,7 @@
     <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
-    <title>Software Dashboard</title>
+    <title>Sales</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Font-Awesome/css")
@@ -52,7 +52,7 @@
                         </div>
                         <div class="col-lg-8" align="right">
                             <a href="@Url.Action("SalesDetail", "Software", new { BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                         </div>
                     </div>
                     <br />
@@ -83,6 +83,8 @@
             </div>
         </section>
 
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->
@@ -96,7 +98,8 @@
         // ================
         // Global Variables
         // ================
-        var SalesGrid;
+        var sales;
+        var salesGrid;
 
 
         $(document).ready(function () {
@@ -137,28 +140,28 @@
                 "hideMethod": "fadeOut"
             }
 
-            companies = new wijmo.collections.CollectionView();
-            companies.canFilter = true;
-            companies.pageSize = 15;
+            sales = new wijmo.collections.CollectionView();
+            sales.canFilter = true;
+            sales.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                companies.refresh();
+                sales.refresh();
             });
-            companies.filter = function (item) {
-                return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+            sales.filter = function (item) {
+                return !filterText || (item.Sale.toLowerCase().indexOf(filterText) > -1);
             }
-            companies.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsCompany();
+            sales.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsSale();
             });
-            companies.currentChanged.addHandler(function (sender, args) {
+            sales.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
             // Flex Grid
-            SalesGrid = new wijmo.grid.FlexGrid('#SalesGrid');
-            SalesGrid.initialize({
+            salesGrid = new wijmo.grid.FlexGrid('#SalesGrid');
+            salesGrid.initialize({
                 columns: [
                             {
                                 "header": "Edit",
@@ -179,14 +182,14 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Si Number",
+                                "header": "SI Number",
                                 //"binding": "Company",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*",
                             },
                             {
-                                "header": "Si Date",
+                                "header": "SI Date",
                                 //"binding": "Address",
                                 "align": "left",
                                 "allowSorting": true,
@@ -206,23 +209,30 @@
                                 "allowSorting": true,
                                 "width": "2*"
                             },
-                             {
-                                 "header": "Doc Reference",
-                                 //"binding": "ContactNumber",
-                                 "align": "left",
-                                 "allowSorting": true,
-                                 "width": "2*"
-                             },
+                            {
+                                "header": "Doc Reference",
+                                //"binding": "ContactNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
                             {
                                 "header": "Amount",
                                 //"binding": "ContactNumber",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
+                            },
+                            {
+                                "header": "Lock",
+                                //"binding": "ContactNumber",
+                                "align": "center",
+                                "allowSorting": true,
+                                "width": "2*"
                             }
                 ],
                 autoGenerateColumns: false,
-                //itemsSource: items,
+                //itemsSource: sales,
                 isReadOnly: true,
                 frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
@@ -230,7 +240,7 @@
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
 
-            SalesGrid.trackChanges = true;
+            salesGrid.trackChanges = true;
         });
 
     </script>

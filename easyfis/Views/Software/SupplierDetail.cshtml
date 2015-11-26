@@ -39,7 +39,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <h4 id="companyDetailLabel"></h4>
+                        <h4 id="supplierDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary btn-sm" id=""><i class="fa fa-save"></i> Save</button>
@@ -48,35 +48,21 @@
                 </div>
                 @*<hr />*@
                 <div class="well">
-                    <form id="companyDetailForm">
+                    <form id="supplierDetailForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Supplier Code:</label>
-                                    <input type="text" class="form-control input-sm" id="">
+                                    <label>Code:</label>
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Auto Generated No ni-->
                                 </div>
                                 <div class="form-group">
                                     <label>Supplier:</label>
                                     <input type="text" class="form-control input-sm" id="">
                                 </div>
                                 <div class="form-group">
-                                    <label>Address:</label>
-                                    <textarea class="form-control textarea-custom" id=""></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label>Contact Number:</label>
-                                    <input type="text" class="form-control input-sm" id="">
-                                </div>
-                                <div class="form-group">
-                                    <label>Contact Person:</label>
+                                    <label>Supplier Group:</label>
                                     <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
                                 </div>
-                                <div class="form-group">
-                                    <label>Email Address:</label>
-                                    <input type="email" class="form-control input-sm" id="">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Account:</label>
                                     <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
@@ -86,8 +72,26 @@
                                     <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
+                                    <label>Address:</label>
+                                    <textarea class="form-control textarea-custom" id=""></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Contact Number:</label>
+                                    <input type="text" class="form-control input-sm" id="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact Person:</label>
+                                    <input type="text" class="form-control input-sm" id="">
+                                </div>
+                                <div class="form-group">
                                     <label>TIN:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    <input type="text" class="form-control input-sm" id="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Particulars:</label>
+                                    <textarea class="form-control textarea-custom" id=""></textarea>
                                 </div>
                             </div>
                         </div>
@@ -96,6 +100,8 @@
             </div>
         </section>
 
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->

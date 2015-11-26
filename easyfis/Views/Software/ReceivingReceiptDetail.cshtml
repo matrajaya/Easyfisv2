@@ -11,7 +11,7 @@
     <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
-    <title>Sales Detail</title>
+    <title>Receiving Receipt Detail</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Font-Awesome/css")
@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         @*<h4><img src='~/images/Icons/iCompany.png'> Company - Detail</h4>*@
-                        <h4><i class="fa fa-bar-chart fa-2x"></i> Sales Detail</h4>
+                        <h4><i class="fa fa-file-text fa-2x"></i>  Receiving Receipt Detail</h4>
                         <br />
                         <div class="div_Current_Page">
                             @*<label id="currentBranchName"></label>*@
@@ -40,16 +40,16 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <h4 id="salesDetailLabel"></h4>
+                        <h4 id="RRDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</button>
-                        <button onclick="window.location.href = '@Url.Action("Sales", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</button>
+                        <button onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
                 <div class="well">
-                    <form id="salesDetailForm">
+                    <form id="RRDetailForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -57,11 +57,11 @@
                                     <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
-                                    <label>SI Number:</label>
+                                    <label>RR Number:</label>
                                     <input type="text" class="form-control input-sm" id="">
                                 </div>
                                 <div class="form-group">
-                                    <label>SI Date:</label>
+                                    <label>RR Date:</label>
                                     <input type="text" class="form-control input-sm" id="">
                                 </div>
                                 <div class="form-group">
@@ -69,7 +69,7 @@
                                     <input type="text" class="form-control input-sm" id="">
                                 </div>
                                 <div class="form-group">
-                                    <label>Customer:</label> 
+                                    <label>Supplier:</label>
                                     <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
@@ -83,24 +83,24 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Manual SI Number:</label>
-                                    <input type="text" class="form-control input-sm requiredCompany" id="">
+                                    <label>Manual RR Number:</label>
+                                    <input type="text" class="form-control input-sm" id="">
                                 </div>
                                 <div class="form-group">
-                                    <label>Sold By:</label>
-                                    <input type="text" class="form-control input-sm requiredCompany" id=""> <!-- Drop down list ni-->
+                                    <label>Received By:</label><br />
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
                                     <label>Prepared By:</label>
-                                    <input type="text" class="form-control input-sm requiredCompany" id=""> <!-- Drop down list ni-->
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
                                     <label>Checked By:</label>
-                                    <input type="text" class="form-control input-sm requiredCompany" id=""> <!-- Drop down list ni-->
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
                                 </div>
                                 <div class="form-group">
                                     <label>Approved By:</label>
-                                    <input type="text" class="form-control input-sm requiredCompany" id=""> <!-- Drop down list ni-->
+                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
                                 </div>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
 
-        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Sales", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Sales</a> ' + ' > Sales Detail';
+        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
 
     </script>
 </body>

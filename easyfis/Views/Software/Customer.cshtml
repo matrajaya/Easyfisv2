@@ -82,6 +82,9 @@
                 </div>
             </div>
         </section>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->
@@ -95,6 +98,7 @@
         // ================
         // Global Variables
         // ================
+        var customers;
         var customerGrid;
 
 
@@ -136,22 +140,22 @@
                 "hideMethod": "fadeOut"
             }
 
-            companies = new wijmo.collections.CollectionView();
-            companies.canFilter = true;
-            companies.pageSize = 15;
+            customers = new wijmo.collections.CollectionView();
+            customers.canFilter = true;
+            customers.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                companies.refresh();
+                customers.refresh();
             });
-            companies.filter = function (item) {
-                return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+            customers.filter = function (item) {
+                return !filterText || (item.Customer.toLowerCase().indexOf(filterText) > -1);
             }
-            companies.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsCompany();
+            customers.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsCustomer();
             });
-            companies.currentChanged.addHandler(function (sender, args) {
+            customers.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
@@ -195,6 +199,20 @@
                                 "header": "Contact Number",
                                 //"binding": "ContactNumber",
                                 "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Group",
+                                //"binding": "ContactNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Lock",
+                                //"binding": "ContactNumber",
+                                "align": "center",
                                 "allowSorting": true,
                                 "width": "2*"
                             }

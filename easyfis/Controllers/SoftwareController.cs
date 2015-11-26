@@ -40,7 +40,19 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult PurchaseOrderDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult ReceivingReceipt()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult ReceivingReceiptDetail()
         {
             return View();
         }
@@ -130,7 +142,19 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult StockInDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult StockOut()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult StockOutDetail()
         {
             return View();
         }
