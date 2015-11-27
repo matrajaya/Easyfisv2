@@ -53,71 +53,81 @@
                         <button class="btn btn-primary btn-sm" id="cmdSaveAndLockJournalVoucher" onclick="cmdJournalVoucherSaveAndLockButton_OnClick()"><i class="fa fa-save"></i> Save Journal</button>
                         <!-- Save Button to Add JV -->
                         <button class="btn btn-primary btn-sm" id="cmdSaveJournalVoucher" onclick="cmdJournalVoucherSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick="cmdJournalVoucherEditEnableButton_OnClick()"><i class="fa fa-pencil"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="cmdEditJournalVoucher" onclick="cmdJournalVoucherEditEnableButton_OnClick()"><i class="fa fa-edit"></i> Edit</button>
                         <button onclick="window.location.href ='@Url.Action("JournalVoucherPDF", "Software", new { JVId = JVId })'" class="btn btn-primary btn-sm" id="cmdPreviewJournalVoucher"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href ='@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseJournalVoucher"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
-                <div class="well">
-                    <form id="journalVoucherDetailForm">
+                <div class="jumbotron">
+                    <form class="form-horizontal" role="form">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Branch:</label>
-                                    <div id="branch_Id" class="comboBox-wide"></div>
-
-                                    <input type="hidden" id="branch_Id_data" class="requiredJournalVoucher" required />
-                                    <input type="hidden" id="branch_selectedValue" />
+                                    <label class="control-label col-sm-2">Branch:</label>
+                                    <div class="col-sm-6">
+                                        <div id="branch_Id" class="comboBox-wide"></div>
+                                        <input type="hidden" id="branch_Id_data" class="requiredJournalVoucher" />
+                                        <input type="hidden" id="branch_selectedValue" />
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>JV Number:</label>
-                                    <input type="text" id="journalVoucher_No_Display" class="form-control input-sm">
-                                    <input type="hidden" id="journalVoucher_No">
+                                    <label class="control-label col-sm-2">JV Number:</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" id="journalVoucher_No_Display" class="form-control input-sm">
+                                        <input type="hidden" id="journalVoucher_No">
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>JV Date:</label>
-
-                                    <div id="journalVoucher_Date" class="comboBox-wide"></div>
-                                    <input type="hidden" id="journalVoucher_date_Data" class="input-sm requiredJournalVoucher" value="@currentDate" required />
+                                    <label class="control-label col-sm-2">JV Date:</label>
+                                    <div class="col-sm-6">
+                                        <div id="journalVoucher_Date" class="comboBox-wide"></div>
+                                        <input type="hidden" id="journalVoucher_date_Data" class="input-sm requiredJournalVoucher" value="@currentDate" required />
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Manual JV Number:</label>
-                                    <input type="text" id="manual_JournalVoucher_No" class="form-control input-sm requiredJournalVoucher" />
+                                    <label class="control-label col-sm-2">Manual JV Number:</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" id="manual_JournalVoucher_No" class="form-control input-sm requiredJournalVoucher" />
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Particulars:</label>
-                                    <textarea type="text" id="journalVoucher_Particulars" class="form-control textarea-custom requiredJournalVoucher"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Prepared by:</label>
-                                    <div id="preparedByUserId" class="comboBox-wide"></div>
-
-                                    <input type="hidden" id="preparedByUserId_Data" class="requiredJournalVoucher" required />
-                                    <input type="hidden" id="preparedByUserId_selectedValue" />
-                                    <input type="hidden" id="userId_data" value="@userId" />
+                                    <label class="control-label col-sm-2">Particulars:</label>
+                                    <div class="col-sm-10">
+                                        <textarea type="text" id="journalVoucher_Particulars" class="form-control textarea-custom requiredJournalVoucher"></textarea>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Checked by:</label>
-                                    <div id="checkedByUserId" class="comboBox-wide"></div>
-
-                                    <input type="hidden" id="checkedByUserId_Data" class="requiredJournalVoucher" required />
-                                    <input type="hidden" id="checkedByUserId_selectedValue" />
+                                    <label class="control-label col-sm-2">Prepared by:</label>
+                                    <div class="col-sm-6">
+                                        <div id="preparedByUserId" class="comboBox-wide"></div>
+                                        <input type="hidden" id="preparedByUserId_Data" class="requiredJournalVoucher" required />
+                                        <input type="hidden" id="preparedByUserId_selectedValue" />
+                                        <input type="hidden" id="userId_data" value="@userId" />
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Approved by:</label>
-                                    <div id="approvedByUserId" class="comboBox-wide"></div>
-
-                                    <input type="hidden" id="approvedByUserId_Data" class="requiredJournalVoucher" required />
-                                    <input type="hidden" id="approvedByUserId_selectedValue" />
+                                    <label class="control-label col-sm-2">Checked by:</label>
+                                    <div class="col-sm-6">
+                                        <div id="checkedByUserId" class="comboBox-wide"></div>
+                                        <input type="hidden" id="checkedByUserId_Data" class="requiredJournalVoucher" required />
+                                        <input type="hidden" id="checkedByUserId_selectedValue" />
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="hidden" id="JV_IsLocked">
-
-                                    <input type="hidden" id="JV_IsLocked_defaultTrue">
-                                    <input type="hidden" id="JV_IsLocked_defaultFalse">
+                                    <label class="control-label col-sm-2">Approved by:</label>
+                                    <div class="col-sm-6">
+                                        <div id="approvedByUserId" class="comboBox-wide"></div>
+                                        <input type="hidden" id="approvedByUserId_Data" class="requiredJournalVoucher" required />
+                                        <input type="hidden" id="approvedByUserId_selectedValue" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-10">
+                                        <input type="hidden" id="JV_IsLocked">
+                                        <input type="hidden" id="JV_IsLocked_defaultTrue">
+                                        <input type="hidden" id="JV_IsLocked_defaultFalse">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1288,10 +1298,10 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             journalVoucherLines.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='cmdJournalVoucherLineEditButton' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='cmdJournalVoucherLineEditButton' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' id = 'cmdJournalVoucherLineDeleteButton' onclick='cmdJournalVoucherLineDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                EditIdDisabled: "<button class='btn btn-primary btn-xs btn-block' id='cmdJournalVoucherLineEditButtonDisabled' disabled><i class='fa fa-pencil'></i> Edit</button>",
-                                DeleteIdDisabled: "<button class='btn btn-danger btn-xs btn-block' id = 'cmdJournalVoucherLineDeleteButtonDisabled' disabled><i class='fa fa-trash'></i> Delete</button>",                                
+                                EditIdDisabled: "<button class='btn btn-primary btn-xs btn-block' id='cmdJournalVoucherLineEditButtonDisabled' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteIdDisabled: "<button class='btn btn-danger btn-xs btn-block' id = 'cmdJournalVoucherLineDeleteButtonDisabled' disabled><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 JVId: Results[i]["JVId"],
                                 BranchId: Results[i]["BranchId"],
@@ -1740,7 +1750,7 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             journals.push({
-                                //EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
+                                //EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                                 //DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdJournalVoucherLineDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 JournalDate: Results[i]["JournalDate"],
@@ -2053,7 +2063,7 @@
                                 JVNumber: Results.JVNumber
                             });
                         }
-                        var JV_Number = parseInt(Results.JVNumber);saveandupdatejournalvoucher
+                        var JV_Number = parseInt(Results.JVNumber);
                         var JV_Number_PlusOne = 0000000001;
                         var JV_Num_Results = JV_Number + JV_Number_PlusOne;
                         //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');

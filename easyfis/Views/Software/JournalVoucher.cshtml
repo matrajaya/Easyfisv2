@@ -176,7 +176,7 @@
                 if (Results.length > 0) {
                     for (i = 0; i < Results.length; i++) {
                         journalVouchers.push({
-                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
+                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                             DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdJournalVoucherDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                             Id: Results[i]["Id"],
                             BranchId: Results[i]["BranchId"],
@@ -492,7 +492,7 @@
             autoGenerateColumns: false,
             itemsSource: journalVouchers,
             isReadOnly: true,
-            frozenColumns: 2,
+            //frozenColumns: 2,
             autoSizeMode: wijmo.grid.AutoSizeMode.Both,
             allowDragging: wijmo.grid.AllowDragging.None,
             selectionMode: wijmo.grid.SelectionMode.Row

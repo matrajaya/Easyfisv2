@@ -43,55 +43,75 @@
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary btn-sm" id=""><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id=""><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id=""><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Supplier", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
-                <div class="well">
-                    <form id="supplierDetailForm">
+                <div class="jumbotron">
+                    <form class="form-horizontal" role="form">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Code:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Auto Generated No ni-->
+                                    <label class="control-label col-sm-2">Code:</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control input-sm" id="" /> <!-- Auto Generated No ni-->
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Supplier:</label>
-                                    <input type="text" class="form-control input-sm" id="">
+                                    <label class="control-label col-sm-2">Supplier:</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control input-sm" id="" />
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Supplier Group:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    <label class="control-label col-sm-2">Supplier Group:</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control input-sm" id="" />
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Account:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    <label class="control-label col-sm-2">Account:</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Term:</label>
-                                    <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    <label class="control-label col-sm-2">Term:</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Address:</label>
-                                    <textarea class="form-control textarea-custom" id=""></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Contact Number:</label>
-                                    <input type="text" class="form-control input-sm" id="">
+                                    <label class="control-label col-sm-2">Address:</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control textarea-custom" id=""></textarea>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Contact Person:</label>
-                                    <input type="text" class="form-control input-sm" id="">
+                                    <label class="control-label col-sm-2">Contact Number:</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control input-sm" id="">
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>TIN:</label>
-                                    <input type="text" class="form-control input-sm" id="">
+                                    <label class="control-label col-sm-2">Contact Person:</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control input-sm" id="">
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Particulars:</label>
-                                    <textarea class="form-control textarea-custom" id=""></textarea>
+                                    <label class="control-label col-sm-2">TIN:</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control input-sm" id="">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-2">Particulars:</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control textarea-custom" id=""></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
