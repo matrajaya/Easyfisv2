@@ -45,7 +45,7 @@
                 <div class="row">
                     <div class="col-md-5">
                         @*<h4 id="journalVoucherDetailLabel"></h4>*@
-                        <label>Status: </label> <span id="status_LockedOrUnlocked" class="branch-name-custom-style"></span> <span id="status_LockedOrUnlocked_JVLEmpty" style="color: red"></span>
+                        <label>Status: </label> <span id="status_LockedOrUnlocked"></span> <span id="status_LockedOrUnlocked_JVLEmpty" style="color: red"></span>
                     </div>
                     <div class="col-md-7" align="right">
                         <button class="btn btn-primary btn-sm" id="cmdJournalJournalVoucher" onclick="cmdJournalVoucherJournalButton_OnClick()"><i class="fa fa-book"></i> Journal</button>
@@ -80,14 +80,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-2">JV Date:</label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-4">
                                         <div id="journalVoucher_Date" class="comboBox-wide"></div>
                                         <input type="hidden" id="journalVoucher_date_Data" class="input-sm requiredJournalVoucher" value="@currentDate" required />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-2">Manual JV Number:</label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-3">
                                         <input type="text" id="manual_JournalVoucher_No" class="form-control input-sm requiredJournalVoucher" />
                                     </div>
                                 </div>
@@ -230,9 +230,9 @@
                                 <dd><input type="text" id="JVL_DebitAmount" class="form-control input-sm requiredJournalVoucherLine" /></dd>
                                 <dt>Credit Amount:</dt>
                                 <dd><input type="text" id="JVL_CreditAmount" class="form-control input-sm requiredJournalVoucherLine" /></dd>
-                                <dt>APRR:</dt>
+                                <dt>RR No:</dt>
                                 <dd><input type="text" id="JVL_APRRId" class="form-control input-sm requiredJournalVoucherLine" /></dd>
-                                <dt>ARSI:</dt>
+                                <dt>SI No:</dt>
                                 <dd><input type="text" id="JVL_ARSIId" class="form-control input-sm requiredJournalVoucherLine" /></dd>
                                 <dt>Is Clear:</dt>
                                 <dd><input type="checkbox" id="JVL_IsClear" class="requiredJournalVoucherLine" /></dd>
@@ -509,7 +509,7 @@
                         $("#cmdJournalJournalVoucher").prop("disabled", false);
                         $("#cmdPreviewJournalVoucher").prop("disabled", false);
                         $('#cmdSaveAndLockJournalVoucher').prop('disabled', true);
-                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-lock"></i> Saved and Locked';
+                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-lock"></i> Saved';
 
                         $("#cmdSaveJournalVoucher").prop("disabled", true);
                         $("#cmdEditJournalVoucher").prop("disabled", false);
@@ -621,7 +621,7 @@
                         $("#cmdJournalJournalVoucher").prop("disabled", true);
                         $("#cmdPreviewJournalVoucher").prop("disabled", true);
                         $('#cmdSaveAndLockJournalVoucher').prop('disabled', false);
-                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-unlock"></i> Not Lock ';
+                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-unlock"></i> Not Save ';
                         $("#cmdEditJournalVoucher").prop("disabled", true);
                         $("#cmdSaveJournalVoucher").prop("disabled", false);
                         //document.getElementById('journalVoucher_No').disabled = false;
@@ -1334,7 +1334,7 @@
                         document.getElementById('journalVoucherLineNameLabel').innerHTML = 'Journal Voucher Line List';
                         $('#cmdSaveJournalVoucher').hide();
                     } else {
-                        document.getElementById('status_LockedOrUnlocked_JVLEmpty').innerHTML = ' - Cannot save journal if JV Line is empty.';
+                        document.getElementById('status_LockedOrUnlocked_JVLEmpty').innerHTML = ' - Cant save journal if JV Line is empty.';
                         $('#cmdSaveAndLockJournalVoucher').hide();
                         $("#cmdJournalJournalVoucher").prop("disabled", true);
                     }
