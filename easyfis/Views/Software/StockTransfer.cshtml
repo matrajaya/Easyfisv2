@@ -95,6 +95,7 @@
         // ================
         // Global Variables
         // ================
+        var stockTransfers;
         var stockTransferGrid;
 
 
@@ -136,22 +137,22 @@
                 "hideMethod": "fadeOut"
             }
 
-            companies = new wijmo.collections.CollectionView();
-            companies.canFilter = true;
-            companies.pageSize = 15;
+            stockTransfers = new wijmo.collections.CollectionView();
+            stockTransfers.canFilter = true;
+            stockTransfers.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                companies.refresh();
+                stockTransfers.refresh();
             });
-            companies.filter = function (item) {
+            stockTransfers.filter = function (item) {
                 return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
             }
-            companies.collectionChanged.addHandler(function (sender, args) {
+            stockTransfers.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsCompany();
             });
-            companies.currentChanged.addHandler(function (sender, args) {
+            stockTransfers.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
@@ -178,38 +179,45 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Transfer Date",
+                                "header": "ST Number",
                                 //"binding": "Company",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*",
                             },
                             {
-                                "header": "Transfer Number",
+                                "header": "ST Date",
                                 //"binding": "Address",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
-                                "header": "Particulars",
+                                "header": "From Branch",
                                 //"binding": "ContactNumber",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
-                             {
-                                 "header": "Approved",
-                                 //"binding": "ContactNumber",
-                                 "align": "left",
-                                 "allowSorting": true,
-                                 "width": "2*"
-                             }
+                            {
+                                "header": "To Branch",
+                                //"binding": "ContactNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Lock",
+                                //"binding": "ContactNumber",
+                                "align": "center",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
                 ],
                 autoGenerateColumns: false,
                 //itemsSource: items,
                 isReadOnly: true,
-                frozenColumns: 2,
+                //frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row

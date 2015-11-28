@@ -227,16 +227,39 @@ a.sidebar-menu-link {
 
     a.sidebar-menu-link:hover {
         color: #FFFFFF;
-        background-color: #003366;
+        background-color: #0f3f6f;
         /*transition: background-color 1s ease 0s;*/
         text-decoration: none;
     }
 
     a.sidebar-menu-link:focus {
         color: #FFFFFF;
-        background-color: black;
+        background-color: #003366;
         text-decoration: none;
     }
+
+a.menu-link-custom {
+    background-color: #00265a;
+    display: block;
+    padding: 13px;
+    color: #fff;
+    padding: 13px;
+}
+
+    a.menu-link-custom:hover {
+        background-color: #000d40;
+    }
+
+     a.menu-link-custom:focus {
+        background-color: #000d40;
+    }
+
+.panel-custom-menu {
+    background-color: #194775;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
 
 .wrapper {
     -webkit-transition: -webkit-transform 0.3s;
@@ -287,6 +310,10 @@ a.sidebar-menu-link {
     display: block;
     padding: 13px;
     color: #fff;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    padding-right: 13px;
+    padding-left: 30px;
 }
 
 .c-menu--push-left .c-menu__close {
@@ -417,10 +444,7 @@ a:hover.profile-name {
     margin-top: 15px;
     border: 0 !important;
     border-radius: 0 !important;
-    padding-top: 35px;
-    padding-bottom: 15px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 30px;
 }
 
 .comboBox-wide {
@@ -447,11 +471,11 @@ a.currentPageLinkCustom {
     color: #000000;
 }
 
-a.currentPageLinkCustom:hover {
-    text-decoration: none;
-    color: #3385FF;
-    margin: 0;
-}
+    a.currentPageLinkCustom:hover {
+        text-decoration: none;
+        color: #3385FF;
+        margin: 0;
+    }
 
 .logoStyle {
     margin-top: 4px;
@@ -472,7 +496,7 @@ label {
 }
 
 
-@media (min-width: 768px) {
+/*@media (min-width: 768px) {
     .navbar-form {
         margin-top: 21px;
         margin-bottom: 21px;
@@ -581,6 +605,12 @@ label {
 .dropdown-menu > li:last-child > a {
     border-bottom: 0 none;
     border-radius: 0 0 10px 10px;
+}*/
+
+.dropdown-custom {
+    width: 100%;
+    border-radius: 0 !important;
+    background-color: #194775;
 }
 
 .sidebar-menu-close {
@@ -588,9 +618,13 @@ label {
 }
 
 .well {
-    padding: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 50px;
+    padding-bottom: 30px;
     margin-top: 20px;
     border: 0 !important;
+    border-radius: 0 !important;
 }
 
 .div_Current_Page {
@@ -627,6 +661,7 @@ a:hover.branchNameStyle {
     font-size: 13px;
     box-shadow: 8px 8px 7px #888888;
 }
+
 .panel-green-footer {
     color: #50ab50;
 }
@@ -650,8 +685,9 @@ a:hover.branchNameStyle {
     font-size: 13px;
     box-shadow: 8px 8px 7px #888888;
 }
+
 .panel-blue-footer {
-    color : #3b81be;
+    color: #3b81be;
 }
 
 .panel-blue:hover {
@@ -677,8 +713,9 @@ a:hover.branchNameStyle {
     font-size: 13px;
     box-shadow: 8px 8px 7px #888888;
 }
+
 .panel-orange-footer {
-    color : #d56d38;
+    color: #d56d38;
 }
 
 .panel-orange:hover {
@@ -694,4 +731,8 @@ a:hover.branchNameStyle {
 .pill-custom {
     background-color: #f5f2f2;
     border-radius: 5px;
+}
+
+.btn-group-custom {
+    margin-top: 5px;
 }
