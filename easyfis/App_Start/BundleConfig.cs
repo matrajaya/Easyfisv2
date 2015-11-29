@@ -85,7 +85,8 @@ namespace easyfis
                      "~/Scripts/tab.js",
                      "~/Scripts/sidebar-menu.js",
                      "~/Scripts/push-left-menu.js",
-                     "~/Scripts/toastr.js"));
+                     "~/Scripts/toastr.js",
+                    "~/Scripts/style2.js"));
 
             // =============
             // WIJMO Scripts
