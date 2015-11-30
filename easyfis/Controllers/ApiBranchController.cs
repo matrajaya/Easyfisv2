@@ -5,12 +5,29 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
     public class ApiBranchController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
+        // ==============================================
+        // Get the Max Journal Voucher Number in Database
+        // ==============================================
+        public String getMaxBranchCode()
+        {
+            var maxJVNo = (from d in db.MstBranches select d.BranchCode).Max();
+            Debug.WriteLine(maxJVNo);
+
+            if (maxJVNo == null)
+            {
+                maxJVNo = "0";
+            }
+
+            return maxJVNo;
+        }
 
         // ===========
         // LIST Branch
@@ -38,6 +55,35 @@ namespace easyfis.Controllers
                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                };
             return branches.ToList();
+        }
+
+        // ===========================
+        // LIST Branch get Last Record
+        // ===========================
+        [Route("api/listBranchLast")]
+        public Models.MstBranch GetLastBranch()
+        {
+            var branches = from d in db.MstBranches.OrderByDescending(d => d.BranchCode)
+                           select new Models.MstBranch
+                           {
+                               Id = d.Id,
+                               CompanyId = d.CompanyId,
+                               Company = d.MstCompany.Company,
+                               BranchCode = d.BranchCode,
+                               Branch = d.Branch,
+                               Address = d.Address,
+                               ContactNumber = d.ContactNumber,
+                               TaxNumber = d.TaxNumber,
+                               IsLocked = d.IsLocked,
+                               CreatedById = d.CreatedById,
+                               CreatedBy = d.MstUser.FullName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                               UpdatedById = d.UpdatedById,
+                               UpdatedBy = d.MstUser1.FullName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                           };
+
+            return (Models.MstBranch)branches.FirstOrDefault();
         }
 
         // =================
@@ -113,11 +159,17 @@ namespace easyfis.Controllers
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
 
+                var getMax = Convert.ToInt32(getMaxBranchCode());
+                var sumOfMaxBranchCodePlusOne = getMax + 1;
+
+                var numberZeroSequenceOfBranchCodeGetMaxNo = String.Format("{0:000}", sumOfMaxBranchCodePlusOne);
+
                 Data.MstBranch newBranch = new Data.MstBranch();
 
                 newBranch.CompanyId = branch.CompanyId;
                 newBranch.Branch = branch.Branch;
-                newBranch.BranchCode = branch.BranchCode;
+                //newBranch.BranchCode = branch.BranchCode;
+                newBranch.BranchCode = numberZeroSequenceOfBranchCodeGetMaxNo;
                 newBranch.Address = branch.Address;
                 newBranch.ContactNumber = branch.ContactNumber;
                 newBranch.TaxNumber = branch.TaxNumber;

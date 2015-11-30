@@ -43,7 +43,7 @@
                                     <input type="hidden" id="branch_Id_data" />
                                     <input type="hidden" id="currentBranchName" />
                                     @*<input type="hidden" id="branch_Id_selectedValue" />*@
-                                    <button class="btn btn-primary btn-sm" id="cmdGoGetBranch" onclick="cmdGoButton_OnClick()"><i class="fa fa-arrow-circle-right"></i> Go</button>
+                                    <button class="btn btn-primary btn-sm" id="cmdGoGetBranch" onclick="cmdGoButton_OnClick()"><i class="fa fa-check"></i> OK</button>
                                 </div>
                             </div>
                         </div>
@@ -283,7 +283,28 @@
                             BranchBranch: results[i]["Branch"]
                         });
                     }
-                    createCboBranch(branches);
+
+                    $.ajax({
+                        url: '/api/listBranchById/' + @branchId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            if (results.length > 0) {
+                                branches.push({
+                                    BranchId: results.Id,
+                                    BranchBranch: results.Branch
+                                });
+                            }
+                            //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
+                            document.getElementById('currentBranchName').value = results.Branch;
+                        }
+                    });
+
+                    setTimeout(function() {
+                        createCboBranch(branches);
+                    }, 200);
                 }
             }
         }).fail(function (xhr, textStatus, err) {
@@ -367,24 +388,6 @@
     // On Load Page
     // ============
     $(document).ready(function () {
-        $.ajax({
-            url: '/api/listBranchById/' + @branchId,
-            cache: false,
-            type: 'GET',
-            contentType: 'application/json; charset=utf-8',
-            data: {},
-            success: function (results) {
-                if (results.length > 0) {
-                    branches.push({
-                        BranchId: results.Id,
-                        BranchBranch: results.Branch
-                    });
-                }
-                //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
-                document.getElementById('currentBranchName').value = results.Branch;
-            }
-        });
-
         document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Journal Voucher';
 
         $('#cmdGoGetBranch').prop('disabled', true);
@@ -458,7 +461,7 @@
                             "binding": "Particulars",
                             "align": "left",
                             "allowSorting": true,
-                            "width": "2*"
+                            "width": "4*"
                         },
                         //{
                         //    "header": "Prepared By",
@@ -486,7 +489,7 @@
                             "binding": "IsLocked",
                             "align": "center",
                             "allowSorting": true,
-                            "width": "2*"
+                            "width": "0.5*"
                         }
             ],
             autoGenerateColumns: false,

@@ -1,0 +1,108 @@
+﻿@{
+    var id = Request.QueryString["CompanyId"];
+    var branchId = Request.QueryString["BranchId"];
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
+
+    <!-- Title of the Page -->
+    <title>Users Detail</title>
+
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Font-Awesome/css")
+    @Styles.Render("~/Content/Software-css")
+    @Styles.Render("~/WijmoCSS/Wijmo-css")
+</head>
+<body>
+    <div id="wrapper" class="wrapper">
+        <!-- Header -->
+        @Html.Partial("_SoftwareHeader")
+
+        <!-- Section -->
+        <section>
+            <br /><br /><br />
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        @*<h4><img src='~/images/Icons/iCollect.png'> Company - Detail</h4>*@
+                        <h4><i class="fa fa-user fa-2x"></i> Users Detail</h4>
+                        <br />
+                        <div class="div_Current_Page">
+                            @*<label id="currentBranchName"></label>*@
+                            <span id="currentPage"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 id=""></h4>
+                    </div>
+                    <div class="col-md-6" align="right">
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("Users", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                    </div>
+                </div>
+                @*<hr />*@
+                <div class="well">
+                    <form class="form-horizontal" role="form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Username:</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control input-sm" id="" />  <!-- Drop down list ni-->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Password:</label>
+                                    <div class="col-sm-8">
+                                        <input type="password" class="form-control input-sm" id="" /> <!-- Auto Generated-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Fullname:</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control input-sm" id="" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Copy rights of:</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control input-sm" id="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
+    </div>
+
+    <!-- SideBar Menu -->
+    @Html.Partial("_SoftwareSideBarMenu")
+
+    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    <!-- Scripts JavaScripts -->
+    @Scripts.Render("~/Scripts/Software-js")
+    @Scripts.Render("~/WijmoScripts/Wijmo-js")
+    <script type="text/javascript">
+
+        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Users", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Users</a> ' + ' > Users Detail';
+
+    </script>
+</body>
+</html>

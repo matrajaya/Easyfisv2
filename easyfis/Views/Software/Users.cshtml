@@ -51,7 +51,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
+                            <a href="@Url.Action("UsersDetail", "Software", new { BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
                             <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                         </div>
                     </div>
@@ -82,6 +82,9 @@
                 </div>
             </div>
         </section>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->
@@ -95,6 +98,7 @@
         // ================
         // Global Variables
         // ================
+        var users;
         var userGrid;
 
 
@@ -136,22 +140,22 @@
                 "hideMethod": "fadeOut"
             }
 
-            companies = new wijmo.collections.CollectionView();
-            companies.canFilter = true;
-            companies.pageSize = 15;
+            users = new wijmo.collections.CollectionView();
+            users.canFilter = true;
+            users.pageSize = 15;
 
             var filterText = '';
             $('#InputFilter').keyup(function () {
                 filterText = this.value.toLowerCase();
-                companies.refresh();
+                users.refresh();
             });
-            companies.filter = function (item) {
+            users.filter = function (item) {
                 return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
             }
-            companies.collectionChanged.addHandler(function (sender, args) {
+            users.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsCompany();
             });
-            companies.currentChanged.addHandler(function (sender, args) {
+            users.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
             });
 
@@ -160,16 +164,41 @@
             userGrid.initialize({
                 columns: [
                             {
-                                "header": "Staff",
+                                "header": "Edit",
+                                //"binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                //"binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Username",
                                 //"binding": "Company",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*",
                             },
                             {
-                                "header": "Role",
+                                "header": "Fullname",
                                 //"binding": "Address",
                                 "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Lock",
+                                //"binding": "Address",
+                                "align": "center",
                                 "allowSorting": true,
                                 "width": "2*"
                             }  
@@ -177,7 +206,7 @@
                 autoGenerateColumns: false,
                 //itemsSource: items,
                 isReadOnly: true,
-                frozenColumns: 2,
+                //frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row

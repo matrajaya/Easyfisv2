@@ -12,6 +12,8 @@ namespace easyfis.Controllers
 {
     public class SoftwareController : UserAccountController
     {
+        private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
         // =============
         // GET: SOFTWARE
         // =============
@@ -65,6 +67,12 @@ namespace easyfis.Controllers
 
         [Authorize]
         public ActionResult Disbursement()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult DisbursementDetail()
         {
             return View();
         }
@@ -172,6 +180,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult StockTransferDetail()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult SystemTables()
         {
             return View();
@@ -196,9 +210,8 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult JournalVoucherPDF(int JVId)
+        public ActionResult JournalVoucherPDF(Int32 JVId)
         {
-            Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
             var journalVoucherId = (from d in db.TrnJournalVouchers where d.Id == JVId select d.Id).SingleOrDefault();
 
             // ==========================
@@ -243,7 +256,7 @@ namespace easyfis.Controllers
             document.Open();
 
             // Fonts Customization
-            Font headerFont = FontFactory.GetFont("Arial", 15, Font.BOLD);
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
             Font headerDetailFont = FontFactory.GetFont("Arial", 11);
             Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
             Font cellFont = FontFactory.GetFont("Arial", 11);
@@ -326,7 +339,7 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
-            
+
             decimal debitTotal = journals.Sum(d => d.DebitAmount);
             decimal creditTotal = journals.Sum(d => d.CreditAmount);
 
@@ -382,7 +395,7 @@ namespace easyfis.Controllers
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
             document.Add(tableFooter);
-            
+
             // Document End
             document.Close();
 
@@ -406,6 +419,115 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult CompanyPDF(Int32 BranchId, Int32 CompanyId)
+        {
+            var branchName = (from d in db.MstBranches where d.Id == BranchId select d.Branch).SingleOrDefault();
+
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var companyAddress = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var companyContactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+            var companyTIN = (from d in db.MstCompanies where d.Id == CompanyId select d.TaxNumber).SingleOrDefault();
+
+            // memorystrems
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 11);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase("Company Information Sheet", headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(branchName, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2 });
+            document.Add(tableHeader);
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // table main header
+            PdfPTable tableCompanyDetail = new PdfPTable(2);
+            float[] widthscellsCompanyDetail = new float[] { 20f, 100f };
+            tableCompanyDetail.SetWidths(widthscellsCompanyDetail);
+            tableCompanyDetail.WidthPercentage = 100;
+            tableCompanyDetail.AddCell(new PdfPCell(new Phrase("Company: ", columnFont)) { Border = 0, PaddingTop = 15f });
+            tableCompanyDetail.AddCell(new PdfPCell(new Phrase(companyName, cellFont)) { Border = 0, PaddingTop = 15f });
+            tableCompanyDetail.AddCell(new PdfPCell(new Phrase("Address: ", columnFont)) { Border = 0, PaddingTop = 5f });
+            tableCompanyDetail.AddCell(new PdfPCell(new Phrase(companyAddress, cellFont)) { Border = 0, PaddingTop = 5f });
+            tableCompanyDetail.AddCell(new PdfPCell(new Phrase("Contact Number: ", columnFont)) { Border = 0, PaddingTop = 5f });
+            tableCompanyDetail.AddCell(new PdfPCell(new Phrase(companyContactNo, cellFont)) { Border = 0, PaddingTop = 5f });
+            tableCompanyDetail.AddCell(new PdfPCell(new Phrase("TIN: ", columnFont)) { Border = 0, PaddingTop = 5f });
+            tableCompanyDetail.AddCell(new PdfPCell(new Phrase(companyTIN, cellFont)) { Border = 0, PaddingTop = 5f });
+            document.Add(tableCompanyDetail);
+
+            document.Add(Chunk.NEWLINE);
+
+            // table Cells in branches
+            PdfPTable tableBranches = new PdfPTable(5);
+            float[] widthsOfTableBranches = new float[] { 30f, 60f, 75f, 50f, 50f };
+            tableBranches.SetWidths(widthsOfTableBranches);
+            tableBranches.WidthPercentage = 100;
+            tableBranches.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableBranches.AddCell(new PdfPCell(new Phrase("Branch", columnFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableBranches.AddCell(new PdfPCell(new Phrase("Address", columnFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableBranches.AddCell(new PdfPCell(new Phrase("Contact No.", columnFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableBranches.AddCell(new PdfPCell(new Phrase("TIN", columnFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+            var branches = from d in db.MstBranches
+                           where d.CompanyId == CompanyId
+                           select new Models.MstBranch
+                           {
+                               Id = d.Id,
+                               CompanyId = d.CompanyId,
+                               Company = d.MstCompany.Company,
+                               BranchCode = d.BranchCode,
+                               Branch = d.Branch,
+                               Address = d.Address,
+                               ContactNumber = d.ContactNumber,
+                               TaxNumber = d.TaxNumber,
+                               IsLocked = d.IsLocked,
+                               CreatedById = d.CreatedById,
+                               CreatedBy = d.MstUser.FullName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                               UpdatedById = d.UpdatedById,
+                               UpdatedBy = d.MstUser1.FullName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                           };
+
+            foreach (var b in branches)
+            {
+                tableBranches.AddCell(new PdfPCell(new Phrase(b.BranchCode, cellFont)) { PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableBranches.AddCell(new PdfPCell(new Phrase(b.Branch, cellFont)) { PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableBranches.AddCell(new PdfPCell(new Phrase(b.Address, cellFont)) { PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableBranches.AddCell(new PdfPCell(new Phrase(b.ContactNumber, cellFont)) { PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableBranches.AddCell(new PdfPCell(new Phrase(b.TaxNumber, cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+            }
+
+            document.Add(tableBranches);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
         public ActionResult FinancialStatements()
         {
             return View();
@@ -413,6 +535,12 @@ namespace easyfis.Controllers
 
         [Authorize]
         public ActionResult Users()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult UsersDetail()
         {
             return View();
         }

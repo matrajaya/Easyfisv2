@@ -33,13 +33,18 @@
                     @*<label id="currentBranchName"></label>*@
                     <span id="currentPage"></span>
                 </div>
-                <ul class="nav nav-pills pull-right pill-custom" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Unit</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Tax" id="accountTypeTabId">Tax</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Bank" id="accountCashFlowTabId">Bank</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Term" id="accountCategoryTabId">Term</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Type" id="payaccountCategoryTabId">Pay Type</a></li>
+                <ul class="nav nav-pills pill-custom" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="">Discount</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Tax" id="">Pay Type</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Bank" id="">Tax</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Term" id="">Unit</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Type" id="">Terms</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Bank" id="">Employees</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Term" id="">Article Groups</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Type" id="">Other Articles</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Tax" id="">Account Type</a></li>
                 </ul>
+                <br />
                 <!-- User List -->
                 <div id="sysTableList">
                     <div class="row">
@@ -59,7 +64,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</a>
                             <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                         </div>
                     </div>

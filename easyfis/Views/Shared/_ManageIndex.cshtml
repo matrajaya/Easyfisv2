@@ -5,48 +5,77 @@
 {
     <!-- Section -->
     <section>
-        <div class="cover-login-photo-custom">
+        <div class="jumbotron">
             <div class="container">
+                <br />
+                <h2><b>@ViewData["FullName"]</b></h2>
+                <br /><br />
+                <button class="btn btn-primary btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
+                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-primary btn-sm"> Change Your Password</a>
+            </div>
+        </div>
+        <div class="jumbotron">
+            <div class="container">
+                <label>Choose branch to launch the application</label>
+                <br /><br />
+
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">You Login as: </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="well">
-                                            <h1>@ViewData["FullName"]</h1>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
-                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default btn-sm"> Change Your Password</a>
-                                <p class="change-password-success">@ViewBag.StatusMessage</p>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <div id="branch_Id" class="comboBox-wide"></div>
+                                <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">Choose your branch to launch the application</div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="branch_Id" class="comboBox-wide"></div>
-                                        <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
-                                   </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="col-md-12" align="right">
-                                        <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
-                                    </div>
-                                </div>
+                            <div class="col-sm-6">
+                                <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        @*<div class="cover-login-photo-custom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">You Login as: </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="well">
+                                                <h1>@ViewData["FullName"]</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
+                                    <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default btn-sm"> Change Your Password</a>
+                                    <p class="change-password-success">@ViewBag.StatusMessage</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">Choose your branch to launch the application</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div id="branch_Id" class="comboBox-wide"></div>
+                                            <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-12" align="right">
+                                            <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
     </section>
 }
 else
