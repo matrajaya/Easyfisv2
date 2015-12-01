@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var branchId = Request.QueryString["BranchId"];
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -22,10 +25,29 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>
-                <br /><br />
-                <h2>Accounts Payable</h2>
+                <h4><span class="accountReportsDetail">AP</span> Accounts Payable</h4>
+                <br />
+                <div class="div_Current_Page">
+                    @*<label id="currentBranchName"></label>*@
+                    <span id="currentPage"></span>
+                </div>
+                @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
+                <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>*@
+                @*<br /><br />*@
+                @*<h2>Accounts Payable</h2>*@
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul class="nav nav-pills nav-stacked">
+                            <li class="active"><a href="#">Home</a></li>
+                            <li><a href="#">Menu 1</a></li>
+                            <li><a href="#">Menu 2</a></li>
+                            <li><a href="#">Menu 3</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-8">
+
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -35,5 +57,10 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+
+        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Accounts Payable';
+
+    </script>
 </body>
 </html>
