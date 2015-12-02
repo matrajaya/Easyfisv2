@@ -1,4 +1,5 @@
 ﻿@{
+    var articleSupplierId = Request.QueryString["ArticleSupplierId"];
     var branchId = Request.QueryString["BranchId"];
 }
 <!DOCTYPE html>
@@ -56,37 +57,37 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Code:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" /> <!-- Auto Generated No ni-->
+                                        <input type="text" class="form-control input-sm" id="artcileSupplier_code" /> <!-- Auto Generated No ni-->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Supplier:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />
+                                        <input type="text" class="form-control input-sm" id="artcileSupplier_Supplier" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Supplier Group:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />
+                                        <input type="text" class="form-control input-sm" id="artcileSupplier_SupplierGroup" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Account:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <input type="text" class="form-control input-sm" id="artcileSupplier_Account"> <!-- Drop down list ni-->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Term:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <input type="text" class="form-control input-sm" id="artcileSupplier_Term"> <!-- Drop down list ni-->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Address:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id=""></textarea>
+                                        <textarea class="form-control textarea-custom" id="artcileSupplier_Address"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -94,25 +95,25 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Contact Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="artcileSupplier_ContactNo">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Contact Person:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="artcileSupplier_ContactPerson">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">TIN:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="artcileSupplier_TIN">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id=""></textarea>
+                                        <textarea class="form-control textarea-custom" id="artcileSupplier_Particulars"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -133,8 +134,93 @@
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var suppliers;
 
+        // ==================================
+        // Get Article for supplier by its ID
+        // ==================================
+        function getArticleSupplierById() {
+            $('#loadingModal').modal('show');
+            var suppliers = new wijmo.collections.ObservableArray;
+            var articleId = @articleSupplierId;
+            $.ajax({
+                url: '/api/listArticleById/' +  @articleSupplierId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        suppliers.push ({
+                            Id: Results.Id,
+                            ArticleCode : Results.ArticleCode,
+                            ManualArticleCode : Result.ManualArticleCode,
+                            Article : Results.Article,
+                            Category : Results.Category,
+                            ArticleTypeId : Results.ArticleTypeId,
+                            ArticleType : Results.ArticleType,
+                            ArticleGroupId : Results.ArticleGroupId,
+                            ArticleGroup : Results.ArticleGroup,
+                            AccountId : Results.AccountId,
+                            Account : Results.Account,
+                            SalesAccountId : Results.SalesAccountId,
+                            CostAccountId : Results.CostAccountId,
+                            AssetAccountId : Results.AssetAccountId,
+                            ExpenseAccountId : Results.ExpenseAccountId,
+                            UnitId : Results.UnitId,
+                            OutputTaxId : Results.OutputTaxId,
+                            InputTaxId : Results.InputTaxId,
+                            WTaxTypeId : Results.WTaxTypeId,
+                            Price : Results.Price,
+                            Cost : Results.Cost,
+                            IsInventory : Results.IsInventory,
+                            Particulars : Results.Particulars,
+                            Address : Results.Address,
+                            TermId : Results.TermId,
+                            ContactNumber : Results.ContactNumber,
+                            ContactPerson : Results.ContactPerson,
+                            TaxNumber : Results.TaxNumber,
+                            CreditLimit : Results.CreditLimit,
+                            DateAcquired : Results.DateAcquired,
+                            UsefulLife : Results.UsefulLife,
+                            SalvageValue : Results.SalvageValue,
+                            ManualArticleOldCode : Results.ManualArticleOldCode,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+                    document.getElementById('artcileSupplier_code').value = Results.ArticleCode;
+                    document.getElementById('artcileSupplier_Supplier').value = Results.Article;
+                    // drop downs over heree...
+
+                    document.getElementById('artcileSupplier_Address').value = Results.Address;
+                    document.getElementById('artcileSupplier_Particulars').value = Results.Particulars;
+                    document.getElementById('artcileSupplier_TIN').value = Results.TaxNumber;
+                    document.getElementById('artcileSupplier_ContactNo').value = Results.ContactNumber;
+                    document.getElementById('artcileSupplier_ContactPerson').value = Results.ContactPerson;
+                }
+            });
+
+            return suppliers;
+        }
+
+        // ============
+        // On Page Load
+        // ============
         $(document).ready(function () {
+            document.getElementById('artcileSupplier_code').disabled = true;
+
+            getArticleSupplierById();
+
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Supplier</a> ' + ' > Supplier Detail';
         });
 

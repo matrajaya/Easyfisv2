@@ -79,6 +79,7 @@
       <Association Name="MstAccount_MstArticle1" Member="MstArticles1" ThisKey="Id" OtherKey="SalesAccountId" Type="MstArticle" />
       <Association Name="MstAccount_MstArticle2" Member="MstArticles2" ThisKey="Id" OtherKey="CostAccountId" Type="MstArticle" />
       <Association Name="MstAccount_MstArticle3" Member="MstArticles3" ThisKey="Id" OtherKey="AssetAccountId" Type="MstArticle" />
+      <Association Name="MstAccount_MstArticleGroup" Member="MstArticleGroups" ThisKey="Id" OtherKey="AccountId" Type="MstArticleGroup" />
       <Association Name="MstAccount_MstDiscount" Member="MstDiscounts" ThisKey="Id" OtherKey="AccountId" Type="MstDiscount" />
       <Association Name="MstAccount_MstPayType" Member="MstPayTypes" ThisKey="Id" OtherKey="AccountId" Type="MstPayType" />
       <Association Name="MstAccount_MstTaxType" Member="MstTaxTypes" ThisKey="Id" OtherKey="AccountId" Type="MstTaxType" />
@@ -228,6 +229,8 @@
       <Association Name="MstTaxType_MstArticle2" Member="MstTaxType2" ThisKey="WTaxTypeId" OtherKey="Id" Type="MstTaxType" IsForeignKey="true" />
       <Association Name="MstTerm_MstArticle" Member="MstTerm" ThisKey="TermId" OtherKey="Id" Type="MstTerm" IsForeignKey="true" />
       <Association Name="MstUnit_MstArticle" Member="MstUnit" ThisKey="UnitId" OtherKey="Id" Type="MstUnit" IsForeignKey="true" />
+      <Association Name="MstUser_MstArticle" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_MstArticle1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstArticleComponent" Member="MstArticleComponents">
@@ -267,7 +270,10 @@
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="MstArticleGroup_MstArticle" Member="MstArticles" ThisKey="Id" OtherKey="ArticleGroupId" Type="MstArticle" />
+      <Association Name="MstAccount_MstArticleGroup" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstArticleType_MstArticleGroup" Member="MstArticleType" ThisKey="ArticleTypeId" OtherKey="Id" Type="MstArticleType" IsForeignKey="true" />
+      <Association Name="MstUser_MstArticleGroup" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_MstArticleGroup1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstArticleInventory" Member="MstArticleInventories">
@@ -327,7 +333,7 @@
     <Type Name="MstBranch">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="CompanyId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="BranchCode" Type="System.String" DbType="NVarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="BranchCode" Type="System.String" DbType="NVarChar(5) NOT NULL" CanBeNull="false" />
       <Column Name="Branch" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
       <Column Name="Address" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="ContactNumber" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
@@ -489,6 +495,10 @@
       <Association Name="MstUser_MstAccountCategory1" Member="MstAccountCategories1" ThisKey="Id" OtherKey="UpdatedById" Type="MstAccountCategory" />
       <Association Name="MstUser_MstAccountType" Member="MstAccountTypes" ThisKey="Id" OtherKey="CreatedById" Type="MstAccountType" />
       <Association Name="MstUser_MstAccountType1" Member="MstAccountTypes1" ThisKey="Id" OtherKey="UpdatedById" Type="MstAccountType" />
+      <Association Name="MstUser_MstArticle" Member="MstArticles" ThisKey="Id" OtherKey="CreatedById" Type="MstArticle" />
+      <Association Name="MstUser_MstArticle1" Member="MstArticles1" ThisKey="Id" OtherKey="UpdatedById" Type="MstArticle" />
+      <Association Name="MstUser_MstArticleGroup" Member="MstArticleGroups" ThisKey="Id" OtherKey="CreatedById" Type="MstArticleGroup" />
+      <Association Name="MstUser_MstArticleGroup1" Member="MstArticleGroups1" ThisKey="Id" OtherKey="UpdatedById" Type="MstArticleGroup" />
       <Association Name="MstUser_MstBranch" Member="MstBranches" ThisKey="Id" OtherKey="CreatedById" Type="MstBranch" />
       <Association Name="MstUser_MstBranch1" Member="MstBranches1" ThisKey="Id" OtherKey="UpdatedById" Type="MstBranch" />
       <Association Name="MstUser_MstCompany" Member="MstCompanies" ThisKey="Id" OtherKey="CreatedById" Type="MstCompany" />

@@ -189,7 +189,7 @@
     function cmdCompanyEditButton_OnClick() {
         companies.editItem(companies.currentItem);
         var company = companies.currentEditItem;
-        var id = company.Id !== null && typeof (company.Id) != 'undefined' ? wijmo.Globalize.format(company.Id) : 0;
+        var id = company.Id;
         window.location = '/Software/CompanyDetail?CompanyId=' + id + '&BranchId=' + @branchId;
     }
 

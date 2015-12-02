@@ -214,7 +214,7 @@
     function cmdJournalVoucherEditButton_OnClick() {
         journalVouchers.editItem(journalVouchers.currentItem);
         var journalVoucher = journalVouchers.currentEditItem;
-        var id = journalVoucher.Id !== null && typeof (journalVoucher.Id) != 'undefined' ? wijmo.Globalize.format(journalVoucher.Id) : 0;
+        var id = journalVoucher.Id;
         window.location = '/Software/JournalVoucherDetail?JournalVoucherId=' + id + '&BranchId=' + @branchId;
     }
 

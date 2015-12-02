@@ -1873,6 +1873,8 @@ namespace easyfis.Data
 		
 		private EntitySet<MstArticle> _MstArticles3;
 		
+		private EntitySet<MstArticleGroup> _MstArticleGroups;
+		
 		private EntitySet<MstDiscount> _MstDiscounts;
 		
 		private EntitySet<MstPayType> _MstPayTypes;
@@ -1937,6 +1939,7 @@ namespace easyfis.Data
 			this._MstArticles1 = new EntitySet<MstArticle>(new Action<MstArticle>(this.attach_MstArticles1), new Action<MstArticle>(this.detach_MstArticles1));
 			this._MstArticles2 = new EntitySet<MstArticle>(new Action<MstArticle>(this.attach_MstArticles2), new Action<MstArticle>(this.detach_MstArticles2));
 			this._MstArticles3 = new EntitySet<MstArticle>(new Action<MstArticle>(this.attach_MstArticles3), new Action<MstArticle>(this.detach_MstArticles3));
+			this._MstArticleGroups = new EntitySet<MstArticleGroup>(new Action<MstArticleGroup>(this.attach_MstArticleGroups), new Action<MstArticleGroup>(this.detach_MstArticleGroups));
 			this._MstDiscounts = new EntitySet<MstDiscount>(new Action<MstDiscount>(this.attach_MstDiscounts), new Action<MstDiscount>(this.detach_MstDiscounts));
 			this._MstPayTypes = new EntitySet<MstPayType>(new Action<MstPayType>(this.attach_MstPayTypes), new Action<MstPayType>(this.detach_MstPayTypes));
 			this._MstTaxTypes = new EntitySet<MstTaxType>(new Action<MstTaxType>(this.attach_MstTaxTypes), new Action<MstTaxType>(this.detach_MstTaxTypes));
@@ -2266,6 +2269,19 @@ namespace easyfis.Data
 			set
 			{
 				this._MstArticles3.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstAccount_MstArticleGroup", Storage="_MstArticleGroups", ThisKey="Id", OtherKey="AccountId")]
+		public EntitySet<MstArticleGroup> MstArticleGroups
+		{
+			get
+			{
+				return this._MstArticleGroups;
+			}
+			set
+			{
+				this._MstArticleGroups.Assign(value);
 			}
 		}
 		
@@ -2647,6 +2663,18 @@ namespace easyfis.Data
 		{
 			this.SendPropertyChanging();
 			entity.MstAccount3 = null;
+		}
+		
+		private void attach_MstArticleGroups(MstArticleGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstAccount = this;
+		}
+		
+		private void detach_MstArticleGroups(MstArticleGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstAccount = null;
 		}
 		
 		private void attach_MstDiscounts(MstDiscount entity)
@@ -4223,6 +4251,10 @@ namespace easyfis.Data
 		
 		private EntityRef<MstUnit> _MstUnit;
 		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -4339,6 +4371,8 @@ namespace easyfis.Data
 			this._MstTaxType2 = default(EntityRef<MstTaxType>);
 			this._MstTerm = default(EntityRef<MstTerm>);
 			this._MstUnit = default(EntityRef<MstUnit>);
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
 			OnCreated();
 		}
 		
@@ -5017,6 +5051,10 @@ namespace easyfis.Data
 			{
 				if ((this._CreatedById != value))
 				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnCreatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._CreatedById = value;
@@ -5057,6 +5095,10 @@ namespace easyfis.Data
 			{
 				if ((this._UpdatedById != value))
 				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnUpdatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._UpdatedById = value;
@@ -5807,6 +5849,74 @@ namespace easyfis.Data
 						this._UnitId = default(int);
 					}
 					this.SendPropertyChanged("MstUnit");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstArticle", Storage="_MstUser", ThisKey="CreatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.MstArticles.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.MstArticles.Add(this);
+						this._CreatedById = value.Id;
+					}
+					else
+					{
+						this._CreatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstArticle1", Storage="_MstUser1", ThisKey="UpdatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.MstArticles1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.MstArticles1.Add(this);
+						this._UpdatedById = value.Id;
+					}
+					else
+					{
+						this._UpdatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser1");
 				}
 			}
 		}
@@ -6629,7 +6739,13 @@ namespace easyfis.Data
 		
 		private EntitySet<MstArticle> _MstArticles;
 		
+		private EntityRef<MstAccount> _MstAccount;
+		
 		private EntityRef<MstArticleType> _MstArticleType;
+		
+		private EntityRef<MstUser> _MstUser;
+		
+		private EntityRef<MstUser> _MstUser1;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -6666,7 +6782,10 @@ namespace easyfis.Data
 		public MstArticleGroup()
 		{
 			this._MstArticles = new EntitySet<MstArticle>(new Action<MstArticle>(this.attach_MstArticles), new Action<MstArticle>(this.detach_MstArticles));
+			this._MstAccount = default(EntityRef<MstAccount>);
 			this._MstArticleType = default(EntityRef<MstArticleType>);
+			this._MstUser = default(EntityRef<MstUser>);
+			this._MstUser1 = default(EntityRef<MstUser>);
 			OnCreated();
 		}
 		
@@ -6745,6 +6864,10 @@ namespace easyfis.Data
 			{
 				if ((this._AccountId != value))
 				{
+					if (this._MstAccount.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnAccountIdChanging(value);
 					this.SendPropertyChanging();
 					this._AccountId = value;
@@ -6865,6 +6988,10 @@ namespace easyfis.Data
 			{
 				if ((this._CreatedById != value))
 				{
+					if (this._MstUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnCreatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._CreatedById = value;
@@ -6905,6 +7032,10 @@ namespace easyfis.Data
 			{
 				if ((this._UpdatedById != value))
 				{
+					if (this._MstUser1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
 					this.OnUpdatedByIdChanging(value);
 					this.SendPropertyChanging();
 					this._UpdatedById = value;
@@ -6947,6 +7078,40 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstAccount_MstArticleGroup", Storage="_MstAccount", ThisKey="AccountId", OtherKey="Id", IsForeignKey=true)]
+		public MstAccount MstAccount
+		{
+			get
+			{
+				return this._MstAccount.Entity;
+			}
+			set
+			{
+				MstAccount previousValue = this._MstAccount.Entity;
+				if (((previousValue != value) 
+							|| (this._MstAccount.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstAccount.Entity = null;
+						previousValue.MstArticleGroups.Remove(this);
+					}
+					this._MstAccount.Entity = value;
+					if ((value != null))
+					{
+						value.MstArticleGroups.Add(this);
+						this._AccountId = value.Id;
+					}
+					else
+					{
+						this._AccountId = default(int);
+					}
+					this.SendPropertyChanged("MstAccount");
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstArticleType_MstArticleGroup", Storage="_MstArticleType", ThisKey="ArticleTypeId", OtherKey="Id", IsForeignKey=true)]
 		public MstArticleType MstArticleType
 		{
@@ -6977,6 +7142,74 @@ namespace easyfis.Data
 						this._ArticleTypeId = default(int);
 					}
 					this.SendPropertyChanged("MstArticleType");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstArticleGroup", Storage="_MstUser", ThisKey="CreatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser
+		{
+			get
+			{
+				return this._MstUser.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser.Entity = null;
+						previousValue.MstArticleGroups.Remove(this);
+					}
+					this._MstUser.Entity = value;
+					if ((value != null))
+					{
+						value.MstArticleGroups.Add(this);
+						this._CreatedById = value.Id;
+					}
+					else
+					{
+						this._CreatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstArticleGroup1", Storage="_MstUser1", ThisKey="UpdatedById", OtherKey="Id", IsForeignKey=true)]
+		public MstUser MstUser1
+		{
+			get
+			{
+				return this._MstUser1.Entity;
+			}
+			set
+			{
+				MstUser previousValue = this._MstUser1.Entity;
+				if (((previousValue != value) 
+							|| (this._MstUser1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstUser1.Entity = null;
+						previousValue.MstArticleGroups1.Remove(this);
+					}
+					this._MstUser1.Entity = value;
+					if ((value != null))
+					{
+						value.MstArticleGroups1.Add(this);
+						this._UpdatedById = value.Id;
+					}
+					else
+					{
+						this._UpdatedById = default(int);
+					}
+					this.SendPropertyChanged("MstUser1");
 				}
 			}
 		}
@@ -8339,7 +8572,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchCode", DbType="NVarChar(3) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchCode", DbType="NVarChar(5) NOT NULL", CanBeNull=false)]
 		public string BranchCode
 		{
 			get
@@ -11623,6 +11856,14 @@ namespace easyfis.Data
 		
 		private EntitySet<MstAccountType> _MstAccountTypes1;
 		
+		private EntitySet<MstArticle> _MstArticles;
+		
+		private EntitySet<MstArticle> _MstArticles1;
+		
+		private EntitySet<MstArticleGroup> _MstArticleGroups;
+		
+		private EntitySet<MstArticleGroup> _MstArticleGroups1;
+		
 		private EntitySet<MstBranch> _MstBranches;
 		
 		private EntitySet<MstBranch> _MstBranches1;
@@ -11681,6 +11922,10 @@ namespace easyfis.Data
 			this._MstAccountCategories1 = new EntitySet<MstAccountCategory>(new Action<MstAccountCategory>(this.attach_MstAccountCategories1), new Action<MstAccountCategory>(this.detach_MstAccountCategories1));
 			this._MstAccountTypes = new EntitySet<MstAccountType>(new Action<MstAccountType>(this.attach_MstAccountTypes), new Action<MstAccountType>(this.detach_MstAccountTypes));
 			this._MstAccountTypes1 = new EntitySet<MstAccountType>(new Action<MstAccountType>(this.attach_MstAccountTypes1), new Action<MstAccountType>(this.detach_MstAccountTypes1));
+			this._MstArticles = new EntitySet<MstArticle>(new Action<MstArticle>(this.attach_MstArticles), new Action<MstArticle>(this.detach_MstArticles));
+			this._MstArticles1 = new EntitySet<MstArticle>(new Action<MstArticle>(this.attach_MstArticles1), new Action<MstArticle>(this.detach_MstArticles1));
+			this._MstArticleGroups = new EntitySet<MstArticleGroup>(new Action<MstArticleGroup>(this.attach_MstArticleGroups), new Action<MstArticleGroup>(this.detach_MstArticleGroups));
+			this._MstArticleGroups1 = new EntitySet<MstArticleGroup>(new Action<MstArticleGroup>(this.attach_MstArticleGroups1), new Action<MstArticleGroup>(this.detach_MstArticleGroups1));
 			this._MstBranches = new EntitySet<MstBranch>(new Action<MstBranch>(this.attach_MstBranches), new Action<MstBranch>(this.detach_MstBranches));
 			this._MstBranches1 = new EntitySet<MstBranch>(new Action<MstBranch>(this.attach_MstBranches1), new Action<MstBranch>(this.detach_MstBranches1));
 			this._MstCompanies = new EntitySet<MstCompany>(new Action<MstCompany>(this.attach_MstCompanies), new Action<MstCompany>(this.detach_MstCompanies));
@@ -11999,6 +12244,58 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstArticle", Storage="_MstArticles", ThisKey="Id", OtherKey="CreatedById")]
+		public EntitySet<MstArticle> MstArticles
+		{
+			get
+			{
+				return this._MstArticles;
+			}
+			set
+			{
+				this._MstArticles.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstArticle1", Storage="_MstArticles1", ThisKey="Id", OtherKey="UpdatedById")]
+		public EntitySet<MstArticle> MstArticles1
+		{
+			get
+			{
+				return this._MstArticles1;
+			}
+			set
+			{
+				this._MstArticles1.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstArticleGroup", Storage="_MstArticleGroups", ThisKey="Id", OtherKey="CreatedById")]
+		public EntitySet<MstArticleGroup> MstArticleGroups
+		{
+			get
+			{
+				return this._MstArticleGroups;
+			}
+			set
+			{
+				this._MstArticleGroups.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstArticleGroup1", Storage="_MstArticleGroups1", ThisKey="Id", OtherKey="UpdatedById")]
+		public EntitySet<MstArticleGroup> MstArticleGroups1
+		{
+			get
+			{
+				return this._MstArticleGroups1;
+			}
+			set
+			{
+				this._MstArticleGroups1.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstUser_MstBranch", Storage="_MstBranches", ThisKey="Id", OtherKey="CreatedById")]
 		public EntitySet<MstBranch> MstBranches
 		{
@@ -12253,6 +12550,54 @@ namespace easyfis.Data
 		}
 		
 		private void detach_MstAccountTypes1(MstAccountType entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_MstArticles(MstArticle entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_MstArticles(MstArticle entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_MstArticles1(MstArticle entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_MstArticles1(MstArticle entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = null;
+		}
+		
+		private void attach_MstArticleGroups(MstArticleGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = this;
+		}
+		
+		private void detach_MstArticleGroups(MstArticleGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser = null;
+		}
+		
+		private void attach_MstArticleGroups1(MstArticleGroup entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstUser1 = this;
+		}
+		
+		private void detach_MstArticleGroups1(MstArticleGroup entity)
 		{
 			this.SendPropertyChanging();
 			entity.MstUser1 = null;
