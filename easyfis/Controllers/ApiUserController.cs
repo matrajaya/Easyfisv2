@@ -40,7 +40,14 @@ namespace easyfis.Controllers
                                 Id = d.Id,
                                 FullName = d.FullName,
                                 UserName = d.UserName,
-                                IsLocked = d.IsLocked
+                                IsLocked = d.IsLocked,
+                                UserId = d.UserId,
+                                //CreatedById = d.CreatedById,
+                                //CreatedBy = d.MstUser1.FullName,
+                                //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                //UpdatedById = d.UpdatedById,
+                                //UpdatedBy = d.MstUser2.FullName,
+                                //UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                             };
             return users.ToList();
         }

@@ -25,6 +25,7 @@ namespace easyfis.Models
         public Int32 AssetAccountId { get; set; }
         public Int32 ExpenseAccountId { get; set; }
         public Int32 UnitId { get; set; }
+        public String Unit { get; set; }
         public Int32 OutputTaxId { get; set; }
         public Int32 InputTaxId { get; set; }
         public Int32 WTaxTypeId { get; set; }
@@ -34,6 +35,7 @@ namespace easyfis.Models
         public String Particulars { get; set; }
         public String Address { get; set; }
         public Int32 TermId { get; set; }
+        public String Term { get; set; }
         public String ContactNumber { get; set; }
         public String ContactPerson { get; set; }
         public String TaxNumber { get; set; }

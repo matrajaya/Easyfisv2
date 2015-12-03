@@ -180,7 +180,9 @@ namespace easyfis.Controllers
                     //int mstUserId = Convert.ToInt32(mstUserIdLastValue) + 1;
 
 
-                    var date = DateTime.Now;    
+                    var date = DateTime.Now;
+
+                    var mstUserIdLastValueId = (from d in db.MstUsers.OrderByDescending(d => d.Id) select d.Id).FirstOrDefault();
 
                     if (users.Any())
                     {
@@ -190,9 +192,9 @@ namespace easyfis.Controllers
                         newUser.FullName = model.FullName;
 
                         newUser.IsLocked = isLocked;
-                        newUser.CreatedById = 0;
+                        newUser.CreatedById = mstUserIdLastValueId;
                         newUser.CreatedDateTime = date;
-                        newUser.UpdatedById = 0;
+                        newUser.UpdatedById = mstUserIdLastValueId;
                         newUser.UpdatedDateTime = date;
 
                         db.MstUsers.InsertOnSubmit(newUser);
@@ -200,19 +202,17 @@ namespace easyfis.Controllers
 
                         // after submit, get last inserted Id and update the userid for created by and updated by.
                         var identityUserId = User.Identity.GetUserId();
-                        var mstUserIdLastValue = (from d in db.MstUsers.OrderByDescending(d => d.Id) select d.Id).FirstOrDefault();
-                        var mstUsersData = from d in db.MstUsers where d.Id == mstUserIdLastValue select d;
+                        var mstUserIdLastValueOfTheLastId = (from d in db.MstUsers.OrderByDescending(d => d.Id) select d.Id).FirstOrDefault();
+                        var mstUsersData = from d in db.MstUsers where d.Id == mstUserIdLastValueOfTheLastId select d;
+
+                        var mstUsersId = from d in db.MstUsers where d.UserId == identityUserId select d.Id;
 
                         if (mstUsersData.Any())
                         {
-                            newUser.CreatedById = mstUserIdLastValue;
-                            newUser.UpdatedById = mstUserIdLastValue;
+                            newUser.CreatedById = mstUserIdLastValueOfTheLastId;
+                            newUser.UpdatedById = mstUserIdLastValueOfTheLastId;
 
                             db.SubmitChanges();
-
-                            Debug.WriteLine(newUser.CreatedById);
-                            Debug.WriteLine(newUser.UpdatedById);
-                            Debug.WriteLine(mstUserIdLastValue);
                         }
                         //db.SubmitChanges();
                     }
