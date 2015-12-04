@@ -129,12 +129,17 @@
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
-
         // ================
         // Global Variables
         // ================
         var customers;
         var customerGrid;
+
+        var btnFirstPageGrid;
+        var btnPreviousPageGrid;
+        var btnNextPageGrid;
+        var btnLastPageGrid;
+        var btnCurrentPageGrid;
 
         // ==============================
         // Get Data from MstArtcile Table
@@ -223,7 +228,7 @@
                 show: true,
                 backdrop: 'static'
             });
-           
+
         }
         // Customer Confirm Delete Button
         function cmdCustomerConfirmDeleteButton_OnClick() {
@@ -457,6 +462,6 @@
             });
         });
 
-</script>
+    </script>
 </body>
 </html>

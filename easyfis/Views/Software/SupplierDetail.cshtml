@@ -179,7 +179,7 @@
             var suppliers = new wijmo.collections.ObservableArray;
             var articleId = @articleSupplierId;
             $.ajax({
-                url: '/api/listArticleById/' +  @articleSupplierId,
+                url: '/api/listArticleById/' +  articleId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -233,7 +233,7 @@
                     }
                     document.getElementById('artcileSupplier_code').value = Results.ArticleCode;
                     document.getElementById('artcileSupplier_Supplier').value = Results.Article;
-                    
+
                     document.getElementById('artcileSupplier_SupplierGroup_Data').value = Results.ArticleGroupId;
                     document.getElementById('artcileSupplier_SupplierGroup_SelectedValue').value = Results.ArticleGroup;
 
@@ -242,7 +242,7 @@
 
                     document.getElementById('artcileSupplier_Term_Data').value = Results.TermId;
                     document.getElementById('artcileSupplier_Term_SelectedValue').value = Results.Term;
-                    
+
                     document.getElementById('artcileSupplier_Address').value = Results.Address;
                     document.getElementById('artcileSupplier_Particulars').value = Results.Particulars;
                     document.getElementById('artcileSupplier_TIN').value = Results.TaxNumber;
@@ -421,6 +421,8 @@
         // On Page Load
         // ============
         $(document).ready(function () {
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Supplier</a> ' + ' > Supplier Detail';
+        
             document.getElementById('artcileSupplier_code').disabled = true;
 
             getArticleSupplierById();
@@ -429,13 +431,12 @@
             cboArticleGroup  = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup');
             cboForAccount  = new wijmo.input.ComboBox('#artcileSupplier_Account');
             cboForTerm  = new wijmo.input.ComboBox('#artcileSupplier_Term');
-            
+
             // ajax for combobox
             getArticleSupplierGroupForComboBox();
             getArticleAccountForComboBox();
             getArticleTermForComboBox();
 
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Supplier</a> ' + ' > Supplier Detail';
         });
 
     </script>
