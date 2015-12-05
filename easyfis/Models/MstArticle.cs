@@ -27,8 +27,11 @@ namespace easyfis.Models
         public Int32 UnitId { get; set; }
         public String Unit { get; set; }
         public Int32 OutputTaxId { get; set; }
+        public String OutputTax { get; set; }
         public Int32 InputTaxId { get; set; }
+        public String InputTax { get; set; }
         public Int32 WTaxTypeId { get; set; }
+        public String WTaxType { get; set; }
         public Decimal Price { get; set; }
         public Decimal? Cost { get; set; }
         public Boolean IsInventory { get; set; }

@@ -1,5 +1,6 @@
 ﻿@{
     var branchId = Request.QueryString["BranchId"];
+    var itemId = Request.QueryString["ItemId"];
 }
 <!DOCTYPE html>
 <html>
@@ -56,49 +57,55 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Code:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" /> <!-- Auto Generated No ni-->
+                                        <input type="text" class="form-control input-sm" id="articleItem_code" /> <!-- Auto Generated No ni-->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual Code:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />
+                                        <input type="text" class="form-control input-sm" id="articleItem_manualCode" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Item:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />
+                                        <input type="text" class="form-control input-sm" id="articleItem_item" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Item Group:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div type="text" class="comboBox-wide" id="articleItem_itemGroup"></div>
+
+                                        <input type="hidden" id="articleItem_itemGroup_data" />
+                                        <input type="hidden" id="articleItem_itemGroup_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Category:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <input type="text" class="form-control input-sm" id="articleItem_category">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Unit:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div type="text" class="comboBox-wide" id="articleItem_unit"></div>
+
+                                        <input type="hidden" id="articleItem_unit_data" />
+                                        <input type="hidden" id="articleItem_unit_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Price:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="articleItem_price">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id=""></textarea>
+                                        <textarea class="form-control textarea-custom" id="articleItem_particulars"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -106,37 +113,46 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Input Tax:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div type="text" class="comboBox-wide" id="articleItem_inputTax"></div>
+
+                                        <input type="hidden" id="articleItem_inputTax_data" />
+                                        <input type="hidden" id="articleItem_inputTax_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Output Tax:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div type="text" class="comboBox-wide" id="articleItem_outputTax"></div>
+
+                                        <input type="hidden" id="articleItem_outputTax_data" />
+                                        <input type="hidden" id="articleItem_outputTax_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Withholding Tax:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div type="text" class="comboBox-wide" id="articleItem_withholdingTax"></div>
+
+                                        <input type="hidden" id="articleItem_withholdingTax_data" />
+                                        <input type="hidden" id="articleItem_withholdingTax_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Inventory:</label>
                                     <div class="col-sm-8">
-                                        <input type="checkbox" id="">
+                                        <input type="checkbox" id="articleItem_Inventory">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Old Manual Cost:</label>
+                                    <label class="control-label col-sm-4">Old Manual Code:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="articleItem_oldManualCode">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual Cost:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="articleItem_manualCost">
                                     </div>
                                 </div>
                             </div>
@@ -157,11 +173,357 @@
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var items;
 
+        var articleItemGroups;
+        var articleItemUnits;
+        var taxTypes;
+
+        var cboArticleGroupForItem;
+        var cboArticleUnitForItem;
+        var cboArticleInputTaxTypeForItem;
+        var cboArticleOutputTaxTypeForItem;
+        var cboArticleWithholdingTaxTypeForItem;
+
+
+        // ==============================
+        // Get Article for item by its ID
+        // ==============================
+        function getArticleItemById() {
+            $('#loadingModal').modal('show');
+            var items = new wijmo.collections.ObservableArray;
+            var articleId = @itemId;
+            $.ajax({
+                url: '/api/listArticleById/' +  articleId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        items.push ({
+                            Id: Results.Id,
+                            ArticleCode : Results.ArticleCode,
+                            ManualArticleCode : Result.ManualArticleCode,
+                            Article : Results.Article,
+                            Category : Results.Category,
+                            ArticleTypeId : Results.ArticleTypeId,
+                            ArticleType : Results.ArticleType,
+                            ArticleGroupId : Results.ArticleGroupId,
+                            ArticleGroup : Results.ArticleGroup,
+                            AccountId : Results.AccountId,
+                            Account : Results.Account,
+                            SalesAccountId : Results.SalesAccountId,
+                            CostAccountId : Results.CostAccountId,
+                            AssetAccountId : Results.AssetAccountId,
+                            ExpenseAccountId : Results.ExpenseAccountId,
+                            UnitId : Results.UnitId,
+                            Unit : Results.Unit,
+                            OutputTaxId : Results.OutputTaxId,
+                            OutputTax : Results.OutputTax,
+                            InputTaxId : Results.InputTaxId,
+                            InputTax : Results.InputTax,
+                            WTaxTypeId : Results.WTaxTypeId,
+                            WTaxType : Results.WTaxType,
+                            Price : Results.Price,
+                            Cost : Results.Cost,
+                            IsInventory : Results.IsInventory,
+                            Particulars : Results.Particulars,
+                            Address : Results.Address,
+                            TermId : Results.TermId,
+                            Term : Results.Term,
+                            ContactNumber : Results.ContactNumber,
+                            ContactPerson : Results.ContactPerson,
+                            TaxNumber : Results.TaxNumber,
+                            CreditLimit : Results.CreditLimit,
+                            DateAcquired : Results.DateAcquired,
+                            UsefulLife : Results.UsefulLife,
+                            SalvageValue : Results.SalvageValue,
+                            ManualArticleOldCode : Results.ManualArticleOldCode,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+                    document.getElementById('articleItem_code').value = Results.ArticleCode;
+                    document.getElementById('articleItem_manualCode').value = Results.ManualArticleCode;
+                    document.getElementById('articleItem_item').value = Results.Article;
+
+                    document.getElementById('articleItem_category').value = Results.Category;
+
+                    document.getElementById('articleItem_itemGroup_data').value = Results.ArticleGroupId;
+                    document.getElementById('articleItem_itemGroup_SelectedValue').value = Results.ArticleGroup;
+
+                    document.getElementById('articleItem_unit_data').value = Results.UnitId;
+                    document.getElementById('articleItem_unit_SelectedValue').value = Results.Unit;
+
+                    document.getElementById('articleItem_price').value = Results.Price;
+                    document.getElementById('articleItem_particulars').value = Results.Particulars;
+                    if(Results.IsInventory == 0) {
+                        document.getElementById('articleItem_Inventory').checked = false;
+                    } else {
+                        document.getElementById('articleItem_Inventory').checked = true;
+                    }
+
+
+                    document.getElementById('articleItem_inputTax_data').value = Results.InputTaxId;
+                    document.getElementById('articleItem_inputTax_SelectedValue').value = Results.InputTax;
+
+                    document.getElementById('articleItem_outputTax_data').value = Results.OutputTaxId;
+                    document.getElementById('articleItem_outputTax_SelectedValue').value = Results.OutputTax;
+
+                    document.getElementById('articleItem_withholdingTax_data').value = Results.WTaxTypeId;
+                    document.getElementById('articleItem_withholdingTax_SelectedValue').value = Results.WTaxType;
+
+
+                    document.getElementById('articleItem_oldManualCode').value = Results.ManualArticleOldCode;
+                    document.getElementById('articleItem_manualCost').value = Results.Cost;
+
+                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                    // comboboxes
+                    getArticleItemGroupForComboBox();
+                    getArticleItemUnitForComboBox();
+                    getArticleTaxTypeForComboBox();
+                }
+            });
+            return items;
+        }
+
+        // =====================
+        // Get Artile Item Group
+        // =====================
+        function getArticleItemGroupForComboBox() {
+            articleItemGroups = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleGroup',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            articleItemGroups.push({
+                                ArticleGroupId: results[i]["Id"],
+                                ArticleGroupArticleGroup: results[i]["ArticleGroup"]
+                            });
+                        }
+                        createCboForArticleItemGroup(articleItemGroups);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+            );
+        }
+
+        // ======================
+        // CBO for Customer Group
+        // ======================
+        function createCboForArticleItemGroup(articleItemGroups) {
+            var articleItemGroupCollection = new wijmo.collections.CollectionView(articleItemGroups);
+            var articleGroupList = new Array();
+            for (var i = 0; i < articleItemGroupCollection.items.length; i++) {
+                articleGroupList.push(articleItemGroupCollection.items[i].ArticleGroupArticleGroup);
+            }
+
+            cboArticleGroupForItem.dispose();
+            cboArticleGroupForItem = new wijmo.input.ComboBox('#articleItem_itemGroup', {
+                placeholder: "Select Item Group",
+                itemsSource: articleGroupList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('articleItem_itemGroup_SelectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#articleItem_itemGroup_data").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupId);
+                }
+            });
+        }
+
+        // ====================
+        // Get Artile Item Unit
+        // ====================
+        function getArticleItemUnitForComboBox() {
+            articleItemUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            articleItemUnits.push({
+                                ArticleUnitId: results[i]["Id"],
+                                ArticleUnitArticleUnit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForArticleItemUnit(articleItemUnits);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+            );
+        }
+
+        // =====================
+        // CBO for Customer Unit
+        // =====================
+        function createCboForArticleItemUnit(articleItemUnits) {
+            var articleItemUnitCollection = new wijmo.collections.CollectionView(articleItemUnits);
+            var articleGroupList = new Array();
+            for (var i = 0; i < articleItemUnitCollection.items.length; i++) {
+                articleGroupList.push(articleItemUnitCollection.items[i].ArticleUnitArticleUnit);
+            }
+
+            cboArticleUnitForItem.dispose();
+            cboArticleUnitForItem = new wijmo.input.ComboBox('#articleItem_unit', {
+                placeholder: "Select Item Group",
+                itemsSource: articleGroupList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('articleItem_unit_SelectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#articleItem_unit_data").val(articleItemUnitCollection.items[this.selectedIndex].ArticleUnitId);
+                }
+            });
+        }
+
+        // ===================
+        // Get Artile Tax Type
+        // ===================
+        function getArticleTaxTypeForComboBox() {
+            taxTypes = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listTaxType',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            taxTypes.push({
+                                ArticleTaxTypeId: results[i]["Id"],
+                                ArticleTaxTypeTaxType: results[i]["TaxType"]
+                            });
+                        }
+                        createCboForArticleInputTaxType(taxTypes);
+                        createCboForArticleOutputTaxType(taxTypes);
+                        createCboForArticleWithholdingTaxType(taxTypes);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+            );
+        }
+
+        // ======================
+        // CBO for input tax type
+        // ======================
+        function createCboForArticleInputTaxType(taxTypes) {
+            var articleInputTaxTypeCollection = new wijmo.collections.CollectionView(taxTypes);
+            var articleGroupList = new Array();
+            for (var i = 0; i < articleInputTaxTypeCollection.items.length; i++) {
+                articleGroupList.push(articleInputTaxTypeCollection.items[i].ArticleTaxTypeTaxType);
+            }
+
+            cboArticleInputTaxTypeForItem.dispose();
+            cboArticleInputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_inputTax', {
+                placeholder: "Select Input Tax Type",
+                itemsSource: articleGroupList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('articleItem_inputTax_SelectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#articleItem_inputTax_data").val(articleInputTaxTypeCollection.items[this.selectedIndex].ArticleTaxTypeId);
+                }
+            });
+        }
+
+        // ======================
+        // CBO for output tax type
+        // ======================
+        function createCboForArticleOutputTaxType(taxTypes) {
+            var articleOutputTaxTypeCollection = new wijmo.collections.CollectionView(taxTypes);
+            var articleGroupList = new Array();
+            for (var i = 0; i < articleOutputTaxTypeCollection.items.length; i++) {
+                articleGroupList.push(articleOutputTaxTypeCollection.items[i].ArticleTaxTypeTaxType);
+            }
+
+            cboArticleOutputTaxTypeForItem.dispose();
+            cboArticleOutputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_outputTax', {
+                placeholder: "Select Output Tax Type",
+                itemsSource: articleGroupList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('articleItem_outputTax_SelectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#articleItem_outputTax_data").val(articleOutputTaxTypeCollection.items[this.selectedIndex].ArticleTaxTypeId);
+                }
+            });
+        }
+
+        // =============================
+        // CBO for Withholding  tax type
+        // =============================
+        function createCboForArticleWithholdingTaxType(taxTypes) {
+            var articleWithholdingTaxTypeCollection = new wijmo.collections.CollectionView(taxTypes);
+            var articleGroupList = new Array();
+            for (var i = 0; i < articleWithholdingTaxTypeCollection.items.length; i++) {
+                articleGroupList.push(articleWithholdingTaxTypeCollection.items[i].ArticleTaxTypeTaxType);
+            }
+
+            cboArticleWithholdingTaxTypeForItem.dispose();
+            cboArticleWithholdingTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_withholdingTax', {
+                placeholder: "Select Withholding Tax Type",
+                itemsSource: articleGroupList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('articleItem_withholdingTax_SelectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#articleItem_withholdingTax_data").val(articleWithholdingTaxTypeCollection.items[this.selectedIndex].ArticleTaxTypeId);
+                }
+            });
+        }
+
+
+        // ===========
+        // Onload Page
+        // ===========
         $(document).ready(function () {
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Items", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Items</a> ' + ' > Item Detail';
-        });
 
+            document.getElementById('articleItem_code').disabled = true;
+
+            cboArticleGroupForItem  = new wijmo.input.ComboBox('#articleItem_itemGroup');
+            cboArticleUnitForItem = new wijmo.input.ComboBox('#articleItem_unit');
+
+            cboArticleInputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_inputTax');
+            cboArticleOutputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_outputTax');
+            cboArticleWithholdingTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_withholdingTax');
+
+            getArticleItemById();
+
+            // comboboxes
+            getArticleItemGroupForComboBox();
+
+        });
     </script>
 
 </body>
