@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var branchId = Request.QueryString["BranchId"];
+}
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -7,7 +10,7 @@
     <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
-    <title>Software Dashboard</title>
+    <title>Accounts Receivable</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Font-Awesome/css")
@@ -22,12 +25,128 @@
         <section>
             <br /><br /><br />
             <div class="container">
-                <button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>
-                <br /><br />
-                <h2>Accounts Receivable</h2>
+                <h4><span class="accountReportsDetail">AR</span> Accounts Receivable</h4>
+                <br />
+                <div class="div_Current_Page">
+                    @*<label id="currentBranchName"></label>*@
+                    <span id="currentPage"></span>
+                </div>
+                @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
+                    <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>*@
+                @*<br /><br />*@
+                @*<h2>Accounts Payable</h2>*@
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
+                            <li class="active"><a data-toggle="pill" href="#AR">Accounts Receivable</a></li>
+                            <li><a data-toggle="pill" href="#ARS">Accounts Receivable Summary</a></li>
+                            <li><a data-toggle="pill" href="#SOA">Statement of Account</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-8">
+                        <div align="right">
+                            <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                        </div>
+                        <div class="tab-content">
+                            <div id="AR" class="tab-pane fade in active">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Date as of:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control input-sm" id="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Company:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control input-sm" id="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Filter:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="checkbox" id="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="ARS" class="tab-pane fade">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Date as of:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control input-sm" id="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Company:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control input-sm" id="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Filter:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="checkbox" id="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="SOA" class="tab-pane fade">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Date as of:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control input-sm" id="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Company:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control input-sm" id="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Customer:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control input-sm" id="" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Filter:</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="checkbox" id="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->
@@ -35,5 +154,10 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+
+        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Accounts Receivable';
+
+    </script>
 </body>
 </html>
