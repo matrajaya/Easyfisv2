@@ -27,7 +27,7 @@
             <div class="container">
                 <h2>Main Menu</h2>
                 <div class="div_Current_Page">
-                    <label id="currentBranchName"></label>
+                    <label id="currentCompanyName"></label> <label> :\ </label> <span id="currentBranchName"></span>
                 </div>
                 @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button><br /><br />*@
                 @*<h3>Software Dashboard</h3>*@
@@ -588,9 +588,11 @@
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         $(document).ready(function () {
+            var branchID = @branchId;
+
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listBranchById/' + @branchId,
+                url: '/api/listBranchById/' + branchID,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -600,9 +602,11 @@
                     if (results.length > 0) {
                         branches.push({
                             BranchId: results.Id,
+                            BranchCompany : results.Company,
                             BranchBranch: results.Branch
                         });
                     }
+                    document.getElementById('currentCompanyName').innerHTML = results.Company;
                     document.getElementById('currentBranchName').innerHTML = results.Branch;
                 }
             });
