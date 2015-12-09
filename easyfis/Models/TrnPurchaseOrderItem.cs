@@ -6,7 +6,7 @@ using System.Web;
 
 namespace easyfis.Models
 {
-    public class PurchaseOrderItem
+    public class TrnPurchaseOrderItem
     {
         [Key]
 
