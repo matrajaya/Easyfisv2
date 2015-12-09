@@ -130,6 +130,66 @@ namespace easyfis.Controllers
             return (Models.MstArticle)articles.FirstOrDefault();
         }
 
+        // ===============================
+        // LIST Article by Article Type Id
+        // ===============================
+        [Route("api/listArticleByArticleTypeId/{id}")]
+        public List<Models.MstArticle> GetByArticleTypeId(String id)
+        {
+            var articleTypeId = Convert.ToInt32(id);
+            var articles = from d in db.MstArticles
+                           where d.ArticleTypeId == articleTypeId
+                           select new Models.MstArticle
+                           {
+                               Id = d.Id,
+                               ArticleCode = d.ArticleCode,
+                               ManualArticleCode = d.ManualArticleCode,
+                               Article = d.Article,
+                               Category = d.Category,
+                               ArticleTypeId = d.ArticleTypeId,
+                               ArticleType = d.MstArticleType.ArticleType,
+                               ArticleGroupId = d.ArticleGroupId,
+                               ArticleGroup = d.MstArticleGroup.ArticleGroup,
+                               AccountId = d.AccountId,
+                               Account = d.MstAccount.Account,
+                               SalesAccountId = d.SalesAccountId,
+                               CostAccountId = d.CostAccountId,
+                               AssetAccountId = d.AssetAccountId,
+                               ExpenseAccountId = d.ExpenseAccountId,
+                               UnitId = d.UnitId,
+                               Unit = d.MstUnit.Unit,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType.TaxType,
+                               InputTaxId = d.InputTaxId,
+                               InputTax = d.MstTaxType1.TaxType,
+                               WTaxTypeId = d.WTaxTypeId,
+                               WTaxType = d.MstTaxType2.TaxType,
+                               Price = d.Price,
+                               Cost = d.Cost,
+                               IsInventory = d.IsInventory,
+                               Particulars = d.Particulars,
+                               Address = d.Address,
+                               TermId = d.TermId,
+                               Term = d.MstTerm.Term,
+                               ContactNumber = d.ContactNumber,
+                               ContactPerson = d.ContactPerson,
+                               TaxNumber = d.TaxNumber,
+                               CreditLimit = d.CreditLimit,
+                               DateAcquired = d.DateAcquired.ToShortDateString(),
+                               UsefulLife = d.UsefulLife,
+                               SalvageValue = d.SalvageValue,
+                               ManualArticleOldCode = d.ManualArticleOldCode,
+                               IsLocked = d.IsLocked,
+                               CreatedById = d.CreatedById,
+                               CreatedBy = d.MstUser.FullName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                               UpdatedById = d.UpdatedById,
+                               UpdatedBy = d.MstUser1.FullName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                           };
+            return articles.ToList();
+        }
+
         // ==============
         // DELETE Article
         // ==============
