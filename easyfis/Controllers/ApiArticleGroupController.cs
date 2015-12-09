@@ -21,7 +21,6 @@ namespace easyfis.Controllers
                                 select new Models.MstArticleGroup
                                 {
                                     Id = d.Id,
-
                                     ArticleGroup = d.ArticleGroup,
                                     ArticleTypeId = d.ArticleTypeId,
                                     ArticleType = d.MstArticleType.ArticleType,
@@ -31,7 +30,6 @@ namespace easyfis.Controllers
                                     CostAccountId = d.CostAccountId,
                                     AssetAccountId = d.AssetAccountId,
                                     ExpenseAccountId = d.ExpenseAccountId,
-
                                     IsLocked = d.IsLocked,
                                     CreatedById = d.CreatedById,
                                     CreatedBy = d.MstUser.FullName,
@@ -64,7 +62,6 @@ namespace easyfis.Controllers
                                     CostAccountId = d.CostAccountId,
                                     AssetAccountId = d.AssetAccountId,
                                     ExpenseAccountId = d.ExpenseAccountId,
-
                                     IsLocked = d.IsLocked,
                                     CreatedById = d.CreatedById,
                                     CreatedBy = d.MstUser.FullName,

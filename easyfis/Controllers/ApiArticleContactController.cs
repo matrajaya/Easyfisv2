@@ -17,16 +17,16 @@ namespace easyfis.Controllers
         [Route("api/listArticleContact")]
         public List<Models.MstArticleContact> Get()
         {
-            var articleContact = from d in db.MstArticleContacts
-                               select new Models.MstArticleContact
-                               {
-                                   Id = d.Id,
-                                   ArticleId = d.ArticleId,
-                                   ContactPerson = d.ContactPerson,
-                                   ContactNumber = d.ContactNumber,
-                                   Remarks = d.Remarks
-                               };
-            return articleContact.ToList();
+            var articleContacts = from d in db.MstArticleContacts
+                                  select new Models.MstArticleContact
+                                  {
+                                      Id = d.Id,
+                                      ArticleId = d.ArticleId,
+                                      ContactPerson = d.ContactPerson,
+                                      ContactNumber = d.ContactNumber,
+                                      Remarks = d.Remarks
+                                  };
+            return articleContacts.ToList();
         }
     }
 }

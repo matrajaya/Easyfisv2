@@ -17,7 +17,7 @@ namespace easyfis.Controllers
         [Route("api/listArticleType")]
         public List<Models.MstArticleType> Get()
         {
-            var articleType = from d in db.MstArticleTypes
+            var articleTypes = from d in db.MstArticleTypes
                                select new Models.MstArticleType
                                {
                                    Id = d.Id,
@@ -30,7 +30,7 @@ namespace easyfis.Controllers
                                    //UpdatedBy = d.UpdatedBy,
                                    //UpdatedDateTime = d.UpdatedDateTime
                                };
-            return articleType.ToList();
+            return articleTypes.ToList();
         }
     }
 }

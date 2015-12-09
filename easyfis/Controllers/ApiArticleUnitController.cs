@@ -17,7 +17,7 @@ namespace easyfis.Controllers
         [Route("api/listArticleUnit")]
         public List<Models.MstArticleUnit> Get()
         {
-            var articleUnit = from d in db.MstArticleUnits
+            var articleUnits = from d in db.MstArticleUnits
                                select new Models.MstArticleUnit
                                {
                                    Id = d.Id,
@@ -27,7 +27,7 @@ namespace easyfis.Controllers
                                    Multiplier = d.Multiplier,
                                    //IsCountUnit = d.IsCountUnit
                                };
-            return articleUnit.ToList();
+            return articleUnits.ToList();
         }
     }
 }

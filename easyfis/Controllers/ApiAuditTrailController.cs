@@ -11,25 +11,25 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =======================
-        // LIST System Audit Trail
-        // =======================
-        [Route("api/listSysAuditTrail")]
+        // ================
+        // LIST Audit Trail
+        // ================
+        [Route("api/listAuditTrail")]
         public List<Models.SysAuditTrail> Get()
         {
-            var sysAuditTrail = from d in db.SysAuditTrails
-                        select new Models.SysAuditTrail
-                        {
-                            Id = d.Id,
-                            //Userid = d.Userid,
-                            //User = d.User,
-                            //Audidate = d.Audidate,
-                            TableInformation = d.TableInformation,
-                            RecordInformation = d.RecordInformation,
-                            FormInformation = d.FormInformation,
-                            ActionInformation = d.ActionInformation
-                        };
-            return sysAuditTrail.ToList();
+            var auditTrails = from d in db.SysAuditTrails
+                              select new Models.SysAuditTrail
+                              {
+                                  Id = d.Id,
+                                  //Userid = d.Userid,
+                                  //User = d.User,
+                                  //Audidate = d.Audidate,
+                                  TableInformation = d.TableInformation,
+                                  RecordInformation = d.RecordInformation,
+                                  FormInformation = d.FormInformation,
+                                  ActionInformation = d.ActionInformation
+                              };
+            return auditTrails.ToList();
         }
     }
 }

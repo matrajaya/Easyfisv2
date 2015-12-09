@@ -18,22 +18,22 @@ namespace easyfis.Controllers
         public List<Models.MstTaxType> Get()
         {
             var taxTypes = from d in db.MstTaxTypes
-                        select new Models.MstTaxType
-                        {
-                            Id = d.Id,
-                            TaxType = d.TaxType,
-                            TaxRate = d.TaxRate,
-                            IsInclusive = d.IsInclusive,
-                            AccountId = d.AccountId,
-                            Account = d.MstAccount.Account,
-                            IsLocked = d.IsLocked,
-                            CreatedById = d.CreatedById,
-                            CreatedBy = d.MstUser.FullName,
-                            CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                            UpdatedById = d.UpdatedById,
-                            UpdatedBy = d.MstUser1.FullName,
-                            UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                        };
+                           select new Models.MstTaxType
+                           {
+                               Id = d.Id,
+                               TaxType = d.TaxType,
+                               TaxRate = d.TaxRate,
+                               IsInclusive = d.IsInclusive,
+                               AccountId = d.AccountId,
+                               Account = d.MstAccount.Account,
+                               IsLocked = d.IsLocked,
+                               CreatedById = d.CreatedById,
+                               CreatedBy = d.MstUser.FullName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                               UpdatedById = d.UpdatedById,
+                               UpdatedBy = d.MstUser1.FullName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                           };
             return taxTypes.ToList();
         }
     }

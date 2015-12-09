@@ -17,24 +17,24 @@ namespace easyfis.Controllers
         [Route("api/listDiscount")]
         public List<Models.MstDiscount> Get()
         {
-            var discount = from d in db.MstDiscounts
-                               select new Models.MstDiscount
-                               {
-                                   Id = d.Id,
-                                   Discount = d.Discount,
-                                   DiscountRate = d.DiscountRate,
-                                   IsInclusive = d.IsInclusive,
-                                   AccountId = d.AccountId,
-                                   //Account = d.Account,
-                                   IsLocked = d.IsLocked,
-                                   CreatedById = d.CreatedById,
-                                   //CreatedBy = d.CreatedBy,
-                                   //CreatedDateTime = d.CreatedDateTime,
-                                   UpdatedById = d.UpdatedById,
-                                   //UpdatedBy = d.UpdatedBy,
-                                   //UpdatedDateTime = d.UpdatedDateTime
-                               };
-            return discount.ToList();
+            var discounts = from d in db.MstDiscounts
+                            select new Models.MstDiscount
+                            {
+                                Id = d.Id,
+                                Discount = d.Discount,
+                                DiscountRate = d.DiscountRate,
+                                IsInclusive = d.IsInclusive,
+                                AccountId = d.AccountId,
+                                //Account = d.Account,
+                                IsLocked = d.IsLocked,
+                                CreatedById = d.CreatedById,
+                                //CreatedBy = d.CreatedBy,
+                                //CreatedDateTime = d.CreatedDateTime,
+                                UpdatedById = d.UpdatedById,
+                                //UpdatedBy = d.UpdatedBy,
+                                //UpdatedDateTime = d.UpdatedDateTime
+                            };
+            return discounts.ToList();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace easyfis.Controllers
         [Route("api/listInventory")]
         public List<Models.TrnInventory> Get()
         {
-            var invent = from d in db.TrnInventories
+            var inventories = from d in db.TrnInventories
                         select new Models.TrnInventory
                         {
                             Id = d.Id,
@@ -37,7 +37,7 @@ namespace easyfis.Controllers
                             Amount = d.Amount,
                             Particulars = d.Particulars
                         };
-            return invent.ToList();
+            return inventories.ToList();
         }
     }
 }

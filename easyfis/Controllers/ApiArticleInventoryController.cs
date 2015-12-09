@@ -17,19 +17,19 @@ namespace easyfis.Controllers
         [Route("api/listArticleInventory")]
         public List<Models.MstArticleInventory> Get()
         {
-            var articleInventory = from d in db.MstArticleInventories
-                                    select new Models.MstArticleInventory
-                                    {
-                                        Id = d.Id,
-                                        BranchId = d.BranchId,
-                                        ArticleId = d.ArticleId,
-                                        InventoryCode = d.InventoryCode,
-                                        Quantity = d.Quantity,
-                                        Cost = d.Cost,
-                                        Amount = d.Amount,
-                                        Particulars = d.Particulars
-                                    };
-            return articleInventory.ToList();
+            var articleInventories = from d in db.MstArticleInventories
+                                     select new Models.MstArticleInventory
+                                     {
+                                         Id = d.Id,
+                                         BranchId = d.BranchId,
+                                         ArticleId = d.ArticleId,
+                                         InventoryCode = d.InventoryCode,
+                                         Quantity = d.Quantity,
+                                         Cost = d.Cost,
+                                         Amount = d.Amount,
+                                         Particulars = d.Particulars
+                                     };
+            return articleInventories.ToList();
         }
     }
 }

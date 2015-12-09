@@ -11,20 +11,20 @@ namespace easyfis.Models
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ================
-        // LIST System Form 
-        // ================
-        [Route("api/listSysForm")]
+        // =========
+        // LIST Form 
+        // =========
+        [Route("api/listForm")]
         public List<Models.SysForm> Get()
         {
-            var sysForm = from d in db.SysForms
+            var forms = from d in db.SysForms
                         select new Models.SysForm
                         {
                             Id = d.Id,
                             FormName = d.FormName,
                             Particulars = d.Particulars
                         };
-            return sysForm.ToList();
+            return forms.ToList();
         }
     }
 }

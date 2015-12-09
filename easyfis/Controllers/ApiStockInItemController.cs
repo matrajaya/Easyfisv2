@@ -17,26 +17,26 @@ namespace easyfis.Controllers
         [Route("api/listStockInItem")]
         public List<Models.TrnStockInItem> Get()
         {
-            var stockInItem = from d in db.TrnStockInItems
-                        select new Models.TrnStockInItem
-                        {
-                            Id = d.Id,
-                            INId = d.INId,
-                            //IN = d.IN,
-                            ItemId = d.ItemId,
-                            //Item = d.Item,
-                            Particulars = d.Particulars,
-                            UnitId = d.UnitId,
-                            //Unit = d.Unit,
-                            Quantity = d.Quantity,
-                            Cost = d.Cost,
-                            Amount = d.Amount,
-                            BaseUnitId = d.BaseUnitId,
-                            //BaseUnit = d.BaseUnit,
-                            BaseQuantity = d.BaseQuantity,
-                            BaseCost = d.BaseCost
-                        };
-            return stockInItem.ToList();
+            var stockInItems = from d in db.TrnStockInItems
+                               select new Models.TrnStockInItem
+                               {
+                                   Id = d.Id,
+                                   INId = d.INId,
+                                   //IN = d.IN,
+                                   ItemId = d.ItemId,
+                                   //Item = d.Item,
+                                   Particulars = d.Particulars,
+                                   UnitId = d.UnitId,
+                                   //Unit = d.Unit,
+                                   Quantity = d.Quantity,
+                                   Cost = d.Cost,
+                                   Amount = d.Amount,
+                                   BaseUnitId = d.BaseUnitId,
+                                   //BaseUnit = d.BaseUnit,
+                                   BaseQuantity = d.BaseQuantity,
+                                   BaseCost = d.BaseCost
+                               };
+            return stockInItems.ToList();
         }
     }
 }

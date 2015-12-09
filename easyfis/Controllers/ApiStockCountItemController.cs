@@ -17,18 +17,18 @@ namespace easyfis.Controllers
         [Route("api/listStockCountItem")]
         public List<Models.TrnStockCountItem> Get()
         {
-            var stockCountItem = from d in db.TrnStockCountItems
-                        select new Models.TrnStockCountItem
-                        {
-                            Id = d.Id,
-                            SCId = d.SCId,
-                            //SC = d.SC,
-                            ItemId = d.ItemId,
-                            //Item = d.Item,
-                            Particulars = d.Particulars,
-                            Quantity = d.Quantity
-                        };
-            return stockCountItem.ToList();
+            var stockCountItems = from d in db.TrnStockCountItems
+                                  select new Models.TrnStockCountItem
+                                  {
+                                      Id = d.Id,
+                                      SCId = d.SCId,
+                                      //SC = d.SC,
+                                      ItemId = d.ItemId,
+                                      //Item = d.Item,
+                                      Particulars = d.Particulars,
+                                      Quantity = d.Quantity
+                                  };
+            return stockCountItems.ToList();
         }
     }
 }

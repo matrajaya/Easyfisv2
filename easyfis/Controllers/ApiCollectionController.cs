@@ -17,32 +17,32 @@ namespace easyfis.Controllers
         [Route("api/listCollection")]
         public List<Models.TrnCollection> Get()
         {
-            var collect = from d in db.TrnCollections
-                        select new Models.TrnCollection
-                        {
-                            Id = d.Id,
-                            BranchId = d.BranchId,
-                            //Branch = d.Branch,
-                            ORNumber = d.ORNumber,
-                            //ORDate = d.ORDate,
-                            //Customer = d.Customer,
-                            Particulars = d.Particulars,
-                            ManualORNumber = d.ManualORNumber,
-                            //PreparedBy = d.PreparedBy,
-                            PreparedById = d.PreparedById,
-                            //CheckedBy = d.CheckedBy,
-                            CheckedById = d.CheckedById,
-                            //ApprovedBy = d.ApprovedBy,
-                            ApprovedById = d.ApprovedById,
-                            IsLocked = d.IsLocked,
-                            CreatedById = d.CreatedById,
-                            //CreatedBy = d.CreatedBy,
-                            //CreatedDateTime = d.CreatedDateTime,
-                            UpdatedById = d.UpdatedById,
-                            //UpdatedBy = d.UpdatedBy,
-                            //UpdatedDateTime = d.UpdatedDateTime
-                        };
-            return collect.ToList();
+            var collections = from d in db.TrnCollections
+                              select new Models.TrnCollection
+                              {
+                                  Id = d.Id,
+                                  BranchId = d.BranchId,
+                                  //Branch = d.Branch,
+                                  ORNumber = d.ORNumber,
+                                  //ORDate = d.ORDate,
+                                  //Customer = d.Customer,
+                                  Particulars = d.Particulars,
+                                  ManualORNumber = d.ManualORNumber,
+                                  //PreparedBy = d.PreparedBy,
+                                  PreparedById = d.PreparedById,
+                                  //CheckedBy = d.CheckedBy,
+                                  CheckedById = d.CheckedById,
+                                  //ApprovedBy = d.ApprovedBy,
+                                  ApprovedById = d.ApprovedById,
+                                  IsLocked = d.IsLocked,
+                                  CreatedById = d.CreatedById,
+                                  //CreatedBy = d.CreatedBy,
+                                  //CreatedDateTime = d.CreatedDateTime,
+                                  UpdatedById = d.UpdatedById,
+                                  //UpdatedBy = d.UpdatedBy,
+                                  //UpdatedDateTime = d.UpdatedDateTime
+                              };
+            return collections.ToList();
         }
     }
 }

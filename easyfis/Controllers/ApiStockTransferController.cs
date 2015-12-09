@@ -24,10 +24,10 @@ namespace easyfis.Controllers
                                     //Userid = d.Userid,
                                     //User = d.User,
                                     //Audidate = d.Audidate,
-                                    TableInformation = d.TableInformation,
-                                    RecordInformation = d.RecordInformation,
-                                    FormInformation = d.FormInformation,
-                                    ActionInformation = d.ActionInformation
+                                    //TableInformation = d.TableInformation,
+                                    //RecordInformation = d.RecordInformation,
+                                    //FormInformation = d.FormInformation,
+                                    //ActionInformation = d.ActionInformation
                                 };
             return stockTransfer.ToList();
         }
