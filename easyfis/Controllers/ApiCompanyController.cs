@@ -147,6 +147,46 @@ namespace easyfis.Controllers
             }
         }
 
+        // =======================
+        // UPDATE Company IsLocked
+        // =======================
+        [Route("api/updateCompanyIsLock/{id}")]
+        public HttpResponseMessage PutIslock(String id, Models.MstCompany company)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var companyId = Convert.ToInt32(id);
+                var companies = from d in db.MstCompanies where d.Id == companyId select d;
+
+                if (companies.Any())
+                {
+                    var updateCompany = companies.FirstOrDefault();
+
+                    updateCompany.IsLocked = company.IsLocked;
+                    updateCompany.UpdatedById = mstUserId;
+                    updateCompany.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
         // ==============
         // DELETE Company
         // ==============

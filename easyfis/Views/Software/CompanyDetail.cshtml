@@ -39,11 +39,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <!--<h4 id="companyDetailLabel"></h4>-->
-                        <span id="status_LockedOrUnlocked"></span> <span id="status_LockedOrUnlocked_branchesEmpty" style="color: red"></span>
-                    </div>
-                    <div class="col-md-6" align="right">
+                    <div class="col-md-12" align="right">
                         <button class="btn btn-primary btn-sm" id="cmdSaveCompany" onclick="cmdCompanySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdSaveUpdateCompany" onclick="cmdCompanySaveUpdateButton_OnClick()"><i class="fa fa-save"></i> Save Company</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditCompany" onclick="cmdCompanyEditButton_OnClick()"><i class="fa fa-edit"></i> Edit</button>
@@ -80,6 +76,12 @@
                                     <label class="control-label col-sm-4">TAX No:</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredCompany" id="company_TaxNumber" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Lock:</label>
+                                    <div class="col-sm-8">
+                                        <input type="checkbox" class="checkbox_custom" id="isLocked_Status" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -341,14 +343,15 @@
                         $("#cmdPrintCompany").prop("disabled", false);
                         $("#cmdSaveUpdateCompany").prop("disabled", true);
                         $("#cmdBranchAddBranchButton").prop("disabled", true);
-                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-lock"></i> Locked';
                         document.getElementById('company_Company').disabled = true;
                         document.getElementById('company_Address').disabled = true;
                         document.getElementById('company_ContactNumber').disabled = true;
                         document.getElementById('company_TaxNumber').disabled = true;
 
+                        document.getElementById('isLocked_Status').checked = true;
+
                         branches = new wijmo.collections.CollectionView(getBranchByCompanyId());
-                        
+
                         branches.canFilter = true;
                         branches.pageSize = 15;
 
@@ -466,7 +469,8 @@
                         $("#cmdPrintCompany").prop("disabled", true);
                         $("#cmdSaveUpdateCompany").prop("disabled", false);
 
-                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-unlock"></i> Not Lock';
+                        document.getElementById('isLocked_Status').checked = false;
+
                         document.getElementById('company_Company').disabled = false;
                         document.getElementById('company_Address').disabled = false;
                         document.getElementById('company_ContactNumber').disabled = false;
@@ -719,10 +723,14 @@
             var companyObject = new Object();
             var companyId = @id;
 
-            companyObject.Company = document.getElementById('company_Company').value;
-            companyObject.Address = document.getElementById('company_Address').value;
-            companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
-            companyObject.TaxNumber = document.getElementById('company_TaxNumber').value;
+            $("#cmdSaveCompany").prop("disabled", true);
+            $("#cmdSaveUpdateCompany").prop("disabled", true);
+            $("#cmdEditCompany").prop("disabled", true);
+            $("#cmdPrintCompany").prop("disabled", true);
+            $("#cmdCloseButtonCompany").prop("disabled", true);
+            $("#cmdSaveBranchButton").prop("disabled", true);
+            $("#cmdBranchDetailCloseButton").prop("disabled", true);
+
             if(companyId > 0) {
                 companyObject.IsLocked = document.getElementById('Company_IsLocked_defaultFalse').value;
             } else {
@@ -732,7 +740,7 @@
             var dataUpdate = JSON.stringify(companyObject);
             $.ajax({
                 type: "PUT",
-                url: '/api/updateCompany/' + companyId,
+                url: '/api/updateCompanyIsLock/' + companyId,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 data: dataUpdate,
@@ -827,7 +835,7 @@
         // GET Branch List by Id
         // =====================
         function getBranchByCompanyId() {
-           // $('#loadingModal').modal('show');
+            // $('#loadingModal').modal('show');
             var branches = new wijmo.collections.ObservableArray;
             var companyId = @id;
             $.ajax({
@@ -837,7 +845,7 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                   // $('#loadingModal').modal('hide');
+                    // $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             branches.push({
@@ -863,7 +871,6 @@
                         $("#cmdSaveCompany").hide();
                         $("#cmdSaveUpdateCompany").show();
                     } else {
-                        document.getElementById('status_LockedOrUnlocked_branchesEmpty').innerHTML = ' - Branch list is empty';
                         $("#cmdSaveCompany").show();
                         $("#cmdSaveUpdateCompany").hide();
                     }
@@ -1161,13 +1168,16 @@
 
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Company", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Company</a> ' + ' > Company Detail';
 
+            document.getElementById('isLocked_Status').disabled = true;
+
             if(@id == 0) {
                 $("#cmdBranchAddBranchButton").prop("disabled", true);
                 $("#cmdSaveCompany").prop("disabled", false);
                 $("#cmdSaveUpdateCompany").prop("disabled", true);
                 $("#cmdEditCompany").prop("disabled", true);
                 $("#cmdPrintCompany").prop("disabled", true);
-                document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-unlock"></i> Not Lock';
+
+
             } else {
                 $("#cmdBranchAddBranchButton").prop("disabled", false);
             }

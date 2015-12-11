@@ -43,11 +43,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-5">
-                        @*<h4 id="journalVoucherDetailLabel"></h4>*@
-                        <span id="status_LockedOrUnlocked"></span> <span id="status_LockedOrUnlocked_JVLEmpty" style="color: red"></span>
-                    </div>
-                    <div class="col-md-7" align="right">
+                    <div class="col-md-12" align="right">
                         <button class="btn btn-primary btn-sm" id="cmdJournalJournalVoucher" onclick="cmdJournalVoucherJournalButton_OnClick()"><i class="fa fa-book"></i> Journal</button>
                         <!-- Save Button to Add Journal -->
                         <button class="btn btn-primary btn-sm" id="cmdSaveAndLockJournalVoucher" onclick="cmdJournalVoucherSaveAndLockButton_OnClick()"><i class="fa fa-save"></i> Save Journal</button>
@@ -122,6 +118,12 @@
                                         <div id="approvedByUserId" class="comboBox-wide"></div>
                                         <input type="hidden" id="approvedByUserId_Data" class="requiredJournalVoucher" required />
                                         <input type="hidden" id="approvedByUserId_selectedValue" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Lock:</label>
+                                    <div class="col-sm-8">
+                                        <input type="checkbox" class="checkbox_custom" id="isLocked_Status" />
                                     </div>
                                 </div>
                                 <br />
@@ -520,7 +522,6 @@
                         $("#cmdJournalJournalVoucher").prop("disabled", false);
                         $("#cmdPreviewJournalVoucher").prop("disabled", false);
                         $('#cmdSaveAndLockJournalVoucher').prop('disabled', true);
-                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-lock"></i> Locked';
 
                         $("#cmdSaveJournalVoucher").prop("disabled", true);
                         $("#cmdEditJournalVoucher").prop("disabled", false);
@@ -528,6 +529,8 @@
                         //document.getElementById('journalVoucher_No').disabled = true;
                         document.getElementById('manual_JournalVoucher_No').disabled = true;
                         document.getElementById('journalVoucher_Particulars').disabled = true;
+
+                        document.getElementById('isLocked_Status').checked = true;
 
                         $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", true);
 
@@ -632,9 +635,10 @@
                         $("#cmdJournalJournalVoucher").prop("disabled", true);
                         $("#cmdPreviewJournalVoucher").prop("disabled", true);
                         $('#cmdSaveAndLockJournalVoucher').prop('disabled', false);
-                        document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-unlock"></i> Not Lock ';
                         $("#cmdEditJournalVoucher").prop("disabled", true);
                         $("#cmdSaveJournalVoucher").prop("disabled", false);
+
+                        document.getElementById('isLocked_Status').checked = false;
                         //document.getElementById('journalVoucher_No').disabled = false;
                         document.getElementById('manual_JournalVoucher_No').disabled = false;
                         document.getElementById('journalVoucher_Particulars').disabled = false;
@@ -1128,14 +1132,7 @@
 
             var journalVoucherObject = new Object();
             var journalVoucherId = @JVId;
-            journalVoucherObject.BranchId = document.getElementById('branch_Id_data').value;
-            journalVoucherObject.JVNumber = document.getElementById('journalVoucher_No').value;
-            journalVoucherObject.ManualJVNumber = document.getElementById('manual_JournalVoucher_No').value;
-            journalVoucherObject.JVDate = document.getElementById('journalVoucher_date_Data').value;
-            journalVoucherObject.Particulars = document.getElementById('journalVoucher_Particulars').value;
-            journalVoucherObject.PreparedById = document.getElementById('preparedByUserId_Data').value;
-            journalVoucherObject.CheckedById = document.getElementById('checkedByUserId_Data').value;
-            journalVoucherObject.ApprovedById = document.getElementById('approvedByUserId_Data').value;
+
             if(journalVoucherId > 0) {
                 journalVoucherObject.IsLocked = document.getElementById('JV_IsLocked_defaultFalse').value;
             } else {
@@ -1145,7 +1142,7 @@
 
             $.ajax({
                 type: "PUT",
-                url: '/api/updateJournalVoucher/' + journalVoucherId,
+                url: '/api/updateJournalVoucherIsLock/' + journalVoucherId,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 data: JVdata,
@@ -1349,7 +1346,6 @@
                         document.getElementById('journalVoucherLineNameLabel').innerHTML = 'Journal Voucher Line List';
                         $('#cmdSaveJournalVoucher').hide();
                     } else {
-                        document.getElementById('status_LockedOrUnlocked_JVLEmpty').innerHTML = ' - JV Line is empty.';
                         $('#cmdSaveAndLockJournalVoucher').hide();
                         $("#cmdJournalJournalVoucher").prop("disabled", true);
                     }
@@ -2045,6 +2041,8 @@
                 }
             });
 
+            document.getElementById('isLocked_Status').disabled = true;
+
             $('#cmdJournalJournalVoucher').click(function () {
                 $('#journalList').modal({
                     show: true,
@@ -2099,7 +2097,6 @@
 
                 $("#cmdEditJournalVoucher").prop("disabled", true);
                 document.getElementById('cmdSaveJournalVoucher').innerHTML = '<i class="fa fa-save"></i> Save';
-                document.getElementById('status_LockedOrUnlocked').innerHTML = ' <i class="fa fa-save"></i> Not Lock';
 
                 journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
                     format: 'MM/dd/yyyy',

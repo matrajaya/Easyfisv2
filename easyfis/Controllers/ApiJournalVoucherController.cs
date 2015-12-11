@@ -273,6 +273,57 @@ namespace easyfis.Controllers
             }
         }
 
+        // =============================
+        // UPDATE Journal Voucher IsLock
+        // =============================
+        [Route("api/updateJournalVoucherIsLock/{id}")]
+        public HttpResponseMessage PutIsLock(String id, Models.TrnJournalVoucher journalVoucher)
+        {
+            try
+            {
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var journalVoucherId = Convert.ToInt32(id);
+                var journalVouchers = from d in db.TrnJournalVouchers where d.Id == journalVoucherId select d;
+
+                if (journalVouchers.Any())
+                {
+                    var updateJournalVoucher = journalVouchers.FirstOrDefault();
+
+                    updateJournalVoucher.IsLocked = journalVoucher.IsLocked;
+                    updateJournalVoucher.UpdatedById = mstUserId;
+                    updateJournalVoucher.UpdatedDateTime = date;
+
+
+                    if (updateJournalVoucher.IsLocked == true)
+                    {
+                        Debug.WriteLine(updateJournalVoucher.IsLocked);
+                        postJournal.postJournal(journalVoucherId);
+                    }
+                    else
+                    {
+                        Debug.WriteLine(updateJournalVoucher.IsLocked);
+                        postJournal.deleteJournal(journalVoucherId);
+                    }
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
         // ======================
         // DELETE Journal Voucher
         // ======================

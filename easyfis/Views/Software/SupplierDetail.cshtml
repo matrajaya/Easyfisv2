@@ -43,10 +43,11 @@
                         <h4 id="supplierDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id=""><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id=""><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id=""><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("Supplier", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="supplier_SaveSupplierButton" onclick="supplierSaveSupplierButton_OnClick()"><i class="fa fa-save"></i> Save Supplier</button>
+                        <button class="btn btn-primary btn-sm" id="supplier_SaveButton" onclick="supplierSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id="supplier_EditButton" onclick="supplierEditButton_OnClick()"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="supplier_PrintButton"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("Supplier", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="supplier_CloseButton"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -57,7 +58,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Code:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="artcileSupplier_code" /> <!-- Auto Generated No ni-->
+                                        <input type="text" class="form-control input-sm" id="artcileSupplier_code" />
+                                        <input type="hidden" id="artcileSupplier_code_data" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -123,6 +125,20 @@
                                     <label class="control-label col-sm-4">Particulars:</label>
                                     <div class="col-sm-8">
                                         <textarea class="form-control textarea-custom" id="artcileSupplier_Particulars"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Lock:</label>
+                                    <div class="col-sm-8">
+                                        <input type="checkbox" class="checkbox_custom" id="isLocked_Status" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-8">
+                                        <input type="hidden" id="Supplier_IsLocked">
+                                        <input type="hidden" id="Supplier_IsLocked_defaultTrue">
+                                        <input type="hidden" id="Supplier_IsLocked_defaultFalse">
                                     </div>
                                 </div>
                             </div>
@@ -235,6 +251,8 @@
                         });
                     }
                     document.getElementById('artcileSupplier_code').value = Results.ArticleCode;
+                    document.getElementById('artcileSupplier_code_data').value = Results.ArticleCode;
+
                     document.getElementById('artcileSupplier_Supplier').value = Results.Article;
 
                     document.getElementById('artcileSupplier_SupplierGroup_Data').value = Results.ArticleGroupId;
@@ -256,6 +274,39 @@
                     document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
                     document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
                     document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                    document.getElementById('Supplier_IsLocked').value = Results.IsLocked;
+
+                    if(document.getElementById('Supplier_IsLocked').value == 'true') {
+                        document.getElementById('artcileSupplier_Supplier').disabled = true;
+                        document.getElementById('artcileSupplier_Address').disabled = true;
+                        document.getElementById('artcileSupplier_Particulars').disabled = true;
+                        document.getElementById('artcileSupplier_TIN').disabled = true;
+                        document.getElementById('artcileSupplier_ContactNo').disabled = true;
+                        document.getElementById('artcileSupplier_ContactPerson').disabled = true;
+
+                        $("#supplier_SaveSupplierButton").prop("disabled", true);
+                        $("#supplier_SaveButton").prop("disabled", true);
+                        $("#supplier_EditButton").prop("disabled", false);
+                        $("#supplier_PrintButton").prop("disabled", false);
+                        
+                        document.getElementById('isLocked_Status').checked = true;
+
+                    } else if(document.getElementById('Supplier_IsLocked').value == 'false') {
+                        document.getElementById('artcileSupplier_Supplier').disabled = false;
+                        document.getElementById('artcileSupplier_Address').disabled = false;
+                        document.getElementById('artcileSupplier_Particulars').disabled = false;
+                        document.getElementById('artcileSupplier_TIN').disabled = false;
+                        document.getElementById('artcileSupplier_ContactNo').disabled = false;
+                        document.getElementById('artcileSupplier_ContactPerson').disabled = false;
+
+                        $("#supplier_SaveSupplierButton").prop("disabled", false);
+                        $("#supplier_SaveButton").prop("disabled", false);
+                        $("#supplier_EditButton").prop("disabled", true);
+                        $("#supplier_PrintButton").prop("disabled", true);
+
+                        document.getElementById('isLocked_Status').checked = false;
+                    }
 
                     // ajax for combobox
                     getArticleSupplierGroupForComboBox();
@@ -305,17 +356,45 @@
                 articleGroupList.push(articleSupplierGroupCollection.items[i].ArticleGroupArticleGroup);
             }
 
-            cboArticleGroup.dispose();
-            cboArticleGroup = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup', {
-                placeholder: "Select Supplier Group",
-                itemsSource: articleGroupList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('artcileSupplier_SupplierGroup_SelectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#artcileSupplier_SupplierGroup_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupId);
-                }
-            });
+            if(document.getElementById('Supplier_IsLocked').value == 'true') {
+                cboArticleGroup.dispose();
+                cboArticleGroup = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup', {
+                    disabled: true,
+                    placeholder: "Select Supplier Group",
+                    itemsSource: articleGroupList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('artcileSupplier_SupplierGroup_SelectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#artcileSupplier_SupplierGroup_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupId);
+                    }
+                });
+            } else if(document.getElementById('Supplier_IsLocked').value == 'false') {
+                cboArticleGroup.dispose();
+                cboArticleGroup = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup', {
+                    disabled: false,
+                    placeholder: "Select Supplier Group",
+                    itemsSource: articleGroupList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('artcileSupplier_SupplierGroup_SelectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#artcileSupplier_SupplierGroup_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupId);
+                    }
+                });
+            } else {
+                cboArticleGroup.dispose();
+                cboArticleGroup = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup', {
+                    placeholder: "Select Supplier Group",
+                    itemsSource: articleGroupList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('artcileSupplier_SupplierGroup_SelectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#artcileSupplier_SupplierGroup_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupId);
+                    }
+                });
+            }
         }
 
         // ==================
@@ -356,17 +435,45 @@
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
 
-            cboForAccount.dispose();
-            cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account', {
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('artcileSupplier_Account_SelectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#artcileSupplier_Account_Data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+            if(document.getElementById('Supplier_IsLocked').value == 'true') {
+                cboForAccount.dispose();
+                cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account', {
+                    disabled: true,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('artcileSupplier_Account_SelectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#artcileSupplier_Account_Data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else if(document.getElementById('Supplier_IsLocked').value == 'false') {
+                cboForAccount.dispose();
+                cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account', {
+                    disabled: false,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('artcileSupplier_Account_SelectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#artcileSupplier_Account_Data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else {
+                cboForAccount.dispose();
+                cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account', {
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('artcileSupplier_Account_SelectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#artcileSupplier_Account_Data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            }
         }
 
         // ===============
@@ -407,28 +514,203 @@
                 termList.push(termCollection.items[i].TermTerm);
             }
 
-            cboForTerm.dispose();
-            cboForTerm = new wijmo.input.ComboBox('#artcileSupplier_Term', {
-                placeholder: "Select Account",
-                itemsSource: termList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('artcileSupplier_Term_SelectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#artcileSupplier_Term_Data").val(accountCollection.items[this.selectedIndex].AccountId);
+            if(document.getElementById('Supplier_IsLocked').value == 'true') {
+                cboForTerm.dispose();
+                cboForTerm = new wijmo.input.ComboBox('#artcileSupplier_Term', {
+                    disabled: true,
+                    placeholder: "Select Account",
+                    itemsSource: termList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('artcileSupplier_Term_SelectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#artcileSupplier_Term_Data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else if(document.getElementById('Supplier_IsLocked').value == 'false') {
+                cboForTerm.dispose();
+                cboForTerm = new wijmo.input.ComboBox('#artcileSupplier_Term', {
+                    disabled: false,
+                    placeholder: "Select Account",
+                    itemsSource: termList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('artcileSupplier_Term_SelectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#artcileSupplier_Term_Data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else {
+                cboForTerm.dispose();
+                cboForTerm = new wijmo.input.ComboBox('#artcileSupplier_Term', {
+                    placeholder: "Select Account",
+                    itemsSource: termList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('artcileSupplier_Term_SelectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#artcileSupplier_Term_Data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            }
+        }
+
+        // ====================
+        // EDIT Supplier Button
+        // ====================
+        function supplierEditButton_OnClick() {
+            $("#supplier_SaveSupplierButton").prop("disabled", true);
+            $("#supplier_SaveButton").prop("disabled", true);
+            $("#supplier_EditButton").prop("disabled", true);
+            $("#supplier_PrintButton").prop("disabled", true);
+            $("#supplier_CloseButton").prop("disabled", true);
+            
+            var supplierObject = new Object();
+            var supplierId = @articleSupplierId;
+
+            if(supplierId > 0) {
+                supplierObject.IsLocked = document.getElementById('Supplier_IsLocked_defaultFalse').value;
+            } else {
+                supplierObject.IsLocked = document.getElementById('Supplier_IsLocked_defaultTrue').value;
+            }
+
+            console.log(document.getElementById('Supplier_IsLocked_defaultFalse').value);
+
+            var dataUpdate = JSON.stringify(supplierObject);
+            $.ajax({
+                type: "PUT",
+                url: '/api/updateArticleIsLock/' + supplierId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: dataUpdate,
+                statusCode: {
+                    200: function () {
+                        toastr.success("Unlocked");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Can't Update");
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                    }
                 }
             });
+
+        }
+
+        // =============================
+        // SAVE SUPPLIER Supplier Button
+        // =============================
+        function supplierSaveSupplierButton_OnClick() {
+            $("#supplier_SaveSupplierButton").prop("disabled", true);
+            $("#supplier_SaveButton").prop("disabled", true);
+            $("#supplier_EditButton").prop("disabled", true);
+            $("#supplier_PrintButton").prop("disabled", true);
+            $("#supplier_CloseButton").prop("disabled", true);
+            
+            var supplierObject = new Object();
+            var supplierId = @articleSupplierId;
+
+            if(supplierId > 0) {
+                supplierObject.IsLocked = document.getElementById('Supplier_IsLocked_defaultTrue').value;
+            } else {
+                supplierObject.IsLocked = document.getElementById('Supplier_IsLocked_defaultFalse').value;
+            }
+
+            console.log(document.getElementById('Supplier_IsLocked_defaultFalse').value);
+
+            var dataUpdate = JSON.stringify(supplierObject);
+            $.ajax({
+                type: "PUT",
+                url: '/api/updateArticleIsLock/' + supplierId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: dataUpdate,
+                statusCode: {
+                    200: function () {
+                        toastr.success("Successfully Saved");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Can't Update");
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                    }
+                }
+            });
+
+        }
+
+        // ========================================================
+        // Function with leading zeroes to display the article code
+        // ========================================================
+        function zerofill(number, length) {
+            var result = number.toString();
+            var pad = length - result.length;
+            while(pad > 0) {
+                result = '0' + result;
+                pad--;
+            }
+            return result;
         }
 
         // ============
         // On Page Load
         // ============
         $(document).ready(function () {
+            document.getElementById('Supplier_IsLocked_defaultTrue').value = 'true';
+            document.getElementById('Supplier_IsLocked_defaultFalse').value = 'false';
+
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Supplier</a> ' + ' > Supplier Detail';
-        
+
             document.getElementById('artcileSupplier_code').disabled = true;
+            document.getElementById('isLocked_Status').disabled = true;
 
             getArticleSupplierById();
+
+            if(@articleSupplierId == 0) {
+                if(document.getElementById('artcileSupplier_code_data').value == 0) {
+                    document.getElementById('artcileSupplier_code').value = "0000000001";
+                }
+
+                document.getElementById('artcileSupplier_code_data').value = 0;
+
+                var suppliers = new wijmo.collections.ObservableArray;
+                $.ajax({
+                    url: '/api/listArticleLastSupplierByArticleTypeId/3',
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            suppliers.push({
+                                Id: Results.Id,
+                                SupplierArticleCode: Results.ArticleCode
+                            });
+                        }
+                        var ArticleCode = parseInt(Results.ArticleCode);
+                        var ArticleCode_plusOne = 0000000001;
+                        var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
+                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+
+                        document.getElementById('artcileSupplier_code_data').value = zerofill(ArticleCode_Results, 10);
+                        document.getElementById('artcileSupplier_code').value = zerofill(ArticleCode_Results, 10);
+                    }
+                });
+
+                $("#supplier_SaveSupplierButton").prop("disabled", false);
+                $("#supplier_SaveButton").prop("disabled", false);
+                $("#supplier_EditButton").prop("disabled", true);
+                $("#supplier_PrintButton").prop("disabled", true);
+            }
+
 
             // combo box wijmo
             cboArticleGroup  = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup');
