@@ -589,12 +589,27 @@
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
+                        $("#supplier_SaveSupplierButton").prop("disabled", true);
+                        $("#supplier_SaveButton").prop("disabled", true);
+                        $("#supplier_EditButton").prop("disabled", true);
+                        $("#supplier_PrintButton").prop("disabled", true);
+                        $("#supplier_CloseButton").prop("disabled", true);
                     },
                     404: function () {
                         toastr.error("Can't Update");
+                        $("#supplier_SaveSupplierButton").prop("disabled", false);
+                        $("#supplier_SaveButton").prop("disabled", false);
+                        $("#supplier_EditButton").prop("disabled", false);
+                        $("#supplier_PrintButton").prop("disabled", false);
+                        $("#supplier_CloseButton").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
+                        $("#supplier_SaveSupplierButton").prop("disabled", false);
+                        $("#supplier_SaveButton").prop("disabled", false);
+                        $("#supplier_EditButton").prop("disabled", false);
+                        $("#supplier_PrintButton").prop("disabled", false);
+                        $("#supplier_CloseButton").prop("disabled", false);
                     }
                 }
             });
@@ -631,7 +646,7 @@
                 data: dataUpdate,
                 statusCode: {
                     200: function () {
-                        toastr.success("Successfully Saved");
+                        toastr.success("Saved Supplier");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);

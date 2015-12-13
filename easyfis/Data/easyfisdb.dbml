@@ -59,6 +59,7 @@
       <Association Name="AspNetUser_AspNetUserClaim" Member="AspNetUserClaims" ThisKey="Id" OtherKey="UserId" Type="AspNetUserClaim" />
       <Association Name="AspNetUser_AspNetUserLogin" Member="AspNetUserLogins" ThisKey="Id" OtherKey="UserId" Type="AspNetUserLogin" />
       <Association Name="AspNetUser_AspNetUserRole" Member="AspNetUserRoles" ThisKey="Id" OtherKey="UserId" Type="AspNetUserRole" />
+      <Association Name="AspNetUser_MstUser" Member="MstUsers" ThisKey="Id" OtherKey="UserId" Type="MstUser" />
     </Type>
   </Table>
   <Table Name="dbo.MstAccount" Member="MstAccounts">
@@ -316,6 +317,8 @@
       <Association Name="MstArticleType_MstAccountArticleType" Member="MstAccountArticleTypes" ThisKey="Id" OtherKey="ArticleTypeId" Type="MstAccountArticleType" />
       <Association Name="MstArticleType_MstArticle" Member="MstArticles" ThisKey="Id" OtherKey="ArticleTypeId" Type="MstArticle" />
       <Association Name="MstArticleType_MstArticleGroup" Member="MstArticleGroups" ThisKey="Id" OtherKey="ArticleTypeId" Type="MstArticleGroup" />
+      <Association Name="MstUser_MstArticleType" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_MstArticleType1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstArticleUnit" Member="MstArticleUnits">
@@ -397,6 +400,8 @@
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="MstDiscount_TrnSalesInvoiceItem" Member="TrnSalesInvoiceItems" ThisKey="Id" OtherKey="DiscountId" Type="TrnSalesInvoiceItem" />
       <Association Name="MstAccount_MstDiscount" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
+      <Association Name="MstUser_MstDiscount" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_MstDiscount1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstPayType" Member="MstPayTypes">
@@ -412,6 +417,8 @@
       <Association Name="MstPayType_TrnCollectionLine" Member="TrnCollectionLines" ThisKey="Id" OtherKey="PayTypeId" Type="TrnCollectionLine" />
       <Association Name="MstPayType_TrnDisbursement" Member="TrnDisbursements" ThisKey="Id" OtherKey="PayTypeId" Type="TrnDisbursement" />
       <Association Name="MstAccount_MstPayType" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
+      <Association Name="MstUser_MstPayType" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_MstPayType1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstTaxType" Member="MstTaxTypes">
@@ -505,10 +512,16 @@
       <Association Name="MstUser_MstArticle1" Member="MstArticles1" ThisKey="Id" OtherKey="UpdatedById" Type="MstArticle" />
       <Association Name="MstUser_MstArticleGroup" Member="MstArticleGroups" ThisKey="Id" OtherKey="CreatedById" Type="MstArticleGroup" />
       <Association Name="MstUser_MstArticleGroup1" Member="MstArticleGroups1" ThisKey="Id" OtherKey="UpdatedById" Type="MstArticleGroup" />
+      <Association Name="MstUser_MstArticleType" Member="MstArticleTypes" ThisKey="Id" OtherKey="CreatedById" Type="MstArticleType" />
+      <Association Name="MstUser_MstArticleType1" Member="MstArticleTypes1" ThisKey="Id" OtherKey="UpdatedById" Type="MstArticleType" />
       <Association Name="MstUser_MstBranch" Member="MstBranches" ThisKey="Id" OtherKey="CreatedById" Type="MstBranch" />
       <Association Name="MstUser_MstBranch1" Member="MstBranches1" ThisKey="Id" OtherKey="UpdatedById" Type="MstBranch" />
       <Association Name="MstUser_MstCompany" Member="MstCompanies" ThisKey="Id" OtherKey="CreatedById" Type="MstCompany" />
       <Association Name="MstUser_MstCompany1" Member="MstCompanies1" ThisKey="Id" OtherKey="UpdatedById" Type="MstCompany" />
+      <Association Name="MstUser_MstDiscount" Member="MstDiscounts" ThisKey="Id" OtherKey="CreatedById" Type="MstDiscount" />
+      <Association Name="MstUser_MstDiscount1" Member="MstDiscounts1" ThisKey="Id" OtherKey="UpdatedById" Type="MstDiscount" />
+      <Association Name="MstUser_MstPayType" Member="MstPayTypes" ThisKey="Id" OtherKey="CreatedById" Type="MstPayType" />
+      <Association Name="MstUser_MstPayType1" Member="MstPayTypes1" ThisKey="Id" OtherKey="UpdatedById" Type="MstPayType" />
       <Association Name="MstUser_MstTaxType" Member="MstTaxTypes" ThisKey="Id" OtherKey="CreatedById" Type="MstTaxType" />
       <Association Name="MstUser_MstTaxType1" Member="MstTaxTypes1" ThisKey="Id" OtherKey="UpdatedById" Type="MstTaxType" />
       <Association Name="MstUser_MstTerm" Member="MstTerms" ThisKey="Id" OtherKey="CreatedById" Type="MstTerm" />
@@ -517,11 +530,60 @@
       <Association Name="MstUser_MstUnit1" Member="MstUnits1" ThisKey="Id" OtherKey="UpdatedById" Type="MstUnit" />
       <Association Name="MstUser_MstUserForm" Member="MstUserForms" ThisKey="Id" OtherKey="UserId" Type="MstUserForm" />
       <Association Name="MstUser_SysAuditTrail" Member="SysAuditTrails" ThisKey="Id" OtherKey="UserId" Type="SysAuditTrail" />
+      <Association Name="MstUser_TrnCollection" Member="TrnCollections" ThisKey="Id" OtherKey="CheckedById" Type="TrnCollection" />
+      <Association Name="MstUser_TrnCollection1" Member="TrnCollections1" ThisKey="Id" OtherKey="ApprovedById" Type="TrnCollection" />
+      <Association Name="MstUser_TrnCollection2" Member="TrnCollections2" ThisKey="Id" OtherKey="CreatedById" Type="TrnCollection" />
+      <Association Name="MstUser_TrnCollection3" Member="TrnCollections3" ThisKey="Id" OtherKey="PreparedById" Type="TrnCollection" />
+      <Association Name="MstUser_TrnCollection4" Member="TrnCollections4" ThisKey="Id" OtherKey="UpdatedById" Type="TrnCollection" />
+      <Association Name="MstUser_TrnDisbursement" Member="TrnDisbursements" ThisKey="Id" OtherKey="ApprovedById" Type="TrnDisbursement" />
+      <Association Name="MstUser_TrnDisbursement1" Member="TrnDisbursements1" ThisKey="Id" OtherKey="CheckedById" Type="TrnDisbursement" />
+      <Association Name="MstUser_TrnDisbursement2" Member="TrnDisbursements2" ThisKey="Id" OtherKey="CreatedById" Type="TrnDisbursement" />
+      <Association Name="MstUser_TrnDisbursement3" Member="TrnDisbursements3" ThisKey="Id" OtherKey="PreparedById" Type="TrnDisbursement" />
+      <Association Name="MstUser_TrnDisbursement4" Member="TrnDisbursements4" ThisKey="Id" OtherKey="UpdatedById" Type="TrnDisbursement" />
       <Association Name="MstUser_TrnJournalVoucher" Member="TrnJournalVouchers" ThisKey="Id" OtherKey="PreparedById" Type="TrnJournalVoucher" />
       <Association Name="MstUser_TrnJournalVoucher1" Member="TrnJournalVouchers1" ThisKey="Id" OtherKey="CheckedById" Type="TrnJournalVoucher" />
       <Association Name="MstUser_TrnJournalVoucher2" Member="TrnJournalVouchers2" ThisKey="Id" OtherKey="ApprovedById" Type="TrnJournalVoucher" />
       <Association Name="MstUser_TrnJournalVoucher3" Member="TrnJournalVouchers3" ThisKey="Id" OtherKey="CreatedById" Type="TrnJournalVoucher" />
       <Association Name="MstUser_TrnJournalVoucher4" Member="TrnJournalVouchers4" ThisKey="Id" OtherKey="UpdatedById" Type="TrnJournalVoucher" />
+      <Association Name="MstUser_TrnPurchaseOrder" Member="TrnPurchaseOrders" ThisKey="Id" OtherKey="ApprovedById" Type="TrnPurchaseOrder" />
+      <Association Name="MstUser_TrnPurchaseOrder1" Member="TrnPurchaseOrders1" ThisKey="Id" OtherKey="CheckedById" Type="TrnPurchaseOrder" />
+      <Association Name="MstUser_TrnPurchaseOrder2" Member="TrnPurchaseOrders2" ThisKey="Id" OtherKey="CreatedById" Type="TrnPurchaseOrder" />
+      <Association Name="MstUser_TrnPurchaseOrder3" Member="TrnPurchaseOrders3" ThisKey="Id" OtherKey="PreparedById" Type="TrnPurchaseOrder" />
+      <Association Name="MstUser_TrnPurchaseOrder4" Member="TrnPurchaseOrders4" ThisKey="Id" OtherKey="RequestedById" Type="TrnPurchaseOrder" />
+      <Association Name="MstUser_TrnPurchaseOrder5" Member="TrnPurchaseOrders5" ThisKey="Id" OtherKey="UpdatedById" Type="TrnPurchaseOrder" />
+      <Association Name="MstUser_TrnReceivingReceipt" Member="TrnReceivingReceipts" ThisKey="Id" OtherKey="ApprovedById" Type="TrnReceivingReceipt" />
+      <Association Name="MstUser_TrnReceivingReceipt1" Member="TrnReceivingReceipts1" ThisKey="Id" OtherKey="CheckedById" Type="TrnReceivingReceipt" />
+      <Association Name="MstUser_TrnReceivingReceipt2" Member="TrnReceivingReceipts2" ThisKey="Id" OtherKey="CreatedById" Type="TrnReceivingReceipt" />
+      <Association Name="MstUser_TrnReceivingReceipt3" Member="TrnReceivingReceipts3" ThisKey="Id" OtherKey="PreparedById" Type="TrnReceivingReceipt" />
+      <Association Name="MstUser_TrnReceivingReceipt4" Member="TrnReceivingReceipts4" ThisKey="Id" OtherKey="ReceivedById" Type="TrnReceivingReceipt" />
+      <Association Name="MstUser_TrnReceivingReceipt5" Member="TrnReceivingReceipts5" ThisKey="Id" OtherKey="UpdatedById" Type="TrnReceivingReceipt" />
+      <Association Name="MstUser_TrnSalesInvoice" Member="TrnSalesInvoices" ThisKey="Id" OtherKey="ApprovedById" Type="TrnSalesInvoice" />
+      <Association Name="MstUser_TrnSalesInvoice1" Member="TrnSalesInvoices1" ThisKey="Id" OtherKey="CheckedById" Type="TrnSalesInvoice" />
+      <Association Name="MstUser_TrnSalesInvoice2" Member="TrnSalesInvoices2" ThisKey="Id" OtherKey="CreatedById" Type="TrnSalesInvoice" />
+      <Association Name="MstUser_TrnSalesInvoice3" Member="TrnSalesInvoices3" ThisKey="Id" OtherKey="PreparedById" Type="TrnSalesInvoice" />
+      <Association Name="MstUser_TrnSalesInvoice4" Member="TrnSalesInvoices4" ThisKey="Id" OtherKey="SoldById" Type="TrnSalesInvoice" />
+      <Association Name="MstUser_TrnSalesInvoice5" Member="TrnSalesInvoices5" ThisKey="Id" OtherKey="UpdatedById" Type="TrnSalesInvoice" />
+      <Association Name="MstUser_TrnStockCount" Member="TrnStockCounts" ThisKey="Id" OtherKey="ApprovedById" Type="TrnStockCount" />
+      <Association Name="MstUser_TrnStockCount1" Member="TrnStockCounts1" ThisKey="Id" OtherKey="CheckedById" Type="TrnStockCount" />
+      <Association Name="MstUser_TrnStockCount2" Member="TrnStockCounts2" ThisKey="Id" OtherKey="CreatedById" Type="TrnStockCount" />
+      <Association Name="MstUser_TrnStockCount3" Member="TrnStockCounts3" ThisKey="Id" OtherKey="PreparedById" Type="TrnStockCount" />
+      <Association Name="MstUser_TrnStockCount4" Member="TrnStockCounts4" ThisKey="Id" OtherKey="UpdatedById" Type="TrnStockCount" />
+      <Association Name="MstUser_TrnStockIn" Member="TrnStockIns" ThisKey="Id" OtherKey="ApprovedById" Type="TrnStockIn" />
+      <Association Name="MstUser_TrnStockIn1" Member="TrnStockIns1" ThisKey="Id" OtherKey="CheckedById" Type="TrnStockIn" />
+      <Association Name="MstUser_TrnStockIn2" Member="TrnStockIns2" ThisKey="Id" OtherKey="CreatedById" Type="TrnStockIn" />
+      <Association Name="MstUser_TrnStockIn3" Member="TrnStockIns3" ThisKey="Id" OtherKey="PreparedById" Type="TrnStockIn" />
+      <Association Name="MstUser_TrnStockIn4" Member="TrnStockIns4" ThisKey="Id" OtherKey="UpdatedById" Type="TrnStockIn" />
+      <Association Name="MstUser_TrnStockOut" Member="TrnStockOuts" ThisKey="Id" OtherKey="ApprovedById" Type="TrnStockOut" />
+      <Association Name="MstUser_TrnStockOut1" Member="TrnStockOuts1" ThisKey="Id" OtherKey="CheckedById" Type="TrnStockOut" />
+      <Association Name="MstUser_TrnStockOut2" Member="TrnStockOuts2" ThisKey="Id" OtherKey="CreatedById" Type="TrnStockOut" />
+      <Association Name="MstUser_TrnStockOut3" Member="TrnStockOuts3" ThisKey="Id" OtherKey="PreparedById" Type="TrnStockOut" />
+      <Association Name="MstUser_TrnStockOut4" Member="TrnStockOuts4" ThisKey="Id" OtherKey="UpdatedById" Type="TrnStockOut" />
+      <Association Name="MstUser_TrnStockTransfer" Member="TrnStockTransfers" ThisKey="Id" OtherKey="ApprovedById" Type="TrnStockTransfer" />
+      <Association Name="MstUser_TrnStockTransfer1" Member="TrnStockTransfers1" ThisKey="Id" OtherKey="CheckedById" Type="TrnStockTransfer" />
+      <Association Name="MstUser_TrnStockTransfer2" Member="TrnStockTransfers2" ThisKey="Id" OtherKey="CreatedById" Type="TrnStockTransfer" />
+      <Association Name="MstUser_TrnStockTransfer3" Member="TrnStockTransfers3" ThisKey="Id" OtherKey="PreparedById" Type="TrnStockTransfer" />
+      <Association Name="MstUser_TrnStockTransfer4" Member="TrnStockTransfers4" ThisKey="Id" OtherKey="UpdatedById" Type="TrnStockTransfer" />
+      <Association Name="AspNetUser_MstUser" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.MstUserForm" Member="MstUserForms">
@@ -580,6 +642,11 @@
       <Association Name="TrnCollection_TrnJournal" Member="TrnJournals" ThisKey="Id" OtherKey="ORId" Type="TrnJournal" />
       <Association Name="MstArticle_TrnCollection" Member="MstArticle" ThisKey="CustomerId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstBranch_TrnCollection" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
+      <Association Name="MstUser_TrnCollection" Member="MstUser" ThisKey="CheckedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnCollection1" Member="MstUser1" ThisKey="ApprovedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnCollection2" Member="MstUser2" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnCollection3" Member="MstUser3" ThisKey="PreparedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnCollection4" Member="MstUser4" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnCollectionLine" Member="TrnCollectionLines">
@@ -638,6 +705,11 @@
       <Association Name="MstArticle_TrnDisbursement1" Member="MstArticle1" ThisKey="BankId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstBranch_TrnDisbursement" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
       <Association Name="MstPayType_TrnDisbursement" Member="MstPayType" ThisKey="PayTypeId" OtherKey="Id" Type="MstPayType" IsForeignKey="true" />
+      <Association Name="MstUser_TrnDisbursement" Member="MstUser" ThisKey="ApprovedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnDisbursement1" Member="MstUser1" ThisKey="CheckedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnDisbursement2" Member="MstUser2" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnDisbursement3" Member="MstUser3" ThisKey="PreparedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnDisbursement4" Member="MstUser4" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnDisbursementLine" Member="TrnDisbursementLines">
@@ -794,6 +866,12 @@
       <Association Name="MstArticle_TrnPurchaseOrder" Member="MstArticle" ThisKey="SupplierId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstBranch_TrnPurchaseOrder" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
       <Association Name="MstTerm_TrnPurchaseOrder" Member="MstTerm" ThisKey="TermId" OtherKey="Id" Type="MstTerm" IsForeignKey="true" />
+      <Association Name="MstUser_TrnPurchaseOrder" Member="MstUser" ThisKey="ApprovedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnPurchaseOrder1" Member="MstUser1" ThisKey="CheckedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnPurchaseOrder2" Member="MstUser2" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnPurchaseOrder3" Member="MstUser3" ThisKey="PreparedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnPurchaseOrder4" Member="MstUser4" ThisKey="RequestedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnPurchaseOrder5" Member="MstUser5" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnPurchaseOrderItem" Member="TrnPurchaseOrderItems">
@@ -845,6 +923,12 @@
       <Association Name="MstArticle_TrnReceivingReceipt" Member="MstArticle" ThisKey="SupplierId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstBranch_TrnReceivingReceipt" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
       <Association Name="MstTerm_TrnReceivingReceipt" Member="MstTerm" ThisKey="TermId" OtherKey="Id" Type="MstTerm" IsForeignKey="true" />
+      <Association Name="MstUser_TrnReceivingReceipt" Member="MstUser" ThisKey="ApprovedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnReceivingReceipt1" Member="MstUser1" ThisKey="CheckedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnReceivingReceipt2" Member="MstUser2" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnReceivingReceipt3" Member="MstUser3" ThisKey="PreparedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnReceivingReceipt4" Member="MstUser4" ThisKey="ReceivedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnReceivingReceipt5" Member="MstUser5" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnReceivingReceiptItem" Member="TrnReceivingReceiptItems">
@@ -911,6 +995,12 @@
       <Association Name="MstArticle_TrnSalesInvoice" Member="MstArticle" ThisKey="CustomerId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstBranch_TrnSalesInvoice" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
       <Association Name="MstTerm_TrnSalesInvoice" Member="MstTerm" ThisKey="TermId" OtherKey="Id" Type="MstTerm" IsForeignKey="true" />
+      <Association Name="MstUser_TrnSalesInvoice" Member="MstUser" ThisKey="ApprovedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnSalesInvoice1" Member="MstUser1" ThisKey="CheckedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnSalesInvoice2" Member="MstUser2" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnSalesInvoice3" Member="MstUser3" ThisKey="PreparedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnSalesInvoice4" Member="MstUser4" ThisKey="SoldById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnSalesInvoice5" Member="MstUser5" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnSalesInvoiceItem" Member="TrnSalesInvoiceItems">
@@ -960,6 +1050,11 @@
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="TrnStockCount_TrnStockCountItem" Member="TrnStockCountItems" ThisKey="Id" OtherKey="SCId" Type="TrnStockCountItem" />
       <Association Name="MstBranch_TrnStockCount" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockCount" Member="MstUser" ThisKey="ApprovedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockCount1" Member="MstUser1" ThisKey="CheckedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockCount2" Member="MstUser2" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockCount3" Member="MstUser3" ThisKey="PreparedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockCount4" Member="MstUser4" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnStockCountItem" Member="TrnStockCountItems">
@@ -998,6 +1093,11 @@
       <Association Name="MstAccount_TrnStockIn" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstArticle_TrnStockIn" Member="MstArticle" ThisKey="ArticleId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstBranch_TrnStockIn" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockIn" Member="MstUser" ThisKey="ApprovedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockIn1" Member="MstUser1" ThisKey="CheckedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockIn2" Member="MstUser2" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockIn3" Member="MstUser3" ThisKey="PreparedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockIn4" Member="MstUser4" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnStockInItem" Member="TrnStockInItems">
@@ -1043,6 +1143,11 @@
       <Association Name="MstAccount_TrnStockOut" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstArticle_TrnStockOut" Member="MstArticle" ThisKey="ArticleId" OtherKey="Id" Type="MstArticle" IsForeignKey="true" />
       <Association Name="MstBranch_TrnStockOut" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockOut" Member="MstUser" ThisKey="ApprovedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockOut1" Member="MstUser1" ThisKey="CheckedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockOut2" Member="MstUser2" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockOut3" Member="MstUser3" ThisKey="PreparedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockOut4" Member="MstUser4" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnStockOutItem" Member="TrnStockOutItems">
@@ -1090,6 +1195,11 @@
       <Association Name="TrnStockTransfer_TrnStockTransferItem" Member="TrnStockTransferItems" ThisKey="Id" OtherKey="STId" Type="TrnStockTransferItem" />
       <Association Name="MstBranch_TrnStockTransfer" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
       <Association Name="MstBranch_TrnStockTransfer1" Member="MstBranch1" ThisKey="ToBranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockTransfer" Member="MstUser" ThisKey="ApprovedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockTransfer1" Member="MstUser1" ThisKey="CheckedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockTransfer2" Member="MstUser2" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockTransfer3" Member="MstUser3" ThisKey="PreparedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
+      <Association Name="MstUser_TrnStockTransfer4" Member="MstUser4" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.TrnStockTransferItem" Member="TrnStockTransferItems">
