@@ -79,6 +79,41 @@
             </div>
         </section>        
         
+        <!-- StockTransfer Delete -->
+        <div class="modal fade" id="deleteStockTransferConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Stock <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteStockTransfer" onclick="cmdStockTransferConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class=" modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4>Loading ...</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -90,14 +125,169 @@
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
-
         // ================
         // Global Variables
         // ================
         var stockTransfers;
         var stockTransferGrid;
 
+        var btnFirstPageGrid;
+        var btnPreviousPageGrid;
+        var btnNextPageGrid;
+        var btnLastPageGrid;
+        var btnCurrentPageGrid;
 
+        // =======================
+        // GET Stock Transfer List
+        // =======================
+        function getStockTransfer() {
+            var stockTransfers = new wijmo.collections.ObservableArray;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listStockTransfer',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            stockTransfers.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='StockTransferEditButton' onclick='cmdStockTransferEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='StockTransferDeleteButton' onclick='cmdStockTransferDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                STNumber: Results[i]["STNumber"],
+                                STDate: Results[i]["STDate"],
+                                ToBranchId: Results[i]["ToBranchId"],
+                                ToBranch: Results[i]["ToBranch"],
+                                Particulars: Results[i]["Particulars"],
+                                ManualSTNumber: Results[i]["ManualSTNumber"],
+                                PreparedById: Results[i]["PreparedById"],
+                                PreparedBy: Results[i]["PreparedBy"],
+                                CheckedById: Results[i]["CheckedById"],
+                                CheckedBy: Results[i]["CheckedBy"],
+                                ApprovedById: Results[i]["ApprovedById"],
+                                ApprovedBy: Results[i]["ApprovedBy"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return stockTransfers;
+        }
+
+        // ==========================
+        // Stock Transfer Edit Button
+        // ==========================
+        function cmdStockTransferEditButton_OnClick() {
+            stockTransfers.editItem(stockTransfers.currentItem);
+            var stockTransfer = stockTransfers.currentEditItem;
+            var id = stockTransfer.Id;
+            window.location = '/Software/StockTransferDetail?StockTransferId=' + id + '&BranchId=' + @branchId;
+        }
+
+        // ============================
+        // Stock Transfer delete Button
+        // ============================
+        function cmdStockTransferDeleteButton_OnClick() {
+            $('#deleteStockTransferConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+            $("#cmdConfirmDeleteStockTransfer").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+        }
+        // Company Confirm Delete Button
+        function cmdStockTransferConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteStockTransfer").prop("disabled", true);
+            $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+
+            stockTransfers.editItem(stockTransfers.currentItem);
+            var id = stockTransfers.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteStockTransfer/' + id,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteStockTransfer").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteStockTransferConfirm').modal('hide');
+                        $("#cmdConfirmDeleteStockTransfer").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Can't be deleted");
+                        $('#deleteStockTransferConfirm').modal('hide');
+                        $("#cmdConfirmDeleteStockTransfer").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+        // ===================
+        // FlexGrid Selection
+        // ===================
+        function updateDetails() {
+            var item = stockTransfers.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ===============================
+        // Navigation Buttons for Comapany
+        // ===============================
+        function updateNavigateButtonsStockTransfer() {
+            if (stockTransfers.pageSize <= 0) {
+                document.getElementById('naviagtionPageGrid').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGrid').style.display = 'block';
+            if (stockTransfers.pageIndex === 0) {
+                btnFirstPageGrid.setAttribute('disabled', 'disabled');
+                btnPreviousPageGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.removeAttribute('disabled');
+            } else if (stockTransfers.pageIndex === (stockTransfers.pageCount - 1)) {
+                btnFirstPageGrid.removeAttribute('disabled');
+                btnPreviousPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGrid.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGrid.removeAttribute('disabled');
+                btnPreviousPageGrid.removeAttribute('disabled');
+                btnNextPageGrid.removeAttribute('disabled');
+                btnLastPageGrid.removeAttribute('disabled');
+            }
+            btnCurrentPageGrid.innerHTML = (stockTransfers.pageIndex + 1) + ' / ' + stockTransfers.pageCount;
+        }
+
+        // ===========
+        // OnLoad Page
+        // ===========
         $(document).ready(function () {
             $.ajax({
                 url: '/api/listBranchById/' + @branchId,
@@ -136,7 +326,7 @@
                 "hideMethod": "fadeOut"
             }
 
-            stockTransfers = new wijmo.collections.CollectionView();
+            stockTransfers = new wijmo.collections.CollectionView(getStockTransfer());
             stockTransfers.canFilter = true;
             stockTransfers.pageSize = 15;
 
@@ -146,10 +336,10 @@
                 stockTransfers.refresh();
             });
             stockTransfers.filter = function (item) {
-                return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
             }
             stockTransfers.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsCompany();
+                updateNavigateButtonsStockTransfer();
             });
             stockTransfers.currentChanged.addHandler(function (sender, args) {
                 updateDetails();
@@ -179,42 +369,42 @@
                             },
                             {
                                 "header": "ST Number",
-                                //"binding": "Company",
+                                "binding": "STNumber",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*",
                             },
                             {
                                 "header": "ST Date",
-                                //"binding": "Address",
+                                "binding": "STDate",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "From Branch",
-                                //"binding": "ContactNumber",
+                                "binding": "Branch",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "To Branch",
-                                //"binding": "ContactNumber",
+                                "binding": "ToBranch",
                                 "align": "left",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Lock",
-                                //"binding": "ContactNumber",
+                                "binding": "IsLocked",
                                 "align": "center",
                                 "allowSorting": true,
                                 "width": "2*"
                             }
                 ],
                 autoGenerateColumns: false,
-                //itemsSource: items,
+                itemsSource: stockTransfers,
                 isReadOnly: true,
                 //frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
@@ -223,8 +413,34 @@
             });
 
             stockTransferGrid.trackChanges = true;
+
+            //Navigation button
+            btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
+            btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
+            btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
+            btnLastPageGrid = document.getElementById('btnMoveToLastPageGrid');
+            btnCurrentPageGrid = document.getElementById('btnCurrentPageGrid');
+
+            updateNavigateButtonsStockTransfer();
+
+            btnFirstPageGrid.addEventListener('click', function () {
+                stockTransfers.moveToFirstPage();
+                updateNavigateButtonsStockTransfer();
+            });
+            btnPreviousPageGrid.addEventListener('click', function () {
+                stockTransfers.moveToPreviousPage();
+                updateNavigateButtonsStockTransfer();
+            });
+            btnNextPageGrid.addEventListener('click', function () {
+                stockTransfers.moveToNextPage();
+                updateNavigateButtonsStockTransfer();
+            });
+            btnLastPageGrid.addEventListener('click', function () {
+                stockTransfers.moveToLastPage();
+                updateNavigateButtonsStockTransfer();
+            });
         });
 
-    </script>
+</script>
 </body>
 </html>

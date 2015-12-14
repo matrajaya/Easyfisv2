@@ -20,7 +20,7 @@ namespace easyfis.Models
         public Int32 PayTypeId { get; set; }
         public String PayType { get; set; }
         public Int32 BankId { get; set; }
-        public String Bank { get; set; }
+        public Int32 Bank { get; set; }
         public String ManualCVNumber { get; set; }
         public String Particulars { get; set; }
         public String CheckNumber { get; set; }
@@ -28,12 +28,12 @@ namespace easyfis.Models
         public Decimal Amount { get; set; }
         public Boolean IsCrossCheck { get; set; }
         public Boolean IsClear { get; set; }
-        public String PreparedBy { get; set; }
         public Int32 PreparedById { get; set; }
-        public String CheckedBy { get; set; }
+        public String PreparedBy { get; set; }
         public Int32 CheckedById { get; set; }
-        public String ApprovedBy { get; set; }
+        public String CheckedBy { get; set; }
         public Int32 ApprovedById { get; set; }
+        public String ApprovedBy { get; set; }
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
         public String CreatedBy { get; set; }
