@@ -20,7 +20,7 @@ namespace easyfis.Models
         public Int32 PayTypeId { get; set; }
         public String PayType { get; set; }
         public Int32 BankId { get; set; }
-        public Int32 Bank { get; set; }
+        public String Bank { get; set; }
         public String ManualCVNumber { get; set; }
         public String Particulars { get; set; }
         public String CheckNumber { get; set; }
