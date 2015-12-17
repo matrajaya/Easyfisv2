@@ -113,25 +113,37 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Requested by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="RequestedBy"></div>
+
+                                        <input type="hidden" id="RequestedBy_data" />
+                                        <input type="hidden" id="RequestedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Prepared by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="PreparedBy"></div>
+
+                                        <input type="hidden" id="PreparedBy_data" />
+                                        <input type="hidden" id="PreparedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Checked by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="CheckedBy"></div>
+
+                                        <input type="hidden" id="CheckedBy_data" />
+                                        <input type="hidden" id="CheckedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Approved by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="ApprovedBy"></div>
+
+                                        <input type="hidden" id="ApprovedBy_data" />
+                                        <input type="hidden" id="ApprovedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -177,6 +189,13 @@
         // Global Variables
         // ================
         var POs;
+
+        var users;
+
+        var cboRequestedBy;
+        var cboPreparedBy;
+        var cboCheckedBy;
+        var cboApprovedBy;
 
         // ==================
         // GET Purchase by Id
@@ -233,10 +252,22 @@
                     document.getElementById('PO_RequestNumber').value = Results.Remarks;
                     document.getElementById('PO_ClosePO').checked = Results.IsClose;
 
+                    document.getElementById('RequestedBy_data').value = Results.RequestedById;
+                    document.getElementById('RequestedBy_selectedValue').value = Results.RequestedBy;
+                    document.getElementById('PreparedBy_data').value = Results.PreparedById;
+                    document.getElementById('PreparedBy_selectedValue').value = Results.PreparedBy;
+                    document.getElementById('CheckedBy_data').value = Results.CheckedById;
+                    document.getElementById('CheckedBy_selectedValue').value = Results.CheckedBy;
+                    document.getElementById('ApprovedBy_data').value = Results.ApprovedById;
+                    document.getElementById('ApprovedBy_selectedValue').value = Results.ApprovedBy;
+                    
+
                     document.getElementById('createdBy').innerHTML = Results.CreatedBy;
                     document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
                     document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
                     document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+                   
+                    getUsersForComboBox();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -244,6 +275,153 @@
             return POs;
         }
 
+        // =======================
+        // GET Users for Combo Box
+        // =======================
+        function getUsersForComboBox() {
+            users = new wijmo.collections.ObservableArray();
+
+            $.ajax({
+                url: '/api/listUser',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            users.push({
+                                UserId: results[i]["Id"],
+                                UserFullName: results[i]["FullName"]
+                            });
+                        }
+
+                        if(@POId == 0) {
+                            var userId = document.getElementById('userId_data').value;
+                            $.ajax({
+                                url: '/api/listByMstUserId/' + userId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        users.push({
+                                            UserId: results.Id,
+                                            UserFullName: results.FullName
+                                        });
+                                    }
+                                    createCboUserRequestedBy(users);
+                                    createCboUserPreparedBy(users);
+                                    createCboUserCheckedBy(users);
+                                    createCboUserApprovedBy(users);
+                                }
+                            });
+                        } else {
+                            createCboUserRequestedBy(users);
+                            createCboUserPreparedBy(users);
+                            createCboUserCheckedBy(users);
+                            createCboUserApprovedBy(users);
+                            
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+            );
+
+            return users;
+        }
+
+        // ==================================
+        // Combo Box for Users - Requested By
+        // ==================================
+        function createCboUserRequestedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboRequestedBy.dispose();
+            cboRequestedBy = new wijmo.input.ComboBox('#RequestedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RequestedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RequestedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+        // ==================================
+        // Combo Box for Users - Prepared By
+        // ==================================
+        function createCboUserPreparedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboPreparedBy.dispose();
+            cboPreparedBy = new wijmo.input.ComboBox('#PreparedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('PreparedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#PreparedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+        // ==================================
+        // Combo Box for Users - Checked By
+        // ==================================
+        function createCboUserCheckedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboCheckedBy.dispose();
+            cboCheckedBy = new wijmo.input.ComboBox('#CheckedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('CheckedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+        // ==================================
+        // Combo Box for Users - Approved By
+        // ==================================
+        function createCboUserApprovedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboApprovedBy.dispose();
+            cboApprovedBy = new wijmo.input.ComboBox('#ApprovedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('ApprovedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
         // ===========
         // OnLoad Page
         // ===========
@@ -253,7 +431,11 @@
 
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Purchase Order</a> ' + ' > Purchase Order Detail';
             getPOById();
-        
+            
+            cboRequestedBy  = new wijmo.input.ComboBox('#RequestedBy');
+            cboPreparedBy  = new wijmo.input.ComboBox('#PreparedBy');
+            cboCheckedBy  = new wijmo.input.ComboBox('#CheckedBy');
+            cboApprovedBy  = new wijmo.input.ComboBox('#ApprovedBy');
         });
     </script>
 
