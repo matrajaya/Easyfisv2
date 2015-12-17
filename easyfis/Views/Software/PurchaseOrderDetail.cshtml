@@ -1,5 +1,6 @@
 ﻿@{
     var branchId = Request.QueryString["BranchId"];
+    var POId = Request.QueryString["POId"];
 }
 <!DOCTYPE html>
 <html>
@@ -56,13 +57,13 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Branch:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />  <!-- Drop down list ni-->
+                                        <input type="text" class="form-control input-sm" id="PO_Branch" />  <!-- Drop down list ni-->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">PO Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" /> <!-- Auto Generated-->
+                                        <input type="text" class="form-control input-sm" id="PO_PONumber" /> <!-- Auto Generated-->
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -74,7 +75,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual PO Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="PO_ManualPONumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -92,7 +93,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Remarks:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id=""></textarea>
+                                        <textarea class="form-control textarea-custom" id="PO_Remarks"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +101,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Request Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="PO_RequestNumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -136,7 +137,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Close PO:</label>
                                     <div class="col-sm-8">
-                                        <input type="checkbox" id="">
+                                        <input type="checkbox" id="PO_ClosePO">
                                     </div>
                                 </div>
                             </div>
@@ -145,6 +146,21 @@
                 </div>
             </div>
         </section>
+
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class=" modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4>Loading ...</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
@@ -157,11 +173,88 @@
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var POs;
 
+        // ==================
+        // GET Purchase by Id
+        // ==================
+        function getPOById() {
+            POs = new wijmo.collections.ObservableArray;
+            var POId = @POId;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listPurchaseOrderById/' + POId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        POs.push({
+                            Id: Results.Id,
+                            BranchId: Results.BranchId,
+                            Branch: Results.Branch,
+                            PONumber: Results.PONumber,
+                            PODate: Results.PODate,
+                            SupplierId: Results.SupplierId,
+                            Supplier: Results.Supplier,
+                            TermId: Results.TermId,
+                            Term: Results.Term,
+                            ManualRequestNumber: Results.ManualRequestNumber,
+                            ManualPONumber: Results.ManualPONumber,
+                            DateNeeded: Results.DateNeeded,
+                            Remarks: Results.Remarks,
+                            IsClose: Results.IsClose,
+                            RequestedById: Results.RequestedById,
+                            RequestedBy: Results.RequestedBy,
+                            PreparedById: Results.PreparedById,
+                            PreparedBy: Results.PreparedBy,
+                            CheckedById: Results.CheckedById,
+                            CheckedBy: Results.CheckedBy,
+                            ApprovedById: Results.ApprovedById,
+                            ApprovedBy: Results.ApprovedBy,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+                    
+                    document.getElementById('PO_PONumber').value = Results.PONumber;
+                    document.getElementById('PO_ManualPONumber').value = Results.ManualPONumber;
+                    document.getElementById('PO_Remarks').value = Results.Remarks;
+                    document.getElementById('PO_RequestNumber').value = Results.Remarks;
+                    document.getElementById('PO_ClosePO').checked = Results.IsClose;
+
+                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return POs;
+        }
+
+        // ===========
+        // OnLoad Page
+        // ===========
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Purchase Order</a> ' + ' > Purchase Order Detail';
-        });
+            document.getElementById('PO_Branch').disabled = true;
+            document.getElementById('PO_PONumber').disabled = true;
 
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Purchase Order</a> ' + ' > Purchase Order Detail';
+            getPOById();
+        
+        });
     </script>
 
 </body>
