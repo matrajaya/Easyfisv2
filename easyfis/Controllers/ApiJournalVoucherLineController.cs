@@ -35,8 +35,10 @@ namespace easyfis.Controllers
                                               CreditAmount = d.CreditAmount,
                                               APRRId = d.APRRId,
                                               APRR = d.TrnReceivingReceipt.RRNumber,
+                                              APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
                                               ARSIId = d.ARSIId,
                                               ARSI = d.TrnSalesInvoice.SINumber,
+                                              ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
                                               IsClear = d.IsClear
                                           };
             return journalVoucherLines.ToList();
@@ -66,8 +68,10 @@ namespace easyfis.Controllers
                                               CreditAmount = d.CreditAmount,
                                               APRRId = d.APRRId,
                                               APRR = d.TrnReceivingReceipt.RRNumber,
+                                              APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
                                               ARSIId = d.ARSIId,
                                               ARSI = d.TrnSalesInvoice.SINumber,
+                                              ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
                                               IsClear = d.IsClear
                                           };
             return journalVoucherLines.ToList();

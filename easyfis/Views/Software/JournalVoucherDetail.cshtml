@@ -1343,8 +1343,10 @@
                                 CreditAmount: Results[i]["CreditAmount"],
                                 APRRId: Results[i]["APRRId"],
                                 APRR: Results[i]["APRR"],
+                                APRRBranch: Results[i]["APRRBranch"],
                                 ARSIId: Results[i]["ARSIId"],
                                 ARSI: Results[i]["ARSI"],
+                                ARSIBranch: Results[i]["ARSIBranch"],
                                 IsClear: Results[i]["IsClear"],
                             });
                             var debitAmountTotal = 0;
@@ -1564,7 +1566,8 @@
                         for (i = 0; i < results.length; i++) {
                             sales.push({
                                 SalesId: results[i]["Id"],
-                                SINumber: results[i]["SINumber"]
+                                SINumber: results[i]["SINumber"],
+                                Branch: results[i]["Branch"]
                             });
                         }
                         createCboSalesForJournalVoucherLine(sales);
@@ -1583,7 +1586,7 @@
             var salesCollections = new wijmo.collections.CollectionView(sales);
             var salesList = new Array();
             for (var i = 0; i < salesCollections.items.length; i++) {
-                salesList.push(salesCollections.items[i].SINumber);
+                salesList.push(salesCollections.items[i].SINumber + " - " + salesCollections.items[i].Branch);
             }
 
             cboSalesJVL.dispose();
@@ -1615,7 +1618,8 @@
                         for (i = 0; i < results.length; i++) {
                             receivingReceipts.push({
                                 RRId: results[i]["Id"],
-                                RRNumber: results[i]["RRNumber"]
+                                RRNumber: results[i]["RRNumber"],
+                                Branch: results[i]["Branch"]
                             });
                         }
                         createCboReceivingReceiptForJournalVoucherLine(receivingReceipts);
@@ -1634,7 +1638,7 @@
             var RRCollections = new wijmo.collections.CollectionView(receivingReceipts);
             var RRList = new Array();
             for (var i = 0; i < RRCollections.items.length; i++) {
-                RRList.push(RRCollections.items[i].RRNumber);
+                RRList.push(RRCollections.items[i].RRNumber + " - " + RRCollections.items[i].Branch);
             }
 
             cboRRJVL.dispose();
@@ -1719,9 +1723,9 @@
             document.getElementById('JVL_Particulars').value = journalVoucherLine.Particulars ? journalVoucherLine.Particulars : '';
             document.getElementById('JVL_DebitAmount').value = journalVoucherLine.DebitAmount ? journalVoucherLine.DebitAmount : '';
             document.getElementById('JVL_CreditAmount').value = journalVoucherLine.CreditAmount ? journalVoucherLine.CreditAmount : '';
-            document.getElementById('JVL_APRRId_selectedValue').value = journalVoucherLine.APRR ? journalVoucherLine.APRR : '';
+            document.getElementById('JVL_APRRId_selectedValue').value = journalVoucherLine.APRR + " - " + journalVoucherLine.APRRBranch ? journalVoucherLine.APRR + " - " + journalVoucherLine.APRRBranch  : '';
             document.getElementById('JVL_APRRId_data').value = journalVoucherLine.APRRId ? journalVoucherLine.APRRId : '';
-            document.getElementById('JVL_ARSIId_selectedValue').value = journalVoucherLine.ARSI ? journalVoucherLine.ARSI : '';
+            document.getElementById('JVL_ARSIId_selectedValue').value = journalVoucherLine.ARSI + " - " + journalVoucherLine.ARSIBranch ? journalVoucherLine.ARSI + " - " + journalVoucherLine.ARSIBranch : '';
             document.getElementById('JVL_ARSIId_data').value = journalVoucherLine.ARSIId ? journalVoucherLine.ARSIId : '';
             if (journalVoucherLine.IsClear == true) {
                 document.getElementById('JVL_IsClear').checked  = true;
