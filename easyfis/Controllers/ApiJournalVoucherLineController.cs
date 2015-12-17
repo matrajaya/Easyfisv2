@@ -34,7 +34,9 @@ namespace easyfis.Controllers
                                               DebitAmount = d.DebitAmount,
                                               CreditAmount = d.CreditAmount,
                                               APRRId = d.APRRId,
+                                              APRR = d.TrnReceivingReceipt.RRNumber,
                                               ARSIId = d.ARSIId,
+                                              ARSI = d.TrnSalesInvoice.SINumber,
                                               IsClear = d.IsClear
                                           };
             return journalVoucherLines.ToList();
@@ -63,7 +65,9 @@ namespace easyfis.Controllers
                                               DebitAmount = d.DebitAmount,
                                               CreditAmount = d.CreditAmount,
                                               APRRId = d.APRRId,
+                                              APRR = d.TrnReceivingReceipt.RRNumber,
                                               ARSIId = d.ARSIId,
+                                              ARSI = d.TrnSalesInvoice.SINumber,
                                               IsClear = d.IsClear
                                           };
             return journalVoucherLines.ToList();

@@ -24,7 +24,9 @@ namespace easyfis.Models
         public Decimal DebitAmount { get; set; }
         public Decimal CreditAmount { get; set; }
         public Int32? APRRId { get; set; }
+        public String APRR { get; set; }
         public Int32? ARSIId { get; set; }
+        public String ARSI { get; set; }
         public Boolean IsClear { get; set; }
     }
 }
