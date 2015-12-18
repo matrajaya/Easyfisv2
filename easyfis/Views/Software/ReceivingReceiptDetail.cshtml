@@ -1,6 +1,7 @@
 ﻿@{
     var id = Request.QueryString["CompanyId"];
     var branchId = Request.QueryString["BranchId"];
+    var RRId = Request.QueryString["RRId"];
 }
 <!DOCTYPE html>
 <html>
@@ -58,32 +59,39 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Branch:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />  <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="RRbranch"></div>
+
+                                        <input type="text" id="RRbranch_data" />
+                                        <input type="text" id="RRbranch_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">RR Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" /> <!-- Auto Generated-->
+                                        <input type="text" class="form-control input-sm" id="RRRRNumber" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">RR Date:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />
+                                        <div class="comboBox-wide" id="RRRRDate"></div>
+                                        <input type="text" id="RRRRDate_data"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Doc Reference:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="RRDocReference">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Supplier:</label>
                                     <div class="col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" class="form-control input-sm" />
+                                            <div class="comboBox-wide" id="RRSupplier"></div>
+
+                                            <input type="text" id="RRSupplier_data" />
+                                            <input type="text" id="RRSupplier_selectedValue" />
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-primary btn-sm">PO</button>
                                             </div>
@@ -93,13 +101,16 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Term:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="RRTerm"></div>
+
+                                        <input type="text" id="RRTerm_data" />
+                                        <input type="text" id="RRTerm_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Remarks:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id=""></textarea>
+                                        <textarea class="form-control textarea-custom" id="RRRemarks"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -107,31 +118,57 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual RR Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="RRManualRRNumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Received by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="RRReceivedBy"></div>
+
+                                        <input type="text" id="RRReceivedBy_data" />
+                                        <input type="text" id="RRReceivedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Prepared by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="RRPreparedBy"></div>
+
+                                        <input type="text" id="RRPreparedBy_data" />
+                                        <input type="text" id="RRPreparedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Checked by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="RRCheckedBy"></div>
+
+                                        <input type="text" id="RRCheckedBy_data" />
+                                        <input type="text" id="RRCheckedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Approved by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="RRApprovedBy"></div>
+
+                                        <input type="text" id="RRApprovedBy_data" />
+                                        <input type="text" id="RRApprovedBy_selectedValue" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Lock:</label>
+                                    <div class="col-sm-8">
+                                        <input type="checkbox" id="RR_Lock">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-8">
+                                        <input type="hidden" id="RR_IsLocked">
+                                        <input type="hidden" id="RR_IsLocked_defaultTrue">
+                                        <input type="hidden" id="RR_IsLocked_defaultFalse">
                                     </div>
                                 </div>
                             </div>
@@ -140,6 +177,22 @@
                 </div>
             </div>
         </section>
+
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class=" modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4>Loading ...</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
@@ -153,8 +206,105 @@
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var RRs;
 
-        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
+        // =================
+        // GET RR List By Id
+        // =================
+        function getRRById() {
+            var RRs = new wijmo.collections.ObservableArray;
+            var RRId = @RRId;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listReceivingReceiptById/' + RRId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        RRs.push({
+                            Id: Results.Id,
+                            BranchId: Results.BranchId,
+                            Branch: Results.Branch,
+                            RRNumber: Results.RRNumber,
+                            RRDate: Results.RRDate,
+                            SupplierId: Results.SupplierId,
+                            Supplier: Results.Supplier,
+                            TermId: Results.TermId,
+                            Term: Results.Term,
+                            DocumentReference: Results.DocumentReference,
+                            ManualRRNumber: Results.ManualRRNumber,
+                            Remarks: Results.Remarks,
+                            Amount: Results.Amount,
+                            WTaxAmount: Results.WTaxAmount,
+                            PaidAmount: Results.PaidAmount,
+                            AdjustmentAmount: Results.AdjustmentAmount,
+                            BalanceAmount: Results.BalanceAmount,
+                            ReceivedById: Results.ReceivedById,
+                            ReceivedBy: Results.ReceivedBy,
+                            PreparedById: Results.PreparedById,
+                            PreparedBy: Results.PreparedBy,
+                            CheckedById: Results.CheckedById,
+                            CheckedBy: Results.CheckedBy,
+                            ApprovedById: Results.ApprovedById,
+                            ApprovedBy: Results.ApprovedBy,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+                    document.getElementById('RRbranch_data').value = Results.BranchId;
+                    document.getElementById('RRbranch_selectedValue').value = Results.Branch;
+                    
+                    document.getElementById('RRRRNumber').value = Results.RRNumber;
+                    document.getElementById('RRRRDate_data').value = Results.RRDate;
+                    document.getElementById('RRDocReference').value = Results.DocumentReference;
+                    document.getElementById('RRSupplier_data').value = Results.SupplierId;
+                    document.getElementById('RRSupplier_selectedValue').value = Results.Supplier;
+                    document.getElementById('RRTerm_data').value = Results.TermId;
+                    document.getElementById('RRTerm_selectedValue').value = Results.Term;
+                    document.getElementById('RRRemarks').value = Results.Remarks;
+                    document.getElementById('RRManualRRNumber').value = Results.ManualRRNumber;
+                    document.getElementById('RRReceivedBy_data').value = Results.ReceivedById;
+                    document.getElementById('RRReceivedBy_selectedValue').value = Results.ReceivedBy;
+                    document.getElementById('RRPreparedBy_data').value = Results.PreparedById;
+                    document.getElementById('RRPreparedBy_selectedValue').value = Results.PreparedBy;
+                    document.getElementById('RRCheckedBy_data').value = Results.CheckedById;
+                    document.getElementById('RRCheckedBy_selectedValue').value = Results.CheckedBy;
+                    document.getElementById('RRApprovedBy_data').value = Results.ApprovedById;
+                    document.getElementById('RRApprovedBy_selectedValue').value = Results.ApprovedBy;
+                    document.getElementById('RR_Lock').checked = Results.IsLocked;
+
+                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return RRs;
+        }
+
+        // ===============
+        // OnLoad Function
+        // ===============
+        $(document).ready(function () {
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
+            document.getElementById('RR_Lock').disabled = true;
+
+            getRRById();
+        });
 
     </script>
 </body>
