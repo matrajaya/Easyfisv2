@@ -4,7 +4,6 @@
 
     var username = ViewData["UserName"];
     var userId = ViewData["UserId"];
-    var currentDate = DateTime.Now;
 }
 <!DOCTYPE html>
 <html>
@@ -78,7 +77,7 @@
                                     <label class="control-label col-sm-4">JV Date:</label>
                                     <div class="col-sm-8">
                                         <div id="journalVoucher_Date" class="comboBox-wide"></div>
-                                        <input type="hidden" id="journalVoucher_date_Data" class="input-sm requiredJournalVoucher" value="@currentDate" required />
+                                        <input type="hidden" id="journalVoucher_date_Data" class="requiredJournalVoucher" required />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -2191,7 +2190,8 @@
 
         document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > ' + '<a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Journal Voucher</a> ' + ' > Journal Voucher Detail';
 
-        if (@JVId == 0) {
+        var JVId = @JVId;
+        if (JVId == 0) {
 
             if(document.getElementById('journalVoucher_No').value == 0) {
                 document.getElementById('journalVoucher_No_Display').value = "0000000001";
@@ -2232,6 +2232,9 @@
 
             $("#cmdEditJournalVoucher").prop("disabled", true);
             document.getElementById('cmdSaveJournalVoucher').innerHTML = '<i class="fa fa-save"></i> Save';
+
+            var d = new Date();
+            document.getElementById("journalVoucher_date_Data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
 
             journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
                 format: 'MM/dd/yyyy',

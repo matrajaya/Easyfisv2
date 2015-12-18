@@ -97,6 +97,49 @@ namespace easyfis.Controllers
             return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
         }
 
+        // ========================
+        // LIST Purchase Order Last
+        // ========================
+        [Route("api/listPurchaseOrderLast")]
+        public Models.TrnPurchaseOrder GetPOLastId()
+        {
+            var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.PONumber)
+                                 select new Models.TrnPurchaseOrder
+                                 {
+                                     Id = d.Id,
+                                     BranchId = d.BranchId,
+                                     Branch = d.MstBranch.Branch,
+                                     PONumber = d.PONumber,
+                                     PODate = d.PODate.ToShortDateString(),
+                                     SupplierId = d.SupplierId,
+                                     Supplier = d.MstArticle.Article,
+                                     TermId = d.TermId,
+                                     Term = d.MstTerm.Term,
+                                     ManualRequestNumber = d.ManualRequestNumber,
+                                     ManualPONumber = d.ManualPONumber,
+                                     DateNeeded = d.DateNeeded.ToShortDateString(),
+                                     Remarks = d.Remarks,
+                                     IsClose = d.IsClose,
+                                     RequestedById = d.RequestedById,
+                                     RequestedBy = d.MstUser4.FullName,
+                                     PreparedById = d.PreparedById,
+                                     PreparedBy = d.MstUser3.FullName,
+                                     CheckedById = d.CheckedById,
+                                     CheckedBy = d.MstUser1.FullName,
+                                     ApprovedById = d.ApprovedById,
+                                     ApprovedBy = d.MstUser.FullName,
+                                     IsLocked = d.IsLocked,
+                                     CreatedById = d.CreatedById,
+                                     CreatedBy = d.MstUser2.FullName,
+                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                     UpdatedById = d.UpdatedById,
+                                     UpdatedBy = d.MstUser5.FullName,
+                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                 };
+            return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
+        }
+
+
         // =========
         // DELETE PO
         // =========
