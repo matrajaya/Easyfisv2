@@ -306,7 +306,7 @@
                     document.getElementById('PO_Remarks').value = Results.Remarks;
                     document.getElementById('PO_RequestNumber').value = Results.Remarks;
                     document.getElementById('PO_DateNeeded_data').value = Results.DateNeeded;
-                    
+
                     var PODateNeeded_Result = Results.DateNeeded
                     PODateNeeded.dispose();
                     PODateNeeded = new wijmo.input.InputDate('#PO_DateNeeded', {
@@ -503,7 +503,7 @@
             }
                 );
 
-            return suppliers;
+            return terms;
         }
 
         // ===================
@@ -524,7 +524,7 @@
                 required: false,
                 selectedValue: document.getElementById('PO_Term_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#PO_Term_data").val(supplierCollection.items[this.selectedIndex].TermId);
+                    $("#PO_Term_data").val(termCollections.items[this.selectedIndex].TermId);
                 }
             });
         }
@@ -586,9 +586,7 @@
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
-            }
-    );
-
+            });
             return users;
         }
 
@@ -685,7 +683,6 @@
             });
         }
 
-        
         // =====================================================
         // Function with leading zeroes to display the PO Number
         // =====================================================
@@ -705,7 +702,7 @@
         $(document).ready(function () {
             document.getElementById('PO_Branch').disabled = true;
             document.getElementById('PO_PONumber').disabled = true;
-            
+
             document.getElementById('PO_Lock').disabled = true;
 
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Purchase Order</a> ' + ' > Purchase Order Detail';

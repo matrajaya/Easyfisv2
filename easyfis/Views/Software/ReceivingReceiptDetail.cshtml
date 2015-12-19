@@ -2,6 +2,7 @@
     var id = Request.QueryString["CompanyId"];
     var branchId = Request.QueryString["BranchId"];
     var RRId = Request.QueryString["RRId"];
+    var userId = ViewData["UserId"];
 }
 <!DOCTYPE html>
 <html>
@@ -61,21 +62,22 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="RRbranch"></div>
 
-                                        <input type="text" id="RRbranch_data" />
-                                        <input type="text" id="RRbranch_selectedValue" />
+                                        <input type="hidden" id="RRbranch_data" />
+                                        <input type="hidden" id="RRbranch_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">RR Number:</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm" id="RRRRNumber" />
+                                        <input type="hidden" id="RRRRNumber_Display" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">RR Date:</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="RRRRDate"></div>
-                                        <input type="text" id="RRRRDate_data"/>
+                                        <input type="hidden" id="RRRRDate_data" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -90,10 +92,10 @@
                                         <div class="input-group">
                                             <div class="comboBox-wide" id="RRSupplier"></div>
 
-                                            <input type="text" id="RRSupplier_data" />
-                                            <input type="text" id="RRSupplier_selectedValue" />
+                                            <input type="hidden" id="RRSupplier_data" />
+                                            <input type="hidden" id="RRSupplier_selectedValue" />
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-primary btn-sm">PO</button>
+                                                <button type="button" class="btn btn-primary btn-sm" id="cmdRRForPOSupplier" onclick="RRForPOSupplier_OnClick()">PO</button>
                                             </div>
                                         </div>
                                     </div>
@@ -103,8 +105,8 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="RRTerm"></div>
 
-                                        <input type="text" id="RRTerm_data" />
-                                        <input type="text" id="RRTerm_selectedValue" />
+                                        <input type="hidden" id="RRTerm_data" />
+                                        <input type="hidden" id="RRTerm_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -126,8 +128,8 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="RRReceivedBy"></div>
 
-                                        <input type="text" id="RRReceivedBy_data" />
-                                        <input type="text" id="RRReceivedBy_selectedValue" />
+                                        <input type="hidden" id="RRReceivedBy_data" />
+                                        <input type="hidden" id="RRReceivedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -135,8 +137,9 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="RRPreparedBy"></div>
 
-                                        <input type="text" id="RRPreparedBy_data" />
-                                        <input type="text" id="RRPreparedBy_selectedValue" />
+                                        <input type="hidden" id="RRPreparedBy_data" />
+                                        <input type="hidden" id="RRPreparedBy_selectedValue" />
+                                        <input type="hidden" id="userId_data" value="@userId" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -144,8 +147,8 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="RRCheckedBy"></div>
 
-                                        <input type="text" id="RRCheckedBy_data" />
-                                        <input type="text" id="RRCheckedBy_selectedValue" />
+                                        <input type="hidden" id="RRCheckedBy_data" />
+                                        <input type="hidden" id="RRCheckedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -153,8 +156,8 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="RRApprovedBy"></div>
 
-                                        <input type="text" id="RRApprovedBy_data" />
-                                        <input type="text" id="RRApprovedBy_selectedValue" />
+                                        <input type="hidden" id="RRApprovedBy_data" />
+                                        <input type="hidden" id="RRApprovedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -178,6 +181,26 @@
             </div>
         </section>
 
+        <!-- JournalList -->
+        <div class="modal fade" id="POStatus" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="POStatusModalLabel">Purchase Order Status</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                        <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Loading Modal -->
         <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class=" modal-dialog modal-sm">
@@ -192,7 +215,6 @@
                 </div>
             </div>
         </div>
-
 
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
@@ -210,6 +232,28 @@
         // Global Variables
         // ================
         var RRs;
+
+        var branches;
+
+
+        var users;
+
+        var suppliers;
+
+        var terms;
+
+        var RRDate;
+
+        var cboBranch;
+
+        var cboSupplier;
+
+        var cboTerm;
+
+        var cboReceivedBy;
+        var cboPreparedBy;
+        var cboCheckedBy;
+        var cboApprovedBy;
 
         // =================
         // GET RR List By Id
@@ -264,9 +308,21 @@
                     }
                     document.getElementById('RRbranch_data').value = Results.BranchId;
                     document.getElementById('RRbranch_selectedValue').value = Results.Branch;
-                    
+
                     document.getElementById('RRRRNumber').value = Results.RRNumber;
                     document.getElementById('RRRRDate_data').value = Results.RRDate;
+
+                    var RRdate_date = Results.RRDate;
+                    RRDate.dispose();
+                    RRDate = new wijmo.input.InputDate('#RRRRDate', {
+                        format: 'MM/dd/yyyy',
+                        value: new Date(RRdate_date),
+                        mask: '99/99/9999',
+                        onValueChanged: function () {
+                            document.getElementById('RRRRDate_data').value = this.value.toLocaleDateString();
+                        }
+                    });
+
                     document.getElementById('RRDocReference').value = Results.DocumentReference;
                     document.getElementById('RRSupplier_data').value = Results.SupplierId;
                     document.getElementById('RRSupplier_selectedValue').value = Results.Supplier;
@@ -289,6 +345,10 @@
                     document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
                     document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
+                    getBranchesForComboBox();
+                    getSupplierForComboBox();
+                    getTermForComboBox();
+                    getUsersForComboBox();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -296,16 +356,433 @@
             return RRs;
         }
 
+        // ========================
+        // GET Branch for Combo Box
+        // ========================
+        function getBranchesForComboBox() {
+            branches = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listBranch',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            branches.push({
+                                BranchId: results[i]["Id"],
+                                BranchBranch: results[i]["Branch"]
+                            });
+                        }
+
+                        var RRId = @RRId;
+                        if(RRId == 0) {
+                            $.ajax({
+                                url: '/api/listBranchById/' + @branchId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        branches.push({
+                                            BranchId: results.Id,
+                                            Branch: results.Branch
+                                        });
+                                    }
+                                    document.getElementById('RRbranch_data').value = results.Id;
+                                    document.getElementById('RRbranch_selectedValue').value = results.Branch;
+
+                                    createCboBranch(branches);
+                                }
+                            });
+                        } else {
+                            createCboBranch(branches);
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+                );
+
+            return branches;
+        }
+
+        // ======================
+        // Combo Box for Branches
+        // ======--==============
+        function createCboBranch(branches) {
+            var branchCollections = new wijmo.collections.CollectionView(branches);
+            var branchList = new Array();
+            for (var i = 0; i < branchCollections.items.length; i++) {
+                branchList.push(branchCollections.items[i].BranchBranch);
+            }
+
+            cboBranch.dispose();
+            cboBranch = new wijmo.input.ComboBox('#RRbranch', {
+                disabled: true,
+                placeholder: "Select Branch",
+                itemsSource: branchList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRbranch_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRbranch_data").val(branchCollections.items[this.selectedIndex].BranchId);
+                }
+            });
+        }
+
+        // ==========================
+        // GET Supplier for Combo Box
+        // ==========================
+        function getSupplierForComboBox() {
+            suppliers = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            suppliers.push({
+                                SupplierId: results[i]["Id"],
+                                Supplier: results[i]["Article"]
+                            });
+                        }
+                        createCbosupplier(suppliers);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+                );
+
+            return suppliers;
+        }
+
+        // =======================
+        // Combo Box for Suppliers
+        // =======================
+        function createCbosupplier(suppliers) {
+            var supplierCollection = new wijmo.collections.CollectionView(suppliers);
+            var supplierList = new Array();
+            for (var i = 0; i < supplierCollection.items.length; i++) {
+                supplierList.push(supplierCollection.items[i].Supplier);
+            }
+
+            cboSupplier.dispose();
+            cboSupplier = new wijmo.input.ComboBox('#RRSupplier', {
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRSupplier_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRSupplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                }
+            });
+        }
+
+        // =======================
+        // GET Terms for Combo Box
+        // =======================
+        function getTermForComboBox() {
+            terms = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listTerm',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            terms.push({
+                                TermId: results[i]["Id"],
+                                Term: results[i]["Term"]
+                            });
+                        }
+                        createCboTerm(terms);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+                );
+
+            return terms;
+        }
+
+        // ===================
+        // Combo Box for Terms
+        // ===================
+        function createCboTerm(terms) {
+            var termCollections = new wijmo.collections.CollectionView(terms);
+            var termList = new Array();
+            for (var i = 0; i < termCollections.items.length; i++) {
+                termList.push(termCollections.items[i].Term);
+            }
+
+            cboTerm.dispose();
+            cboTerm = new wijmo.input.ComboBox('#RRTerm', {
+                placeholder: "Select Term",
+                itemsSource: termList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRTerm_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRTerm_data").val(termCollections.items[this.selectedIndex].TermId);
+                }
+            });
+        }
+
+
+        // =======================
+        // GET Users for Combo Box
+        // =======================
+        function getUsersForComboBox() {
+            users = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUser',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            users.push({
+                                UserId: results[i]["Id"],
+                                UserFullName: results[i]["FullName"]
+                            });
+                        }
+
+                        var RRId = @RRId;
+                        if(RRId == 0) {
+                            var userId = document.getElementById('userId_data').value;
+                            $.ajax({
+                                url: '/api/listByMstUserId/' + userId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        users.push({
+                                            UserId: results.Id,
+                                            UserFullName: results.FullName
+                                        });
+                                    }
+
+                                    document.getElementById('RRPreparedBy_data').value = results.Id;
+                                    document.getElementById('RRPreparedBy_selectedValue').value =  results.FullName;
+
+                                    createCboUserReceivedBy(users);
+                                    createCboUserPreparedBy(users);
+                                    createCboUserCheckedBy(users);
+                                    createCboUserApprovedBy(users);
+                                }
+                            });
+                        } else {
+                            createCboUserReceivedBy(users);
+                            createCboUserPreparedBy(users);
+                            createCboUserCheckedBy(users);
+                            createCboUserApprovedBy(users);
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return users;
+        }
+
+        // ==================================
+        // Combo Box for Users - Received By
+        // ==================================
+        function createCboUserReceivedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboReceivedBy.dispose();
+            cboReceivedBy = new wijmo.input.ComboBox('#RRReceivedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRReceivedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRReceivedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // =================================
+        // Combo Box for Users - Prepared By
+        // =================================
+        function createCboUserPreparedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboPreparedBy.dispose();
+            cboPreparedBy = new wijmo.input.ComboBox('#RRPreparedBy', {
+                disabled: true,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRPreparedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRPreparedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // =================================
+        // Combo Box for Users - Checked By
+        // =================================
+        function createCboUserCheckedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboCheckedBy.dispose();
+            cboCheckedBy = new wijmo.input.ComboBox('#RRCheckedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRCheckedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRCheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // =================================
+        // Combo Box for Users - Approved By
+        // =================================
+        function createCboUserApprovedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboApprovedBy.dispose();
+            cboApprovedBy = new wijmo.input.ComboBox('#RRApprovedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRApprovedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // =====================================================
+        // Function with leading zeroes to display the RR Number
+        // =====================================================
+        function zerofill(number, length) {
+            var result = number.toString();
+            var pad = length - result.length;
+            while(pad > 0) {
+                result = '0' + result;
+                pad--;
+            }
+            return result;
+        }
+
         // ===============
         // OnLoad Function
         // ===============
         $(document).ready(function () {
+
+            $('#cmdRRForPOSupplier').click(function () {
+                $('#POStatus').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+            });
+
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
             document.getElementById('RR_Lock').disabled = true;
+            document.getElementById('RRRRNumber').disabled = true;
+
+            var RRId = @RRId;
+            if(RRId == 0) {
+                if(document.getElementById('RRRRNumber').value == 0) {
+                    document.getElementById('RRRRNumber_Display').value = "0000000001";
+                }
+
+                document.getElementById('RRRRNumber').value = 0;
+                //document.getElementById('journalVoucher_No_Display').value = "000-000000";
+                var POs = new wijmo.collections.ObservableArray;
+                $.ajax({
+                    url: '/api/listReceivingReceiptLast',
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            POs.push({
+                                Id: Results.Id,
+                                RRNumber: Results.RRNumber
+                            });
+                        }
+                        var RR_Number = parseInt(Results.RRNumber);
+                        var RR_Number_PlusOne = 0000000001;
+                        var RR_Num_Results = RR_Number + RR_Number_PlusOne;
+                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+
+                        document.getElementById('RRRRNumber').value = zerofill(RR_Num_Results, 10);
+                        document.getElementById('RRRRNumber_Display').value = zerofill(RR_Num_Results, 10);
+                    }
+                });
+            }
 
             getRRById();
-        });
+            getBranchesForComboBox();
+            getSupplierForComboBox();
+            getTermForComboBox();
+            getUsersForComboBox();
 
+            cboBranch = new wijmo.input.ComboBox('#RRbranch');
+
+            var d = new Date();
+            document.getElementById("RRRRDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            RRDate = new wijmo.input.InputDate('#RRRRDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('RRRRDate_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+            cboSupplier = new wijmo.input.ComboBox('#RRSupplier');
+            cboTerm = new wijmo.input.ComboBox('#RRTerm');
+            cboReceivedBy  = new wijmo.input.ComboBox('#RRReceivedBy');
+            cboPreparedBy  = new wijmo.input.ComboBox('#RRPreparedBy');
+            cboCheckedBy  = new wijmo.input.ComboBox('#RRCheckedBy');
+            cboApprovedBy  = new wijmo.input.ComboBox('#RRApprovedBy');
+
+        });
     </script>
 </body>
 </html>
