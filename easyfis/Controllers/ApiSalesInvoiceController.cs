@@ -55,6 +55,96 @@ namespace easyfis.Controllers
             return salesInvoices.ToList();
         }
 
+        // ========================
+        // LIST Sales Invoice By Id
+        // ========================
+        [Route("api/listSalesInvoiceById/{id}")]
+        public Models.TrnSalesInvoice GetSalesById(String id)
+        {
+            var salesId = Convert.ToInt32(id);
+            var salesInvoices = from d in db.TrnSalesInvoices
+                                where d.Id == salesId
+                                select new Models.TrnSalesInvoice
+                                {
+                                    Id = d.Id,
+                                    BranchId = d.BranchId,
+                                    Branch = d.MstBranch.Branch,
+                                    SINumber = d.SINumber,
+                                    SIDate = d.SIDate.ToShortDateString(),
+                                    CustomerId = d.CustomerId,
+                                    Customer = d.MstArticle.Article,
+                                    TermId = d.TermId,
+                                    Term = d.MstTerm.Term,
+                                    DocumentReference = d.DocumentReference,
+                                    ManualSINumber = d.ManualSINumber,
+                                    Remarks = d.Remarks,
+                                    Amount = d.Amount,
+                                    PaidAmount = d.PaidAmount,
+                                    AdjustmentAmount = d.AdjustmentAmount,
+                                    BalanceAmount = d.BalanceAmount,
+                                    SoldById = d.SoldById,
+                                    SoldBy = d.MstUser4.FullName,
+                                    PreparedById = d.PreparedById,
+                                    PreparedBy = d.MstUser3.FullName,
+                                    CheckedById = d.CheckedById,
+                                    CheckedBy = d.MstUser1.FullName,
+                                    ApprovedById = d.ApprovedById,
+                                    ApprovedBy = d.MstUser.FullName,
+                                    IsLocked = d.IsLocked,
+                                    CreatedById = d.CreatedById,
+                                    CreatedBy = d.MstUser2.FullName,
+                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                    UpdatedById = d.UpdatedById,
+                                    UpdatedBy = d.MstUser5.FullName,
+                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                };
+            return (Models.TrnSalesInvoice)salesInvoices.FirstOrDefault();
+        }
+
+        // ==========================
+        // LIST Sales Invoice Last Id
+        // ==========================
+        [Route("api/listSalesInvoiceLast")]
+        public Models.TrnSalesInvoice GetSalesLastId()
+        {
+            var salesInvoices = from d in db.TrnSalesInvoices.OrderByDescending(d => d.SINumber)
+                                select new Models.TrnSalesInvoice
+                                {
+                                    Id = d.Id,
+                                    BranchId = d.BranchId,
+                                    Branch = d.MstBranch.Branch,
+                                    SINumber = d.SINumber,
+                                    SIDate = d.SIDate.ToShortDateString(),
+                                    CustomerId = d.CustomerId,
+                                    Customer = d.MstArticle.Article,
+                                    TermId = d.TermId,
+                                    Term = d.MstTerm.Term,
+                                    DocumentReference = d.DocumentReference,
+                                    ManualSINumber = d.ManualSINumber,
+                                    Remarks = d.Remarks,
+                                    Amount = d.Amount,
+                                    PaidAmount = d.PaidAmount,
+                                    AdjustmentAmount = d.AdjustmentAmount,
+                                    BalanceAmount = d.BalanceAmount,
+                                    SoldById = d.SoldById,
+                                    SoldBy = d.MstUser4.FullName,
+                                    PreparedById = d.PreparedById,
+                                    PreparedBy = d.MstUser3.FullName,
+                                    CheckedById = d.CheckedById,
+                                    CheckedBy = d.MstUser1.FullName,
+                                    ApprovedById = d.ApprovedById,
+                                    ApprovedBy = d.MstUser.FullName,
+                                    IsLocked = d.IsLocked,
+                                    CreatedById = d.CreatedById,
+                                    CreatedBy = d.MstUser2.FullName,
+                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                    UpdatedById = d.UpdatedById,
+                                    UpdatedBy = d.MstUser5.FullName,
+                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                };
+            return (Models.TrnSalesInvoice)salesInvoices.FirstOrDefault();
+        }
+
         // ============
         // DELETE Sales
         // ============
