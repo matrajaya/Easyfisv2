@@ -866,18 +866,18 @@
 
                 document.getElementById('articleItem_code_data').value = 0;
 
-                var suppliers = new wijmo.collections.ObservableArray;
+                var items = new wijmo.collections.ObservableArray;
                 $.ajax({
-                    url: '/api/listArticleLastSupplierByArticleTypeId/1',
+                    url: '/api/listArticleLastByArticleTypeId/1',
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
                         if (Results.length > 0) {
-                            suppliers.push({
+                            items.push({
                                 Id: Results.Id,
-                                SupplierArticleCode: Results.ArticleCode
+                                ItemArticleCode: Results.ArticleCode
                             });
                         }
                         var ArticleCode = parseInt(Results.ArticleCode);

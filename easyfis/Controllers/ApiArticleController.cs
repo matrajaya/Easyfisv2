@@ -192,11 +192,11 @@ namespace easyfis.Controllers
         }
 
 
-        // ==============================
-        // LIST Article Last For Supplier
-        // ==============================
-        [Route("api/listArticleLastSupplierByArticleTypeId/{id}")]
-        public Models.MstArticle GetSupplierLastId(String id)
+        // ====================================
+        // LIST Article Last by Article Type Id
+        // ====================================
+        [Route("api/listArticleLastByArticleTypeId/{id}")]
+        public Models.MstArticle GetArticleLastId(String id)
         {
             var articleTypeId = Convert.ToInt32(id);
             var articles = from d in db.MstArticles.OrderByDescending(d => d.ArticleCode)

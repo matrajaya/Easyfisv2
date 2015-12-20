@@ -723,7 +723,7 @@
 
                 document.getElementById('RRRRNumber').value = 0;
                 //document.getElementById('journalVoucher_No_Display').value = "000-000000";
-                var POs = new wijmo.collections.ObservableArray;
+                var RRs = new wijmo.collections.ObservableArray;
                 $.ajax({
                     url: '/api/listReceivingReceiptLast',
                     cache: false,
@@ -732,7 +732,7 @@
                     data: {},
                     success: function (Results) {
                         if (Results.length > 0) {
-                            POs.push({
+                            RRs.push({
                                 Id: Results.Id,
                                 RRNumber: Results.RRNumber
                             });

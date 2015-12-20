@@ -718,18 +718,18 @@
 
                 document.getElementById('artcileCustomer_code_data').value = 0;
 
-                var suppliers = new wijmo.collections.ObservableArray;
+                var customers = new wijmo.collections.ObservableArray;
                 $.ajax({
-                    url: '/api/listArticleLastSupplierByArticleTypeId/2',
+                    url: '/api/listArticleLastByArticleTypeId/2',
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
                         if (Results.length > 0) {
-                            suppliers.push({
+                            customers.push({
                                 Id: Results.Id,
-                                SupplierArticleCode: Results.ArticleCode
+                                CustomerArticleCode: Results.ArticleCode
                             });
                         }
                         var ArticleCode = parseInt(Results.ArticleCode);
