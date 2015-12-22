@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="@Url.Action("CustomerDetail", "Software", new { ArticleCustomerId = 0, BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
+                            <a href="@Url.Action("CustomerDetail", "Software", new { CustomerId = 0, BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
                             <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                         </div>
                     </div>
@@ -213,7 +213,7 @@
             customers.editItem(customers.currentItem);
             var customer = customers.currentEditItem;
             var id = customer.Id;
-            window.location = '/Software/CustomerDetail?ArticleCustomerId=' + id + '&BranchId=' + @branchId;
+            window.location = '/Software/CustomerDetail?CustomerId=' + id + '&BranchId=' + @branchId;
         }
 
         // =====================

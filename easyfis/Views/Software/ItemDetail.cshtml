@@ -46,7 +46,7 @@
                         <button class="btn btn-primary btn-sm" id="item_saveSaveItem" onclick="itemSaveItemButton_OnClick()"><i class="fa fa-save"></i> Save and Lock</button>
                         <button class="btn btn-primary btn-sm" id="item_saveItem"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="item_editItem" onclick="itemEditButton_OnClick()"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="item_printItem"><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-primary btn-sm" id="item_printItem" onclick="window.location.href ='@Url.Action("ItemPDF", "Software", new { ItemId = itemId })'"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Items", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="item_closeItem"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>

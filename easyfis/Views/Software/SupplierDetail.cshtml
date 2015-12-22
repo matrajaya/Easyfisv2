@@ -1,5 +1,5 @@
 ﻿@{
-    var articleSupplierId = Request.QueryString["ArticleSupplierId"];
+    var supplierId = Request.QueryString["SupplierId"];
     var branchId = Request.QueryString["BranchId"];
 }
 <!DOCTYPE html>
@@ -46,7 +46,7 @@
                         <button class="btn btn-primary btn-sm" id="supplier_SaveSupplierButton" onclick="supplierSaveSupplierButton_OnClick()"><i class="fa fa-save"></i> Save and Lock</button>
                         <button class="btn btn-primary btn-sm" id="supplier_SaveButton" onclick="supplierSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="supplier_EditButton" onclick="supplierEditButton_OnClick()"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="supplier_PrintButton"><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-primary btn-sm" id="supplier_PrintButton" onclick="window.location.href ='@Url.Action("SupplierPDF", "Software", new { SupplierId = supplierId })'"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Supplier", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="supplier_CloseButton"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
@@ -193,9 +193,9 @@
         function getArticleSupplierById() {
             $('#loadingModal').modal('show');
             var suppliers = new wijmo.collections.ObservableArray;
-            var articleId = @articleSupplierId;
+            var supplierId = @supplierId;
             $.ajax({
-                url: '/api/article/' +  articleId,
+                url: '/api/article/' +  supplierId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -559,7 +559,7 @@
             $("#supplier_CloseButton").prop("disabled", true);
             
             var supplierObject = new Object();
-            var supplierId = @articleSupplierId;
+            var supplierId = @supplierId;
 
             if(supplierId > 0) {
                 supplierObject.IsLocked = document.getElementById('Supplier_IsLocked_defaultFalse').value;
@@ -620,7 +620,7 @@
             $("#supplier_CloseButton").prop("disabled", true);
             
             var supplierObject = new Object();
-            var supplierId = @articleSupplierId;
+            var supplierId = @supplierId;
 
             if(supplierId > 0) {
                 supplierObject.IsLocked = document.getElementById('Supplier_IsLocked_defaultTrue').value;
@@ -682,7 +682,8 @@
 
             getArticleSupplierById();
 
-            if(@articleSupplierId == 0) {
+            var supplierId = @supplierId;
+            if(supplierId == 0) {
                 // ajax for combobox
                 getArticleSupplierGroupForComboBox();
                 getArticleAccountForComboBox();

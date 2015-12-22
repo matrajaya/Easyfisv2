@@ -1,6 +1,6 @@
 ﻿@{
     var branchId = Request.QueryString["BranchId"];
-    var articleCustomerId = Request.QueryString["ArticleCustomerId"];
+    var customerId = Request.QueryString["CustomerId"];
 }
 <!DOCTYPE html>
 <html>
@@ -46,7 +46,7 @@
                         <button class="btn btn-primary btn-sm" id="customer_saveSaveCustomer" onclick="customerSaveCustomerButton_OnClick()"><i class="fa fa-save"></i> Save and Lock</button>
                         <button class="btn btn-primary btn-sm" id="customer_saveCustomer"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="customer_editCustomer" onclick="customerEditButton_OnClick()"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="customer_printCustomer"><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-primary btn-sm" id="customer_printCustomer" onclick="window.location.href ='@Url.Action("CustomerPDF", "Software", new { CustomerId = customerId })'"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Customer", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="customer_CloseCustomer"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
@@ -199,9 +199,9 @@
         function getArticleCustomerById() {
             $('#loadingModal').modal('show');
             var customers = new wijmo.collections.ObservableArray;
-            var articleId = @articleCustomerId;
+            var customerId = @customerId;
             $.ajax({
-                url: '/api/article/' +  articleId,
+                url: '/api/article/' +  customerId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -591,7 +591,7 @@
             $("#customer_CloseCustomer").prop("disabled", true);
 
             var customerObject = new Object();
-            var customerId = @articleCustomerId;
+            var customerId = @customerId;
 
             if(customerId > 0) {
                 customerObject.IsLocked = document.getElementById('Customer_IsLocked_defaultTrue').value;
@@ -652,7 +652,7 @@
             $("#customer_CloseCustomer").prop("disabled", true);
 
             var customerObject = new Object();
-            var customerId = @articleCustomerId;
+            var customerId = @customerId;
 
             if(customerId > 0) {
                 customerObject.IsLocked = document.getElementById('Customer_IsLocked_defaultFalse').value;
@@ -709,10 +709,11 @@
             document.getElementById('Customer_IsLocked_defaultTrue').value = 'true';
             document.getElementById('Customer_IsLocked_defaultFalse').value = 'false';
             document.getElementById('isLocked_Status').disabled = true;
-            
+
             getArticleCustomerById();
 
-            if(@articleCustomerId == 0) {
+            var customerId = @customerId;
+            if(customerId == 0) {
                 // comboboxes
                 getArticleCustomerGroupForComboBox();
                 getArticleAccountForComboBox();

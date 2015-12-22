@@ -36,6 +36,31 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult SupplierPDF(Int32 SupplierId)
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
         public ActionResult PurchaseOrder()
         {
             return View();
@@ -48,6 +73,32 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult PurchaseOrderPDF(Int32 POId)
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+
+        [Authorize]
         public ActionResult ReceivingReceipt()
         {
             return View();
@@ -57,6 +108,31 @@ namespace easyfis.Controllers
         public ActionResult ReceivingReceiptDetail()
         {
             return View();
+        }
+
+        [Authorize]
+        public ActionResult ReceivingReceiptPDF(Int32 RRId)
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
         }
 
         [Authorize]
@@ -93,6 +169,31 @@ namespace easyfis.Controllers
         public ActionResult CustomerDetail()
         {
             return View();
+        }
+
+        [Authorize]
+        public ActionResult CustomerPDF(Int32 CustomerId)
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
         }
 
         [Authorize]
@@ -141,6 +242,31 @@ namespace easyfis.Controllers
         public ActionResult ItemDetail()
         {
             return View();
+        }
+
+        [Authorize]
+        public ActionResult ItemPDF(Int32 ItemId)
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
         }
 
         [Authorize]
@@ -246,7 +372,7 @@ namespace easyfis.Controllers
             var checkedBy = (from d in db.MstUsers where d.Id == checkedByUserId select d.FullName).SingleOrDefault();
             var approvedBy = (from d in db.MstUsers where d.Id == approvedByUserId select d.FullName).SingleOrDefault();
 
-            // Pauls Work and Layouts in PDF journal
+            // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
             Document document = new Document(rec, 72, 72, 72, 72);
