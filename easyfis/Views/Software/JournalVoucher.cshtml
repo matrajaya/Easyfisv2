@@ -41,15 +41,11 @@
                     <label>Branch </label>
                     <div class="row">
                         <div class="col-lg-4">
-                            <div class="input-group">
-                                <div id="branch_Id" class="comboBox-wide-custom"></div>
-                                <input type="hidden" id="branch_Id_data" />
-                                <input type="hidden" id="currentBranchName" />
-                                <div class="input-group-btn">
-                                    <button class="btn btn-primary btn-sm" id="cmdGoGetBranch" onclick="cmdGoButton_OnClick()"><i class="fa fa-check"></i> OK</button>
-                                </div>
-                            </div>
+                            <div class="comboBox-wide" id="branch_Id"></div>
+                            <input type="hidden" id="branch_Id_data" />
+                            <input type="hidden" id="currentBranchName" />
                         </div>
+                        <div class="col-lg-8"></div>
                     </div>
                     <br />
                     <div class="row">
@@ -331,6 +327,33 @@
                 onSelectedIndexChanged: function () {
                     $("#branch_Id_data").val(branchCollections.items[this.selectedIndex].BranchId);
                     $('#cmdGoGetBranch').prop('disabled', false);
+
+                    var branchId = document.getElementById('branch_Id_data').value;
+                    //window.location = '/Software/JournalVoucher?BranchId=' + branchId;
+
+                    journalVouchers = new wijmo.collections.CollectionView(getJVByBranchIDClick(branchId));
+                    journalVouchers.canFilter = true;
+                    journalVouchers.pageSize = 15;
+
+                    var filterTextJournalVoucher = '';
+                    $('#InputFilterJournalVoucher').keyup(function () {
+                        filterTextJournalVoucher = this.value.toLowerCase();
+                        journalVouchers.refresh();
+                    });
+                    journalVouchers.filter = function (item) {
+                        return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
+                    }
+                    journalVouchers.collectionChanged.addHandler(function (sender, args) {
+                        updateNavigateButtonsJournalVoucher();
+                    });
+                    journalVouchers.currentChanged.addHandler(function (sender, args) {
+                        updateDetailsJournalVoucher();
+                    });
+
+                    // Flex Grid
+                    journalVoucherGrid.itemsSource = journalVouchers;
+                    journalVoucherGrid.trackChanges = true;
+
                 }
             });
         }
@@ -383,39 +406,6 @@
                 alert(err);
             });
             return journalVouchers;
-        }
-
-
-        // ======================
-        // Go Button - Get Branch
-        // ======================
-        function cmdGoButton_OnClick() {
-            var branchId = document.getElementById('branch_Id_data').value;
-            //window.location = '/Software/JournalVoucher?BranchId=' + branchId;
-
-            journalVouchers = new wijmo.collections.CollectionView(getJVByBranchIDClick(branchId));
-            journalVouchers.canFilter = true;
-            journalVouchers.pageSize = 15;
-
-            var filterTextJournalVoucher = '';
-            $('#InputFilterJournalVoucher').keyup(function () {
-                filterTextJournalVoucher = this.value.toLowerCase();
-                journalVouchers.refresh();
-            });
-            journalVouchers.filter = function (item) {
-                return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
-            }
-            journalVouchers.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsJournalVoucher();
-            });
-            journalVouchers.currentChanged.addHandler(function (sender, args) {
-                updateDetailsJournalVoucher();
-            });
-
-            // Flex Grid
-            journalVoucherGrid.itemsSource = journalVouchers;
-            journalVoucherGrid.trackChanges = true;
-
         }
 
         // ===================
