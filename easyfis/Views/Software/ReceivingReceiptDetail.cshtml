@@ -181,7 +181,7 @@
             </div>
         </section>
 
-        <!-- JournalList -->
+        <!-- RR for PO Modal -->
         <div class="modal fade" id="POStatus" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
@@ -255,7 +255,7 @@
             var RRId = @RRId;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listReceivingReceiptById/' + RRId,
+                url: '/api/receivingReceipt/' + RRId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -703,7 +703,6 @@
         // OnLoad Function
         // ===============
         $(document).ready(function () {
-
             $('#cmdRRForPOSupplier').click(function () {
                 $('#POStatus').modal({
                     show: true,
@@ -714,45 +713,6 @@
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
             document.getElementById('RR_Lock').disabled = true;
             document.getElementById('RRRRNumber').disabled = true;
-
-            var RRId = @RRId;
-            if(RRId == 0) {
-                if(document.getElementById('RRRRNumber').value == 0) {
-                    document.getElementById('RRRRNumber_Display').value = "0000000001";
-                }
-
-                document.getElementById('RRRRNumber').value = 0;
-                //document.getElementById('journalVoucher_No_Display').value = "000-000000";
-                var RRs = new wijmo.collections.ObservableArray;
-                $.ajax({
-                    url: '/api/listReceivingReceiptLast',
-                    cache: false,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    data: {},
-                    success: function (Results) {
-                        if (Results.length > 0) {
-                            RRs.push({
-                                Id: Results.Id,
-                                RRNumber: Results.RRNumber
-                            });
-                        }
-                        var RR_Number = parseInt(Results.RRNumber);
-                        var RR_Number_PlusOne = 0000000001;
-                        var RR_Num_Results = RR_Number + RR_Number_PlusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
-
-                        document.getElementById('RRRRNumber').value = zerofill(RR_Num_Results, 10);
-                        document.getElementById('RRRRNumber_Display').value = zerofill(RR_Num_Results, 10);
-                    }
-                });
-            }
-
-            getRRById();
-            getBranchesForComboBox();
-            getSupplierForComboBox();
-            getTermForComboBox();
-            getUsersForComboBox();
 
             cboBranch = new wijmo.input.ComboBox('#RRbranch');
 
@@ -774,6 +734,45 @@
             cboCheckedBy  = new wijmo.input.ComboBox('#RRCheckedBy');
             cboApprovedBy  = new wijmo.input.ComboBox('#RRApprovedBy');
 
+            getRRById();
+
+            var RRId = @RRId;
+            if(RRId == 0) {
+                getBranchesForComboBox();
+                getSupplierForComboBox();
+                getTermForComboBox();
+                getUsersForComboBox();
+
+                if(document.getElementById('RRRRNumber').value == 0) {
+                    document.getElementById('RRRRNumber_Display').value = "0000000001";
+                }
+
+                document.getElementById('RRRRNumber').value = 0;
+                //document.getElementById('journalVoucher_No_Display').value = "000-000000";
+                var RRs = new wijmo.collections.ObservableArray;
+                $.ajax({
+                    url: '/api/receivingReceiptLastRRNumber',
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            RRs.push({
+                                Id: Results.Id,
+                                RRNumber: Results.RRNumber
+                            });
+                        }
+                        var RR_Number = parseInt(Results.RRNumber);
+                        var RR_Number_PlusOne = 0000000001;
+                        var RR_Num_Results = RR_Number + RR_Number_PlusOne;
+                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+
+                        document.getElementById('RRRRNumber').value = zerofill(RR_Num_Results, 10);
+                        document.getElementById('RRRRNumber_Display').value = zerofill(RR_Num_Results, 10);
+                    }
+                });
+            }
         });
     </script>
 </body>

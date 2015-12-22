@@ -1,6 +1,8 @@
 ﻿@{
     var id = Request.QueryString["CompanyId"];
     var branchId = Request.QueryString["BranchId"];
+    var collectonId = Request.QueryString["CollectonId"];
+    var userId = ViewData["UserId"];
 }
 <!DOCTYPE html>
 <html>
@@ -58,35 +60,43 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Branch:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />  <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="collection_Branch"></div>
+
+                                        <input type="hidden" id="collection_Branch_data" />
+                                        <input type="hidden" id="collection_Branch_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">OR Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" /> <!-- Auto Generated-->
+                                        <input type="text" class="form-control input-sm" id="collection_ORNumber" />
+                                        <input type="hidden" id="collection_ORNumber_Display" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">OR Date:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />
+                                        <div class="comboBox-wide" id="collection_ORDate"></div>
+                                        <input type="hidden" id="collection_ORDate_data" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual OR Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="collection_ManualORNumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Customer:</label>
                                     <div class="col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" class="form-control input-sm" />
+                                            <div class="comboBox-wide" id="collection_Customer"></div>
+
+                                            <input type="hidden" id="collection_Customer_data" />
+                                            <input type="hidden" id="collection_Customer_selectedValue" />
                                             <div class="input-group-btn">
-                                                <button type="button" class=" btn btn-primary btn-sm">AR</button>
-                                                <button type="button" class="btn btn-primary btn-sm">Advances</button>
+                                                <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
+                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>
                                             </div>
                                         </div>
                                     </div>
@@ -94,7 +104,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id=""></textarea>
+                                        <textarea class="form-control textarea-custom" id="collection_Particulars"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -102,19 +112,35 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Prepared by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="collection_PreparedBy"></div>
+
+                                        <input type="hidden" id="collection_PreparedBy_data" />
+                                        <input type="hidden" id="collection_PreparedBy_selectedValue" />
+                                        <input type="hidden" id="userId_data" value="@userId" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Checked by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="collection_CheckedBy"></div>
+
+                                        <input type="hidden" id="collection_CheckedBy_data" />
+                                        <input type="hidden" id="collection_CheckedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Approved by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="collection_ApprovedBy"></div>
+
+                                        <input type="hidden" id="collection_ApprovedBy_data" />
+                                        <input type="hidden" id="collection_ApprovedBy_selectedValue" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Lock:</label>
+                                    <div class="col-sm-8">
+                                        <input type="checkbox" id="collection_Lock">
                                     </div>
                                 </div>
                             </div>
@@ -123,6 +149,61 @@
                 </div>
             </div>
         </section>
+
+        <!-- Sales for Collection Modal -->
+        <div class="modal fade" id="SalesStatus" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="POStatusModalLabel">Sales Invoice Status</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                        <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- customer Advances for Collection Modal -->
+        <div class="modal fade" id="customerAdvances" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="POStatusModalLabel">Customer Advances</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                        <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class=" modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4>Loading ...</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
@@ -136,8 +217,462 @@
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var collections;
 
-        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Collection", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Collection</a> ' + ' > Collection Detail';
+        var branches;
+        var customers;
+
+        var ORDate;
+
+        var cboBranch;
+        var cboCustomer;
+        var cboPreparedBy;
+        // ====================
+        // GET Collection By Id
+        // ====================
+        function getCollectionById() {
+            collections = new wijmo.collections.ObservableArray;
+            var collectonId = @collectonId;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/collection/' + collectonId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        collections.push({
+                            Id: Results.Id,
+                            BranchId: Results.BranchId,
+                            Branch: Results.Branch,
+                            ORNumber: Results.ORNumber,
+                            ORDate: Results.ORDate,
+                            CustomerId: Results.CustomerId,
+                            Customer: Results.Customer,
+                            Particulars: Results.Particulars,
+                            ManualORNumber: Results.ManualORNumber,
+                            PreparedById: Results.PreparedById,
+                            PreparedBy: Results.PreparedBy,
+                            CheckedById: Results.CheckedById,
+                            CheckedBy: Results.CheckedBy,
+                            ApprovedById: Results.ApprovedById,
+                            ApprovedBy: Results.ApprovedBy,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+
+                    document.getElementById('collection_Branch_data').value = Results.BranchId;
+                    document.getElementById('collection_Branch_selectedValue').value = Results.Branch;
+                    document.getElementById('collection_ORNumber').value = Results.ORNumber;
+                    document.getElementById('collection_ORNumber_Display').value = Results.ORNumber;
+                    document.getElementById('collection_ORDate_data').value = Results.ORDate;
+
+                    var ORdate_date = Results.ORDate;
+                    ORDate.dispose();
+                    ORDate = new wijmo.input.InputDate('#collection_ORDate', {
+                        format: 'MM/dd/yyyy',
+                        value: new Date(ORdate_date),
+                        mask: '99/99/9999',
+                        onValueChanged: function () {
+                            document.getElementById('collection_ORDate_data').value = this.value.toLocaleDateString();
+                        }
+                    });
+
+                    document.getElementById('collection_ManualORNumber').value = Results.ManualORNumber;
+                    document.getElementById('collection_Customer_data').value = Results.CustomerId;
+                    document.getElementById('collection_Customer_selectedValue').value = Results.Customer;
+                    document.getElementById('collection_Particulars').value = Results.Particulars;
+
+                    document.getElementById('collection_PreparedBy_data').value = Results.PreparedById;
+                    document.getElementById('collection_PreparedBy_selectedValue').value = Results.PreparedBy;
+
+                    document.getElementById('collection_CheckedBy_data').value = Results.CheckedById;
+                    document.getElementById('collection_CheckedBy_selectedValue').value = Results.CheckedBy;
+
+                    document.getElementById('collection_ApprovedBy_data').value = Results.ApprovedById;
+                    document.getElementById('collection_ApprovedBy_selectedValue').value = Results.ApprovedBy;
+
+                    document.getElementById('collection_Lock').checked = Results.IsLocked;
+
+                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                    getBranchesForComboBox();
+                    getCustomerForComboBox();
+                    getUsersForComboBox();
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return collections;
+        }
+
+
+        // ========================
+        // GET Branch for Combo Box
+        // ========================
+        function getBranchesForComboBox() {
+            branches = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listBranch',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            branches.push({
+                                BranchId: results[i]["Id"],
+                                BranchBranch: results[i]["Branch"]
+                            });
+                        }
+
+                        var collectonId = @collectonId;
+                        if(collectonId == 0) {
+                            $.ajax({
+                                url: '/api/listBranchById/' + @branchId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        branches.push({
+                                            BranchId: results.Id,
+                                            Branch: results.Branch
+                                        });
+                                    }
+                                    document.getElementById('collection_Branch_data').value = results.Id;
+                                    document.getElementById('collection_Branch_selectedValue').value = results.Branch;
+
+                                    createCboBranch(branches);
+                                }
+                            });
+                        } else {
+                            createCboBranch(branches);
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+                    );
+
+            return branches;
+        }
+
+        // ======================
+        // Combo Box for Branches
+        // ======--==============
+        function createCboBranch(branches) {
+            var branchCollections = new wijmo.collections.CollectionView(branches);
+            var branchList = new Array();
+            for (var i = 0; i < branchCollections.items.length; i++) {
+                branchList.push(branchCollections.items[i].BranchBranch);
+            }
+
+            cboBranch.dispose();
+            cboBranch = new wijmo.input.ComboBox('#collection_Branch', {
+                disabled: true,
+                placeholder: "Select Branch",
+                itemsSource: branchList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collection_Branch_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collection_Branch_data").val(branchCollections.items[this.selectedIndex].BranchId);
+                }
+            });
+        }
+
+
+        // ==========================
+        // GET Customer for Combo Box
+        // ==========================
+        function getCustomerForComboBox() {
+            customers = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/2',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            customers.push({
+                                CustomerId: results[i]["Id"],
+                                Customer: results[i]["Article"]
+                            });
+                        }
+                        createCboCustomer(customers);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+                );
+
+            return customers;
+        }
+
+        // =======================
+        // Combo Box for Customer
+        // =======================
+        function createCboCustomer(customers) {
+            var customerCollection = new wijmo.collections.CollectionView(customers);
+            var customerList = new Array();
+            for (var i = 0; i < customerCollection.items.length; i++) {
+                customerList.push(customerCollection.items[i].Customer);
+            }
+
+            cboCustomer.dispose();
+            cboCustomer = new wijmo.input.ComboBox('#collection_Customer', {
+                placeholder: "Select Customer",
+                itemsSource: customerList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collection_Customer_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collection_Customer_data").val(customerCollection.items[this.selectedIndex].CustomerId);
+                }
+            });
+        }
+
+
+        // =======================
+        // GET Users for Combo Box
+        // =======================
+        function getUsersForComboBox() {
+            users = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUser',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            users.push({
+                                UserId: results[i]["Id"],
+                                UserFullName: results[i]["FullName"]
+                            });
+                        }
+
+                        var collectonId = @collectonId;
+                        if(collectonId == 0) {
+                            var userId = document.getElementById('userId_data').value;
+                            $.ajax({
+                                url: '/api/listByMstUserId/' + userId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        users.push({
+                                            UserId: results.Id,
+                                            UserFullName: results.FullName
+                                        });
+                                    }
+                                    console.log(results.Id);
+                                    document.getElementById('collection_PreparedBy_data').value = results.Id;
+                                    document.getElementById('collection_PreparedBy_selectedValue').value =  results.FullName;
+
+                                    createCboUserPreparedBy(users);
+                                    createCboUserCheckedBy(users);
+                                    createCboUserApprovedBy(users);
+                                }
+                            });
+                        } else {
+                            createCboUserPreparedBy(users);
+                            createCboUserCheckedBy(users);
+                            createCboUserApprovedBy(users);
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return users;
+        }
+
+        // =================================
+        // Combo Box for Users - Prepared By
+        // =================================
+        function createCboUserPreparedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboPreparedBy.dispose();
+            cboPreparedBy = new wijmo.input.ComboBox('#collection_PreparedBy', {
+                disabled: true,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collection_PreparedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collection_PreparedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // =================================
+        // Combo Box for Users - Checked By
+        // =================================
+        function createCboUserCheckedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboCheckedBy.dispose();
+            cboCheckedBy = new wijmo.input.ComboBox('#collection_CheckedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collection_CheckedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collection_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // =================================
+        // Combo Box for Users - Approved By
+        // =================================
+        function createCboUserApprovedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboApprovedBy.dispose();
+            cboApprovedBy = new wijmo.input.ComboBox('#collection_ApprovedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collection_ApprovedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collection_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // =====================================================
+        // Function with leading zeroes to display the OR Number
+        // =====================================================
+        function zerofill(number, length) {
+            var result = number.toString();
+            var pad = length - result.length;
+            while(pad > 0) {
+                result = '0' + result;
+                pad--;
+            }
+            return result;
+        }
+
+        // ===========
+        // OnLoad Page
+        // ===========
+        $(document).ready(function () {
+            $('#cmdAR').click(function () {
+                $('#SalesStatus').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+            });
+
+            $('#cmdAdvances').click(function () {
+                $('#customerAdvances').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+            });
+
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Collection", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Collection</a> ' + ' > Collection Detail';
+            document.getElementById('collection_ORNumber').disabled = true;
+            document.getElementById('collection_Lock').disabled = true;
+
+            cboBranch = new wijmo.input.ComboBox('#collection_Branch');
+            cboCustomer = new wijmo.input.ComboBox('#collection_Customer');
+            cboPreparedBy = new wijmo.input.ComboBox('#collection_PreparedBy');
+            cboCheckedBy = new wijmo.input.ComboBox('#collection_CheckedBy');
+            cboApprovedBy = new wijmo.input.ComboBox('#collection_ApprovedBy');
+
+            var d = new Date();
+            document.getElementById("collection_ORDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            ORDate = new wijmo.input.InputDate('#collection_ORDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('collection_ORDate_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+            getCollectionById();
+
+            var collectionId = @collectonId;
+            if(collectionId == 0) {
+
+                getBranchesForComboBox();
+                getCustomerForComboBox();
+                getUsersForComboBox();
+
+                if(document.getElementById('collection_ORNumber').value == 0) {
+                    document.getElementById('collection_ORNumber_Display').value = "0000000001";
+                }
+
+                document.getElementById('collection_ORNumber').value = 0;
+                var collections = new wijmo.collections.ObservableArray;
+                $.ajax({
+                    url: '/api/collectionLastORNumber',
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            collections.push({
+                                Id: Results.Id,
+                                ORNumber: Results.ORNumber
+                            });
+                        }
+                        var OR_Number = parseInt(Results.ORNumber);
+                        var OR_Number_PlusOne = 0000000001;
+                        var OR_Num_Results = OR_Number + OR_Number_PlusOne;
+
+                        document.getElementById('collection_ORNumber').value = zerofill(OR_Num_Results, 10);
+                        document.getElementById('collection_ORNumber_Display').value = zerofill(OR_Num_Results, 10);
+                    }
+                });
+            }
+
+        });
 
     </script>
 </body>

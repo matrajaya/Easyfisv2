@@ -166,6 +166,21 @@
             </div>
         </section>
 
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class=" modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4>Loading ...</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -200,12 +215,12 @@
         // ================
         // GET Stock In List
         // ================
-        function getStockIn() {
+        function getStockInById() {
             stockIns = new wijmo.collections.ObservableArray;
             var stockInId = @stockInId;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listStockInById/' + stockInId,
+                url: '/api/stockIn/' + stockInId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -400,6 +415,7 @@
             }
             );
         }
+
         // ===============
         // CBO for Account
         // ===============
@@ -424,9 +440,9 @@
             });
         }
 
-        // ==================================================
-        // GET Articles for Combo Box in Journal Voucher Line
-        // ==================================================
+        // ==========================
+        // GET Articles for Combo Box
+        // ==========================
         function getArticlesForComboBox() {
             articles = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -452,9 +468,9 @@
             );
         }
 
-        // ==============================================
-        // Combo Box for Articles in Journal Voucher Line
-        // ==============================================
+        // ======================
+        // Combo Box for Articles
+        // ======================
         function createCboArticles(articles) {
             var articleCollections = new wijmo.collections.CollectionView(articles);
             var articleList = new Array();
@@ -625,8 +641,34 @@
             document.getElementById('StockIn_INnumber').disabled = true;
             document.getElementById('StockIn_Lock').disabled = true;
 
+            cboBranch = new wijmo.input.ComboBox('#StockIn_Branch');
+
+            var d = new Date();
+            document.getElementById("StockIn_InDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            INDate = new wijmo.input.InputDate('#StockIn_InDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('StockIn_InDate_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+            cboForAccount = new wijmo.input.ComboBox('#StockIn_Account');
+            cboArticle = new wijmo.input.ComboBox('#StockIn_Article');
+            cboPreparedBy = new wijmo.input.ComboBox('#StockIn_PreparedBy');
+            cboCheckedBy = new wijmo.input.ComboBox('#StockIn_CheckedBy');
+            cboApprovedBy = new wijmo.input.ComboBox('#StockIn_ApprovedBy');
+
+            getStockInById();
+
             var stockInId = @stockInId;
             if(stockInId == 0) {
+                getBranchesForComboBox();
+                getUsersForComboBox();
+                getAccountForComboBox();
+                getArticlesForComboBox();
+
                 if(document.getElementById('StockIn_INnumber').value == 0) {
                     document.getElementById('StockIn_INnumber_Display').value = "0000000001";
                 }
@@ -635,7 +677,7 @@
                 //document.getElementById('journalVoucher_No_Display').value = "000-000000";
                 var stockIns = new wijmo.collections.ObservableArray;
                 $.ajax({
-                    url: '/api/listStockInLast',
+                    url: '/api/stockInLastINNumber',
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
@@ -657,30 +699,6 @@
                     }
                 });
             }
-
-            var d = new Date();
-            document.getElementById("StockIn_InDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
-            INDate = new wijmo.input.InputDate('#StockIn_InDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    document.getElementById('StockIn_InDate_data').value = this.value.toLocaleDateString();
-                }
-            });
-
-            getStockIn();
-            getBranchesForComboBox();
-            getUsersForComboBox();
-            getAccountForComboBox();
-            getArticlesForComboBox();
-
-            cboBranch = new wijmo.input.ComboBox('#StockIn_Branch');
-            cboForAccount = new wijmo.input.ComboBox('#StockIn_Account');
-            cboArticle = new wijmo.input.ComboBox('#StockIn_Article');
-            cboPreparedBy = new wijmo.input.ComboBox('#StockIn_PreparedBy');
-            cboCheckedBy = new wijmo.input.ComboBox('#StockIn_CheckedBy');
-            cboApprovedBy = new wijmo.input.ComboBox('#StockIn_ApprovedBy');
         });
     </script>
 </body>

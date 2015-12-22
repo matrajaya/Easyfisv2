@@ -46,6 +46,78 @@ namespace easyfis.Controllers
             return collections.ToList();
         }
 
+        // ====================
+        // GET Collection By Id
+        // ====================
+        [Route("api/collection/{id}")]
+        public Models.TrnCollection GetCollectionById(String id)
+        {
+            var collection_Id = Convert.ToInt32(id);
+            var collections = from d in db.TrnCollections
+                              where d.Id == collection_Id
+                              select new Models.TrnCollection
+                              {
+                                  Id = d.Id,
+                                  BranchId = d.BranchId,
+                                  Branch = d.MstBranch.Branch,
+                                  ORNumber = d.ORNumber,
+                                  ORDate = d.ORDate.ToShortDateString(),
+                                  CustomerId = d.CustomerId,
+                                  Customer = d.MstArticle.Article,
+                                  Particulars = d.Particulars,
+                                  ManualORNumber = d.ManualORNumber,
+                                  PreparedById = d.PreparedById,
+                                  PreparedBy = d.MstUser3.FullName,
+                                  CheckedById = d.CheckedById,
+                                  CheckedBy = d.MstUser.FullName,
+                                  ApprovedById = d.ApprovedById,
+                                  ApprovedBy = d.MstUser1.FullName,
+                                  IsLocked = d.IsLocked,
+                                  CreatedById = d.CreatedById,
+                                  CreatedBy = d.MstUser2.FullName,
+                                  CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                  UpdatedById = d.UpdatedById,
+                                  UpdatedBy = d.MstUser4.FullName,
+                                  UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                              };
+            return (Models.TrnCollection)collections.FirstOrDefault();
+        }
+
+        // ===============================
+        // GET last ORNumber in Collection
+        // ===============================
+        [Route("api/collectionLastORNumber")]
+        public Models.TrnCollection GetCollectionLastORNumber()
+        {
+            var collections = from d in db.TrnCollections.OrderByDescending(d => d.ORNumber)
+                              select new Models.TrnCollection
+                              {
+                                  Id = d.Id,
+                                  BranchId = d.BranchId,
+                                  Branch = d.MstBranch.Branch,
+                                  ORNumber = d.ORNumber,
+                                  ORDate = d.ORDate.ToShortDateString(),
+                                  CustomerId = d.CustomerId,
+                                  Customer = d.MstArticle.Article,
+                                  Particulars = d.Particulars,
+                                  ManualORNumber = d.ManualORNumber,
+                                  PreparedById = d.PreparedById,
+                                  PreparedBy = d.MstUser3.FullName,
+                                  CheckedById = d.CheckedById,
+                                  CheckedBy = d.MstUser.FullName,
+                                  ApprovedById = d.ApprovedById,
+                                  ApprovedBy = d.MstUser1.FullName,
+                                  IsLocked = d.IsLocked,
+                                  CreatedById = d.CreatedById,
+                                  CreatedBy = d.MstUser2.FullName,
+                                  CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                  UpdatedById = d.UpdatedById,
+                                  UpdatedBy = d.MstUser4.FullName,
+                                  UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                              };
+            return (Models.TrnCollection)collections.FirstOrDefault();
+        }
+
         // =================
         // DELETE Collection
         // =================
@@ -54,8 +126,8 @@ namespace easyfis.Controllers
         {
             try
             {
-                var collectionId = Convert.ToInt32(id);
-                var collections = from d in db.TrnCollections where d.Id == collectionId select d;
+                var collection_Id = Convert.ToInt32(id);
+                var collections = from d in db.TrnCollections where d.Id == collection_Id select d;
 
                 if (collections.Any())
                 {

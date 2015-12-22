@@ -42,14 +42,14 @@ namespace easyfis.Controllers
         }
 
         // =====================================
-        // LIST Article Group by Article Type Id
+        // List Article Group by Article Type Id
         // =====================================
-        [Route("api/listArticleGroupByArticleTypeId/{id}")]
-        public List<Models.MstArticleGroup> GetArticleGroupByArticleTypeId(String id)
+        [Route("api/listArticleGroupByArticleTypeId/{articleTypeId}")]
+        public List<Models.MstArticleGroup> GetArticleGroupByArticleTypeId(String articleTypeId)
         {
-            var articleTypeId = Convert.ToInt32(id);
+            var article_articleTypeId = Convert.ToInt32(articleTypeId);
             var articleGroups = from d in db.MstArticleGroups
-                                where d.ArticleTypeId == articleTypeId
+                                where d.ArticleTypeId == article_articleTypeId
                                 select new Models.MstArticleGroup
                                 {
                                     Id = d.Id,

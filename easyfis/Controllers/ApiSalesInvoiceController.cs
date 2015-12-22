@@ -55,15 +55,15 @@ namespace easyfis.Controllers
             return salesInvoices.ToList();
         }
 
-        // ========================
-        // LIST Sales Invoice By Id
-        // ========================
-        [Route("api/listSalesInvoiceById/{id}")]
+        // =======================
+        // GET Sales Invoice By Id
+        // =======================
+        [Route("api/salesInvoice/{id}")]
         public Models.TrnSalesInvoice GetSalesById(String id)
         {
-            var salesId = Convert.ToInt32(id);
+            var sales_Id = Convert.ToInt32(id);
             var salesInvoices = from d in db.TrnSalesInvoices
-                                where d.Id == salesId
+                                where d.Id == sales_Id
                                 select new Models.TrnSalesInvoice
                                 {
                                     Id = d.Id,
@@ -101,10 +101,10 @@ namespace easyfis.Controllers
             return (Models.TrnSalesInvoice)salesInvoices.FirstOrDefault();
         }
 
-        // ==========================
-        // LIST Sales Invoice Last Id
-        // ==========================
-        [Route("api/listSalesInvoiceLast")]
+        // =================================
+        // GET last SINumber in SalesInvoice
+        // =================================
+        [Route("api/salesInvoiceLastSINumber")]
         public Models.TrnSalesInvoice GetSalesLastId()
         {
             var salesInvoices = from d in db.TrnSalesInvoices.OrderByDescending(d => d.SINumber)
@@ -153,8 +153,8 @@ namespace easyfis.Controllers
         {
             try
             {
-                var salesId = Convert.ToInt32(id);
-                var sales = from d in db.TrnSalesInvoices where d.Id == salesId select d;
+                var sales_Id = Convert.ToInt32(id);
+                var sales = from d in db.TrnSalesInvoices where d.Id == sales_Id select d;
 
                 if (sales.Any())
                 {

@@ -56,15 +56,15 @@ namespace easyfis.Controllers
             return receivingReceipts.ToList();
         }
 
-        // ============================
-        // LIST Receiving Receipt By Id
-        // ============================
-        [Route("api/listReceivingReceiptById/{Id}")]
-        public Models.TrnReceivingReceipt GetRRById(String Id)
+        // ===========================
+        // GET Receiving Receipt By Id
+        // ===========================
+        [Route("api/receivingReceipt/{Id}")]
+        public Models.TrnReceivingReceipt GetReceivingReceiptById(String Id)
         {
-            var RRId = Convert.ToInt32(Id);
+            var receivingReceipt_Id = Convert.ToInt32(Id);
             var receivingReceipts = from d in db.TrnReceivingReceipts
-                                    where d.Id == RRId
+                                    where d.Id == receivingReceipt_Id
                                     select new Models.TrnReceivingReceipt
                                     {
                                         Id = d.Id,
@@ -103,11 +103,11 @@ namespace easyfis.Controllers
             return (Models.TrnReceivingReceipt)receivingReceipts.FirstOrDefault();
         }
 
-        // ==============================
-        // LIST Receiving Receipt Last Id
-        // ==============================
-        [Route("api/listReceivingReceiptLast")]
-        public Models.TrnReceivingReceipt GetRRLastId()
+        // =======================================
+        // GET Last RRNumber in Receiving Receipts
+        // =======================================
+        [Route("api/receivingReceiptLastRRNumber")]
+        public Models.TrnReceivingReceipt GetLastRRNumber()
         {
             var receivingReceipts = from d in db.TrnReceivingReceipts.OrderByDescending(d => d.RRNumber)
                                     select new Models.TrnReceivingReceipt
@@ -156,12 +156,12 @@ namespace easyfis.Controllers
         {
             try
             {
-                var RRId = Convert.ToInt32(id);
-                var RRs = from d in db.TrnReceivingReceipts where d.Id == RRId select d;
+                var receivingReceipt_Id = Convert.ToInt32(id);
+                var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == receivingReceipt_Id select d;
 
-                if (RRs.Any())
+                if (receivingReceipts.Any())
                 {
-                    db.TrnReceivingReceipts.DeleteOnSubmit(RRs.First());
+                    db.TrnReceivingReceipts.DeleteOnSubmit(receivingReceipts.First());
                     db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);

@@ -1,6 +1,8 @@
 ﻿@{
     var id = Request.QueryString["CompanyId"];
     var branchId = Request.QueryString["BranchId"];
+    var disbursementId = Request.QueryString["DisbursementId"];
+    var userId = ViewData["UserId"];
 }
 <!DOCTYPE html>
 <html>
@@ -58,35 +60,43 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Branch:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />  <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="disbursement_Branch"></div>
+
+                                        <input type="hidden" id="disbursement_Branch_data" />
+                                        <input type="hidden" id="disbursement_Branch_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">CV Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" /> <!-- Auto Generated-->
+                                        <input type="text" class="form-control input-sm" id="disbursement_CVNumber" />
+                                        <input type="hidden" id="disbursement_CVNumber_Display" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">CV Date:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />
+                                        <div class="comboBox-wide" id="disbursement_CVDate"></div>
+                                        <input type="hidden" id="disbursement_CVDate_data" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual CV Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="disbursement_ManualCVNumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Supplier:</label>
                                     <div class="col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" class="form-control input-sm" />
+                                            <div class="comboBox-wide" id="disbursement_Supplier"></div>
+
+                                            <input type="hidden" id="disbursement_Supplier_data" />
+                                            <input type="hidden" id="disbursement_Supplier_selectedValue" />
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-primary btn-sm">AP</button>
-                                                <button type="button" class="btn btn-primary btn-sm">Advances</button>
+                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAP" onclick="AP_OnClick()">AP</button>
+                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="Advances_OnClick()">Advances</button>
                                             </div>
                                         </div>
                                     </div>
@@ -94,19 +104,22 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Payee:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="disbursement_Payee">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Pay Type:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <div class="comboBox-wide" id="disbursement_PayType"></div>
+
+                                        <input type="hidden" id="disbursement_PayType_data" />
+                                        <input type="hidden" id="disbursement_PayType_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id=""></textarea>
+                                        <textarea class="form-control textarea-custom" id="disbursement_Particulars"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -114,49 +127,77 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Bank:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <div class="comboBox-wide" id="disbursement_Bank"></div>
+
+                                        <input type="hidden" id="disbursement_Bank_data" />
+                                        <input type="hidden" id="disbursement_Bank_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Check Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="disbursement_CheckNumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Check Date:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <div class="comboBox-wide" id="disbursement_CheckDate"></div>
+                                        <input type="hidden" id="disbursement_CheckDate_data" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Amount:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
+                                        <input type="text" class="form-control input-sm" id="disbursement_Amount">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Cross Check:</label>
                                     <div class="col-sm-8">
-                                        <input type="checkbox" id="">
+                                        <input type="checkbox" id="disbursement_CrossCheck">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Prepared by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="disbursement_PreparedBy"></div>
+
+                                        <input type="hidden" id="disbursement_PreparedBy_data" />
+                                        <input type="hidden" id="disbursement_PreparedBy_selectedValue" />
+                                        <input type="hidden" id="userId_data" value="@userId" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Checked by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="disbursement_CheckedBy"></div>
+
+                                        <input type="hidden" id="disbursement_CheckedBy_data" />
+                                        <input type="hidden" id="disbursement_CheckedBy_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Approved by:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id=""> <!-- Drop down list ni-->
+                                        <div class="comboBox-wide" id="disbursement_ApprovedBy"></div>
+
+                                        <input type="hidden" id="disbursement_ApprovedBy_data" />
+                                        <input type="hidden" id="disbursement_ApprovedBy_selectedValue" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Lock:</label>
+                                    <div class="col-sm-8">
+                                        <input type="checkbox" id="disbursement_Lock">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-8">
+                                        <input type="hidden" id="disbursement_IsLocked">
+                                        <input type="hidden" id="disbursement_IsLocked_defaultTrue">
+                                        <input type="hidden" id="disbursement_IsLocked_defaultFalse">
                                     </div>
                                 </div>
                             </div>
@@ -165,6 +206,61 @@
                 </div>
             </div>
         </section>
+
+        <!-- RR status -->
+        <div class="modal fade" id="RRStatus" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="RRStatusModalLabel">Receiving Receipt Status</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                        <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spplier Advances -->
+        <div class="modal fade" id="SupplierAdvances" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="SupplierAdvancesModalLabel">Spplier Advances</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                        <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Modal -->
+        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class=" modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h4>Loading ...</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
@@ -178,9 +274,614 @@
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var disbursements;
+        var branches;
+        var suppliers;
+        var payTypes;
+        var banks
+        var users;
 
-        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Disbursement</a> ' + ' > Disbursement Detail';
+        var CVDate;
+        var CheckDate;
 
+        var cboBranch;
+        var cboSupplier;
+        var cboPayType;
+        var cboBank;
+
+        var cboPreparedBy;
+        var cboCheckedBy;
+        var cboApprovedBy;
+        // ======================
+        // GET Disbursement By Id
+        // ======================
+        function getDisbursementById() {
+            disbursements = new wijmo.collections.ObservableArray;
+            var disbursementId = @disbursementId;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/disbursement/' + disbursementId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        disbursements.push({
+                            Id: Results.Id,
+                            BranchId: Results.BranchId,
+                            Branch: Results.Branch,
+                            CVNumber: Results.CVNumber,
+                            CVDate: Results.CVDate,
+                            SupplierId: Results.SupplierId,
+                            Supplier: Results.Supplier,
+                            Payee: Results.Payee,
+                            PayTypeId: Results.PayTypeId,
+                            PayType: Results.PayType,
+                            BankId: Results.BankId,
+                            Bank: Results.Bank,
+                            ManualCVNumber: Results.ManualCVNumber,
+                            Particulars: Results.Particulars,
+                            CheckNumber: Results.CheckNumber,
+                            CheckDate: Results.CheckDate,
+                            Amount: Results.Amount,
+                            IsCrossCheck: Results.IsCrossCheck,
+                            IsClear: Results.IsClear,
+                            PreparedById: Results.PreparedById,
+                            PreparedBy: Results.PreparedBy,
+                            CheckedById: Results.CheckedById,
+                            CheckedBy: Results.CheckedBy,
+                            ApprovedById: Results.ApprovedById,
+                            ApprovedBy: Results.ApprovedBy,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+
+                    document.getElementById('disbursement_Branch_data').value = Results.BranchId;
+                    document.getElementById('disbursement_Branch_selectedValue').value = Results.Branch;
+                    document.getElementById('disbursement_CVNumber').value = Results.CVNumber;
+                    document.getElementById('disbursement_CVNumber_Display').value = Results.CVNumber;
+                    document.getElementById('disbursement_CVDate_data').value = Results.CVDate;
+
+                    var CVDate_date = Results.CVDate;
+                    CVDate.dispose();
+                    CVDate = new wijmo.input.InputDate('#disbursement_CVDate', {
+                        format: 'MM/dd/yyyy',
+                        value: new Date(CVDate_date),
+                        mask: '99/99/9999',
+                        onValueChanged: function () {
+                            document.getElementById('disbursement_CVDate_data').value = this.value.toLocaleDateString();
+                        }
+                    });
+
+                    document.getElementById('disbursement_ManualCVNumber').value = Results.ManualCVNumber
+                    document.getElementById('disbursement_Supplier_data').value = Results.SupplierId;
+                    document.getElementById('disbursement_Supplier_selectedValue').value = Results.Supplier;
+                    document.getElementById('disbursement_Payee').value = Results.Payee;
+                    document.getElementById('disbursement_PayType_data').value = Results.PayTypeId;
+                    document.getElementById('disbursement_PayType_selectedValue').value = Results.PayType;
+                    document.getElementById('disbursement_Particulars').value = Results.Particulars;
+                    document.getElementById('disbursement_Bank_data').value = Results.BankId;
+                    document.getElementById('disbursement_Bank_selectedValue').value = Results.Bank;
+                    document.getElementById('disbursement_CheckNumber').value = Results.CheckNumber;
+                    document.getElementById('disbursement_CheckDate_data').value = Results.CheckDate;
+
+                    var CheckDate_date = Results.CheckDate;
+                    CheckDate.dispose();
+                    CheckDate = new wijmo.input.InputDate('#disbursement_CheckDate', {
+                        format: 'MM/dd/yyyy',
+                        value: new Date(CheckDate_date),
+                        mask: '99/99/9999',
+                        onValueChanged: function () {
+                            document.getElementById('disbursement_CheckDate_data').value = this.value.toLocaleDateString();
+                        }
+                    });
+
+                    document.getElementById('disbursement_Amount').value = Results.Amount;
+                    document.getElementById('disbursement_CrossCheck').checked = Results.IsCrossCheck;
+                    document.getElementById('disbursement_PreparedBy_data').value = Results.PreparedById;
+                    document.getElementById('disbursement_PreparedBy_selectedValue').value = Results.PreparedBy;
+                    document.getElementById('disbursement_CheckedBy_data').value = Results.CheckedById;
+                    document.getElementById('disbursement_CheckedBy_selectedValue').value = Results.CheckedBy;
+                    document.getElementById('disbursement_ApprovedBy_data').value = Results.ApprovedById;
+                    document.getElementById('disbursement_ApprovedBy_selectedValue').value = Results.ApprovedBy;
+                    document.getElementById('disbursement_Lock').checked = Results.IsLocked;
+
+                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                    getBranchesForComboBox();
+                    getSupplierForComboBox();
+                    getPaytypeForComboBox();
+                    getBankForComboBox();
+                    getUsersForComboBox();
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return disbursements;
+        }
+
+        // ========================
+        // GET Branch for Combo Box
+        // ========================
+        function getBranchesForComboBox() {
+            branches = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listBranch',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            branches.push({
+                                BranchId: results[i]["Id"],
+                                BranchBranch: results[i]["Branch"]
+                            });
+                        }
+
+                        var disbursementId = @disbursementId;
+                        if(disbursementId == 0) {
+                            $.ajax({
+                                url: '/api/listBranchById/' + @branchId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        branches.push({
+                                            BranchId: results.Id,
+                                            Branch: results.Branch
+                                        });
+                                    }
+                                    document.getElementById('disbursement_Branch_data').value = results.Id;
+                                    document.getElementById('disbursement_Branch_selectedValue').value = results.Branch;
+
+                                    createCboBranch(branches);
+                                }
+                            });
+                        } else {
+                            createCboBranch(branches);
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+                    );
+            return branches;
+        }
+
+        // ======================
+        // Combo Box for Branches
+        // ======================
+        function createCboBranch(branches) {
+            var branchCollections = new wijmo.collections.CollectionView(branches);
+            var branchList = new Array();
+            for (var i = 0; i < branchCollections.items.length; i++) {
+                branchList.push(branchCollections.items[i].BranchBranch);
+            }
+
+            cboBranch.dispose();
+            cboBranch = new wijmo.input.ComboBox('#disbursement_Branch', {
+                disabled: true,
+                placeholder: "Select Branch",
+                itemsSource: branchList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursement_Branch_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#disbursement_Branch_data").val(branchCollections.items[this.selectedIndex].BranchId);
+                }
+            });
+        }
+
+        // ==========================
+        // GET Supplier for Combo Box
+        // ==========================
+        function getSupplierForComboBox() {
+            suppliers = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            suppliers.push({
+                                SupplierId: results[i]["Id"],
+                                Supplier: results[i]["Article"]
+                            });
+                        }
+                        createCbosupplier(suppliers);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+                );
+
+            return suppliers;
+        }
+
+        // =======================
+        // Combo Box for Suppliers
+        // =======================
+        function createCbosupplier(suppliers) {
+            var supplierCollection = new wijmo.collections.CollectionView(suppliers);
+            var supplierList = new Array();
+            for (var i = 0; i < supplierCollection.items.length; i++) {
+                supplierList.push(supplierCollection.items[i].Supplier);
+            }
+
+            cboSupplier.dispose();
+            cboSupplier = new wijmo.input.ComboBox('#disbursement_Supplier', {
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#disbursement_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                }
+            });
+        }
+
+        // =========================
+        // GET Paytype for Combo Box
+        // =========================
+        function getPaytypeForComboBox() {
+            payTypes = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listPayType',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            payTypes.push({
+                                PayTypeId: results[i]["Id"],
+                                PayType: results[i]["PayType"]
+                            });
+                        }
+                        createCboPaytype(payTypes);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+                );
+
+            return payTypes;
+        }
+
+        // =====================
+        // Combo Box for Paytype
+        // =====================
+        function createCboPaytype(payTypes) {
+            var payTypeCollection = new wijmo.collections.CollectionView(payTypes);
+            var payTypeList = new Array();
+            for (var i = 0; i < payTypeCollection.items.length; i++) {
+                payTypeList.push(payTypeCollection.items[i].PayType);
+            }
+
+            cboPayType.dispose();
+            cboPayType = new wijmo.input.ComboBox('#disbursement_PayType', {
+                placeholder: "Select Pay Type",
+                itemsSource: payTypeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursement_PayType_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#disbursement_PayType_data").val(payTypeCollection.items[this.selectedIndex].PayTypeId);
+                }
+            });
+        }
+
+        // ======================
+        // GET Bank for Combo Box
+        // ======================
+        function getBankForComboBox() {
+            banks = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/5',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            banks.push({
+                                BankId: results[i]["Id"],
+                                Bank: results[i]["Article"]
+                            });
+                        }
+                        createCboBank(banks);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return banks;
+        }
+
+        // ==================
+        // Combo Box for Bank
+        // ==================
+        function createCboBank(banks) {
+            var bankCollection = new wijmo.collections.CollectionView(banks);
+            var bankList = new Array();
+            for (var i = 0; i < bankCollection.items.length; i++) {
+                bankList.push(bankCollection.items[i].Bank);
+            }
+
+            cboBank.dispose();
+            cboBank = new wijmo.input.ComboBox('#disbursement_Bank', {
+                placeholder: "Select Bank",
+                itemsSource: bankList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursement_Bank_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#disbursement_Bank_data").val(bankCollection.items[this.selectedIndex].BankId);
+                }
+            });
+        }
+
+        // =======================
+        // GET Users for Combo Box
+        // =======================
+        function getUsersForComboBox() {
+            users = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUser',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            users.push({
+                                UserId: results[i]["Id"],
+                                UserFullName: results[i]["FullName"]
+                            });
+                        }
+
+                        var disbursementId = @disbursementId;
+                        if(disbursementId == 0) {
+                            var userId = document.getElementById('userId_data').value;
+                            $.ajax({
+                                url: '/api/listByMstUserId/' + userId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        users.push({
+                                            UserId: results.Id,
+                                            UserFullName: results.FullName
+                                        });
+                                    }
+
+                                    document.getElementById('disbursement_PreparedBy_data').value = results.Id;
+                                    document.getElementById('disbursement_PreparedBy_selectedValue').value =  results.FullName;
+
+                                    createCboUserPreparedBy(users);
+                                    createCboUserCheckedBy(users);
+                                    createCboUserApprovedBy(users);
+                                }
+                            });
+                        } else {
+                            createCboUserPreparedBy(users);
+                            createCboUserCheckedBy(users);
+                            createCboUserApprovedBy(users);
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return users;
+        }
+
+        // ==================================
+        // Combo Box for Users - Prepared By
+        // ==================================
+        function createCboUserPreparedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboPreparedBy.dispose();
+            cboPreparedBy = new wijmo.input.ComboBox('#disbursement_PreparedBy', {
+                disabled: true,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursement_PreparedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#disbursement_PreparedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // ==================================
+        // Combo Box for Users - Checked By
+        // ==================================
+        function createCboUserCheckedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboCheckedBy.dispose();
+            cboCheckedBy = new wijmo.input.ComboBox('#disbursement_CheckedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursement_CheckedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#disbursement_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // ==================================
+        // Combo Box for Users - Approved By
+        // ==================================
+        function createCboUserApprovedBy(users) {
+            var usersCollection = new wijmo.collections.CollectionView(users);
+            var userList = new Array();
+            for (var i = 0; i < usersCollection.items.length; i++) {
+                userList.push(usersCollection.items[i].UserFullName);
+            }
+
+            cboApprovedBy.dispose();
+            cboApprovedBy = new wijmo.input.ComboBox('#disbursement_ApprovedBy', {
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursement_ApprovedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#disbursement_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+        }
+
+        // =====================================================
+        // Function with leading zeroes to display the CV Number
+        // =====================================================
+        function zerofill(number, length) {
+            var result = number.toString();
+            var pad = length - result.length;
+            while(pad > 0) {
+                result = '0' + result;
+                pad--;
+            }
+            return result;
+        }
+
+        // ===========
+        // OnLoad Page
+        // ===========
+        $(document).ready(function () {
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Disbursement</a> ' + ' > Disbursement Detail';
+            document.getElementById('disbursement_CVNumber').disabled = true;
+            document.getElementById('disbursement_Lock').disabled = true;
+            
+            $('#cmdAP').click(function () {
+                $('#RRStatus').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+            });
+
+            $('#cmdAdvances').click(function () {
+                $('#SupplierAdvances').modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+            });
+
+            cboBranch = new wijmo.input.ComboBox('#disbursement_Branch');
+
+            var d = new Date();
+            document.getElementById("disbursement_CVDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            CVDate = new wijmo.input.InputDate('#disbursement_CVDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('disbursement_CVDate_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+            document.getElementById("disbursement_CheckDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            CheckDate = new wijmo.input.InputDate('#disbursement_CheckDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('disbursement_CheckDate_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+            cboSupplier = new wijmo.input.ComboBox('#disbursement_Supplier');
+            cboPayType = new wijmo.input.ComboBox('#disbursement_PayType');
+            cboBank = new wijmo.input.ComboBox('#disbursement_Bank');
+            cboPreparedBy = new wijmo.input.ComboBox('#disbursement_PreparedBy');
+            cboCheckedBy = new wijmo.input.ComboBox('#disbursement_CheckedBy');
+            cboApprovedBy = new wijmo.input.ComboBox('#disbursement_ApprovedBy');
+
+            getDisbursementById();
+
+            disbursementId = @disbursementId;
+            if (disbursementId == 0) {
+                getBranchesForComboBox();
+                getSupplierForComboBox();
+                getPaytypeForComboBox();
+                getBankForComboBox();
+                getUsersForComboBox();
+
+                if(document.getElementById('disbursement_CVNumber').value == 0) {
+                    document.getElementById('disbursement_CVNumber_Display').value = "0000000001";
+                }
+
+                document.getElementById('disbursement_CVNumber').value = 0;
+                //document.getElementById('journalVoucher_No_Display').value = "000-000000";
+                var disbursements = new wijmo.collections.ObservableArray;
+                $.ajax({
+                    url: '/api/disbursementLastCVNumber',
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            disbursements.push({
+                                Id: Results.Id,
+                                CVNumber: Results.CVNumber
+                            });
+                        }
+                        var CV_Number = parseInt(Results.CVNumber);
+                        var CV_Number_PlusOne = 0000000001;
+                        var CV_Num_Results = CV_Number + CV_Number_PlusOne;
+                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+
+                        document.getElementById('disbursement_CVNumber').value = zerofill(CV_Num_Results, 10);
+                        document.getElementById('disbursement_CVNumber_Display').value = zerofill(CV_Num_Results, 10);
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

@@ -49,15 +49,15 @@ namespace easyfis.Controllers
             return stockIns.ToList();
         }
 
-        // ===================
-        // LIST Stock In By Id
-        // ===================
-        [Route("api/listStockInById/{id}")]
+        // ==================
+        // GET Stock In By Id
+        // ==================
+        [Route("api/stockIn/{id}")]
         public Models.TrnStockIn GetStockInById(String id)
         {
-            var stockInId = Convert.ToInt32(id);
+            var stockIn_Id = Convert.ToInt32(id);
             var stockIns = from d in db.TrnStockIns
-                           where d.Id == stockInId
+                           where d.Id == stockIn_Id
                            select new Models.TrnStockIn
                            {
                                Id = d.Id,
@@ -89,10 +89,10 @@ namespace easyfis.Controllers
             return (Models.TrnStockIn)stockIns.FirstOrDefault();
         }
 
-        // ===================
-        // LIST Stock In By Id
-        // ===================
-        [Route("api/listStockInLast")]
+        // ============================
+        // GET last INNumber in StockIn
+        // ============================
+        [Route("api/stockInLastINNumber")]
         public Models.TrnStockIn GetStockInLastId()
         {
             var stockIns = from d in db.TrnStockIns.OrderByDescending(d => d.INNumber)
@@ -128,16 +128,16 @@ namespace easyfis.Controllers
         }
 
 
-        // ==============
-        // DELETE Company
-        // ==============
+        // ===============
+        // DELETE Stock In
+        // ===============
         [Route("api/deleteStockIn/{id}")]
         public HttpResponseMessage Delete(String id)
         {
             try
             {
-                var stockInId = Convert.ToInt32(id);
-                var stockIns = from d in db.TrnStockIns where d.Id == stockInId select d;
+                var stockIn_Id = Convert.ToInt32(id);
+                var stockIns = from d in db.TrnStockIns where d.Id == stockIn_Id select d;
 
                 if (stockIns.Any())
                 {

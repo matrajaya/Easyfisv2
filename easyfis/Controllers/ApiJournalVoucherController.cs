@@ -65,11 +65,11 @@ namespace easyfis.Controllers
             return journalVouchers.ToList();
         }
 
-        // ====================
-        // LIST Journal Voucher
-        // ====================
-        [Route("api/listJournalVoucherLast")]
-        public Models.TrnJournalVoucher GetLastDataId()
+        // ====================================
+        // GET last JVNumber in Journal Voucher
+        // ====================================
+        [Route("api/journalVoucherLastJVNumber")]
+        public Models.TrnJournalVoucher GetLastJVNumber()
         {
             var journalVouchers = from d in db.TrnJournalVouchers.OrderByDescending(d => d.JVNumber)
                                   select new Models.TrnJournalVoucher
@@ -98,15 +98,15 @@ namespace easyfis.Controllers
             return (Models.TrnJournalVoucher)journalVouchers.FirstOrDefault();
         }
 
-        // ==========================
-        // LIST Journal Voucher by Id
-        // ==========================
+        // =========================
+        // GET Journal Voucher by Id
+        // =========================
         [Route("api/journalVoucher/{Id}")]
         public Models.TrnJournalVoucher GetJournalVoucherById(String Id)
         {
-            var journalVoucherId = Convert.ToInt32(Id);
+            var journalVoucher_Id = Convert.ToInt32(Id);
             var journalVouchers = from d in db.TrnJournalVouchers
-                                  where d.Id == journalVoucherId
+                                  where d.Id == journalVoucher_Id
                                   select new Models.TrnJournalVoucher
                                       {
                                           Id = d.Id,
@@ -139,9 +139,9 @@ namespace easyfis.Controllers
         [Route("api/listJournalVoucherByBranchId/{branchId}")]
         public List<Models.TrnJournalVoucher> GetJournalVoucherByBranchId(String branchId)
         {
-            var journalVoucherBranchId = Convert.ToInt32(branchId);
+            var journalVoucher_BranchId = Convert.ToInt32(branchId);
             var journalVouchers = from d in db.TrnJournalVouchers
-                                  where d.BranchId == journalVoucherBranchId
+                                  where d.BranchId == journalVoucher_BranchId
                                   select new Models.TrnJournalVoucher
                                       {
                                           Id = d.Id,

@@ -53,15 +53,15 @@ namespace easyfis.Controllers
             return purchaseOrders.ToList();
         }
 
-        // =========================
-        // LIST Purchase Order by Id
-        // =========================
-        [Route("api/listPurchaseOrderById/{id}")]
+        // ========================
+        // GET Purchase Order by Id
+        // ========================
+        [Route("api/purchaseOrder/{id}")]
         public Models.TrnPurchaseOrder GetPurchaseOrderById(String id)
         {
-            var POId = Convert.ToInt32(id);
+            var purchaseOrder_Id = Convert.ToInt32(id);
             var purchaseOrders = from d in db.TrnPurchaseOrders
-                                 where d.Id == POId
+                                 where d.Id == purchaseOrder_Id
                                  select new Models.TrnPurchaseOrder
                                  {
                                      Id = d.Id,
@@ -97,11 +97,11 @@ namespace easyfis.Controllers
             return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
         }
 
-        // ========================
-        // LIST Purchase Order Last
-        // ========================
-        [Route("api/listPurchaseOrderLast")]
-        public Models.TrnPurchaseOrder GetPOLastId()
+        // ===================================
+        // GET last PONumber in Purchase Order 
+        // ===================================
+        [Route("api/purchaseOrderLastPONumber")]
+        public Models.TrnPurchaseOrder GetLastPONumber()
         {
             var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.PONumber)
                                  select new Models.TrnPurchaseOrder
@@ -148,12 +148,12 @@ namespace easyfis.Controllers
         {
             try
             {
-                var POId = Convert.ToInt32(id);
-                var POs = from d in db.TrnPurchaseOrders where d.Id == POId select d;
+                var purchaseOrder_Id = Convert.ToInt32(id);
+                var purchaseOrders = from d in db.TrnPurchaseOrders where d.Id == purchaseOrder_Id select d;
 
-                if (POs.Any())
+                if (purchaseOrders.Any())
                 {
-                    db.TrnPurchaseOrders.DeleteOnSubmit(POs.First());
+                    db.TrnPurchaseOrders.DeleteOnSubmit(purchaseOrders.First());
                     db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);

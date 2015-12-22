@@ -71,15 +71,15 @@ namespace easyfis.Controllers
             return articles.ToList();
         }
 
-        // ==================
-        // LIST Article By Id
-        // ==================
-        [Route("api/listArticleById/{id}")]
+        // =================
+        // GET Article By Id
+        // =================
+        [Route("api/article/{id}")]
         public Models.MstArticle GetArticleById(String id)
         {
-            var articleId = Convert.ToInt32(id);
+            var article_Id = Convert.ToInt32(id);
             var articles = from d in db.MstArticles
-                           where d.Id == articleId
+                           where d.Id == article_Id
                            select new Models.MstArticle
                            {
                                Id = d.Id,
@@ -132,14 +132,14 @@ namespace easyfis.Controllers
         }
 
         // ===============================
-        // LIST Article by Article Type Id
+        // LIST Article by ArticleTypeId
         // ===============================
-        [Route("api/listArticleByArticleTypeId/{id}")]
-        public List<Models.MstArticle> GetArticleByArticleTypeId(String id)
+        [Route("api/listArticleByArticleTypeId/{articleTypeId}")]
+        public List<Models.MstArticle> GetArticleByArticleTypeId(String articleTypeId)
         {
-            var articleTypeId = Convert.ToInt32(id);
+            var article_articleTypeId = Convert.ToInt32(articleTypeId);
             var articles = from d in db.MstArticles
-                           where d.ArticleTypeId == articleTypeId
+                           where d.ArticleTypeId == article_articleTypeId
                            select new Models.MstArticle
                            {
                                Id = d.Id,
@@ -191,16 +191,15 @@ namespace easyfis.Controllers
             return articles.ToList();
         }
 
-
-        // ====================================
-        // LIST Article Last by Article Type Id
-        // ====================================
-        [Route("api/listArticleLastByArticleTypeId/{id}")]
-        public Models.MstArticle GetArticleLastId(String id)
+        // ================================================
+        // GET last ArticleCode in Aritcle by ArticleTypeId
+        // ================================================
+        [Route("api/articleLastArticleCodeByArticleTypeId/{articleTypeId}")]
+        public Models.MstArticle GetLastArticle(String articleTypeId)
         {
-            var articleTypeId = Convert.ToInt32(id);
+            var article_articleTypeId = Convert.ToInt32(articleTypeId);
             var articles = from d in db.MstArticles.OrderByDescending(d => d.ArticleCode)
-                           where d.ArticleTypeId == articleTypeId
+                           where d.ArticleTypeId == article_articleTypeId
                            select new Models.MstArticle
                            {
                                Id = d.Id,
@@ -251,7 +250,6 @@ namespace easyfis.Controllers
                            };
             return (Models.MstArticle)articles.FirstOrDefault();
         }
-
 
         // ===========
         // ADD Article
@@ -329,8 +327,8 @@ namespace easyfis.Controllers
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
 
-                var articleId = Convert.ToInt32(id);
-                var articles = from d in db.MstArticles where d.Id == articleId select d;
+                var article_Id = Convert.ToInt32(id);
+                var articles = from d in db.MstArticles where d.Id == article_Id select d;
 
                 if (articles.Any())
                 {
@@ -400,8 +398,8 @@ namespace easyfis.Controllers
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
 
-                var articleId = Convert.ToInt32(id);
-                var articles = from d in db.MstArticles where d.Id == articleId select d;
+                var article_Id = Convert.ToInt32(id);
+                var articles = from d in db.MstArticles where d.Id == article_Id select d;
 
                 if (articles.Any())
                 {
@@ -436,8 +434,8 @@ namespace easyfis.Controllers
         {
             try
             {
-                var articleId = Convert.ToInt32(id);
-                var articles = from d in db.MstArticles where d.Id == articleId select d;
+                var article_Id = Convert.ToInt32(id);
+                var articles = from d in db.MstArticles where d.Id == article_Id select d;
 
                 if (articles.Any())
                 {

@@ -201,7 +201,7 @@
             var customers = new wijmo.collections.ObservableArray;
             var articleId = @articleCustomerId;
             $.ajax({
-                url: '/api/listArticleById/' +  articleId,
+                url: '/api/article/' +  articleId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -708,10 +708,16 @@
         $(document).ready(function () {
             document.getElementById('Customer_IsLocked_defaultTrue').value = 'true';
             document.getElementById('Customer_IsLocked_defaultFalse').value = 'false';
-            
             document.getElementById('isLocked_Status').disabled = true;
+            
+            getArticleCustomerById();
 
             if(@articleCustomerId == 0) {
+                // comboboxes
+                getArticleCustomerGroupForComboBox();
+                getArticleAccountForComboBox();
+                getArticleTermForComboBox();
+
                 if(document.getElementById('artcileCustomer_code_data').value == 0) {
                     document.getElementById('artcileCustomer_code').value = "0000000001";
                 }
@@ -720,7 +726,7 @@
 
                 var customers = new wijmo.collections.ObservableArray;
                 $.ajax({
-                    url: '/api/listArticleLastByArticleTypeId/2',
+                    url: '/api/articleLastArticleCodeByArticleTypeId/2',
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
@@ -756,16 +762,7 @@
             cboArticleGroupForCustomer  = new wijmo.input.ComboBox('#artcileCustomer_customerGroup');
             cboForAccount  = new wijmo.input.ComboBox('#artcileCustomer_account');
             cboForTerm  = new wijmo.input.ComboBox('#artcileCustomer_term');
-
-            getArticleCustomerById();
-
-            // comboboxes
-            getArticleCustomerGroupForComboBox();
-            getArticleAccountForComboBox();
-            getArticleTermForComboBox();
         });
-
     </script>
-
 </body>
 </html>

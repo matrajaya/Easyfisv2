@@ -217,14 +217,13 @@
         // Global Variables
         // ================
         var POs;
-
         var branches;
         var PODate;
         var PODateNeeded;
         var users;
         var suppliers;
         var terms;
-
+        
         var cboBranch;
         var cboSupplier;
         var cboTerm;
@@ -241,7 +240,7 @@
             var POId = @POId;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listPurchaseOrderById/' + POId,
+                url: '/api/purchaseOrder/' + POId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -702,44 +701,8 @@
         $(document).ready(function () {
             document.getElementById('PO_Branch').disabled = true;
             document.getElementById('PO_PONumber').disabled = true;
-
             document.getElementById('PO_Lock').disabled = true;
-
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Purchase Order</a> ' + ' > Purchase Order Detail';
-            getPOById();
-
-            var POId = @POId;
-            if(POId == 0) {
-                if(document.getElementById('PO_PONumber').value == 0) {
-                    document.getElementById('PO_PONumber_Display').value = "0000000001";
-                }
-
-                document.getElementById('PO_PONumber').value = 0;
-                //document.getElementById('journalVoucher_No_Display').value = "000-000000";
-                var POs = new wijmo.collections.ObservableArray;
-                $.ajax({
-                    url: '/api/listPurchaseOrderLast',
-                    cache: false,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    data: {},
-                    success: function (Results) {
-                        if (Results.length > 0) {
-                            POs.push({
-                                Id: Results.Id,
-                                PONumber: Results.PONumber
-                            });
-                        }
-                        var PO_Number = parseInt(Results.PONumber);
-                        var PO_Number_PlusOne = 0000000001;
-                        var PO_Num_Results = PO_Number + PO_Number_PlusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
-
-                        document.getElementById('PO_PONumber').value = zerofill(PO_Num_Results, 10);
-                        document.getElementById('PO_PONumber_Display').value = zerofill(PO_Num_Results, 10);
-                    }
-                });
-            }
 
             cboBranch = new wijmo.input.ComboBox('#PO_Branch');
 
@@ -770,12 +733,46 @@
             cboCheckedBy  = new wijmo.input.ComboBox('#CheckedBy');
             cboApprovedBy  = new wijmo.input.ComboBox('#ApprovedBy');
 
-            getBranchesForComboBox();
-            getSupplierForComboBox();
-            getTermForComboBox();
-            getUsersForComboBox();
+            getPOById();
+
+            var POId = @POId;
+            if(POId == 0) {
+                getBranchesForComboBox();
+                getSupplierForComboBox();
+                getTermForComboBox();
+                getUsersForComboBox();
+
+                if(document.getElementById('PO_PONumber').value == 0) {
+                    document.getElementById('PO_PONumber_Display').value = "0000000001";
+                }
+
+                document.getElementById('PO_PONumber').value = 0;
+                //document.getElementById('journalVoucher_No_Display').value = "000-000000";
+                var POs = new wijmo.collections.ObservableArray;
+                $.ajax({
+                    url: '/api/purchaseOrderLastPONumber',
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            POs.push({
+                                Id: Results.Id,
+                                PONumber: Results.PONumber
+                            });
+                        }
+                        var PO_Number = parseInt(Results.PONumber);
+                        var PO_Number_PlusOne = 0000000001;
+                        var PO_Num_Results = PO_Number + PO_Number_PlusOne;
+                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+
+                        document.getElementById('PO_PONumber').value = zerofill(PO_Num_Results, 10);
+                        document.getElementById('PO_PONumber_Display').value = zerofill(PO_Num_Results, 10);
+                    }
+                });
+            }
         });
     </script>
-
 </body>
 </html>

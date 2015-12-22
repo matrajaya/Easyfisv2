@@ -509,10 +509,9 @@
                             UpdatedDateTime: Results.UpdatedDateTime
                         });
                     }
-
-                    getBranchesForComboBox();
-                    getUsersForComboBox();
-
+                    
+                    document.getElementById('branch_Id_data').value = Results.BranchId;
+                    document.getElementById('branch_selectedValue').value = Results.Branch;
                     document.getElementById('journalVoucher_No').value = Results.JVNumber;
 
                     var JV_Number = Results.JVNumber;
@@ -687,6 +686,9 @@
                             }
                         });
                     }
+                    
+                    getBranchesForComboBox();
+                    getUsersForComboBox();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -713,24 +715,30 @@
                                 BranchBranch: results[i]["Branch"]
                             });
                         }
-                        $.ajax({
-                            url: '/api/listBranchById/' + @branchId,
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (results) {
-                                if (results.length > 0) {
-                                    branches.push({
-                                        BranchId: results.Id,
-                                        BranchBranch: results.Branch
-                                    });
+
+                        var JVId = @JVId;
+                        if(JVId == 0) {
+                            $.ajax({
+                                url: '/api/listBranchById/' + @branchId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        branches.push({
+                                            BranchId: results.Id,
+                                            BranchBranch: results.Branch
+                                        });
+                                    }
+                                    document.getElementById('branch_Id_data').value = @branchId;
+                                    document.getElementById('branch_selectedValue').value = results.Branch;
+                                    createCboBranch(branches);
                                 }
-                                document.getElementById('branch_Id_data').value = @branchId;
-                                document.getElementById('branch_selectedValue').value = results.Branch;
-                                createCboBranch(branches);
-                            }
-                        });
+                            });
+                        } else {
+                            createCboBranch(branches);
+                        }
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -2201,7 +2209,7 @@
                 //document.getElementById('journalVoucher_No_Display').value = "000-000000";
                 var journalVouchers = new wijmo.collections.ObservableArray;
                 $.ajax({
-                    url: '/api/listJournalVoucherLast',
+                    url: '/api/journalVoucherLastJVNumber',
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',

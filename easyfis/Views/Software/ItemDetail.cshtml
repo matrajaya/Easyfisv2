@@ -228,7 +228,7 @@
             var items = new wijmo.collections.ObservableArray;
             var articleId = @itemId;
             $.ajax({
-                url: '/api/listArticleById/' +  articleId,
+                url: '/api/article/' +  articleId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -853,13 +853,18 @@
         // ===========
         $(document).ready(function () {
             document.getElementById('isLocked_Status').disabled = true;
-
             document.getElementById('Item_IsLocked_defaultTrue').value = 'true';
             document.getElementById('Item_IsLocked_defaultFalse').value = 'false';
-
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Items", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Items</a> ' + ' > Item Detail';
+            
+            getArticleItemById();
 
             if(@itemId == 0) {
+                // comboboxes
+                getArticleItemGroupForComboBox();
+                getArticleItemUnitForComboBox();
+                getArticleTaxTypeForComboBox();
+
                 if(document.getElementById('articleItem_code_data').value == 0) {
                     document.getElementById('articleItem_code').value = "0000000001";
                 }
@@ -868,7 +873,7 @@
 
                 var items = new wijmo.collections.ObservableArray;
                 $.ajax({
-                    url: '/api/listArticleLastByArticleTypeId/1',
+                    url: '/api/articleLastArticleCodeByArticleTypeId/1',
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
@@ -905,16 +910,7 @@
             cboArticleInputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_inputTax');
             cboArticleOutputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_outputTax');
             cboArticleWithholdingTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_withholdingTax');
-
-            getArticleItemById();
-
-            // comboboxes
-            getArticleItemGroupForComboBox();
-            getArticleItemUnitForComboBox();
-            getArticleTaxTypeForComboBox();
-
         });
     </script>
-
 </body>
 </html>
