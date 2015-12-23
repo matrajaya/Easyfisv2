@@ -84,6 +84,44 @@ namespace easyfis.Controllers
         }
 
         // ===============================
+        // GET Collection Filter by OR Date
+        // ================================
+        [Route("api/listCollectionFilterByORDate/{ORDate}")]
+        public List<Models.TrnCollection> GetCollectionFilterByORDate(String ORDate)
+        {
+            var collection_ORDate = Convert.ToDateTime(ORDate);
+            var collections = from d in db.TrnCollections
+                              where d.ORDate == collection_ORDate
+                              select new Models.TrnCollection
+                              {
+                                  Id = d.Id,
+                                  BranchId = d.BranchId,
+                                  Branch = d.MstBranch.Branch,
+                                  ORNumber = d.ORNumber,
+                                  ORDate = d.ORDate.ToShortDateString(),
+                                  CustomerId = d.CustomerId,
+                                  Customer = d.MstArticle.Article,
+                                  Particulars = d.Particulars,
+                                  ManualORNumber = d.ManualORNumber,
+                                  PreparedById = d.PreparedById,
+                                  PreparedBy = d.MstUser3.FullName,
+                                  CheckedById = d.CheckedById,
+                                  CheckedBy = d.MstUser.FullName,
+                                  ApprovedById = d.ApprovedById,
+                                  ApprovedBy = d.MstUser1.FullName,
+                                  IsLocked = d.IsLocked,
+                                  CreatedById = d.CreatedById,
+                                  CreatedBy = d.MstUser2.FullName,
+                                  CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                  UpdatedById = d.UpdatedById,
+                                  UpdatedBy = d.MstUser4.FullName,
+                                  UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                              };
+            return collections.ToList();
+        }
+
+
+        // ===============================
         // GET last ORNumber in Collection
         // ===============================
         [Route("api/collectionLastORNumber")]

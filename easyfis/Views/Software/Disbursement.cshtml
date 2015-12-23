@@ -39,6 +39,15 @@
                             </div>
                         </div>
                     </div>
+                    <label>ST date </label>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="comboBox-wide" id="filterDate"></div>
+                            <input type="hidden" id="filterDate_data" />
+                        </div>
+                        <div class="col-lg-8"></div>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
@@ -137,14 +146,14 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // =====================
-        // GET Disbursement List
-        // =====================
-        function getDisbursement() {
+        // =======================================
+        // GET Disbursement List Filter by CV Date
+        // =======================================
+        function getDisbursementFilterByCVDate(CVDateFilter) {
             var disbursements = new wijmo.collections.ObservableArray;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listDisbursement',
+                url: '/api/listDisbursementFilterByCVDate/' + CVDateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -336,7 +345,46 @@
                 "hideMethod": "fadeOut"
             }
 
-            disbursements = new wijmo.collections.CollectionView(getDisbursement());
+            var CVDateFilter_Date = new Date();
+            document.getElementById("filterDate_data").value = [ CVDateFilter_Date.getMonth()+1, CVDateFilter_Date.getDate(), CVDateFilter_Date.getFullYear()].join('-');
+
+            var cboFilterDate;
+            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
+                    var CVDateFilterValue = document.getElementById('filterDate_data').value;
+
+                    disbursements = new wijmo.collections.CollectionView(getDisbursementFilterByCVDate(CVDateFilterValue));
+                    disbursements.canFilter = true;
+                    disbursements.pageSize = 15;
+
+                    var filterText = '';
+                    $('#InputFilter').keyup(function () {
+                        filterText = this.value.toLowerCase();
+                        disbursements.refresh();
+                    });
+                    disbursements.filter = function (item) {
+                        return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1);
+                    }
+                    disbursements.collectionChanged.addHandler(function (sender, args) {
+                        updateNavigateButtonsDisbursement();
+                    });
+                    disbursements.currentChanged.addHandler(function (sender, args) {
+                        updateDetails();
+                    });
+
+                    disbursementGrid.itemsSource = disbursements;
+                    disbursementGrid.trackChanges = true;
+
+                    updateNavigateButtonsDisbursement();
+                }
+            });
+
+            var CVDateFilter = document.getElementById('filterDate_data').value;
+            disbursements = new wijmo.collections.CollectionView(getDisbursementFilterByCVDate(CVDateFilter));
             disbursements.canFilter = true;
             disbursements.pageSize = 15;
 
