@@ -175,7 +175,282 @@
                         </div>
                     </form>
                 </div>
-            </div>
+
+                <ul class="nav nav-tabs " role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#UnitConversion" id="unitConvertionTabId">Unit Conversion</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Component" id="componentTabId">Component</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Price" id="priceTabId">Price</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Inventory" id="inventoryTabId">Inventory</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#GLAccount" id="glAccountTabId">GL Account</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#FixedAsset" id="fixedAssetId">Fixed Asset</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <div id="UnitConversion" class="tab-pane fade in active">
+                        <!-- UnitConversion List -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>Unit Conversion</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                </div>
+                            </div>
+                            @*<div class="col-lg-8" align="right">
+                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
+                </div>*@
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="AccountGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Component" class="tab-pane fade in active">
+                        <!-- Component List -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>Component</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                </div>
+                            </div>
+                            @*<div class="col-lg-8" align="right">
+                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
+                </div>*@
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="AccountGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Price" class="tab-pane fade in active">
+                        <!-- Price List -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>Price</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                </div>
+                            </div>
+                            @*<div class="col-lg-8" align="right">
+                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
+                </div>*@
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="AccountGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Inventory" class="tab-pane fade in active">
+                        <!-- Inventory List -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>Inventory</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                </div>
+                            </div>
+                            @*<div class="col-lg-8" align="right">
+                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
+                </div>*@
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="AccountGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="GLAccount" class="tab-pane fade in active">
+                        <!-- GL Account List -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>GL Account</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                </div>
+                            </div>
+                            @*<div class="col-lg-8" align="right">
+                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
+                </div>*@
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="AccountGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="FixedAsset" class="tab-pane fade in active">
+                        <!-- Fixed Asset List -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>Fixed Asset</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                </div>
+                            </div>
+                            @*<div class="col-lg-8" align="right">
+                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
+                </div>*@
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="AccountGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </section>
 
         <!-- Loading Modal -->
@@ -786,7 +1061,7 @@
                 }
             });
         }
-        
+
         // =========
         // EDIT Item
         // =========
@@ -856,7 +1131,7 @@
             document.getElementById('Item_IsLocked_defaultTrue').value = 'true';
             document.getElementById('Item_IsLocked_defaultFalse').value = 'false';
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Items", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Items</a> ' + ' > Item Detail';
-            
+
             getArticleItemById();
 
             if(@itemId == 0) {
@@ -894,7 +1169,7 @@
                         document.getElementById('articleItem_code').value = zerofill(ArticleCode_Results, 10);
                     }
                 });
-                
+
                 $("#item_saveSaveItem").prop("disabled", false);
                 $("#item_saveItem").prop("disabled", false);
                 $("#item_editItem").prop("disabled", true);

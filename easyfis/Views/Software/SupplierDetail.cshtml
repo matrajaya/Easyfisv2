@@ -145,6 +145,103 @@
                         </div>
                     </form>
                 </div>
+                <!-- Supplier line -->
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#JournalLedger" id="journalLedgerTabId">Journal Ledger</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#ContactInformation" id="contactInformationTabId">More Contact Information</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <div id="JournalLedger" class="tab-pane fade in active">
+                        <!-- Journal Ledger List -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>Journal Ledger</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterJournalLedger" placeholder="Search">
+                                </div>
+                            </div>
+                            @*<div class="col-lg-8" align="right">
+                                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
+                                </div>*@
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="JournalLedgerGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridJournalLedger">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournalLedger">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournalLedger">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournalLedger"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournalLedger">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournalLedger">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="ContactInformation" class="tab-pane fade in active">
+                        <!-- More Contact Information List -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4>More Contact Information</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterContactInformation" placeholder="Search">
+                                </div>
+                            </div>
+                            @*<div class="col-lg-8" align="right">
+                                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
+                            </div>*@
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="ContactInformationGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridContactInformation">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridContactInformation">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridContactInformation">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridContactInformation"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridContactInformation">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridContactInformation">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -282,7 +379,7 @@
                         $("#supplier_SaveButton").prop("disabled", true);
                         $("#supplier_EditButton").prop("disabled", false);
                         $("#supplier_PrintButton").prop("disabled", false);
-                        
+
                         document.getElementById('isLocked_Status').checked = true;
 
                     } else if(document.getElementById('Supplier_IsLocked').value == 'false') {
@@ -557,7 +654,7 @@
             $("#supplier_EditButton").prop("disabled", true);
             $("#supplier_PrintButton").prop("disabled", true);
             $("#supplier_CloseButton").prop("disabled", true);
-            
+
             var supplierObject = new Object();
             var supplierId = @supplierId;
 
@@ -618,7 +715,7 @@
             $("#supplier_EditButton").prop("disabled", true);
             $("#supplier_PrintButton").prop("disabled", true);
             $("#supplier_CloseButton").prop("disabled", true);
-            
+
             var supplierObject = new Object();
             var supplierId = @supplierId;
 
@@ -733,5 +830,460 @@
         });
 
     </script>
+
+    <!-- ====================== -->
+    <!-- Journal Ledger Scripts -->
+    <!-- ====================== -->
+    <script type="text/javascript">
+        // ===================================
+        // Global Variables for Journal Ledger
+        // ===================================
+        var journalLedger;
+        var journalLedgerGrid;
+
+        var btnFirstPageGridJournalLedger;
+        var btnPreviousPageGridJournalLedger;
+        var btnNextPageGridJournalLedger;
+        var btnLastPageGridJournalLedger;
+        var btnCurrentPageGridJournalLedger;
+        
+        // ================
+        // GET Journal Ledger List
+        // ================
+        function getJournalLedger() {
+            var journalLedger = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            return journalLedger;
+        }
+        // =====================================
+        // FlexGrid Selection for Journal Ledger
+        // =====================================
+        function updateDetailsJournalLedger() {
+            var item = journalLedger.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // =====================================
+        // Navigation Buttons for Journal Ledger
+        // =====================================
+        function updateNavigateButtonsJournalLedger() {
+            if (journalLedger.pageSize <= 0) {
+                document.getElementById('naviagtionPageGridJournalLedger').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGridJournalLedger').style.display = 'block';
+            if (journalLedger.pageIndex === 0) {
+                btnFirstPageGridJournalLedger.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridJournalLedger.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournalLedger.removeAttribute('disabled');
+                btnLastPageGridJournalLedger.removeAttribute('disabled');
+            } else if (journalLedger.pageIndex === (accounts.pageCount - 1)) {
+                btnFirstPageGridJournalLedger.removeAttribute('disabled');
+                btnPreviousPageGridJournalLedger.removeAttribute('disabled');
+                btnLastPageGridJournalLedger.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournalLedger.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridJournalLedger.removeAttribute('disabled');
+                btnPreviousPageGridJournalLedger.removeAttribute('disabled');
+                btnNextPageGridJournalLedger.removeAttribute('disabled');
+                btnLastPageGridJournalLedger.removeAttribute('disabled');
+            }
+            btnCurrentPageGridJournalLedger.innerHTML = (journalLedger.pageIndex + 1) + ' / ' + journalLedger.pageCount;
+        }
+
+        // ===============================
+        // On Page Load for Journal Ledger
+        // ===============================
+        function journalLedgerTab() {
+            journalLedger = new wijmo.collections.CollectionView(getJournalLedger());
+            journalLedger.canFilter = true;
+            journalLedger.pageSize = 15;
+
+            var filterTextJournalLedger = '';
+            $('#InputFilterJournalLedger').keyup(function () {
+                filterTextJournalLedger = this.value.toLowerCase();
+                journalLedger.refresh();
+            });
+            journalLedger.filter = function (item) {
+                return !filterTextJournalLedger || (item.journalLedger.toLowerCase().indexOf(filterTextJournalLedger) > -1);
+            }
+            journalLedger.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsJournalLedger();
+            });
+            journalLedger.currentChanged.addHandler(function (sender, args) {
+                updateDetailsJournalLedger();
+            });
+
+            // Flex Grid for Journal Ledger
+            journalLedgerGrid = new wijmo.grid.FlexGrid('#JournalLedgerGrid');
+            journalLedgerGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Date",
+                                "binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Doc Ref.",
+                                "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Branch",
+                                "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Account",
+                                "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Debit",
+                                "binding": "Debit",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                 "header": "Credit",
+                                 "binding": "Credit",
+                                 "align": "left",
+                                 "allowSorting": true,
+                                 "width": "2*"
+                             },
+                             {
+                                 "header": "Balance",
+                                 "binding": "Balance",
+                                 "align": "left",
+                                 "allowSorting": true,
+                                 "width": "2*"
+                             },
+                             {
+                                 "header": "Particulars",
+                                 "binding": "Particulars",
+                                 "align": "left",
+                                 "allowSorting": true,
+                                 "width": "2*"
+                             },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: journalLedger,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            journalLedgerGrid.trackChanges = true;
+
+            //Navigation button for Journal Ledger
+            btnFirstPageGridJournalLedger = document.getElementById('btnMoveToFirstPageGridJournalLedger');
+            btnPreviousPageGridJournalLedger = document.getElementById('btnMoveToPreviousPageGridJournalLedger');
+            btnNextPageGridJournalLedger = document.getElementById('btnMoveToNextPageGridJournalLedger');
+            btnLastPageGridJournalLedger = document.getElementById('btnMoveToLastPageGridJournalLedger');
+            btnCurrentPageGridJournalLedger = document.getElementById('btnCurrentPageGridJournalLedger');
+
+            updateNavigateButtonsJournalLedger();
+
+            btnFirstPageGridJournalLedger.addEventListener('click', function () {
+                journalLedger.moveToFirstPage();
+                updateNavigateButtonsJournalLedger();
+            });
+            btnPreviousPageGridJournalLedger.addEventListener('click', function () {
+                journalLedger.moveToPreviousPage();
+                updateNavigateButtonsJournalLedger();
+            });
+            btnNextPageGridJournalLedger.addEventListener('click', function () {
+                journalLedger.moveToNextPage();
+                updateNavigateButtonsJournalLedger();
+            });
+            btnLastPageGridJournalLedger.addEventListener('click', function () {
+                journalLedger.moveToLastPage();
+                updateNavigateButtonsJournalLedger();
+            });
+        }
+    </script>
+    
+    <!-- =========================== -->
+    <!-- Contact Information Scripts -->
+    <!-- =========================== -->
+    <script type="text/javascript">
+        // ========================================
+        // Global Variables for Contact Information
+        // ========================================
+        var contactInformation;
+        var contactInformationGrid;
+
+        var btnFirstPageGridContactInformation;
+        var btnPreviousPageGridContactInformation;
+        var btnNextPageGridContactInformation;
+        var btnLastPageGridContactInformation;
+        var btnCurrentPageGridContactInformation;
+
+        // ============================
+        // GET Contact Information List
+        // ============================
+        function getContactInformation() {
+            var contactInformation = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            return contactInformation;
+        }
+
+        // ==========================================
+        // FlexGrid Selection for Contact Information
+        // ==========================================
+        function updateDetailsContactInformation() {
+            var item = contactInformation.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ==========================================
+        // Navigation Buttons for Contact Information
+        // ==========================================
+        function updateNavigateButtonsContactInformation() {
+            if (contactInformation.pageSize <= 0) {
+                document.getElementById('naviagtionPageGridContactInformation').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGridContactInformation').style.display = 'block';
+            if (contactInformation.pageIndex === 0) {
+                btnFirstPageGridContactInformation.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridContactInformation.setAttribute('disabled', 'disabled');
+                btnNextPageGridContactInformation.removeAttribute('disabled');
+                btnLastPageGridJournalLedger.removeAttribute('disabled');
+            } else if (contactInformation.pageIndex === (contactInformation.pageCount - 1)) {
+                btnFirstPageGridContactInformation.removeAttribute('disabled');
+                btnPreviousPageGridContactInformation.removeAttribute('disabled');
+                btnLastPageGridContactInformation.setAttribute('disabled', 'disabled');
+                btnNextPageGridContactInformation.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridContactInformation.removeAttribute('disabled');
+                btnPreviousPageGridContactInformation.removeAttribute('disabled');
+                btnNextPageGridContactInformation.removeAttribute('disabled');
+                btnLastPageGridContactInformation.removeAttribute('disabled');
+            }
+            btnCurrentPageGridContactInformation.innerHTML = (contactInformation.pageIndex + 1) + ' / ' + contactInformation.pageCount;
+        }
+
+        // ====================================
+        // On Page Load for Contact Information
+        // ====================================
+        function contactInformationTab() {
+            contactInformation = new wijmo.collections.CollectionView(getContactInformation());
+            contactInformation.canFilter = true;
+            contactInformation.pageSize = 15;
+
+            var filterTextContactInformation = '';
+            $('#InputFilterContactInformation').keyup(function () {
+                filterTextContactInformation = this.value.toLowerCase();
+                contactInformation.refresh();
+            });
+            contactInformation.filter = function (item) {
+                return !filterTextContactInformation || (item.ContactInformation.toLowerCase().indexOf(filterTextContactInformation) > -1);
+            }
+            contactInformation.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsContactInformation();
+            });
+            contactInformation.currentChanged.addHandler(function (sender, args) {
+                updateDetailsContactInformation();
+            });
+
+            // Flex Grid for Contact Information
+            contactInformationGrid = new wijmo.grid.FlexGrid('#ContactInformationGrid');
+            contactInformationGrid.initialize({
+                columns: [
+                            {
+                                "header": "Contact",
+                                "binding": "Contact",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Contact Number(s)",
+                                "binding": "ContactNumbers",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Remarks",
+                                "binding": "Remarks",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: contactInformation,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            contactInformationGrid.trackChanges = true;
+
+            //Navigation button for Journal Ledger
+            btnFirstPageGridContactInformation = document.getElementById('btnMoveToFirstPageGridContactInformation');
+            btnPreviousPageGridContactInformation = document.getElementById('btnMoveToPreviousPageContactInformation');
+            btnNextPageGridContactInformation = document.getElementById('btnMoveToNextPageGridContactInformation');
+            btnLastPageGridContactInformation = document.getElementById('btnMoveToLastPageGridContactInformation');
+            btnCurrentPageGridContactInformation = document.getElementById('btnCurrentPageGridContactInformation');
+
+            updateNavigateButtonsContactInformation();
+
+            btnFirstPageGridContactInformation.addEventListener('click', function () {
+                contactInformation.moveToFirstPage();
+                updateNavigateButtonsContactInformation();
+            });
+            btnPreviousPageGridContactInformation.addEventListener('click', function () {
+                contactInformation.moveToPreviousPage();
+                updateNavigateButtonsContactInformation();
+            });
+            btnNextPageGridContactInformation.addEventListener('click', function () {
+                contactInformation.moveToNextPage();
+                updateNavigateButtonsContactInformation();
+            });
+            btnLastPageGridContactInformation.addEventListener('click', function () {
+                contactInformation.moveToLastPage();
+                updateNavigateButtonsContactInformation();
+            });
+        }
+    </script>
+    
+    <!-- ================================ --> 
+    <!-- Tab Current Page on Load Scripts --> 
+    <!-- ================================ --> 
+    <script type="text/javascript">
+    // ====
+    // TABS
+    // ====
+    $('#journalLedgerTabId').click(function () {
+        $('#JournalLedger').show();
+        $('#ContactInformation').hide();
+        window.journalLedgerTab = function () {
+            return true;
+        };
+    });
+
+    $('#contactInformationTabId').click(function () {
+        $('#JournalLedger').hide();
+        $('#ContactInformation').show();
+        window.contactInformationTab = function () {
+            return true;
+        };
+    });
+
+    $('#JournalLedger').show();
+    $('#ContactInformation').hide();
+    journalLedgerTab();
+    </script>
+
 </body>
 </html>
