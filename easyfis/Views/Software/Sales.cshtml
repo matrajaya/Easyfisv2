@@ -39,6 +39,15 @@
                             </div>
                         </div>
                     </div>
+                    <label>Filter by SI date </label>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="comboBox-wide" id="filterDate"></div>
+                            <input type="hidden" id="filterDate_data" />
+                        </div>
+                        <div class="col-lg-8"></div>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
@@ -137,14 +146,14 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // ==============
-        // GET Sales List
-        // ==============
-        function getSales() {
+        // ==========================
+        // GET Sales Filter By SIDate
+        // ==========================
+        function getSalesFilterBySIDate(SIDateFilter) {
             var sales = new wijmo.collections.ObservableArray;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listSalesInvoice',
+                url: '/api/salesInvoiceFilterBySIDate/' + SIDateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -335,7 +344,46 @@
                 "hideMethod": "fadeOut"
             }
 
-            sales = new wijmo.collections.CollectionView(getSales());
+            var SIDateFilter_Date = new Date();
+            document.getElementById("filterDate_data").value = [ SIDateFilter_Date.getMonth()+1, SIDateFilter_Date.getDate(), SIDateFilter_Date.getFullYear()].join('-');
+
+            var cboFilterDate;
+            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
+                    var SIDateFilterValue = document.getElementById('filterDate_data').value;
+
+                    sales = new wijmo.collections.CollectionView(getSalesFilterBySIDate(SIDateFilterValue));
+                    sales.canFilter = true;
+                    sales.pageSize = 15;
+
+                    var filterText = '';
+                    $('#InputFilter').keyup(function () {
+                        filterText = this.value.toLowerCase();
+                        sales.refresh();
+                    });
+                    sales.filter = function (item) {
+                        return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1);
+                    }
+                    sales.collectionChanged.addHandler(function (sender, args) {
+                        updateNavigateButtonsSales();
+                    });
+                    sales.currentChanged.addHandler(function (sender, args) {
+                        updateDetails();
+                    });
+                    
+                    salesGrid.itemsSource = sales;
+                    salesGrid.trackChanges = true;
+
+                    updateNavigateButtonsSales();
+                }
+            });
+
+            var SIDateFilter = document.getElementById('filterDate_data').value;
+            sales = new wijmo.collections.CollectionView(getSalesFilterBySIDate(SIDateFilter));
             sales.canFilter = true;
             sales.pageSize = 15;
 

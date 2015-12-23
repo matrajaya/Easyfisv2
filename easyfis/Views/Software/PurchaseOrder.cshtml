@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-                    <label>Filter date </label>
+                    <label>Filter by PO date </label>
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="comboBox-wide" id="filterDate"></div>
@@ -345,7 +345,7 @@
 
             var PODateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [ PODateFilter_Date.getMonth()+1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
-            
+
             var cboFilterDate;
             cboFilterDate = new wijmo.input.InputDate('#filterDate', {
                 format: 'MM/dd/yyyy',
@@ -380,7 +380,7 @@
                     updateNavigateButtonsPO();
                 }
             });
-            
+
             var PODateFilter = document.getElementById('filterDate_data').value;
             POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilter));
             POs.canFilter = true;
@@ -504,6 +504,6 @@
             });
         });
 
-</script>
+    </script>
 </body>
 </html>
