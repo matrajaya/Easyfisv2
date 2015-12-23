@@ -39,6 +39,15 @@
                             </div>
                         </div>
                     </div>
+                    <label>Filter by OUT date </label>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="comboBox-wide" id="filterDate"></div>
+                            <input type="hidden" id="filterDate_data" />
+                        </div>
+                        <div class="col-lg-8"></div>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
@@ -140,11 +149,11 @@
         // ==================
         // GET Stock out List
         // ==================
-        function getStockOut() {
+        function getStockOutFilterByOUTdate(OUTdateFilter) {
             var stockOuts = new wijmo.collections.ObservableArray;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listStockOut',
+                url: '/api/listStockOutFilterByOTDate/' + OUTdateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -325,8 +334,47 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             }
+            
+            var OUTDateFilter_Date = new Date();
+            document.getElementById("filterDate_data").value = [ OUTDateFilter_Date.getMonth()+1, OUTDateFilter_Date.getDate(), OUTDateFilter_Date.getFullYear()].join('-');
 
-            stockOuts = new wijmo.collections.CollectionView(getStockOut());
+            var cboFilterDate;
+            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
+                    var OUTDateFilterValue = document.getElementById('filterDate_data').value;
+
+                    stockOuts = new wijmo.collections.CollectionView(getStockOutFilterByOUTdate(OUTDateFilterValue));
+                    stockOuts.canFilter = true;
+                    stockOuts.pageSize = 15;
+
+                    var filterText = '';
+                    $('#InputFilter').keyup(function () {
+                        filterText = this.value.toLowerCase();
+                        stockOuts.refresh();
+                    });
+                    stockOuts.filter = function (item) {
+                        return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1);
+                    }
+                    stockOuts.collectionChanged.addHandler(function (sender, args) {
+                        updateNavigateButtonsStockOut();
+                    });
+                    stockOuts.currentChanged.addHandler(function (sender, args) {
+                        updateDetails();
+                    });
+                    
+                    stockOutGrid.itemsSource = stockOuts;
+                    stockOutGrid.trackChanges = true;
+
+                    updateNavigateButtonsStockOut();
+                }
+            });
+
+            var OUTdateFilter = document.getElementById('filterDate_data').value;
+            stockOuts = new wijmo.collections.CollectionView(getStockOutFilterByOUTdate(OUTdateFilter));
             stockOuts.canFilter = true;
             stockOuts.pageSize = 15;
 
