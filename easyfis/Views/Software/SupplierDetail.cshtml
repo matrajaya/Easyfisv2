@@ -166,10 +166,9 @@
                                     <input type="text" class="form-control input-sm" id="InputFilterJournalLedger" placeholder="Search">
                                 </div>
                             </div>
-                            @*<div class="col-lg-8" align="right">
-                                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
-                                </div>*@
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
@@ -211,10 +210,9 @@
                                     <input type="text" class="form-control input-sm" id="InputFilterContactInformation" placeholder="Search">
                                 </div>
                             </div>
-                            @*<div class="col-lg-8" align="right">
-                                        <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
-                                </div>*@
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
@@ -1231,7 +1229,7 @@
 
             //Navigation button for Journal Ledger
             btnFirstPageGridContactInformation = document.getElementById('btnMoveToFirstPageGridContactInformation');
-            btnPreviousPageGridContactInformation = document.getElementById('btnMoveToPreviousPageGridContactInformation'); // PAUL: Imo ID Dri master Sayop ug Spelling haha
+            btnPreviousPageGridContactInformation = document.getElementById('btnMoveToPreviousPageGridContactInformation');
             btnNextPageGridContactInformation = document.getElementById('btnMoveToNextPageGridContactInformation');
             btnLastPageGridContactInformation = document.getElementById('btnMoveToLastPageGridContactInformation');
             btnCurrentPageGridContactInformation = document.getElementById('btnCurrentPageGridContactInformation');
@@ -1275,13 +1273,13 @@
         $('#contactInformationTabId').click(function () {
             $('#JournalLedger').hide();
             $('#ContactInformation').show();
-            contactInformationTab(); // PAUL: Imo function wa nimo tawaga dri mao wla to mo display ang grid.
+            contactInformationTab(); 
             window.contactInformationTab = function () {
                 return true;
             };
         });
 
-        $(document).ready(function () { // PAUL: Wla kay document Ready Function :D
+        $(document).ready(function () { 
             $('#JournalLedger').show();
             $('#ContactInformation').hide();
             journalLedgerTab();
