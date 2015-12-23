@@ -39,6 +39,15 @@
                             </div>
                         </div>
                     </div>
+                    <label>Filter by IN date </label>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="comboBox-wide" id="filterDate"></div>
+                            <input type="hidden" id="filterDate_data" />
+                        </div>
+                        <div class="col-lg-8"></div>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
@@ -137,14 +146,14 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // ================
-        // GET Stock In List
-        // ================
-        function getStockIn() {
+        // ==================================
+        // GET Stock In List Filter by INDate
+        // ==================================
+        function getStockInFilterByINDate(INDateFilter) {
             var stockIns = new wijmo.collections.ObservableArray;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listStockIn',
+                url: '/api/listStockInFilterByINDate/' + INDateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -328,8 +337,47 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             }
+            
+            var INDateFilter_Date = new Date();
+            document.getElementById("filterDate_data").value = [ INDateFilter_Date.getMonth()+1, INDateFilter_Date.getDate(), INDateFilter_Date.getFullYear()].join('-');
 
-            stockIns = new wijmo.collections.CollectionView(getStockIn());
+            var cboFilterDate;
+            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
+                    var INDateFilterValue = document.getElementById('filterDate_data').value;
+
+                    stockIns = new wijmo.collections.CollectionView(getStockInFilterByINDate(INDateFilterValue));
+                    stockIns.canFilter = true;
+                    stockIns.pageSize = 15;
+
+                    var filterText = '';
+                    $('#InputFilter').keyup(function () {
+                        filterText = this.value.toLowerCase();
+                        stockIns.refresh();
+                    });
+                    stockIns.filter = function (item) {
+                        return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1);
+                    }
+                    stockIns.collectionChanged.addHandler(function (sender, args) {
+                        updateNavigateButtonsStockIn();
+                    });
+                    stockIns.currentChanged.addHandler(function (sender, args) {
+                        updateDetails();
+                    });
+                    
+                    stockInGrid.itemsSource = stockIns;
+                    stockInGrid.trackChanges = true;
+
+                    updateNavigateButtonsStockIn();
+                }
+            });
+
+            var INDateFilter = document.getElementById('filterDate_data').value;
+            stockIns = new wijmo.collections.CollectionView(getStockInFilterByINDate(INDateFilter));
             stockIns.canFilter = true;
             stockIns.pageSize = 15;
 

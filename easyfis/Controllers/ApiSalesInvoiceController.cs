@@ -104,7 +104,7 @@ namespace easyfis.Controllers
         // ===================================
         // GET Sales Invoice Filter by SI Date
         // ===================================
-        [Route("api/salesInvoiceFilterBySIDate/{SIDate}")]
+        [Route("api/listSalesInvoiceFilterBySIDate/{SIDate}")]
         public List<Models.TrnSalesInvoice> GetSalesFilterBySIDate(String SIDate)
         {
             var sales_SIDate = Convert.ToDateTime(SIDate);

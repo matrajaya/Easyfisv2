@@ -153,7 +153,7 @@
             var sales = new wijmo.collections.ObservableArray;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/salesInvoiceFilterBySIDate/' + SIDateFilter,
+                url: '/api/listSalesInvoiceFilterBySIDate/' + SIDateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

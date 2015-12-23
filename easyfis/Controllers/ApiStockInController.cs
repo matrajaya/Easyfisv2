@@ -89,6 +89,47 @@ namespace easyfis.Controllers
             return (Models.TrnStockIn)stockIns.FirstOrDefault();
         }
 
+        // ==============================
+        // GET Stock In Filter By IN Date
+        // ==============================
+        [Route("api/listStockInFilterByINDate/{INDate}")]
+        public List<Models.TrnStockIn> GetStockInFilterByINDate(String INDate)
+        {
+            var stockIn_INDate = Convert.ToDateTime(INDate);
+            var stockIns = from d in db.TrnStockIns
+                           where d.INDate == stockIn_INDate
+                           select new Models.TrnStockIn
+                           {
+                               Id = d.Id,
+                               BranchId = d.BranchId,
+                               Branch = d.MstBranch.Branch,
+                               INNumber = d.INNumber,
+                               INDate = d.INDate.ToShortDateString(),
+                               AccountId = d.AccountId,
+                               Account = d.MstAccount.Account,
+                               ArticleId = d.ArticleId,
+                               Article = d.MstArticle.Article,
+                               Particulars = d.Particulars,
+                               ManualINNumber = d.ManualINNumber,
+                               IsProduced = d.IsProduced,
+                               PreparedById = d.PreparedById,
+                               PreparedBy = d.MstUser3.FullName,
+                               CheckedById = d.CheckedById,
+                               CheckedBy = d.MstUser1.FullName,
+                               ApprovedById = d.ApprovedById,
+                               ApprovedBy = d.MstUser.FullName,
+                               IsLocked = d.IsLocked,
+                               CreatedById = d.CreatedById,
+                               CreatedBy = d.MstUser2.FullName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                               UpdatedById = d.UpdatedById,
+                               UpdatedBy = d.MstUser4.FullName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                           };
+            return stockIns.ToList();
+        }
+
+
         // ============================
         // GET last INNumber in StockIn
         // ============================
