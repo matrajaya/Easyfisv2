@@ -39,6 +39,15 @@
                             </div>
                         </div>
                     </div>
+                    <label>Filter date </label>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="comboBox-wide" id="filterDate"></div>
+                            <input type="hidden" id="filterDate_data" />
+                        </div>
+                        <div class="col-lg-8"></div>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
@@ -141,11 +150,12 @@
         // ==================
         // GET Purchase Order
         // ==================
-        function getPO() {
+        function getPO(PODateFilter) {
             var POs = new wijmo.collections.ObservableArray;
+            var PODateFilter = document.getElementById('filterDate_data').value;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listPurchaseOrder',
+                url: '/api/listPurchaseOrderFilterByPODate/' + PODateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -334,7 +344,46 @@
                 "hideMethod": "fadeOut"
             }
 
-            POs = new wijmo.collections.CollectionView(getPO());
+            var PODateFilter = new Date();
+            document.getElementById("filterDate_data").value = [ PODateFilter.getMonth()+1, PODateFilter.getDate(), PODateFilter.getFullYear()].join('-');
+
+            var cboFilterDate;
+            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
+                format: 'MM-dd-yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
+                    var valueDate = document.getElementById('filterDate_data').value;
+
+                    POs = new wijmo.collections.CollectionView(getPO(valueDate));
+                    POs.canFilter = true;
+                    POs.pageSize = 15;
+
+                    var filterText = '';
+                    $('#InputFilter').keyup(function () {
+                        filterText = this.value.toLowerCase();
+                        POs.refresh();
+                    });
+                    POs.filter = function (item) {
+                        return !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
+                    }
+                    POs.collectionChanged.addHandler(function (sender, args) {
+                        updateNavigateButtonsPO();
+                    });
+                    POs.currentChanged.addHandler(function (sender, args) {
+                        updateDetails();
+                    });
+
+                    POGrid.itemsSource = POs;
+                    POGrid.trackChanges = true;
+
+                    updateNavigateButtonsPO();
+                }
+            });
+
+
+            POs = new wijmo.collections.CollectionView(getPO(PODateFilter));
             POs.canFilter = true;
             POs.pageSize = 15;
 
