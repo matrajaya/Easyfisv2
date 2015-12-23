@@ -150,9 +150,8 @@
         // ==================
         // GET Purchase Order
         // ==================
-        function getPO(PODateFilter) {
+        function getPOFilterByDate(PODateFilter) {
             var POs = new wijmo.collections.ObservableArray;
-            var PODateFilter = document.getElementById('filterDate_data').value;
             $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/listPurchaseOrderFilterByPODate/' + PODateFilter,
@@ -344,19 +343,19 @@
                 "hideMethod": "fadeOut"
             }
 
-            var PODateFilter = new Date();
-            document.getElementById("filterDate_data").value = [ PODateFilter.getMonth()+1, PODateFilter.getDate(), PODateFilter.getFullYear()].join('-');
-
+            var PODateFilter_Date = new Date();
+            document.getElementById("filterDate_data").value = [ PODateFilter_Date.getMonth()+1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
+            
             var cboFilterDate;
             cboFilterDate = new wijmo.input.InputDate('#filterDate', {
-                format: 'MM-dd-yyyy',
+                format: 'MM/dd/yyyy',
                 value: new Date(),
                 mask: '99/99/9999',
                 onValueChanged: function () {
                     document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
-                    var valueDate = document.getElementById('filterDate_data').value;
+                    var PODateFilterValue = document.getElementById('filterDate_data').value;
 
-                    POs = new wijmo.collections.CollectionView(getPO(valueDate));
+                    POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilterValue));
                     POs.canFilter = true;
                     POs.pageSize = 15;
 
@@ -381,9 +380,9 @@
                     updateNavigateButtonsPO();
                 }
             });
-
-
-            POs = new wijmo.collections.CollectionView(getPO(PODateFilter));
+            
+            var PODateFilter = document.getElementById('filterDate_data').value;
+            POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilter));
             POs.canFilter = true;
             POs.pageSize = 15;
 

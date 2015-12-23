@@ -39,6 +39,15 @@
                             </div>
                         </div>
                     </div>
+                    <label>Filter date </label>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="comboBox-wide" id="filterDate"></div>
+                            <input type="hidden" id="filterDate_data" />
+                        </div>
+                        <div class="col-lg-8"></div>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
@@ -138,14 +147,14 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // ===========
-        // GET RR List
-        // ===========
-        function getRR() {
+        // ============================
+        // GET RR List Filter By RRDate
+        // ============================
+        function getRRFilterByRRDate(RRDateFilter) {
             var RRs = new wijmo.collections.ObservableArray;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listReceivingReceipt',
+                url: '/api/listReceivingReceiptFilterByRRDate/' +  RRDateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -337,7 +346,46 @@
                 "hideMethod": "fadeOut"
             }
 
-            RRs = new wijmo.collections.CollectionView(getRR());
+            var RRDateFilter_Date = new Date();
+            document.getElementById("filterDate_data").value = [ RRDateFilter_Date.getMonth()+1, RRDateFilter_Date.getDate(), RRDateFilter_Date.getFullYear()].join('-');
+
+            var cboFilterDate;
+            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
+                    var RRDateFilterValue = document.getElementById('filterDate_data').value;
+
+                    RRs = new wijmo.collections.CollectionView(getRRFilterByRRDate(RRDateFilterValue));
+                    RRs.canFilter = true;
+                    RRs.pageSize = 15;
+
+                    var filterText = '';
+                    $('#InputFilter').keyup(function () {
+                        filterText = this.value.toLowerCase();
+                        stockIns.refresh();
+                    });
+                    RRs.filter = function (item) {
+                        return !filterText || (item.RR.toLowerCase().indexOf(filterText) > -1);
+                    }
+                    RRs.collectionChanged.addHandler(function (sender, args) {
+                        updateNavigateButtonsRR();
+                    });
+                    RRs.currentChanged.addHandler(function (sender, args) {
+                        updateDetails();
+                    });
+
+                    RRGrid.itemsSource = RRs;
+                    RRGrid.trackChanges = true;
+
+                    updateNavigateButtonsRR();
+                }
+            });
+            
+            var RRDateFilter = document.getElementById('filterDate_data').value;
+            RRs = new wijmo.collections.CollectionView(getRRFilterByRRDate(RRDateFilter));
             RRs.canFilter = true;
             RRs.pageSize = 15;
 
