@@ -39,6 +39,15 @@
                             </div>
                         </div>
                     </div>
+                    <label>OR date </label>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="comboBox-wide" id="filterDate"></div>
+                            <input type="hidden" id="filterDate_data" />
+                        </div>
+                        <div class="col-lg-8"></div>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
@@ -137,14 +146,14 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // ===================
-        // GET Collection List
-        // ===================
-        function getCollection() {
+        // ====================================
+        // GET Collection List Filter by ORDate
+        // ====================================
+        function getCollectionFilterByORDate(ORDateFilter) {
             var collections = new wijmo.collections.ObservableArray;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listCollection',
+                url: '/api/listCollectionFilterByORDate/' + ORDateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -327,7 +336,47 @@
                 "hideMethod": "fadeOut"
             }
 
-            collections = new wijmo.collections.CollectionView(getCollection());
+            var ORDateFilter_Date = new Date();
+            document.getElementById("filterDate_data").value = [ ORDateFilter_Date.getMonth()+1, ORDateFilter_Date.getDate(), ORDateFilter_Date.getFullYear()].join('-');
+
+            var cboFilterDate;
+            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
+                    var ORDateFilterValue = document.getElementById('filterDate_data').value;
+
+                    collections = new wijmo.collections.CollectionView(getCollectionFilterByORDate(ORDateFilterValue));
+                    collections.canFilter = true;
+                    collections.pageSize = 15;
+
+                    var filterText = '';
+                    $('#InputFilter').keyup(function () {
+                        filterText = this.value.toLowerCase();
+                        collections.refresh();
+                    });
+                    collections.filter = function (item) {
+                        return !filterText || (item.ORNumber.toLowerCase().indexOf(filterText) > -1);
+                    }
+                    collections.collectionChanged.addHandler(function (sender, args) {
+                        updateNavigateButtonsCollections();
+                    });
+                    collections.currentChanged.addHandler(function (sender, args) {
+                        updateDetails();
+                    });
+
+                    collectionGrid.itemsSource = collections;
+                    collectionGrid.trackChanges = true;
+
+                    updateNavigateButtonsCollections();
+                }
+            });
+
+
+            var ORDateFilter = document.getElementById('filterDate_data').value;
+            collections = new wijmo.collections.CollectionView(getCollectionFilterByORDate(ORDateFilter));
             collections.canFilter = true;
             collections.pageSize = 15;
 
