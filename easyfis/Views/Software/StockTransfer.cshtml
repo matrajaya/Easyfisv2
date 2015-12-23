@@ -39,6 +39,15 @@
                             </div>
                         </div>
                     </div>
+                    <label>Filter by ST date </label>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="comboBox-wide" id="filterDate"></div>
+                            <input type="hidden" id="filterDate_data" />
+                        </div>
+                        <div class="col-lg-8"></div>
+                    </div>
+                    <br />
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
@@ -137,14 +146,14 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // =======================
-        // GET Stock Transfer List
-        // =======================
-        function getStockTransfer() {
+        // =======================================
+        // GET Stock Transfer List Flter by STDate
+        // =======================================
+        function getStockTransferFilterBySTDate(STDateFilter) {
             var stockTransfers = new wijmo.collections.ObservableArray;
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listStockTransfer',
+                url: '/api/listStockTransferFilterBySTDate/' + STDateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -325,8 +334,47 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             }
+            
+            var STDateFilter_Date = new Date();
+            document.getElementById("filterDate_data").value = [ STDateFilter_Date.getMonth()+1, STDateFilter_Date.getDate(), STDateFilter_Date.getFullYear()].join('-');
 
-            stockTransfers = new wijmo.collections.CollectionView(getStockTransfer());
+            var cboFilterDate;
+            cboFilterDate = new wijmo.input.InputDate('#filterDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
+                    var STDateFilterValue = document.getElementById('filterDate_data').value;
+
+                    stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate(STDateFilterValue));
+                    stockTransfers.canFilter = true;
+                    stockTransfers.pageSize = 15;
+
+                    var filterText = '';
+                    $('#InputFilter').keyup(function () {
+                        filterText = this.value.toLowerCase();
+                        stockTransfers.refresh();
+                    });
+                    stockTransfers.filter = function (item) {
+                        return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
+                    }
+                    stockTransfers.collectionChanged.addHandler(function (sender, args) {
+                        updateNavigateButtonsStockTransfer();
+                    });
+                    stockTransfers.currentChanged.addHandler(function (sender, args) {
+                        updateDetails();
+                    });
+                    
+                    stockTransferGrid.itemsSource = stockTransfers;
+                    stockTransferGrid.trackChanges = true;
+
+                    updateNavigateButtonsStockTransfer();
+                }
+            });
+
+            var STDateFilter = document.getElementById('filterDate_data').value;
+            stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate(STDateFilter));
             stockTransfers.canFilter = true;
             stockTransfers.pageSize = 15;
 

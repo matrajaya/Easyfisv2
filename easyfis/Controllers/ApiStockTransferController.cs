@@ -83,6 +83,44 @@ namespace easyfis.Controllers
             return (Models.TrnStockTransfer)stockTransfer.FirstOrDefault();
         }
 
+        // ===================================
+        // GET Stock Transfer Filter by STDate
+        // ===================================
+        [Route("api/listStockTransferFilterBySTDate/{STDate}")]
+        public List<Models.TrnStockTransfer> GetStockTransferFilterBySTDate(String STDate)
+        {
+            var stockTransfer_STDate = Convert.ToDateTime(STDate);
+            var stockTransfer = from d in db.TrnStockTransfers
+                                where d.STDate == stockTransfer_STDate
+                                select new Models.TrnStockTransfer
+                                {
+                                    Id = d.Id,
+                                    BranchId = d.BranchId,
+                                    Branch = d.MstBranch.Branch,
+                                    STNumber = d.STNumber,
+                                    STDate = d.STDate.ToShortDateString(),
+                                    ToBranchId = d.ToBranchId,
+                                    ToBranch = d.MstBranch1.Branch,
+                                    Particulars = d.Particulars,
+                                    ManualSTNumber = d.ManualSTNumber,
+                                    PreparedById = d.PreparedById,
+                                    PreparedBy = d.MstUser3.FullName,
+                                    CheckedById = d.CheckedById,
+                                    CheckedBy = d.MstUser1.FullName,
+                                    ApprovedById = d.ApprovedById,
+                                    ApprovedBy = d.MstUser.FullName,
+                                    IsLocked = d.IsLocked,
+                                    CreatedById = d.CreatedById,
+                                    CreatedBy = d.MstUser2.FullName,
+                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                    UpdatedById = d.UpdatedById,
+                                    UpdatedBy = d.MstUser4.FullName,
+                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                };
+            return stockTransfer.ToList();
+        }
+
+
         // ==============================
         // Get STNumber in Stock Transfer
         // ==============================
