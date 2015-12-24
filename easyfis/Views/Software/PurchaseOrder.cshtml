@@ -153,6 +153,7 @@
         function getPOFilterByDate(PODateFilter) {
             var POs = new wijmo.collections.ObservableArray;
             $('#loadingModal').modal('show');
+            $('#loadingSpin').show();
             $.ajax({
                 url: '/api/listPurchaseOrderFilterByPODate/' + PODateFilter,
                 cache: false,
@@ -161,6 +162,7 @@
                 data: {},
                 success: function (Results) {
                     $('#loadingModal').modal('hide');
+                    $('#loadingSpin').hide();
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             POs.push({
@@ -405,7 +407,6 @@
             var PODateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [ PODateFilter_Date.getMonth()+1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
             
-            $('#loadingSpin').show();
             var cboFilterDate;
             cboFilterDate = new wijmo.input.InputDate('#filterDate', {
                 format: 'MM/dd/yyyy',

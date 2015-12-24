@@ -424,46 +424,40 @@
         function getJournalVoucherLastInsertedId() {
             var journalVouchers = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/listJournalVoucher',
+                url: '/api/journalVoucherLastId',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
                     if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            journalVouchers.push({
-                                Id: Results.Id,
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                JVNumber: Results[i]["JVNumber"],
-                                ManualJVNumber: Results[i]["ManualJVNumber"],
-                                JVDate: Results[i]["JVDate"],
-                                Particulars: Results[i]["Particulars"],
-                                PreparedById: Results[i]["PreparedById"],
-                                PreparedBy: Results[i]["PreparedBy"],
-                                CheckedById: Results[i]["CheckedById"],
-                                CheckedBy: Results[i]["CheckedBy"],
-                                ApprovedById: Results[i]["ApprovedById"],
-                                ApprovedBy: Results[i]["ApprovedBy"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                            });
-                            var journalVoucherId = Results[i]["Id"];
-                            var manualJournalVoucherNumber = Results[i]["ManualJVNumber"];
-                        }
-                        if (manualJournalVoucherNumber == document.getElementById('manual_JournalVoucher_No').value) {
-                            window.location = '/Software/JournalVoucherDetail?JournalVoucherId=' + journalVoucherId + '&branchId=' + @branchId;
-                            window.setTimeout(function () { location.reload() }, 1000);
-                        }
+                        journalVouchers.push({
+                            Id: Results.Id,
+                            BranchId: Results.BranchId,
+                            Branch: Results.Branch,
+                            JVNumber: Results.JVNumber,
+                            ManualJVNumber: Results.ManualJVNumber,
+                            JVDate: Results.JVDate,
+                            Particulars: Results.Particulars,
+                            PreparedById: Results.PreparedById,
+                            PreparedBy: Results.PreparedBy,
+                            CheckedById: Results.CheckedById,
+                            CheckedBy: Results.CheckedBy,
+                            ApprovedById: Results.ApprovedById,
+                            ApprovedBy: Results.ApprovedBy,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
                     }
-
+                    window.location = '/Software/JournalVoucherDetail?JournalVoucherId=' + Results.Id + '&branchId=' + @branchId;
+                    window.setTimeout(function () { location.reload() }, 1000);
                 }
+
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             });
@@ -509,7 +503,7 @@
                             UpdatedDateTime: Results.UpdatedDateTime
                         });
                     }
-                    
+
                     document.getElementById('branch_Id_data').value = Results.BranchId;
                     document.getElementById('branch_selectedValue').value = Results.Branch;
                     document.getElementById('journalVoucher_No').value = Results.JVNumber;
@@ -686,7 +680,7 @@
                             }
                         });
                     }
-                    
+
                     getBranchesForComboBox();
                     getUsersForComboBox();
                 }

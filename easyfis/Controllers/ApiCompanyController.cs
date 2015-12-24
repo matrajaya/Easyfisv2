@@ -65,6 +65,32 @@ namespace easyfis.Controllers
             return (Models.MstCompany)company.FirstOrDefault();
         }
 
+        // ===================
+        // GET Company last Id
+        // ===================
+        [Route("api/companyLastId")]
+        public Models.MstCompany GetCompanyLastId()
+        {
+            var company = from d in db.MstCompanies.OrderByDescending(d => d.Id)
+                          select new Models.MstCompany
+                          {
+                              Id = d.Id,
+                              Company = d.Company,
+                              Address = d.Address,
+                              ContactNumber = d.ContactNumber,
+                              TaxNumber = d.TaxNumber,
+                              IsLocked = d.IsLocked,
+                              CreatedById = d.CreatedById,
+                              CreatedBy = d.MstUser.FullName,
+                              CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                              UpdatedById = d.UpdatedById,
+                              UpdatedBy = d.MstUser1.FullName,
+                              UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                          };
+
+            return (Models.MstCompany)company.FirstOrDefault();
+        }
+
         // ===========
         // ADD Company
         // ===========

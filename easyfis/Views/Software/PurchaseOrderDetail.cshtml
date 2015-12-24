@@ -44,10 +44,11 @@
                         <h4 id="PODetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id=""><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id=""><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="" onclick="window.location.href ='@Url.Action("PurchaseOrderPDF", "Software", new { POId = POId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</button>
+                        <!-- <button class="btn btn-primary btn-sm" id=""><i class="fa fa-save"></i> Save and Lock</button> -->
+                        <button class="btn btn-primary btn-sm" id="cmdSavePO" onclick="btnSavePO_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id="cmdEditPO"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="cmdPrintPO" onclick="window.location.href ='@Url.Action("PurchaseOrderPDF", "Software", new { POId = POId })'"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdClosePO"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -223,7 +224,7 @@
         var users;
         var suppliers;
         var terms;
-        
+
         var cboBranch;
         var cboSupplier;
         var cboTerm;
@@ -303,7 +304,7 @@
                     document.getElementById('PO_Term_data').value = Results.TermId;
                     document.getElementById('PO_Term_selectedValue').value = Results.Term;
                     document.getElementById('PO_Remarks').value = Results.Remarks;
-                    document.getElementById('PO_RequestNumber').value = Results.Remarks;
+                    document.getElementById('PO_RequestNumber').value = Results.ManualRequestNumber;
                     document.getElementById('PO_DateNeeded_data').value = Results.DateNeeded;
 
                     var PODateNeeded_Result = Results.DateNeeded
@@ -337,6 +338,62 @@
                     getSupplierForComboBox();
                     getTermForComboBox();
                     getUsersForComboBox();
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return POs;
+        }
+
+        // ==========================
+        // GET Purchase Order Last Id
+        // ==========================
+        function getPOLastInsertedId() {
+            var POs = new wijmo.collections.ObservableArray;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/purchaseOrderLastId',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        POs.push({
+                            Id: Results.Id,
+                            BranchId: Results.BranchId,
+                            Branch: Results.Branch,
+                            PONumber: Results.PONumber,
+                            PODate: Results.PODate,
+                            SupplierId: Results.SupplierId,
+                            Supplier: Results.Supplier,
+                            TermId: Results.TermId,
+                            Term: Results.Term,
+                            ManualRequestNumber: Results.ManualRequestNumber,
+                            ManualPONumber: Results.ManualPONumber,
+                            DateNeeded: Results.DateNeeded,
+                            Remarks: Results.Remarks,
+                            IsClose: Results.IsClose,
+                            RequestedById: Results.RequestedById,
+                            RequestedBy: Results.RequestedBy,
+                            PreparedById: Results.PreparedById,
+                            PreparedBy: Results.PreparedBy,
+                            CheckedById: Results.CheckedById,
+                            CheckedBy: Results.CheckedBy,
+                            ApprovedById: Results.ApprovedById,
+                            ApprovedBy: Results.ApprovedBy,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+                    window.location = '/Software/PurchaseOrderDetail?POId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.setTimeout(function () { location.reload() }, 1000);
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -393,7 +450,7 @@
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             }
-                );
+            );
 
             return branches;
         }
@@ -693,6 +750,100 @@
                 pad--;
             }
             return result;
+        }
+
+        // ======
+        // ADD PO
+        // ======
+        function btnSavePO_OnClick() {
+            var POObject = new Object();
+            var POId = @POId;
+            POObject.BranchId = document.getElementById('PO_Branch_data').value;
+            POObject.PONumber = document.getElementById('PO_PONumber').value;
+            POObject.PODate = document.getElementById('PO_Date_data').value;
+            POObject.SupplierId = document.getElementById('PO_Supplier_data').value;
+            POObject.TermId = document.getElementById('PO_Term_data').value;
+            POObject.ManualRequestNumber = document.getElementById('PO_RequestNumber').value;
+            POObject.ManualPONumber = document.getElementById('PO_ManualPONumber').value;
+            POObject.DateNeeded = document.getElementById('PO_DateNeeded_data').value;
+            POObject.Remarks = document.getElementById('PO_Remarks').value;
+            POObject.IsClose = document.getElementById('PO_ClosePO').checked;
+            POObject.RequestedById = document.getElementById('RequestedBy_data').value;
+            POObject.PreparedById = document.getElementById('PreparedBy_data').value;
+            POObject.CheckedById = document.getElementById('CheckedBy_data').value;
+            POObject.ApprovedById = document.getElementById('ApprovedBy_data').value;
+            var data = JSON.stringify(POObject);
+
+
+            if (POId == 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addPO',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdSavePO").prop("disabled", true);
+                            $("#cmdEditPO").prop("disabled", true);
+                            $("#cmdPrintPO").prop("disabled", true);
+                            $("#cmdClosePO").prop("disabled", true);
+                            toastr.success("Successfully Saved");
+                            setTimeout(getPOLastInsertedId, 1000)
+                        },
+                        404: function () {
+                            toastr.error("Can't Save");
+
+                            $("#cmdSavePO").prop("disabled", true);
+                            $("#cmdEditPO").prop("disabled", true);
+                            $("#cmdPrintPO").prop("disabled", true);
+                            $("#cmdClosePO").prop("disabled", true);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            $("#cmdSavePO").prop("disabled", true);
+                            $("#cmdEditPO").prop("disabled", true);
+                            $("#cmdPrintPO").prop("disabled", true);
+                            $("#cmdClosePO").prop("disabled", true);
+                        }
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updatePO/' + POId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdSavePO").prop("disabled", true);
+                            $("#cmdEditPO").prop("disabled", true);
+                            $("#cmdPrintPO").prop("disabled", true);
+                            $("#cmdClosePO").prop("disabled", true);
+                            toastr.success("Successfully Updated");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Can't Save");
+
+                            $("#cmdSavePO").prop("disabled", true);
+                            $("#cmdEditPO").prop("disabled", true);
+                            $("#cmdPrintPO").prop("disabled", true);
+                            $("#cmdClosePO").prop("disabled", true);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            $("#cmdSavePO").prop("disabled", true);
+                            $("#cmdEditPO").prop("disabled", true);
+                            $("#cmdPrintPO").prop("disabled", true);
+                            $("#cmdClosePO").prop("disabled", true);
+                        }
+                    }
+                });
+            }
         }
 
         // ===========
