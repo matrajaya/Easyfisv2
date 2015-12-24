@@ -975,13 +975,30 @@
             }
             var dataJVAdd = JSON.stringify(journalVoucherObject);
 
+            if( document.getElementById('preparedByUserId_Data').value == '') {
+                document.getElementById("preparedByUserId").style.border = "1px solid red";
+            } else {
+                document.getElementById("preparedByUserId").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if(document.getElementById('checkedByUserId_Data').value == '') {
+                document.getElementById("checkedByUserId").style.border = "1px solid red";
+            } else {
+                document.getElementById("checkedByUserId").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if(document.getElementById('approvedByUserId_Data').value == '') {
+                document.getElementById("approvedByUserId").style.border = "1px solid red";
+            } else {
+                document.getElementById("approvedByUserId").style.border = "1px solid #C8C8C8   ";
+            }
+
             var isValid = true;
             $('.requiredJournalVoucher').each(function () {
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red",
                     });
                 }
                 else {
@@ -1229,13 +1246,30 @@
             }
             var data = JSON.stringify(journalVoucherObject);
 
+            if( document.getElementById('preparedByUserId_Data').value == '') {
+                document.getElementById("preparedByUserId").style.border = "1px solid red";
+            } else {
+                document.getElementById("preparedByUserId").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if(document.getElementById('checkedByUserId_Data').value == '') {
+                document.getElementById("checkedByUserId").style.border = "1px solid red";
+            } else {
+                document.getElementById("checkedByUserId").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if(document.getElementById('approvedByUserId_Data').value == '') {
+                document.getElementById("approvedByUserId").style.border = "1px solid red";
+            } else {
+                document.getElementById("approvedByUserId").style.border = "1px solid #C8C8C8   ";
+            }
+
             var isValid = true;
             $('.requiredJournalVoucher').each(function () {
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red"
                     });
                 }
                 else {
@@ -1754,13 +1788,42 @@
             journalVoucherLineObject.IsClear = document.getElementById('JVL_IsClear').checked;
             var data = JSON.stringify(journalVoucherLineObject);
 
+            if( document.getElementById('JVL_Branch_Id_Data').value == '') {
+                document.getElementById("JVL_Branch_Id").style.border = "1px solid red";
+            } else {
+                document.getElementById("JVL_Branch_Id").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('JVL_Account_Id_Data').value == '') {
+                document.getElementById("JVL_Account_Id").style.border = "1px solid red";
+            } else {
+                document.getElementById("JVL_Account_Id").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('JVL_Aritcle_Id_Data').value == '') {
+                document.getElementById("JVL_Aritcle_Id").style.border = "1px solid red";
+            } else {
+                document.getElementById("JVL_Aritcle_Id").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('JVL_APRRId_data').value == '') {
+                document.getElementById("JVL_APRRId").style.border = "1px solid red";
+            } else {
+                document.getElementById("JVL_APRRId").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('JVL_ARSIId_data').value == '') {
+                document.getElementById("JVL_ARSIId").style.border = "1px solid red";
+            } else {
+                document.getElementById("JVL_ARSIId").style.border = "1px solid #C8C8C8   ";
+            }
+
             var isValid = true;
             $('.requiredJournalVoucherLine').each(function () {
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red"
                     });
                 }
                 else {
