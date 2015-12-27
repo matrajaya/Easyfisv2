@@ -185,8 +185,46 @@
                         </div>
                     </form>
                 </div>
-
-
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Purchase Order Line</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input type="text" class="form-control input-sm" id="InputFilterPOLine" placeholder="Search Branch">
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <br />
+                <div class="row" align="left">
+                    <div class="col-lg-12">
+                        <div id="POGrid" class="grid" align="left"></div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="btn-group col-md-7" id="navigationPageGridPOLine">
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridPOLine">
+                            <span class="glyphicon glyphicon-fast-backward"></span>
+                        </button>
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridPOLine">
+                            <span class="glyphicon glyphicon-step-backward"></span>
+                        </button>
+                        <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridPOLine"></button>
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridPOLine">
+                            <span class="glyphicon glyphicon-step-forward"></span>
+                        </button>
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridPOLine">
+                            <span class="glyphicon glyphicon-fast-forward"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -227,6 +265,14 @@
         var suppliers;
         var terms;
 
+        var POLines;
+        var POLineGrid;
+        var btnFirstPageGridPOLine;
+        var btnPreviousPageGridPOLine;
+        var btnNextPageGridPOLine;
+        var btnLastPageGridPOLine;
+        var btnCurrentPageGridPOLine;
+        
         var cboBranch;
         var cboSupplier;
         var cboTerm;
@@ -904,6 +950,34 @@
             }
         }
 
+        // ==========================================
+        // Navigation Buttons for Purchase Order Line
+        // ==========================================
+        function updateNavigateButtonsPOLine() {
+            if (POLines.pageSize <= 0) {
+                document.getElementById('navigationPageGridPOLine').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridPOLine').style.display = 'block';
+            if (POLines.pageIndex === 0) {
+                btnFirstPageGridPOLine.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridPOLine.setAttribute('disabled', 'disabled');
+                btnNextPageGridPOLine.removeAttribute('disabled');
+                btnLastPageGridPOLine.removeAttribute('disabled');
+            } else if (POLines.pageIndex === (POLines.pageCount - 1)) {
+                btnFirstPageGridPOLine.removeAttribute('disabled');
+                btnPreviousPageGridPOLine.removeAttribute('disabled');
+                btnLastPageGridPOLine.setAttribute('disabled', 'disabled');
+                btnNextPageGridPOLine.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridPOLine.removeAttribute('disabled');
+                btnPreviousPageGridPOLine.removeAttribute('disabled');
+                btnNextPageGridPOLine.removeAttribute('disabled');
+                btnLastPageGridPOLine.removeAttribute('disabled');
+            }
+            btnCurrentPageGridPOLine.innerHTML = (POLines.pageIndex + 1) + ' / ' + POLines.pageCount;
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -981,6 +1055,127 @@
                     }
                 });
             }
+
+            POLines = new wijmo.collections.CollectionView();
+            POLines.canFilter = true;
+            POLines.pageSize = 15;
+
+            var filterTextPOLine = '';
+            $('#InputFilterPOLine').keyup(function () {
+                filterTextPOLine = this.value.toLowerCase();
+                POLines.refresh();
+            });
+            POLines.filter = function (item) {
+                return !filterTextPOLine || (item.POLines.toLowerCase().indexOf(filterTextPOLine) > -1);
+            }
+            POLines.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsPOLine();
+            });
+            //POLines.currentChanged.addHandler(function (sender, args) {
+            //    updateDetailsPOLine();
+            //});
+
+            // Flex Grid for Purchase Order Line
+            POLineGrid = new wijmo.grid.FlexGrid('#POGrid');
+            POLineGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Item",
+                                //"binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*",
+                            },
+                            {
+                                "header": "Particulars",
+                                //"binding": "BranchCode",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "4*"
+                            },
+                            {
+                                "header": "Quantity",
+                                //"binding": "Address",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Unit",
+                                //"binding": "ContactNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                //"binding": "TaxNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                //"binding": "TaxNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: branches,
+                isReadOnly: true,
+                //frozenColumns: 2,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            POLineGrid.trackChanges = true;
+
+            //Navigation button for Purchase Order Line
+            btnFirstPageGridPOLine = document.getElementById('btnMoveToFirstPageGridPOLine');
+            btnPreviousPageGridPOLine = document.getElementById('btnMoveToPreviousPageGridPOLine');
+            btnNextPageGridPOLine = document.getElementById('btnMoveToNextPageGridPOLine');
+            btnLastPageGridPOLine = document.getElementById('btnMoveToLastPageGridPOLine');
+            btnCurrentPageGridPOLine = document.getElementById('btnCurrentPageGridPOLine');
+
+            updateNavigateButtonsPOLine();
+
+            btnFirstPageGridPOLine.addEventListener('click', function () {
+                POLines.moveToFirstPage();
+                updateNavigateButtonsPOLine();
+            });
+            btnPreviousPageGridPOLine.addEventListener('click', function () {
+                POLines.moveToPreviousPage();
+                updateNavigateButtonsPOLine();
+            });
+            btnNextPageGridPOLine.addEventListener('click', function () {
+                POLines.moveToNextPage();
+                updateNavigateButtonsPOLine();
+            });
+            btnLastPageGridPOLine.addEventListener('click', function () {
+                POLines.moveToLastPage();
+                updateNavigateButtonsPOLine();
+            });
         });
     </script>
 </body>
