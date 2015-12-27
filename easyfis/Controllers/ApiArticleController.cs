@@ -251,11 +251,11 @@ namespace easyfis.Controllers
             return (Models.MstArticle)articles.FirstOrDefault();
         }
 
-        // ===========
-        // ADD Article
-        // ===========
-        [Route("api/addArticle")]
-        public int Post(Models.MstArticle article)
+        // ========================
+        // ADD Article for Supplier
+        // ========================
+        [Route("api/addArticleForSupplier")]
+        public int Post(Models.MstArticle articleSupplier)
         {
             try
             {
@@ -264,52 +264,56 @@ namespace easyfis.Controllers
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
 
-                Data.MstArticle newArticle = new Data.MstArticle();
+                Data.MstArticle newArticleSupplier = new Data.MstArticle();
 
-                newArticle.ArticleCode = article.ArticleCode;
-                newArticle.ManualArticleCode = article.ManualArticleCode;
-                newArticle.Article = article.Article;
-                newArticle.Category = article.Category;
-                newArticle.ArticleTypeId = article.ArticleTypeId;
-                newArticle.ArticleGroupId = article.ArticleGroupId;
-                newArticle.AccountId = article.AccountId;
-                newArticle.SalesAccountId = article.SalesAccountId;
-                newArticle.CostAccountId = article.CostAccountId;
-                newArticle.AssetAccountId = article.AssetAccountId;
-                newArticle.ExpenseAccountId = article.ExpenseAccountId;
-                newArticle.UnitId = article.UnitId;
-                newArticle.OutputTaxId = article.OutputTaxId;
-                newArticle.InputTaxId = article.InputTaxId;
-                newArticle.WTaxTypeId = article.WTaxTypeId;
-                newArticle.Price = article.Price;
-                newArticle.Cost = article.Cost;
-                newArticle.IsInventory = article.IsInventory;
-                newArticle.Particulars = article.Particulars;
-                newArticle.Address = article.Address;
-                newArticle.TermId = article.TermId;
-                newArticle.ContactNumber = article.ContactNumber;
-                newArticle.ContactPerson = article.ContactPerson;
-                newArticle.TaxNumber = article.TaxNumber;
-                newArticle.CreditLimit = article.CreditLimit;
-                newArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
-                newArticle.UsefulLife = article.UsefulLife;
-                newArticle.SalvageValue = article.SalvageValue;
-                newArticle.ManualArticleOldCode = article.ManualArticleOldCode;
+                newArticleSupplier.ArticleCode = articleSupplier.ArticleCode;
+                newArticleSupplier.ManualArticleCode = " ";
+                newArticleSupplier.Article = articleSupplier.Article;
+                newArticleSupplier.Category = " ";
+                newArticleSupplier.ArticleTypeId = 3;
+                newArticleSupplier.ArticleGroupId = articleSupplier.ArticleGroupId;
 
-                newArticle.IsLocked = isLocked;
-                newArticle.CreatedById = mstUserId;
-                newArticle.CreatedDateTime = date;
-                newArticle.UpdatedById = mstUserId;
-                newArticle.UpdatedDateTime = date;
+                newArticleSupplier.AccountId = articleSupplier.AccountId;
+                newArticleSupplier.SalesAccountId = articleSupplier.SalesAccountId;
+                newArticleSupplier.CostAccountId = articleSupplier.CostAccountId;
+                newArticleSupplier.AssetAccountId = articleSupplier.AssetAccountId;
+                newArticleSupplier.ExpenseAccountId = articleSupplier.ExpenseAccountId;
 
-                db.MstArticles.InsertOnSubmit(newArticle);
+                newArticleSupplier.UnitId = 1;
+                newArticleSupplier.OutputTaxId = 6;
+                newArticleSupplier.InputTaxId = 6;
+                newArticleSupplier.WTaxTypeId = 6;
+
+                newArticleSupplier.Price = 0;
+                newArticleSupplier.Cost = 0;
+                newArticleSupplier.IsInventory = false;
+                newArticleSupplier.Particulars = articleSupplier.Particulars;
+                newArticleSupplier.Address = articleSupplier.Address;
+                newArticleSupplier.TermId = articleSupplier.TermId;
+                newArticleSupplier.ContactNumber = articleSupplier.ContactNumber;
+                newArticleSupplier.ContactPerson = articleSupplier.ContactPerson;
+                newArticleSupplier.TaxNumber = articleSupplier.TaxNumber;
+                newArticleSupplier.CreditLimit = 0;
+                newArticleSupplier.DateAcquired = date;
+                newArticleSupplier.UsefulLife = 0;
+                newArticleSupplier.SalvageValue = 0;
+                newArticleSupplier.ManualArticleOldCode = " ";
+
+                newArticleSupplier.IsLocked = isLocked;
+                newArticleSupplier.CreatedById = mstUserId;
+                newArticleSupplier.CreatedDateTime = date;
+                newArticleSupplier.UpdatedById = mstUserId;
+                newArticleSupplier.UpdatedDateTime = date;
+
+                db.MstArticles.InsertOnSubmit(newArticleSupplier);
                 db.SubmitChanges();
 
-                return newArticle.Id;
+                return newArticleSupplier.Id;
 
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return 0;
             }
         }
