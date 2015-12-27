@@ -182,7 +182,7 @@
                     <li role="presentation"><a data-toggle="tab" href="#Price" id="priceTabId">Price</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#Inventory" id="inventoryTabId">Inventory</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#GLAccount" id="glAccountTabId">GL Account</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#FixedAsset" id="fixedAssetId">Fixed Asset</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#FixedAsset" id="fixedAssetTabId">Fixed Asset</a></li>
                 </ul>
                 <br />
                 <div class="tab-content">
@@ -197,34 +197,33 @@
                             <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                    <input type="text" class="form-control input-sm" id="InputFilterUnitConversion" placeholder="Search">
                                 </div>
                             </div>
-                            @*<div class="col-lg-8" align="right">
-                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
-                </div>*@
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <div id="AccountGrid" class="grid" align="left"></div>
+                                <div id="UnitConversionGrid" class="grid" align="left"></div>
                             </div>
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                            <div class="btn-group col-md-7" id="navigationPageGridUnitConversion">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridUnitConversion">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridUnitConversion">
                                     <span class="glyphicon glyphicon-step-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridUnitConversion"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridUnitConversion">
                                     <span class="glyphicon glyphicon-step-forward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridUnitConversion">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
                             </div>
@@ -241,34 +240,33 @@
                             <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                    <input type="text" class="form-control input-sm" id="InputFilterComponent" placeholder="Search">
                                 </div>
                             </div>
-                            @*<div class="col-lg-8" align="right">
-                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
-                </div>*@
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <div id="AccountGrid" class="grid" align="left"></div>
+                                <div id="ComponentGrid" class="grid" align="left"></div>
                             </div>
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                            <div class="btn-group col-md-7" id="navigationPageGridComponent">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridComponent">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridComponent">
                                     <span class="glyphicon glyphicon-step-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridComponent"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridComponent">
                                     <span class="glyphicon glyphicon-step-forward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridComponent">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
                             </div>
@@ -285,34 +283,33 @@
                             <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                    <input type="text" class="form-control input-sm" id="InputFilterPrice" placeholder="Search">
                                 </div>
                             </div>
-                            @*<div class="col-lg-8" align="right">
-                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
-                </div>*@
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <div id="AccountGrid" class="grid" align="left"></div>
+                                <div id="PriceGrid" class="grid" align="left"></div>
                             </div>
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                            <div class="btn-group col-md-7" id="navigationPageGridPrice">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridPrice">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridPrice">
                                     <span class="glyphicon glyphicon-step-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridPrice"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridPrice">
                                     <span class="glyphicon glyphicon-step-forward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridPrice">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
                             </div>
@@ -329,34 +326,33 @@
                             <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                    <input type="text" class="form-control input-sm" id="InputFilterInventory" placeholder="Search">
                                 </div>
                             </div>
-                            @*<div class="col-lg-8" align="right">
-                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
-                </div>*@
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <div id="AccountGrid" class="grid" align="left"></div>
+                                <div id="InventoryGrid" class="grid" align="left"></div>
                             </div>
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                            <div class="btn-group col-md-7" id="navigationPageGridInventory">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridInventory">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridInventory">
                                     <span class="glyphicon glyphicon-step-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridInventory"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridInventory">
                                     <span class="glyphicon glyphicon-step-forward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridInventory">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
                             </div>
@@ -373,34 +369,33 @@
                             <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                    <input type="text" class="form-control input-sm" id="InputFilterGLAccount" placeholder="Search">
                                 </div>
                             </div>
-                            @*<div class="col-lg-8" align="right">
-                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
-                </div>*@
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <div id="AccountGrid" class="grid" align="left"></div>
+                                <div id="GLAccountGrid" class="grid" align="left"></div>
                             </div>
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                            <div class="btn-group col-md-7" id="navigationPageGridGLAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridGLAccount">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridGLAccount">
                                     <span class="glyphicon glyphicon-step-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridGLAccount"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridGLAccount">
                                     <span class="glyphicon glyphicon-step-forward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridGLAccount">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
                             </div>
@@ -417,34 +412,33 @@
                             <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                    <input type="text" class="form-control input-sm" id="InputFilterFixedAsset" placeholder="Search">
                                 </div>
                             </div>
-                            @*<div class="col-lg-8" align="right">
-                    <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                    <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
-                </div>*@
+                            <div class="col-lg-8" align="right">
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>   
+                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <div id="AccountGrid" class="grid" align="left"></div>
+                                <div id="FixedAssetGrid" class="grid" align="left"></div>
                             </div>
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                            <div class="btn-group col-md-7" id="navigationPageGridFixedAsset">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridFixedAsset">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridFixedAsset">
                                     <span class="glyphicon glyphicon-step-backward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridFixedAsset"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridFixedAsset">
                                     <span class="glyphicon glyphicon-step-forward"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridFixedAsset">
                                     <span class="glyphicon glyphicon-fast-forward"></span>
                                 </button>
                             </div>
@@ -1185,6 +1179,1399 @@
             cboArticleInputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_inputTax');
             cboArticleOutputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_outputTax');
             cboArticleWithholdingTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_withholdingTax');
+        });
+    </script>
+
+    <!-- ======================= -->
+    <!-- Unit Conversion Scripts -->
+    <!-- ======================= -->
+    <script type="text/javascript">
+        // ====================================
+        // Global Variables for Unit Conversion
+        // ====================================
+        var unitConversions;
+        var unitConversionGrid;
+
+        var btnFirstPageGridUnitConversion;
+        var btnPreviousPageGridUnitConversion;
+        var btnNextPageGridUnitConversion;
+        var btnLastPageGridUnitConversion;
+        var btnCurrentPageGridUnitConversion;
+
+        // ========================
+        // GET Unit Conversion List
+        // ========================
+        function getUnitConversion() {
+            var unitConversions = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return unitConversions;
+        }
+        // ======================================
+        // FlexGrid Selection for Unit Conversion
+        // ======================================
+        function updateDetailsUnitConversion() {
+            var item = unitConversions.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ======================================
+        // Navigation Buttons for Unit Conversion
+        // ======================================
+        function updateNavigateButtonsUnitConversion() {
+            if (unitConversions.pageSize <= 0) {
+                document.getElementById('navigationPageGridUnitConversion').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridUnitConversion').style.display = 'block';
+            if (unitConversions.pageIndex === 0) {
+                btnFirstPageGridUnitConversion.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridUnitConversion.setAttribute('disabled', 'disabled');
+                btnNextPageGridUnitConversion.removeAttribute('disabled');
+                btnLastPageGridUnitConversion.removeAttribute('disabled');
+            } else if (unitConversions.pageIndex === (unitConversions.pageCount - 1)) {
+                btnFirstPageGridUnitConversion.removeAttribute('disabled');
+                btnPreviousPageGridUnitConversion.removeAttribute('disabled');
+                btnLastPageGridUnitConversion.setAttribute('disabled', 'disabled');
+                btnNextPageGridUnitConversion.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridUnitConversion.removeAttribute('disabled');
+                btnPreviousPageGridUnitConversion.removeAttribute('disabled');
+                btnNextPageGridUnitConversion.removeAttribute('disabled');
+                btnLastPageGridUnitConversion.removeAttribute('disabled');
+            }
+            btnCurrentPageGridUnitConversion.innerHTML = (unitConversions.pageIndex + 1) + ' / ' + unitConversions.pageCount;
+        }
+
+        // ================
+        //  Unit Conversion
+        // ================
+        function unitConversionTab() {
+            unitConversions = new wijmo.collections.CollectionView();
+            unitConversions.canFilter = true;
+            unitConversions.pageSize = 15;
+
+            var filterTextUnitConversion = '';
+            $('#InputFilterUnitConversion').keyup(function () {
+                filterTextUnitConversion = this.value.toLowerCase();
+                unitConversions.refresh();
+            });
+            unitConversions.filter = function (item) {
+                return !filterTextUnitConversion || (item.unitConversions.toLowerCase().indexOf(filterTextUnitConversion) > -1);
+            }
+            unitConversions.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsUnitConversion();
+            });
+            unitConversions.currentChanged.addHandler(function (sender, args) {
+                updateDetailsUnitConversion();
+            });
+
+            // Flex Grid for Unit Conversion
+            unitConversionGrid = new wijmo.grid.FlexGrid('#UnitConversionGrid');
+            unitConversionGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Multiplier",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Unit.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Base Unit",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "C",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: unitConversions,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            unitConversionGrid.trackChanges = true;
+
+            //Navigation button for Unit Conversion
+            btnFirstPageGridUnitConversion = document.getElementById('btnMoveToFirstPageGridUnitConversion');
+            btnPreviousPageGridUnitConversion = document.getElementById('btnMoveToPreviousPageGridUnitConversion');
+            btnNextPageGridUnitConversion = document.getElementById('btnMoveToNextPageGridUnitConversion');
+            btnLastPageGridUnitConversion = document.getElementById('btnMoveToLastPageGridUnitConversion');
+            btnCurrentPageGridUnitConversion = document.getElementById('btnCurrentPageGridUnitConversion');
+
+            updateNavigateButtonsUnitConversion();
+
+            btnFirstPageGridUnitConversion.addEventListener('click', function () {
+                unitConversions.moveToFirstPage();
+                updateNavigateButtonsUnitConversion();
+            });
+            btnPreviousPageGridUnitConversion.addEventListener('click', function () {
+                unitConversions.moveToPreviousPage();
+                updateNavigateButtonsUnitConversion();
+            });
+            btnNextPageGridUnitConversion.addEventListener('click', function () {
+                unitConversions.moveToNextPage();
+                updateNavigateButtonsUnitConversion();
+            });
+            btnLastPageGridUnitConversion.addEventListener('click', function () {
+                unitConversions.moveToLastPage();
+                updateNavigateButtonsUnitConversion();
+            });
+        }
+    </script>
+
+    <!-- ================= -->
+    <!-- Component Scripts -->
+    <!-- ================= -->
+    <script type="text/javascript">
+        // ==============================
+        // Global Variables for Component
+        // ==============================
+        var components;
+        var componentGrid;
+
+        var btnFirstPageGridComponent;
+        var btnPreviousPageGridComponent;
+        var btnNextPageGridComponent;
+        var btnLastPageGridComponent;
+        var btnCurrentPageGridComponent;
+
+        // ==================
+        // GET Component List
+        // ==================
+        function getComponent() {
+            var components = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return components;
+        }
+        // ================================
+        // FlexGrid Selection for Component
+        // ================================
+        function updateDetailsComponent() {
+            var item = components.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ================================
+        // Navigation Buttons for Component
+        // ================================
+        function updateNavigateButtonsComponent() {
+            if (components.pageSize <= 0) {
+                document.getElementById('navigationPageGridComponent').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridComponent').style.display = 'block';
+            if (components.pageIndex === 0) {
+                btnFirstPageGridComponent.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridComponent.setAttribute('disabled', 'disabled');
+                btnNextPageGridComponent.removeAttribute('disabled');
+                btnLastPageGridComponent.removeAttribute('disabled');
+            } else if (components.pageIndex === (components.pageCount - 1)) {
+                btnFirstPageGridComponent.removeAttribute('disabled');
+                btnPreviousPageGridComponent.removeAttribute('disabled');
+                btnLastPageGridComponent.setAttribute('disabled', 'disabled');
+                btnNextPageGridComponent.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridComponent.removeAttribute('disabled');
+                btnPreviousPageGridComponent.removeAttribute('disabled');
+                btnNextPageGridComponent.removeAttribute('disabled');
+                btnLastPageGridComponent.removeAttribute('disabled');
+            }
+            btnCurrentPageGridComponent.innerHTML = (components.pageIndex + 1) + ' / ' + components.pageCount;
+        }
+
+        // ==========
+        //  Component
+        // ==========
+        function componentTab() {
+            components = new wijmo.collections.CollectionView();
+            components.canFilter = true;
+            components.pageSize = 15;
+
+            var filterTextComponent = '';
+            $('#InputFilterComponent').keyup(function () {
+                filterTextComponent = this.value.toLowerCase();
+                components.refresh();
+            });
+            components.filter = function (item) {
+                return !filterTextComponent || (item.components.toLowerCase().indexOf(filterTextComponent) > -1);
+            }
+            components.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsComponent();
+            });
+            components.currentChanged.addHandler(function (sender, args) {
+                updateDetailsComponent();
+            });
+
+            // Flex Grid for Component
+            componentGrid = new wijmo.grid.FlexGrid('#ComponentGrid');
+            componentGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: components,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            componentGrid.trackChanges = true;
+
+            //Navigation button for Component
+            btnFirstPageGridComponent = document.getElementById('btnMoveToFirstPageGridComponent');
+            btnPreviousPageGridComponent = document.getElementById('btnMoveToPreviousPageGridComponent');
+            btnNextPageGridComponent = document.getElementById('btnMoveToNextPageGridComponent');
+            btnLastPageGridComponent = document.getElementById('btnMoveToLastPageGridComponent');
+            btnCurrentPageGridComponent = document.getElementById('btnCurrentPageGridComponent');
+
+            updateNavigateButtonsComponent();
+
+            btnFirstPageGridComponent.addEventListener('click', function () {
+                components.moveToFirstPage();
+                updateNavigateButtonsComponent();
+            });
+            btnPreviousPageGridComponent.addEventListener('click', function () {
+                components.moveToPreviousPage();
+                updateNavigateButtonsComponent();
+            });
+            btnNextPageGridComponent.addEventListener('click', function () {
+                components.moveToNextPage();
+                updateNavigateButtonsComponent();
+            });
+            btnCurrentPageGridComponent.addEventListener('click', function () {
+                components.moveToLastPage();
+                updateNavigateButtonsComponent();
+            });
+        }
+    </script>
+
+    <!-- ================= -->
+    <!-- Price Scripts -->
+    <!-- ================= -->
+    <script type="text/javascript">
+        // ==========================
+        // Global Variables for Price
+        // ==========================
+        var prices;
+        var priceGrid;
+
+        var btnFirstPageGridPrice;
+        var btnPreviousPageGridPrice;
+        var btnNextPageGridPrice;
+        var btnLastPageGridPrice;
+        var btnCurrentPageGridPrice;
+
+        // ==================
+        // GET Price List
+        // ==================
+        function getPrice() {
+            var prices = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return prices;
+        }
+        // ============================
+        // FlexGrid Selection for Price
+        // ============================
+        function updateDetailsPrice() {
+            var item = prices.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ============================
+        // Navigation Buttons for Price
+        // ============================
+        function updateNavigateButtonsPrice() {
+            if (prices.pageSize <= 0) {
+                document.getElementById('navigationPageGridPrice').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridPrice').style.display = 'block';
+            if (prices.pageIndex === 0) {
+                btnFirstPageGridPrice.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridPrice.setAttribute('disabled', 'disabled');
+                btnNextPageGridPrice.removeAttribute('disabled');
+                btnLastPageGridPrice.removeAttribute('disabled');
+            } else if (prices.pageIndex === (prices.pageCount - 1)) {
+                btnFirstPageGridPrice.removeAttribute('disabled');
+                btnPreviousPageGridPrice.removeAttribute('disabled');
+                btnLastPageGridPrice.setAttribute('disabled', 'disabled');
+                btnNextPageGridPrice.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridPrice.removeAttribute('disabled');
+                btnPreviousPageGridPrice.removeAttribute('disabled');
+                btnNextPageGridPrice.removeAttribute('disabled');
+                btnLastPageGridPrice.removeAttribute('disabled');
+            }
+            btnCurrentPageGridPrice.innerHTML = (prices.pageIndex + 1) + ' / ' + prices.pageCount;
+        }
+
+        // =====
+        // Price
+        // =====
+        function priceTab() {
+            prices = new wijmo.collections.CollectionView();
+            prices.canFilter = true;
+            prices.pageSize = 15;
+
+            var filterTextPrice = '';
+            $('#InputFilterPrice').keyup(function () {
+                filterTextPrice = this.value.toLowerCase();
+                prices.refresh();
+            });
+            prices.filter = function (item) {
+                return !filterTextPrice || (item.prices.toLowerCase().indexOf(filterTextPrice) > -1);
+            }
+            prices.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsPrice();
+            });
+            prices.currentChanged.addHandler(function (sender, args) {
+                updateDetailsPrice();
+            });
+
+            // Flex Grid for Price
+            priceGrid = new wijmo.grid.FlexGrid('#PriceGrid');
+            priceGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: prices,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            priceGrid.trackChanges = true;
+
+            //Navigation button for price
+            btnFirstPageGridPrice = document.getElementById('btnMoveToFirstPageGridPrice');
+            btnPreviousPageGridPrice = document.getElementById('btnMoveToPreviousPageGridPrice');
+            btnNextPageGridPrice = document.getElementById('btnMoveToNextPageGridPrice');
+            btnLastPageGridPrice = document.getElementById('btnMoveToLastPageGridPrice');
+            btnCurrentPageGridPrice = document.getElementById('btnCurrentPageGridPrice');
+
+            updateNavigateButtonsPrice();
+
+            btnFirstPageGridPrice.addEventListener('click', function () {
+                prices.moveToFirstPage();
+                updateNavigateButtonsPrice();
+            });
+            btnPreviousPageGridComponent.addEventListener('click', function () {
+                prices.moveToPreviousPage();
+                updateNavigateButtonsPrice();
+            });
+            btnNextPageGridComponent.addEventListener('click', function () {
+                prices.moveToNextPage();
+                updateNavigateButtonsPrice();
+            });
+            btnCurrentPageGridComponent.addEventListener('click', function () {
+                prices.moveToLastPage();
+                updateNavigateButtonsPrice();
+            });
+        }
+    </script>
+
+    <!-- ================= -->
+    <!-- Inventory Scripts -->
+    <!-- ================= -->
+    <script type="text/javascript">
+        // ==============================
+        // Global Variables for Inventory
+        // ==============================
+        var inventories;
+        var inventoryGrid;
+
+        var btnFirstPageGridInventory;
+        var btnPreviousPageGridInventory;
+        var btnNextPageGridInventory;
+        var btnLastPageGridInventory;
+        var btnCurrentPageGridInventory;
+
+        // ==================
+        // GET Inventory List
+        // ==================
+        function getInventory() {
+            var inventories = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return inventories;
+        }
+        // ================================
+        // FlexGrid Selection for Inventory
+        // ================================
+        function updateDetailsInventory() {
+            var item = inventories.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ================================
+        // Navigation Buttons for Inventory
+        // ================================
+        function updateNavigateButtonsInventory() {
+            if (inventories.pageSize <= 0) {
+                document.getElementById('navigationPageGridInventory').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridInventory').style.display = 'block';
+            if (inventories.pageIndex === 0) {
+                btnFirstPageGridInventory.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridInventory.setAttribute('disabled', 'disabled');
+                btnNextPageGridInventory.removeAttribute('disabled');
+                btnLastPageGridInventory.removeAttribute('disabled');
+            } else if (inventories.pageIndex === (inventories.pageCount - 1)) {
+                btnFirstPageGridInventory.removeAttribute('disabled');
+                btnPreviousPageGridInventory.removeAttribute('disabled');
+                btnLastPageGridInventory.setAttribute('disabled', 'disabled');
+                btnNextPageGridInventory.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridInventory.removeAttribute('disabled');
+                btnPreviousPageGridInventory.removeAttribute('disabled');
+                btnNextPageGridInventory.removeAttribute('disabled');
+                btnLastPageGridInventory.removeAttribute('disabled');
+            }
+            btnCurrentPageGridInventory.innerHTML = (inventories.pageIndex + 1) + ' / ' + inventories.pageCount;
+        }
+
+        // ==========
+        //  Inventory
+        // ==========
+        function inventoryTab() {
+            inventories = new wijmo.collections.CollectionView();
+            inventories.canFilter = true;
+            inventories.pageSize = 15;
+
+            var filterTextUnitInventory = '';
+            $('#InputFilterInventory').keyup(function () {
+                filterTextUnitInventory = this.value.toLowerCase();
+                inventories.refresh();
+            });
+            inventories.filter = function (item) {
+                return !filterTextUnitInventory || (item.inventories.toLowerCase().indexOf(filterTextUnitInventory) > -1);
+            }
+            inventories.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsInventory();
+            });
+            inventories.currentChanged.addHandler(function (sender, args) {
+                updateDetailsInventory();
+            });
+
+            // Flex Grid for Inventory
+            inventoryGrid = new wijmo.grid.FlexGrid('#InventoryGrid');
+            inventoryGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Branch",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Code.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: inventories,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            inventoryGrid.trackChanges = true;
+
+            //Navigation button for Inventory
+            btnFirstPageGridInventory = document.getElementById('btnMoveToFirstPageGridInventory');
+            btnPreviousPageGridInventory = document.getElementById('btnMoveToPreviousPageGridInventory');
+            btnNextPageGridInventory = document.getElementById('btnMoveToNextPageGridInventory');
+            btnLastPageGridInventory = document.getElementById('btnMoveToLastPageGridInventory');
+            btnCurrentPageGridInventory = document.getElementById('btnCurrentPageGridInventory');
+
+            updateNavigateButtonsInventory();
+
+            btnFirstPageGridInventory.addEventListener('click', function () {
+                inventories.moveToFirstPage();
+                updateNavigateButtonsInventory();
+            });
+            btnPreviousPageGridInventory.addEventListener('click', function () {
+                inventories.moveToPreviousPage();
+                updateNavigateButtonsInventory();
+            });
+            btnNextPageGridInventory.addEventListener('click', function () {
+                inventories.moveToNextPage();
+                updateNavigateButtonsInventory();
+            });
+            btnLastPageGridInventory.addEventListener('click', function () {
+                inventories.moveToLastPage();
+                updateNavigateButtonsInventory();
+            });
+        }
+    </script>
+
+    <!-- ================== -->
+    <!-- GL Account Scripts -->
+    <!-- ================== -->
+    <script type="text/javascript">
+        // ===============================
+        // Global Variables for GL Account
+        // ===============================
+        var glAccounts;
+        var glAccountGrid;
+
+        var btnFirstPageGridGLAccount;
+        var btnPreviousPageGridGLAccount;
+        var btnNextPageGridGLAccount;
+        var btnLastPageGridGLAccount;
+        var btnCurrentPageGridGLAccount;
+
+        // ===================
+        // GET GL Account List
+        // ===================
+        function getGLAccount() {
+            var glAccounts = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return glAccounts;
+        }
+        // =================================
+        // FlexGrid Selection for GL Account
+        // =================================
+        function updateDetailsGLAccount() {
+            var item = glAccounts.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // =================================
+        // Navigation Buttons for GL Account
+        // =================================
+        function updateNavigateButtonsGLAccount() {
+            if (glAccounts.pageSize <= 0) {
+                document.getElementById('navigationPageGridGLAccount').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridGLAccount').style.display = 'block';
+            if (glAccounts.pageIndex === 0) {
+                btnFirstPageGridGLAccount.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridGLAccount.setAttribute('disabled', 'disabled');
+                btnNextPageGridGLAccount.removeAttribute('disabled');
+                btnLastPageGridGLAccount.removeAttribute('disabled');
+            } else if (glAccounts.pageIndex === (glAccounts.pageCount - 1)) {
+                btnFirstPageGridGLAccount.removeAttribute('disabled');
+                btnPreviousPageGridGLAccount.removeAttribute('disabled');
+                btnLastPageGridGLAccount.setAttribute('disabled', 'disabled');
+                btnNextPageGridGLAccount.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridGLAccount.removeAttribute('disabled');
+                btnPreviousPageGridGLAccount.removeAttribute('disabled');
+                btnNextPageGridGLAccount.removeAttribute('disabled');
+                btnLastPageGridGLAccount.removeAttribute('disabled');
+            }
+            btnCurrentPageGridGLAccount.innerHTML = (glAccounts.pageIndex + 1) + ' / ' + glAccounts.pageCount;
+        }
+
+        // ==========
+        // GL Account
+        // ==========
+        function glAccountTab() {
+            glAccounts = new wijmo.collections.CollectionView();
+            glAccounts.canFilter = true;
+            glAccounts.pageSize = 15;
+
+            var filterTextGLAccount = '';
+            $('#InputFilterGLAccount').keyup(function () {
+                filterTextGLAccount = this.value.toLowerCase();
+                glAccounts.refresh();
+            });
+            glAccounts.filter = function (item) {
+                return !filterTextGLAccount || (item.glAccounts.toLowerCase().indexOf(filterTextGLAccount) > -1);
+            }
+            glAccounts.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsGLAccount();
+            });
+            glAccounts.currentChanged.addHandler(function (sender, args) {
+                updateDetailsGLAccount();
+            });
+
+            // Flex Grid for GL Account
+            glAccountGrid = new wijmo.grid.FlexGrid('#GLAccountGrid');
+            glAccountGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Multiplier",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Unit.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Base Unit",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "C",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: glAccounts,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            glAccountGrid.trackChanges = true;
+
+            //Navigation button for GL Account
+            btnFirstPageGridGLAccount = document.getElementById('btnMoveToFirstPageGridGLAccount');
+            btnPreviousPageGridGLAccount = document.getElementById('btnMoveToPreviousPageGridGLAccount');
+            btnNextPageGridGLAccount = document.getElementById('btnMoveToNextPageGridGLAccount');
+            btnLastPageGridGLAccount = document.getElementById('btnMoveToLastPageGridGLAccount');
+            btnCurrentPageGridGLAccount = document.getElementById('btnCurrentPageGridGLAccount');
+
+            updateNavigateButtonsGLAccount();
+
+            btnFirstPageGridGLAccount.addEventListener('click', function () {
+                glAccounts.moveToFirstPage();
+                updateNavigateButtonsGLAccount();
+            });
+            btnPreviousPageGridGLAccount.addEventListener('click', function () {
+                glAccounts.moveToPreviousPage();
+                updateNavigateButtonsGLAccount();
+            });
+            btnNextPageGridGLAccount.addEventListener('click', function () {
+                glAccounts.moveToNextPage();
+                updateNavigateButtonsGLAccount();
+            });
+            btnLastPageGridGLAccount.addEventListener('click', function () {
+                glAccounts.moveToLastPage();
+                updateNavigateButtonsGLAccount();
+            });
+        }
+    </script>
+
+    <!-- =================== -->
+    <!-- Fixed Asset Scripts -->
+    <!-- =================== -->
+    <script type="text/javascript">
+        // ================================
+        // Global Variables for Fixed Asset
+        // ================================
+        var fixedAssets;
+        var fixedAssetGrid;
+
+        var btnFirstPageGridFixedAsset;
+        var btnPreviousPageGridFixedAsset;
+        var btnNextPageGridFixedAsset;
+        var btnLastPageGridFixedAsset;
+        var btnCurrentPageGridFixedAsset;
+
+        // ====================
+        // GET Fixed Asset List
+        // ====================
+        function getFixedAsset() {
+            var fixedAssets = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return fixedAssets;
+        }
+        // ==================================
+        // FlexGrid Selection for Fixed Asset
+        // ==================================
+        function updateDetailsFixedAsset() {
+            var item = fixedAssets.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ==================================
+        // Navigation Buttons for Fixed Asset
+        // ==================================
+        function updateNavigateButtonsFixedAsset() {
+            if (fixedAssets.pageSize <= 0) {
+                document.getElementById('navigationPageGridFixedAsset').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridFixedAsset').style.display = 'block';
+            if (fixedAssets.pageIndex === 0) {
+                btnFirstPageGridFixedAsset.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridFixedAsset.setAttribute('disabled', 'disabled');
+                btnNextPageGridFixedAsset.removeAttribute('disabled');
+                btnLastPageGridFixedAsset.removeAttribute('disabled');
+            } else if (fixedAssets.pageIndex === (fixedAssets.pageCount - 1)) {
+                btnFirstPageGridFixedAsset.removeAttribute('disabled');
+                btnPreviousPageGridFixedAsset.removeAttribute('disabled');
+                btnLastPageGridFixedAsset.setAttribute('disabled', 'disabled');
+                btnNextPageGridFixedAsset.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridFixedAsset.removeAttribute('disabled');
+                btnPreviousPageGridFixedAsset.removeAttribute('disabled');
+                btnNextPageGridFixedAsset.removeAttribute('disabled');
+                btnLastPageGridFixedAsset.removeAttribute('disabled');
+            }
+            btnCurrentPageGridFixedAsset.innerHTML = (fixedAssets.pageIndex + 1) + ' / ' + fixedAssets.pageCount;
+        }
+
+        // ============
+        //  Fixed Asset
+        // ============
+        function fixedAssetTab() {
+            fixedAssets = new wijmo.collections.CollectionView();
+            fixedAssets.canFilter = true;
+            fixedAssets.pageSize = 15;
+
+            var filterTextFixedAsset = '';
+            $('#InputFilterFixedAsset').keyup(function () {
+                filterTextFixedAsset = this.value.toLowerCase();
+                fixedAssets.refresh();
+            });
+            fixedAssets.filter = function (item) {
+                return !filterTextFixedAsset || (item.fixedAssets.toLowerCase().indexOf(filterTextFixedAsset) > -1);
+            }
+            fixedAssets.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsFixedAsset();
+            });
+            fixedAssets.currentChanged.addHandler(function (sender, args) {
+                updateDetailsFixedAsset();
+            });
+
+            // Flex Grid for Fixed Asset
+            fixedAssetGrid = new wijmo.grid.FlexGrid('#FixedAssetGrid');
+            fixedAssetGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Multiplier",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Unit.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Base Unit",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "C",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: fixedAssets,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            fixedAssetGrid.trackChanges = true;
+
+            //Navigation button for Fixed Asset
+            btnFirstPageGridFixedAsset = document.getElementById('btnMoveToFirstPageGridFixedAsset');
+            btnPreviousPageGridFixedAsset = document.getElementById('btnMoveToPreviousPageGridFixedAsset');
+            btnNextPageGridFixedAsset = document.getElementById('btnMoveToNextPageGridFixedAsset');
+            btnLastPageGridFixedAsset = document.getElementById('btnMoveToLastPageGridFixedAsset');
+            btnCurrentPageGridFixedAsset = document.getElementById('btnCurrentPageGridFixedAsset');
+
+            updateNavigateButtonsFixedAsset();
+
+            btnFirstPageGridFixedAsset.addEventListener('click', function () {
+                fixedAssets.moveToFirstPage();
+                updateNavigateButtonsFixedAsset();
+            });
+            btnPreviousPageGridFixedAsset.addEventListener('click', function () {
+                fixedAssets.moveToPreviousPage();
+                updateNavigateButtonsFixedAsset();
+            });
+            btnNextPageGridFixedAsset.addEventListener('click', function () {
+                fixedAssets.moveToNextPage();
+                updateNavigateButtonsFixedAsset();
+            });
+            btnLastPageGridFixedAsset.addEventListener('click', function () {
+                fixedAssets.moveToLastPage();
+                updateNavigateButtonsFixedAsset();
+            });
+        }
+    </script>
+
+    <!-- ================================ -->
+    <!-- Tab Current Page on Load Scripts -->
+    <!-- ================================ -->
+    <script type="text/javascript">
+        // ====
+        // TABS
+        // ====
+        $('#unitConversionTabId').click(function () {
+            $('#UnitConversion').show();
+            $('#Component').hide();
+            $('#Price').hide();
+            $('#Inventory').hide();
+            $('#GLAccount').hide();
+            $('#FixedAsset').hide();
+            window.unitConversionTab = function () {
+                return true;
+            };
+        });
+        $('#componentTabId').click(function () {
+            $('#UnitConversion').hide();
+            $('#Component').show();
+            $('#Price').hide();
+            $('#Inventory').hide();
+            $('#GLAccount').hide();
+            $('#FixedAsset').hide();
+            componentTab();
+            window.componentTab = function () {
+                return true;
+            };
+        });
+        $('#priceTabId').click(function () {
+            $('#UnitConversion').hide();
+            $('#Component').hide();
+            $('#Price').show();
+            $('#Inventory').hide();
+            $('#GLAccount').hide();
+            $('#FixedAsset').hide();
+            priceTab();
+            window.priceTab = function () {
+                return true;
+            };
+        });
+        $('#inventoryTabId').click(function () {
+            $('#UnitConversion').hide();
+            $('#Component').hide();
+            $('#Price').hide();
+            $('#Inventory').show();
+            $('#GLAccount').hide();
+            $('#FixedAsset').hide();
+            inventoryTab();
+            window.inventoryTab = function () {
+                return true;
+            };
+        });
+        $('#glAccountTabId').click(function () {
+            $('#UnitConversion').hide();
+            $('#Component').hide();
+            $('#Price').hide();
+            $('#Inventory').hide();
+            $('#GLAccount').show();
+            $('#FixedAsset').hide();
+            glAccountTab();
+            window.glAccountTab = function () {
+                return true;
+            };
+        });
+        $('#fixedAssetTabId').click(function () {
+            $('#UnitConversion').hide();
+            $('#Component').hide();
+            $('#Price').hide();
+            $('#Inventory').hide();
+            $('#GLAccount').hide();
+            $('#FixedAsset').show();
+            fixedAssetTab();
+            window.fixedAssetTab = function () {
+                return true;
+            };
+        });
+
+        $(document).ready(function () {
+            $('#UnitConversion').show();
+            $('#Component').hide();
+            $('#Price').hide();
+            $('#Inventory').hide();
+            $('#GLAccount').hide();
+            $('#FixedAsset').hide();
+            unitConversionTab();
         });
     </script>
 </body>

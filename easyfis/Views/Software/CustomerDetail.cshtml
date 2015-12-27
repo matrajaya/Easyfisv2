@@ -183,7 +183,7 @@
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridJournalLedger">
+                            <div class="btn-group col-md-7" id="navigationPageGridJournalLedger">
                                 <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournalLedger">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
@@ -226,7 +226,7 @@
                         </div>
                         <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGriContactInformation">
+                            <div class="btn-group col-md-7" id="naviagtionPageGridContactInformation">
                                 <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridContactInformation">
                                     <span class="glyphicon glyphicon-fast-backward"></span>
                                 </button>
@@ -1171,10 +1171,10 @@
         // ==========================================
         function updateNavigateButtonsContactInformation() {
             if (contactInformations.pageSize <= 0) {
-                document.getElementById('naviagtionPageGridContactInformation').style.display = 'none';
+                document.getElementById('navigationPageGridContactInformation').style.display = 'none';
                 return;
             }
-            document.getElementById('naviagtionPageGridContactInformation').style.display = 'block';
+            document.getElementById('navigationPageGridContactInformation').style.display = 'block';
             if (contactInformations.pageIndex === 0) {
                 btnFirstPageGridContactInformation.setAttribute('disabled', 'disabled');
                 btnPreviousPageGridContactInformation.setAttribute('disabled', 'disabled');
