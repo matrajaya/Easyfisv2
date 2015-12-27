@@ -253,37 +253,30 @@
         function getCompanyLastInsertedId() {
             var companies = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/listCompany',
+                url: '/api/companyLastId',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
                     if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            companies.push({
-                                Id: Results[i]["Id"],
-                                Company: Results[i]["Company"],
-                                Address: Results[i]["Address"],
-                                ContactNumber: Results[i]["ContactNumber"],
-                                TaxNumber: Results[i]["TaxNumber"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                            });
-                            var companyId = Results[i]["Id"];
-                            var company = Results[i]["Company"];
-                        }
-                        if (company == document.getElementById('company_Company').value) {
-                            //window.location.href = '/Software/CompanyDetail/?Id=' + companyId;
-                            window.location = '/Software/CompanyDetail?CompanyId=' + companyId + '&BranchId=' + @branchId;
-                            window.setTimeout(function () { location.reload() }, 1000);
-                        }
+                        companies.push({
+                            Id: Results.Id,
+                            Company: Results.Company,
+                            Address: Results.Address,
+                            ContactNumber: Results.ContactNumber,
+                            TaxNumber: Results.TaxNumber,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
                     }
+                    window.location = '/Software/CompanyDetail?CompanyId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.setTimeout(function () { location.reload() }, 1000);
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -500,8 +493,7 @@
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red"
                     });
                 }
                 else {
@@ -655,8 +647,7 @@
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red"
                     });
                 }
                 else {
@@ -950,8 +941,7 @@
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red"
                     });
                 }
                 else {

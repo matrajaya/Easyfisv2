@@ -42,7 +42,7 @@
                     <label>PO date </label>
                     <div class="row">
                         <div class="col-lg-4">
-                            <div class="comboBox-wide" id="filterDate"></div>
+                            <div id="filterDate"></div>
                             <input type="hidden" id="filterDate_data" />
                         </div>
                         <div class="col-lg-8"></div>
@@ -204,7 +204,7 @@
             });
             return POs;
         }
-
+ 
         // ==============
         // PO Edit Button
         // ==============
@@ -345,7 +345,7 @@
 
             var PODateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [ PODateFilter_Date.getMonth()+1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
-
+            
             var cboFilterDate;
             cboFilterDate = new wijmo.input.InputDate('#filterDate', {
                 format: 'MM/dd/yyyy',

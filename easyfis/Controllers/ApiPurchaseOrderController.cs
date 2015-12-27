@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -183,6 +185,154 @@ namespace easyfis.Controllers
             return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
         }
 
+        // =============================
+        // GET last Id in Purchase Order 
+        // =============================
+        [Route("api/purchaseOrderLastId")]
+        public Models.TrnPurchaseOrder GetLastId()
+        {
+            var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.Id)
+                                 select new Models.TrnPurchaseOrder
+                                 {
+                                     Id = d.Id,
+                                     BranchId = d.BranchId,
+                                     Branch = d.MstBranch.Branch,
+                                     PONumber = d.PONumber,
+                                     PODate = d.PODate.ToShortDateString(),
+                                     SupplierId = d.SupplierId,
+                                     Supplier = d.MstArticle.Article,
+                                     TermId = d.TermId,
+                                     Term = d.MstTerm.Term,
+                                     ManualRequestNumber = d.ManualRequestNumber,
+                                     ManualPONumber = d.ManualPONumber,
+                                     DateNeeded = d.DateNeeded.ToShortDateString(),
+                                     Remarks = d.Remarks,
+                                     IsClose = d.IsClose,
+                                     RequestedById = d.RequestedById,
+                                     RequestedBy = d.MstUser4.FullName,
+                                     PreparedById = d.PreparedById,
+                                     PreparedBy = d.MstUser3.FullName,
+                                     CheckedById = d.CheckedById,
+                                     CheckedBy = d.MstUser1.FullName,
+                                     ApprovedById = d.ApprovedById,
+                                     ApprovedBy = d.MstUser.FullName,
+                                     IsLocked = d.IsLocked,
+                                     CreatedById = d.CreatedById,
+                                     CreatedBy = d.MstUser2.FullName,
+                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                     UpdatedById = d.UpdatedById,
+                                     UpdatedBy = d.MstUser5.FullName,
+                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                 };
+            return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
+        }
+
+        // ==================
+        // ADD Puschase Order
+        // ==================
+        [Route("api/addPurchaseOrder")]
+        public int Post(Models.TrnPurchaseOrder purchaseOrder)
+        {
+            try
+            {
+                var isLocked = false;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                Data.TrnPurchaseOrder newPO = new Data.TrnPurchaseOrder();
+
+                newPO.BranchId = purchaseOrder.BranchId;
+                newPO.PONumber = purchaseOrder.PONumber;
+                newPO.PODate = Convert.ToDateTime(purchaseOrder.PODate);
+                newPO.SupplierId = purchaseOrder.SupplierId;
+                newPO.TermId = purchaseOrder.TermId;
+                newPO.ManualRequestNumber = purchaseOrder.ManualRequestNumber;
+                newPO.ManualPONumber = purchaseOrder.ManualPONumber;
+                newPO.DateNeeded = Convert.ToDateTime(purchaseOrder.DateNeeded);
+                newPO.Remarks = purchaseOrder.Remarks;
+                newPO.IsClose = purchaseOrder.IsClose;
+                newPO.RequestedById = purchaseOrder.RequestedById;
+                newPO.PreparedById = purchaseOrder.PreparedById;
+                newPO.CheckedById = purchaseOrder.CheckedById;
+                newPO.ApprovedById = purchaseOrder.ApprovedById;
+
+                newPO.IsLocked = isLocked;
+                newPO.CreatedById = mstUserId;
+                newPO.CreatedDateTime = date;
+                newPO.UpdatedById = mstUserId;
+                newPO.UpdatedDateTime = date;
+
+                Debug.WriteLine("Lahos");
+                db.TrnPurchaseOrders.InsertOnSubmit(newPO);
+                db.SubmitChanges();
+
+                Debug.WriteLine("Lahos2");
+                return newPO.Id;
+
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
+                Debug.WriteLine("wala");
+                return 0;
+            }
+        }
+
+        // =====================
+        // Update Puschase Order
+        // =====================
+        [Route("api/updatePurchaseOrder/{id}")]
+        public HttpResponseMessage Put(String id, Models.TrnPurchaseOrder purchaseOrder)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var PO_Id = Convert.ToInt32(id);
+                var POs = from d in db.TrnPurchaseOrders where d.Id == PO_Id select d;
+
+                if (POs.Any())
+                {
+                    var updatePO = POs.FirstOrDefault();
+
+                    updatePO.BranchId = purchaseOrder.BranchId;
+                    updatePO.PONumber = purchaseOrder.PONumber;
+                    updatePO.PODate = Convert.ToDateTime(purchaseOrder.PODate);
+                    updatePO.SupplierId = purchaseOrder.SupplierId;
+                    updatePO.TermId = purchaseOrder.TermId;
+                    updatePO.ManualRequestNumber = purchaseOrder.ManualRequestNumber;
+                    updatePO.ManualPONumber = purchaseOrder.ManualPONumber;
+                    updatePO.DateNeeded = Convert.ToDateTime(purchaseOrder.DateNeeded);
+                    updatePO.Remarks = purchaseOrder.Remarks;
+                    updatePO.IsClose = purchaseOrder.IsClose;
+                    updatePO.RequestedById = purchaseOrder.RequestedById;
+                    updatePO.PreparedById = purchaseOrder.PreparedById;
+                    updatePO.CheckedById = purchaseOrder.CheckedById;
+                    updatePO.ApprovedById = purchaseOrder.ApprovedById;
+
+                    updatePO.IsLocked = purchaseOrder.IsLocked;
+                    updatePO.UpdatedById = mstUserId;
+                    updatePO.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
 
         // =========
         // DELETE PO

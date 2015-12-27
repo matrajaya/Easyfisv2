@@ -685,14 +685,25 @@
             accountObject.AccountTypeId = document.getElementById('account_type_id_data').value;
             accountObject.AccountCashFlowId = document.getElementById('account_cash_flow_id_data').value;
             var data = JSON.stringify(accountObject);
+            
+            if( document.getElementById('account_type_id_data').value == '') {
+                document.getElementById("account_type_id").style.border = "1px solid red";
+            } else {
+                document.getElementById("account_type_id").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('account_cash_flow_id_data').value == '') {
+                document.getElementById("account_cash_flow_id").style.border = "1px solid red";
+            } else {
+                document.getElementById("account_cash_flow_id").style.border = "1px solid #C8C8C8   ";
+            }
 
             var isValid = true;
             $('.requiredAccount').each(function () {
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red"
                     });
                 }
                 else {
@@ -1213,13 +1224,18 @@
             accountTypeObject.SubCategoryDescription = document.getElementById('accountType_SubCategoryDescription').value;
             var data = JSON.stringify(accountTypeObject);
 
+            if( document.getElementById('accountType_CategoryId_Data').value == '') {
+                document.getElementById("accountType_CategoryId").style.border = "1px solid red";
+            } else {
+                document.getElementById("accountType_CategoryId").style.border = "1px solid #C8C8C8   ";
+            }
+
             var isValid = true;
             $('.requiredAccountType').each(function () {
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red"
                     });
                 }
                 else {
@@ -1676,8 +1692,7 @@
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red"
                     });
                 }
                 else {
@@ -2114,8 +2129,7 @@
                 if ($.trim($(this).val()) == '') {
                     isValid = false;
                     $(this).css({
-                        "border": "2px solid red",
-                        "transition": "border 1s ease 0s"
+                        "border": "1px solid red"
                     });
                 }
                 else {
