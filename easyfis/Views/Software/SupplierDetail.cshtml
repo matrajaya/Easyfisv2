@@ -406,6 +406,75 @@
             return suppliers;
         }
 
+        // ==================================
+        // Get Last Id for supplier by its ID
+        // ==================================
+        function getLastInsertedIdSupplierByArticleTypeId() {
+            var suppliers = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/articleLastIdByArticleTypeId/3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        suppliers.push ({
+                            Id: Results.Id,
+                            ArticleCode : Results.ArticleCode,
+                            ManualArticleCode : Result.ManualArticleCode,
+                            Article : Results.Article,
+                            Category : Results.Category,
+                            ArticleTypeId : Results.ArticleTypeId,
+                            ArticleType : Results.ArticleType,
+                            ArticleGroupId : Results.ArticleGroupId,
+                            ArticleGroup : Results.ArticleGroup,
+                            AccountId : Results.AccountId,
+                            Account : Results.Account,
+                            SalesAccountId : Results.SalesAccountId,
+                            CostAccountId : Results.CostAccountId,
+                            AssetAccountId : Results.AssetAccountId,
+                            ExpenseAccountId : Results.ExpenseAccountId,
+                            UnitId : Results.UnitId,
+                            OutputTaxId : Results.OutputTaxId,
+                            OutputTax : Results.OutputTax,
+                            InputTaxId : Results.InputTaxId,
+                            InputTax : Results.InputTax,
+                            WTaxTypeId : Results.WTaxTypeId,
+                            WTaxType : Results.WTaxType,
+                            Price : Results.Price,
+                            Cost : Results.Cost,
+                            IsInventory : Results.IsInventory,
+                            Particulars : Results.Particulars,
+                            Address : Results.Address,
+                            TermId : Results.TermId,
+                            Term : Results.Term,
+                            ContactNumber : Results.ContactNumber,
+                            ContactPerson : Results.ContactPerson,
+                            TaxNumber : Results.TaxNumber,
+                            CreditLimit : Results.CreditLimit,
+                            DateAcquired : Results.DateAcquired,
+                            UsefulLife : Results.UsefulLife,
+                            SalvageValue : Results.SalvageValue,
+                            ManualArticleOldCode : Results.ManualArticleOldCode,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+                    window.location = '/Software/SupplierDetail?SupplierId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.setTimeout(function () { location.reload() }, 1000);
+                }
+            });
+
+            return suppliers;
+        }
+
+
         // =========================
         // Get Artile Supplier Group
         // =========================
@@ -1052,7 +1121,7 @@
                                 $("#supplier_PrintButton").prop("disabled", true);
                                 $("#supplier_CloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
-                                setTimeout(getPOLastInsertedId, 1000);
+                                setTimeout(getLastInsertedIdSupplierByArticleTypeId, 1000);
                             },
                             404: function () {
                                 toastr.error("Can't Save");
@@ -1075,7 +1144,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updatePurchaseOrder/' + POId,
+                        url: '/api/updateArticleForSupplier/' + supplierId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,

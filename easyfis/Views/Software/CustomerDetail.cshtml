@@ -469,6 +469,67 @@
                     selectedValue: document.getElementById('artcileCustomer_customerGroup_SelectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
                         $("#artcileCustomer_customerGroup_data").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupId);
+                        
+                        accounts = new wijmo.collections.ObservableArray();
+                        $.ajax({
+                            url: '/api/listAccount',
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (results) {
+                                if (results.length > 0) {
+                                    for (i = 0; i < results.length; i++) {
+                                        accounts.push({
+                                            AccountId: results[i]["Id"],
+                                            AccountAccount: results[i]["Account"]
+                                        });
+                                    }
+                                    
+                                    var accountCollection = new wijmo.collections.CollectionView(accounts);
+                                    var accountList = new Array();
+                                    for (var i = 0; i < accountCollection.items.length; i++) {
+                                        accountList.push(accountCollection.items[i].AccountAccount);
+                                    }
+
+                                    if(document.getElementById('artcileCustomer_customerGroup_data').value == 8) {
+                                        cboForAccount.dispose();
+                                        cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
+                                            disabled: false,
+                                            placeholder: "Select Account",
+                                            itemsSource: accountList,
+                                            isEditable: false,
+                                            required: false,
+                                            selectedValue: "Accounts Receivable - Trade",
+                                            onSelectedIndexChanged: function () {
+                                                $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                                            }
+                                        });
+
+                                        document.getElementById('artcileCustomer_account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
+                                    } else if(document.getElementById('artcileCustomer_customerGroup_data').value == 9) {
+                                        cboForAccount.dispose();
+                                        cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
+                                            disabled: false,
+                                            placeholder: "Select Account",
+                                            itemsSource: accountList,
+                                            isEditable: false,
+                                            required: false,
+                                            selectedValue: "Accounts Receivable - Non-Trade",
+                                            onSelectedIndexChanged: function () {
+                                                $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                                            }
+                                        });
+                                        
+                                        document.getElementById('artcileCustomer_account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
+                                    } else {
+                                        console.log('invalid group');
+                                    }
+                                }
+
+                            }
+                        });
+                    
                     }
                 });
             } else if(document.getElementById('Customer_IsLocked').value == 'false') {
@@ -482,6 +543,66 @@
                     selectedValue: document.getElementById('artcileCustomer_customerGroup_SelectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
                         $("#artcileCustomer_customerGroup_data").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupId);
+                        
+                        accounts = new wijmo.collections.ObservableArray();
+                        $.ajax({
+                            url: '/api/listAccount',
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (results) {
+                                if (results.length > 0) {
+                                    for (i = 0; i < results.length; i++) {
+                                        accounts.push({
+                                            AccountId: results[i]["Id"],
+                                            AccountAccount: results[i]["Account"]
+                                        });
+                                    }
+                                    
+                                    var accountCollection = new wijmo.collections.CollectionView(accounts);
+                                    var accountList = new Array();
+                                    for (var i = 0; i < accountCollection.items.length; i++) {
+                                        accountList.push(accountCollection.items[i].AccountAccount);
+                                    }
+
+                                    if(document.getElementById('artcileCustomer_customerGroup_data').value == 8) {
+                                        cboForAccount.dispose();
+                                        cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
+                                            disabled: false,
+                                            placeholder: "Select Account",
+                                            itemsSource: accountList,
+                                            isEditable: false,
+                                            required: false,
+                                            selectedValue: "Accounts Receivable - Trade",
+                                            onSelectedIndexChanged: function () {
+                                                $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                                            }
+                                        });
+
+                                        document.getElementById('artcileCustomer_account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
+                                    } else if(document.getElementById('artcileCustomer_customerGroup_data').value == 9) {
+                                        cboForAccount.dispose();
+                                        cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
+                                            disabled: false,
+                                            placeholder: "Select Account",
+                                            itemsSource: accountList,
+                                            isEditable: false,
+                                            required: false,
+                                            selectedValue: "Accounts Receivable - Non-Trade",
+                                            onSelectedIndexChanged: function () {
+                                                $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                                            }
+                                        });
+                                        
+                                        document.getElementById('artcileCustomer_account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
+                                    } else {
+                                        console.log('invalid group');
+                                    }
+                                }
+
+                            }
+                        });
                     }
                 });
             } else {
@@ -494,11 +615,70 @@
                     selectedValue: document.getElementById('artcileCustomer_customerGroup_SelectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
                         $("#artcileCustomer_customerGroup_data").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupId);
+                    
+                        accounts = new wijmo.collections.ObservableArray();
+                        $.ajax({
+                            url: '/api/listAccount',
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (results) {
+                                if (results.length > 0) {
+                                    for (i = 0; i < results.length; i++) {
+                                        accounts.push({
+                                            AccountId: results[i]["Id"],
+                                            AccountAccount: results[i]["Account"]
+                                        });
+                                    }
+                                    
+                                    var accountCollection = new wijmo.collections.CollectionView(accounts);
+                                    var accountList = new Array();
+                                    for (var i = 0; i < accountCollection.items.length; i++) {
+                                        accountList.push(accountCollection.items[i].AccountAccount);
+                                    }
+
+                                    if(document.getElementById('artcileCustomer_customerGroup_data').value == 8) {
+                                        cboForAccount.dispose();
+                                        cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
+                                            disabled: false,
+                                            placeholder: "Select Account",
+                                            itemsSource: accountList,
+                                            isEditable: false,
+                                            required: false,
+                                            selectedValue: "Accounts Receivable - Trade",
+                                            onSelectedIndexChanged: function () {
+                                                $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                                            }
+                                        });
+
+                                        document.getElementById('artcileCustomer_account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
+                                    } else if(document.getElementById('artcileCustomer_customerGroup_data').value == 9) {
+                                        cboForAccount.dispose();
+                                        cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
+                                            disabled: false,
+                                            placeholder: "Select Account",
+                                            itemsSource: accountList,
+                                            isEditable: false,
+                                            required: false,
+                                            selectedValue: "Accounts Receivable - Non-Trade",
+                                            onSelectedIndexChanged: function () {
+                                                $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                                            }
+                                        });
+                                        
+                                        document.getElementById('artcileCustomer_account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
+                                    } else {
+                                        console.log('invalid group');
+                                    }
+
+                                }
+
+                            }
+                        });
                     }
                 });
             }
-
-
         }
 
         // ==================
@@ -623,7 +803,7 @@
                 cboForTerm.dispose();
                 cboForTerm = new wijmo.input.ComboBox('#artcileCustomer_term', {
                     disabled: true,
-                    placeholder: "Select Account",
+                    placeholder: "Select Term",
                     itemsSource: termList,
                     isEditable: false,
                     required: false,
@@ -636,7 +816,7 @@
                 cboForTerm.dispose();
                 cboForTerm = new wijmo.input.ComboBox('#artcileCustomer_term', {
                     disabled: false,
-                    placeholder: "Select Account",
+                    placeholder: "Select Term",
                     itemsSource: termList,
                     isEditable: false,
                     required: false,
@@ -648,7 +828,7 @@
             } else {
                 cboForTerm.dispose();
                 cboForTerm = new wijmo.input.ComboBox('#artcileCustomer_term', {
-                    placeholder: "Select Account",
+                    placeholder: "Select Term",
                     itemsSource: termList,
                     isEditable: false,
                     required: false,
