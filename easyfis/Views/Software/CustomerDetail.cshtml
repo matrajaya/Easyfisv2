@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary btn-sm" id="customer_saveSaveCustomer" onclick="customerSaveCustomerButton_OnClick()"><i class="fa fa-save"></i> Save and Lock</button>
-                        <button class="btn btn-primary btn-sm" id="customer_saveCustomer"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id="customer_saveCustomer" onclick="customerSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="customer_editCustomer" onclick="customerEditButton_OnClick()"><i class="fa fa-edit"></i> Edit</button>
                         <button class="btn btn-primary btn-sm" id="customer_printCustomer" onclick="window.location.href ='@Url.Action("CustomerPDF", "Software", new { CustomerId = customerId })'"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Customer", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="customer_CloseCustomer"><i class="fa fa-times"></i> Close</button>
@@ -58,14 +58,14 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Code:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="artcileCustomer_code" />
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_code" />
                                         <input type="hidden" id="artcileCustomer_code_data" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Customer:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="artcileCustomer_customer" />
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_customer" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -73,7 +73,7 @@
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="artcileCustomer_customerGroup"></div>
 
-                                        <input type="hidden" id="artcileCustomer_customerGroup_data" />
+                                        <input type="hidden" id="artcileCustomer_customerGroup_data" class="requiredCustomer" />
                                         <input type="hidden" id="artcileCustomer_customerGroup_SelectedValue" />
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="artcileCustomer_account"></div>
 
-                                        <input type="hidden" id="artcileCustomer_account_data" />
+                                        <input type="hidden" id="artcileCustomer_account_data" class="requiredCustomer" />
                                         <input type="hidden" id="artcileCustomer_account_SelectedValue" />
                                     </div>
                                 </div>
@@ -91,20 +91,20 @@
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="artcileCustomer_term"></div>
 
-                                        <input type="hidden" id="artcileCustomer_term_data" />
+                                        <input type="hidden" id="artcileCustomer_term_data" class="requiredCustomer" />
                                         <input type="hidden" id="artcileCustomer_term_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Credit Limit:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="artcileCustomer_creditLimit"> <!-- Drop down list ni-->
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_creditLimit"> <!-- Drop down list ni-->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Address:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id="artcileCustomer_address"></textarea>
+                                        <textarea class="form-control textarea-custom requiredCustomer" id="artcileCustomer_address"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -112,25 +112,25 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Contact Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="artcileCustomer_contactNo">
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_contactNo">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Contact Person:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="artcileCustomer_contactPerson">
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_contactPerson">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">TIN:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="artcileCustomer_TIN">
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_TIN">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id="artcileCustomer_particulars"></textarea>
+                                        <textarea class="form-control textarea-custom requiredCustomer" id="artcileCustomer_particulars"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -420,6 +420,75 @@
             return customers;
         }
 
+        // ==================================
+        // Get Last Id for Customer by its ID
+        // ==================================
+        function getLastInsertedIdCustomerByArticleTypeId() {
+            var suppliers = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/articleLastIdByArticleTypeId/2',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        suppliers.push ({
+                            Id: Results.Id,
+                            ArticleCode : Results.ArticleCode,
+                            ManualArticleCode : Result.ManualArticleCode,
+                            Article : Results.Article,
+                            Category : Results.Category,
+                            ArticleTypeId : Results.ArticleTypeId,
+                            ArticleType : Results.ArticleType,
+                            ArticleGroupId : Results.ArticleGroupId,
+                            ArticleGroup : Results.ArticleGroup,
+                            AccountId : Results.AccountId,
+                            Account : Results.Account,
+                            SalesAccountId : Results.SalesAccountId,
+                            CostAccountId : Results.CostAccountId,
+                            AssetAccountId : Results.AssetAccountId,
+                            ExpenseAccountId : Results.ExpenseAccountId,
+                            UnitId : Results.UnitId,
+                            OutputTaxId : Results.OutputTaxId,
+                            OutputTax : Results.OutputTax,
+                            InputTaxId : Results.InputTaxId,
+                            InputTax : Results.InputTax,
+                            WTaxTypeId : Results.WTaxTypeId,
+                            WTaxType : Results.WTaxType,
+                            Price : Results.Price,
+                            Cost : Results.Cost,
+                            IsInventory : Results.IsInventory,
+                            Particulars : Results.Particulars,
+                            Address : Results.Address,
+                            TermId : Results.TermId,
+                            Term : Results.Term,
+                            ContactNumber : Results.ContactNumber,
+                            ContactPerson : Results.ContactPerson,
+                            TaxNumber : Results.TaxNumber,
+                            CreditLimit : Results.CreditLimit,
+                            DateAcquired : Results.DateAcquired,
+                            UsefulLife : Results.UsefulLife,
+                            SalvageValue : Results.SalvageValue,
+                            ManualArticleOldCode : Results.ManualArticleOldCode,
+                            IsLocked: Results.IsLocked,
+                            CreatedById: Results.CreatedById,
+                            CreatedBy: Results.CreatedBy,
+                            CreatedDateTime: Results.CreatedDateTime,
+                            UpdatedById: Results.UpdatedById,
+                            UpdatedBy: Results.UpdatedBy,
+                            UpdatedDateTime: Results.UpdatedDateTime
+                        });
+                    }
+                    window.location = '/Software/CustomerDetail?CustomerId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.setTimeout(function () { location.reload() }, 1000);
+                }
+            });
+
+            return suppliers;
+        }
+
+
         // =========================
         // Get Artile Customer Group
         // =========================
@@ -469,7 +538,7 @@
                     selectedValue: document.getElementById('artcileCustomer_customerGroup_SelectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
                         $("#artcileCustomer_customerGroup_data").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupId);
-                        
+
                         accounts = new wijmo.collections.ObservableArray();
                         $.ajax({
                             url: '/api/listAccount',
@@ -485,7 +554,7 @@
                                             AccountAccount: results[i]["Account"]
                                         });
                                     }
-                                    
+
                                     var accountCollection = new wijmo.collections.CollectionView(accounts);
                                     var accountList = new Array();
                                     for (var i = 0; i < accountCollection.items.length; i++) {
@@ -495,7 +564,7 @@
                                     if(document.getElementById('artcileCustomer_customerGroup_data').value == 8) {
                                         cboForAccount.dispose();
                                         cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
-                                            disabled: false,
+                                            disabled: true,
                                             placeholder: "Select Account",
                                             itemsSource: accountList,
                                             isEditable: false,
@@ -510,7 +579,7 @@
                                     } else if(document.getElementById('artcileCustomer_customerGroup_data').value == 9) {
                                         cboForAccount.dispose();
                                         cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
-                                            disabled: false,
+                                            disabled: true,
                                             placeholder: "Select Account",
                                             itemsSource: accountList,
                                             isEditable: false,
@@ -520,7 +589,7 @@
                                                 $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
                                             }
                                         });
-                                        
+
                                         document.getElementById('artcileCustomer_account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
                                     } else {
                                         console.log('invalid group');
@@ -529,7 +598,7 @@
 
                             }
                         });
-                    
+
                     }
                 });
             } else if(document.getElementById('Customer_IsLocked').value == 'false') {
@@ -543,7 +612,7 @@
                     selectedValue: document.getElementById('artcileCustomer_customerGroup_SelectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
                         $("#artcileCustomer_customerGroup_data").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupId);
-                        
+
                         accounts = new wijmo.collections.ObservableArray();
                         $.ajax({
                             url: '/api/listAccount',
@@ -559,7 +628,7 @@
                                             AccountAccount: results[i]["Account"]
                                         });
                                     }
-                                    
+
                                     var accountCollection = new wijmo.collections.CollectionView(accounts);
                                     var accountList = new Array();
                                     for (var i = 0; i < accountCollection.items.length; i++) {
@@ -569,7 +638,7 @@
                                     if(document.getElementById('artcileCustomer_customerGroup_data').value == 8) {
                                         cboForAccount.dispose();
                                         cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
-                                            disabled: false,
+                                            disabled: true,
                                             placeholder: "Select Account",
                                             itemsSource: accountList,
                                             isEditable: false,
@@ -584,7 +653,7 @@
                                     } else if(document.getElementById('artcileCustomer_customerGroup_data').value == 9) {
                                         cboForAccount.dispose();
                                         cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
-                                            disabled: false,
+                                            disabled: true,
                                             placeholder: "Select Account",
                                             itemsSource: accountList,
                                             isEditable: false,
@@ -594,7 +663,7 @@
                                                 $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
                                             }
                                         });
-                                        
+
                                         document.getElementById('artcileCustomer_account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
                                     } else {
                                         console.log('invalid group');
@@ -615,7 +684,7 @@
                     selectedValue: document.getElementById('artcileCustomer_customerGroup_SelectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
                         $("#artcileCustomer_customerGroup_data").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupId);
-                    
+
                         accounts = new wijmo.collections.ObservableArray();
                         $.ajax({
                             url: '/api/listAccount',
@@ -631,7 +700,7 @@
                                             AccountAccount: results[i]["Account"]
                                         });
                                     }
-                                    
+
                                     var accountCollection = new wijmo.collections.CollectionView(accounts);
                                     var accountList = new Array();
                                     for (var i = 0; i < accountCollection.items.length; i++) {
@@ -641,7 +710,7 @@
                                     if(document.getElementById('artcileCustomer_customerGroup_data').value == 8) {
                                         cboForAccount.dispose();
                                         cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
-                                            disabled: false,
+                                            disabled: true,
                                             placeholder: "Select Account",
                                             itemsSource: accountList,
                                             isEditable: false,
@@ -656,7 +725,7 @@
                                     } else if(document.getElementById('artcileCustomer_customerGroup_data').value == 9) {
                                         cboForAccount.dispose();
                                         cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
-                                            disabled: false,
+                                            disabled: true,
                                             placeholder: "Select Account",
                                             itemsSource: accountList,
                                             isEditable: false,
@@ -666,7 +735,7 @@
                                                 $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
                                             }
                                         });
-                                        
+
                                         document.getElementById('artcileCustomer_account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
                                     } else {
                                         console.log('invalid group');
@@ -735,7 +804,7 @@
             } else if(document.getElementById('Customer_IsLocked').value == 'false') {
                 cboForAccount.dispose();
                 cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
-                    disabled: false,
+                    disabled: true,
                     placeholder: "Select Account",
                     itemsSource: accountList,
                     isEditable: false,
@@ -748,6 +817,7 @@
             } else {
                 cboForAccount.dispose();
                 cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
+                    disabled: true,
                     placeholder: "Select Account",
                     itemsSource: accountList,
                     isEditable: false,
@@ -809,7 +879,7 @@
                     required: false,
                     selectedValue: document.getElementById('artcileCustomer_term_SelectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
-                        $("#artcileCustomer_term_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                        $("#artcileCustomer_term_data").val(termCollection.items[this.selectedIndex].TermId);
                     }
                 });
             } else if(document.getElementById('Customer_IsLocked').value == 'false') {
@@ -822,7 +892,7 @@
                     required: false,
                     selectedValue: document.getElementById('artcileCustomer_term_SelectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
-                        $("#artcileCustomer_term_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                        $("#artcileCustomer_term_data").val(termCollection.items[this.selectedIndex].TermId);
                     }
                 });
             } else {
@@ -834,7 +904,7 @@
                     required: false,
                     selectedValue: document.getElementById('artcileCustomer_term_SelectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
-                        $("#artcileCustomer_term_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                        $("#artcileCustomer_term_data").val(termCollection.items[this.selectedIndex].TermId);
                     }
                 });
             }
@@ -973,6 +1043,144 @@
                     }
                 }
             });
+        }
+
+        // ============
+        // ADD Customer
+        // ============
+        function customerSaveButton_OnClick() {
+            var customerObject = new Object();
+            var customerId = @customerId;
+            customerObject.ArticleCode = document.getElementById('artcileCustomer_code').value;
+            customerObject.Article = document.getElementById('artcileCustomer_customer').value;
+            customerObject.ArticleGroupId = document.getElementById('artcileCustomer_customerGroup_data').value;
+            customerObject.AccountId = document.getElementById('artcileCustomer_account_data').value;
+            customerObject.SalesAccountId = document.getElementById('artcileCustomer_account_data').value;
+            customerObject.CostAccountId = document.getElementById('artcileCustomer_account_data').value;
+            customerObject.AssetAccountId = document.getElementById('artcileCustomer_account_data').value;
+            customerObject.ExpenseAccountId = document.getElementById('artcileCustomer_account_data').value;
+            customerObject.Particulars = document.getElementById('artcileCustomer_particulars').value;
+            customerObject.Address = document.getElementById('artcileCustomer_address').value;
+            customerObject.TermId = document.getElementById('artcileCustomer_term_data').value;
+            customerObject.CreditLimit = document.getElementById('artcileCustomer_creditLimit').value;
+            customerObject.ContactNumber = document.getElementById('artcileCustomer_contactNo').value;
+            customerObject.ContactPerson = document.getElementById('artcileCustomer_contactPerson').value;
+            customerObject.TaxNumber = document.getElementById('artcileCustomer_TIN').value;
+            var data = JSON.stringify(customerObject);
+
+            if( document.getElementById('artcileCustomer_customerGroup_data').value == '') {
+                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid red";
+            } else {
+                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid #C8C8C8   ";
+            }
+            
+            if( document.getElementById('artcileCustomer_account_data').value == '') {
+                document.getElementById("artcileCustomer_account").style.border = "1px solid red";
+            } else {
+                document.getElementById("artcileCustomer_account").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('artcileCustomer_term_data').value == '') {
+                document.getElementById("artcileCustomer_term").style.border = "1px solid red";
+            } else {
+                document.getElementById("artcileCustomer_term").style.border = "1px solid #C8C8C8   ";
+            }
+
+            var isValid = true;
+            $('.requiredCustomer').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                if(customerId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addArticleForCustomer',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getLastInsertedIdCustomerByArticleTypeId, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateArticleForCustomer/' + customerId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                            }
+                        }
+                    });
+                }
+            }
+
         }
 
         // ===========

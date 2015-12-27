@@ -451,6 +451,147 @@ namespace easyfis.Controllers
             }
         }
 
+        // ========================
+        // ADD Article for Customer
+        // ========================
+        [Route("api/addArticleForCustomer")]
+        public int PostCustomer(Models.MstArticle articleCustomer)
+        {
+            try
+            {
+                var isLocked = false;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                Data.MstArticle newArticleCustomer = new Data.MstArticle();
+
+                newArticleCustomer.ArticleCode = articleCustomer.ArticleCode;
+                newArticleCustomer.ManualArticleCode = " ";
+                newArticleCustomer.Article = articleCustomer.Article;
+                newArticleCustomer.Category = " ";
+                newArticleCustomer.ArticleTypeId = 2;
+                newArticleCustomer.ArticleGroupId = articleCustomer.ArticleGroupId;
+
+                newArticleCustomer.AccountId = articleCustomer.AccountId;
+                newArticleCustomer.SalesAccountId = articleCustomer.SalesAccountId;
+                newArticleCustomer.CostAccountId = articleCustomer.CostAccountId;
+                newArticleCustomer.AssetAccountId = articleCustomer.AssetAccountId;
+                newArticleCustomer.ExpenseAccountId = articleCustomer.ExpenseAccountId;
+
+                newArticleCustomer.UnitId = 1;
+                newArticleCustomer.OutputTaxId = 5;
+                newArticleCustomer.InputTaxId = 5;
+                newArticleCustomer.WTaxTypeId = 5;
+
+                newArticleCustomer.Price = 0;
+                newArticleCustomer.Cost = 0;
+                newArticleCustomer.IsInventory = false;
+                newArticleCustomer.Particulars = articleCustomer.Particulars;
+                newArticleCustomer.Address = articleCustomer.Address;
+                newArticleCustomer.TermId = articleCustomer.TermId;
+                newArticleCustomer.ContactNumber = articleCustomer.ContactNumber;
+                newArticleCustomer.ContactPerson = articleCustomer.ContactPerson;
+                newArticleCustomer.TaxNumber = articleCustomer.TaxNumber;
+                newArticleCustomer.CreditLimit = articleCustomer.CreditLimit;
+                newArticleCustomer.DateAcquired = date;
+                newArticleCustomer.UsefulLife = 0;
+                newArticleCustomer.SalvageValue = 0;
+                newArticleCustomer.ManualArticleOldCode = " ";
+
+                newArticleCustomer.IsLocked = isLocked;
+                newArticleCustomer.CreatedById = mstUserId;
+                newArticleCustomer.CreatedDateTime = date;
+                newArticleCustomer.UpdatedById = mstUserId;
+                newArticleCustomer.UpdatedDateTime = date;
+
+                db.MstArticles.InsertOnSubmit(newArticleCustomer);
+                db.SubmitChanges();
+
+                return newArticleCustomer.Id;
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return 0;
+            }
+        }
+
+        // ===========================
+        // UPDATE Article For Customer
+        // ===========================
+        [Route("api/updateArticleForCustomer/{id}")]
+        public HttpResponseMessage PutCustomer(String id, Models.MstArticle articleCustomer)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var articleCustomer_Id = Convert.ToInt32(id);
+                var articleCustomers = from d in db.MstArticles where d.Id == articleCustomer_Id select d;
+
+                if (articleCustomers.Any())
+                {
+                    var updateArticleCustomer = articleCustomers.FirstOrDefault();
+
+                    updateArticleCustomer.ArticleCode = articleCustomer.ArticleCode;
+                    updateArticleCustomer.ManualArticleCode = " ";
+                    updateArticleCustomer.Article = articleCustomer.Article;
+                    updateArticleCustomer.Category = " ";
+                    updateArticleCustomer.ArticleTypeId = 2;
+                    updateArticleCustomer.ArticleGroupId = articleCustomer.ArticleGroupId;
+
+                    updateArticleCustomer.AccountId = articleCustomer.AccountId;
+                    updateArticleCustomer.SalesAccountId = articleCustomer.SalesAccountId;
+                    updateArticleCustomer.CostAccountId = articleCustomer.CostAccountId;
+                    updateArticleCustomer.AssetAccountId = articleCustomer.AssetAccountId;
+                    updateArticleCustomer.ExpenseAccountId = articleCustomer.ExpenseAccountId;
+
+                    updateArticleCustomer.UnitId = 1;
+                    updateArticleCustomer.OutputTaxId = 5;
+                    updateArticleCustomer.InputTaxId = 5;
+                    updateArticleCustomer.WTaxTypeId = 5;
+
+                    updateArticleCustomer.Price = 0;
+                    updateArticleCustomer.Cost = 0;
+                    updateArticleCustomer.IsInventory = false;
+                    updateArticleCustomer.Particulars = articleCustomer.Particulars;
+                    updateArticleCustomer.Address = articleCustomer.Address;
+                    updateArticleCustomer.TermId = articleCustomer.TermId;
+                    updateArticleCustomer.ContactNumber = articleCustomer.ContactNumber;
+                    updateArticleCustomer.ContactPerson = articleCustomer.ContactPerson;
+                    updateArticleCustomer.TaxNumber = articleCustomer.TaxNumber;
+                    updateArticleCustomer.CreditLimit = articleCustomer.CreditLimit;
+                    updateArticleCustomer.DateAcquired = date;
+                    updateArticleCustomer.UsefulLife = 0;
+                    updateArticleCustomer.SalvageValue = 0;
+                    updateArticleCustomer.ManualArticleOldCode = " ";
+
+                    updateArticleCustomer.IsLocked = articleCustomer.IsLocked;
+                    updateArticleCustomer.UpdatedById = mstUserId;
+                    updateArticleCustomer.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+
         // =====================
         // UPDATE Article IsLock
         // =====================
