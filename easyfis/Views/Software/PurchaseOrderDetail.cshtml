@@ -833,7 +833,7 @@
                 if (POId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addPO',
+                        url: '/api/addPurchaseOrder',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -866,7 +866,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updatePO/' + POId,
+                        url: '/api/updatePurchaseOrder/' + POId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,

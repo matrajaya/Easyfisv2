@@ -230,7 +230,7 @@ namespace easyfis.Controllers
         // ==================
         // ADD Puschase Order
         // ==================
-        [Route("api/addPO")]
+        [Route("api/addPurchaseOrder")]
         public int Post(Models.TrnPurchaseOrder purchaseOrder)
         {
             try
@@ -282,7 +282,7 @@ namespace easyfis.Controllers
         // =====================
         // Update Puschase Order
         // =====================
-        [Route("api/updatePO/{id}")]
+        [Route("api/updatePurchaseOrder/{id}")]
         public HttpResponseMessage Put(String id, Models.TrnPurchaseOrder purchaseOrder)
         {
             try
