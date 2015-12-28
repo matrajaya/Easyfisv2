@@ -17,9 +17,13 @@ namespace easyfis.Models
         public String Account { get; set; }
 
         public Int32 SalesAccountId { get; set; }
+        public String SalesAccount { get; set; }
         public Int32 CostAccountId { get; set; }
+        public String CostAccount { get; set; }
         public Int32 AssetAccountId { get; set; }
+        public String AssetAccount { get; set; }
         public Int32 ExpenseAccountId { get; set; }
+        public String ExpenseAccount { get; set; }
 
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
