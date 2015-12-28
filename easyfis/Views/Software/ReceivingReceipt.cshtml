@@ -358,6 +358,9 @@
                     document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
                     var RRDateFilterValue = document.getElementById('filterDate_data').value;
 
+                    $('body').removeClass('modal-open');
+                    $(".modal-backdrop").remove();
+
                     RRs = new wijmo.collections.CollectionView(getRRFilterByRRDate(RRDateFilterValue));
                     RRs.canFilter = true;
                     RRs.pageSize = 15;

@@ -204,7 +204,7 @@
             });
             return POs;
         }
- 
+
         // ==============
         // PO Edit Button
         // ==============
@@ -345,7 +345,7 @@
 
             var PODateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [ PODateFilter_Date.getMonth()+1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
-            
+
             var cboFilterDate;
             cboFilterDate = new wijmo.input.InputDate('#filterDate', {
                 format: 'MM/dd/yyyy',
@@ -354,6 +354,8 @@
                 onValueChanged: function () {
                     document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
                     var PODateFilterValue = document.getElementById('filterDate_data').value;
+
+                    $(".modal-backdrop").remove();
 
                     POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilterValue));
                     POs.canFilter = true;
