@@ -73,8 +73,8 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_SupplierGroup"></div>
 
-                                        <input type="text" id="artcileSupplier_SupplierGroup_Data" />
-                                        <input type="text" id="artcileSupplier_SupplierGroup_SelectedValue" />
+                                        <input type="hidden" id="artcileSupplier_SupplierGroup_Data" />
+                                        <input type="hidden" id="artcileSupplier_SupplierGroup_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -82,8 +82,8 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_Account"></div>
 
-                                        <input type="text" id="artcileSupplier_Account_Data" class="requiredSupplier" />
-                                        <input type="text" id="artcileSupplier_Account_SelectedValue" />
+                                        <input type="hidden" id="artcileSupplier_Account_Data" class="requiredSupplier" />
+                                        <input type="hidden" id="artcileSupplier_Account_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -492,19 +492,14 @@
                             articleSupplierGroups.push({
                                 ArticleGroupId: results[i]["Id"],
                                 ArticleGroupArticleGroup: results[i]["ArticleGroup"],
-
                                 ArticleGroupAccountId: results[i]["AccountId"],
                                 ArticleGroupAccount: results[i]["Account"],
-
                                 ArticleGroupSalesAccountId: results[i]["SalesAccountId"],
                                 ArticleGroupSalesAccount: results[i]["SalesAccount"],
-
                                 ArticleGroupCostAccountId: results[i]["CostAccountId"],
                                 ArticleGroupCostAccount: results[i]["CostAccount"],
-
                                 ArticleGroupAssetAccountId: results[i]["AssetAccountId"],
                                 ArticleGroupAssetAccount: results[i]["AssetAccount"],
-
                                 ArticleGroupExpenseAccountId: results[i]["ExpenseAccountId"],
                                 ArticleGroupExpenseAccount: results[i]["ExpenseAccount"]
                             });
