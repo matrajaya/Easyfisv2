@@ -311,6 +311,10 @@ namespace easyfis.Controllers
             return (Models.MstArticle)articles.FirstOrDefault();
         }
 
+
+
+        // ======================================================================================================================
+
         // ========================
         // ADD Article for Supplier
         // ========================
@@ -450,6 +454,7 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
+
 
         // ========================
         // ADD Article for Customer
@@ -591,6 +596,73 @@ namespace easyfis.Controllers
             }
         }
 
+
+        // ====================
+        //// ADD Article for Item
+        //// ====================
+        //[Route("api/addArticleForItem")]
+        //public int PostItem(Models.MstArticle articleItem)
+        //{
+        //    try
+        //    {
+        //        var isLocked = false;
+        //        var identityUserId = User.Identity.GetUserId();
+        //        var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+        //        var date = DateTime.Now;
+
+        //        Data.MstArticle newArticleItem = new Data.MstArticle();
+
+        //        newArticleCustomer.ArticleCode = articleItem.ArticleCode;
+        //        newArticleCustomer.ManualArticleCode = articleItem.ManualArticleCode;
+        //        newArticleCustomer.Article = articleItem.Article;
+        //        newArticleCustomer.Category = articleItem.Category;
+        //        newArticleCustomer.ArticleTypeId = 1;
+        //        newArticleCustomer.ArticleGroupId = articleItem.ArticleGroupId;
+
+        //        newArticleCustomer.AccountId = articleCustomer.AccountId;
+        //        newArticleCustomer.SalesAccountId = articleCustomer.SalesAccountId;
+        //        newArticleCustomer.CostAccountId = articleCustomer.CostAccountId;
+        //        newArticleCustomer.AssetAccountId = articleCustomer.AssetAccountId;
+        //        newArticleCustomer.ExpenseAccountId = articleCustomer.ExpenseAccountId;
+
+        //        newArticleCustomer.UnitId = 1;
+        //        newArticleCustomer.OutputTaxId = 5;
+        //        newArticleCustomer.InputTaxId = 5;
+        //        newArticleCustomer.WTaxTypeId = 5;
+
+        //        newArticleCustomer.Price = 0;
+        //        newArticleCustomer.Cost = 0;
+        //        newArticleCustomer.IsInventory = false;
+        //        newArticleCustomer.Particulars = articleCustomer.Particulars;
+        //        newArticleCustomer.Address = articleCustomer.Address;
+        //        newArticleCustomer.TermId = articleCustomer.TermId;
+        //        newArticleCustomer.ContactNumber = articleCustomer.ContactNumber;
+        //        newArticleCustomer.ContactPerson = articleCustomer.ContactPerson;
+        //        newArticleCustomer.TaxNumber = articleCustomer.TaxNumber;
+        //        newArticleCustomer.CreditLimit = articleCustomer.CreditLimit;
+        //        newArticleCustomer.DateAcquired = date;
+        //        newArticleCustomer.UsefulLife = 0;
+        //        newArticleCustomer.SalvageValue = 0;
+        //        newArticleCustomer.ManualArticleOldCode = " ";
+
+        //        newArticleCustomer.IsLocked = isLocked;
+        //        newArticleCustomer.CreatedById = mstUserId;
+        //        newArticleCustomer.CreatedDateTime = date;
+        //        newArticleCustomer.UpdatedById = mstUserId;
+        //        newArticleCustomer.UpdatedDateTime = date;
+
+        //        db.MstArticles.InsertOnSubmit(newArticleCustomer);
+        //        db.SubmitChanges();
+
+        //        return newArticleCustomer.Id;
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Debug.WriteLine(e);
+        //        return 0;
+        //    }
+        //}
 
         // =====================
         // UPDATE Article IsLock
