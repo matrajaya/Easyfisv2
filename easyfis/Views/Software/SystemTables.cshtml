@@ -34,29 +34,29 @@
                     <span id="currentPage"></span>
                 </div>
                 <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="">Discount</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Tax" id="">Pay Type</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Bank" id="">Tax</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Term" id="">Unit</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Type" id="">Terms</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Bank" id="">Employees</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Term" id="">Article Groups</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Type" id="">Other Articles</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Tax" id="">Account Type</a></li>
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#Discount" id="discountTabId">Discount</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#PayType" id="payTypeTabId">Pay Type</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Tax" id="taxTabId">Tax</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Unit" id="unitTabId">Unit</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Term" id="termTabId">Terms</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Employee" id="employeeTabId">Employees</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#ArticleGroup" id="articleGroupTabId">Article Groups</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#OtherArticle" id="otherArticleTabId">Other Articles</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
                 </ul>
                 <br />
-                <!-- User List -->
-                <div id="sysTableList">
+                <!-- Discount List -->
+                <div id="Discount">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Unit </h4>
+                            <h4>Discount</h4>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                <input type="text" class="form-control input-sm" id="InputFilterDiscount" placeholder="Search">
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
@@ -67,23 +67,375 @@
                     <br />
                     <div class="row" align="left">
                         <div class="col-lg-12">
-                            <div id="SystemTableGrid" class="grid" align="left"></div>
+                            <div id="DiscountGrid" class="grid" align="left"></div>
                         </div>
                     </div>
                     <br />
                     <div class="row">
-                        <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                        <div class="btn-group col-md-7" id="navigationPageGridDiscount">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridDiscount">
                                 <span class="glyphicon glyphicon-fast-backward"></span>
                             </button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridDiscount">
                                 <span class="glyphicon glyphicon-step-backward"></span>
                             </button>
-                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridDiscount"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridDiscount">
                                 <span class="glyphicon glyphicon-step-forward"></span>
                             </button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridDiscount">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pay Type List -->
+                <div id="PayType">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Pay Type</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="InputFilterPayType" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-lg-8" align="right">
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="PayTypeGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="navigationPageGridPayType">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridPayType">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridPayType">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridPayType"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridPayType">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridPayType">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tax List -->
+                <div id="Tax">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Tax</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="InputFilterTax" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-lg-8" align="right">
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="TaxGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="navigationPageGridTax">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridTax">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridTax">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridTax"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridTax">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridTax">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Unit List -->
+                <div id="Unit">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Unit</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="InputFilterUnit" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-lg-8" align="right">
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="UnitGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="navigationPageGridUnit">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridUnit">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridUnit">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridUnit"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridUnit">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridUnit">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Terms List -->
+                <div id="Term">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Term</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="InputFilterTerm" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-lg-8" align="right">
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="TermGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="navigationPageGridTerm">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridTerm">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridTerm">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridTerm"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridTerm">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridTerm">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Employees List -->
+                <div id="Employee">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Employee</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="InputFilterEmployee" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-lg-8" align="right">
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="EmployeeGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="navigationPageGridEmployee">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridEmployee">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridEmployee">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridEmployee"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridEmployee">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridEmployee">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Article Group List -->
+                <div id="ArticleGroup">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Article Groups</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="InputFilterArticleGroup" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-lg-8" align="right">
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="ArticleGroupGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="navigationPageGridArticleGroup">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridArticleGroup">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridArticleGroup">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridArticleGroup"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridArticleGroup">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridArticleGroup">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Other Article List -->
+                <div id="OtherArticle">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Other Article</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="InputFilterOtherArticle" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-lg-8" align="right">
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="OtherArticleGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="navigationPageGridOtherArticle">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridOtherArticle">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridOtherArticle">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridOtherArticle"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridOtherArticle">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridOtherArticle">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Account Type List -->
+                <div id="AccountType">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h4>Account Type</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="InputFilterAccountType" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="col-lg-8" align="right">
+                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</a>
+                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="AccountTypeGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="navigationPageGridAccountType">
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridAccountType">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridAccountType">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridAccountType"></button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridAccountType">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridAccountType">
                                 <span class="glyphicon glyphicon-fast-forward"></span>
                             </button>
                         </div>
@@ -96,10 +448,12 @@
     <!-- SideBar Menu -->
     @Html.Partial("_SoftwareSideBarMenu")
 
+    <!-- Footer Menu -->
+    @Html.Partial("_SoftwareFooter")
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     @Scripts.Render("~/WijmoScripts/Wijmo-js")
-    <script type="text/javascript">
+    @*<script type="text/javascript">
 
         // ================
         // Global Variables
@@ -206,6 +560,2232 @@
             systemTable.trackChanges = true;
         });
 
+    </script>*@
+
+    <!-- ================ -->
+    <!-- Discount Scripts -->
+    <!-- ================ -->
+    <script type="text/javascript">
+        // =============================
+        // Global Variables for Discount
+        // =============================
+        var discounts;
+        var discountGrid;
+
+        var btnFirstPageGridDiscount;
+        var btnPreviousPageGridDiscount;
+        var btnNextPageGridDiscount;
+        var btnLastPageGridDiscount;
+        var btnCurrentPageGridDiscount;
+
+        // ==================
+        // GET Price List
+        // ==================
+        function getDiscount() {
+            var discounts = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return discounts;
+        }
+        // ===============================
+        // FlexGrid Selection for Discount
+        // ===============================
+        function updateDetailsDiscount() {
+            var item = discounts.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ===============================
+        // Navigation Buttons for Discount
+        // ===============================
+        function updateNavigateButtonsDiscount() {
+            if (discounts.pageSize <= 0) {
+                document.getElementById('navigationPageGridDiscount').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridDiscount').style.display = 'block';
+            if (discounts.pageIndex === 0) {
+                btnFirstPageGridDiscount.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridDiscount.setAttribute('disabled', 'disabled');
+                btnNextPageGridDiscount.removeAttribute('disabled');
+                btnLastPageGridDiscount.removeAttribute('disabled');
+            } else if (discounts.pageIndex === (discounts.pageCount - 1)) {
+                btnFirstPageGridDiscount.removeAttribute('disabled');
+                btnPreviousPageGridDiscount.removeAttribute('disabled');
+                btnLastPageGridDiscount.setAttribute('disabled', 'disabled');
+                btnNextPageGridDiscount.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridDiscount.removeAttribute('disabled');
+                btnPreviousPageGridDiscount.removeAttribute('disabled');
+                btnNextPageGridDiscount.removeAttribute('disabled');
+                btnLastPageGridDiscount.removeAttribute('disabled');
+            }
+            btnCurrentPageGridDiscount.innerHTML = (discounts.pageIndex + 1) + ' / ' + discounts.pageCount;
+        }
+
+        // ========
+        // Discount
+        // ========
+        function discountTab() {
+            discounts = new wijmo.collections.CollectionView();
+            discounts.canFilter = true;
+            discounts.pageSize = 15;
+
+            var filterTextDiscount = '';
+            $('#InputFilterDiscount').keyup(function () {
+                filterTextDiscount = this.value.toLowerCase();
+                discounts.refresh();
+            });
+            discounts.filter = function (item) {
+                return !filterTextDiscount || (item.discount.toLowerCase().indexOf(filterTextDiscount) > -1);
+            }
+            discounts.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsDiscount();
+            });
+            discounts.currentChanged.addHandler(function (sender, args) {
+                updateDetailsDiscount();
+            });
+
+            // Flex Grid for Discount
+            discountGrid = new wijmo.grid.FlexGrid('#DiscountGrid');
+            discountGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: discounts,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            discountGrid.trackChanges = true;
+
+            //Navigation button for discount
+            btnFirstPageGridDiscount = document.getElementById('btnMoveToFirstPageGridDiscount');
+            btnPreviousPageGridDiscount = document.getElementById('btnMoveToPreviousPageGridDiscount');
+            btnNextPageGridDiscount = document.getElementById('btnMoveToNextPageGridDiscount');
+            btnLastPageGridDiscount = document.getElementById('btnMoveToLastPageGridDiscount');
+            btnCurrentPageGridDiscount = document.getElementById('btnCurrentPageGridDiscount');
+
+            updateNavigateButtonsDiscount();
+
+            btnFirstPageGridDiscount.addEventListener('click', function () {
+                discounts.moveToFirstPage();
+                updateNavigateButtonsDiscount();
+            });
+            btnPreviousPageGridDiscount.addEventListener('click', function () {
+                discounts.moveToPreviousPage();
+                updateNavigateButtonsDiscount();
+            });
+            btnNextPageGridDiscount.addEventListener('click', function () {
+                discounts.moveToNextPage();
+                updateNavigateButtonsDiscount();
+            });
+            btnLastPageGridDiscount.addEventListener('click', function () {
+                discounts.moveToLastPage();
+                updateNavigateButtonsDiscount();
+            });
+        }
+    </script>
+
+    <!-- ================ -->
+    <!-- Pay Type Scripts -->
+    <!-- ================ -->
+    <script type="text/javascript">
+        // =============================
+        // Global Variables for Pay Type
+        // =============================
+        var paytypes;
+        var payTypeGrid;
+
+        var btnFirstPageGridPayType;
+        var btnPreviousPageGridPayType;
+        var btnNextPageGridPayType;
+        var btnLastPageGridPayType;
+        var btnCurrentPageGridPayType;
+
+        // =================
+        // GET Pay Type List
+        // =================
+        function getPayType() {
+            var paytypes = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return paytypes;
+        }
+        // ===============================
+        // FlexGrid Selection for Pay Type
+        // ===============================
+        function updateDetailsPayType() {
+            var item = paytypes.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ===============================
+        // Navigation Buttons for Pay Type
+        // ===============================
+        function updateNavigateButtonsPayType() {
+            if (paytypes.pageSize <= 0) {
+                document.getElementById('navigationPageGridPayType').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridPayType').style.display = 'block';
+            if (paytypes.pageIndex === 0) {
+                btnFirstPageGridPayType.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridPayType.setAttribute('disabled', 'disabled');
+                btnNextPageGridPayType.removeAttribute('disabled');
+                btnLastPageGridPayType.removeAttribute('disabled');
+            } else if (paytypes.pageIndex === (paytypes.pageCount - 1)) {
+                btnFirstPageGridPayType.removeAttribute('disabled');
+                btnPreviousPageGridPayType.removeAttribute('disabled');
+                btnLastPageGridPayType.setAttribute('disabled', 'disabled');
+                btnNextPageGridPayType.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridPayType.removeAttribute('disabled');
+                btnPreviousPageGridPayType.removeAttribute('disabled');
+                btnNextPageGridPayType.removeAttribute('disabled');
+                btnLastPageGridPayType.removeAttribute('disabled');
+            }
+            btnCurrentPageGridPayType.innerHTML = (paytypes.pageIndex + 1) + ' / ' + paytypes.pageCount;
+        }
+
+        // ========
+        // Pay Type
+        // ========
+        function payTypeTab() {
+            paytypes = new wijmo.collections.CollectionView();
+            paytypes.canFilter = true;
+            paytypes.pageSize = 15;
+
+            var filterTextPayType = '';
+            $('#InputFilterPayType').keyup(function () {
+                filterTextPayType = this.value.toLowerCase();
+                paytypes.refresh();
+            });
+            paytypes.filter = function (item) {
+                return !filterTextPayType || (item.paytype.toLowerCase().indexOf(filterTextPayType) > -1);
+            }
+            paytypes.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsPayType();
+            });
+            paytypes.currentChanged.addHandler(function (sender, args) {
+                updateDetailsPayType();
+            });
+
+            // Flex Grid for Pay Type
+            payTypeGrid = new wijmo.grid.FlexGrid('#PayTypeGrid');
+            payTypeGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: paytypes,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            payTypeGrid.trackChanges = true;
+
+            //Navigation button for Pay Type
+            btnFirstPageGridPayType = document.getElementById('btnMoveToFirstPageGridPayType');
+            btnPreviousPageGridPayType = document.getElementById('btnMoveToPreviousPageGridPayType');
+            btnNextPageGridPayType = document.getElementById('btnMoveToNextPageGridPayType');
+            btnLastPageGridPayType = document.getElementById('btnMoveToLastPageGridPayType');
+            btnCurrentPageGridPayType = document.getElementById('btnCurrentPageGridPayType');
+
+            updateNavigateButtonsPayType();
+
+            btnFirstPageGridPayType.addEventListener('click', function () {
+                paytypes.moveToFirstPage();
+                updateNavigateButtonsPayType();
+            });
+            btnPreviousPageGridPayType.addEventListener('click', function () {
+                paytypes.moveToPreviousPage();
+                updateNavigateButtonsPayType();
+            });
+            btnNextPageGridPayType.addEventListener('click', function () {
+                paytypes.moveToNextPage();
+                updateNavigateButtonsPayType();
+            });
+            btnLastPageGridPayType.addEventListener('click', function () {
+                paytypes.moveToLastPage();
+                updateNavigateButtonsPayType();
+            });
+        }
+    </script>
+
+    <!-- =========== -->
+    <!-- Tax Scripts -->
+    <!-- =========== -->
+    <script type="text/javascript">
+        // ========================
+        // Global Variables for Tax
+        // ========================
+        var taxes;
+        var taxGrid;
+
+        var btnFirstPageGridTax;
+        var btnPreviousPageGridTax;
+        var btnNextPageGridTax;
+        var btnLastPageGridTax;
+        var btnCurrentPageGridTax;
+
+        // ============
+        // GET Tax List
+        // ============
+        function getTax() {
+            var taxes = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return taxes;
+        }
+        // ==========================
+        // FlexGrid Selection for Tax
+        // ==========================
+        function updateDetailsTax() {
+            var item = taxes.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ==========================
+        // Navigation Buttons for Tax
+        // ==========================
+        function updateNavigateButtonsTax() {
+            if (taxes.pageSize <= 0) {
+                document.getElementById('navigationPageGridTax').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridTax').style.display = 'block';
+            if (taxes.pageIndex === 0) {
+                btnFirstPageGridTax.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridTax.setAttribute('disabled', 'disabled');
+                btnNextPageGridTax.removeAttribute('disabled');
+                btnLastPageGridTax.removeAttribute('disabled');
+            } else if (taxes.pageIndex === (taxes.pageCount - 1)) {
+                btnFirstPageGridTax.removeAttribute('disabled');
+                btnPreviousPageGridTax.removeAttribute('disabled');
+                btnLastPageGridTax.setAttribute('disabled', 'disabled');
+                btnNextPageGridTax.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridTax.removeAttribute('disabled');
+                btnPreviousPageGridTax.removeAttribute('disabled');
+                btnNextPageGridTax.removeAttribute('disabled');
+                btnLastPageGridTax.removeAttribute('disabled');
+            }
+            btnCurrentPageGridTax.innerHTML = (taxes.pageIndex + 1) + ' / ' + taxes.pageCount;
+        }
+
+        // ===
+        // Tax
+        // ===
+        function taxTab() {
+            taxes = new wijmo.collections.CollectionView();
+            taxes.canFilter = true;
+            taxes.pageSize = 15;
+
+            var filterTextTax = '';
+            $('#InputFilterTax').keyup(function () {
+                filterTextTax = this.value.toLowerCase();
+                taxes.refresh();
+            });
+            taxes.filter = function (item) {
+                return !filterTextTax || (item.tax.toLowerCase().indexOf(filterTextTax) > -1);
+            }
+            taxes.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsTax();
+            });
+            taxes.currentChanged.addHandler(function (sender, args) {
+                updateDetailsTax();
+            });
+
+            // Flex Grid for Tax
+            taxGrid = new wijmo.grid.FlexGrid('#TaxGrid');
+            taxGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: taxes,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            taxGrid.trackChanges = true;
+
+            //Navigation button for Tax
+            btnFirstPageGridTax = document.getElementById('btnMoveToFirstPageGridTax');
+            btnPreviousPageGridTax = document.getElementById('btnMoveToPreviousPageGridTax');
+            btnNextPageGridTax = document.getElementById('btnMoveToNextPageGridTax');
+            btnLastPageGridTax = document.getElementById('btnMoveToLastPageGridTax');
+            btnCurrentPageGridTax = document.getElementById('btnCurrentPageGridTax');
+
+            updateNavigateButtonsTax();
+
+            btnFirstPageGridTax.addEventListener('click', function () {
+                taxes.moveToFirstPage();
+                updateNavigateButtonsTax();
+            });
+            btnPreviousPageGridTax.addEventListener('click', function () {
+                taxes.moveToPreviousPage();
+                updateNavigateButtonsTax();
+            });
+            btnNextPageGridTax.addEventListener('click', function () {
+                taxes.moveToNextPage();
+                updateNavigateButtonsTax();
+            });
+            btnLastPageGridTax.addEventListener('click', function () {
+                taxes.moveToLastPage();
+                updateNavigateButtonsTax();
+            });
+        }
+    </script>
+
+    <!-- ============ -->
+    <!-- Unit Scripts -->
+    <!-- ============ -->
+    <script type="text/javascript">
+        // =========================
+        // Global Variables for Unit
+        // =========================
+        var units;
+        var unitGrid;
+
+        var btnFirstPageGridUnit;
+        var btnPreviousPageGridUnit;
+        var btnNextPageGridUnit;
+        var btnLastPageGridUnit;
+        var btnCurrentPageGridUnit;
+
+        // =============
+        // GET Unit List
+        // =============
+        function getUnit() {
+            var units = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return units;
+        }
+        // ===========================
+        // FlexGrid Selection for Unit
+        // ===========================
+        function updateDetailsUnit() {
+            var item = units.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ===========================
+        // Navigation Buttons for Unit
+        // ===========================
+        function updateNavigateButtonsUnit() {
+            if (units.pageSize <= 0) {
+                document.getElementById('navigationPageGridUnit').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridUnit').style.display = 'block';
+            if (units.pageIndex === 0) {
+                btnFirstPageGridUnit.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridUnit.setAttribute('disabled', 'disabled');
+                btnNextPageGridUnit.removeAttribute('disabled');
+                btnLastPageGridUnit.removeAttribute('disabled');
+            } else if (units.pageIndex === (units.pageCount - 1)) {
+                btnFirstPageGridUnit.removeAttribute('disabled');
+                btnPreviousPageGridUnit.removeAttribute('disabled');
+                btnLastPageGridUnit.setAttribute('disabled', 'disabled');
+                btnNextPageGridUnit.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridUnit.removeAttribute('disabled');
+                btnPreviousPageGridUnit.removeAttribute('disabled');
+                btnNextPageGridUnit.removeAttribute('disabled');
+                btnLastPageGridUnit.removeAttribute('disabled');
+            }
+            btnCurrentPageGridUnit.innerHTML = (units.pageIndex + 1) + ' / ' + units.pageCount;
+        }
+
+        // ====
+        // Unit
+        // ====
+        function unitTab() {
+            units = new wijmo.collections.CollectionView();
+            units.canFilter = true;
+            units.pageSize = 15;
+
+            var filterTextUnit = '';
+            $('#InputFilterUnit').keyup(function () {
+                filterTextUnit = this.value.toLowerCase();
+                units.refresh();
+            });
+            units.filter = function (item) {
+                return !filterTextUnit || (item.unit.toLowerCase().indexOf(filterTextUnit) > -1);
+            }
+            units.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsUnit();
+            });
+            units.currentChanged.addHandler(function (sender, args) {
+                updateDetailsUnit();
+            });
+
+            // Flex Grid for Unit
+            unitGrid = new wijmo.grid.FlexGrid('#UnitGrid');
+            unitGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: units,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            unitGrid.trackChanges = true;
+
+            //Navigation button for Unit
+            btnFirstPageGridUnit = document.getElementById('btnMoveToFirstPageGridUnit');
+            btnPreviousPageGridUnit = document.getElementById('btnMoveToPreviousPageGridUnit');
+            btnNextPageGridUnit = document.getElementById('btnMoveToNextPageGridUnit');
+            btnLastPageGridUnit = document.getElementById('btnMoveToLastPageGridUnit');
+            btnCurrentPageGridUnit = document.getElementById('btnCurrentPageGridUnit');
+
+            updateNavigateButtonsUnit();
+
+            btnFirstPageGridUnit.addEventListener('click', function () {
+                units.moveToFirstPage();
+                updateNavigateButtonsUnit();
+            });
+            btnPreviousPageGridUnit.addEventListener('click', function () {
+                units.moveToPreviousPage();
+                updateNavigateButtonsUnit();
+            });
+            btnNextPageGridUnit.addEventListener('click', function () {
+                units.moveToNextPage();
+                updateNavigateButtonsUnit();
+            });
+            btnLastPageGridUnit.addEventListener('click', function () {
+                units.moveToLastPage();
+                updateNavigateButtonsUnit();
+            });
+        }
+    </script>
+
+    <!-- ============ -->
+    <!-- Term Scripts -->
+    <!-- ============ -->
+    <script type="text/javascript">
+        // =========================
+        // Global Variables for Term
+        // =========================
+        var terms;
+        var termGrid;
+
+        var btnFirstPageGridTerm;
+        var btnPreviousPageGridTerm;
+        var btnNextPageGridTerm;
+        var btnLastPageGridTerm;
+        var btnCurrentPageGridTerm;
+
+        // =============
+        // GET Term List
+        // =============
+        function getTerm() {
+            var terms = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return terms;
+        }
+        // ===========================
+        // FlexGrid Selection for Term
+        // ===========================
+        function updateDetailsTerm() {
+            var item = terms.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ===========================
+        // Navigation Buttons for Term
+        // ===========================
+        function updateNavigateButtonsTerm() {
+            if (terms.pageSize <= 0) {
+                document.getElementById('navigationPageGridTerm').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridTerm').style.display = 'block';
+            if (terms.pageIndex === 0) {
+                btnFirstPageGridTerm.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridTerm.setAttribute('disabled', 'disabled');
+                btnNextPageGridTerm.removeAttribute('disabled');
+                btnLastPageGridTerm.removeAttribute('disabled');
+            } else if (terms.pageIndex === (terms.pageCount - 1)) {
+                btnFirstPageGridTerm.removeAttribute('disabled');
+                btnPreviousPageGridTerm.removeAttribute('disabled');
+                btnLastPageGridTerm.setAttribute('disabled', 'disabled');
+                btnNextPageGridTerm.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridTerm.removeAttribute('disabled');
+                btnPreviousPageGridTerm.removeAttribute('disabled');
+                btnNextPageGridTerm.removeAttribute('disabled');
+                btnLastPageGridTerm.removeAttribute('disabled');
+            }
+            btnCurrentPageGridTerm.innerHTML = (terms.pageIndex + 1) + ' / ' + terms.pageCount;
+        }
+
+        // ====
+        // Term
+        // ====
+        function termTab() {
+            terms = new wijmo.collections.CollectionView();
+            terms.canFilter = true;
+            terms.pageSize = 15;
+
+            var filterTextTerm = '';
+            $('#InputFilterTerm').keyup(function () {
+                filterTextTerm = this.value.toLowerCase();
+                terms.refresh();
+            });
+            terms.filter = function (item) {
+                return !filterTextTerm || (item.term.toLowerCase().indexOf(filterTextTerm) > -1);
+            }
+            terms.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsTerm();
+            });
+            terms.currentChanged.addHandler(function (sender, args) {
+                updateDetailsTerm();
+            });
+
+            // Flex Grid for Term
+            termGrid = new wijmo.grid.FlexGrid('#TermGrid');
+            termGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: terms,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            termGrid.trackChanges = true;
+
+            //Navigation button for Term
+            btnFirstPageGridTerm = document.getElementById('btnMoveToFirstPageGridTerm');
+            btnPreviousPageGridTerm = document.getElementById('btnMoveToPreviousPageGridTerm');
+            btnNextPageGridTerm = document.getElementById('btnMoveToNextPageGridTerm');
+            btnLastPageGridTerm = document.getElementById('btnMoveToLastPageGridTerm');
+            btnCurrentPageGridTerm = document.getElementById('btnCurrentPageGridTerm');
+
+            updateNavigateButtonsTerm();
+
+            btnFirstPageGridTerm.addEventListener('click', function () {
+                terms.moveToFirstPage();
+                updateNavigateButtonsTerm();
+            });
+            btnPreviousPageGridTerm.addEventListener('click', function () {
+                terms.moveToPreviousPage();
+                updateNavigateButtonsTerm();
+            });
+            btnNextPageGridTerm.addEventListener('click', function () {
+                terms.moveToNextPage();
+                updateNavigateButtonsTerm();
+            });
+            btnLastPageGridTerm.addEventListener('click', function () {
+                terms.moveToLastPage();
+                updateNavigateButtonsTerm();
+            });
+        }
+    </script>
+
+    <!-- ================ -->
+    <!-- Employee Scripts -->
+    <!-- ================ -->
+    <script type="text/javascript">
+        // =============================
+        // Global Variables for Employee
+        // =============================
+        var employees;
+        var employeeGrid;
+
+        var btnFirstPageEmployee;
+        var btnPreviousPageGridEmployee;
+        var btnNextPageGridEmployee;
+        var btnLastPageGridEmployee;
+        var btnCurrentPageGridEmployee;
+
+        // =================
+        // GET Employee List
+        // =================
+        function getEmployee() {
+            var employees = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return employees;
+        }
+        // ===============================
+        // FlexGrid Selection for Employee
+        // ===============================
+        function updateDetailsEmployee() {
+            var item = employees.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ===============================
+        // Navigation Buttons for Employee
+        // ===============================
+        function updateNavigateButtonsEmployee() {
+            if (employees.pageSize <= 0) {
+                document.getElementById('navigationPageGridEmployee').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridEmployee').style.display = 'block';
+            if (employees.pageIndex === 0) {
+                btnFirstPageGridEmployee.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridEmployee.setAttribute('disabled', 'disabled');
+                btnNextPageGridEmployee.removeAttribute('disabled');
+                btnLastPageGridEmployee.removeAttribute('disabled');
+            } else if (employees.pageIndex === (employees.pageCount - 1)) {
+                btnFirstPageGridEmployee.removeAttribute('disabled');
+                btnPreviousPageGridEmployee.removeAttribute('disabled');
+                btnLastPageGridEmployee.setAttribute('disabled', 'disabled');
+                btnNextPageGridEmployee.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridEmployee.removeAttribute('disabled');
+                btnPreviousPageGridEmployee.removeAttribute('disabled');
+                btnNextPageGridEmployee.removeAttribute('disabled');
+                btnLastPageGridEmployee.removeAttribute('disabled');
+            }
+            btnCurrentPageGridEmployee.innerHTML = (employees.pageIndex + 1) + ' / ' + employees.pageCount;
+        }
+
+        // ========
+        // Employee
+        // ========
+        function employeeTab() {
+            employees = new wijmo.collections.CollectionView();
+            employees.canFilter = true;
+            employees.pageSize = 15;
+
+            var filterTextEmployee = '';
+            $('#InputFilterTerm').keyup(function () {
+                filterTextEmployee = this.value.toLowerCase();
+                employees.refresh();
+            });
+            employees.filter = function (item) {
+                return !filterTextEmployee || (item.employee.toLowerCase().indexOf(filterTextEmployee) > -1);
+            }
+            employees.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsEmployee();
+            });
+            employees.currentChanged.addHandler(function (sender, args) {
+                updateDetailsEmployee();
+            });
+
+            // Flex Grid for Employee
+            employeeGrid = new wijmo.grid.FlexGrid('#EmployeeGrid');
+            employeeGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: employees,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            employeeGrid.trackChanges = true;
+
+            //Navigation button for Employee
+            btnFirstPageGridEmployee = document.getElementById('btnMoveToFirstPageGridEmployee');
+            btnPreviousPageGridEmployee = document.getElementById('btnMoveToPreviousPageGridEmployee');
+            btnNextPageGridEmployee = document.getElementById('btnMoveToNextPageGridEmployee');
+            btnLastPageGridEmployee= document.getElementById('btnMoveToLastPageGridEmployee');
+            btnCurrentPageGridEmployee = document.getElementById('btnCurrentPageGridEmployee');
+
+            updateNavigateButtonsEmployee();
+
+            btnFirstPageGridEmployee.addEventListener('click', function () {
+                employees.moveToFirstPage();
+                updateNavigateButtonsEmployee();
+            });
+            btnPreviousPageGridEmployee.addEventListener('click', function () {
+                employees.moveToPreviousPage();
+                updateNavigateButtonsEmployee();
+            });
+            btnNextPageGridEmployee.addEventListener('click', function () {
+                employees.moveToNextPage();
+                updateNavigateButtonsEmployee();
+            });
+            btnLastPageGridEmployee.addEventListener('click', function () {
+                employees.moveToLastPage();
+                updateNavigateButtonsEmployee();
+            });
+        }
+    </script>
+
+    <!-- ===================== -->
+    <!-- Article Group Scripts -->
+    <!-- ===================== -->
+    <script type="text/javascript">
+        // ==================================
+        // Global Variables for Article Group
+        // ==================================
+        var articlegroups;
+        var articleGroupGrid;
+
+        var btnFirstPageArticleGroup;
+        var btnPreviousPageGridArticleGroup;
+        var btnNextPageGridArticleGroup;
+        var btnLastPageGridArticleGroup;
+        var btnCurrentPageGridArticleGroup;
+
+        // ======================
+        // GET Article Group List
+        // ======================
+        function getArticleGroup() {
+            var articlegroups = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return articlegroups;
+        }
+        // ====================================
+        // FlexGrid Selection for Article Group
+        // ====================================
+        function updateDetailsArticleGroup() {
+            var item = articlegroups.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ====================================
+        // Navigation Buttons for Article Group
+        // ====================================
+        function updateNavigateButtonsArticleGroup() {
+            if (articlegroups.pageSize <= 0) {
+                document.getElementById('navigationPageGridArticleGroup').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridArticleGroup').style.display = 'block';
+            if (articlegroups.pageIndex === 0) {
+                btnFirstPageGridArticleGroup.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridArticleGroup.setAttribute('disabled', 'disabled');
+                btnNextPageGridArticleGroup.removeAttribute('disabled');
+                btnLastPageGridArticleGroup.removeAttribute('disabled');
+            } else if (articlegroups.pageIndex === (articlegroups.pageCount - 1)) {
+                btnFirstPageGridArticleGroup.removeAttribute('disabled');
+                btnPreviousPageGridArticleGroup.removeAttribute('disabled');
+                btnLastPageGridArticleGroup.setAttribute('disabled', 'disabled');
+                btnNextPageGridArticleGroup.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridArticleGroup.removeAttribute('disabled');
+                btnPreviousPageGridArticleGroup.removeAttribute('disabled');
+                btnNextPageGridArticleGroup.removeAttribute('disabled');
+                btnLastPageGridArticleGroup.removeAttribute('disabled');
+            }
+            btnCurrentPageGridArticleGroup.innerHTML = (articlegroups.pageIndex + 1) + ' / ' + articlegroups.pageCount;
+        }
+
+        // =============
+        // Article Group
+        // =============
+        function articleGroupTab() {
+            articlegroups = new wijmo.collections.CollectionView();
+            articlegroups.canFilter = true;
+            articlegroups.pageSize = 15;
+
+            var filterTextArticleGroup = '';
+            $('#InputFilterArticleGroup').keyup(function () {
+                filterTextArticleGroup = this.value.toLowerCase();
+                articlegroups.refresh();
+            });
+            articlegroups.filter = function (item) {
+                return !filterTextArticleGroup || (item.articlegroup.toLowerCase().indexOf(filterTextArticleGroup) > -1);
+            }
+            articlegroups.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsArticleGroup();
+            });
+            articlegroups.currentChanged.addHandler(function (sender, args) {
+                updateDetailsArticleGroup();
+            });
+
+            // Flex Grid for Article Group
+            articleGroupGrid = new wijmo.grid.FlexGrid('#ArticleGroupGrid');
+            articleGroupGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: articlegroups,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            articleGroupGrid.trackChanges = true;
+
+            //Navigation button for Employee
+            btnFirstPageGridArticleGroup = document.getElementById('btnMoveToFirstPageGridArticleGroup');
+            btnPreviousPageGridArticleGroup = document.getElementById('btnMoveToPreviousPageGridArticleGroup');
+            btnNextPageGridArticleGroup = document.getElementById('btnMoveToNextPageGridArticleGroup');
+            btnLastPageGridArticleGroup = document.getElementById('btnMoveToLastPageGridArticleGroup');
+            btnCurrentPageGridArticleGroup = document.getElementById('btnCurrentPageGridArticleGroup');
+
+            updateNavigateButtonsArticleGroup();
+
+            btnFirstPageGridArticleGroup.addEventListener('click', function () {
+                articlegroups.moveToFirstPage();
+                updateNavigateButtonsArticleGroup();
+            });
+            btnPreviousPageGridArticleGroup.addEventListener('click', function () {
+                articlegroups.moveToPreviousPage();
+                updateNavigateButtonsArticleGroup();
+            });
+            btnNextPageGridArticleGroup.addEventListener('click', function () {
+                articlegroups.moveToNextPage();
+                updateNavigateButtonsArticleGroup();
+            });
+            btnLastPageGridArticleGroup.addEventListener('click', function () {
+                articlegroups.moveToLastPage();
+                updateNavigateButtonsArticleGroup();
+            });
+        }
+    </script>
+
+    <!-- ===================== -->
+    <!-- Other Article Scripts -->
+    <!-- ===================== -->
+    <script type="text/javascript">
+        // ==================================
+        // Global Variables for Other Article
+        // ==================================
+        var otherarticles;
+        var otherArticleGrid;
+
+        var btnFirstPageGridOtherArticle;
+        var btnPreviousPageGridOtherArticle;
+        var btnNextPageGridOtherArticle;
+        var btnLastPageGridOtherArticle;
+        var btnCurrentPageGridOtherArticle;
+
+        // ======================
+        // GET Other Article List
+        // ======================
+        function getOtherArticle() {
+            var otherarticles = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return otherarticles;
+        }
+        // ====================================
+        // FlexGrid Selection for Other Article
+        // ====================================
+        function updateDetailsOtherArticle() {
+            var item = otherarticles.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ====================================
+        // Navigation Buttons for Other Article
+        // ====================================
+        function updateNavigateButtonsOtherArticle() {
+            if (otherarticles.pageSize <= 0) {
+                document.getElementById('navigationPageGridOtherArticle').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridOtherArticle').style.display = 'block';
+            if (otherarticles.pageIndex === 0) {
+                btnFirstPageGridOtherArticle.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridOtherArticle.setAttribute('disabled', 'disabled');
+                btnNextPageGridOtherArticle.removeAttribute('disabled');
+                btnLastPageGridOtherArticle.removeAttribute('disabled');
+            } else if (otherarticles.pageIndex === (otherarticles.pageCount - 1)) {
+                btnFirstPageGridOtherArticle.removeAttribute('disabled');
+                btnPreviousPageGridOtherArticle.removeAttribute('disabled');
+                btnLastPageGridOtherArticle.setAttribute('disabled', 'disabled');
+                btnNextPageGridOtherArticle.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridOtherArticle.removeAttribute('disabled');
+                btnPreviousPageGridOtherArticle.removeAttribute('disabled');
+                btnNextPageGridOtherArticle.removeAttribute('disabled');
+                btnLastPageGridOtherArticle.removeAttribute('disabled');
+            }
+            btnCurrentPageGridOtherArticle.innerHTML = (otherarticles.pageIndex + 1) + ' / ' + otherarticles.pageCount;
+        }
+
+        // =============
+        // Other Article
+        // =============
+        function otherArticleTab() {
+            otherarticles = new wijmo.collections.CollectionView();
+            otherarticles.canFilter = true;
+            otherarticles.pageSize = 15;
+
+            var filterTextOtherArticle = '';
+            $('#InputFilterOtherArticle').keyup(function () {
+                filterTextOtherArticle = this.value.toLowerCase();
+                otherarticles.refresh();
+            });
+            otherarticles.filter = function (item) {
+                return !filterTextOtherArticle || (item.otherarticle.toLowerCase().indexOf(filterTextOtherArticle) > -1);
+            }
+            otherarticles.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsOtherArticle();
+            });
+            otherarticles.currentChanged.addHandler(function (sender, args) {
+                updateDetailsOtherArticle();
+            });
+
+            // Flex Grid for Other Article
+            otherArticleGrid = new wijmo.grid.FlexGrid('#OtherArticleGrid');
+            otherArticleGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: otherarticles,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            otherArticleGrid.trackChanges = true;
+
+            //Navigation button for Other Article
+            btnFirstPageGridOtherArticle = document.getElementById('btnMoveToFirstPageGridOtherArticle');
+            btnPreviousPageGridOtherArticle = document.getElementById('btnMoveToPreviousPageGridOtherArticle');
+            btnNextPageGridOtherArticle = document.getElementById('btnMoveToNextPageGridOtherArticle');
+            btnLastPageGridOtherArticle = document.getElementById('btnMoveToLastPageGridOtherArticle');
+            btnCurrentPageGridOtherArticle = document.getElementById('btnCurrentPageGridOtherArticle');
+
+            updateNavigateButtonsOtherArticle();
+
+            btnFirstPageGridOtherArticle.addEventListener('click', function () {
+                otherarticles.moveToFirstPage();
+                updateNavigateButtonsOtherArticle();
+            });
+            btnPreviousPageGridOtherArticle.addEventListener('click', function () {
+                otherarticles.moveToPreviousPage();
+                updateNavigateButtonsOtherArticle();
+            });
+            btnNextPageGridOtherArticle.addEventListener('click', function () {
+                otherarticles.moveToNextPage();
+                updateNavigateButtonsOtherArticle();
+            });
+            btnLastPageGridOtherArticle.addEventListener('click', function () {
+                otherarticles.moveToLastPage();
+                updateNavigateButtonsOtherArticle();
+            });
+        }
+    </script>
+
+    <!-- ==================== -->
+    <!-- Account Type Scripts -->
+    <!-- ==================== -->
+    <script type="text/javascript">
+        // =================================
+        // Global Variables for Account Type
+        // =================================
+        var accountTypes;
+        var accountTypeGrid;
+
+        var btnFirstPageGridAccountType;
+        var btnPreviousPageGridAccountType;
+        var btnNextPageGridAccountType;
+        var btnLastPageGridAccountType;
+        var btnCurrentPageGridAccountType;
+
+        // =====================
+        // GET Account Type List
+        // =====================
+        function getAccountType() {
+            var accountTypes = new wijmo.collections.ObservableArray;
+            //$('#loadingModal').modal('show');
+            //$.ajax({
+            //    url: '/api/listAccount',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (Results) {
+            //        $('#loadingModal').modal('hide');
+            //        if (Results.length > 0) {
+            //            for (i = 0; i < Results.length; i++) {
+            //                journalLedger.push({
+            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+            //                    Id: Results[i]["Id"],
+            //                    AccountCode: Results[i]["AccountCode"],
+            //                    Account: Results[i]["Account"],
+            //                    AccountTypeId: Results[i]["AccountTypeId"],
+            //                    AccountType: Results[i]["AccountType"],
+            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
+            //                    IsLocked: Results[i]["IsLocked"],
+            //                    CreatedById: Results[i]["CreatedById"],
+            //                    CreatedBy: Results[i]["CreatedBy"],
+            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
+            //                    UpdatedById: Results[i]["UpdatedById"],
+            //                    UpdatedBy: Results[i]["UpdatedBy"],
+            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+            //                });
+            //            }
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //});
+            //return accountTypes;
+        }
+        // ===================================
+        // FlexGrid Selection for Account Type
+        // ===================================
+        function updateDetailsAccountType() {
+            var item = accountTypes.currentItem;
+            document.getElementById('createdBy').innerHTML = item.CreatedBy;
+            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
+            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
+            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        }
+
+        // ===================================
+        // Navigation Buttons for Account Type
+        // ===================================
+        function updateNavigateButtonsAccountType() {
+            if (accountTypes.pageSize <= 0) {
+                document.getElementById('navigationPageGridAccountType').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridAccountType').style.display = 'block';
+            if (accountTypes.pageIndex === 0) {
+                btnFirstPageGridAccountType.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridAccountType.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccountType.removeAttribute('disabled');
+                btnLastPageGridAccountType.removeAttribute('disabled');
+            } else if (accountTypes.pageIndex === (accountTypes.pageCount - 1)) {
+                btnFirstPageGridAccountType.removeAttribute('disabled');
+                btnPreviousPageGridAccountType.removeAttribute('disabled');
+                btnLastPageGridAccountType.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccountType.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridAccountType.removeAttribute('disabled');
+                btnPreviousPageGridAccountType.removeAttribute('disabled');
+                btnNextPageGridAccountType.removeAttribute('disabled');
+                btnLastPageGridAccountType.removeAttribute('disabled');
+            }
+            btnCurrentPageGridAccountType.innerHTML = (accountTypes.pageIndex + 1) + ' / ' + accountTypes.pageCount;
+        }
+
+        // ============
+        // Account Type
+        // ============
+        function accountTypeTab() {
+            accountTypes = new wijmo.collections.CollectionView();
+            accountTypes.canFilter = true;
+            accountTypes.pageSize = 15;
+
+            var filterTextAccountType = '';
+            $('#InputFilterAccountType').keyup(function () {
+                filterTextAccountType = this.value.toLowerCase();
+                accountTypes.refresh();
+            });
+            accountTypes.filter = function (item) {
+                return !filterTextAccountType || (item.accountType.toLowerCase().indexOf(filterTextAccountType) > -1);
+            }
+            accountTypes.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountType();
+            });
+            accountTypes.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccountType();
+            });
+
+            // Flex Grid for Account Type
+            accountTypeGrid = new wijmo.grid.FlexGrid('#AccountTypeGrid');
+            accountTypeGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Manual Code",
+                                //"binding": "Date",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Component.",
+                                // "binding": "Doc Ref.",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "3*"
+                            },
+                            {
+                                "header": "Quantity",
+                                // "binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Unit",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Cost",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Particulars",
+                                // "binding": "Account",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: accountTypes,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            accountTypeGrid.trackChanges = true;
+
+            //Navigation button for Account Type
+            btnFirstPageGridAccountType = document.getElementById('btnMoveToFirstPageGridAccountType');
+            btnPreviousPageGridAccountType = document.getElementById('btnMoveToPreviousPageGridAccountType');
+            btnNextPageGridAccountType = document.getElementById('btnMoveToNextPageGridAccountType');
+            btnLastPageGridAccountType = document.getElementById('btnMoveToLastPageGridAccountType');
+            btnCurrentPageGridAccountType = document.getElementById('btnCurrentPageGridAccountType');
+
+            updateNavigateButtonsAccountType();
+
+            btnFirstPageGridAccountType.addEventListener('click', function () {
+                accountTypes.moveToFirstPage();
+                updateNavigateButtonsAccountType();
+            });
+            btnPreviousPageGridAccountType.addEventListener('click', function () {
+                accountTypes.moveToPreviousPage();
+                updateNavigateButtonsAccountType();
+            });
+            btnNextPageGridAccountType.addEventListener('click', function () {
+                accountTypes.moveToNextPage();
+                updateNavigateButtonsAccountType();
+            });
+            btnLastPageGridAccountType.addEventListener('click', function () {
+                accountTypes.moveToLastPage();
+                updateNavigateButtonsAccountType();
+            });
+        }
+    </script>
+
+    <!-- ================================ -->
+    <!-- Tab Current Page on Load Scripts -->
+    <!-- ================================ -->
+    <script type="text/javascript">
+        // ====
+        // TABS
+        // ====
+        $('#discountTabId').click(function () {
+            $('#Discount').show();
+            $('#PayType').hide();
+            $('#Tax').hide();
+            $('#Unit').hide();
+            $('#Term').hide();
+            $('#Employee').hide();
+            $('#ArticleGroup').hide();
+            $('#OtherArticle').hide();
+            $('#AccountType').hide();
+            window.discountTab = function () {
+                return true;
+            };
+        });
+        $('#payTypeTabId').click(function () {
+            $('#Discount').hide();
+            $('#PayType').show();
+            $('#Tax').hide();
+            $('#Unit').hide();
+            $('#Term').hide();
+            $('#Employee').hide();
+            $('#ArticleGroup').hide();
+            $('#OtherArticle').hide();
+            $('#AccountType').hide();
+            payTypeTab();
+            window.payTypeTab = function () {
+                return true;
+            };
+        });
+        $('#taxTabId').click(function () {
+            $('#Discount').hide();
+            $('#PayType').hide();
+            $('#Tax').show();
+            $('#Unit').hide();
+            $('#Term').hide();
+            $('#Employee').hide();
+            $('#ArticleGroup').hide();
+            $('#OtherArticle').hide();
+            $('#AccountType').hide();
+            taxTab();
+            window.taxTab = function () {
+                return true;
+            };
+        });
+        $('#unitTabId').click(function () {
+            $('#Discount').hide();
+            $('#PayType').hide();
+            $('#Tax').hide();
+            $('#Unit').show();
+            $('#Term').hide();
+            $('#Employee').hide();
+            $('#ArticleGroup').hide();
+            $('#OtherArticle').hide();
+            $('#AccountType').hide();
+            unitTab();
+            window.unitTab = function () {
+                return true;
+            };
+        });
+        $('#termTabId').click(function () {
+            $('#Discount').hide();
+            $('#PayType').hide();
+            $('#Tax').hide();
+            $('#Unit').hide();
+            $('#Term').show();
+            $('#Employee').hide();
+            $('#ArticleGroup').hide();
+            $('#OtherArticle').hide();
+            $('#AccountType').hide();
+            termTab();
+            window.termTab = function () {
+                return true;
+            };
+        });
+        $('#employeeTabId').click(function () {
+            $('#Discount').hide();
+            $('#PayType').hide();
+            $('#Tax').hide();
+            $('#Unit').hide();
+            $('#Term').hide();
+            $('#Employee').show();
+            $('#ArticleGroup').hide();
+            $('#OtherArticle').hide();
+            $('#AccountType').hide();
+            employeeTab();
+            window.employeeTab = function () {
+                return true;
+            };
+        });
+        $('#articleGroupTabId').click(function () {
+            $('#Discount').hide();
+            $('#PayType').hide();
+            $('#Tax').hide();
+            $('#Unit').hide();
+            $('#Term').hide();
+            $('#Employee').hide();
+            $('#ArticleGroup').show();
+            $('#OtherArticle').hide();
+            $('#AccountType').hide();
+            articleGroupTab();
+            window.articleGroupTab = function () {
+                return true;
+            };
+        });
+        $('#otherArticleTabId').click(function () {
+            $('#Discount').hide();
+            $('#PayType').hide();
+            $('#Tax').hide();
+            $('#Unit').hide();
+            $('#Term').hide();
+            $('#Employee').hide();
+            $('#ArticleGroup').hide();
+            $('#OtherArticle').show();
+            $('#AccountType').hide();
+            otherArticleTab();
+            window.otherArticleTab = function () {
+                return true;
+            };
+        });
+        $('#accountTypeTabId').click(function () {
+            $('#Discount').hide();
+            $('#PayType').hide();
+            $('#Tax').hide();
+            $('#Unit').hide();
+            $('#Term').hide();
+            $('#Employee').hide();
+            $('#ArticleGroup').hide();
+            $('#OtherArticle').hide();
+            $('#AccountType').show();
+            accountTypeTab();
+            window.accountTypeTab = function () {
+                return true;
+            };
+        });
+
+        $(document).ready(function () {
+            $('#Discount').show();
+            $('#PayType').hide();
+            $('#Tax').hide();
+            $('#Unit').hide();
+            $('#Term').hide();
+            $('#Employee').hide();
+            $('#ArticleGroup').hide();
+            $('#OtherArticle').hide();
+            $('#AccountType').hide();
+            discountTab();
+        });
     </script>
 </body>
 </html>
