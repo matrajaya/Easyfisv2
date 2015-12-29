@@ -398,7 +398,6 @@
         // ==========================
         function getPOLastInsertedId() {
             var POs = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/purchaseOrderLastId',
                 cache: false,
@@ -406,7 +405,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                    $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         POs.push({
                             Id: Results.Id,

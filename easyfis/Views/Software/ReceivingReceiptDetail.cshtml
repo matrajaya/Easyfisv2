@@ -451,8 +451,6 @@
         // ========-======
         function getRRLastInsertedIdById() {
             var RRs = new wijmo.collections.ObservableArray;
-            var RRId = @RRId;
-            $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/receivingReceiptLastId',
                 cache: false,
@@ -460,41 +458,10 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                    $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         RRs.push({
                             Id: Results.Id,
-                            BranchId: Results.BranchId,
-                            Branch: Results.Branch,
-                            RRNumber: Results.RRNumber,
-                            RRDate: Results.RRDate,
-                            SupplierId: Results.SupplierId,
-                            Supplier: Results.Supplier,
-                            TermId: Results.TermId,
-                            Term: Results.Term,
-                            DocumentReference: Results.DocumentReference,
-                            ManualRRNumber: Results.ManualRRNumber,
-                            Remarks: Results.Remarks,
-                            Amount: Results.Amount,
-                            WTaxAmount: Results.WTaxAmount,
-                            PaidAmount: Results.PaidAmount,
-                            AdjustmentAmount: Results.AdjustmentAmount,
-                            BalanceAmount: Results.BalanceAmount,
-                            ReceivedById: Results.ReceivedById,
-                            ReceivedBy: Results.ReceivedBy,
-                            PreparedById: Results.PreparedById,
-                            PreparedBy: Results.PreparedBy,
-                            CheckedById: Results.CheckedById,
-                            CheckedBy: Results.CheckedBy,
-                            ApprovedById: Results.ApprovedById,
-                            ApprovedBy: Results.ApprovedBy,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
+                            RRNumber: Results.RRNumber
                         });
                     }
                     window.location = '/Software/ReceivingReceiptDetail?RRId=' + Results.Id + '&BranchId=' + @branchId;
