@@ -683,6 +683,79 @@ namespace easyfis.Controllers
             }
         }
 
+        // =======================
+        // UPDATE Article For Item
+        // =======================
+        [Route("api/updateArticleForItem/{id}")]
+        public HttpResponseMessage PutItem(String id, Models.MstArticle articleItem)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var articleItem_Id = Convert.ToInt32(id);
+                var articleItems = from d in db.MstArticles where d.Id == articleItem_Id select d;
+
+                if (articleItems.Any())
+                {
+                    var updateArticleItem = articleItems.FirstOrDefault();
+
+                    updateArticleItem.ArticleCode = articleItem.ArticleCode;
+                    updateArticleItem.ManualArticleCode = articleItem.ManualArticleCode;
+                    updateArticleItem.Article = articleItem.Article;
+                    updateArticleItem.Category = articleItem.Category;
+                    updateArticleItem.ArticleTypeId = 1;
+                    updateArticleItem.ArticleGroupId = articleItem.ArticleGroupId;
+
+                    updateArticleItem.AccountId = articleItem.AccountId;
+                    updateArticleItem.SalesAccountId = articleItem.SalesAccountId;
+                    updateArticleItem.CostAccountId = articleItem.CostAccountId;
+                    updateArticleItem.AssetAccountId = articleItem.AssetAccountId;
+                    updateArticleItem.ExpenseAccountId = articleItem.ExpenseAccountId;
+
+                    updateArticleItem.UnitId = articleItem.UnitId;
+                    updateArticleItem.OutputTaxId = articleItem.OutputTaxId;
+                    updateArticleItem.InputTaxId = articleItem.InputTaxId;
+                    updateArticleItem.WTaxTypeId = articleItem.WTaxTypeId;
+
+                    updateArticleItem.Price = articleItem.Price;
+                    updateArticleItem.Cost = articleItem.Cost;
+                    updateArticleItem.IsInventory = articleItem.IsInventory;
+                    updateArticleItem.Particulars = articleItem.Particulars;
+                    updateArticleItem.TermId = 1;
+                    updateArticleItem.Address = "NA";
+                    updateArticleItem.ContactNumber = "NA";
+                    updateArticleItem.ContactPerson = "NA";
+                    updateArticleItem.TaxNumber = "NA";
+                    updateArticleItem.CreditLimit = 0;
+                    updateArticleItem.DateAcquired = Convert.ToDateTime(articleItem.DateAcquired);
+                    updateArticleItem.UsefulLife = articleItem.UsefulLife;
+                    updateArticleItem.SalvageValue = articleItem.SalvageValue;
+                    updateArticleItem.ManualArticleOldCode = articleItem.ManualArticleOldCode;
+
+                    updateArticleItem.IsLocked = articleItem.IsLocked;
+                    updateArticleItem.UpdatedById = mstUserId;
+                    updateArticleItem.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
         // =====================
         // UPDATE Article IsLock
         // =====================
