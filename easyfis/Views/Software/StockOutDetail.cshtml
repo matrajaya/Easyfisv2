@@ -1,5 +1,4 @@
 ﻿@{
-    var id = Request.QueryString["CompanyId"];
     var branchId = Request.QueryString["BranchId"];
     var stockOutId = Request.QueryString["StockOutId"];
     var userId = ViewData["UserId"];
@@ -31,11 +30,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        @*<h4><img src='~/images/Icons/iCompany.png'> Company - Detail</h4>*@
                         <h4><i class="fa fa-dropbox fa-2x"></i>  Stock Out Detail</h4>
                         <br />
                         <div class="div_Current_Page">
-                            @*<label id="currentBranchName"></label>*@
                             <span id="currentPage"></span>
                         </div>
                     </div>
@@ -45,11 +42,11 @@
                         <h4 id="stockOutDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-book"></i> Journal</button>
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" onclick="window.location.href ='@Url.Action("StockOutPDF", "Software", new { StockOutId = stockOutId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("StockOut", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockOutJournal"><i class="fa fa-book"></i> Journal</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockOutSave" onclick="btnStockOutSave_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockOutEdit"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockOutPrint" onclick="window.location.href ='@Url.Action("StockOutPDF", "Software", new { StockOutId = stockOutId })'"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("StockOut", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdStockOutClose"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -62,14 +59,14 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="StockOut_Branch"></div>
 
-                                        <input type="hidden" id="StockOut_Branch_data" />
+                                        <input type="hidden" id="StockOut_Branch_data" class="requiredStockOut" />
                                         <input type="hidden" id="StockOut_Branch_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">OT Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="StockOut_OTNumber" /> 
+                                        <input type="text" class="form-control input-sm requiredStockOut" id="StockOut_OTNumber" /> 
                                         <input type="hidden" id="StockOut_OTNumber_Display" /> 
                                     </div>
                                 </div>
@@ -77,7 +74,7 @@
                                     <label class="control-label col-sm-4">OT Date:</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="StockOut_OTDate"></div>
-                                        <input type="hidden" id="StockOut_OTDate_data" />
+                                        <input type="hidden" id="StockOut_OTDate_data" class="requiredStockOut" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -85,7 +82,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="StockOut_Account"></div>
 
-                                        <input type="hidden" id="StockOut_Account_data" />
+                                        <input type="hidden" id="StockOut_Account_data" class="requiredStockOut" />
                                         <input type="hidden" id="StockOut_Account_selectedValue" />
                                     </div>
                                 </div>
@@ -94,14 +91,14 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="StockOut_Article"></div>
 
-                                        <input type="hidden" id="StockOut_Article_data" />
+                                        <input type="hidden" id="StockOut_Article_data" class="requiredStockOut" />
                                         <input type="hidden" id="StockOut_Article_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars:</label>
-                                    <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id="StockOut_Particulars"></textarea>
+                                    <div class="col-sm-8"> 
+                                        <textarea class="form-control textarea-custom requiredStockOut" id="StockOut_Particulars"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +106,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual OT Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="StockOUt_ManualOTNumber">
+                                        <input type="text" class="form-control input-sm requiredStockOut" id="StockOUt_ManualOTNumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -117,7 +114,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="StockOut_PreparedBy"></div>
 
-                                        <input type="hidden" id="StockOut_PreparedBy_data" />
+                                        <input type="hidden" id="StockOut_PreparedBy_data" class="requiredStockOut" />
                                         <input type="hidden" id="StockOut_PreparedBy_selectedValue" />
                                         <input type="hidden" id="userId_data" value="@userId" />
                                     </div>
@@ -127,7 +124,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="StockOut_CheckedBy"></div>
 
-                                        <input type="hidden" id="StockOut_CheckedBy_data" />
+                                        <input type="hidden" id="StockOut_CheckedBy_data" class="requiredStockOut" />
                                         <input type="hidden" id="StockOut_CheckedBy_selectedValue" />
                                     </div>
                                 </div>
@@ -136,7 +133,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="StockOut_ApprovedBy"></div>
 
-                                        <input type="hidden" id="StockOut_ApprovedBy_data" />
+                                        <input type="hidden" id="StockOut_ApprovedBy_data" class="requiredStockOut" />
                                         <input type="hidden" id="StockOut_ApprovedBy_selectedValue" />
                                     </div>
                                 </div>
@@ -202,9 +199,7 @@
         var accounts;
         var articles;
         var users;
-
         var OTDate;
-
         var cboBranch;
         var cboForAccount;
         var cboArticle;
@@ -299,6 +294,31 @@
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
+            });
+            return stockOuts;
+        }
+
+        // =====================
+        // GET Stock Out Last Id
+        // =====================
+        function getStockOutLastId() {
+            stockOuts = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/stockOutLastId',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        stockOuts.push({
+                            Id: Results.Id,
+                            OTNumber: Results.OTNumber
+                        });
+                    }
+                    window.location = '/Software/StockOutDetail?StockOutId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.setTimeout(function () { location.reload() }, 1000);
+                }
             });
             return stockOuts;
         }
@@ -624,6 +644,156 @@
                 pad--;
             }
             return result;
+        }
+
+        // =============
+        // Add Stock Out
+        // =============
+        function btnStockOutSave_OnClick() {
+            var stockOutObject = new Object();
+            var stockOutId = @stockOutId;
+            stockOutObject.BranchId = document.getElementById('StockOut_Branch_data').value;
+            stockOutObject.OTNumber = document.getElementById('StockOut_OTNumber').value;
+            stockOutObject.OTDate = document.getElementById('StockOut_OTDate_data').value;
+            stockOutObject.AccountId = document.getElementById('StockOut_Account_data').value;
+            stockOutObject.ArticleId = document.getElementById('StockOut_Article_data').value;
+            stockOutObject.Particulars = document.getElementById('StockOut_Particulars').value;
+            stockOutObject.ManualOTNumber = document.getElementById('StockOUt_ManualOTNumber').value;
+            stockOutObject.PreparedById = document.getElementById('StockOut_PreparedBy_data').value;
+            stockOutObject.CheckedById = document.getElementById('StockOut_CheckedBy_data').value;
+            stockOutObject.ApprovedById = document.getElementById('StockOut_ApprovedBy_data').value;
+            var data = JSON.stringify(stockOutObject);
+
+            if( document.getElementById('StockOut_Branch_data').value == '') {
+                document.getElementById("StockOut_Branch").style.border = "1px solid red";
+            } else {
+                document.getElementById("StockOut_Branch").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('StockOut_Account_data').value == '') {
+                document.getElementById("StockOut_Account").style.border = "1px solid red";
+            } else {
+                document.getElementById("StockOut_Account").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('StockOut_Article_data').value == '') {
+                document.getElementById("StockOut_Article").style.border = "1px solid red";
+            } else {
+                document.getElementById("StockOut_Article").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('StockOut_PreparedBy_data').value == '') {
+                document.getElementById("StockOut_PreparedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("StockOut_PreparedBy").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('StockOut_CheckedBy_data').value == '') {
+                document.getElementById("StockOut_CheckedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("StockOut_CheckedBy").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('StockOut_ApprovedBy_data').value == '') {
+                document.getElementById("StockOut_ApprovedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("StockOut_ApprovedBy").style.border = "1px solid #C8C8C8   ";
+            }
+
+            var isValid = true;
+            $('.requiredStockOut').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                if (stockOutId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addStockOut',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdStockOutJournal").prop("disabled", true);
+                                $("#cmdStockOutSave").prop("disabled", true);
+                                $("#cmdStockOutEdit").prop("disabled", true);
+                                $("#cmdStockOutPrint").prop("disabled", true);
+                                $("#cmdStockOutClose").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getStockOutLastId, 1000)
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdStockOutJournal").prop("disabled", true);
+                                $("#cmdStockOutSave").prop("disabled", true);
+                                $("#cmdStockOutEdit").prop("disabled", true);
+                                $("#cmdStockOutPrint").prop("disabled", true);
+                                $("#cmdStockOutClose").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdStockOutJournal").prop("disabled", true);
+                                $("#cmdStockOutSave").prop("disabled", true);
+                                $("#cmdStockOutEdit").prop("disabled", true);
+                                $("#cmdStockOutPrint").prop("disabled", true);
+                                $("#cmdStockOutClose").prop("disabled", true);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateStockOut/' + stockOutId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdStockOutJournal").prop("disabled", true);
+                                $("#cmdStockOutSave").prop("disabled", true);
+                                $("#cmdStockOutEdit").prop("disabled", true);
+                                $("#cmdStockOutPrint").prop("disabled", true);
+                                $("#cmdStockOutClose").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdStockOutJournal").prop("disabled", true);
+                                $("#cmdStockOutSave").prop("disabled", true);
+                                $("#cmdStockOutEdit").prop("disabled", true);
+                                $("#cmdStockOutPrint").prop("disabled", true);
+                                $("#cmdStockOutClose").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdStockOutJournal").prop("disabled", true);
+                                $("#cmdStockOutSave").prop("disabled", true);
+                                $("#cmdStockOutEdit").prop("disabled", true);
+                                $("#cmdStockOutPrint").prop("disabled", true);
+                                $("#cmdStockOutClose").prop("disabled", true);
+                            }
+                        }
+                    });
+                }
+            }
         }
 
         // ===========

@@ -205,6 +205,7 @@ namespace easyfis.Controllers
                            };
             return (Models.TrnStockIn)stockIns.FirstOrDefault();
         }
+
         // ============
         // ADD Stock In
         // ============
