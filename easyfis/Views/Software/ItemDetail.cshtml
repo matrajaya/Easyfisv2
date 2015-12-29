@@ -29,11 +29,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        @*<h4><img src='~/images/Icons/iItems.png'> Item Detail</h4>*@
                         <h4><i class="fa fa-cart-arrow-down fa-2x"></i> Item Detail</h4>
                         <br />
                         <div class="div_Current_Page">
-                            @*<label id="currentBranchName"></label>*@
                             <span id="currentPage"></span>
                         </div>
                     </div>
@@ -50,7 +48,6 @@
                         <button onclick="window.location.href = '@Url.Action("Items", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="item_closeItem"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
-                @*<hr />*@
                 <div class="well">
                     <form class="form-horizontal" role="form">
                         <div class="row">
@@ -78,7 +75,6 @@
                                     <label class="control-label col-sm-4">Item Group:</label>
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="articleItem_itemGroup"></div>
-
                                         <input type="hidden" id="articleItem_itemGroup_data" class="requiredItem" />
                                         <input type="hidden" id="articleItem_itemGroup_SelectedValue" />
                                     </div>
@@ -93,7 +89,6 @@
                                     <label class="control-label col-sm-4">Unit:</label>
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="articleItem_unit"></div>
-
                                         <input type="hidden" id="articleItem_unit_data" class="requiredItem" />
                                         <input type="hidden" id="articleItem_unit_SelectedValue" />
                                     </div>
@@ -116,7 +111,6 @@
                                     <label class="control-label col-sm-4">Input Tax:</label>
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="articleItem_inputTax"></div>
-
                                         <input type="hidden" id="articleItem_inputTax_data" class="requiredItem" />
                                         <input type="hidden" id="articleItem_inputTax_SelectedValue" />
                                     </div>
@@ -125,7 +119,6 @@
                                     <label class="control-label col-sm-4">Output Tax:</label>
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="articleItem_outputTax"></div>
-
                                         <input type="hidden" id="articleItem_outputTax_data" class="requiredItem" />
                                         <input type="hidden" id="articleItem_outputTax_SelectedValue" />
                                     </div>
@@ -134,7 +127,6 @@
                                     <label class="control-label col-sm-4">Withholding Tax:</label>
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="articleItem_withholdingTax"></div>
-
                                         <input type="hidden" id="articleItem_withholdingTax_data" class="requiredItem" />
                                         <input type="hidden" id="articleItem_withholdingTax_SelectedValue" />
                                     </div>
@@ -176,6 +168,7 @@
                     </form>
                 </div>
 
+                <!-- Item Lines -->
                 <ul class="nav nav-tabs " role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#UnitConversion" id="unitConversionTabId">Unit Conversion</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#Component" id="componentTabId">Component</a></li>
@@ -186,8 +179,8 @@
                 </ul>
                 <br />
                 <div class="tab-content">
+                    <!-- UnitConversion List -->
                     <div id="UnitConversion" class="tab-pane fade in active">
-                        <!-- UnitConversion List -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>Unit Conversion</h4>
@@ -229,8 +222,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Component List -->
                     <div id="Component" class="tab-pane fade">
-                        <!-- Component List -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>Component</h4>
@@ -272,8 +266,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Price List -->
                     <div id="Price" class="tab-pane fade">
-                        <!-- Price List -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>Price</h4>
@@ -315,8 +310,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Inventory List -->
                     <div id="Inventory" class="tab-pane fade">
-                        <!-- Inventory List -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>Inventory</h4>
@@ -358,8 +354,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- GL Account  -->
                     <div id="GLAccount" class="tab-pane fade">
-                        <!-- GL Account  -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>GL Account</h4>
@@ -420,8 +417,9 @@
                             </form>
                         </div>
                     </div>
+
+                    <!-- Fixed Asset  -->
                     <div id="FixedAsset" class="tab-pane fade">
-                        <!-- Fixed Asset  -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>Fixed Asset</h4>
@@ -490,21 +488,16 @@
         // Global Variables
         // ================
         var items;
-
         var dateAcquired;
-
         var articleItemGroups;
         var articleItemUnits;
         var taxTypes;
-
         var accounts;
-
         var cboAccount;
         var cboSaleAccount;
         var cboCostAccount;
         var cboAccumDepAccount;
         var cboExpenseAccount;
-
         var cboArticleGroupForItem;
         var cboArticleUnitForItem;
         var cboArticleInputTaxTypeForItem;
@@ -581,7 +574,6 @@
                     }
 
                     document.getElementById('Item_DateAcquired_data').value = Results.DateAcquired;
-
                     var dateAcquired_Result = Results.DateAcquired;
                     dateAcquired.dispose();
                     dateAcquired = new wijmo.input.InputDate('#Item_DateAcquired', {
@@ -592,65 +584,46 @@
                             document.getElementById('Item_DateAcquired_data').value = this.value.toLocaleDateString();
                         }
                     });
-
                     document.getElementById('Item_UsefulLife').value = Results.UsefulLife;
                     document.getElementById('Item_SalvageValue').value = Results.SalvageValue;
-
                     document.getElementById('Item_Account_data').value = Results.AccountId;
                     document.getElementById('Item_Account_selectedValue').value = Results.Account;
-
                     document.getElementById('Item_SalesAccount_data').value = Results.SalesAccountId;
                     document.getElementById('Item_SalesAccount_selectedValue').value = Results.SalesAccount;
-
                     document.getElementById('Item_CostAccount_data').value = Results.CostAccountId;
                     document.getElementById('Item_CostAccount_selectedValue').value = Results.CostAccount;
-
                     document.getElementById('Item_AccumDepAccount_data').value = Results.AssetAccountId;
                     document.getElementById('Item_AccumDepAccount_selectedValue').value = Results.AssetAccount;
-
                     document.getElementById('Item_ExpenseAccount_data').value = Results.ExpenseAccountId;
                     document.getElementById('Item_ExpenseAccount_selectedValue').value = Results.ExpenseAccount;
-
                     document.getElementById('articleItem_code').value = Results.ArticleCode;
                     document.getElementById('articleItem_code_data').value = Results.ArticleCode;
-
                     document.getElementById('articleItem_manualCode').value = Results.ManualArticleCode;
                     document.getElementById('articleItem_item').value = Results.Article;
-
                     document.getElementById('articleItem_category').value = Results.Category;
-
                     document.getElementById('articleItem_itemGroup_data').value = Results.ArticleGroupId;
                     document.getElementById('articleItem_itemGroup_SelectedValue').value = Results.ArticleGroup;
-
                     document.getElementById('articleItem_unit_data').value = Results.UnitId;
                     document.getElementById('articleItem_unit_SelectedValue').value = Results.Unit;
-
                     document.getElementById('articleItem_price').value = Results.Price;
                     document.getElementById('articleItem_particulars').value = Results.Particulars;
-
                     if(Results.IsInventory == 0) {
                         document.getElementById('articleItem_Inventory').checked = false;
                     } else {
                         document.getElementById('articleItem_Inventory').checked = true;
                     }
-
                     document.getElementById('articleItem_inputTax_data').value = Results.InputTaxId;
                     document.getElementById('articleItem_inputTax_SelectedValue').value = Results.InputTax;
-
                     document.getElementById('articleItem_outputTax_data').value = Results.OutputTaxId;
                     document.getElementById('articleItem_outputTax_SelectedValue').value = Results.OutputTax;
-
                     document.getElementById('articleItem_withholdingTax_data').value = Results.WTaxTypeId;
                     document.getElementById('articleItem_withholdingTax_SelectedValue').value = Results.WTaxType;
-
                     document.getElementById('articleItem_oldManualCode').value = Results.ManualArticleOldCode;
                     document.getElementById('articleItem_manualCost').value = Results.Cost;
-
                     document.getElementById('createdBy').innerHTML = Results.CreatedBy;
                     document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
                     document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
                     document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
-
                     document.getElementById('Item_IsLocked').value = Results.IsLocked;
 
                     if(document.getElementById('Item_IsLocked').value == 'true') {
@@ -662,9 +635,9 @@
                         document.getElementById('articleItem_Inventory').disabled = true;
                         document.getElementById('articleItem_oldManualCode').disabled = true;
                         document.getElementById('articleItem_manualCost').disabled = true;
-
+                        document.getElementById('Item_UsefulLife').disabled = true;
+                        document.getElementById('Item_SalvageValue').disabled = true;
                         document.getElementById('isLocked_Status').checked = true;
-
                         $("#item_saveSaveItem").prop("disabled", true);
                         $("#item_saveItem").prop("disabled", true);
                         $("#item_editItem").prop("disabled", false);
@@ -679,9 +652,9 @@
                         document.getElementById('articleItem_Inventory').disabled = false;
                         document.getElementById('articleItem_oldManualCode').disabled = false;
                         document.getElementById('articleItem_manualCost').disabled = false;
-
+                        document.getElementById('Item_UsefulLife').disabled = false;
+                        document.getElementById('Item_SalvageValue').disabled = false;
                         document.getElementById('isLocked_Status').checked = false;
-
                         $("#item_saveSaveItem").prop("disabled", false);
                         $("#item_saveItem").prop("disabled", false);
                         $("#item_editItem").prop("disabled", true);
@@ -694,8 +667,34 @@
                     getArticleTaxTypeForComboBox();
                     getAccount();
                 }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
             });
             return items;
+        }
+
+        // ==============================
+        // Get Last Id for Item by its ID
+        // ==============================
+        function getLastInsertedIdItemByArticleTypeId() {
+            var items = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/articleLastIdByArticleTypeId/1',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        items.push ({
+                            Id: Results.Id,
+                            Article : Results.Article
+                        });
+                    }
+                    window.location = '/Software/ItemDetail?ItemId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.setTimeout(function () { location.reload() }, 1000);
+                }
+            });
         }
 
         // =====================
@@ -730,10 +729,7 @@
                         createCboForArticleItemGroup(articleItemGroups);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-            );
+            });
         }
 
         // ======================
@@ -1088,7 +1084,6 @@
                     }
                 });
             }
-
         }
 
         // ====================
@@ -1113,10 +1108,7 @@
                         createCboForArticleItemUnit(articleItemUnits);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-            );
+            });
         }
 
         // =====================
@@ -1194,10 +1186,7 @@
                         createCboForArticleWithholdingTaxType(taxTypes);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-            );
+            });
         }
 
         // ======================
@@ -1376,8 +1365,6 @@
                         createCboForGLAccount(accounts);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
         }
 
@@ -1489,8 +1476,6 @@
                 itemObject.IsLocked = document.getElementById('Item_IsLocked_defaultFalse').value;
             }
 
-            console.log(document.getElementById('Item_IsLocked_defaultFalse').value);
-
             var dataUpdate = JSON.stringify(itemObject);
             $.ajax({
                 type: "PUT",
@@ -1549,8 +1534,6 @@
             } else {
                 itemObject.IsLocked = document.getElementById('Item_IsLocked_defaultTrue').value;
             }
-
-            console.log(document.getElementById('Item_IsLocked_defaultFalse').value);
 
             var dataUpdate = JSON.stringify(itemObject);
             $.ajax({
@@ -1625,61 +1608,61 @@
             if( document.getElementById('articleItem_itemGroup_data').value == '') {
                 document.getElementById("articleItem_itemGroup").style.border = "1px solid red";
             } else {
-                document.getElementById("articleItem_itemGroup").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("articleItem_itemGroup").style.border = "1px solid #C8C8C8";
             }
-            
+
             if( document.getElementById('articleItem_unit_data').value == '') {
                 document.getElementById("articleItem_unit").style.border = "1px solid red";
             } else {
-                document.getElementById("articleItem_unit").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("articleItem_unit").style.border = "1px solid #C8C8C8 ";
             }
-            
+
             if( document.getElementById('articleItem_inputTax_data').value == '') {
                 document.getElementById("articleItem_inputTax").style.border = "1px solid red";
             } else {
-                document.getElementById("articleItem_inputTax").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("articleItem_inputTax").style.border = "1px solid #C8C8C8 ";
             }
 
             if( document.getElementById('articleItem_outputTax_data').value == '') {
                 document.getElementById("articleItem_outputTax").style.border = "1px solid red";
             } else {
-                document.getElementById("articleItem_outputTax").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("articleItem_outputTax").style.border = "1px solid #C8C8C8";
             }
 
             if( document.getElementById('articleItem_withholdingTax_data').value == '') {
                 document.getElementById("articleItem_withholdingTax").style.border = "1px solid red";
             } else {
-                document.getElementById("articleItem_withholdingTax").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("articleItem_withholdingTax").style.border = "1px solid #C8C8C8";
             }
 
             if( document.getElementById('Item_Account_data').value == '') {
                 document.getElementById("Item_Account").style.border = "1px solid red";
             } else {
-                document.getElementById("Item_Account").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("Item_Account").style.border = "1px solid #C8C8C8";
             }
-            
+
             if( document.getElementById('Item_SalesAccount_data').value == '') {
                 document.getElementById("Item_SalesAccount").style.border = "1px solid red";
             } else {
-                document.getElementById("Item_SalesAccount").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("Item_SalesAccount").style.border = "1px solid #C8C8C8";
             }
-            
+
             if( document.getElementById('Item_CostAccount_data').value == '') {
                 document.getElementById("Item_CostAccount").style.border = "1px solid red";
             } else {
-                document.getElementById("Item_CostAccount").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("Item_CostAccount").style.border = "1px solid #C8C8C8";
             }
 
             if( document.getElementById('Item_AccumDepAccount_data').value == '') {
                 document.getElementById("Item_AccumDepAccount").style.border = "1px solid red";
             } else {
-                document.getElementById("Item_AccumDepAccount").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("Item_AccumDepAccount").style.border = "1px solid #C8C8C8";
             }
-            
+
             if( document.getElementById('Item_ExpenseAccount_data').value == '') {
                 document.getElementById("Item_ExpenseAccount").style.border = "1px solid red";
             } else {
-                document.getElementById("Item_ExpenseAccount").style.border = "1px solid #C8C8C8   ";
+                document.getElementById("Item_ExpenseAccount").style.border = "1px solid #C8C8C8";
             }
 
             var isValid = true;
@@ -1696,7 +1679,6 @@
                     });
                 }
             });
-
             if (isValid == false) {
                 toastr.error("Invalid Entry");
                 e.preventDefault();
@@ -1717,7 +1699,7 @@
                                 $("#item_printItem").prop("disabled", true);
                                 $("#item_closeItem").prop("disabled", true);
                                 toastr.success("Successfully Saved");
-                                //setTimeout(getLastInsertedIdSupplierByArticleTypeId, 1000);
+                                setTimeout(getLastInsertedIdItemByArticleTypeId, 1000);
                             },
                             404: function () {
                                 toastr.error("Can't Save");
@@ -1789,7 +1771,8 @@
 
             getArticleItemById();
 
-            if(@itemId == 0) {
+            itemId = @itemId;
+            if(itemId == 0) {
                 // comboboxes
                 getArticleItemGroupForComboBox();
                 getArticleItemUnitForComboBox();
@@ -1818,35 +1801,29 @@
                         var ArticleCode = parseInt(Results.ArticleCode);
                         var ArticleCode_plusOne = 0000000001;
                         var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
 
                         document.getElementById('articleItem_code_data').value = zerofill(ArticleCode_Results, 10);
                         document.getElementById('articleItem_code').value = zerofill(ArticleCode_Results, 10);
                     }
                 });
-
                 $("#item_saveSaveItem").prop("disabled", false);
                 $("#item_saveItem").prop("disabled", false);
                 $("#item_editItem").prop("disabled", true);
                 $("#item_printItem").prop("disabled", true);
-
             }
 
             document.getElementById('articleItem_code').disabled = true;
 
             cboArticleGroupForItem  = new wijmo.input.ComboBox('#articleItem_itemGroup');
             cboArticleUnitForItem = new wijmo.input.ComboBox('#articleItem_unit');
-
             cboArticleInputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_inputTax');
             cboArticleOutputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_outputTax');
             cboArticleWithholdingTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_withholdingTax');
-
             cboAccount = new wijmo.input.ComboBox('#Item_Account');
             cboSaleAccount = new wijmo.input.ComboBox('#Item_SalesAccount');
             cboCostAccount = new wijmo.input.ComboBox('#Item_CostAccount');
             cboAccumDepAccount = new wijmo.input.ComboBox('#Item_AccumDepAccount');
             cboExpenseAccount = new wijmo.input.ComboBox('#Item_ExpenseAccount');
-
 
             var d = new Date();
             document.getElementById("Item_DateAcquired_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
@@ -1858,7 +1835,6 @@
                     document.getElementById('Item_DateAcquired_data').value = this.value.toLocaleDateString();
                 }
             });
-
         });
     </script>
 

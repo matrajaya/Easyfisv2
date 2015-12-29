@@ -29,11 +29,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        @*<h4><img src='~/images/Icons/iSupplier.png'> Supplier Detail</h4>*@
                         <h4><i class="fa fa-truck fa-2x"></i> Supplier Detail</h4>
                         <br />
                         <div class="div_Current_Page">
-                            @*<label id="currentBranchName"></label>*@
                             <span id="currentPage"></span>
                         </div>
                     </div>
@@ -50,7 +48,6 @@
                         <button onclick="window.location.href = '@Url.Action("Supplier", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="supplier_CloseButton"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
-                @*<hr />*@
                 <div class="well">
                     <form class="form-horizontal" role="form">
                         <div class="row">
@@ -72,7 +69,6 @@
                                     <label class="control-label col-sm-4">Supplier Group:</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_SupplierGroup"></div>
-
                                         <input type="hidden" id="artcileSupplier_SupplierGroup_Data" />
                                         <input type="hidden" id="artcileSupplier_SupplierGroup_SelectedValue" />
                                     </div>
@@ -81,16 +77,18 @@
                                     <label class="control-label col-sm-4">Account:</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_Account"></div>
-
                                         <input type="hidden" id="artcileSupplier_Account_Data" class="requiredSupplier" />
                                         <input type="hidden" id="artcileSupplier_Account_SelectedValue" />
+                                        <input type="hidden" id="artcileSupplier_SalesAccountId" />
+                                        <input type="hidden" id="artcileSupplier_CostAccountId" />
+                                        <input type="hidden" id="artcileSupplier_AssetAccountId" />
+                                        <input type="hidden" id="artcileSupplier_ExpenseAccountId" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Term:</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_Term"></div>
-
                                         <input type="hidden" id="artcileSupplier_Term_Data" class="requiredSupplier" />
                                         <input type="hidden" id="artcileSupplier_Term_SelectedValue" />
                                     </div>
@@ -145,6 +143,7 @@
                         </div>
                     </form>
                 </div>
+
                 <!-- Supplier line -->
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#JournalLedger" id="journalLedgerTabId">Journal Ledger</a></li>
@@ -152,8 +151,8 @@
                 </ul>
                 <br />
                 <div class="tab-content">
+                    <!-- Journal Ledger -->
                     <div id="JournalLedger" class="tab-pane fade in active">
-                        <!-- Journal Ledger List -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>Journal Ledger</h4>
@@ -196,8 +195,8 @@
                         </div>
                     </div>
 
+                    <!-- More Contact Information List -->
                     <div id="ContactInformation" class="tab-pane fade in active">
-                        <!-- More Contact Information List -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>More Contact Information</h4>
@@ -273,11 +272,9 @@
         // Global Variables
         // ================
         var suppliers;
-
         var articleSupplierGroups;
         var accounts;
         var terms;
-
         var cboArticleGroup;
         var cboForAccount;
         var cboForTerm;
@@ -345,6 +342,11 @@
                             UpdatedDateTime: Results.UpdatedDateTime
                         });
                     }
+
+                    document.getElementById('artcileSupplier_SalesAccountId').value = Results.SalesAccountId;
+                    document.getElementById('artcileSupplier_CostAccountId').value = Results.CostAccountId;
+                    document.getElementById('artcileSupplier_AssetAccountId').value = Results.AssetAccountId;
+                    document.getElementById('artcileSupplier_ExpenseAccountId').value = Results.ExpenseAccountId;
                     document.getElementById('artcileSupplier_code').value = Results.ArticleCode;
                     document.getElementById('artcileSupplier_code_data').value = Results.ArticleCode;
                     document.getElementById('artcileSupplier_Supplier').value = Results.Article;
@@ -372,12 +374,10 @@
                         document.getElementById('artcileSupplier_TIN').disabled = true;
                         document.getElementById('artcileSupplier_ContactNo').disabled = true;
                         document.getElementById('artcileSupplier_ContactPerson').disabled = true;
-
                         $("#supplier_SaveSupplierButton").prop("disabled", true);
                         $("#supplier_SaveButton").prop("disabled", true);
                         $("#supplier_EditButton").prop("disabled", false);
                         $("#supplier_PrintButton").prop("disabled", false);
-
                         document.getElementById('isLocked_Status').checked = true;
 
                     } else if(document.getElementById('Supplier_IsLocked').value == 'false') {
@@ -387,13 +387,13 @@
                         document.getElementById('artcileSupplier_TIN').disabled = false;
                         document.getElementById('artcileSupplier_ContactNo').disabled = false;
                         document.getElementById('artcileSupplier_ContactPerson').disabled = false;
-
                         $("#supplier_SaveSupplierButton").prop("disabled", false);
                         $("#supplier_SaveButton").prop("disabled", false);
                         $("#supplier_EditButton").prop("disabled", true);
                         $("#supplier_PrintButton").prop("disabled", true);
-
                         document.getElementById('isLocked_Status').checked = false;
+                    } else {
+                        console.log("Invalid Lock");
                     }
 
                     // ajax for combobox
@@ -401,6 +401,8 @@
                     getArticleAccountForComboBox();
                     getArticleTermForComboBox();
                 }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
             });
 
             return suppliers;
@@ -421,59 +423,14 @@
                     if (Results.length > 0) {
                         suppliers.push ({
                             Id: Results.Id,
-                            ArticleCode : Results.ArticleCode,
-                            ManualArticleCode : Result.ManualArticleCode,
-                            Article : Results.Article,
-                            Category : Results.Category,
-                            ArticleTypeId : Results.ArticleTypeId,
-                            ArticleType : Results.ArticleType,
-                            ArticleGroupId : Results.ArticleGroupId,
-                            ArticleGroup : Results.ArticleGroup,
-                            AccountId : Results.AccountId,
-                            Account : Results.Account,
-                            SalesAccountId : Results.SalesAccountId,
-                            CostAccountId : Results.CostAccountId,
-                            AssetAccountId : Results.AssetAccountId,
-                            ExpenseAccountId : Results.ExpenseAccountId,
-                            UnitId : Results.UnitId,
-                            OutputTaxId : Results.OutputTaxId,
-                            OutputTax : Results.OutputTax,
-                            InputTaxId : Results.InputTaxId,
-                            InputTax : Results.InputTax,
-                            WTaxTypeId : Results.WTaxTypeId,
-                            WTaxType : Results.WTaxType,
-                            Price : Results.Price,
-                            Cost : Results.Cost,
-                            IsInventory : Results.IsInventory,
-                            Particulars : Results.Particulars,
-                            Address : Results.Address,
-                            TermId : Results.TermId,
-                            Term : Results.Term,
-                            ContactNumber : Results.ContactNumber,
-                            ContactPerson : Results.ContactPerson,
-                            TaxNumber : Results.TaxNumber,
-                            CreditLimit : Results.CreditLimit,
-                            DateAcquired : Results.DateAcquired,
-                            UsefulLife : Results.UsefulLife,
-                            SalvageValue : Results.SalvageValue,
-                            ManualArticleOldCode : Results.ManualArticleOldCode,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
+                            Article : Results.Article
                         });
                     }
                     window.location = '/Software/SupplierDetail?SupplierId=' + Results.Id + '&BranchId=' + @branchId;
                     window.setTimeout(function () { location.reload() }, 1000);
                 }
             });
-
-            return suppliers;
         }
-
 
         // =========================
         // Get Artile Supplier Group
@@ -507,10 +464,7 @@
                         createCboForArticleSupplierGroup(articleSupplierGroups);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-            );
+            });
         }
 
         // ======================
@@ -536,6 +490,10 @@
                         $("#artcileSupplier_SupplierGroup_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupId);
                         $("#artcileSupplier_Account_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAccountId);
                         $("#artcileSupplier_Account_SelectedValue").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAccount);
+                        $("#artcileSupplier_SalesAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupSalesAccountId);
+                        $("#artcileSupplier_CostAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupCostAccountId);
+                        $("#artcileSupplier_AssetAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
+                        $("#artcileSupplier_ExpenseAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
 
                         accounts = new wijmo.collections.ObservableArray();
                         $.ajax({
@@ -590,6 +548,10 @@
                         $("#artcileSupplier_SupplierGroup_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupId);
                         $("#artcileSupplier_Account_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAccountId);
                         $("#artcileSupplier_Account_SelectedValue").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAccount);
+                        $("#artcileSupplier_SalesAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupSalesAccountId);
+                        $("#artcileSupplier_CostAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupCostAccountId);
+                        $("#artcileSupplier_AssetAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
+                        $("#artcileSupplier_ExpenseAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
 
                         accounts = new wijmo.collections.ObservableArray();
                         $.ajax({
@@ -643,6 +605,10 @@
                         $("#artcileSupplier_SupplierGroup_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupId);
                         $("#artcileSupplier_Account_Data").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAccountId);
                         $("#artcileSupplier_Account_SelectedValue").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAccount);
+                        $("#artcileSupplier_SalesAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupSalesAccountId);
+                        $("#artcileSupplier_CostAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupCostAccountId);
+                        $("#artcileSupplier_AssetAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
+                        $("#artcileSupplier_ExpenseAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
 
                         accounts = new wijmo.collections.ObservableArray();
                         $.ajax({
@@ -709,10 +675,7 @@
                         createCboForAccount(accounts);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-            );
+            });
         }
 
         // ===============
@@ -789,15 +752,12 @@
                         createCboForTerm(terms);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-            );
+            });
         }
 
-        // ===============
+        // ============
         // CBO for Term
-        // ===============
+        // ============
         function createCboForTerm(terms) {
             var termCollection = new wijmo.collections.CollectionView(terms);
             var termList = new Array();
@@ -865,8 +825,6 @@
                 supplierObject.IsLocked = document.getElementById('Supplier_IsLocked_defaultTrue').value;
             }
 
-            console.log(document.getElementById('Supplier_IsLocked_defaultFalse').value);
-
             var dataUpdate = JSON.stringify(supplierObject);
             $.ajax({
                 type: "PUT",
@@ -919,14 +877,11 @@
 
             var supplierObject = new Object();
             var supplierId = @supplierId;
-
             if(supplierId > 0) {
                 supplierObject.IsLocked = document.getElementById('Supplier_IsLocked_defaultTrue').value;
             } else {
                 supplierObject.IsLocked = document.getElementById('Supplier_IsLocked_defaultFalse').value;
             }
-
-            console.log(document.getElementById('Supplier_IsLocked_defaultFalse').value);
 
             var dataUpdate = JSON.stringify(supplierObject);
             $.ajax({
@@ -950,7 +905,6 @@
                     }
                 }
             });
-
         }
 
         // ========================================================
@@ -976,10 +930,10 @@
             supplierObject.Article = document.getElementById('artcileSupplier_Supplier').value;
             supplierObject.ArticleGroupId = document.getElementById('artcileSupplier_SupplierGroup_Data').value;
             supplierObject.AccountId = document.getElementById('artcileSupplier_Account_Data').value;
-            supplierObject.SalesAccountId = document.getElementById('artcileSupplier_Account_Data').value;
-            supplierObject.CostAccountId = document.getElementById('artcileSupplier_Account_Data').value;
-            supplierObject.AssetAccountId = document.getElementById('artcileSupplier_Account_Data').value;
-            supplierObject.ExpenseAccountId = document.getElementById('artcileSupplier_Account_Data').value;
+            supplierObject.SalesAccountId = document.getElementById('artcileSupplier_SalesAccountId').value;
+            supplierObject.CostAccountId = document.getElementById('artcileSupplier_CostAccountId').value;
+            supplierObject.AssetAccountId = document.getElementById('artcileSupplier_AssetAccountId').value;
+            supplierObject.ExpenseAccountId = document.getElementById('artcileSupplier_ExpenseAccountId').value;
             supplierObject.Particulars = document.getElementById('artcileSupplier_Particulars').value;
             supplierObject.Address = document.getElementById('artcileSupplier_Address').value;
             supplierObject.TermId = document.getElementById('artcileSupplier_Term_Data').value;
@@ -1020,7 +974,6 @@
                     });
                 }
             });
-
             if (isValid == false) {
                 toastr.error("Invalid Entry");
                 e.preventDefault();
@@ -1107,11 +1060,9 @@
         // On Page Load
         // ============
         $(document).ready(function () {
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Supplier</a> ' + ' > Supplier Detail';
             document.getElementById('Supplier_IsLocked_defaultTrue').value = 'true';
             document.getElementById('Supplier_IsLocked_defaultFalse').value = 'false';
-
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Supplier</a> ' + ' > Supplier Detail';
-
             document.getElementById('artcileSupplier_code').disabled = true;
             document.getElementById('isLocked_Status').disabled = true;
 
@@ -1129,7 +1080,6 @@
                 }
 
                 document.getElementById('artcileSupplier_code_data').value = 0;
-
                 var suppliers = new wijmo.collections.ObservableArray;
                 $.ajax({
                     url: '/api/articleLastArticleCodeByArticleTypeId/3',
@@ -1147,13 +1097,10 @@
                         var ArticleCode = parseInt(Results.ArticleCode);
                         var ArticleCode_plusOne = 0000000001;
                         var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
-
                         document.getElementById('artcileSupplier_code_data').value = zerofill(ArticleCode_Results, 10);
                         document.getElementById('artcileSupplier_code').value = zerofill(ArticleCode_Results, 10);
                     }
                 });
-
                 $("#supplier_SaveSupplierButton").prop("disabled", false);
                 $("#supplier_SaveButton").prop("disabled", false);
                 $("#supplier_EditButton").prop("disabled", true);
@@ -1164,9 +1111,7 @@
             cboArticleGroup  = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup');
             cboForAccount  = new wijmo.input.ComboBox('#artcileSupplier_Account');
             cboForTerm  = new wijmo.input.ComboBox('#artcileSupplier_Term');
-
         });
-
     </script>
 
     <!-- ====================== -->

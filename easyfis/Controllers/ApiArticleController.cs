@@ -331,9 +331,6 @@ namespace easyfis.Controllers
             return (Models.MstArticle)articles.FirstOrDefault();
         }
 
-
-        // ======================================================================================================================
-
         // ========================
         // ADD Article for Supplier
         // ========================
@@ -473,7 +470,6 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
-
 
         // ========================
         // ADD Article for Customer
@@ -615,7 +611,6 @@ namespace easyfis.Controllers
             }
         }
 
-
         // ====================
         // ADD Article for Item
         // ====================
@@ -755,6 +750,7 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
+
 
         // =====================
         // UPDATE Article IsLock

@@ -500,8 +500,6 @@
                     window.location = '/Software/ReceivingReceiptDetail?RRId=' + Results.Id + '&BranchId=' + @branchId;
                     window.setTimeout(function () { location.reload() }, 1000);
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
             return RRs;
         }
@@ -552,11 +550,7 @@
                         }
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-            );
-
+            });
             return branches;
         }
 
@@ -606,11 +600,7 @@
                         createCbosupplier(suppliers);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-                );
-
+            });
             return suppliers;
         }
 
@@ -659,11 +649,7 @@
                         createCboTerm(terms);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-                );
-
+            });
             return terms;
         }
 
@@ -745,8 +731,6 @@
                         }
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
             return users;
         }
