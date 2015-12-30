@@ -30,11 +30,9 @@
                 <div id="">
                     <div class="row">
                         <div class="col-lg-12">
-                            @*<h4><img src='~/images/Icons/iDisburse.png'> Disbursement</h4>*@
                             <h4><i class="fa fa-credit-card fa-2x"></i> Disbursement</h4>
                             <br />
                             <div class="div_Current_Page">
-                                @*<label id="currentBranchName"></label>*@
                                 <span id="currentPage"></span>
                             </div>
                         </div>
@@ -42,7 +40,7 @@
                     <label>ST date </label>
                     <div class="row">
                         <div class="col-lg-4">
-                            <div class="comboBox-wide" id="filterDate"></div>
+                            <div id="filterDate"></div>
                             <input type="hidden" id="filterDate_data" />
                         </div>
                         <div class="col-lg-8"></div>
@@ -356,6 +354,9 @@
                 onValueChanged: function () {
                     document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
                     var CVDateFilterValue = document.getElementById('filterDate_data').value;
+                    
+                    $('body').removeClass('modal-open');
+                    $(".modal-backdrop").remove();
 
                     disbursements = new wijmo.collections.CollectionView(getDisbursementFilterByCVDate(CVDateFilterValue));
                     disbursements.canFilter = true;
