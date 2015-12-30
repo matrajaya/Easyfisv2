@@ -1,5 +1,4 @@
 ﻿@{
-    var id = Request.QueryString["CompanyId"];
     var branchId = Request.QueryString["BranchId"];
     var stockTransferId = Request.QueryString["StockTransferId"];
     var userId = ViewData["UserId"];
@@ -31,11 +30,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        @*<h4><img src='~/images/Icons/iCollect.png'> Company - Detail</h4>*@
                         <h4><i class="fa fa-exchange fa-2x"></i> Stock Transfer Detail</h4>
                         <br />
                         <div class="div_Current_Page">
-                            @*<label id="currentBranchName"></label>*@
                             <span id="currentPage"></span>
                         </div>
                     </div>
@@ -45,11 +42,11 @@
                         <h4 id="collectionDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-book"></i> Journal</button>
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" onclick="window.location.href ='@Url.Action("StockTransferPDF", "Software", new { StockTransferId = stockTransferId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("StockTransfer", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockTransferJournal"><i class="fa fa-book"></i> Journal</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockTransferSave" onclick="btnStockTransferSave_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockTransferEdit"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockTransferPrint" onclick="window.location.href ='@Url.Action("StockTransferPDF", "Software", new { StockTransferId = stockTransferId })'"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("StockTransfer", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdStockTransferClose"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -62,22 +59,22 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_Branch"></div>
 
-                                        <input type="hidden" id="stockTransfer_Branch_data" />
+                                        <input type="hidden" id="stockTransfer_Branch_data" class="requiredStockTransfer" />
                                         <input type="hidden" id="stockTransfer_Branch_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">ST Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="stockTransfer_STNumber" />
-                                        <input type="hidden" id="stockTransfer_STNumber_Display" /> 
+                                        <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_STNumber" />
+                                        <input type="hidden" id="stockTransfer_STNumber_Display" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">ST Date:</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_STDate"></div>
-                                        <input type="hidden" id="stockTransfer_STDate_data" />
+                                        <input type="hidden" id="stockTransfer_STDate_data" class="requiredStockTransfer" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -85,14 +82,14 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_ToBranch"></div>
 
-                                        <input type="hidden" id="stockTransfer_ToBranch_data" />
+                                        <input type="hidden" id="stockTransfer_ToBranch_data" class="requiredStockTransfer" />
                                         <input type="hidden" id="stockTransfer_ToBranch_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id="stockTransfer_Particulars"></textarea>
+                                        <textarea class="form-control textarea-custom requiredStockTransfer" id="stockTransfer_Particulars"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +97,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual ST Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="stockTransfer_ManualSTNumber">
+                                        <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_ManualSTNumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -108,7 +105,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_PreparedBy"></div>
 
-                                        <input type="hidden" id="stockTransfer_PreparedBy_data" />
+                                        <input type="hidden" id="stockTransfer_PreparedBy_data" class="requiredStockTransfer" />
                                         <input type="hidden" id="stockTransfer_PreparedBy_selectedValue" />
                                         <input type="hidden" id="userId_data" value="@userId" />
                                     </div>
@@ -118,7 +115,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_CheckedBy"></div>
 
-                                        <input type="hidden" id="stockTransfer_CheckedBy_data" />
+                                        <input type="hidden" id="stockTransfer_CheckedBy_data" class="requiredStockTransfer" />
                                         <input type="hidden" id="stockTransfer_CheckedBy_selectedValue" />
                                     </div>
                                 </div>
@@ -127,7 +124,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_ApprovedBy"></div>
 
-                                        <input type="hidden" id="stockTransfer_ApprovedBy_data" />
+                                        <input type="hidden" id="stockTransfer_ApprovedBy_data" class="requiredStockTransfer" />
                                         <input type="hidden" id="stockTransfer_ApprovedBy_selectedValue" />
                                     </div>
                                 </div>
@@ -240,7 +237,6 @@
                     document.getElementById('stockTransfer_STNumber').value = Results.STNumber;
                     document.getElementById('stockTransfer_STNumber_Display').value = Results.STNumber;
                     document.getElementById('stockTransfer_STDate_data').value = Results.STDate;
-
                     var STDate_date = Results.STDate;
                     STDate.dispose();
                     STDate = new wijmo.input.InputDate('#stockTransfer_STDate', {
@@ -251,7 +247,6 @@
                             document.getElementById('stockTransfer_STDate_data').value = this.value.toLocaleDateString();
                         }
                     });
-
                     document.getElementById('stockTransfer_ToBranch_data').value = Results.ToBranchId;
                     document.getElementById('stockTransfer_ToBranch_selectedValue').value = Results.ToBranch;
                     document.getElementById('stockTransfer_Particulars').value = Results.Particulars;
@@ -263,7 +258,6 @@
                     document.getElementById('stockTransfer_ApprovedBy_data').value = Results.ApprovedById;
                     document.getElementById('stockTransfer_ApprovedBy_selectedValue').value = Results.ApprovedBy;
                     document.getElementById('StockTransfer_Lock').checked = Results.IsLocked;
-
                     document.getElementById('createdBy').innerHTML = Results.CreatedBy;
                     document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
                     document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
@@ -274,6 +268,31 @@
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
+            });
+            return stockTransfers;
+        }
+
+        // ==========================
+        // GET Purchase Order Last Id
+        // ==========================
+        function getStockTransferLastInsertedId() {
+            var stockTransfers = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/stockTransferLastId',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        stockTransfers.push({
+                            Id: Results.Id,
+                            STNumber: Results.STNumber
+                        });
+                    }
+                    window.location = '/Software/StockTransferDetail?StockTransferId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.setTimeout(function () { location.reload() }, 1000);
+                }
             });
             return stockTransfers;
         }
@@ -487,7 +506,7 @@
                 }
             });
         }
-        
+
         // ==================================
         // Combo Box for Users - Approved By
         // ==================================
@@ -524,6 +543,155 @@
             return result;
         }
 
+        // ==================
+        // Add Stock Transfer
+        // ==================
+        function btnStockTransferSave_OnClick() {
+            var stockTransferObject = new Object();
+            var stockTransferId = @stockTransferId;
+            stockTransferObject.BranchId = document.getElementById('stockTransfer_Branch_data').value;
+            stockTransferObject.STNumber = document.getElementById('stockTransfer_STNumber').value;
+            stockTransferObject.STDate = document.getElementById('stockTransfer_STDate_data').value;
+            stockTransferObject.ToBranchId = document.getElementById('stockTransfer_ToBranch_data').value;
+            stockTransferObject.Particulars = document.getElementById('stockTransfer_Particulars').value;
+            stockTransferObject.ManualSTNumber = document.getElementById('stockTransfer_ManualSTNumber').value;
+            stockTransferObject.PreparedById = document.getElementById('stockTransfer_PreparedBy_data').value;
+            stockTransferObject.CheckedById = document.getElementById('stockTransfer_CheckedBy_data').value;
+            stockTransferObject.ApprovedById = document.getElementById('stockTransfer_ApprovedBy_data').value;
+            var data = JSON.stringify(stockTransferObject);
+
+            if( document.getElementById('stockTransfer_Branch_data').value == '') {
+                document.getElementById("stockTransfer_Branch").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransfer_Branch").style.border = "1px solid #C8C8C8";
+            }
+            
+            if( document.getElementById('stockTransfer_STDate_data').value == '') {
+                document.getElementById("stockTransfer_STDate").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransfer_STDate").style.border = "1px solid #C8C8C8";
+            }
+            
+            if( document.getElementById('stockTransfer_ToBranch_data').value == '') {
+                document.getElementById("stockTransfer_ToBranch").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransfer_ToBranch").style.border = "1px solid #C8C8C8";
+            }
+            
+            if( document.getElementById('stockTransfer_PreparedBy_data').value == '') {
+                document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('stockTransfer_CheckedBy_data').value == '') {
+                document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid #C8C8C8";
+            }
+            
+            if( document.getElementById('stockTransfer_ApprovedBy_data').value == '') {
+                document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredStockTransfer').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                if (stockTransferId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addStockTransfer',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdStockTransferJournal").prop("disabled", true);
+                                $("#cmdStockTransferSave").prop("disabled", true);
+                                $("#cmdStockTransferEdit").prop("disabled", true);
+                                $("#cmdStockTransferPrint").prop("disabled", true);
+                                $("#cmdStockTransferClose").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getStockTransferLastInsertedId, 1000)
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdStockTransferJournal").prop("disabled", true);
+                                $("#cmdStockTransferSave").prop("disabled", true);
+                                $("#cmdStockTransferEdit").prop("disabled", true);
+                                $("#cmdStockTransferPrint").prop("disabled", true);
+                                $("#cmdStockTransferClose").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdStockTransferJournal").prop("disabled", true);
+                                $("#cmdStockTransferSave").prop("disabled", true);
+                                $("#cmdStockTransferEdit").prop("disabled", true);
+                                $("#cmdStockTransferPrint").prop("disabled", true);
+                                $("#cmdStockTransferClose").prop("disabled", true);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateStockTransfer/' + stockTransferId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdStockTransferJournal").prop("disabled", true);
+                                $("#cmdStockTransferSave").prop("disabled", true);
+                                $("#cmdStockTransferEdit").prop("disabled", true);
+                                $("#cmdStockTransferPrint").prop("disabled", true);
+                                $("#cmdStockTransferClose").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdStockTransferJournal").prop("disabled", true);
+                                $("#cmdStockTransferSave").prop("disabled", true);
+                                $("#cmdStockTransferEdit").prop("disabled", true);
+                                $("#cmdStockTransferPrint").prop("disabled", true);
+                                $("#cmdStockTransferClose").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdStockTransferJournal").prop("disabled", true);
+                                $("#cmdStockTransferSave").prop("disabled", true);
+                                $("#cmdStockTransferEdit").prop("disabled", true);
+                                $("#cmdStockTransferPrint").prop("disabled", true);
+                                $("#cmdStockTransferClose").prop("disabled", true);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -544,7 +712,7 @@
                     document.getElementById('stockTransfer_STDate_data').value = this.value.toLocaleDateString();
                 }
             });
-            
+
             cboBranch = new wijmo.input.ComboBox('#stockTransfer_Branch');
             cboPreparedBy = new wijmo.input.ComboBox('#stockTransfer_PreparedBy');
             cboCheckedBy = new wijmo.input.ComboBox('#stockTransfer_CheckedBy');
