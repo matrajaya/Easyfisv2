@@ -355,6 +355,7 @@
                     document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
                     var PODateFilterValue = document.getElementById('filterDate_data').value;
 
+                    $('body').removeClass('modal-open');
                     $(".modal-backdrop").remove();
 
                     POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilterValue));

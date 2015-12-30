@@ -398,7 +398,6 @@
         // ==========================
         function getPOLastInsertedId() {
             var POs = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/purchaseOrderLastId',
                 cache: false,
@@ -406,45 +405,15 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                    $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         POs.push({
                             Id: Results.Id,
-                            BranchId: Results.BranchId,
-                            Branch: Results.Branch,
-                            PONumber: Results.PONumber,
-                            PODate: Results.PODate,
-                            SupplierId: Results.SupplierId,
-                            Supplier: Results.Supplier,
-                            TermId: Results.TermId,
-                            Term: Results.Term,
-                            ManualRequestNumber: Results.ManualRequestNumber,
-                            ManualPONumber: Results.ManualPONumber,
-                            DateNeeded: Results.DateNeeded,
-                            Remarks: Results.Remarks,
-                            IsClose: Results.IsClose,
-                            RequestedById: Results.RequestedById,
-                            RequestedBy: Results.RequestedBy,
-                            PreparedById: Results.PreparedById,
-                            PreparedBy: Results.PreparedBy,
-                            CheckedById: Results.CheckedById,
-                            CheckedBy: Results.CheckedBy,
-                            ApprovedById: Results.ApprovedById,
-                            ApprovedBy: Results.ApprovedBy,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
+                            PONumber: Results.PONumber
                         });
                     }
                     window.location = '/Software/PurchaseOrderDetail?POId=' + Results.Id + '&BranchId=' + @branchId;
                     window.setTimeout(function () { location.reload() }, 1000);
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
             return POs;
         }
@@ -495,11 +464,7 @@
                         }
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-            );
-
+            });
             return branches;
         }
 
@@ -549,11 +514,7 @@
                         createCbosupplier(suppliers);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-                );
-
+            });
             return suppliers;
         }
 
@@ -602,11 +563,7 @@
                         createCboTerm(terms);
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            }
-                );
-
+            });
             return terms;
         }
 
@@ -688,8 +645,6 @@
                         }
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
             return users;
         }

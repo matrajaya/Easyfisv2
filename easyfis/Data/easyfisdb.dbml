@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="easyfis" Class="easyfisdbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=USER-1\SQLEXPRESS;Initial Catalog=easyfis;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=NOAH;Initial Catalog=easyfis;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DefaultConnection" Provider="System.Data.SqlClient" />
   <Table Name="dbo.[__MigrationHistory]" Member="__MigrationHistories">
     <Type Name="__MigrationHistory">
       <Column Name="MigrationId" Type="System.String" DbType="NVarChar(150) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -80,6 +80,7 @@
       <Association Name="MstAccount_MstArticle1" Member="MstArticles1" ThisKey="Id" OtherKey="SalesAccountId" Type="MstArticle" />
       <Association Name="MstAccount_MstArticle2" Member="MstArticles2" ThisKey="Id" OtherKey="CostAccountId" Type="MstArticle" />
       <Association Name="MstAccount_MstArticle3" Member="MstArticles3" ThisKey="Id" OtherKey="AssetAccountId" Type="MstArticle" />
+      <Association Name="MstAccount_MstArticle4" Member="MstArticles4" ThisKey="Id" OtherKey="ExpenseAccountId" Type="MstArticle" />
       <Association Name="MstAccount_MstArticleGroup" Member="MstArticleGroups" ThisKey="Id" OtherKey="AccountId" Type="MstArticleGroup" />
       <Association Name="MstAccount_MstArticleGroup1" Member="MstArticleGroups1" ThisKey="Id" OtherKey="SalesAccountId" Type="MstArticleGroup" />
       <Association Name="MstAccount_MstArticleGroup2" Member="MstArticleGroups2" ThisKey="Id" OtherKey="CostAccountId" Type="MstArticleGroup" />
@@ -227,6 +228,7 @@
       <Association Name="MstAccount_MstArticle1" Member="MstAccount1" ThisKey="SalesAccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstAccount_MstArticle2" Member="MstAccount2" ThisKey="CostAccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstAccount_MstArticle3" Member="MstAccount3" ThisKey="AssetAccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
+      <Association Name="MstAccount_MstArticle4" Member="MstAccount4" ThisKey="ExpenseAccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstArticleGroup_MstArticle" Member="MstArticleGroup" ThisKey="ArticleGroupId" OtherKey="Id" Type="MstArticleGroup" IsForeignKey="true" />
       <Association Name="MstArticleType_MstArticle" Member="MstArticleType" ThisKey="ArticleTypeId" OtherKey="Id" Type="MstArticleType" IsForeignKey="true" />
       <Association Name="MstTaxType_MstArticle" Member="MstTaxType" ThisKey="OutputTaxId" OtherKey="Id" Type="MstTaxType" IsForeignKey="true" />
@@ -275,13 +277,11 @@
       <Column Name="UpdatedById" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="MstArticleGroup_MstArticle" Member="MstArticles" ThisKey="Id" OtherKey="ArticleGroupId" Type="MstArticle" />
-      <Association Name="MstArticleGroup_MstArticleGroup" Member="MstArticleGroup2" ThisKey="Id" OtherKey="Id" Type="MstArticleGroup" Cardinality="One" />
       <Association Name="MstAccount_MstArticleGroup" Member="MstAccount" ThisKey="AccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstAccount_MstArticleGroup1" Member="MstAccount1" ThisKey="SalesAccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstAccount_MstArticleGroup2" Member="MstAccount2" ThisKey="CostAccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstAccount_MstArticleGroup3" Member="MstAccount3" ThisKey="AssetAccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
       <Association Name="MstAccount_MstArticleGroup4" Member="MstAccount4" ThisKey="ExpenseAccountId" OtherKey="Id" Type="MstAccount" IsForeignKey="true" />
-      <Association Name="MstArticleGroup_MstArticleGroup" Member="MstArticleGroup1" ThisKey="Id" OtherKey="Id" Type="MstArticleGroup" IsForeignKey="true" />
       <Association Name="MstArticleType_MstArticleGroup" Member="MstArticleType" ThisKey="ArticleTypeId" OtherKey="Id" Type="MstArticleType" IsForeignKey="true" />
       <Association Name="MstUser_MstArticleGroup" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
       <Association Name="MstUser_MstArticleGroup1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />

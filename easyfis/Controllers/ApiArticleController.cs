@@ -34,9 +34,13 @@ namespace easyfis.Controllers
                                AccountId = d.AccountId,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
+                               SalesAccount = d.MstAccount1.Account,
                                CostAccountId = d.CostAccountId,
+                               CostAccount = d.MstAccount2.Account,
                                AssetAccountId = d.AssetAccountId,
+                               AssetAccount = d.MstAccount3.Account,
                                ExpenseAccountId = d.ExpenseAccountId,
+                               ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
                                OutputTaxId = d.OutputTaxId,
@@ -94,9 +98,13 @@ namespace easyfis.Controllers
                                AccountId = d.AccountId,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
+                               SalesAccount = d.MstAccount1.Account,
                                CostAccountId = d.CostAccountId,
+                               CostAccount = d.MstAccount2.Account,
                                AssetAccountId = d.AssetAccountId,
+                               AssetAccount = d.MstAccount3.Account,
                                ExpenseAccountId = d.ExpenseAccountId,
+                               ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
                                OutputTaxId = d.OutputTaxId,
@@ -154,9 +162,13 @@ namespace easyfis.Controllers
                                AccountId = d.AccountId,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
+                               SalesAccount = d.MstAccount1.Account,
                                CostAccountId = d.CostAccountId,
+                               CostAccount = d.MstAccount2.Account,
                                AssetAccountId = d.AssetAccountId,
+                               AssetAccount = d.MstAccount3.Account,
                                ExpenseAccountId = d.ExpenseAccountId,
+                               ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
                                OutputTaxId = d.OutputTaxId,
@@ -214,9 +226,13 @@ namespace easyfis.Controllers
                                AccountId = d.AccountId,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
+                               SalesAccount = d.MstAccount1.Account,
                                CostAccountId = d.CostAccountId,
+                               CostAccount = d.MstAccount2.Account,
                                AssetAccountId = d.AssetAccountId,
+                               AssetAccount = d.MstAccount3.Account,
                                ExpenseAccountId = d.ExpenseAccountId,
+                               ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
                                OutputTaxId = d.OutputTaxId,
@@ -274,9 +290,13 @@ namespace easyfis.Controllers
                                AccountId = d.AccountId,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
+                               SalesAccount = d.MstAccount1.Account,
                                CostAccountId = d.CostAccountId,
+                               CostAccount = d.MstAccount2.Account,
                                AssetAccountId = d.AssetAccountId,
+                               AssetAccount = d.MstAccount3.Account,
                                ExpenseAccountId = d.ExpenseAccountId,
+                               ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
                                OutputTaxId = d.OutputTaxId,
@@ -310,10 +330,6 @@ namespace easyfis.Controllers
                            };
             return (Models.MstArticle)articles.FirstOrDefault();
         }
-
-
-
-        // ======================================================================================================================
 
         // ========================
         // ADD Article for Supplier
@@ -455,7 +471,6 @@ namespace easyfis.Controllers
             }
         }
 
-
         // ========================
         // ADD Article for Customer
         // ========================
@@ -596,73 +611,146 @@ namespace easyfis.Controllers
             }
         }
 
-
         // ====================
-        //// ADD Article for Item
-        //// ====================
-        //[Route("api/addArticleForItem")]
-        //public int PostItem(Models.MstArticle articleItem)
-        //{
-        //    try
-        //    {
-        //        var isLocked = false;
-        //        var identityUserId = User.Identity.GetUserId();
-        //        var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-        //        var date = DateTime.Now;
+        // ADD Article for Item
+        // ====================
+        [Route("api/addArticleForItem")]
+        public int PostItem(Models.MstArticle articleItem)
+        {
+            try
+            {
+                var isLocked = false;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
 
-        //        Data.MstArticle newArticleItem = new Data.MstArticle();
+                Data.MstArticle newArticleItem = new Data.MstArticle();
 
-        //        newArticleCustomer.ArticleCode = articleItem.ArticleCode;
-        //        newArticleCustomer.ManualArticleCode = articleItem.ManualArticleCode;
-        //        newArticleCustomer.Article = articleItem.Article;
-        //        newArticleCustomer.Category = articleItem.Category;
-        //        newArticleCustomer.ArticleTypeId = 1;
-        //        newArticleCustomer.ArticleGroupId = articleItem.ArticleGroupId;
+                newArticleItem.ArticleCode = articleItem.ArticleCode;
+                newArticleItem.ManualArticleCode = articleItem.ManualArticleCode;
+                newArticleItem.Article = articleItem.Article;
+                newArticleItem.Category = articleItem.Category;
+                newArticleItem.ArticleTypeId = 1;
+                newArticleItem.ArticleGroupId = articleItem.ArticleGroupId;
 
-        //        newArticleCustomer.AccountId = articleCustomer.AccountId;
-        //        newArticleCustomer.SalesAccountId = articleCustomer.SalesAccountId;
-        //        newArticleCustomer.CostAccountId = articleCustomer.CostAccountId;
-        //        newArticleCustomer.AssetAccountId = articleCustomer.AssetAccountId;
-        //        newArticleCustomer.ExpenseAccountId = articleCustomer.ExpenseAccountId;
+                newArticleItem.AccountId = articleItem.AccountId;
+                newArticleItem.SalesAccountId = articleItem.SalesAccountId;
+                newArticleItem.CostAccountId = articleItem.CostAccountId;
+                newArticleItem.AssetAccountId = articleItem.AssetAccountId;
+                newArticleItem.ExpenseAccountId = articleItem.ExpenseAccountId;
 
-        //        newArticleCustomer.UnitId = 1;
-        //        newArticleCustomer.OutputTaxId = 5;
-        //        newArticleCustomer.InputTaxId = 5;
-        //        newArticleCustomer.WTaxTypeId = 5;
+                newArticleItem.UnitId = articleItem.UnitId;
+                newArticleItem.OutputTaxId = articleItem.OutputTaxId;
+                newArticleItem.InputTaxId = articleItem.InputTaxId;
+                newArticleItem.WTaxTypeId = articleItem.WTaxTypeId;
 
-        //        newArticleCustomer.Price = 0;
-        //        newArticleCustomer.Cost = 0;
-        //        newArticleCustomer.IsInventory = false;
-        //        newArticleCustomer.Particulars = articleCustomer.Particulars;
-        //        newArticleCustomer.Address = articleCustomer.Address;
-        //        newArticleCustomer.TermId = articleCustomer.TermId;
-        //        newArticleCustomer.ContactNumber = articleCustomer.ContactNumber;
-        //        newArticleCustomer.ContactPerson = articleCustomer.ContactPerson;
-        //        newArticleCustomer.TaxNumber = articleCustomer.TaxNumber;
-        //        newArticleCustomer.CreditLimit = articleCustomer.CreditLimit;
-        //        newArticleCustomer.DateAcquired = date;
-        //        newArticleCustomer.UsefulLife = 0;
-        //        newArticleCustomer.SalvageValue = 0;
-        //        newArticleCustomer.ManualArticleOldCode = " ";
+                newArticleItem.Price = articleItem.Price;
+                newArticleItem.Cost = articleItem.Cost;
+                newArticleItem.IsInventory = articleItem.IsInventory;
+                newArticleItem.Particulars = articleItem.Particulars;
+                newArticleItem.TermId = 1;
+                newArticleItem.Address = "NA";
+                newArticleItem.ContactNumber = "NA";
+                newArticleItem.ContactPerson = "NA";
+                newArticleItem.TaxNumber = "NA";
+                newArticleItem.CreditLimit = 0;
+                newArticleItem.DateAcquired = Convert.ToDateTime(articleItem.DateAcquired);
+                newArticleItem.UsefulLife = articleItem.UsefulLife;
+                newArticleItem.SalvageValue = articleItem.SalvageValue;
+                newArticleItem.ManualArticleOldCode = articleItem.ManualArticleOldCode;
 
-        //        newArticleCustomer.IsLocked = isLocked;
-        //        newArticleCustomer.CreatedById = mstUserId;
-        //        newArticleCustomer.CreatedDateTime = date;
-        //        newArticleCustomer.UpdatedById = mstUserId;
-        //        newArticleCustomer.UpdatedDateTime = date;
+                newArticleItem.IsLocked = isLocked;
+                newArticleItem.CreatedById = mstUserId;
+                newArticleItem.CreatedDateTime = date;
+                newArticleItem.UpdatedById = mstUserId;
+                newArticleItem.UpdatedDateTime = date;
 
-        //        db.MstArticles.InsertOnSubmit(newArticleCustomer);
-        //        db.SubmitChanges();
+                db.MstArticles.InsertOnSubmit(newArticleItem);
+                db.SubmitChanges();
 
-        //        return newArticleCustomer.Id;
+                return newArticleItem.Id;
 
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine(e);
-        //        return 0;
-        //    }
-        //}
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return 0;
+            }
+        }
+
+        // =======================
+        // UPDATE Article For Item
+        // =======================
+        [Route("api/updateArticleForItem/{id}")]
+        public HttpResponseMessage PutItem(String id, Models.MstArticle articleItem)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var articleItem_Id = Convert.ToInt32(id);
+                var articleItems = from d in db.MstArticles where d.Id == articleItem_Id select d;
+
+                if (articleItems.Any())
+                {
+                    var updateArticleItem = articleItems.FirstOrDefault();
+
+                    updateArticleItem.ArticleCode = articleItem.ArticleCode;
+                    updateArticleItem.ManualArticleCode = articleItem.ManualArticleCode;
+                    updateArticleItem.Article = articleItem.Article;
+                    updateArticleItem.Category = articleItem.Category;
+                    updateArticleItem.ArticleTypeId = 1;
+                    updateArticleItem.ArticleGroupId = articleItem.ArticleGroupId;
+
+                    updateArticleItem.AccountId = articleItem.AccountId;
+                    updateArticleItem.SalesAccountId = articleItem.SalesAccountId;
+                    updateArticleItem.CostAccountId = articleItem.CostAccountId;
+                    updateArticleItem.AssetAccountId = articleItem.AssetAccountId;
+                    updateArticleItem.ExpenseAccountId = articleItem.ExpenseAccountId;
+
+                    updateArticleItem.UnitId = articleItem.UnitId;
+                    updateArticleItem.OutputTaxId = articleItem.OutputTaxId;
+                    updateArticleItem.InputTaxId = articleItem.InputTaxId;
+                    updateArticleItem.WTaxTypeId = articleItem.WTaxTypeId;
+
+                    updateArticleItem.Price = articleItem.Price;
+                    updateArticleItem.Cost = articleItem.Cost;
+                    updateArticleItem.IsInventory = articleItem.IsInventory;
+                    updateArticleItem.Particulars = articleItem.Particulars;
+                    updateArticleItem.TermId = 1;
+                    updateArticleItem.Address = "NA";
+                    updateArticleItem.ContactNumber = "NA";
+                    updateArticleItem.ContactPerson = "NA";
+                    updateArticleItem.TaxNumber = "NA";
+                    updateArticleItem.CreditLimit = 0;
+                    updateArticleItem.DateAcquired = Convert.ToDateTime(articleItem.DateAcquired);
+                    updateArticleItem.UsefulLife = articleItem.UsefulLife;
+                    updateArticleItem.SalvageValue = articleItem.SalvageValue;
+                    updateArticleItem.ManualArticleOldCode = articleItem.ManualArticleOldCode;
+
+                    updateArticleItem.IsLocked = articleItem.IsLocked;
+                    updateArticleItem.UpdatedById = mstUserId;
+                    updateArticleItem.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
 
         // =====================
         // UPDATE Article IsLock

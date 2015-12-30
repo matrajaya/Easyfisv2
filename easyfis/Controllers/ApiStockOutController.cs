@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
@@ -161,6 +162,138 @@ namespace easyfis.Controllers
                                 UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                             };
             return (Models.TrnStockOut)stockOuts.FirstOrDefault();
+        }
+
+        // ========================
+        // GET last Id in Stock Out
+        // ========================
+        [Route("api/stockOutLastId")]
+        public Models.TrnStockOut GetStockOutLastId()
+        {
+            var stockOuts = from d in db.TrnStockOuts.OrderByDescending(d => d.Id)
+                            select new Models.TrnStockOut
+                            {
+                                Id = d.Id,
+                                BranchId = d.BranchId,
+                                Branch = d.MstBranch.Branch,
+                                OTNumber = d.OTNumber,
+                                OTDate = d.OTDate.ToShortDateString(),
+                                AccountId = d.AccountId,
+                                Account = d.MstAccount.Account,
+                                ArticleId = d.ArticleId,
+                                Article = d.MstArticle.Article,
+                                Particulars = d.Particulars,
+                                ManualOTNumber = d.ManualOTNumber,
+                                PreparedById = d.PreparedById,
+                                PreparedBy = d.MstUser3.FullName,
+                                CheckedById = d.CheckedById,
+                                CheckedBy = d.MstUser1.FullName,
+                                ApprovedById = d.ApprovedById,
+                                ApprovedBy = d.MstUser.FullName,
+                                IsLocked = d.IsLocked,
+                                CreatedById = d.CreatedById,
+                                CreatedBy = d.MstUser2.FullName,
+                                CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                UpdatedById = d.UpdatedById,
+                                UpdatedBy = d.MstUser4.FullName,
+                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                            };
+            return (Models.TrnStockOut)stockOuts.FirstOrDefault();
+        }
+
+        // =============
+        // ADD Stock out
+        // =============
+        [Route("api/addStockOut")]
+        public int Post(Models.TrnStockOut stockOut)
+        {
+            try
+            {
+                var isLocked = false;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                Data.TrnStockOut newStockOut = new Data.TrnStockOut();
+
+                newStockOut.BranchId = stockOut.BranchId;
+                newStockOut.OTNumber = stockOut.OTNumber;
+                newStockOut.OTDate = Convert.ToDateTime(stockOut.OTDate);
+                newStockOut.AccountId = stockOut.AccountId;
+                newStockOut.ArticleId = stockOut.ArticleId;
+                newStockOut.Particulars = stockOut.Particulars;
+                newStockOut.ManualOTNumber = stockOut.ManualOTNumber;
+                newStockOut.PreparedById = stockOut.PreparedById;
+                newStockOut.CheckedById = stockOut.CheckedById;
+                newStockOut.ApprovedById = stockOut.ApprovedById;
+                newStockOut.IsLocked = isLocked;
+                newStockOut.CreatedById = mstUserId;
+                newStockOut.CreatedDateTime = date;
+                newStockOut.UpdatedById = mstUserId;
+                newStockOut.UpdatedDateTime = date;
+
+                db.TrnStockOuts.InsertOnSubmit(newStockOut);
+                db.SubmitChanges();
+
+                return newStockOut.Id;
+
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // ================
+        // UPDATE Stock Out
+        // ================
+        [Route("api/updateStockOut/{id}")]
+        public HttpResponseMessage Put(String id, Models.TrnStockOut stockOut)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var stockOut_Id = Convert.ToInt32(id);
+                var stockOuts = from d in db.TrnStockOuts where d.Id == stockOut_Id select d;
+
+                if (stockOuts.Any())
+                {
+                    var updateStockOut = stockOuts.FirstOrDefault();
+
+                    updateStockOut.BranchId = stockOut.BranchId;
+                    updateStockOut.OTNumber = stockOut.OTNumber;
+                    updateStockOut.OTDate = Convert.ToDateTime(stockOut.OTDate);
+                    updateStockOut.AccountId = stockOut.AccountId;
+                    updateStockOut.ArticleId = stockOut.ArticleId;
+                    updateStockOut.Particulars = stockOut.Particulars;
+                    updateStockOut.ManualOTNumber = stockOut.ManualOTNumber;
+                    updateStockOut.PreparedById = stockOut.PreparedById;
+                    updateStockOut.CheckedById = stockOut.CheckedById;
+                    updateStockOut.ApprovedById = stockOut.ApprovedById;
+                    updateStockOut.IsLocked = stockOut.IsLocked;
+                    updateStockOut.CreatedById = mstUserId;
+                    updateStockOut.CreatedDateTime = date;
+                    updateStockOut.UpdatedById = mstUserId;
+                    updateStockOut.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
 
         // ================
