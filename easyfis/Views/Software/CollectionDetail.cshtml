@@ -1,5 +1,4 @@
 ﻿@{
-    var id = Request.QueryString["CompanyId"];
     var branchId = Request.QueryString["BranchId"];
     var collectonId = Request.QueryString["CollectonId"];
     var userId = ViewData["UserId"];
@@ -31,11 +30,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        @*<h4><img src='~/images/Icons/iCollect.png'> Company - Detail</h4>*@
                         <h4><i class="fa fa-cc-visa fa-2x"></i> Collection Detail</h4>
                         <br />
                         <div class="div_Current_Page">
-                            @*<label id="currentBranchName"></label>*@
                             <span id="currentPage"></span>
                         </div>
                     </div>
@@ -45,11 +42,11 @@
                         <h4 id="collectionDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-book"></i> Journal</button>
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" onclick="window.location.href ='@Url.Action("CollectionPDF", "Software", new { CollectonId = collectonId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("Collection", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdCollectionJournal"><i class="fa fa-book"></i> Journal</button>
+                        <button class="btn btn-primary btn-sm" id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id="cmdCollectionEdit"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="window.location.href ='@Url.Action("CollectionPDF", "Software", new { CollectonId = collectonId })'"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("Collection", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -62,14 +59,14 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="collection_Branch"></div>
 
-                                        <input type="hidden" id="collection_Branch_data" />
+                                        <input type="hidden" id="collection_Branch_data" class="requiredCollection" />
                                         <input type="hidden" id="collection_Branch_selectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">OR Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="collection_ORNumber" />
+                                        <input type="text" class="form-control input-sm requiredCollection" id="collection_ORNumber" />
                                         <input type="hidden" id="collection_ORNumber_Display" />
                                     </div>
                                 </div>
@@ -77,13 +74,13 @@
                                     <label class="control-label col-sm-4">OR Date:</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="collection_ORDate"></div>
-                                        <input type="hidden" id="collection_ORDate_data" />
+                                        <input type="hidden" id="collection_ORDate_data" class="requiredCollection" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual OR Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="collection_ManualORNumber">
+                                        <input type="text" class="form-control input-sm requiredCollection" id="collection_ManualORNumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -92,7 +89,7 @@
                                         <div class="input-group">
                                             <div class="comboBox-wide" id="collection_Customer"></div>
 
-                                            <input type="hidden" id="collection_Customer_data" />
+                                            <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
                                             <input type="hidden" id="collection_Customer_selectedValue" />
                                             <div class="input-group-btn">
                                                 <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
@@ -104,7 +101,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars:</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom" id="collection_Particulars"></textarea>
+                                        <textarea class="form-control textarea-custom requiredCollection" id="collection_Particulars"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -114,7 +111,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="collection_PreparedBy"></div>
 
-                                        <input type="hidden" id="collection_PreparedBy_data" />
+                                        <input type="hidden" id="collection_PreparedBy_data" class="requiredCollection" />
                                         <input type="hidden" id="collection_PreparedBy_selectedValue" />
                                         <input type="hidden" id="userId_data" value="@userId" />
                                     </div>
@@ -124,7 +121,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="collection_CheckedBy"></div>
 
-                                        <input type="hidden" id="collection_CheckedBy_data" />
+                                        <input type="hidden" id="collection_CheckedBy_data" class="requiredCollection" />
                                         <input type="hidden" id="collection_CheckedBy_selectedValue" />
                                     </div>
                                 </div>
@@ -133,7 +130,7 @@
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="collection_ApprovedBy"></div>
 
-                                        <input type="hidden" id="collection_ApprovedBy_data" />
+                                        <input type="hidden" id="collection_ApprovedBy_data" class="requiredCollection" />
                                         <input type="hidden" id="collection_ApprovedBy_selectedValue" />
                                     </div>
                                 </div>
@@ -277,7 +274,6 @@
                     document.getElementById('collection_ORNumber').value = Results.ORNumber;
                     document.getElementById('collection_ORNumber_Display').value = Results.ORNumber;
                     document.getElementById('collection_ORDate_data').value = Results.ORDate;
-
                     var ORdate_date = Results.ORDate;
                     ORDate.dispose();
                     ORDate = new wijmo.input.InputDate('#collection_ORDate', {
@@ -288,23 +284,17 @@
                             document.getElementById('collection_ORDate_data').value = this.value.toLocaleDateString();
                         }
                     });
-
                     document.getElementById('collection_ManualORNumber').value = Results.ManualORNumber;
                     document.getElementById('collection_Customer_data').value = Results.CustomerId;
                     document.getElementById('collection_Customer_selectedValue').value = Results.Customer;
                     document.getElementById('collection_Particulars').value = Results.Particulars;
-
                     document.getElementById('collection_PreparedBy_data').value = Results.PreparedById;
                     document.getElementById('collection_PreparedBy_selectedValue').value = Results.PreparedBy;
-
                     document.getElementById('collection_CheckedBy_data').value = Results.CheckedById;
                     document.getElementById('collection_CheckedBy_selectedValue').value = Results.CheckedBy;
-
                     document.getElementById('collection_ApprovedBy_data').value = Results.ApprovedById;
                     document.getElementById('collection_ApprovedBy_selectedValue').value = Results.ApprovedBy;
-
                     document.getElementById('collection_Lock').checked = Results.IsLocked;
-
                     document.getElementById('createdBy').innerHTML = Results.CreatedBy;
                     document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
                     document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
@@ -316,6 +306,32 @@
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
+            });
+            return collections;
+        }
+
+
+        // ======================
+        // GET Collection Last Id
+        // ======================
+        function getCollectionLastInsertedId() {
+            var collections = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/collectionLastId',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        collections.push({
+                            Id: Results.Id,
+                            ORNumber: Results.ORNumber
+                        });
+                    }
+                    window.location = '/Software/CollectionDetail?CollectonId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.setTimeout(function () { location.reload() }, 1000);
+                }
             });
             return collections;
         }
@@ -370,7 +386,7 @@
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             }
-                    );
+                );
 
             return branches;
         }
@@ -593,6 +609,156 @@
                 pad--;
             }
             return result;
+        }
+
+        // ==============
+        // ADD Collection
+        // ==============
+        function btnCollectionSave_OnClick() {
+            var collectionObject = new Object();
+            var collectonId = @collectonId;
+            collectionObject.BranchId = document.getElementById('collection_Branch_data').value;
+            collectionObject.ORNumber = document.getElementById('collection_ORNumber').value;
+            collectionObject.ORDate = document.getElementById('collection_ORDate_data').value;
+            collectionObject.CustomerId = document.getElementById('collection_Customer_data').value;
+            collectionObject.Particulars = document.getElementById('collection_Particulars').value;
+            collectionObject.ManualORNumber = document.getElementById('collection_ManualORNumber').value;
+            collectionObject.PreparedById = document.getElementById('collection_PreparedBy_data').value;
+            collectionObject.CheckedById = document.getElementById('collection_CheckedBy_data').value;
+            collectionObject.ApprovedById = document.getElementById('collection_ApprovedBy_data').value;
+            var data = JSON.stringify(collectionObject);
+
+            if( document.getElementById('collection_Branch_data').value == '') {
+                document.getElementById("collection_Branch").style.border = "1px solid red";
+            } else {
+                document.getElementById("collection_Branch").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('collection_ORDate_data').value == '') {
+                document.getElementById("collection_ORDate").style.border = "1px solid red";
+            } else {
+                document.getElementById("collection_ORDate").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('collection_Customer_data').value == '') {
+                document.getElementById("collection_Customer").style.border = "1px solid red";
+            } else {
+                document.getElementById("collection_Customer").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('collection_PreparedBy_data').value == '') {
+                document.getElementById("collection_PreparedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("collection_PreparedBy").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('collection_CheckedBy_data').value == '') {
+                document.getElementById("collection_CheckedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("collection_CheckedBy").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('collection_ApprovedBy_data').value == '') {
+                document.getElementById("collection_ApprovedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("collection_ApprovedBy").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredCollection').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                if (collectonId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addCollection',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdCollectionJournal").prop("disabled", true);
+                                $("#cmdCollectionSave").prop("disabled", true);
+                                $("#cmdCollectionEdit").prop("disabled", true);
+                                $("#cmdCollectionPrint").prop("disabled", true);
+                                $("#cmdCollectionClose").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getCollectionLastInsertedId, 1000)
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdCollectionJournal").prop("disabled", true);
+                                $("#cmdCollectionSave").prop("disabled", true);
+                                $("#cmdCollectionEdit").prop("disabled", true);
+                                $("#cmdCollectionPrint").prop("disabled", true);
+                                $("#cmdCollectionClose").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdCollectionJournal").prop("disabled", true);
+                                $("#cmdCollectionSave").prop("disabled", true);
+                                $("#cmdCollectionEdit").prop("disabled", true);
+                                $("#cmdCollectionPrint").prop("disabled", true);
+                                $("#cmdCollectionClose").prop("disabled", true);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateCollectionIsLock/' + collectonId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdCollectionJournal").prop("disabled", true);
+                                $("#cmdCollectionSave").prop("disabled", true);
+                                $("#cmdCollectionEdit").prop("disabled", true);
+                                $("#cmdCollectionPrint").prop("disabled", true);
+                                $("#cmdCollectionClose").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdCollectionJournal").prop("disabled", true);
+                                $("#cmdCollectionSave").prop("disabled", true);
+                                $("#cmdCollectionEdit").prop("disabled", true);
+                                $("#cmdCollectionPrint").prop("disabled", true);
+                                $("#cmdCollectionClose").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdCollectionJournal").prop("disabled", true);
+                                $("#cmdCollectionSave").prop("disabled", true);
+                                $("#cmdCollectionEdit").prop("disabled", true);
+                                $("#cmdCollectionPrint").prop("disabled", true);
+                                $("#cmdCollectionClose").prop("disabled", true);
+                            }
+                        }
+                    });
+                }
+            }
+
         }
 
         // ===========
