@@ -229,7 +229,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="AccountDetailForm">
-                            <input type="hidden" class="form-control input-sm" id="account_id" />
+                            <input type="hidden" id="account_id" />
                             <dl class="dl-horizontal">
                                 <dt>Account Code:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccount" id="account_code" /></dd>
@@ -295,7 +295,7 @@
                         <h4 class="modal-title" id="accountTypeModalLabel">Account Type Detail</h4>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" class="form-control input-sm" id="accountType_id" />
+                        <input type="hidden" id="accountType_id" />
                         <form id="AccountTypeDetailForm">
                             <dl class="dl-horizontal">
                                 <dt>Account Type Code:</dt>
@@ -357,7 +357,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="AccountCashFlowDetailForm">
-                            <input type="hidden" class="form-control input-sm" id="accountCashFlow_Id" />
+                            <input type="hidden" id="accountCashFlow_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Cash Flow Code:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccountCashFlow" id="accountCashFlow_Code" /></dd>
@@ -409,7 +409,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="AccountCategoryDetailForm">
-                            <input type="hidden" class="form-control input-sm" id="accountCategory_Id" />
+                            <input type="hidden" id="accountCategory_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Category Code:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccountCategory" id="accountCategory_Code" /></dd>
@@ -661,7 +661,7 @@
             document.getElementById('account_cash_flow_selectedValue').value = "";
         }
 
-        // =====-=============
+        // ===================
         // SAVE Account Button
         // ===================
         function cmdAccountSaveButton_OnClick() {
@@ -829,7 +829,7 @@
             $("#cmdAccountDetailCloseButton").prop("disabled", false);
 
             var account = accounts.currentEditItem;
-            document.getElementById('account_id').value = account.Id !== null && typeof (account.Id) != 'undefined' ? wijmo.Globalize.format(account.Id) : '';
+            document.getElementById('account_id').value = account.Id ? account.Id : '';
             document.getElementById('account_code').value = account.AccountCode ? account.AccountCode : '';
             document.getElementById('account_account').value = account.Account ? account.Account : '';
             document.getElementById('account_type_id_data').value = account.AccountTypeId ? account.AccountTypeId : '';
@@ -1356,7 +1356,7 @@
             getAccountCategoryForComboBox();
 
             var accountType = accountTypes.currentEditItem;
-            document.getElementById('accountType_id').value = accountType.Id !== null && typeof (accountType.Id) != 'undefined' ? wijmo.Globalize.format(accountType.Id) : '';
+            document.getElementById('accountType_id').value = accountType.Id ? accountType.Id : '';
             document.getElementById('accountType_code').value = accountType.AccountTypeCode ? accountType.AccountTypeCode : '';
             document.getElementById('accountType_accountType').value = accountType.AccountType ? accountType.AccountType : '';
             document.getElementById('accountType_CategoryId_Data').value = accountType.AccountCategoryId ? accountType.AccountCategoryId : '';
@@ -1811,7 +1811,7 @@
             $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
 
             var accountCashFlow = accountCashFlows.currentEditItem;
-            document.getElementById('accountCashFlow_Id').value = accountCashFlow.Id !== null && typeof (accountCashFlow.Id) != 'undefined' ? wijmo.Globalize.format(accountCashFlow.Id) : '';
+            document.getElementById('accountCashFlow_Id').value = accountCashFlow.Id ? accountCashFlow.Id : '';
             document.getElementById('accountCashFlow_Code').value = accountCashFlow.AccountCashFlowCode ? accountCashFlow.AccountCashFlowCode : '';
             document.getElementById('accountCashFlow_CashFlow').value = accountCashFlow.AccountCashFlow ? accountCashFlow.AccountCashFlow : '';
         }
@@ -2248,7 +2248,7 @@
             $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
 
             var accountCategory = accountCategories.currentEditItem;
-            document.getElementById('accountCategory_Id').value = accountCategory.Id !== null && typeof (accountCategory.Id) != 'undefined' ? wijmo.Globalize.format(accountCategory.Id) : '';
+            document.getElementById('accountCategory_Id').value = accountCategory.Id ? accountCategory.Id : '';
             document.getElementById('accountCategory_Code').value = accountCategory.AccountCategoryCode ? accountCategory.AccountCategoryCode : '';
             document.getElementById('accountCategory_Category').value = accountCategory.AccountCategory ? accountCategory.AccountCategory : '';
         }
