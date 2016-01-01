@@ -691,14 +691,19 @@
                     </div>
                     <div class="modal-body">
                         <form id="employeeDetailForm">
-                            <input type="hidden" id="term_id" />
+                            <input type="hidden" id="employee_id" />
                             <dl class="dl-horizontal">
                                 <dt>Code:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_Code" /></dd>
                                 <dt>Employee:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_Employee" /></dd>
                                 <dt>Account:</dt>
-                                <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_Account" /></dd>
+                                <dd>
+                                    <div id="employee_Account" class="comboBox-wide"></div>
+
+                                    <input type="hidden" class="requiredEmployee" id="employee_Account_data" />
+                                    <input type="hidden" id="employee_Account_selectedValue" />
+                                </dd>
                                 <dt>Address:</dt>
                                 <dd><textarea class="form-control input-sm textarea-custom requiredEmployee" id="employee_Address"></textarea></dd>
                                 <dt>Contact Number:</dt>
@@ -2566,7 +2571,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#cmdConfirmDeleteUnit").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButtonUnit").prop("disabled", false);
         }
@@ -2811,7 +2816,7 @@
             }
             btnCurrentPageGridTerm.innerHTML = (terms.pageIndex + 1) + ' / ' + terms.pageCount;
         }
-        
+
         // ========
         // ADD Term
         // ========
@@ -2838,7 +2843,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#cmdSaveTermButton").prop("disabled", false);
             $("#cmdTermDetailCloseButton").prop("disabled", false);
 
@@ -2856,7 +2861,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#cmdConfirmDeleteTerm").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButtonTerm").prop("disabled", false);
         }
@@ -3160,7 +3165,8 @@
         // =============================
         var employees;
         var employeeGrid;
-
+        var employeeAccounts;
+        var cboEmployeeForAccount;
         var btnFirstPageEmployee;
         var btnPreviousPageGridEmployee;
         var btnNextPageGridEmployee;
@@ -3276,6 +3282,54 @@
             btnCurrentPageGridEmployee.innerHTML = (employees.pageIndex + 1) + ' / ' + employees.pageCount;
         }
 
+        // ===========
+        // Get Account
+        // ===========
+        function getEmployeeAccountForComboBox() {
+            employeeAccounts = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            employeeAccounts.push({
+                                AccountId: results[i]["Id"],
+                                AccountAccount: results[i]["Account"]
+                            });
+                        }
+                        createCboForEmployeeAccount(employeeAccounts);
+                    }
+                }
+            });
+        }
+
+        // ===============
+        // CBO for Account
+        // ===============
+        function  createCboForEmployeeAccount(employeeAccounts) {
+            var accountCollection = new wijmo.collections.CollectionView(employeeAccounts);
+            var accountList = new Array();
+            for (var i = 0; i < accountCollection.items.length; i++) {
+                accountList.push(accountCollection.items[i].AccountAccount);
+            }
+
+            cboEmployeeForAccount.dispose();
+            cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account', {
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('employee_Account_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#employee_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                }
+            });
+        }
+
         // ============
         // ADD Employee
         // ============
@@ -3284,16 +3338,66 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdSaveEmployeeButton").prop("disabled", false);
+            $("#cmdEmployeeDetailCloseButton").prop("disabled", false);
+
+            getEmployeeAccountForComboBox();
+
+            document.getElementById('employee_id').value = 0;
+            document.getElementById('employee_Code').value = "";
+            document.getElementById('employee_Employee').value = "";
+            document.getElementById('employee_Account_data').value = "";
+            document.getElementById('employee_Account_selectedValue').value = "";
+            document.getElementById('employee_Address').value = "";
+            document.getElementById('employee_ContactNumber').value = "";
+
+            var employees = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/articleLastArticleCodeByArticleTypeId/4',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        employees.push({
+                            Id: Results.Id,
+                            EmployeeArticleCode: Results.ArticleCode
+                        });
+                    }
+                    var ArticleCode = parseInt(Results.ArticleCode);
+                    var ArticleCode_plusOne = 0000000001;
+                    var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
+
+                    document.getElementById('employee_Code').value = zerofill(ArticleCode_Results, 10);
+                }
+            });
         }
 
         // =============
         // EDIT Employee
         // =============
         function btnEditEmployee_OnClick() {
+            employees.editItem(employees.currentItem);
             $('#employeeEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdSaveEmployeeButton").prop("disabled", false);
+            $("#cmdEmployeeDetailCloseButton").prop("disabled", false);
+
+            getEmployeeAccountForComboBox();
+
+            var employee = employees.currentEditItem;
+            document.getElementById('employee_id').value = employee.Id ? employee.Id : '';
+            document.getElementById('employee_Code').value = employee.ArticleCode ? employee.ArticleCode : '';
+            document.getElementById('employee_Employee').value = employee.Article ? employee.Article : '';
+            document.getElementById('employee_Account_data').value = employee.AccountId ? employee.AccountId : '';
+            document.getElementById('employee_Account_selectedValue').value = employee.Account ? employee.Account : '';
+            document.getElementById('employee_Address').value = employee.Address ? employee.Address : '';
+            document.getElementById('employee_ContactNumber').value = employee.ContactNumber ? employee.ContactNumber : '';
         }
 
         // ===============
@@ -3304,18 +3408,238 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdConfirmDeleteEmployee").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButtonEmployee").prop("disabled", false);
         }
-        
+        // Employee Confirm Delete Button
+        function cmdEmployeeConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteEmployee").prop("disabled", true);
+            $("#cmdConfirmDeleteCloseButtonEmployee").prop("disabled", true);
+
+            employees.editItem(employees.currentItem);
+            var id = employees.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteArticle/' + id,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteEmployee").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonEmployee").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+
+                        $('#deleteEmployeeConfirm').modal('hide');
+
+                        employees = new wijmo.collections.CollectionView(getEmployee());
+                        employees.canFilter = true;
+                        employees.pageSize = 15;
+
+                        var filterTextEmployee = '';
+                        $('#InputFilterTerm').keyup(function () {
+                            filterTextEmployee = this.value.toLowerCase();
+                            employees.refresh();
+                        });
+                        employees.filter = function (item) {
+                            return !filterTextEmployee || (item.Article.toLowerCase().indexOf(filterTextEmployee) > -1);
+                        }
+                        employees.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsEmployee();
+                        });
+                        employees.currentChanged.addHandler(function (sender, args) {
+                            updateDetailsEmployee();
+                        });
+
+                        employeeGrid.itemsSource = employees;
+                        employeeGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $("#cmdConfirmDeleteEmployee").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonEmployee").prop("disabled", false);
+                        $('#deleteEmployeeConfirm').modal('hide');
+
+                    },
+                    400: function () {
+                        toastr.error("Can't be deleted");
+                        $("#cmdConfirmDeleteEmployee").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonEmployee").prop("disabled", false);
+                        $('#deleteEmployeeConfirm').modal('hide');
+                    }
+                }
+            });
+        }
+
+        // =============
+        // SAVE Employee
+        // =============
+        function btnEmployeeSaveButton_OnClick() {
+            var employeeObject = new Object();
+            var employeeId = document.getElementById('employee_id').value;
+            employeeObject.ArticleCode = document.getElementById('employee_Code').value;
+            employeeObject.Article = document.getElementById('employee_Employee').value;
+            employeeObject.AccountId = document.getElementById('employee_Account_data').value;
+            employeeObject.Address = document.getElementById('employee_Address').value;
+            employeeObject.ContactNumber = document.getElementById('employee_ContactNumber').value;
+            var employeeData = JSON.stringify(employeeObject);
+
+            if( document.getElementById('employee_Account_data').value == '') {
+                document.getElementById("employee_Account").style.border = "1px solid red";
+            } else {
+                document.getElementById("employee_Account").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredEmployee').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                $("#cmdSaveEmployeeButton").prop("disabled", true);
+                $("#cmdEmployeeDetailCloseButton").prop("disabled", true);
+
+                if(employeeId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addArticle/4',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: employeeData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveEmployeeButton").prop("disabled", true);
+                                $("#cmdEmployeeDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+
+                                $('#employeeEdit').modal('hide');
+
+                                employees = new wijmo.collections.CollectionView(getEmployee());
+                                employees.canFilter = true;
+                                employees.pageSize = 15;
+
+                                var filterTextEmployee = '';
+                                $('#InputFilterTerm').keyup(function () {
+                                    filterTextEmployee = this.value.toLowerCase();
+                                    employees.refresh();
+                                });
+                                employees.filter = function (item) {
+                                    return !filterTextEmployee || (item.Article.toLowerCase().indexOf(filterTextEmployee) > -1);
+                                }
+                                employees.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsEmployee();
+                                });
+                                employees.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsEmployee();
+                                });
+
+                                employeeGrid.itemsSource = employees;
+                                employeeGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdSaveEmployeeButton").prop("disabled", false);
+                                $("#cmdEmployeeDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdSaveEmployeeButton").prop("disabled", false);
+                                $("#cmdEmployeeDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateArticle/' + employeeId + '/4',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: employeeData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveEmployeeButton").prop("disabled", true);
+                                $("#cmdEmployeeDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+
+                                $('#employeeEdit').modal('hide');
+
+                                employees = new wijmo.collections.CollectionView(getEmployee());
+                                employees.canFilter = true;
+                                employees.pageSize = 15;
+
+                                var filterTextEmployee = '';
+                                $('#InputFilterTerm').keyup(function () {
+                                    filterTextEmployee = this.value.toLowerCase();
+                                    employees.refresh();
+                                });
+                                employees.filter = function (item) {
+                                    return !filterTextEmployee || (item.Article.toLowerCase().indexOf(filterTextEmployee) > -1);
+                                }
+                                employees.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsEmployee();
+                                });
+                                employees.currentChanged.addHandler(function (sender, args) {
+                                    updateDetailsEmployee();
+                                });
+
+                                employeeGrid.itemsSource = employees;
+                                employeeGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdSaveEmployeeButton").prop("disabled", false);
+                                $("#cmdEmployeeDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdSaveEmployeeButton").prop("disabled", false);
+                                $("#cmdEmployeeDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // ========================================================
+        // Function with leading zeroes to display the article code
+        // ========================================================
+        function zerofill(number, length) {
+            var result = number.toString();
+            var pad = length - result.length;
+            while(pad > 0) {
+                result = '0' + result;
+                pad--;
+            }
+            return result;
+        }
+
         // ========
         // Employee
         // ========
         function employeeTab() {
+            cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account');
+            document.getElementById('employee_Code').disabled = true;
+
             employees = new wijmo.collections.CollectionView(getEmployee());
             employees.canFilter = true;
             employees.pageSize = 15;
 
             var filterTextEmployee = '';
-            $('#InputFilterTerm').keyup(function () {
+            $('#InputFilterEmployee').keyup(function () {
                 filterTextEmployee = this.value.toLowerCase();
                 employees.refresh();
             });

@@ -347,21 +347,20 @@ namespace easyfis.Controllers
                 var articleType_Id = Convert.ToInt32(articleTypeId);
 
                 Data.MstArticle newArticle = new Data.MstArticle();
-
                 if (articleType_Id == 4)
                 {
                     newArticle.ArticleCode = article.ArticleCode;
-                    newArticle.ManualArticleCode = " ";
+                    newArticle.ManualArticleCode = "NULL";
                     newArticle.Article = article.Article;
-                    newArticle.Category = " ";
+                    newArticle.Category = "NA";
                     newArticle.ArticleTypeId = articleType_Id;
                     newArticle.ArticleGroupId = null;
 
                     newArticle.AccountId = article.AccountId;
-                    newArticle.SalesAccountId = article.SalesAccountId;
-                    newArticle.CostAccountId = article.CostAccountId;
-                    newArticle.AssetAccountId = article.AssetAccountId;
-                    newArticle.ExpenseAccountId = article.ExpenseAccountId;
+                    newArticle.SalesAccountId = article.AccountId;
+                    newArticle.CostAccountId = article.AccountId;
+                    newArticle.AssetAccountId = article.AccountId;
+                    newArticle.ExpenseAccountId = article.AccountId;
 
                     newArticle.UnitId = 1;
                     newArticle.OutputTaxId = 5;
@@ -381,7 +380,7 @@ namespace easyfis.Controllers
                     newArticle.DateAcquired = date;
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
-                    newArticle.ManualArticleOldCode = " ";
+                    newArticle.ManualArticleOldCode = "NULL";
                 }
                 else if (articleType_Id == 3)
                 {
@@ -524,12 +523,10 @@ namespace easyfis.Controllers
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
-
                 var articleType_Id = Convert.ToInt32(articleTypeId);
 
                 var article_Id = Convert.ToInt32(id);
                 var articles = from d in db.MstArticles where d.Id == article_Id select d;
-
 
                 if (articles.Any())
                 {
@@ -673,7 +670,6 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
-
 
         // =====================
         // UPDATE Article IsLock
