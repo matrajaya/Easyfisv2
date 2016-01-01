@@ -382,6 +382,41 @@ namespace easyfis.Controllers
                     newArticle.SalvageValue = 0;
                     newArticle.ManualArticleOldCode = "NULL";
                 }
+                else if (articleType_Id == 5)
+                {
+                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ManualArticleCode = "NULL";
+                    newArticle.Article = article.Article;
+                    newArticle.Category = "NA";
+                    newArticle.ArticleTypeId = articleType_Id;
+                    newArticle.ArticleGroupId = article.ArticleGroupId;
+
+                    newArticle.AccountId = article.AccountId;
+                    newArticle.SalesAccountId = article.AccountId;
+                    newArticle.CostAccountId = article.AccountId;
+                    newArticle.AssetAccountId = article.AccountId;
+                    newArticle.ExpenseAccountId = article.AccountId;
+
+                    newArticle.UnitId = 1;
+                    newArticle.OutputTaxId = 6;
+                    newArticle.InputTaxId = 5;
+                    newArticle.WTaxTypeId = 5;
+
+                    newArticle.Price = 0;
+                    newArticle.Cost = 0;
+                    newArticle.IsInventory = false;
+                    newArticle.Particulars = "NA";
+                    newArticle.Address = article.Address;
+                    newArticle.TermId = 1;
+                    newArticle.ContactNumber = article.ContactNumber;
+                    newArticle.ContactPerson = article.ContactPerson;
+                    newArticle.TaxNumber = "NA";
+                    newArticle.CreditLimit = 0;
+                    newArticle.DateAcquired = date;
+                    newArticle.UsefulLife = 0;
+                    newArticle.SalvageValue = 0;
+                    newArticle.ManualArticleOldCode = "NULL";
+                }
                 else if (articleType_Id == 4)
                 {
                     newArticle.ArticleCode = article.ArticleCode;
@@ -574,6 +609,17 @@ namespace easyfis.Controllers
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.Address = article.Address;
                         updateArticle.ContactNumber = article.ContactNumber;
+                    }
+                    else if (articleType_Id == 5)
+                    {
+                        updateArticle.ArticleCode = article.ArticleCode;
+                        updateArticle.Article = article.Article;
+                        updateArticle.ArticleTypeId = articleType_Id;
+                        updateArticle.ArticleGroupId = article.ArticleGroupId;
+                        updateArticle.AccountId = article.AccountId;
+                        updateArticle.Address = article.Address;
+                        updateArticle.ContactNumber = article.ContactNumber;
+                        updateArticle.ContactPerson = article.ContactPerson;
                     }
                     else if (articleType_Id == 4)
                     {
