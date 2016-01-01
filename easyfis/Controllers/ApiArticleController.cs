@@ -347,7 +347,42 @@ namespace easyfis.Controllers
                 var articleType_Id = Convert.ToInt32(articleTypeId);
 
                 Data.MstArticle newArticle = new Data.MstArticle();
-                if (articleType_Id == 4)
+                if (articleType_Id == 6)
+                {
+                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ManualArticleCode = "NULL";
+                    newArticle.Article = article.Article;
+                    newArticle.Category = "NA";
+                    newArticle.ArticleTypeId = articleType_Id;
+                    newArticle.ArticleGroupId = null;
+
+                    newArticle.AccountId = article.AccountId;
+                    newArticle.SalesAccountId = article.AccountId;
+                    newArticle.CostAccountId = article.AccountId;
+                    newArticle.AssetAccountId = article.AccountId;
+                    newArticle.ExpenseAccountId = article.AccountId;
+
+                    newArticle.UnitId = 1;
+                    newArticle.OutputTaxId = 5;
+                    newArticle.InputTaxId = 5;
+                    newArticle.WTaxTypeId = 5;
+
+                    newArticle.Price = 0;
+                    newArticle.Cost = 0;
+                    newArticle.IsInventory = false;
+                    newArticle.Particulars = "NA";
+                    newArticle.Address = article.Address;
+                    newArticle.TermId = 1;
+                    newArticle.ContactNumber = article.ContactNumber;
+                    newArticle.ContactPerson = "NA";
+                    newArticle.TaxNumber = "NA";
+                    newArticle.CreditLimit = 0;
+                    newArticle.DateAcquired = date;
+                    newArticle.UsefulLife = 0;
+                    newArticle.SalvageValue = 0;
+                    newArticle.ManualArticleOldCode = "NULL";
+                }
+                else if (articleType_Id == 4)
                 {
                     newArticle.ArticleCode = article.ArticleCode;
                     newArticle.ManualArticleCode = "NULL";
@@ -531,8 +566,16 @@ namespace easyfis.Controllers
                 if (articles.Any())
                 {
                     var updateArticle = articles.FirstOrDefault();
-
-                    if (articleType_Id == 4)
+                    if (articleType_Id == 6)
+                    {
+                        updateArticle.ArticleCode = article.ArticleCode;
+                        updateArticle.Article = article.Article;
+                        updateArticle.ArticleTypeId = articleType_Id;
+                        updateArticle.AccountId = article.AccountId;
+                        updateArticle.Address = article.Address;
+                        updateArticle.ContactNumber = article.ContactNumber;
+                    }
+                    else if (articleType_Id == 4)
                     {
                         updateArticle.ArticleCode = article.ArticleCode;
                         updateArticle.Article = article.Article;
