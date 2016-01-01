@@ -982,7 +982,7 @@
                 if(supplierId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addArticleForSupplier',
+                        url: '/api/addArticle/3',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -1017,7 +1017,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateArticleForSupplier/' + supplierId,
+                        url: '/api/updateArticle/' + supplierId + '/3',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,

@@ -1687,7 +1687,7 @@
                 if(itemId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addArticleForItem',
+                        url: '/api/addArticle/1',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -1722,7 +1722,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateArticleForItem/' + itemId,
+                        url: '/api/updateArticle/' + itemId + '/1',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,

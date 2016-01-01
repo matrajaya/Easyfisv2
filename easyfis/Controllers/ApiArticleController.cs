@@ -331,11 +331,11 @@ namespace easyfis.Controllers
             return (Models.MstArticle)articles.FirstOrDefault();
         }
 
-        // ========================
-        // ADD Article for Supplier
-        // ========================
-        [Route("api/addArticleForSupplier")]
-        public int PostSupplier(Models.MstArticle articleSupplier)
+        // ===========
+        // ADD Article
+        // ===========
+        [Route("api/addArticle/{articleTypeId}")]
+        public int Post(String articleTypeId, Models.MstArticle article)
         {
             try
             {
@@ -344,191 +344,165 @@ namespace easyfis.Controllers
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
 
-                Data.MstArticle newArticleSupplier = new Data.MstArticle();
+                var articleType_Id = Convert.ToInt32(articleTypeId);
 
-                newArticleSupplier.ArticleCode = articleSupplier.ArticleCode;
-                newArticleSupplier.ManualArticleCode = " ";
-                newArticleSupplier.Article = articleSupplier.Article;
-                newArticleSupplier.Category = " ";
-                newArticleSupplier.ArticleTypeId = 3;
-                newArticleSupplier.ArticleGroupId = articleSupplier.ArticleGroupId;
+                Data.MstArticle newArticle = new Data.MstArticle();
 
-                newArticleSupplier.AccountId = articleSupplier.AccountId;
-                newArticleSupplier.SalesAccountId = articleSupplier.SalesAccountId;
-                newArticleSupplier.CostAccountId = articleSupplier.CostAccountId;
-                newArticleSupplier.AssetAccountId = articleSupplier.AssetAccountId;
-                newArticleSupplier.ExpenseAccountId = articleSupplier.ExpenseAccountId;
-
-                newArticleSupplier.UnitId = 1;
-                newArticleSupplier.OutputTaxId = 5;
-                newArticleSupplier.InputTaxId = 5;
-                newArticleSupplier.WTaxTypeId = 5;
-
-                newArticleSupplier.Price = 0;
-                newArticleSupplier.Cost = 0;
-                newArticleSupplier.IsInventory = false;
-                newArticleSupplier.Particulars = articleSupplier.Particulars;
-                newArticleSupplier.Address = articleSupplier.Address;
-                newArticleSupplier.TermId = articleSupplier.TermId;
-                newArticleSupplier.ContactNumber = articleSupplier.ContactNumber;
-                newArticleSupplier.ContactPerson = articleSupplier.ContactPerson;
-                newArticleSupplier.TaxNumber = articleSupplier.TaxNumber;
-                newArticleSupplier.CreditLimit = 0;
-                newArticleSupplier.DateAcquired = date;
-                newArticleSupplier.UsefulLife = 0;
-                newArticleSupplier.SalvageValue = 0;
-                newArticleSupplier.ManualArticleOldCode = " ";
-
-                newArticleSupplier.IsLocked = isLocked;
-                newArticleSupplier.CreatedById = mstUserId;
-                newArticleSupplier.CreatedDateTime = date;
-                newArticleSupplier.UpdatedById = mstUserId;
-                newArticleSupplier.UpdatedDateTime = date;
-
-                db.MstArticles.InsertOnSubmit(newArticleSupplier);
-                db.SubmitChanges();
-
-                return newArticleSupplier.Id;
-
-            }
-            catch(Exception e)
-            {
-                Debug.WriteLine(e);
-                return 0;
-            }
-        }
-
-        // ===========================
-        // UPDATE Article For Supplier
-        // ===========================
-        [Route("api/updateArticleForSupplier/{id}")]
-        public HttpResponseMessage PutSupplier(String id, Models.MstArticle articleSupplier)
-        {
-            try
-            {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
-
-                var articleSupplier_Id = Convert.ToInt32(id);
-                var articleSuppliers = from d in db.MstArticles where d.Id == articleSupplier_Id select d;
-
-                if (articleSuppliers.Any())
+                if (articleType_Id == 4)
                 {
-                    var updateArticleSupplier = articleSuppliers.FirstOrDefault();
+                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ManualArticleCode = " ";
+                    newArticle.Article = article.Article;
+                    newArticle.Category = " ";
+                    newArticle.ArticleTypeId = articleType_Id;
+                    newArticle.ArticleGroupId = null;
 
-                    updateArticleSupplier.ArticleCode = articleSupplier.ArticleCode;
-                    updateArticleSupplier.ManualArticleCode = " ";
-                    updateArticleSupplier.Article = articleSupplier.Article;
-                    updateArticleSupplier.Category = " ";
-                    updateArticleSupplier.ArticleTypeId = 3;
-                    updateArticleSupplier.ArticleGroupId = articleSupplier.ArticleGroupId;
+                    newArticle.AccountId = article.AccountId;
+                    newArticle.SalesAccountId = article.SalesAccountId;
+                    newArticle.CostAccountId = article.CostAccountId;
+                    newArticle.AssetAccountId = article.AssetAccountId;
+                    newArticle.ExpenseAccountId = article.ExpenseAccountId;
 
-                    updateArticleSupplier.AccountId = articleSupplier.AccountId;
-                    updateArticleSupplier.SalesAccountId = articleSupplier.SalesAccountId;
-                    updateArticleSupplier.CostAccountId = articleSupplier.CostAccountId;
-                    updateArticleSupplier.AssetAccountId = articleSupplier.AssetAccountId;
-                    updateArticleSupplier.ExpenseAccountId = articleSupplier.ExpenseAccountId;
+                    newArticle.UnitId = 1;
+                    newArticle.OutputTaxId = 5;
+                    newArticle.InputTaxId = 5;
+                    newArticle.WTaxTypeId = 5;
 
-                    updateArticleSupplier.UnitId = 1;
-                    updateArticleSupplier.OutputTaxId = 5;
-                    updateArticleSupplier.InputTaxId = 5;
-                    updateArticleSupplier.WTaxTypeId = 5;
+                    newArticle.Price = 0;
+                    newArticle.Cost = 0;
+                    newArticle.IsInventory = false;
+                    newArticle.Particulars = "NA";
+                    newArticle.Address = article.Address;
+                    newArticle.TermId = 1;
+                    newArticle.ContactNumber = article.ContactNumber;
+                    newArticle.ContactPerson = "NA";
+                    newArticle.TaxNumber = "NA";
+                    newArticle.CreditLimit = 0;
+                    newArticle.DateAcquired = date;
+                    newArticle.UsefulLife = 0;
+                    newArticle.SalvageValue = 0;
+                    newArticle.ManualArticleOldCode = " ";
+                }
+                else if (articleType_Id == 3)
+                {
+                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ManualArticleCode = " ";
+                    newArticle.Article = article.Article;
+                    newArticle.Category = " ";
+                    newArticle.ArticleTypeId = articleType_Id;
+                    newArticle.ArticleGroupId = article.ArticleGroupId;
 
-                    updateArticleSupplier.Price = 0;
-                    updateArticleSupplier.Cost = 0;
-                    updateArticleSupplier.IsInventory = false;
-                    updateArticleSupplier.Particulars = articleSupplier.Particulars;
-                    updateArticleSupplier.Address = articleSupplier.Address;
-                    updateArticleSupplier.TermId = articleSupplier.TermId;
-                    updateArticleSupplier.ContactNumber = articleSupplier.ContactNumber;
-                    updateArticleSupplier.ContactPerson = articleSupplier.ContactPerson;
-                    updateArticleSupplier.TaxNumber = articleSupplier.TaxNumber;
-                    updateArticleSupplier.CreditLimit = 0;
-                    updateArticleSupplier.DateAcquired = date;
-                    updateArticleSupplier.UsefulLife = 0;
-                    updateArticleSupplier.SalvageValue = 0;
-                    updateArticleSupplier.ManualArticleOldCode = " ";
+                    newArticle.AccountId = article.AccountId;
+                    newArticle.SalesAccountId = article.SalesAccountId;
+                    newArticle.CostAccountId = article.CostAccountId;
+                    newArticle.AssetAccountId = article.AssetAccountId;
+                    newArticle.ExpenseAccountId = article.ExpenseAccountId;
 
-                    updateArticleSupplier.IsLocked = articleSupplier.IsLocked;
-                    updateArticleSupplier.UpdatedById = mstUserId;
-                    updateArticleSupplier.UpdatedDateTime = date;
+                    newArticle.UnitId = 1;
+                    newArticle.OutputTaxId = 5;
+                    newArticle.InputTaxId = 5;
+                    newArticle.WTaxTypeId = 5;
 
-                    db.SubmitChanges();
+                    newArticle.Price = 0;
+                    newArticle.Cost = 0;
+                    newArticle.IsInventory = false;
+                    newArticle.Particulars = article.Particulars;
+                    newArticle.Address = article.Address;
+                    newArticle.TermId = article.TermId;
+                    newArticle.ContactNumber = article.ContactNumber;
+                    newArticle.ContactPerson = article.ContactPerson;
+                    newArticle.TaxNumber = article.TaxNumber;
+                    newArticle.CreditLimit = 0;
+                    newArticle.DateAcquired = date;
+                    newArticle.UsefulLife = 0;
+                    newArticle.SalvageValue = 0;
+                    newArticle.ManualArticleOldCode = " ";
+                }
+                else if (articleType_Id == 2)
+                {
+                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ManualArticleCode = " ";
+                    newArticle.Article = article.Article;
+                    newArticle.Category = " ";
+                    newArticle.ArticleTypeId = 2;
+                    newArticle.ArticleGroupId = article.ArticleGroupId;
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                    newArticle.AccountId = article.AccountId;
+                    newArticle.SalesAccountId = article.SalesAccountId;
+                    newArticle.CostAccountId = article.CostAccountId;
+                    newArticle.AssetAccountId = article.AssetAccountId;
+                    newArticle.ExpenseAccountId = article.ExpenseAccountId;
+
+                    newArticle.UnitId = 1;
+                    newArticle.OutputTaxId = 5;
+                    newArticle.InputTaxId = 5;
+                    newArticle.WTaxTypeId = 5;
+
+                    newArticle.Price = 0;
+                    newArticle.Cost = 0;
+                    newArticle.IsInventory = false;
+                    newArticle.Particulars = article.Particulars;
+                    newArticle.Address = article.Address;
+                    newArticle.TermId = article.TermId;
+                    newArticle.ContactNumber = article.ContactNumber;
+                    newArticle.ContactPerson = article.ContactPerson;
+                    newArticle.TaxNumber = article.TaxNumber;
+                    newArticle.CreditLimit = article.CreditLimit;
+                    newArticle.DateAcquired = date;
+                    newArticle.UsefulLife = 0;
+                    newArticle.SalvageValue = 0;
+                    newArticle.ManualArticleOldCode = " ";
+                }
+                else if (articleType_Id == 1)
+                {
+                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ManualArticleCode = article.ManualArticleCode;
+                    newArticle.Article = article.Article;
+                    newArticle.Category = article.Category;
+                    newArticle.ArticleTypeId = 1;
+                    newArticle.ArticleGroupId = article.ArticleGroupId;
+
+                    newArticle.AccountId = article.AccountId;
+                    newArticle.SalesAccountId = article.SalesAccountId;
+                    newArticle.CostAccountId = article.CostAccountId;
+                    newArticle.AssetAccountId = article.AssetAccountId;
+                    newArticle.ExpenseAccountId = article.ExpenseAccountId;
+
+                    newArticle.UnitId = article.UnitId;
+                    newArticle.OutputTaxId = article.OutputTaxId;
+                    newArticle.InputTaxId = article.InputTaxId;
+                    newArticle.WTaxTypeId = article.WTaxTypeId;
+
+                    newArticle.Price = article.Price;
+                    newArticle.Cost = article.Cost;
+                    newArticle.IsInventory = article.IsInventory;
+                    newArticle.Particulars = article.Particulars;
+                    newArticle.TermId = 1;
+                    newArticle.Address = "NA";
+                    newArticle.ContactNumber = "NA";
+                    newArticle.ContactPerson = "NA";
+                    newArticle.TaxNumber = "NA";
+                    newArticle.CreditLimit = 0;
+                    newArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
+                    newArticle.UsefulLife = article.UsefulLife;
+                    newArticle.SalvageValue = article.SalvageValue;
+                    newArticle.ManualArticleOldCode = article.ManualArticleOldCode;
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                    Debug.WriteLine("Not an Article Type Id");
                 }
 
-            }
-            catch
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
+                newArticle.IsLocked = isLocked;
+                newArticle.CreatedById = mstUserId;
+                newArticle.CreatedDateTime = date;
+                newArticle.UpdatedById = mstUserId;
+                newArticle.UpdatedDateTime = date;
 
-        // ========================
-        // ADD Article for Customer
-        // ========================
-        [Route("api/addArticleForCustomer")]
-        public int PostCustomer(Models.MstArticle articleCustomer)
-        {
-            try
-            {
-                var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
-
-                Data.MstArticle newArticleCustomer = new Data.MstArticle();
-
-                newArticleCustomer.ArticleCode = articleCustomer.ArticleCode;
-                newArticleCustomer.ManualArticleCode = " ";
-                newArticleCustomer.Article = articleCustomer.Article;
-                newArticleCustomer.Category = " ";
-                newArticleCustomer.ArticleTypeId = 2;
-                newArticleCustomer.ArticleGroupId = articleCustomer.ArticleGroupId;
-
-                newArticleCustomer.AccountId = articleCustomer.AccountId;
-                newArticleCustomer.SalesAccountId = articleCustomer.SalesAccountId;
-                newArticleCustomer.CostAccountId = articleCustomer.CostAccountId;
-                newArticleCustomer.AssetAccountId = articleCustomer.AssetAccountId;
-                newArticleCustomer.ExpenseAccountId = articleCustomer.ExpenseAccountId;
-
-                newArticleCustomer.UnitId = 1;
-                newArticleCustomer.OutputTaxId = 5;
-                newArticleCustomer.InputTaxId = 5;
-                newArticleCustomer.WTaxTypeId = 5;
-
-                newArticleCustomer.Price = 0;
-                newArticleCustomer.Cost = 0;
-                newArticleCustomer.IsInventory = false;
-                newArticleCustomer.Particulars = articleCustomer.Particulars;
-                newArticleCustomer.Address = articleCustomer.Address;
-                newArticleCustomer.TermId = articleCustomer.TermId;
-                newArticleCustomer.ContactNumber = articleCustomer.ContactNumber;
-                newArticleCustomer.ContactPerson = articleCustomer.ContactPerson;
-                newArticleCustomer.TaxNumber = articleCustomer.TaxNumber;
-                newArticleCustomer.CreditLimit = articleCustomer.CreditLimit;
-                newArticleCustomer.DateAcquired = date;
-                newArticleCustomer.UsefulLife = 0;
-                newArticleCustomer.SalvageValue = 0;
-                newArticleCustomer.ManualArticleOldCode = " ";
-
-                newArticleCustomer.IsLocked = isLocked;
-                newArticleCustomer.CreatedById = mstUserId;
-                newArticleCustomer.CreatedDateTime = date;
-                newArticleCustomer.UpdatedById = mstUserId;
-                newArticleCustomer.UpdatedDateTime = date;
-
-                db.MstArticles.InsertOnSubmit(newArticleCustomer);
+                db.MstArticles.InsertOnSubmit(newArticle);
                 db.SubmitChanges();
 
-                return newArticleCustomer.Id;
+                return newArticle.Id;
 
             }
             catch (Exception e)
@@ -538,11 +512,11 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===========================
-        // UPDATE Article For Customer
-        // ===========================
-        [Route("api/updateArticleForCustomer/{id}")]
-        public HttpResponseMessage PutCustomer(String id, Models.MstArticle articleCustomer)
+        // ==============
+        // UPDATE Article
+        // ==============
+        [Route("api/updateArticle/{id}/{articleTypeId}")]
+        public HttpResponseMessage Put(String id, String articleTypeId, Models.MstArticle article)
         {
             try
             {
@@ -551,189 +525,138 @@ namespace easyfis.Controllers
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
 
-                var articleCustomer_Id = Convert.ToInt32(id);
-                var articleCustomers = from d in db.MstArticles where d.Id == articleCustomer_Id select d;
+                var articleType_Id = Convert.ToInt32(articleTypeId);
 
-                if (articleCustomers.Any())
+                var article_Id = Convert.ToInt32(id);
+                var articles = from d in db.MstArticles where d.Id == article_Id select d;
+
+
+                if (articles.Any())
                 {
-                    var updateArticleCustomer = articleCustomers.FirstOrDefault();
+                    var updateArticle = articles.FirstOrDefault();
 
-                    updateArticleCustomer.ArticleCode = articleCustomer.ArticleCode;
-                    updateArticleCustomer.ManualArticleCode = " ";
-                    updateArticleCustomer.Article = articleCustomer.Article;
-                    updateArticleCustomer.Category = " ";
-                    updateArticleCustomer.ArticleTypeId = 2;
-                    updateArticleCustomer.ArticleGroupId = articleCustomer.ArticleGroupId;
+                    if (articleType_Id == 4)
+                    {
+                        updateArticle.ArticleCode = article.ArticleCode;
+                        updateArticle.Article = article.Article;
+                        updateArticle.ArticleTypeId = articleType_Id;
+                        updateArticle.AccountId = article.AccountId;
+                        updateArticle.Address = article.Address;
+                        updateArticle.ContactNumber = article.ContactNumber;
+                    }
+                    else if (articleType_Id == 3)
+                    {
+                        updateArticle.ArticleCode = article.ArticleCode;
+                        updateArticle.ManualArticleCode = " ";
+                        updateArticle.Article = article.Article;
+                        updateArticle.Category = " ";
+                        updateArticle.ArticleTypeId = articleType_Id;
+                        updateArticle.ArticleGroupId = article.ArticleGroupId;
 
-                    updateArticleCustomer.AccountId = articleCustomer.AccountId;
-                    updateArticleCustomer.SalesAccountId = articleCustomer.SalesAccountId;
-                    updateArticleCustomer.CostAccountId = articleCustomer.CostAccountId;
-                    updateArticleCustomer.AssetAccountId = articleCustomer.AssetAccountId;
-                    updateArticleCustomer.ExpenseAccountId = articleCustomer.ExpenseAccountId;
+                        updateArticle.AccountId = article.AccountId;
+                        updateArticle.SalesAccountId = article.SalesAccountId;
+                        updateArticle.CostAccountId = article.CostAccountId;
+                        updateArticle.AssetAccountId = article.AssetAccountId;
+                        updateArticle.ExpenseAccountId = article.ExpenseAccountId;
 
-                    updateArticleCustomer.UnitId = 1;
-                    updateArticleCustomer.OutputTaxId = 5;
-                    updateArticleCustomer.InputTaxId = 5;
-                    updateArticleCustomer.WTaxTypeId = 5;
+                        updateArticle.UnitId = 1;
+                        updateArticle.OutputTaxId = 5;
+                        updateArticle.InputTaxId = 5;
+                        updateArticle.WTaxTypeId = 5;
 
-                    updateArticleCustomer.Price = 0;
-                    updateArticleCustomer.Cost = 0;
-                    updateArticleCustomer.IsInventory = false;
-                    updateArticleCustomer.Particulars = articleCustomer.Particulars;
-                    updateArticleCustomer.Address = articleCustomer.Address;
-                    updateArticleCustomer.TermId = articleCustomer.TermId;
-                    updateArticleCustomer.ContactNumber = articleCustomer.ContactNumber;
-                    updateArticleCustomer.ContactPerson = articleCustomer.ContactPerson;
-                    updateArticleCustomer.TaxNumber = articleCustomer.TaxNumber;
-                    updateArticleCustomer.CreditLimit = articleCustomer.CreditLimit;
-                    updateArticleCustomer.DateAcquired = date;
-                    updateArticleCustomer.UsefulLife = 0;
-                    updateArticleCustomer.SalvageValue = 0;
-                    updateArticleCustomer.ManualArticleOldCode = " ";
+                        updateArticle.Price = 0;
+                        updateArticle.Cost = 0;
+                        updateArticle.IsInventory = false;
+                        updateArticle.Particulars = article.Particulars;
+                        updateArticle.Address = article.Address;
+                        updateArticle.TermId = article.TermId;
+                        updateArticle.ContactNumber = article.ContactNumber;
+                        updateArticle.ContactPerson = article.ContactPerson;
+                        updateArticle.TaxNumber = article.TaxNumber;
+                        updateArticle.CreditLimit = 0;
+                        updateArticle.DateAcquired = date;
+                        updateArticle.UsefulLife = 0;
+                        updateArticle.SalvageValue = 0;
+                        updateArticle.ManualArticleOldCode = " ";
+                    }
+                    else if (articleType_Id == 2)
+                    {
+                        updateArticle.ArticleCode = article.ArticleCode;
+                        updateArticle.ManualArticleCode = " ";
+                        updateArticle.Article = article.Article;
+                        updateArticle.Category = " ";
+                        updateArticle.ArticleTypeId = articleType_Id;
+                        updateArticle.ArticleGroupId = article.ArticleGroupId;
 
-                    updateArticleCustomer.IsLocked = articleCustomer.IsLocked;
-                    updateArticleCustomer.UpdatedById = mstUserId;
-                    updateArticleCustomer.UpdatedDateTime = date;
+                        updateArticle.AccountId = article.AccountId;
+                        updateArticle.SalesAccountId = article.SalesAccountId;
+                        updateArticle.CostAccountId = article.CostAccountId;
+                        updateArticle.AssetAccountId = article.AssetAccountId;
+                        updateArticle.ExpenseAccountId = article.ExpenseAccountId;
 
-                    db.SubmitChanges();
+                        updateArticle.UnitId = 1;
+                        updateArticle.OutputTaxId = 5;
+                        updateArticle.InputTaxId = 5;
+                        updateArticle.WTaxTypeId = 5;
 
-                    return Request.CreateResponse(HttpStatusCode.OK);
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
+                        updateArticle.Price = 0;
+                        updateArticle.Cost = 0;
+                        updateArticle.IsInventory = false;
+                        updateArticle.Particulars = article.Particulars;
+                        updateArticle.Address = article.Address;
+                        updateArticle.TermId = article.TermId;
+                        updateArticle.ContactNumber = article.ContactNumber;
+                        updateArticle.ContactPerson = article.ContactPerson;
+                        updateArticle.TaxNumber = article.TaxNumber;
+                        updateArticle.CreditLimit = article.CreditLimit;
+                        updateArticle.DateAcquired = date;
+                        updateArticle.UsefulLife = 0;
+                        updateArticle.SalvageValue = 0;
+                        updateArticle.ManualArticleOldCode = " ";
+                    }
+                    else if (articleType_Id == 1)
+                    {
+                        updateArticle.ArticleCode = article.ArticleCode;
+                        updateArticle.ManualArticleCode = article.ManualArticleCode;
+                        updateArticle.Article = article.Article;
+                        updateArticle.Category = article.Category;
+                        updateArticle.ArticleTypeId = 1;
+                        updateArticle.ArticleGroupId = article.ArticleGroupId;
 
-            }
-            catch
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
+                        updateArticle.AccountId = article.AccountId;
+                        updateArticle.SalesAccountId = article.SalesAccountId;
+                        updateArticle.CostAccountId = article.CostAccountId;
+                        updateArticle.AssetAccountId = article.AssetAccountId;
+                        updateArticle.ExpenseAccountId = article.ExpenseAccountId;
 
-        // ====================
-        // ADD Article for Item
-        // ====================
-        [Route("api/addArticleForItem")]
-        public int PostItem(Models.MstArticle articleItem)
-        {
-            try
-            {
-                var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                        updateArticle.UnitId = article.UnitId;
+                        updateArticle.OutputTaxId = article.OutputTaxId;
+                        updateArticle.InputTaxId = article.InputTaxId;
+                        updateArticle.WTaxTypeId = article.WTaxTypeId;
 
-                Data.MstArticle newArticleItem = new Data.MstArticle();
+                        updateArticle.Price = article.Price;
+                        updateArticle.Cost = article.Cost;
+                        updateArticle.IsInventory = article.IsInventory;
+                        updateArticle.Particulars = article.Particulars;
+                        updateArticle.TermId = 1;
+                        updateArticle.Address = "NA";
+                        updateArticle.ContactNumber = "NA";
+                        updateArticle.ContactPerson = "NA";
+                        updateArticle.TaxNumber = "NA";
+                        updateArticle.CreditLimit = 0;
+                        updateArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
+                        updateArticle.UsefulLife = article.UsefulLife;
+                        updateArticle.SalvageValue = article.SalvageValue;
+                        updateArticle.ManualArticleOldCode = article.ManualArticleOldCode;
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Not an Article Type Id");
+                    }
 
-                newArticleItem.ArticleCode = articleItem.ArticleCode;
-                newArticleItem.ManualArticleCode = articleItem.ManualArticleCode;
-                newArticleItem.Article = articleItem.Article;
-                newArticleItem.Category = articleItem.Category;
-                newArticleItem.ArticleTypeId = 1;
-                newArticleItem.ArticleGroupId = articleItem.ArticleGroupId;
-
-                newArticleItem.AccountId = articleItem.AccountId;
-                newArticleItem.SalesAccountId = articleItem.SalesAccountId;
-                newArticleItem.CostAccountId = articleItem.CostAccountId;
-                newArticleItem.AssetAccountId = articleItem.AssetAccountId;
-                newArticleItem.ExpenseAccountId = articleItem.ExpenseAccountId;
-
-                newArticleItem.UnitId = articleItem.UnitId;
-                newArticleItem.OutputTaxId = articleItem.OutputTaxId;
-                newArticleItem.InputTaxId = articleItem.InputTaxId;
-                newArticleItem.WTaxTypeId = articleItem.WTaxTypeId;
-
-                newArticleItem.Price = articleItem.Price;
-                newArticleItem.Cost = articleItem.Cost;
-                newArticleItem.IsInventory = articleItem.IsInventory;
-                newArticleItem.Particulars = articleItem.Particulars;
-                newArticleItem.TermId = 1;
-                newArticleItem.Address = "NA";
-                newArticleItem.ContactNumber = "NA";
-                newArticleItem.ContactPerson = "NA";
-                newArticleItem.TaxNumber = "NA";
-                newArticleItem.CreditLimit = 0;
-                newArticleItem.DateAcquired = Convert.ToDateTime(articleItem.DateAcquired);
-                newArticleItem.UsefulLife = articleItem.UsefulLife;
-                newArticleItem.SalvageValue = articleItem.SalvageValue;
-                newArticleItem.ManualArticleOldCode = articleItem.ManualArticleOldCode;
-
-                newArticleItem.IsLocked = isLocked;
-                newArticleItem.CreatedById = mstUserId;
-                newArticleItem.CreatedDateTime = date;
-                newArticleItem.UpdatedById = mstUserId;
-                newArticleItem.UpdatedDateTime = date;
-
-                db.MstArticles.InsertOnSubmit(newArticleItem);
-                db.SubmitChanges();
-
-                return newArticleItem.Id;
-
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                return 0;
-            }
-        }
-
-        // =======================
-        // UPDATE Article For Item
-        // =======================
-        [Route("api/updateArticleForItem/{id}")]
-        public HttpResponseMessage PutItem(String id, Models.MstArticle articleItem)
-        {
-            try
-            {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
-
-                var articleItem_Id = Convert.ToInt32(id);
-                var articleItems = from d in db.MstArticles where d.Id == articleItem_Id select d;
-
-                if (articleItems.Any())
-                {
-                    var updateArticleItem = articleItems.FirstOrDefault();
-
-                    updateArticleItem.ArticleCode = articleItem.ArticleCode;
-                    updateArticleItem.ManualArticleCode = articleItem.ManualArticleCode;
-                    updateArticleItem.Article = articleItem.Article;
-                    updateArticleItem.Category = articleItem.Category;
-                    updateArticleItem.ArticleTypeId = 1;
-                    updateArticleItem.ArticleGroupId = articleItem.ArticleGroupId;
-
-                    updateArticleItem.AccountId = articleItem.AccountId;
-                    updateArticleItem.SalesAccountId = articleItem.SalesAccountId;
-                    updateArticleItem.CostAccountId = articleItem.CostAccountId;
-                    updateArticleItem.AssetAccountId = articleItem.AssetAccountId;
-                    updateArticleItem.ExpenseAccountId = articleItem.ExpenseAccountId;
-
-                    updateArticleItem.UnitId = articleItem.UnitId;
-                    updateArticleItem.OutputTaxId = articleItem.OutputTaxId;
-                    updateArticleItem.InputTaxId = articleItem.InputTaxId;
-                    updateArticleItem.WTaxTypeId = articleItem.WTaxTypeId;
-
-                    updateArticleItem.Price = articleItem.Price;
-                    updateArticleItem.Cost = articleItem.Cost;
-                    updateArticleItem.IsInventory = articleItem.IsInventory;
-                    updateArticleItem.Particulars = articleItem.Particulars;
-                    updateArticleItem.TermId = 1;
-                    updateArticleItem.Address = "NA";
-                    updateArticleItem.ContactNumber = "NA";
-                    updateArticleItem.ContactPerson = "NA";
-                    updateArticleItem.TaxNumber = "NA";
-                    updateArticleItem.CreditLimit = 0;
-                    updateArticleItem.DateAcquired = Convert.ToDateTime(articleItem.DateAcquired);
-                    updateArticleItem.UsefulLife = articleItem.UsefulLife;
-                    updateArticleItem.SalvageValue = articleItem.SalvageValue;
-                    updateArticleItem.ManualArticleOldCode = articleItem.ManualArticleOldCode;
-
-                    updateArticleItem.IsLocked = articleItem.IsLocked;
-                    updateArticleItem.UpdatedById = mstUserId;
-                    updateArticleItem.UpdatedDateTime = date;
+                    updateArticle.IsLocked = article.IsLocked;
+                    updateArticle.UpdatedById = mstUserId;
+                    updateArticle.UpdatedDateTime = date;
 
                     db.SubmitChanges();
 

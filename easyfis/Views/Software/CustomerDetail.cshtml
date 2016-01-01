@@ -1011,7 +1011,7 @@
                 if(customerId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addArticleForCustomer',
+                        url: '/api/addArticle/2',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -1046,7 +1046,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updateArticleForCustomer/' + customerId,
+                        url: '/api/updateArticle/' + customerId + '/2',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
