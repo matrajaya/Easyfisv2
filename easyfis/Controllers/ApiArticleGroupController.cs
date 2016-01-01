@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
@@ -79,6 +80,121 @@ namespace easyfis.Controllers
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
             return articleGroups.ToList();
+        }
+
+        // =================
+        // ADD Article Group
+        // =================
+        [Route("api/addArticleGroup")]
+        public int Post(Models.MstArticleGroup  articleGroup)
+        {
+            try
+            {
+                var isLocked = false;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                Data.MstArticleGroup newArticleGroup = new Data.MstArticleGroup();
+
+                newArticleGroup.ArticleGroup = articleGroup.ArticleGroup;
+                newArticleGroup.ArticleTypeId = articleGroup.ArticleTypeId;
+                newArticleGroup.AccountId = articleGroup.AccountId;
+                newArticleGroup.SalesAccountId = articleGroup.SalesAccountId;
+                newArticleGroup.CostAccountId = articleGroup.CostAccountId;
+                newArticleGroup.AssetAccountId = articleGroup.AssetAccountId;
+                newArticleGroup.ExpenseAccountId = articleGroup.ExpenseAccountId;
+                newArticleGroup.IsLocked = isLocked;
+                newArticleGroup.CreatedById = mstUserId;
+                newArticleGroup.CreatedDateTime = date;
+                newArticleGroup.UpdatedById = mstUserId;
+                newArticleGroup.UpdatedDateTime = date;
+
+                db.MstArticleGroups.InsertOnSubmit(newArticleGroup);
+                db.SubmitChanges();
+
+                return newArticleGroup.Id;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // ====================
+        // UPDATE Article Group
+        // ====================
+        [Route("api/updateArticleGroup/{id}")]
+        public HttpResponseMessage Put(String id, Models.MstArticleGroup articleGroup)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var articleGroup_Id = Convert.ToInt32(id);
+                var articleGroups = from d in db.MstArticleGroups where d.Id == articleGroup_Id select d;
+
+                if (articleGroups.Any())
+                {
+                    var updateArticleGroup = articleGroups.FirstOrDefault();
+
+                    updateArticleGroup.ArticleGroup = articleGroup.ArticleGroup;
+                    updateArticleGroup.ArticleTypeId = articleGroup.ArticleTypeId;
+                    updateArticleGroup.AccountId = articleGroup.AccountId;
+                    updateArticleGroup.SalesAccountId = articleGroup.SalesAccountId;
+                    updateArticleGroup.CostAccountId = articleGroup.CostAccountId;
+                    updateArticleGroup.AssetAccountId = articleGroup.AssetAccountId;
+                    updateArticleGroup.ExpenseAccountId = articleGroup.ExpenseAccountId;
+                    updateArticleGroup.IsLocked = articleGroup.IsLocked;
+                    updateArticleGroup.UpdatedById = mstUserId;
+                    updateArticleGroup.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // ====================
+        // DELETE Article Group
+        // ====================
+        [Route("api/deleteArticleGroup/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var articleGroup_Id = Convert.ToInt32(id);
+                var articleGroups = from d in db.MstArticleGroups where d.Id == articleGroup_Id select d;
+
+                if (articleGroups.Any())
+                {
+                    db.MstArticleGroups.DeleteOnSubmit(articleGroups.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

@@ -15,7 +15,6 @@ namespace easyfis.Models
         public String ArticleType { get; set; }
         public Int32 AccountId { get; set; }
         public String Account { get; set; }
-
         public Int32 SalesAccountId { get; set; }
         public String SalesAccount { get; set; }
         public Int32 CostAccountId { get; set; }
@@ -24,7 +23,6 @@ namespace easyfis.Models
         public String AssetAccount { get; set; }
         public Int32 ExpenseAccountId { get; set; }
         public String ExpenseAccount { get; set; }
-
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
         public String CreatedBy { get; set; }
