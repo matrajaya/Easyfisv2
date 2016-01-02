@@ -201,6 +201,46 @@
                         </div>
                     </form>
                 </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Disbursement Line</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input type="text" class="form-control input-sm" id="InputFilterDisbursementLine" placeholder="Search Branch">
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <br />
+                <div class="row" align="left">
+                    <div class="col-lg-12">
+                        <div id="DisbursementLineGrid" class="grid" align="left"></div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="btn-group col-md-7" id="navigationPageGridDisbursementLine">
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridDisbursementLine">
+                            <span class="glyphicon glyphicon-fast-backward"></span>
+                        </button>
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridDisbursementLine">
+                            <span class="glyphicon glyphicon-step-backward"></span>
+                        </button>
+                        <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridDisbursementLine"></button>
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridDisbursementLine">
+                            <span class="glyphicon glyphicon-step-forward"></span>
+                        </button>
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridDisbursementLine">
+                            <span class="glyphicon glyphicon-fast-forward"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -289,6 +329,14 @@
         var cboPreparedBy;
         var cboCheckedBy;
         var cboApprovedBy;
+
+        var disbursementLines;
+        var disbursementGrid;
+        var btnFirstPageGridDisbursementLine;
+        var btnPreviousPageGridDisbursementLine;
+        var btnNextPageGridDisbursementLine;
+        var btnLastPageGridDisbursementLine;
+        var btnCurrentPageGridDisbursementLine;
 
         // ======================
         // GET Disbursement By Id
@@ -964,6 +1012,34 @@
             }
         }
 
+        // ========================================
+        // Navigation Buttons for Disbursement Line
+        // ========================================
+        function updateNavigateButtonsDisbursementLine() {
+            if (disbursementLines.pageSize <= 0) {
+                document.getElementById('navigationPageGridDisbursementLine').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridDisbursementLine').style.display = 'block';
+            if (disbursementLines.pageIndex === 0) {
+                btnFirstPageGridDisbursementLine.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridDisbursementLine.setAttribute('disabled', 'disabled');
+                btnNextPageGridDisbursementLine.removeAttribute('disabled');
+                btnLastPageGridDisbursementLine.removeAttribute('disabled');
+            } else if (disbursementLines.pageIndex === (disbursementLines.pageCount - 1)) {
+                btnFirstPageGridDisbursementLine.removeAttribute('disabled');
+                btnPreviousPageGridDisbursementLine.removeAttribute('disabled');
+                btnLastPageGridDisbursementLine.setAttribute('disabled', 'disabled');
+                btnNextPageGridDisbursementLine.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridDisbursementLine.removeAttribute('disabled');
+                btnPreviousPageGridDisbursementLine.removeAttribute('disabled');
+                btnNextPageGridDisbursementLine.removeAttribute('disabled');
+                btnLastPageGridDisbursementLine.removeAttribute('disabled');
+            }
+            btnCurrentPageGridDisbursementLine.innerHTML = (disbursementLines.pageIndex + 1) + ' / ' + disbursementLines.pageCount;
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -1056,6 +1132,127 @@
                     }
                 });
             }
+
+            disbursementLines = new wijmo.collections.CollectionView();
+            disbursementLines.canFilter = true;
+            disbursementLines.pageSize = 15;
+
+            var filterTextDisbursementLine = '';
+            $('#InputFilterDisbursementLine').keyup(function () {
+                filterTextDisbursementLine = this.value.toLowerCase();
+                disbursementLines.refresh();
+            });
+            disbursementLines.filter = function (item) {
+                return !filterTextDisbursementLine || (item.disbursementLine.toLowerCase().indexOf(filterTextDisbursementLine) > -1);
+            }
+            disbursementLines.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsDisbursementLine();
+            });
+            //disbursementLines.currentChanged.addHandler(function (sender, args) {
+            //    updateDetailsPOLine();
+            //});
+
+            // Flex Grid for Purchase Disbursement Line
+            disbursementGrid = new wijmo.grid.FlexGrid('#DisbursementLineGrid');
+            disbursementGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Branch",
+                                //"binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*",
+                            },
+                            {
+                                "header": "Account",
+                                //"binding": "BranchCode",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "4*"
+                            },
+                            {
+                                "header": "Article",
+                                //"binding": "Address",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Particulars",
+                                //"binding": "ContactNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "RR No.",
+                                //"binding": "TaxNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            },
+                            {
+                                "header": "Amount",
+                                //"binding": "TaxNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: disbursementLines,
+                isReadOnly: true,
+                //frozenColumns: 2,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            disbursementGrid.trackChanges = true;
+
+            //Navigation button for Purchase Disbursement Line
+            btnFirstPageGridDisbursementLine = document.getElementById('btnMoveToFirstPageGridDisbursementLine');
+            btnPreviousPageGridDisbursementLine = document.getElementById('btnMoveToPreviousPageGridDisbursementLine');
+            btnNextPageGridDisbursementLine = document.getElementById('btnMoveToNextPageGridDisbursementLine');
+            btnLastPageGridDisbursementLine = document.getElementById('btnMoveToLastPageGridDisbursementLine');
+            btnCurrentPageGridDisbursementLine = document.getElementById('btnCurrentPageGridDisbursementLine');
+
+            updateNavigateButtonsDisbursementLine();
+
+            btnFirstPageGridDisbursementLine.addEventListener('click', function () {
+                disbursementLines.moveToFirstPage();
+                updateNavigateButtonsPOLine();
+            });
+            btnPreviousPageGridDisbursementLine.addEventListener('click', function () {
+                disbursementLines.moveToPreviousPage();
+                updateNavigateButtonsPOLine();
+            });
+            btnNextPageGridDisbursementLine.addEventListener('click', function () {
+                disbursementLines.moveToNextPage();
+                updateNavigateButtonsPOLine();
+            });
+            btnLastPageGridDisbursementLine.addEventListener('click', function () {
+                disbursementLines.moveToLastPage();
+                updateNavigateButtonsPOLine();
+            });
         });
     </script>
 </body>
