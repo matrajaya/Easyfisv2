@@ -144,6 +144,46 @@
                         </div>
                     </form>
                 </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Collection Line</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input type="text" class="form-control input-sm" id="InputFilterCollectionLine" placeholder="Search Branch">
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    </div>
+                </div>
+                <br />
+                <div class="row" align="left">
+                    <div class="col-lg-12">
+                        <div id="CollectionLineGrid" class="grid" align="left"></div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="btn-group col-md-7" id="navigationPageGridCollectionLine">
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridCollectionLine">
+                            <span class="glyphicon glyphicon-fast-backward"></span>
+                        </button>
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridCollectionLine">
+                            <span class="glyphicon glyphicon-step-backward"></span>
+                        </button>
+                        <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridCollectionLine"></button>
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridCollectionLine">
+                            <span class="glyphicon glyphicon-step-forward"></span>
+                        </button>
+                        <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridCollectionLine">
+                            <span class="glyphicon glyphicon-fast-forward"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -227,6 +267,15 @@
         var cboBranch;
         var cboCustomer;
         var cboPreparedBy;
+
+        var collectionLines;
+        var collectionLineGrid;
+        var btnFirstPageGridCollectionGrid;
+        var btnPreviousPageGridCollectionGrid;
+        var btnNextPageGridCollectionGrid;
+        var btnLastPageGridCollectionGrid;
+        var btnCurrentPageGridCollectionGrid;
+
         // ====================
         // GET Collection By Id
         // ====================
@@ -761,6 +810,34 @@
 
         }
 
+        // ======================================
+        // Navigation Buttons for Collection Line
+        // ======================================
+        function updateNavigateButtonsCollectionLine() {
+            if (collectionLines.pageSize <= 0) {
+                document.getElementById('navigationPageGridCollectionLine').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridCollectionLine').style.display = 'block';
+            if (collectionLines.pageIndex === 0) {
+                btnFirstPageGridCollectionGrid.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridCollectionGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGridCollectionGrid.removeAttribute('disabled');
+                btnLastPageGridCollectionGrid.removeAttribute('disabled');
+            } else if (collectionLines.pageIndex === (collectionLines.pageCount - 1)) {
+                btnFirstPageGridCollectionGrid.removeAttribute('disabled');
+                btnPreviousPageGridCollectionGrid.removeAttribute('disabled');
+                btnLastPageGridCollectionGrid.setAttribute('disabled', 'disabled');
+                btnNextPageGridCollectionGrid.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridCollectionGrid.removeAttribute('disabled');
+                btnPreviousPageGridCollectionGrid.removeAttribute('disabled');
+                btnNextPageGridCollectionGrid.removeAttribute('disabled');
+                btnLastPageGridCollectionGrid.removeAttribute('disabled');
+            }
+            btnCurrentPageGridCollectionGrid.innerHTML = (collectionLines.pageIndex + 1) + ' / ' + collectionLines.pageCount;
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -837,6 +914,169 @@
                     }
                 });
             }
+
+            collectionLines = new wijmo.collections.CollectionView();
+            collectionLines.canFilter = true;
+            collectionLines.pageSize = 15;
+
+            var filterTextCollectionLine = '';
+            $('#InputFilterCollectionLine').keyup(function () {
+                filterTextCollectionLine = this.value.toLowerCase();
+                collectionLines.refresh();
+            });
+            collectionLines.filter = function (item) {
+                return !filterTextCollectionLine || (item.collectionLine.toLowerCase().indexOf(filterTextCollectionLine) > -1);
+            }
+            collectionLines.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsCollectionLine();
+            });
+            //collectionLines.currentChanged.addHandler(function (sender, args) {
+            //    updateDetailsPOLine();
+            //});
+
+            // Flex Grid for Purchase Collection Line
+            collectionLineGrid = new wijmo.grid.FlexGrid('#CollectionLineGrid');
+            collectionLineGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Branch",
+                                //"binding": "Branch",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Pay Type",
+                                //"binding": "BranchCode",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Particulars",
+                                //"binding": "Address",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "SI No.",
+                                //"binding": "ContactNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Amount",
+                                //"binding": "TaxNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Account",
+                                //"binding": "TaxNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Article",
+                                //"binding": "TaxNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Check No.",
+                                //"binding": "TaxNumber",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                           {
+                               "header": "Check Date",
+                               //"binding": "TaxNumber",
+                               "align": "left",
+                               "allowSorting": true,
+                               "width": "1*"
+                           },
+                           {
+                               "header": "Check Bank",
+                               //"binding": "TaxNumber",
+                               "align": "left",
+                               "allowSorting": true,
+                               "width": "1*"
+                           },
+                           {
+                               "header": "Depository Bank",
+                               //"binding": "TaxNumber",
+                               "align": "left",
+                               "allowSorting": true,
+                               "width": "1*"
+                           },
+                           {
+                               "header": "C",
+                               //"binding": "TaxNumber",
+                               "align": "left",
+                               "allowSorting": true,
+                               "width": "1*"
+                           }
+                ],
+                autoGenerateColumns: false,
+                //itemsSource: collectionLines,
+                isReadOnly: true,
+                //frozenColumns: 2,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            collectionLineGrid.trackChanges = true;
+
+            //Navigation button for Purchase Collection Line
+            btnFirstPageGridCollectionGrid = document.getElementById('btnMoveToFirstPageGridCollectionLine');
+            btnPreviousPageGridCollectionGrid = document.getElementById('btnMoveToPreviousPageGridCollectionLine');
+            btnNextPageGridCollectionGrid = document.getElementById('btnMoveToNextPageGridCollectionLine');
+            btnLastPageGridCollectionGrid = document.getElementById('btnMoveToLastPageGridCollectionLine');
+            btnCurrentPageGridCollectionGrid = document.getElementById('btnCurrentPageGridCollectionLine');
+
+            updateNavigateButtonsCollectionLine();
+
+            btnFirstPageGridCollectionGrid.addEventListener('click', function () {
+                collectionLines.moveToFirstPage();
+                updateNavigateButtonsCollectionLine();
+            });
+            btnPreviousPageGridCollectionGrid.addEventListener('click', function () {
+                collectionLines.moveToPreviousPage();
+                updateNavigateButtonsCollectionLine();
+            });
+            btnNextPageGridCollectionGrid.addEventListener('click', function () {
+                collectionLines.moveToNextPage();
+                updateNavigateButtonsCollectionLine();
+            });
+            btnLastPageGridCollectionGrid.addEventListener('click', function () {
+                collectionLines.moveToLastPage();
+                updateNavigateButtonsCollectionLine();
+            });
 
         });
 
