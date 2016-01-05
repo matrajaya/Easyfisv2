@@ -22,6 +22,7 @@ namespace easyfis.Models
         public String ManualPONumber { get; set; }
         public String DateNeeded { get; set; }
         public String Remarks { get; set; }
+        public Decimal Amount { get; set; }
         public Boolean  IsClose { get; set; }
         public Int32 RequestedById { get; set; }
         public String RequestedBy { get; set; }

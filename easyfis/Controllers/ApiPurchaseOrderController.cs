@@ -55,6 +55,33 @@ namespace easyfis.Controllers
             return purchaseOrders.ToList();
         }
 
+        // ===================
+        // Get Amount By PO Id
+        // ===================
+        public Decimal getAmount(Int32 POId)
+        {
+            var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
+                                     where d.POId == POId
+                                     select new Models.TrnPurchaseOrderItem
+                                     {
+                                         Id = d.Id,
+                                         POId = d.POId,
+                                         PO = d.TrnPurchaseOrder.PONumber,
+                                         ItemId = d.ItemId,
+                                         Item = d.MstArticle.Article,
+                                         ItemCode = d.MstArticle.ManualArticleCode,
+                                         Particulars = d.Particulars,
+                                         UnitId = d.UnitId,
+                                         Unit = d.MstUnit.Unit,
+                                         Quantity = d.Quantity,
+                                         Cost = d.Cost,
+                                         Amount = d.Amount
+                                     };
+            decimal amount = PurchaseOrderItems.Sum(d => d.Amount);
+
+            return amount;
+        }
+
         // ========================
         // GET Purchase Order by Id
         // ========================
@@ -80,6 +107,7 @@ namespace easyfis.Controllers
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
+                                     Amount = getAmount(purchaseOrder_Id),
                                      RequestedById = d.RequestedById,
                                      RequestedBy = d.MstUser4.FullName,
                                      PreparedById = d.PreparedById,
@@ -124,6 +152,7 @@ namespace easyfis.Controllers
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
+                                     Amount = getAmount(d.Id),
                                      RequestedById = d.RequestedById,
                                      RequestedBy = d.MstUser4.FullName,
                                      PreparedById = d.PreparedById,
@@ -166,6 +195,7 @@ namespace easyfis.Controllers
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
+                                     Amount = getAmount(d.Id),
                                      RequestedById = d.RequestedById,
                                      RequestedBy = d.MstUser4.FullName,
                                      PreparedById = d.PreparedById,
@@ -208,6 +238,7 @@ namespace easyfis.Controllers
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
+                                     Amount = getAmount(d.Id),
                                      RequestedById = d.RequestedById,
                                      RequestedBy = d.MstUser4.FullName,
                                      PreparedById = d.PreparedById,
