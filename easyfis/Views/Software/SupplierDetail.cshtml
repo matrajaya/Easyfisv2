@@ -495,44 +495,7 @@
                         $("#artcileSupplier_AssetAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
                         $("#artcileSupplier_ExpenseAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
 
-                        accounts = new wijmo.collections.ObservableArray();
-                        $.ajax({
-                            url: '/api/listAccount',
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (results) {
-                                if (results.length > 0) {
-                                    for (i = 0; i < results.length; i++) {
-                                        accounts.push({
-                                            AccountId: results[i]["Id"],
-                                            AccountAccount: results[i]["Account"]
-                                        });
-                                    }
-
-                                    var accountCollection = new wijmo.collections.CollectionView(accounts);
-                                    var accountList = new Array();
-                                    for (var i = 0; i < accountCollection.items.length; i++) {
-                                        accountList.push(accountCollection.items[i].AccountAccount);
-                                    }
-
-                                    cboForAccount.dispose();
-                                    cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account', {
-                                        disabled: true,
-                                        placeholder: "Select Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('artcileSupplier_Account_SelectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#artcileSupplier_Account_Data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
+                        getArticleAccountForComboBox();
                     }
                 });
             } else if(document.getElementById('Supplier_IsLocked').value == 'false') {
@@ -553,44 +516,7 @@
                         $("#artcileSupplier_AssetAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
                         $("#artcileSupplier_ExpenseAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
 
-                        accounts = new wijmo.collections.ObservableArray();
-                        $.ajax({
-                            url: '/api/listAccount',
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (results) {
-                                if (results.length > 0) {
-                                    for (i = 0; i < results.length; i++) {
-                                        accounts.push({
-                                            AccountId: results[i]["Id"],
-                                            AccountAccount: results[i]["Account"]
-                                        });
-                                    }
-
-                                    var accountCollection = new wijmo.collections.CollectionView(accounts);
-                                    var accountList = new Array();
-                                    for (var i = 0; i < accountCollection.items.length; i++) {
-                                        accountList.push(accountCollection.items[i].AccountAccount);
-                                    }
-
-                                    cboForAccount.dispose();
-                                    cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account', {
-                                        disabled: true,
-                                        placeholder: "Select Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('artcileSupplier_Account_SelectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#artcileSupplier_Account_Data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
+                        getArticleAccountForComboBox();
                     }
                 });
             } else {
@@ -610,44 +536,7 @@
                         $("#artcileSupplier_AssetAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
                         $("#artcileSupplier_ExpenseAccountId").val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
 
-                        accounts = new wijmo.collections.ObservableArray();
-                        $.ajax({
-                            url: '/api/listAccount',
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (results) {
-                                if (results.length > 0) {
-                                    for (i = 0; i < results.length; i++) {
-                                        accounts.push({
-                                            AccountId: results[i]["Id"],
-                                            AccountAccount: results[i]["Account"]
-                                        });
-                                    }
-
-                                    var accountCollection = new wijmo.collections.CollectionView(accounts);
-                                    var accountList = new Array();
-                                    for (var i = 0; i < accountCollection.items.length; i++) {
-                                        accountList.push(accountCollection.items[i].AccountAccount);
-                                    }
-
-                                    cboForAccount.dispose();
-                                    cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account', {
-                                        disabled: true,
-                                        placeholder: "Select Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('artcileSupplier_Account_SelectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#artcileSupplier_Account_Data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
+                        getArticleAccountForComboBox();
                     }
                 });
             }

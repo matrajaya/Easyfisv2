@@ -763,97 +763,8 @@
                         $("#Item_AccumDepAccount_selectedValue").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccount);
                         $("#Item_ExpenseAccount_data").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
                         $("#Item_ExpenseAccount_selectedValue").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccount);
-
-                        accounts = new wijmo.collections.ObservableArray();
-                        $.ajax({
-                            url: '/api/listAccount',
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (results) {
-                                if (results.length > 0) {
-                                    for (i = 0; i < results.length; i++) {
-                                        accounts.push({
-                                            AccountId: results[i]["Id"],
-                                            AccountAccount: results[i]["Account"]
-                                        });
-                                    }
-
-                                    var accountCollection = new wijmo.collections.CollectionView(accounts);
-                                    var accountList = new Array();
-                                    for (var i = 0; i < accountCollection.items.length; i++) {
-                                        accountList.push(accountCollection.items[i].AccountAccount);
-                                    }
-
-                                    cboAccount.dispose();
-                                    cboAccount = new wijmo.input.ComboBox('#Item_Account', {
-                                        disabled: true,
-                                        placeholder: "Select Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_Account_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboSaleAccount.dispose();
-                                    cboSaleAccount = new wijmo.input.ComboBox('#Item_SalesAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Sales Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_SalesAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_SalesAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboCostAccount.dispose();
-                                    cboCostAccount = new wijmo.input.ComboBox('#Item_CostAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Cost Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_CostAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_CostAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboAccumDepAccount.dispose();
-                                    cboAccumDepAccount = new wijmo.input.ComboBox('#Item_AccumDepAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Accum Dep Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_AccumDepAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_AccumDepAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboExpenseAccount.dispose();
-                                    cboExpenseAccount = new wijmo.input.ComboBox('#Item_ExpenseAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Expense Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_ExpenseAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_ExpenseAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
+                        
+                        getAccount();
                     }
                 });
             } else if(document.getElementById('Item_IsLocked').value == 'false') {
@@ -877,97 +788,8 @@
                         $("#Item_AccumDepAccount_selectedValue").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccount);
                         $("#Item_ExpenseAccount_data").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
                         $("#Item_ExpenseAccount_selectedValue").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccount);
-
-                        accounts = new wijmo.collections.ObservableArray();
-                        $.ajax({
-                            url: '/api/listAccount',
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (results) {
-                                if (results.length > 0) {
-                                    for (i = 0; i < results.length; i++) {
-                                        accounts.push({
-                                            AccountId: results[i]["Id"],
-                                            AccountAccount: results[i]["Account"]
-                                        });
-                                    }
-
-                                    var accountCollection = new wijmo.collections.CollectionView(accounts);
-                                    var accountList = new Array();
-                                    for (var i = 0; i < accountCollection.items.length; i++) {
-                                        accountList.push(accountCollection.items[i].AccountAccount);
-                                    }
-
-                                    cboAccount.dispose();
-                                    cboAccount = new wijmo.input.ComboBox('#Item_Account', {
-                                        disabled: true,
-                                        placeholder: "Select Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_Account_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboSaleAccount.dispose();
-                                    cboSaleAccount = new wijmo.input.ComboBox('#Item_SalesAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Sales Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_SalesAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_SalesAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboCostAccount.dispose();
-                                    cboCostAccount = new wijmo.input.ComboBox('#Item_CostAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Cost Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_CostAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_CostAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboAccumDepAccount.dispose();
-                                    cboAccumDepAccount = new wijmo.input.ComboBox('#Item_AccumDepAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Accum Dep Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_AccumDepAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_AccumDepAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboExpenseAccount.dispose();
-                                    cboExpenseAccount = new wijmo.input.ComboBox('#Item_ExpenseAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Expense Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_ExpenseAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_ExpenseAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
+                        
+                        getAccount();
                     }
                 });
             } else {
@@ -991,96 +813,7 @@
                         $("#Item_ExpenseAccount_data").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
                         $("#Item_ExpenseAccount_selectedValue").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccount);
 
-                        accounts = new wijmo.collections.ObservableArray();
-                        $.ajax({
-                            url: '/api/listAccount',
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (results) {
-                                if (results.length > 0) {
-                                    for (i = 0; i < results.length; i++) {
-                                        accounts.push({
-                                            AccountId: results[i]["Id"],
-                                            AccountAccount: results[i]["Account"]
-                                        });
-                                    }
-
-                                    var accountCollection = new wijmo.collections.CollectionView(accounts);
-                                    var accountList = new Array();
-                                    for (var i = 0; i < accountCollection.items.length; i++) {
-                                        accountList.push(accountCollection.items[i].AccountAccount);
-                                    }
-
-                                    cboAccount.dispose();
-                                    cboAccount = new wijmo.input.ComboBox('#Item_Account', {
-                                        disabled: true,
-                                        placeholder: "Select Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_Account_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboSaleAccount.dispose();
-                                    cboSaleAccount = new wijmo.input.ComboBox('#Item_SalesAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Sales Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_SalesAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_SalesAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboCostAccount.dispose();
-                                    cboCostAccount = new wijmo.input.ComboBox('#Item_CostAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Cost Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_CostAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_CostAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboAccumDepAccount.dispose();
-                                    cboAccumDepAccount = new wijmo.input.ComboBox('#Item_AccumDepAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Accum Dep Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_AccumDepAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_AccumDepAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                    cboExpenseAccount.dispose();
-                                    cboExpenseAccount = new wijmo.input.ComboBox('#Item_ExpenseAccount', {
-                                        disabled: true,
-                                        placeholder: "Select Expense Account",
-                                        itemsSource: accountList,
-                                        isEditable: false,
-                                        required: false,
-                                        selectedValue: document.getElementById('Item_ExpenseAccount_selectedValue').value.toString(),
-                                        onSelectedIndexChanged: function () {
-                                            $("#Item_ExpenseAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                        }
-                                    });
-
-                                }
-                            }
-                        });
+                        getAccount();
                     }
                 });
             }
@@ -1116,9 +849,9 @@
         // =====================
         function createCboForArticleItemUnit(articleItemUnits) {
             var articleItemUnitCollection = new wijmo.collections.CollectionView(articleItemUnits);
-            var articleGroupList = new Array();
+            var articleUnitList = new Array();
             for (var i = 0; i < articleItemUnitCollection.items.length; i++) {
-                articleGroupList.push(articleItemUnitCollection.items[i].ArticleUnitArticleUnit);
+                articleUnitList.push(articleItemUnitCollection.items[i].ArticleUnitArticleUnit);
             }
 
             if(document.getElementById('Item_IsLocked').value == 'true') {
@@ -1126,7 +859,7 @@
                 cboArticleUnitForItem = new wijmo.input.ComboBox('#articleItem_unit', {
                     disabled: true,
                     placeholder: "Select Unit",
-                    itemsSource: articleGroupList,
+                    itemsSource: articleUnitList,
                     isEditable: false,
                     required: false,
                     selectedValue: document.getElementById('articleItem_unit_SelectedValue').value.toString(),
@@ -1139,7 +872,7 @@
                 cboArticleUnitForItem = new wijmo.input.ComboBox('#articleItem_unit', {
                     disabled: false,
                     placeholder: "Select Unit",
-                    itemsSource: articleGroupList,
+                    itemsSource: articleUnitList,
                     isEditable: false,
                     required: false,
                     selectedValue: document.getElementById('articleItem_unit_SelectedValue').value.toString(),
@@ -1151,7 +884,7 @@
                 cboArticleUnitForItem.dispose();
                 cboArticleUnitForItem = new wijmo.input.ComboBox('#articleItem_unit', {
                     placeholder: "Select Unit",
-                    itemsSource: articleGroupList,
+                    itemsSource: articleUnitList,
                     isEditable: false,
                     required: false,
                     selectedValue: document.getElementById('articleItem_unit_SelectedValue').value.toString(),

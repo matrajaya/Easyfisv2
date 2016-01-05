@@ -14,7 +14,7 @@ namespace easyfis.Controllers
         // ========================
         // LIST Purchase Order Item
         // ========================
-        [Route("api/listTrnPurchaseOrderItem")]
+        [Route("api/listPurchaseOrderItem")]
         public List<Models.TrnPurchaseOrderItem> Get()
         {
             var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
@@ -22,12 +22,40 @@ namespace easyfis.Controllers
                                      {
                                          Id = d.Id,
                                          POId = d.POId,
-                                         //PO = d.PO,
+                                         PO = d.TrnPurchaseOrder.PONumber,
                                          ItemId = d.ItemId,
-                                         //Item = d.Item,
+                                         Item = d.MstArticle.Article,
+                                         ItemCode = d.MstArticle.ManualArticleCode,
                                          Particulars = d.Particulars,
                                          UnitId = d.UnitId,
-                                         //Unit = d.Unit,
+                                         Unit = d.MstUnit.Unit,
+                                         Quantity = d.Quantity,
+                                         Cost = d.Cost,
+                                         Amount = d.Amount
+                                     };
+            return PurchaseOrderItems.ToList();
+        }
+
+        // =================================
+        // LIST Purchase Order Item By PO Id
+        // =================================
+        [Route("api/listPurchaseOrderItemByPOId/{id}")]
+        public List<Models.TrnPurchaseOrderItem> GetPOLinesByPOId(String id)
+        {
+            var PO_Id = Convert.ToInt32(id);
+            var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
+                                     where d.POId == PO_Id
+                                     select new Models.TrnPurchaseOrderItem
+                                     {
+                                         Id = d.Id,
+                                         POId = d.POId,
+                                         PO = d.TrnPurchaseOrder.PONumber,
+                                         ItemId = d.ItemId,
+                                         Item = d.MstArticle.Article,
+                                         ItemCode = d.MstArticle.ManualArticleCode,
+                                         Particulars = d.Particulars,
+                                         UnitId = d.UnitId,
+                                         Unit = d.MstUnit.Unit,
                                          Quantity = d.Quantity,
                                          Cost = d.Cost,
                                          Amount = d.Amount
