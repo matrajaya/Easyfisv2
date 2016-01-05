@@ -1245,8 +1245,8 @@
             document.getElementById('POLine_Quantity').value = POLine.Quantity ? POLine.Quantity : '';
             document.getElementById('POLine_Unit_data').value = POLine.UnitId ? POLine.UnitId : '';
             document.getElementById('POLine_Unit_selectedValue').value = POLine.Unit ? POLine.Unit : '';
-            document.getElementById('POLine_Cost').value = POLine.Cost ? POLine.Cost : '';
-            document.getElementById('POLine_Amount').value = POLine.Amount ? POLine.Amount : '';
+            document.getElementById('POLine_Cost').value = POLine.Cost.toLocaleString() ? POLine.Cost.toLocaleString() : '';
+            document.getElementById('POLine_Amount').value = POLine.Amount.toLocaleString() ? POLine.Amount.toLocaleString() : '';
         }
 
         // =================
@@ -1272,8 +1272,8 @@
             document.getElementById('POLine_Quantity').value = '';
             document.getElementById('POLine_Unit_data').value = '';
             document.getElementById('POLine_Unit_selectedValue').value = '';
-            document.getElementById('POLine_Cost').value = '';
-            document.getElementById('POLine_Amount').value = '';
+            document.getElementById('POLine_Cost').value = 0;
+            document.getElementById('POLine_Amount').value = 0;
         }
 
         // ====================
@@ -1290,6 +1290,27 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            $('#POLine_Quantity').keyup (function() {
+                var inputQuantity = this.value;
+                var replacedQuantity = inputQuantity.replace(/\,/g,'');
+                var inputCost = document.getElementById('POLine_Cost').value;
+                var amount = inputCost * replacedQuantity;
+
+                document.getElementById('POLine_Amount').value = amount.toLocaleString();
+            });
+
+            $('#POLine_Cost').keyup (function() {
+                var inputQuantity = document.getElementById('POLine_Quantity').value;
+                var inputCost = this.value;
+                var replacedCost = inputCost.replace(/\,/g,'');
+                var amount = replacedCost * inputQuantity;
+                    
+                document.getElementById('POLine_Amount').value = amount.toLocaleString();
+            });
+
+            document.getElementById('POLine_Amount').disabled = true;
+
+            console.log(document.getElementById('POLine_Quantity').value);
             document.getElementById('PO_Branch').disabled = true;
             document.getElementById('PO_PONumber').disabled = true;
             document.getElementById('PO_Lock').disabled = true;
