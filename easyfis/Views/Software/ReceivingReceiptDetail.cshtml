@@ -31,11 +31,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
-                        @*<h4><img src='~/images/Icons/iCompany.png'> Company - Detail</h4>*@
                         <h4><i class="fa fa-file-text fa-2x"></i>  Receiving Receipt Detail</h4>
                         <br />
                         <div class="div_Current_Page">
-                            @*<label id="currentBranchName"></label>*@
                             <span id="currentPage"></span>
                         </div>
                     </div>
@@ -52,7 +50,7 @@
                         <button id="cmdRRClose" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
-                @*<hr />*@
+
                 <div class="well">
                     <form class="form-horizontal" role="form">
                         <div class="row">
@@ -186,7 +184,7 @@
                 <br />
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Item" id="itemTabId">Items</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#InventoryEntry" id="inventoryEntryTabId">Inventory Entries</a></li>
+                    @*<li role="presentation"><a data-toggle="tab" href="#InventoryEntry" id="inventoryEntryTabId">Inventory Entries</a></li>*@
                 </ul>
                 <br />
                 <div class="tab-content">
@@ -289,7 +287,40 @@
                         <h4 class="modal-title" id="POStatusModalLabel">Purchase Order Status</h4>
                     </div>
                     <div class="modal-body">
+                        <form id="POLinesDetailForm">
+                            <input type="hidden" id="POLine_Id" />
+                            <dl class="dl-horizontal">
+                                <dt>Item Code:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="POLine_ItemCode"></div>
 
+                                    <input type="text" id="POLine_ItemCode_data" class="requiredPOLine">
+                                    <input type="text" id="POLine_ItemCode_selectedValue" />
+                                </dd>
+                                <dt>Item Description:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="POLine_ItemDescription"></div>
+
+                                    <input type="text" id="POLine_ItemDescription_data" class="requiredPOLine">
+                                    <input type="text" id="POLine_ItemDescription_selectedValue" />
+                                </dd>
+                                <dt>Particulars:</dt>
+                                <dd><textarea class="form-control textarea-custom requiredPOLine" id="POLine_Particulars"></textarea></dd>
+                                <dt>Quantity:</dt>
+                                <dd><input type="text" class="form-control input-sm requiredPOLine" id="POLine_Quantity" /></dd>
+                                <dt>Unit:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="POLine_Unit"></div>
+
+                                    <input type="text" id="POLine_Unit_data" class="requiredPOLine">
+                                    <input type="text" id="POLine_Unit_selectedValue" />
+                                </dd>
+                                <dt>Cost:</dt>
+                                <dd><input type="text" class="form-control input-sm requiredPOLine" id="POLine_Cost" /></dd>
+                                <dt>Amount:</dt>
+                                <dd><input type="text" class="form-control input-sm requiredPOLine" id="POLine_Amount" /></dd>
+                            </dl>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
@@ -1193,60 +1224,116 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Date",
+                                "header": "Purchase Order",
                                 //"binding": "Date",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": 200
                             },
                             {
-                                "header": "Doc Ref.",
+                                "header": "Item Code",
                                 // "binding": "Doc Ref.",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": 150
                             },
                             {
-                                "header": "Branch",
+                                "header": "Item Description",
                                 // "binding": "Branch",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 350
                             },
                             {
-                                "header": "Account",
+                                "header": "Particulars",
                                 // "binding": "Account",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 300
                             },
                             {
-                                "header": "Debit",
+                                "header": "Quantity",
                                 // "binding": "Debit",
-                                "align": "left",
+                                "align": "right",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 130
                             },
                             {
-                                "header": "Credit",
+                                "header": "Unit",
                                 // "binding": "Credit",
-                                "align": "left",
+                                "align": "right",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200
                             },
                              {
-                                 "header": "Balance",
+                                 "header": "Cost",
                                  //    "binding": "Balance",
-                                 "align": "left",
+                                 "align": "right",
                                  "allowSorting": true,
-                                 "width": "2*"
+                                 "width": 130
                              },
                              {
-                                 "header": "Particulars",
+                                 "header": "Amount",
+                                 //  "binding": "Particulars",
+                                 "align": "right",
+                                 "allowSorting": true,
+                                 "width": 130
+                             },
+                             {
+                                 "header": "Branch",
                                  //  "binding": "Particulars",
                                  "align": "left",
                                  "allowSorting": true,
-                                 "width": "2*"
+                                 "width": 250
+                             },
+                             {
+                                 "header": "VAT Rate",
+                                 //  "binding": "Particulars",
+                                 "align": "right",
+                                 "allowSorting": true,
+                                 "width": 130
+                             },
+                             {
+                                 "header": "VAT Amount",
+                                 //  "binding": "Particulars",
+                                 "align": "right",
+                                 "allowSorting": true,
+                                 "width": 130
+                             },
+                             {
+                                 "header": "WTAX Rate",
+                                 //  "binding": "Particulars",
+                                 "align": "right",
+                                 "allowSorting": true,
+                                 "width": 130
+                             },
+                             {
+                                 "header": "WTAX Amount",
+                                 //  "binding": "Particulars",
+                                 "align": "right",
+                                 "allowSorting": true,
+                                 "width": 130
+                             },
+                             {
+                                 "header": "Unit",
+                                 //  "binding": "Particulars",
+                                 "align": "right",
+                                 "allowSorting": true,
+                                 "width": 100
+                             },
+                             {
+                                 "header": "Quantity",
+                                 //  "binding": "Particulars",
+                                 "align": "right",
+                                 "allowSorting": true,
+                                 "width": 130
+                             },
+                             {
+                                 "header": "Cost",
+                                 //  "binding": "Particulars",
+                                 "align": "right",
+                                 "allowSorting": true,
+                                 "width": 130
                              },
                 ],
                 autoGenerateColumns: false,
@@ -1258,6 +1345,23 @@
             });
 
             itemGrid.trackChanges = true;
+            var hr = new wijmo.grid.Row();
+            itemGrid.allowMerging = wijmo.grid.AllowMerging.All;
+            itemGrid.columnHeaders.rows.push(hr);
+            itemGrid.columnHeaders.rows[0].allowMerging = true;
+            itemGrid.columnHeaders.rows[0].wordWrap = true;
+
+            for (var c = 11; c <= 11; c++) {
+                itemGrid.columnHeaders.setCellData(0, c, 'VAT');
+
+                for (var cc = 13; cc <= 13; cc++) {
+                    itemGrid.columnHeaders.setCellData(0, cc, 'WTAX');
+                }
+                
+                for (var ccc = 15; ccc <= 17; ccc++) {
+                    itemGrid.columnHeaders.setCellData(0, ccc, 'Basic Unit Conversion');
+                }
+            }
 
             //Navigation button for Item
             btnFirstPageGridItem = document.getElementById('btnMoveToFirstPageGridItem');
