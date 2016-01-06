@@ -41,10 +41,10 @@ namespace easyfis.Controllers
         // =================================
         // LIST Purchase Order Item By PO Id
         // =================================
-        [Route("api/listPurchaseOrderItemByPOId/{id}")]
-        public List<Models.TrnPurchaseOrderItem> GetPOLinesByPOId(String id)
+        [Route("api/listPurchaseOrderItemByPOId/{POId}")]
+        public List<Models.TrnPurchaseOrderItem> GetPOLinesByPOId(String POId)
         {
-            var PO_Id = Convert.ToInt32(id);
+            var PO_Id = Convert.ToInt32(POId);
             var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
                                      where d.POId == PO_Id
                                      select new Models.TrnPurchaseOrderItem

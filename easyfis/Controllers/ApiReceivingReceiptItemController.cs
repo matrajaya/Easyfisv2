@@ -22,25 +22,73 @@ namespace easyfis.Controllers
                                         {
                                             Id = d.Id,
                                             RRId = d.RRId,
-                                            //RR = d.RR,
+                                            RR = d.TrnReceivingReceipt.RRNumber,
                                             POId = d.POId,
-                                            //PO = d.PO,
+                                            PO = d.TrnPurchaseOrder.PONumber,
                                             ItemId = d.ItemId,
-                                            //Item = d.Item,
+                                            Item = d.MstArticle.Article,
+                                            ItemCode = d.MstArticle.ManualArticleCode,
                                             Particulars = d.Particulars,
                                             UnitId = d.UnitId,
-                                            //Unit = d.Unit,
+                                            Unit = d.MstUnit.Unit,
                                             Quantity = d.Quantity,
                                             Cost = d.Cost,
                                             Amount = d.Amount,
                                             VATId = d.VATId,
-                                            //VAT = d.VAT,
+                                            VAT = d.MstTaxType.TaxType,
                                             VATPercentage = d.VATPercentage,
                                             VATAmount = d.VATAmount,
+                                            WTAXId = d.WTAXId,
+                                            WTAX = d.MstTaxType1.TaxType,
+                                            WTAXPercentage = d.WTAXPercentage,
+                                            WTAXAmount = d.WTAXAmount,
                                             BranchId = d.BranchId,
-                                            //Branch = d.Branch,
+                                            Branch = d.MstBranch.Branch,
                                             BaseUnitId = d.BaseUnitId,
-                                            //BaseUnit = d.BaseUnit,
+                                            BaseUnit = d.MstUnit1.Unit,
+                                            BaseQuantity = d.BaseQuantity,
+                                            BaseCost = d.BaseCost
+                                        };
+            return receivingReceiptItems.ToList();
+        }
+
+        // ===================================
+        // GET Receiving Receipt Item by RR Id
+        // ===================================
+        [Route("api/listReceivingReceiptItemByRRId/{RRId}")]
+        public List<Models.TrnReceivingReceiptItem> GetRRLinesByRRId(String RRId)
+        {
+            var RR_Id = Convert.ToInt32(RRId);
+            var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                                        where d.RRId == RR_Id
+                                        select new Models.TrnReceivingReceiptItem
+                                        {
+                                            Id = d.Id,
+                                            RRId = d.RRId,
+                                            RR = d.TrnReceivingReceipt.RRNumber,
+                                            POId = d.POId,
+                                            PO = d.TrnPurchaseOrder.PONumber,
+                                            ItemId = d.ItemId,
+                                            Item = d.MstArticle.Article,
+                                            ItemCode = d.MstArticle.ManualArticleCode,
+                                            Particulars = d.Particulars,
+                                            UnitId = d.UnitId,
+                                            Unit = d.MstUnit.Unit,
+                                            Quantity = d.Quantity,
+                                            Cost = d.Cost,
+                                            Amount = d.Amount,
+                                            VATId = d.VATId,
+                                            VAT = d.MstTaxType.TaxType,
+                                            VATPercentage = d.VATPercentage,
+                                            VATAmount = d.VATAmount,
+                                            WTAXId = d.WTAXId,
+                                            WTAX = d.MstTaxType1.TaxType,
+                                            WTAXPercentage = d.WTAXPercentage,
+                                            WTAXAmount = d.WTAXAmount,
+                                            BranchId = d.BranchId,
+                                            Branch = d.MstBranch.Branch,
+                                            BaseUnitId = d.BaseUnitId,
+                                            BaseUnit = d.MstUnit1.Unit,
                                             BaseQuantity = d.BaseQuantity,
                                             BaseCost = d.BaseCost
                                         };

@@ -16,6 +16,7 @@ namespace easyfis.Models
         public String PO { get; set; }
         public Int32 ItemId { get; set; }
         public String Item { get; set; }
+        public String ItemCode { get; set; }
         public String Particulars { get; set; }
         public Int32 UnitId { get; set; }
         public String Unit { get; set; }
@@ -26,12 +27,15 @@ namespace easyfis.Models
         public String VAT { get; set; }
         public Decimal VATPercentage { get; set; }
         public Decimal VATAmount { get; set; }
+        public Int32 WTAXId { get; set; }
+        public String WTAX { get; set; }
+        public Decimal WTAXPercentage { get; set; }
+        public Decimal WTAXAmount { get; set; }
         public Int32 BranchId { get; set; }
         public String Branch { get; set; }
         public Int32 BaseUnitId { get; set; }
         public String BaseUnit { get; set; }
         public Decimal BaseQuantity { get; set; }
         public Decimal BaseCost { get; set; }
-
     }
 }
