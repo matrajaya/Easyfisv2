@@ -311,9 +311,19 @@
                             <div class="col-md-4"></div>
                         </div>
                         <hr />
+                        <label id="POItem_Title">Purchase Order Items</label>
+                        <div class="row" id="seacrhIdinPOStatus">
+                            <div class="col-lg-5">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterPOItemsPOStatus" placeholder="Search">
+                                </div>
+                            </div>
+                            <div class="col-lg-7"></div>
+                        </div>
+                        <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <label id="POItem_Title">Purchase Order Items</label>
                                 <div id="POStatusGrid" class="grid" align="left"></div>
                                 <center>
                                     <h4>
@@ -321,7 +331,6 @@
                                         <span id="loadingPOItemsGridList"></span>
                                     </h4>
                                 </center>
-
                             </div>
                         </div>
                         <br />
@@ -619,6 +628,13 @@
         // ==========================
         function getSupplierForComboBox() {
             suppliers = new wijmo.collections.ObservableArray();
+            
+            if(document.getElementById('RRSupplier_data').value == '') {
+                $('#cmdRRForPOSupplier').prop("disabled", true);
+            } else {
+                $('#cmdRRForPOSupplier').prop("disabled", false);
+            }
+
             $.ajax({
                 url: '/api/listArticleByArticleTypeId/3',
                 cache: false,
@@ -660,10 +676,11 @@
                 onSelectedIndexChanged: function () {
                     $("#RRSupplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
                     $("#RRSupplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
-
                     $("#POStatus_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
                     $("#POStatus_Supplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
                     
+                    $('#cmdRRForPOSupplier').prop("disabled", false);
+
                     document.getElementById('POStatus_PONumber_data').value = 0;
                     getPOInPOStatusForComboBox();
                 }
@@ -968,7 +985,6 @@
 
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 if (RRId == 0) {
@@ -1055,35 +1071,38 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             document.getElementById('POStatus_PONumber_data').value = 0;
             getSupplierInPOStatusForComboBox();
             getPOInPOStatusForComboBox();
             document.getElementById("loadingPOStatusGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading PO Status...';
             document.getElementById("loadingPOItemsGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Purchase Order Items...';
-            $('#loadingPOStatusGridList').show();
-            $('#loadingPOItemsGridList').hide();
+
             $('#POLinesDetailForm').hide();
+            $('#loadingPOStatusGridList').show();
+
+            $('#loadingPOItemsGridList').hide();
             $('#footerModalPOStatusNavigationButtons').hide();
             $('#POStatusGrid').hide();
             $('#POItem_Title').hide();
+            $('#seacrhIdinPOStatus').hide();
 
             setTimeout(function() {
-                $('#loadingPOStatusGridList').hide();
-                $('#footerModalPOStatusNavigationButtons').show();
                 $('#POLinesDetailForm').show();
-                $('#POStatusGrid').show();
-                $('#POItem_Title').show();
-                
-                //getPOBySupplierInPOStatus();
-                //getPurchaseOrderItemForPOSTatus();
-                    
-                $('#loadingPOStatusGridList').show();
+                $('#loadingPOStatusGridList').hide();
 
                 POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
                 POStatus.canFilter = true;
                 POStatus.pageSize = 10;
 
+                var filterTextItem = '';
+                $('#InputFilterPOItemsPOStatus').keyup(function () {
+                    filterTextItem = this.value.toLowerCase();
+                    POStatus.refresh();
+                });
+                POStatus.filter = function (item) {
+                    return !filterTextItem || (item.Item.toLowerCase().indexOf(filterTextItem) > -1);
+                }
                 POStatus.collectionChanged.addHandler(function (sender, args) {
                     updateNavigateButtonsPOSTatus();
                 });
@@ -1194,22 +1213,29 @@
                 selectedValue: document.getElementById('POStatus_PONumber_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#POStatus_PONumber_data").val(POCollection.items[this.selectedIndex].POId);
-                    
-                    $('#loadingPOItemsGridList').show();
-                    $('#POStatusGrid').hide();
+
+                    $('#loadingPOItemsGridList').hide();
                     $('#footerModalPOStatusNavigationButtons').hide();
+                    $('#POStatusGrid').hide();
                     $('#POItem_Title').hide();
+                    $('#seacrhIdinPOStatus').hide();
+
+                    $('#loadingPOItemsGridList').show();
+                    document.getElementById('InputFilterPOItemsPOStatus').value = "";
 
                     setTimeout(function () {
-                        $('#loadingPOItemsGridList').hide();
-                        $('#POStatusGrid').show();
-                        $('#footerModalPOStatusNavigationButtons').show();
-                        $('#POItem_Title').show();
-
                         POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
                         POStatus.canFilter = true;
                         POStatus.pageSize = 10;
 
+                        var filterTextItem = '';
+                        $('#InputFilterPOItemsPOStatus').keyup(function () {
+                            filterTextItem = this.value.toLowerCase();
+                            POStatus.refresh();
+                        });
+                        POStatus.filter = function (item) {
+                            return !filterTextItem || (item.Item.toLowerCase().indexOf(filterTextItem) > -1);
+                        }
                         POStatus.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsPOSTatus();
                         });
@@ -1223,6 +1249,12 @@
         // Purchase Order Line / Item for PO Status
         // ========================================
         function getPurchaseOrderItemForPOSTatus() {
+            $('#loadingPOItemsGridList').hide();
+            $('#POStatusGrid').show();
+            $('#footerModalPOStatusNavigationButtons').show();
+            $('#POItem_Title').show();
+            $('#seacrhIdinPOStatus').show();
+
             var POStatus = new wijmo.collections.ObservableArray;
             var POId = document.getElementById('POStatus_PONumber_data').value;
             $.ajax({
@@ -1263,6 +1295,14 @@
             POStatus.canFilter = true;
             POStatus.pageSize = 10;
 
+            var filterTextItem = '';
+            $('#InputFilterPOItemsPOStatus').keyup(function () {
+                filterTextItem = this.value.toLowerCase();
+                POStatus.refresh();
+            });
+            POStatus.filter = function (item) {
+                return !filterTextItem || (item.Item.toLowerCase().indexOf(filterTextItem) > -1);
+            }
             POStatus.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsPOSTatus();
             });
@@ -1407,17 +1447,6 @@
         // OnLoad Function
         // ===============
         $(document).ready(function () {
-            //$('#cmdRRForPOSupplier').click(function () {
-            //    $('#POStatus').modal({
-            //        show: true,
-            //        backdrop: 'static'
-            //    });
-
-            //    window.RRForPOSupplier_OnClick = function () {
-            //        return true;
-            //    };
-            //});
-            
             document.getElementById('POStatus_PONumber_data').value = 0;
             getPOBySupplierInPOStatus();
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
@@ -1491,23 +1520,23 @@
     <!-- Item Scripts -->
     <!-- ============ -->
     <script type="text/javascript">
-    // =========================
-    // Global Variables for Item
-    // =========================
-    var items;
-    var itemGrid;
-    var btnFirstPageGridItem;
-    var btnPreviousPageGridItem;
-    var btnNextPageGridItem;
-    var btnLastPageGridItem;
-    var btnCurrentPageGridItem;
+        // =========================
+        // Global Variables for Item
+        // =========================
+        var items;
+        var itemGrid;
+        var btnFirstPageGridItem;
+        var btnPreviousPageGridItem;
+        var btnNextPageGridItem;
+        var btnLastPageGridItem;
+        var btnCurrentPageGridItem;
 
-    // ===========
-    // GET RR Item
-    // ===========
-    function getRRItem() {
-        var items = new wijmo.collections.ObservableArray;
-        RRId = @RRId;
+        // ===========
+        // GET RR Item
+        // ===========
+        function getRRItem() {
+            var items = new wijmo.collections.ObservableArray;
+            RRId = @RRId;
             $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/listReceivingReceiptItemByRRId/' + RRId,
