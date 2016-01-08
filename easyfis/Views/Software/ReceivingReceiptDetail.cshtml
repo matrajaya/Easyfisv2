@@ -1374,41 +1374,33 @@
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-
+            
             POstatusGrid.trackChanges = true;
+
+            // Merge column Headers
             var hr = new wijmo.grid.Row();
             POstatusGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
             POstatusGrid.columnHeaders.rows.push(hr);
             POstatusGrid.columnHeaders.rows[0].allowMerging = true;
+            
+            POstatusGrid.columnHeaders.columns[0].allowMerging = true;
+            POstatusGrid.columnHeaders.setCellData(0, 0, 'Code');
 
+            POstatusGrid.columnHeaders.columns[1].allowMerging = true;
+            POstatusGrid.columnHeaders.setCellData(0, 1, 'Item');
+            
+            POstatusGrid.columnHeaders.columns[2].allowMerging = true;
+            POstatusGrid.columnHeaders.setCellData(0, 2, 'Unit');
+            
             for (var columnQuantityTopAssigned = 3; columnQuantityTopAssigned <= 5; columnQuantityTopAssigned++) {
                 POstatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Quantity');
             }
 
-            for (var columnCode = 0; columnCode < 1; columnCode++) {
-                POstatusGrid.columnHeaders.columns[columnCode].allowMerging = true;
-                POstatusGrid.columnHeaders.setCellData(0, columnCode, 'Code');
-            }
-
-            for (var columnItem = 1; columnItem <= 1; columnItem++) {
-                POstatusGrid.columnHeaders.columns[columnItem].allowMerging = true;
-                POstatusGrid.columnHeaders.setCellData(0, columnItem, 'Item');
-            }
-
-            for (var columnUnit = 2; columnUnit <= 2; columnUnit++) {
-                POstatusGrid.columnHeaders.columns[columnUnit].allowMerging = true;
-                POstatusGrid.columnHeaders.setCellData(0, columnUnit, 'Unit');
-            }
-
-            for (var columnP = 6; columnP <= 6; columnP++) {
-                POstatusGrid.columnHeaders.columns[columnP].allowMerging = true;
-                POstatusGrid.columnHeaders.setCellData(0, columnP, 'P');
-            }
-
-            for (var columnQuantity = 7; columnQuantity <= 7; columnQuantity++) {
-                POstatusGrid.columnHeaders.columns[columnQuantity].allowMerging = true;
-                POstatusGrid.columnHeaders.setCellData(0, columnQuantity, 'Quantity');
-            }
+            POstatusGrid.columnHeaders.columns[6].allowMerging = true;
+            POstatusGrid.columnHeaders.setCellData(0, 6, 'P');
+            
+            POstatusGrid.columnHeaders.columns[7].allowMerging = true;
+            POstatusGrid.columnHeaders.setCellData(0, 7, 'Quantity');
 
             //Navigation button for Item
             btnFirstPageGridPOStatus = document.getElementById('btnMoveToFirstPageGridPOStatus');
@@ -1808,22 +1800,58 @@
             });
 
             itemGrid.trackChanges = true;
+
+            // Merge Headers
             var hr = new wijmo.grid.Row();
-            itemGrid.allowMerging = wijmo.grid.AllowMerging.All;
+            itemGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
             itemGrid.columnHeaders.rows.push(hr);
             itemGrid.columnHeaders.rows[0].allowMerging = true;
-            itemGrid.columnHeaders.rows[0].wordWrap = true;
 
-            for (var c = 11; c <= 11; c++) {
-                itemGrid.columnHeaders.setCellData(0, c, 'VAT');
+            itemGrid.columnHeaders.columns[0].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 0, 'Edit');
 
-                for (var cc = 13; cc <= 13; cc++) {
-                    itemGrid.columnHeaders.setCellData(0, cc, 'WTAX');
-                }
+            itemGrid.columnHeaders.columns[1].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 1, 'Delete');
 
-                for (var ccc = 15; ccc <= 17; ccc++) {
-                    itemGrid.columnHeaders.setCellData(0, ccc, 'Basic Unit Conversion');
-                }
+            itemGrid.columnHeaders.columns[2].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 2, 'Purchase Order');
+
+            itemGrid.columnHeaders.columns[3].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 3, 'Item Code');
+
+            itemGrid.columnHeaders.columns[4].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 4, 'Item Description');
+
+            itemGrid.columnHeaders.columns[5].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 5, 'Particulars');
+
+            itemGrid.columnHeaders.columns[6].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 6, 'Quantity');
+
+            itemGrid.columnHeaders.columns[7].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 7, 'Unit');
+
+            itemGrid.columnHeaders.columns[8].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 8, 'Cost');
+
+            itemGrid.columnHeaders.columns[9].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 9, 'Amount');
+
+            itemGrid.columnHeaders.columns[10].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 10, 'Branch');
+
+            itemGrid.columnHeaders.setCellData(0, 11, 'VAT');
+
+            itemGrid.columnHeaders.columns[12].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 12, 'VAT Amount');
+
+            itemGrid.columnHeaders.setCellData(0, 13, 'WTAX');
+
+            itemGrid.columnHeaders.columns[14].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 14, 'WTAX Amount');
+
+            for (var columnBasicUnitConversion = 15; columnBasicUnitConversion <= 17; columnBasicUnitConversion++) {
+                itemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
             }
 
             //Navigation button for Item
