@@ -90,8 +90,8 @@
                                         <div class="input-group">
                                             <div class="comboBox-wide" id="RRSupplier"></div>
 
-                                            <input type="text" id="RRSupplier_data" class="requiredRR" />
-                                            <input type="text" id="RRSupplier_selectedValue" />
+                                            <input type="hidden" id="RRSupplier_data" class="requiredRR" />
+                                            <input type="hidden" id="RRSupplier_selectedValue" />
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-primary btn-sm" id="cmdRRForPOSupplier" onclick="RRForPOSupplier_OnClick()">PO</button>
                                             </div>
@@ -302,8 +302,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="POStatus_PONumber"></div>
 
-                                            <input type="hidden" id="POStatus_PONumber_data" class="requiredPOLine">
-                                            <input type="hidden" id="POStatus_PONumber_selectedValue" />
+                                            <input type="text" id="POStatus_PONumber_data" class="requiredPOLine">
+                                            <input type="text" id="POStatus_PONumber_selectedValue" />
                                         </dd>
                                     </dl>
                                 </form>
@@ -400,6 +400,13 @@
         var cboPONumberPOStatus;
 
         var POStatus;
+        var POstatusGrid;
+
+        var btnFirstPageGridPOStatus;
+        var btnPreviousPageGridPOStatus;
+        var btnNextPageGridPOStatus;
+        var btnLastPageGridPOStatus;
+        var btnCurrentPageGridPOStatus;
 
         // =================
         // GET RR List By Id
@@ -650,10 +657,8 @@
                 onSelectedIndexChanged: function () {
                     $("#RRSupplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
                     $("#RRSupplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
-                    document.getElementById('POStatus_Supplier_data').value = supplierCollection.items[this.selectedIndex].SupplierId;
-                    document.getElementById('POStatus_Supplier_selectedValue').value = supplierCollection.items[this.selectedIndex].Supplier;
                     
-                    getSupplierInPOStatusForComboBox();
+                    document.getElementById('POStatus_PONumber_data').value = 0;
                     getPOInPOStatusForComboBox();
                 }
             });
@@ -1044,185 +1049,39 @@
                 show: true,
                 backdrop: 'static'
             });
-
+            
+            document.getElementById('POStatus_PONumber_data').value = 0;
             getSupplierInPOStatusForComboBox();
             getPOInPOStatusForComboBox();
             document.getElementById("loadingPOStatusGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading PO Status...';
             $('#loadingPOStatusGridList').show();
             $('#POLinesDetailForm').hide();
             $('#footerModalPOStatusNavigationButtons').hide();
-            
+            $('#POStatusGrid').hide();
+
             setTimeout(function() {
                 $('#loadingPOStatusGridList').hide();
                 $('#footerModalPOStatusNavigationButtons').show();
                 $('#POLinesDetailForm').show();
+                $('#POStatusGrid').show();
+                
+                //getPOBySupplierInPOStatus();
+                //getPurchaseOrderItemForPOSTatus();
+                    
+                $('#loadingPOStatusGridList').show();
 
-                getPOBySupplierInPOStatus();
+                POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+                POStatus.canFilter = true;
+                POStatus.pageSize = 15;
+
+                POStatus.collectionChanged.addHandler(function (sender, args) {
+                    updateNavigateButtonsPOSTatus();
+                });
+                POstatusGrid.itemsSource = POStatus;
+
+
             }, 1000);
 
-        }
-
-        // ===============
-        // OnLoad Function
-        // ===============
-        $(document).ready(function () {
-            $('#cmdRRForPOSupplier').click(function () {
-                $('#POStatus').modal({
-                    show: true,
-                    backdrop: 'static'
-                });
-
-                window.RRForPOSupplier_OnClick = function () {
-                    return true;
-                };
-            });
-
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
-            document.getElementById('RR_Lock').disabled = true;
-            document.getElementById('RRRRNumber').disabled = true;
-
-            cboBranch = new wijmo.input.ComboBox('#RRbranch');
-
-            var d = new Date();
-            document.getElementById("RRRRDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
-            RRDate = new wijmo.input.InputDate('#RRRRDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                onValueChanged: function () {
-                    document.getElementById('RRRRDate_data').value = this.value.toLocaleDateString();
-                }
-            });
-
-            cboSupplier = new wijmo.input.ComboBox('#RRSupplier');
-            cboTerm = new wijmo.input.ComboBox('#RRTerm');
-            cboReceivedBy  = new wijmo.input.ComboBox('#RRReceivedBy');
-            cboPreparedBy  = new wijmo.input.ComboBox('#RRPreparedBy');
-            cboCheckedBy  = new wijmo.input.ComboBox('#RRCheckedBy');
-            cboApprovedBy  = new wijmo.input.ComboBox('#RRApprovedBy');
-
-            getRRById();
-
-            var RRId = @RRId;
-            if(RRId == 0) {
-                getBranchesForComboBox();
-                getSupplierForComboBox();
-                getTermForComboBox();
-                getUsersForComboBox();
-
-                if(document.getElementById('RRRRNumber').value == 0) {
-                    document.getElementById('RRRRNumber_Display').value = "0000000001";
-                }
-
-                document.getElementById('RRRRNumber').value = 0;
-                //document.getElementById('journalVoucher_No_Display').value = "000-000000";
-                var RRs = new wijmo.collections.ObservableArray;
-                $.ajax({
-                    url: '/api/receivingReceiptLastRRNumber',
-                    cache: false,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    data: {},
-                    success: function (Results) {
-                        if (Results.length > 0) {
-                            RRs.push({
-                                Id: Results.Id,
-                                RRNumber: Results.RRNumber
-                            });
-                        }
-                        var RR_Number = parseInt(Results.RRNumber);
-                        var RR_Number_PlusOne = 0000000001;
-                        var RR_Num_Results = RR_Number + RR_Number_PlusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
-
-                        document.getElementById('RRRRNumber').value = zerofill(RR_Num_Results, 10);
-                        document.getElementById('RRRRNumber_Display').value = zerofill(RR_Num_Results, 10);
-                    }
-                });
-            }
-
-        });
-    </script>
-
-    <!-- ============ -->
-    <!-- Item Scripts -->
-    <!-- ============ -->
-    <script type="text/javascript">
-    // =========================
-    // Global Variables for Item
-    // =========================
-    var items;
-    var itemGrid;
-    var btnFirstPageGridItem;
-    var btnPreviousPageGridItem;
-    var btnNextPageGridItem;
-    var btnLastPageGridItem;
-    var btnCurrentPageGridItem;
-
-    var POstatusGrid;
-
-    var btnFirstPageGridPOStatus;
-    var btnPreviousPageGridPOStatus;
-    var btnNextPageGridPOStatus;
-    var btnLastPageGridPOStatus;
-    var btnCurrentPageGridPOStatus;
-
-    // ===========
-    // GET RR Item
-    // ===========
-    function getRRItem() {
-        var items = new wijmo.collections.ObservableArray;
-        RRId = @RRId;
-            $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listReceivingReceiptItemByRRId/' + RRId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            items.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                RRId: Results[i]["RRId"],
-                                RR: Results[i]["RR"],
-                                POId: Results[i]["POId"],
-                                PO: Results[i]["PO"],
-                                ItemId: Results[i]["ItemId"],
-                                Item: Results[i]["Item"],
-                                ItemCode: Results[i]["ItemCode"],
-                                Particulars: Results[i]["Particulars"],
-                                UnitId: Results[i]["UnitId"],
-                                Unit: Results[i]["Unit"],
-                                Quantity: Results[i]["Quantity"],
-                                Cost: Results[i]["Cost"],
-                                Amount: Results[i]["Amount"],
-                                VATId: Results[i]["VATId"],
-                                VAT: Results[i]["VAT"],
-                                VATPercentage: Results[i]["VATPercentage"],
-                                VATAmount: Results[i]["VATAmount"],
-                                WTAXId: Results[i]["WTAXId"],
-                                WTAX: Results[i]["WTAX"],
-                                WTAXPercentage: Results[i]["WTAXPercentage"],
-                                WTAXAmount: Results[i]["WTAXAmount"],
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                BaseUnitId: Results[i]["BaseUnitId"],
-                                BaseUnit: Results[i]["BaseUnit"],
-                                BaseQuantity: Results[i]["BaseQuantity"],
-                                BaseCost: Results[i]["BaseCost"]
-                            });
-                        }
-                    }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return items;
         }
 
         // ====================================
@@ -1337,8 +1196,6 @@
                     });
                     POstatusGrid.itemsSource = POStatus;
 
-                    //POStatus =
-
                 }
             });
         }
@@ -1347,21 +1204,6 @@
         // Purchase Order Line / Item for PO Status
         // ========================================
         function getPurchaseOrderItemForPOSTatus() {
-            //document.getElementById("loadingPOStatusGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading PO Status...';
-            //$('#loadingPOStatusGridList').show();
-            //$('#POLinesDetailForm').hide();
-            //$('#footerModalPOStatusNavigationButtons').hide();
-            
-            //setTimeout(function() {
-            //    $('#loadingPOStatusGridList').hide();
-            //    $('#footerModalPOStatusNavigationButtons').show();
-            //    $('#POLinesDetailForm').show();
-
-            //    getPOBySupplierInPOStatus();
-            //}, 1000);
-
-
-
             var POStatus = new wijmo.collections.ObservableArray;
             var POId = document.getElementById('POStatus_PONumber_data').value;
             $.ajax({
@@ -1390,8 +1232,6 @@
                         }
                     }
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
             });
             return POStatus;
         }
@@ -1541,6 +1381,164 @@
                 btnLastPageGridPOStatus.removeAttribute('disabled');
             }
             btnCurrentPageGridPOStatus.innerHTML = (POStatus.pageIndex + 1) + ' / ' + POStatus.pageCount;
+        }
+
+
+        // ===============
+        // OnLoad Function
+        // ===============
+        $(document).ready(function () {
+            //$('#cmdRRForPOSupplier').click(function () {
+            //    $('#POStatus').modal({
+            //        show: true,
+            //        backdrop: 'static'
+            //    });
+
+            //    window.RRForPOSupplier_OnClick = function () {
+            //        return true;
+            //    };
+            //});
+            
+            document.getElementById('POStatus_PONumber_data').value = 0;
+            getPOBySupplierInPOStatus();
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
+            document.getElementById('RR_Lock').disabled = true;
+            document.getElementById('RRRRNumber').disabled = true;
+
+            cboBranch = new wijmo.input.ComboBox('#RRbranch');
+
+            var d = new Date();
+            document.getElementById("RRRRDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            RRDate = new wijmo.input.InputDate('#RRRRDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('RRRRDate_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+            cboSupplier = new wijmo.input.ComboBox('#RRSupplier');
+            cboTerm = new wijmo.input.ComboBox('#RRTerm');
+            cboReceivedBy  = new wijmo.input.ComboBox('#RRReceivedBy');
+            cboPreparedBy  = new wijmo.input.ComboBox('#RRPreparedBy');
+            cboCheckedBy  = new wijmo.input.ComboBox('#RRCheckedBy');
+            cboApprovedBy  = new wijmo.input.ComboBox('#RRApprovedBy');
+
+            getRRById();
+
+            var RRId = @RRId;
+            if(RRId == 0) {
+                getBranchesForComboBox();
+                getSupplierForComboBox();
+                getTermForComboBox();
+                getUsersForComboBox();
+
+                if(document.getElementById('RRRRNumber').value == 0) {
+                    document.getElementById('RRRRNumber_Display').value = "0000000001";
+                }
+
+                document.getElementById('RRRRNumber').value = 0;
+                //document.getElementById('journalVoucher_No_Display').value = "000-000000";
+                var RRs = new wijmo.collections.ObservableArray;
+                $.ajax({
+                    url: '/api/receivingReceiptLastRRNumber',
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            RRs.push({
+                                Id: Results.Id,
+                                RRNumber: Results.RRNumber
+                            });
+                        }
+                        var RR_Number = parseInt(Results.RRNumber);
+                        var RR_Number_PlusOne = 0000000001;
+                        var RR_Num_Results = RR_Number + RR_Number_PlusOne;
+                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+
+                        document.getElementById('RRRRNumber').value = zerofill(RR_Num_Results, 10);
+                        document.getElementById('RRRRNumber_Display').value = zerofill(RR_Num_Results, 10);
+                    }
+                });
+            }
+
+        });
+    </script>
+
+    <!-- ============ -->
+    <!-- Item Scripts -->
+    <!-- ============ -->
+    <script type="text/javascript">
+    // =========================
+    // Global Variables for Item
+    // =========================
+    var items;
+    var itemGrid;
+    var btnFirstPageGridItem;
+    var btnPreviousPageGridItem;
+    var btnNextPageGridItem;
+    var btnLastPageGridItem;
+    var btnCurrentPageGridItem;
+
+    // ===========
+    // GET RR Item
+    // ===========
+    function getRRItem() {
+        var items = new wijmo.collections.ObservableArray;
+        RRId = @RRId;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listReceivingReceiptItemByRRId/' + RRId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            items.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                RRId: Results[i]["RRId"],
+                                RR: Results[i]["RR"],
+                                POId: Results[i]["POId"],
+                                PO: Results[i]["PO"],
+                                ItemId: Results[i]["ItemId"],
+                                Item: Results[i]["Item"],
+                                ItemCode: Results[i]["ItemCode"],
+                                Particulars: Results[i]["Particulars"],
+                                UnitId: Results[i]["UnitId"],
+                                Unit: Results[i]["Unit"],
+                                Quantity: Results[i]["Quantity"],
+                                Cost: Results[i]["Cost"],
+                                Amount: Results[i]["Amount"],
+                                VATId: Results[i]["VATId"],
+                                VAT: Results[i]["VAT"],
+                                VATPercentage: Results[i]["VATPercentage"],
+                                VATAmount: Results[i]["VATAmount"],
+                                WTAXId: Results[i]["WTAXId"],
+                                WTAX: Results[i]["WTAX"],
+                                WTAXPercentage: Results[i]["WTAXPercentage"],
+                                WTAXAmount: Results[i]["WTAXAmount"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                BaseUnitId: Results[i]["BaseUnitId"],
+                                BaseUnit: Results[i]["BaseUnit"],
+                                BaseQuantity: Results[i]["BaseQuantity"],
+                                BaseCost: Results[i]["BaseCost"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return items;
         }
 
         // ===========================
