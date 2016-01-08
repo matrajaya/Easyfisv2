@@ -628,7 +628,7 @@
         // ==========================
         function getSupplierForComboBox() {
             suppliers = new wijmo.collections.ObservableArray();
-            
+
             if(document.getElementById('RRSupplier_data').value == '') {
                 $('#cmdRRForPOSupplier').prop("disabled", true);
             } else {
@@ -678,7 +678,7 @@
                     $("#RRSupplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
                     $("#POStatus_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
                     $("#POStatus_Supplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
-                    
+
                     $('#cmdRRForPOSupplier').prop("disabled", false);
 
                     document.getElementById('POStatus_PONumber_data').value = 0;
@@ -1377,13 +1377,37 @@
 
             POstatusGrid.trackChanges = true;
             var hr = new wijmo.grid.Row();
-            POstatusGrid.allowMerging = wijmo.grid.AllowMerging.All;
+            POstatusGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
             POstatusGrid.columnHeaders.rows.push(hr);
             POstatusGrid.columnHeaders.rows[0].allowMerging = true;
-            POstatusGrid.columnHeaders.rows[0].wordWrap = true;
 
-            for (var c = 3; c <= 5; c++) {
-                POstatusGrid.columnHeaders.setCellData(0, c, 'Quantity');
+            for (var columnQuantityTopAssigned = 3; columnQuantityTopAssigned <= 5; columnQuantityTopAssigned++) {
+                POstatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Quantity');
+            }
+
+            for (var columnCode = 0; columnCode < 1; columnCode++) {
+                POstatusGrid.columnHeaders.columns[columnCode].allowMerging = true;
+                POstatusGrid.columnHeaders.setCellData(0, columnCode, 'Code');
+            }
+
+            for (var columnItem = 1; columnItem <= 1; columnItem++) {
+                POstatusGrid.columnHeaders.columns[columnItem].allowMerging = true;
+                POstatusGrid.columnHeaders.setCellData(0, columnItem, 'Item');
+            }
+
+            for (var columnUnit = 2; columnUnit <= 2; columnUnit++) {
+                POstatusGrid.columnHeaders.columns[columnUnit].allowMerging = true;
+                POstatusGrid.columnHeaders.setCellData(0, columnUnit, 'Unit');
+            }
+
+            for (var columnP = 6; columnP <= 6; columnP++) {
+                POstatusGrid.columnHeaders.columns[columnP].allowMerging = true;
+                POstatusGrid.columnHeaders.setCellData(0, columnP, 'P');
+            }
+
+            for (var columnQuantity = 7; columnQuantity <= 7; columnQuantity++) {
+                POstatusGrid.columnHeaders.columns[columnQuantity].allowMerging = true;
+                POstatusGrid.columnHeaders.setCellData(0, columnQuantity, 'Quantity');
             }
 
             //Navigation button for Item
