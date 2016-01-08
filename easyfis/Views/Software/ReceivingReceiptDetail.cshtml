@@ -295,30 +295,33 @@
                                         <dd>
                                             <div class="comboBox-wide" id="POStatus_Supplier"></div>
 
-                                            <input type="text" id="POStatus_Supplier_data" class="requiredPOLine">
-                                            <input type="text" id="POStatus_Supplier_selectedValue" />
+                                            <input type="hidden" id="POStatus_Supplier_data" class="requiredPOLine">
+                                            <input type="hidden" id="POStatus_Supplier_selectedValue" />
                                         </dd>
                                         <dt>PO Number:</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="POStatus_PONumber"></div>
 
-                                            <input type="text" id="POStatus_PONumber_data" class="requiredPOLine">
-                                            <input type="text" id="POStatus_PONumber_selectedValue" />
+                                            <input type="hidden" id="POStatus_PONumber_data" class="requiredPOLine">
+                                            <input type="hidden" id="POStatus_PONumber_selectedValue" />
                                         </dd>
                                     </dl>
                                 </form>
                             </div>
                             <div class="col-md-4"></div>
                         </div>
+                        <hr />
                         <div class="row" align="left">
                             <div class="col-lg-12">
+                                <label id="POItem_Title">Purchase Order Items</label>
+                                <div id="POStatusGrid" class="grid" align="left"></div>
                                 <center>
-                                    <h3>
+                                    <h4>
                                         <span id="loadingPOStatusGridList"></span>
-                                    </h3>
+                                        <span id="loadingPOItemsGridList"></span>
+                                    </h4>
                                 </center>
 
-                                <div id="POStatusGrid" class="grid" align="left"></div>
                             </div>
                         </div>
                         <br />
@@ -657,6 +660,9 @@
                 onSelectedIndexChanged: function () {
                     $("#RRSupplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
                     $("#RRSupplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
+
+                    $("#POStatus_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                    $("#POStatus_Supplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
                     
                     document.getElementById('POStatus_PONumber_data').value = 0;
                     getPOInPOStatusForComboBox();
@@ -1054,16 +1060,20 @@
             getSupplierInPOStatusForComboBox();
             getPOInPOStatusForComboBox();
             document.getElementById("loadingPOStatusGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading PO Status...';
+            document.getElementById("loadingPOItemsGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Purchase Order Items...';
             $('#loadingPOStatusGridList').show();
+            $('#loadingPOItemsGridList').hide();
             $('#POLinesDetailForm').hide();
             $('#footerModalPOStatusNavigationButtons').hide();
             $('#POStatusGrid').hide();
+            $('#POItem_Title').hide();
 
             setTimeout(function() {
                 $('#loadingPOStatusGridList').hide();
                 $('#footerModalPOStatusNavigationButtons').show();
                 $('#POLinesDetailForm').show();
                 $('#POStatusGrid').show();
+                $('#POItem_Title').show();
                 
                 //getPOBySupplierInPOStatus();
                 //getPurchaseOrderItemForPOSTatus();
@@ -1072,7 +1082,7 @@
 
                 POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
                 POStatus.canFilter = true;
-                POStatus.pageSize = 15;
+                POStatus.pageSize = 10;
 
                 POStatus.collectionChanged.addHandler(function (sender, args) {
                     updateNavigateButtonsPOSTatus();
@@ -1185,17 +1195,26 @@
                 onSelectedIndexChanged: function () {
                     $("#POStatus_PONumber_data").val(POCollection.items[this.selectedIndex].POId);
                     
-                    $('#loadingPOStatusGridList').show();
+                    $('#loadingPOItemsGridList').show();
+                    $('#POStatusGrid').hide();
+                    $('#footerModalPOStatusNavigationButtons').hide();
+                    $('#POItem_Title').hide();
 
-                    POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
-                    POStatus.canFilter = true;
-                    POStatus.pageSize = 15;
+                    setTimeout(function () {
+                        $('#loadingPOItemsGridList').hide();
+                        $('#POStatusGrid').show();
+                        $('#footerModalPOStatusNavigationButtons').show();
+                        $('#POItem_Title').show();
 
-                    POStatus.collectionChanged.addHandler(function (sender, args) {
-                        updateNavigateButtonsPOSTatus();
-                    });
-                    POstatusGrid.itemsSource = POStatus;
+                        POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+                        POStatus.canFilter = true;
+                        POStatus.pageSize = 10;
 
+                        POStatus.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsPOSTatus();
+                        });
+                        POstatusGrid.itemsSource = POStatus;
+                    }, 500);
                 }
             });
         }
@@ -1242,7 +1261,7 @@
         function getPOBySupplierInPOStatus() {
             POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
             POStatus.canFilter = true;
-            POStatus.pageSize = 15;
+            POStatus.pageSize = 10;
 
             POStatus.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsPOSTatus();
