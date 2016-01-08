@@ -1313,56 +1313,48 @@
                             {
                                 "header": "Code",
                                 "binding": "ItemCode",
-                                "align": "left",
                                 "allowSorting": true,
                                 "width": 130
                             },
                             {
                                 "header": "Item",
                                 "binding": "Item",
-                                "align": "left",
                                 "allowSorting": true,
                                 "width": 300
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
-                                "align": "left",
                                 "allowSorting": true,
                                 "width": 130
                             },
                             {
                                 "header": "PO",
                                 "binding": "Quantity",
-                                "align": "right",
                                 "allowSorting": true,
                                 "width": 130
                             },
                             {
                                 "header": "Received",
                                 //"binding": "BaseCost",
-                                "align": "right",
                                 "allowSorting": true,
                                 "width": 130
                             },
                             {
                                 "header": "Balance",
                                 //"binding": "BaseCost",
-                                "align": "right",
                                 "allowSorting": true,
                                 "width": 130
                             },
                             {
                                 "header": "P",
                                 //"binding": "BaseCost",
-                                "align": "center",
                                 "allowSorting": true,
                                 "width": 50
                             },
                             {
                                 "header": "Quantity",
                                 //"binding": "BaseCost",
-                                "align": "right",
                                 "allowSorting": true,
                                 "width": 130
                             },
@@ -1681,112 +1673,96 @@
                             {
                                 "header": "Purchase Order",
                                 "binding": "PO",
-                                "align": "left",
                                 "allowSorting": true,
                                 "width": 200
                             },
                             {
                                 "header": "Item Code",
                                 "binding": "ItemCode",
-                                "align": "left",
                                 "allowSorting": true,
                                 "width": 150
                             },
                             {
                                 "header": "Item Description",
                                 "binding": "Item",
-                                "align": "left",
                                 "allowSorting": true,
                                 "width": 350
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
-                                "align": "left",
                                 "allowSorting": true,
                                 "width": 300
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "Quantity",
-                                "align": "right",
                                 "allowSorting": true,
                                 "width": 130
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
-                                "align": "right",
                                 "allowSorting": true,
                                 "width": 200
                             },
                              {
                                  "header": "Cost",
                                  "binding": "Cost",
-                                 "align": "right",
                                  "allowSorting": true,
                                  "width": 130
                              },
                              {
                                  "header": "Amount",
                                  "binding": "Amount",
-                                 "align": "right",
                                  "allowSorting": true,
                                  "width": 130
                              },
                              {
                                  "header": "Branch",
                                  "binding": "Branch",
-                                 "align": "left",
                                  "allowSorting": true,
                                  "width": 250
                              },
                              {
                                  "header": "VAT Rate",
                                  "binding": "VATPercentage",
-                                 "align": "right",
                                  "allowSorting": true,
                                  "width": 130
                              },
                              {
                                  "header": "VAT Amount",
                                  "binding": "VATAmount",
-                                 "align": "right",
                                  "allowSorting": true,
                                  "width": 130
                              },
                              {
                                  "header": "WTAX Rate",
                                  "binding": "WTAXPercentage",
-                                 "align": "right",
                                  "allowSorting": true,
                                  "width": 130
                              },
                              {
                                  "header": "WTAX Amount",
                                  "binding": "WTAXAmount",
-                                 "align": "right",
                                  "allowSorting": true,
                                  "width": 130
                              },
                              {
                                  "header": "Unit",
                                  "binding": "BaseUnit",
-                                 "align": "right",
                                  "allowSorting": true,
                                  "width": 100
                              },
                              {
                                  "header": "Quantity",
                                  "binding": "BaseQuantity",
-                                 "align": "right",
                                  "allowSorting": true,
                                  "width": 130
                              },
                              {
                                  "header": "Cost",
                                  "binding": "BaseCost",
-                                 "align": "right",
                                  "allowSorting": true,
                                  "width": 130
                              },
@@ -1801,7 +1777,6 @@
 
             itemGrid.trackChanges = true;
 
-            // Merge Headers
             var hr = new wijmo.grid.Row();
             itemGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
             itemGrid.columnHeaders.rows.push(hr);
