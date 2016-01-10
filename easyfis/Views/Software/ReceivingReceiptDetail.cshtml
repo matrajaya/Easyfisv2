@@ -319,7 +319,9 @@
                                     <input type="text" class="form-control input-sm" id="InputFilterPOItemsPOStatus" placeholder="Search">
                                 </div>
                             </div>
-                            <div class="col-lg-7"></div>
+                            <div class="col-lg-7" align="right">
+                                <button class="btn btn-primary btn-sm" id="cmdApplyPOStatusButton" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply all</button>
+                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
@@ -353,8 +355,67 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdApplyPOStatusButton" onclick="cmdApplyPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply</button>
                         <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RR PO Items Delete -->
+        <div class="modal fade" id="deleteRRLinesConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Item <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteRRLines" onclick="cmdRRLinesConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteCloseButtonRRLines" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RR Status PO Apply all? -->
+        <div class="modal fade" id="applyAllConfirmPOStatus" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Apply PO (All) <i class="fa fa-check"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure that you want to apply all these Purchase Order Items?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAllPOStatusPOItems" onclick=""><i class="fa fa-check"></i> Apply all</button>
+                        <button id="cmdCloseButtonApplyAllPOStatusPOItems" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RR Status PO Apply item? -->
+        <div class="modal fade" id="applyConfirmPOStatus" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Apply PO <i class="fa fa-check-square-o"></i></h4>
+                    </div>
+                    <div class="modal-body">                       
+                         Are you sure that you want to apply this Purchase Order Item?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" id="cmdConfirmApplyPOStatusPOItems" onclick=""><i class="fa fa-check-square-o"></i> Apply</button>
+                        <button id="cmdCloseButtonApplyPOStatusPOItems" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -1266,8 +1327,10 @@
                 success: function (Results) {
                     $('#loadingPOStatusGridList').hide();
                     if (Results.length > 0) {
+                        $('#cmdApplyPOStatusButton').prop("disabled", false);
                         for (i = 0; i < Results.length; i++) {
                             POStatus.push({
+                                ApplyId: "<button class='btn btn-primary btn-xs' onclick='cmdApplyPOStatusButton_OnClick()'><i class='fa fa-check-square-o'></i> Apply</button>",
                                 Id: Results[i]["Id"],
                                 ItemId: Results[i]["ItemId"],
                                 Item: Results[i]["Item"],
@@ -1281,6 +1344,8 @@
                                 Amount: Results[i]["Amount"]
                             });
                         }
+                    } else {
+                        $('#cmdApplyPOStatusButton').prop("disabled", true);
                     }
                 }
             });
@@ -1310,6 +1375,15 @@
             POstatusGrid = new wijmo.grid.FlexGrid('#POStatusGrid');
             POstatusGrid.initialize({
                 columns: [
+                            {
+                                "header": "Apply",
+                                "binding": "ApplyId",
+                                "width": 75,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
                             {
                                 "header": "Code",
                                 "binding": "ItemCode",
@@ -1347,12 +1421,6 @@
                                 "width": 130
                             },
                             {
-                                "header": "P",
-                                //"binding": "BaseCost",
-                                "allowSorting": true,
-                                "width": 50
-                            },
-                            {
                                 "header": "Quantity",
                                 //"binding": "BaseCost",
                                 "allowSorting": true,
@@ -1366,7 +1434,7 @@
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-            
+
             POstatusGrid.trackChanges = true;
 
             // Merge column Headers
@@ -1374,25 +1442,28 @@
             POstatusGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
             POstatusGrid.columnHeaders.rows.push(hr);
             POstatusGrid.columnHeaders.rows[0].allowMerging = true;
-            
+
             POstatusGrid.columnHeaders.columns[0].allowMerging = true;
-            POstatusGrid.columnHeaders.setCellData(0, 0, 'Code');
+            POstatusGrid.columnHeaders.setCellData(0, 0, 'Apply');
 
             POstatusGrid.columnHeaders.columns[1].allowMerging = true;
-            POstatusGrid.columnHeaders.setCellData(0, 1, 'Item');
-            
+            POstatusGrid.columnHeaders.setCellData(0, 1, 'Code');
+
             POstatusGrid.columnHeaders.columns[2].allowMerging = true;
-            POstatusGrid.columnHeaders.setCellData(0, 2, 'Unit');
-            
-            for (var columnQuantityTopAssigned = 3; columnQuantityTopAssigned <= 5; columnQuantityTopAssigned++) {
-                POstatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Quantity');
+            POstatusGrid.columnHeaders.setCellData(0, 2, 'Item');
+
+            POstatusGrid.columnHeaders.columns[3].allowMerging = true;
+            POstatusGrid.columnHeaders.setCellData(0, 3, 'Unit');
+
+            for (var columnQuantityTopAssigned = 4; columnQuantityTopAssigned <= 6; columnQuantityTopAssigned++) {
+                POstatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Quantities');
             }
 
-            POstatusGrid.columnHeaders.columns[6].allowMerging = true;
-            POstatusGrid.columnHeaders.setCellData(0, 6, 'P');
-            
             POstatusGrid.columnHeaders.columns[7].allowMerging = true;
             POstatusGrid.columnHeaders.setCellData(0, 7, 'Quantity');
+
+            //POstatusGrid.columnHeaders.columns[8].allowMerging = true;
+            //POstatusGrid.columnHeaders.setCellData(0, 8, 'Quantity');
 
             //Navigation button for Item
             btnFirstPageGridPOStatus = document.getElementById('btnMoveToFirstPageGridPOStatus');
@@ -1450,11 +1521,30 @@
             btnCurrentPageGridPOStatus.innerHTML = (POStatus.pageIndex + 1) + ' / ' + POStatus.pageCount;
         }
 
+        // ==========================
+        // Apply ALL PO Items Confirm
+        // ==========================
+        function cmdApplyAllPOStatusButton_OnClick() {
+            $('#applyAllConfirmPOStatus').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
 
+        // =====================
+        // Apply PO Item Confirm
+        // =====================
+        function cmdApplyPOStatusButton_OnClick() {
+            $('#applyConfirmPOStatus').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
         // ===============
         // OnLoad Function
         // ===============
         $(document).ready(function () {
+            $('#cmdApplyPOStatusButton').prop("disabled", true);
             document.getElementById('POStatus_PONumber_data').value = 0;
             getPOBySupplierInPOStatus();
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
@@ -1557,8 +1647,8 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             items.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnItemRRLinesEdit_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnItemRRLinesDelete_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 RRId: Results[i]["RRId"],
                                 RR: Results[i]["RR"],
@@ -1623,6 +1713,16 @@
                 btnLastPageGridItem.removeAttribute('disabled');
             }
             btnCurrentPageGridItem.innerHTML = (items.pageIndex + 1) + ' / ' + items.pageCount;
+        }
+
+        // ========================
+        //  RR Lines Confirm Delete
+        // ========================
+        function btnItemRRLinesDelete_OnClick() {
+            $('#deleteRRLinesConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
         }
 
         // =====
@@ -2072,6 +2172,18 @@
             $('#Item').show();
             $('#InventoryEntry').hide();
             itemTab();
+
+            $(document).on('show.bs.modal', '.modal', function (event) {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function() {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
+            });
+
+            $(document).on('hidden.bs.modal', '.modal', function () {
+                $('.modal:visible').length && $(document.body).addClass('modal-open');
+            });
         });
 
     </script>
