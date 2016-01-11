@@ -38,6 +38,33 @@ namespace easyfis.Controllers
             return taxTypes.ToList();
         }
 
+        // ============
+        // GET Tax Type
+        // ============
+        [Route("api/taxType/{id}")]
+        public Models.MstTaxType GetTaxTypeById(String id)
+        {
+            var taxTypeId = Convert.ToInt32(id);
+            var taxTypes = from d in db.MstTaxTypes
+                           where d.Id == taxTypeId
+                           select new Models.MstTaxType
+                           {
+                               Id = d.Id,
+                               TaxType = d.TaxType,
+                               TaxRate = d.TaxRate,
+                               IsInclusive = d.IsInclusive,
+                               AccountId = d.AccountId,
+                               Account = d.MstAccount.Account,
+                               IsLocked = d.IsLocked,
+                               CreatedById = d.CreatedById,
+                               CreatedBy = d.MstUser.FullName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                               UpdatedById = d.UpdatedById,
+                               UpdatedBy = d.MstUser1.FullName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                           };
+            return (Models.MstTaxType)taxTypes.FirstOrDefault();
+        }
 
         // ============
         // ADD Tax Type

@@ -46,8 +46,8 @@
                         <button class="btn btn-primary btn-sm" id="cmdRRJournal"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdRRSave" onclick="RRSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdRREdit"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="window.location.href ='@Url.Action(" receivingreceiptpdf", "Software" , new { rrid=RRId })'"><i class="fa fa-print"></i> Print</button>
-                        <button id="cmdRRClose" onclick="window.location.href = '@Url.Action(" receivingreceipt", "Software" , new { branchid=branchId })'" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="window.location.href ='@Url.Action("ReceivingReceiptPDF", "Software" , new { rrid = RRId })'"><i class="fa fa-print"></i> Print</button>
+                        <button id="cmdRRClose" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software" , new { branchid = branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
 
@@ -90,7 +90,7 @@
                                         <div class="input-group">
                                             <div class="comboBox-wide" id="RRSupplier"></div>
 
-                                            <input type="text" id="RRSupplier_data" class="requiredRR" />
+                                            <input type="hidden" id="RRSupplier_data" class="requiredRR" />
                                             <input type="hidden" id="RRSupplier_selectedValue" />
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-primary btn-sm" id="cmdRRForPOSupplier" onclick="RRForPOSupplier_OnClick()">PO</button>
@@ -373,7 +373,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="POLinesDetailForm">
-                            <input type="text" id="RRLine_Id" />
+                            <input type="hidden" id="RRLine_Id" />
                             <div class="row">
                                 <div class="col-md-6">
                                     <dl class="dl-horizontal">
@@ -381,22 +381,22 @@
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_PONo"></div>
 
-                                            <input type="text" id="RRLine_PONo_data" class="requiredRRLine">
-                                            <input type="text" id="RRLine_PONo_selectedValue" />
+                                            <input type="hidden" id="RRLine_PONo_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_PONo_selectedValue" />
                                         </dd>
                                         <dt>Item Code:</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_ItemCode"></div>
 
-                                            <input type="text" id="RRLine_ItemCode_data" class="requiredRRLine">
-                                            <input type="text" id="RRLine_ItemCode_selectedValue" />
+                                            <input type="hidden" id="RRLine_ItemCode_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_ItemCode_selectedValue" />
                                         </dd>
                                         <dt>Item Description:</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_ItemDescription"></div>
 
-                                            <input type="text" id="RRLine_ItemDescription_data" class="requiredRRLine">
-                                            <input type="text" id="RRLine_ItemDescription_selectedValue" />
+                                            <input type="hidden" id="RRLine_ItemDescription_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_ItemDescription_selectedValue" />
                                         </dd>
                                         <dt>Particulars:</dt>
                                         <dd><textarea class="form-control textarea-custom requiredRRLine" id="RRLine_Particulars"></textarea></dd>
@@ -406,8 +406,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_Unit"></div>
 
-                                            <input type="text" id="RRLine_Unit_data" class="requiredRRLine">
-                                            <input type="text" id="RRLine_Unit_selectedValue" />
+                                            <input type="hidden" id="RRLine_Unit_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_Unit_selectedValue" />
                                         </dd>
                                         <dt>Cost:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredRRLine" id="RRLine_Cost" /></dd>
@@ -417,8 +417,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_Branch"></div>
 
-                                            <input type="text" id="RRLine_Branch_data" class="requiredRRLine">
-                                            <input type="text" id="RRLine_Branch_selectedValue" />
+                                            <input type="hidden" id="RRLine_Branch_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_Branch_selectedValue" />
                                         </dd>
                                     </dl>
                                 </div>
@@ -428,8 +428,9 @@
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_VAT"></div>
 
-                                            <input type="text" id="RRLine_VAT_data" class="requiredRRLine">
-                                            <input type="text" id="RRLine_VAT_selectedValue" />
+                                            <input type="hidden" id="RRLine_VAT_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_VAT_selectedValue" />
+                                            <input type="hidden" id="RRLine_VATInclusive" />
                                         </dd>
                                         <dt>VAT Rate:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredRRLine" id="RRLine_VATRate" /></dd>
@@ -439,8 +440,9 @@
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_WTAX"></div>
 
-                                            <input type="text" id="RRLine_WTAX_data" class="requiredRRLine">
-                                            <input type="text" id="RRLine_WTAX_selectedValue" />
+                                            <input type="hidden" id="RRLine_WTAX_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_WTAX_selectedValue" />
+                                            <input type="hidden" id="RRLine_WTAXInclusive" />
                                         </dd>
                                         <dt>WTAX Rate:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredRRLine" id="RRLine_WTAXRate" /></dd>
@@ -457,8 +459,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_BUCUnit"></div>
 
-                                            <input type="text" id="RRLine_BUCUnit_data" class="requiredRRLine">
-                                            <input type="text" id="RRLine_BUCUnit_selectedValue" />
+                                            <input type="hidden" id="RRLine_BUCUnit_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_BUCUnit_selectedValue" />
                                         </dd>
                                         <dt>Quantity:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredRRLine" id="RRLine_BUCQuantity" /></dd>
@@ -1885,12 +1887,27 @@
                     document.getElementById('RRLine_Unit_selectedValue').value = '';
 
                     document.getElementById('RRLine_VAT_data').value =  '';
+                    document.getElementById('RRLine_VATRate').value = '';
                     document.getElementById('RRLine_VAT_selectedValue').value = '';
                     document.getElementById('RRLine_WTAX_data').value =  '';
+                    document.getElementById('RRLine_WTAXRate').value = '';
                     document.getElementById('RRLine_WTAX_selectedValue').value = '';
+
+                    document.getElementById('RRLine_Particulars').value = '';
+
+                    document.getElementById('RRLine_Quantity').value = '';
+                    document.getElementById('RRLine_Cost').value = '';
+                    document.getElementById('RRLine_Amount').value = '';
+                    document.getElementById('RRLine_VATAmount').value = '';
+                    document.getElementById('RRLine_WTAXAmount').value = '';
+                    document.getElementById('RRLine_BUCUnit_data').value = '';
+                    document.getElementById('RRLine_BUCUnit_selectedValue').value = '';
+                    document.getElementById('RRLine_BUCQuantity').value = '';
+                    document.getElementById('RRLine_BUCCost').value = '';
 
                     getPOItemForComboBox();
                     getTaxTypeForComboBox();
+                    getBUCUnitForComboBox();
                 }
             });
         }
@@ -1923,7 +1940,7 @@
                             }
                             createCboPOItemCode(POItems);
                             createCboPOIteDescription(POItems);
-                            createItemUnit(POItems);
+                            getUnitForComboBox();
                         }
                     }
                 });
@@ -1954,7 +1971,7 @@
                             }
                             createCboPOItemCode(POItems);
                             createCboPOIteDescription(POItems);
-                            createItemUnit(POItems);
+                            getUnitForComboBox();
                         }
                     }
                 });
@@ -1989,9 +2006,10 @@
                     $("#RRLine_Quantity").val(POItemCollection.items[this.selectedIndex].Quantity);
                     $("#RRLine_Cost").val(POItemCollection.items[this.selectedIndex].Cost);
                     $("#RRLine_Amount").val(POItemCollection.items[this.selectedIndex].Amount);
+                    $("#RRLine_BUCQuantity").val(POItemCollection.items[this.selectedIndex].Quantity);
 
                     createCboPOIteDescription(POItems);
-                    createItemUnit(POItems);
+                    getUnitForComboBox();
 
                     var items = new wijmo.collections.ObservableArray;
                     var articleId = POItemCollection.items[this.selectedIndex].ItemId;
@@ -2019,6 +2037,59 @@
                             document.getElementById('RRLine_VAT_selectedValue').value = Results.InputTax;
                             document.getElementById('RRLine_WTAX_data').value =  Results.WTaxTypeId;
                             document.getElementById('RRLine_WTAX_selectedValue').value = Results.WTaxType;
+
+                            var taxTypesVAT = new wijmo.collections.ObservableArray();
+                            var taxTypeVATId = Results.InputTaxId;
+                            $.ajax({
+                                url: '/api/taxType/' + taxTypeVATId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        taxTypesVAT.push({
+                                            TaxTypeId: results.Id,
+                                            TaxType: results.TaxType,
+                                            TaxRate: results.TaxRate,
+                                            IsInclusive: results.IsInclusive
+                                        });
+                                    }
+
+                                    document.getElementById('RRLine_VATRate').value =  results.TaxRate;
+                                    document.getElementById('RRLine_VATInclusive').value =  results.IsInclusive;
+                                    
+                                    var IsInclusive = document.getElementById('RRLine_VATInclusive').value;
+                                    computeTAX(IsInclusive);
+                                }
+                            });
+
+                            var taxTypesWTAX = new wijmo.collections.ObservableArray();
+                            var taxTypeWTAXId = Results.WTaxTypeId;
+                            $.ajax({
+                                url: '/api/taxType/' + taxTypeWTAXId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        taxTypesWTAX.push({
+                                            TaxTypeId: results.Id,
+                                            TaxType: results.TaxType,
+                                            TaxRate: results.TaxRate,
+                                            IsInclusive: results.IsInclusive
+                                        });
+                                    }
+
+                                    document.getElementById('RRLine_WTAXRate').value =  results.TaxRate;
+                                    document.getElementById('RRLine_WTAXInclusive').value =  results.IsInclusive;
+                                    
+                                    var IsInclusive = document.getElementById('RRLine_WTAXInclusive').value;
+                                    computeTAX(IsInclusive);
+                                }
+                            });
+
                             getTaxTypeForComboBox();
                         }
                     });
@@ -2057,9 +2128,10 @@
                     $("#RRLine_Quantity").val(POItemCollection.items[this.selectedIndex].Quantity);
                     $("#RRLine_Cost").val(POItemCollection.items[this.selectedIndex].Cost);
                     $("#RRLine_Amount").val(POItemCollection.items[this.selectedIndex].Amount);
+                    $("#RRLine_BUCQuantity").val(POItemCollection.items[this.selectedIndex].Quantity);
 
                     createCboPOItemCode(POItems);
-                    createItemUnit(POItems);
+                    getUnitForComboBox();
 
                     var items = new wijmo.collections.ObservableArray;
                     var articleId = POItemCollection.items[this.selectedIndex].ItemId;
@@ -2087,6 +2159,59 @@
                             document.getElementById('RRLine_VAT_selectedValue').value = Results.InputTax;
                             document.getElementById('RRLine_WTAX_data').value =  Results.WTaxTypeId;
                             document.getElementById('RRLine_WTAX_selectedValue').value = Results.WTaxType;
+
+                            var taxTypesVAT = new wijmo.collections.ObservableArray();
+                            var taxTypeVATId = Results.InputTaxId;
+                            $.ajax({
+                                url: '/api/taxType/' + taxTypeVATId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        taxTypesVAT.push({
+                                            TaxTypeId: results.Id,
+                                            TaxType: results.TaxType,
+                                            TaxRate: results.TaxRate,
+                                            IsInclusive: results.IsInclusive
+                                        });
+                                    }
+                                    
+                                    document.getElementById('RRLine_VATRate').value =  results.TaxRate;
+                                    document.getElementById('RRLine_VATInclusive').value =  results.IsInclusive;
+                                    
+                                    var IsInclusive = document.getElementById('RRLine_VATInclusive').value;
+                                    computeTAX(IsInclusive);
+                                }
+                            });
+
+                            var taxTypesWTAX = new wijmo.collections.ObservableArray();
+                            var taxTypeWTAXId = Results.WTaxTypeId;
+                            $.ajax({
+                                url: '/api/taxType/' + taxTypeWTAXId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        taxTypesWTAX.push({
+                                            TaxTypeId: results.Id,
+                                            TaxType: results.TaxType,
+                                            TaxRate: results.TaxRate,
+                                            IsInclusive: results.IsInclusive
+                                        });
+                                    }
+                                    
+                                    document.getElementById('RRLine_WTAXRate').value =  results.TaxRate;
+                                    document.getElementById('RRLine_WTAXInclusive').value =  results.IsInclusive;
+
+                                    var IsInclusive = document.getElementById('RRLine_WTAXInclusive').value;
+                                    computeTAX(IsInclusive);
+                                }
+                            });
+
                             getTaxTypeForComboBox();
                         }
                     });
@@ -2098,11 +2223,36 @@
             });
         }
 
+        // =============
+        // Get Item Unit
+        // =============
+        function getUnitForComboBox() {
+            units = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            units.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createItemUnit(units);
+                    }
+                }
+            });
+        }
+
         // ============
         // CBO for Unit
         // ============
-        function createItemUnit(POItems) {
-            var itemUnitCollection = new wijmo.collections.CollectionView(POItems);
+        function createItemUnit(units) {
+            var itemUnitCollection = new wijmo.collections.CollectionView(units);
             var unitList = new Array();
             for (var i = 0; i < itemUnitCollection.items.length; i++) {
                 unitList.push(itemUnitCollection.items[i].Unit);
@@ -2117,43 +2267,7 @@
                 selectedValue: document.getElementById('RRLine_Unit_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#RRLine_Unit_data").val(itemUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#RRLine_ItemDescription_data").val(itemUnitCollection.items[this.selectedIndex].ItemId);
-                    $("#RRLine_ItemDescription_selectedValue").val(itemUnitCollection.items[this.selectedIndex].ItemDescription);
-                    $("#RRLine_ItemCode_data").val(itemUnitCollection.items[this.selectedIndex].ItemId);
-                    $("#RRLine_ItemCode_selectedValue").val(itemUnitCollection.items[this.selectedIndex].ItemCode);
-                    createCboPOItemCode(POItems);
-                    createCboPOIteDescription(POItems);
 
-                    var items = new wijmo.collections.ObservableArray;
-                    var articleId = itemUnitCollection.items[this.selectedIndex].ItemId;
-                    $.ajax({
-                        url: '/api/article/' +  articleId,
-                        cache: false,
-                        type: 'GET',
-                        contentType: 'application/json; charset=utf-8',
-                        data: {},
-                        success: function (Results) {
-                            $('#loadingModal').modal('hide');
-                            if (Results.length > 0) {
-                                items.push ({
-                                    Id: Results.Id,
-                                    OutputTaxId : Results.OutputTaxId,
-                                    OutputTax : Results.OutputTax,
-                                    InputTaxId : Results.InputTaxId,
-                                    InputTax : Results.InputTax,
-                                    WTaxTypeId : Results.WTaxTypeId,
-                                    WTaxType : Results.WTaxType
-                                });
-                            }
-
-                            document.getElementById('RRLine_VAT_data').value =  Results.InputTaxId;
-                            document.getElementById('RRLine_VAT_selectedValue').value = Results.InputTax;
-                            document.getElementById('RRLine_WTAX_data').value =  Results.WTaxTypeId;
-                            document.getElementById('RRLine_WTAX_selectedValue').value = Results.WTaxType;
-                            getTaxTypeForComboBox();
-                        }
-                    });
-                    
                     document.getElementById('RRLine_BUCUnit_data').value =  itemUnitCollection.items[this.selectedIndex].UnitId;
                     document.getElementById('RRLine_BUCUnit_selectedValue').value = itemUnitCollection.items[this.selectedIndex].Unit;
                     getBUCUnitForComboBox();
@@ -2165,7 +2279,7 @@
         // ========================
         // GET Branch for Combo Box
         // ========================
-        function getBranchesForComboBox() {
+        function getBranchesPOItemForComboBox() {
             POItembranches = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listBranch',
@@ -2200,11 +2314,11 @@
                                     document.getElementById('RRLine_Branch_data').value = results.Id;
                                     document.getElementById('RRLine_Branch_selectedValue').value = results.Branch;
 
-                                    createCboBranch(POItembranches);
+                                    createCboBranchForPOItem(POItembranches);
                                 }
                             });
                         } else {
-                            createCboBranch(POItembranches);
+                            createCboBranchForPOItem(POItembranches);
                         }
 
                     }
@@ -2213,10 +2327,10 @@
             return POItembranches;
         }
 
-        // ======================
-        // Combo Box for Branches
-        // ======--==============
-        function createCboBranch(POItembranches) {
+        // ===================================
+        // Combo Box for Branches for PO Items
+        // ===================================
+        function createCboBranchForPOItem(POItembranches) {
             var branchCollections = new wijmo.collections.CollectionView(POItembranches);
             var branchList = new Array();
             for (var i = 0; i < branchCollections.items.length; i++) {
@@ -2253,7 +2367,8 @@
                             taxTypes.push({
                                 TaxTypeId: results[i]["Id"],
                                 TaxType: results[i]["TaxType"],
-                                TaxRate: results[i]["TaxRate"]
+                                TaxRate: results[i]["TaxRate"],
+                                IsInclusive: results[i]["IsInclusive"],
                             });
                         }
                         createCboForVATTaxType(taxTypes);
@@ -2272,17 +2387,21 @@
             for (var i = 0; i < taxTypeCollection.items.length; i++) {
                 taxList.push(taxTypeCollection.items[i].TaxType);
             }
-
+            
             cboForVATTaxType.dispose();
-            cboForVATTaxType = new wijmo.input.ComboBox('#RRLine_WTAX', {
+            cboForVATTaxType = new wijmo.input.ComboBox('#RRLine_VAT', {
                 placeholder: "Select VAT",
                 itemsSource: taxList,
                 isEditable: false,
                 required: false,
-                selectedValue: document.getElementById('RRLine_WTAX_selectedValue').value.toString(),
+                selectedValue: document.getElementById('RRLine_VAT_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#RRLine_WTAX_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
-                    $("#RRLine_WTAXRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
+                    $("#RRLine_VAT_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
+                    $("#RRLine_VATRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
+                    $("#RRLine_VATInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
+
+                    var IsInclusive = taxTypeCollection.items[this.selectedIndex].IsInclusive;
+                    computeTAX(IsInclusive);
                 }
             });
         }
@@ -2298,19 +2417,48 @@
             }
 
             cboForWTAXTaxType.dispose();
-            cboForWTAXTaxType = new wijmo.input.ComboBox('#RRLine_VAT', {
+            cboForWTAXTaxType = new wijmo.input.ComboBox('#RRLine_WTAX', {
                 placeholder: "Select WTAX",
                 itemsSource: taxList,
                 isEditable: false,
                 required: false,
-                selectedValue: document.getElementById('RRLine_VAT_selectedValue').value.toString(),
+                selectedValue: document.getElementById('RRLine_WTAX_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#RRLine_VAT_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
-                    $("#RRLine_VATRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
+                    $("#RRLine_WTAX_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
+                    $("#RRLine_WTAXRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
+                    $("#RRLine_WTAXInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
+                    
+                    var IsInclusive = taxTypeCollection.items[this.selectedIndex].IsInclusive;
+                    computeTAX(IsInclusive);
                 }
             });
         }
 
+        // ===========
+        // Compute VAT
+        // ===========
+        function computeTAX(IsInclusive) {
+            var inputedQuantity = document.getElementById('RRLine_Quantity').value;
+            var inputedCost = document.getElementById('RRLine_Cost').value;
+            var inputedAmount = document.getElementById('RRLine_Amount').value;
+            var inputedVATRate = document.getElementById('RRLine_VATRate').value;
+            var inputedWTAXRate = document.getElementById('RRLine_WTAXRate').value;
+                    
+            var replacedQuantity = inputedQuantity.replace(/\,/g,'');
+            var replacedCost = inputedCost.replace(/\,/g,'');
+            var replacedAmount = inputedAmount.replace(/\,/g,'');
+            var replacedVATRate = inputedVATRate.replace(/\,/g,'');
+            var replacedWTAXRate = inputedWTAXRate.replace(/\,/g,'');
+
+            if(IsInclusive == true) {
+                document.getElementById('RRLine_VATAmount').value = (replacedAmount / (1 + replacedVATRate/100)) * (replacedVATRate/100);
+                document.getElementById('RRLine_WTAXAmount').value = (replacedAmount / (1 + replacedVATRate/100)) * (replacedWTAXRate/100);
+            } else {
+                document.getElementById('RRLine_VATAmount').value = replacedAmount * (replacedVATRate/100);
+                document.getElementById('RRLine_WTAXAmount').value = replacedAmount * (replacedWTAXRate/100);
+                document.getElementById('RRLine_Amount').value = (replacedCost * replacedQuantity) + (replacedAmount * (replacedVATRate/100));
+            }
+        }
 
         // =======================================
         // Get Item Unit for Basic Unit Conversion
@@ -2349,6 +2497,7 @@
 
             cboBUCUnit.dispose();
             cboBUCUnit = new wijmo.input.ComboBox('#RRLine_BUCUnit', {
+                disabled: true,
                 placeholder: "Select Unit",
                 itemsSource: BUCUnitList,
                 isEditable: false,
@@ -2357,9 +2506,9 @@
                 onSelectedIndexChanged: function () {
                     $("#RRLine_BUCUnit_data").val(BUCUnitCollection.items[this.selectedIndex].UnitId);
                 }
-            });D
+            });
         }
-
+ 
         // ===========================
         // Navigation Buttons for Item
         // ===========================
@@ -2399,7 +2548,8 @@
 
             getPOForComboBox();
             getPOItemForComboBox();
-            getBranchesForComboBox();
+            getUnitForComboBox();
+            getBranchesPOItemForComboBox();
             getTaxTypeForComboBox();
             getBUCUnitForComboBox();
 
@@ -2411,25 +2561,28 @@
             document.getElementById('RRLine_ItemDescription_data').value = '';
             document.getElementById('RRLine_ItemDescription_selectedValue').value = '';
             document.getElementById('RRLine_Particulars').value = '';
-            document.getElementById('RRLine_Quantity').value = '';
+            document.getElementById('RRLine_Quantity').value = 0;
             document.getElementById('RRLine_Unit_data').value = '';
             document.getElementById('RRLine_Unit_selectedValue').value = '';
-            document.getElementById('RRLine_Cost').value = '';
-            document.getElementById('RRLine_Amount').value = '';
+            document.getElementById('RRLine_Cost').value = 0;
+            document.getElementById('RRLine_Amount').value = 0;
             document.getElementById('RRLine_Branch_data').value = '';
             document.getElementById('RRLine_Branch_selectedValue').value = '';
             document.getElementById('RRLine_VAT_data').value = '';
             document.getElementById('RRLine_VAT_selectedValue').value = '';
-            document.getElementById('RRLine_VATRate').value = '';
+            document.getElementById('RRLine_VATRate').value = 0;
             document.getElementById('RRLine_VATAmount').value = '';
+            document.getElementById('RRLine_VATInclusive').value = '';
             document.getElementById('RRLine_WTAX_data').value = '';
             document.getElementById('RRLine_WTAX_selectedValue').value = '';
-            document.getElementById('RRLine_WTAXRate').value = '';
+            document.getElementById('RRLine_WTAXRate').value = 0;
             document.getElementById('RRLine_WTAXAmount').value = '';
+            document.getElementById('RRLine_WTAXInclusive').value = '';
             document.getElementById('RRLine_BUCUnit_data').value = '';
             document.getElementById('RRLine_BUCUnit_selectedValue').value = '';
-            document.getElementById('RRLine_BUCQuantity').value = '';
-            document.getElementById('RRLine_BUCCost').value = '';
+            document.getElementById('RRLine_BUCQuantity').value = 0;
+            document.getElementById('RRLine_BUCCost').value = 0;
+
         }
 
         // ==================
@@ -2467,7 +2620,8 @@
             });
 
             getPOItemForComboBox();
-            getBranchesForComboBox();
+            getUnitForComboBox();
+            getBranchesPOItemForComboBox();
             getTaxTypeForComboBox();
             getBUCUnitForComboBox();
 
@@ -2515,13 +2669,103 @@
         //  Item
         // =====
         function itemTab() {
+            $('#RRLine_Quantity').keyup(function() {
+                var inputQuantity = this.value;
+                var inputCost = document.getElementById('RRLine_Cost').value;
+
+                var replacedCost = inputCost.replace(/\,/g,'');
+                var replacedQuantity = inputQuantity.replace(/\,/g,'');
+                var amount = replacedCost * replacedQuantity;
+                var VATRate = document.getElementById('RRLine_VATRate').value;
+                var WTAXRate = document.getElementById('RRLine_WTAXRate').value;
+
+                document.getElementById('RRLine_Amount').value = amount.toLocaleString();
+                document.getElementById('RRLine_VATAmount').value = (amount / (1 + VATRate/100)) * (VATRate/100).toLocaleString();
+                document.getElementById('RRLine_WTAXAmount').value = (amount / (1 + VATRate/100)) * (WTAXRate/100).toLocaleString();
+            });
+
+            $('#RRLine_Cost').keyup(function() {
+                var inputQuantity = document.getElementById('RRLine_Quantity').value;
+                var inputCost = this.value;
+
+                var replacedCost = inputCost.replace(/\,/g,'');
+                var replacedQuantity = inputQuantity.replace(/\,/g,'');
+                var amount = replacedCost * replacedQuantity;
+                var VATRate = document.getElementById('RRLine_VATRate').value;
+                var WTAXRate = document.getElementById('RRLine_WTAXRate').value;
+
+                document.getElementById('RRLine_Amount').value = amount.toLocaleString();
+                document.getElementById('RRLine_VATAmount').value = (amount / (1 + VATRate/100)) * (VATRate/100);
+                document.getElementById('RRLine_WTAXAmount').value = (amount / (1 + VATRate/100)) * (WTAXRate/100);
+            });
+
+            $("#RRLine_Quantity").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#RRLine_Cost").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#RRLine_Amount").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
             cboPOs = new wijmo.input.ComboBox('#RRLine_PONo');
             cboItemCode = new wijmo.input.ComboBox('#RRLine_ItemCode');
             cboItemDescription = new wijmo.input.ComboBox('#RRLine_ItemDescription');
             cboUnit = new wijmo.input.ComboBox('#RRLine_Unit');
             cboPOItemBranch = new wijmo.input.ComboBox('#RRLine_Branch');
-            cboForVATTaxType = new wijmo.input.ComboBox('#RRLine_WTAX');
-            cboForWTAXTaxType = new wijmo.input.ComboBox('#RRLine_VAT');
+            cboForVATTaxType = new wijmo.input.ComboBox('#RRLine_VAT');
+            cboForWTAXTaxType = new wijmo.input.ComboBox('#RRLine_WTAX');
             cboBUCUnit = new wijmo.input.ComboBox('#RRLine_BUCUnit');
 
             document.getElementById('RRLine_Amount').disabled = true;
