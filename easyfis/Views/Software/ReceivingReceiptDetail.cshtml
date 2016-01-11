@@ -1546,6 +1546,7 @@
                 autoGenerateColumns: false,
                 itemsSource: POStatus,
                 isReadOnly: true,
+                frozenColumns: 1,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -1759,6 +1760,11 @@
         var cboUnit;
         var POItembranches;
         var cboPOItemBranch;
+        var taxTypes;
+        var cboForVATTaxType;
+        var cboForWTAXTaxType;
+        var BUCUnits;
+        var cboBUCUnit;
 
         // ===========
         // GET RR Item
@@ -1870,23 +1876,29 @@
                 selectedValue: document.getElementById('RRLine_PONo_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#RRLine_PONo_data").val(POCollection.items[this.selectedIndex].POId);
-                    
+
                     document.getElementById('RRLine_ItemCode_data').value = '';
                     document.getElementById('RRLine_ItemCode_selectedValue').value = '';
                     document.getElementById('RRLine_ItemDescription_data').value = '';
                     document.getElementById('RRLine_ItemDescription_selectedValue').value = '';
                     document.getElementById('RRLine_Unit_data').value = '';
                     document.getElementById('RRLine_Unit_selectedValue').value = '';
+
+                    document.getElementById('RRLine_VAT_data').value =  '';
+                    document.getElementById('RRLine_VAT_selectedValue').value = '';
+                    document.getElementById('RRLine_WTAX_data').value =  '';
+                    document.getElementById('RRLine_WTAX_selectedValue').value = '';
+
                     getPOItemForComboBox();
-                    getItemUnitForComboBox();
+                    getTaxTypeForComboBox();
                 }
             });
         }
 
 
-        // ==================================
-        // GET ItemCodes for PO for Combo Box
-        // ==================================
+        // =================================
+        // GET PO Items for PO for Combo Box
+        // =================================
         function getPOItemForComboBox() {
             POItems = new wijmo.collections.ObservableArray();
             var RRLinePOId = document.getElementById('RRLine_PONo_data').value;
@@ -1911,6 +1923,7 @@
                             }
                             createCboPOItemCode(POItems);
                             createCboPOIteDescription(POItems);
+                            createItemUnit(POItems);
                         }
                     }
                 });
@@ -1946,7 +1959,6 @@
                     }
                 });
             }
-
             return POItems;
         }
 
@@ -1971,10 +1983,49 @@
                     $("#RRLine_ItemCode_data").val(POItemCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemDescription_data").val(POItemCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemDescription_selectedValue").val(POItemCollection.items[this.selectedIndex].ItemDescription);
-                    $("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].ItemId);
+                    $("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].UnitId);
                     $("#RRLine_Unit_selectedValue").val(POItemCollection.items[this.selectedIndex].Unit);
+                    $("#RRLine_Particulars").val(POItemCollection.items[this.selectedIndex].Particulars);
+                    $("#RRLine_Quantity").val(POItemCollection.items[this.selectedIndex].Quantity);
+                    $("#RRLine_Cost").val(POItemCollection.items[this.selectedIndex].Cost);
+                    $("#RRLine_Amount").val(POItemCollection.items[this.selectedIndex].Amount);
+
                     createCboPOIteDescription(POItems);
                     createItemUnit(POItems);
+
+                    var items = new wijmo.collections.ObservableArray;
+                    var articleId = POItemCollection.items[this.selectedIndex].ItemId;
+                    $.ajax({
+                        url: '/api/article/' +  articleId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (Results) {
+                            $('#loadingModal').modal('hide');
+                            if (Results.length > 0) {
+                                items.push ({
+                                    Id: Results.Id,
+                                    OutputTaxId : Results.OutputTaxId,
+                                    OutputTax : Results.OutputTax,
+                                    InputTaxId : Results.InputTaxId,
+                                    InputTax : Results.InputTax,
+                                    WTaxTypeId : Results.WTaxTypeId,
+                                    WTaxType : Results.WTaxType
+                                });
+                            }
+
+                            document.getElementById('RRLine_VAT_data').value =  Results.InputTaxId;
+                            document.getElementById('RRLine_VAT_selectedValue').value = Results.InputTax;
+                            document.getElementById('RRLine_WTAX_data').value =  Results.WTaxTypeId;
+                            document.getElementById('RRLine_WTAX_selectedValue').value = Results.WTaxType;
+                            getTaxTypeForComboBox();
+                        }
+                    });
+
+                    document.getElementById('RRLine_BUCUnit_data').value =  POItemCollection.items[this.selectedIndex].UnitId;
+                    document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
+                    getBUCUnitForComboBox();
                 }
             });
         }
@@ -2000,10 +2051,49 @@
                     $("#RRLine_ItemDescription_data").val(POItemCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemCode_data").val(POItemCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemCode_selectedValue").val(POItemCollection.items[this.selectedIndex].ItemCode);
-                    $("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].ItemId);
+                    $("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].UnitId);
                     $("#RRLine_Unit_selectedValue").val(POItemCollection.items[this.selectedIndex].Unit);
+                    $("#RRLine_Particulars").val(POItemCollection.items[this.selectedIndex].Particulars);
+                    $("#RRLine_Quantity").val(POItemCollection.items[this.selectedIndex].Quantity);
+                    $("#RRLine_Cost").val(POItemCollection.items[this.selectedIndex].Cost);
+                    $("#RRLine_Amount").val(POItemCollection.items[this.selectedIndex].Amount);
+
                     createCboPOItemCode(POItems);
                     createItemUnit(POItems);
+
+                    var items = new wijmo.collections.ObservableArray;
+                    var articleId = POItemCollection.items[this.selectedIndex].ItemId;
+                    $.ajax({
+                        url: '/api/article/' +  articleId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (Results) {
+                            $('#loadingModal').modal('hide');
+                            if (Results.length > 0) {
+                                items.push ({
+                                    Id: Results.Id,
+                                    OutputTaxId : Results.OutputTaxId,
+                                    OutputTax : Results.OutputTax,
+                                    InputTaxId : Results.InputTaxId,
+                                    InputTax : Results.InputTax,
+                                    WTaxTypeId : Results.WTaxTypeId,
+                                    WTaxType : Results.WTaxType
+                                });
+                            }
+
+                            document.getElementById('RRLine_VAT_data').value =  Results.InputTaxId;
+                            document.getElementById('RRLine_VAT_selectedValue').value = Results.InputTax;
+                            document.getElementById('RRLine_WTAX_data').value =  Results.WTaxTypeId;
+                            document.getElementById('RRLine_WTAX_selectedValue').value = Results.WTaxType;
+                            getTaxTypeForComboBox();
+                        }
+                    });
+
+                    document.getElementById('RRLine_BUCUnit_data').value =  POItemCollection.items[this.selectedIndex].UnitId;
+                    document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
+                    getBUCUnitForComboBox();
                 }
             });
         }
@@ -2026,13 +2116,47 @@
                 required: false,
                 selectedValue: document.getElementById('RRLine_Unit_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#RRLine_Unit_data").val(itemUnitCollection.items[this.selectedIndex].ItemId);
+                    $("#RRLine_Unit_data").val(itemUnitCollection.items[this.selectedIndex].UnitId);
                     $("#RRLine_ItemDescription_data").val(itemUnitCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemDescription_selectedValue").val(itemUnitCollection.items[this.selectedIndex].ItemDescription);
                     $("#RRLine_ItemCode_data").val(itemUnitCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemCode_selectedValue").val(itemUnitCollection.items[this.selectedIndex].ItemCode);
                     createCboPOItemCode(POItems);
                     createCboPOIteDescription(POItems);
+
+                    var items = new wijmo.collections.ObservableArray;
+                    var articleId = itemUnitCollection.items[this.selectedIndex].ItemId;
+                    $.ajax({
+                        url: '/api/article/' +  articleId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (Results) {
+                            $('#loadingModal').modal('hide');
+                            if (Results.length > 0) {
+                                items.push ({
+                                    Id: Results.Id,
+                                    OutputTaxId : Results.OutputTaxId,
+                                    OutputTax : Results.OutputTax,
+                                    InputTaxId : Results.InputTaxId,
+                                    InputTax : Results.InputTax,
+                                    WTaxTypeId : Results.WTaxTypeId,
+                                    WTaxType : Results.WTaxType
+                                });
+                            }
+
+                            document.getElementById('RRLine_VAT_data').value =  Results.InputTaxId;
+                            document.getElementById('RRLine_VAT_selectedValue').value = Results.InputTax;
+                            document.getElementById('RRLine_WTAX_data').value =  Results.WTaxTypeId;
+                            document.getElementById('RRLine_WTAX_selectedValue').value = Results.WTaxType;
+                            getTaxTypeForComboBox();
+                        }
+                    });
+                    
+                    document.getElementById('RRLine_BUCUnit_data').value =  itemUnitCollection.items[this.selectedIndex].UnitId;
+                    document.getElementById('RRLine_BUCUnit_selectedValue').value = itemUnitCollection.items[this.selectedIndex].Unit;
+                    getBUCUnitForComboBox();
                 }
             });
         }
@@ -2057,7 +2181,32 @@
                                 BranchBranch: results[i]["Branch"]
                             });
                         }
-                        createCboBranch(POItembranches);
+
+                        var RRLineId = document.getElementById('RRLine_Id').value;
+                        if(RRLineId == 0) {
+                            $.ajax({
+                                url: '/api/listBranchById/' + @branchId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        branches.push({
+                                            BranchId: results.Id,
+                                            Branch: results.Branch
+                                        });
+                                    }
+                                    document.getElementById('RRLine_Branch_data').value = results.Id;
+                                    document.getElementById('RRLine_Branch_selectedValue').value = results.Branch;
+
+                                    createCboBranch(POItembranches);
+                                }
+                            });
+                        } else {
+                            createCboBranch(POItembranches);
+                        }
+
                     }
                 }
             });
@@ -2073,7 +2222,7 @@
             for (var i = 0; i < branchCollections.items.length; i++) {
                 branchList.push(branchCollections.items[i].BranchBranch);
             }
-            
+
             cboPOItemBranch.dispose();
             cboPOItemBranch = new wijmo.input.ComboBox('#RRLine_Branch', {
                 placeholder: "Select Branch",
@@ -2085,6 +2234,130 @@
                     $("#RRLine_Branch_data").val(branchCollections.items[this.selectedIndex].BranchId);
                 }
             });
+        }
+
+        // ===================
+        // Get Artile Tax Type
+        // ===================
+        function getTaxTypeForComboBox() {
+            taxTypes = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listTaxType',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            taxTypes.push({
+                                TaxTypeId: results[i]["Id"],
+                                TaxType: results[i]["TaxType"],
+                                TaxRate: results[i]["TaxRate"]
+                            });
+                        }
+                        createCboForVATTaxType(taxTypes);
+                        createCboForWTAXTaxType(taxTypes);
+                    }
+                }
+            });
+        }
+
+        // ===========
+        // CBO for VAT
+        // ===========
+        function createCboForVATTaxType(taxTypes) {
+            var taxTypeCollection = new wijmo.collections.CollectionView(taxTypes);
+            var taxList = new Array();
+            for (var i = 0; i < taxTypeCollection.items.length; i++) {
+                taxList.push(taxTypeCollection.items[i].TaxType);
+            }
+
+            cboForVATTaxType.dispose();
+            cboForVATTaxType = new wijmo.input.ComboBox('#RRLine_WTAX', {
+                placeholder: "Select VAT",
+                itemsSource: taxList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRLine_WTAX_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRLine_WTAX_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
+                    $("#RRLine_WTAXRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
+                }
+            });
+        }
+
+        // ============
+        // CBO for WTAX
+        // ============
+        function createCboForWTAXTaxType(taxTypes) {
+            var taxTypeCollection = new wijmo.collections.CollectionView(taxTypes);
+            var taxList = new Array();
+            for (var i = 0; i < taxTypeCollection.items.length; i++) {
+                taxList.push(taxTypeCollection.items[i].TaxType);
+            }
+
+            cboForWTAXTaxType.dispose();
+            cboForWTAXTaxType = new wijmo.input.ComboBox('#RRLine_VAT', {
+                placeholder: "Select WTAX",
+                itemsSource: taxList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRLine_VAT_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRLine_VAT_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
+                    $("#RRLine_VATRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
+                }
+            });
+        }
+
+
+        // =======================================
+        // Get Item Unit for Basic Unit Conversion
+        // =======================================
+        function getBUCUnitForComboBox() {
+            BUCUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            BUCUnits.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboBasicUnitConversionUnit(BUCUnits);
+                    }
+                }
+            });
+        }
+
+        // =====================
+        // CBO for Customer Unit
+        // =====================
+        function createCboBasicUnitConversionUnit(BUCUnits) {
+            var BUCUnitCollection = new wijmo.collections.CollectionView(BUCUnits);
+            var BUCUnitList = new Array();
+            for (var i = 0; i < BUCUnitCollection.items.length; i++) {
+                BUCUnitList.push(BUCUnitCollection.items[i].Unit);
+            }
+
+            cboBUCUnit.dispose();
+            cboBUCUnit = new wijmo.input.ComboBox('#RRLine_BUCUnit', {
+                placeholder: "Select Unit",
+                itemsSource: BUCUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('RRLine_BUCUnit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#RRLine_BUCUnit_data").val(BUCUnitCollection.items[this.selectedIndex].UnitId);
+                }
+            });D
         }
 
         // ===========================
@@ -2127,6 +2400,8 @@
             getPOForComboBox();
             getPOItemForComboBox();
             getBranchesForComboBox();
+            getTaxTypeForComboBox();
+            getBUCUnitForComboBox();
 
             document.getElementById('RRLine_Id').value = 0;
             document.getElementById('RRLine_PONo_data').value = '';
@@ -2193,6 +2468,8 @@
 
             getPOItemForComboBox();
             getBranchesForComboBox();
+            getTaxTypeForComboBox();
+            getBUCUnitForComboBox();
 
             var item = items.currentEditItem;
             document.getElementById('RRLine_Id').value = item.Id ? item.Id : '';
@@ -2243,6 +2520,17 @@
             cboItemDescription = new wijmo.input.ComboBox('#RRLine_ItemDescription');
             cboUnit = new wijmo.input.ComboBox('#RRLine_Unit');
             cboPOItemBranch = new wijmo.input.ComboBox('#RRLine_Branch');
+            cboForVATTaxType = new wijmo.input.ComboBox('#RRLine_WTAX');
+            cboForWTAXTaxType = new wijmo.input.ComboBox('#RRLine_VAT');
+            cboBUCUnit = new wijmo.input.ComboBox('#RRLine_BUCUnit');
+
+            document.getElementById('RRLine_Amount').disabled = true;
+            document.getElementById('RRLine_VATRate').disabled = true;
+            document.getElementById('RRLine_VATAmount').disabled = true;
+            document.getElementById('RRLine_WTAXRate').disabled = true;
+            document.getElementById('RRLine_WTAXAmount').disabled = true;
+            document.getElementById('RRLine_BUCQuantity').disabled = true;
+            document.getElementById('RRLine_BUCCost').disabled = true;
 
             items = new wijmo.collections.CollectionView(getRRItem());
             items.canFilter = true;
@@ -2386,6 +2674,7 @@
                 autoGenerateColumns: false,
                 itemsSource: items,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row

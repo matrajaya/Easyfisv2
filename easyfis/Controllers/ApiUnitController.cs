@@ -34,6 +34,30 @@ namespace easyfis.Controllers
             return units.ToList();
         }
 
+        // ==============
+        // Get Unit by Id
+        // ==============
+        [Route("api/unit/{Id}")]
+        public Models.MstUnit GetById(String Id)
+        {
+            var unit_Id = Convert.ToInt32(Id);
+            var units = from d in db.MstUnits
+                        where d.Id == unit_Id
+                        select new Models.MstUnit
+                        {
+                            Id = d.Id,
+                            Unit = d.Unit,
+                            IsLocked = d.IsLocked,
+                            CreatedById = d.CreatedById,
+                            CreatedBy = d.MstUser.FullName,
+                            CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                            UpdatedById = d.UpdatedById,
+                            UpdatedBy = d.MstUser1.FullName,
+                            UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                        };
+            return (Models.MstUnit)units.FirstOrDefault();
+        }
+
         // ========
         // ADD Unit
         // ========
