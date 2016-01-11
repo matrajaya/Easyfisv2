@@ -2451,12 +2451,12 @@
             var replacedWTAXRate = inputedWTAXRate.replace(/\,/g,'');
 
             if(IsInclusive == true) {
-                document.getElementById('RRLine_VATAmount').value = (replacedAmount / (1 + replacedVATRate/100)) * (replacedVATRate/100);
-                document.getElementById('RRLine_WTAXAmount').value = (replacedAmount / (1 + replacedVATRate/100)) * (replacedWTAXRate/100);
+                document.getElementById('RRLine_VATAmount').value = Math.round(((replacedAmount / (1 + replacedVATRate/100)) * (replacedVATRate/100)) * 100) / 100;
+                document.getElementById('RRLine_WTAXAmount').value = Math.round(((replacedAmount / (1 + replacedVATRate/100)) * (replacedWTAXRate/100)) * 100) / 100;
             } else {
-                document.getElementById('RRLine_VATAmount').value = replacedAmount * (replacedVATRate/100);
-                document.getElementById('RRLine_WTAXAmount').value = replacedAmount * (replacedWTAXRate/100);
-                document.getElementById('RRLine_Amount').value = (replacedCost * replacedQuantity) + (replacedAmount * (replacedVATRate/100));
+                document.getElementById('RRLine_VATAmount').value = Math.round((replacedAmount * (replacedVATRate/100)) * 100) / 100;
+                document.getElementById('RRLine_WTAXAmount').value = Math.round((replacedAmount * (replacedWTAXRate/100)) * 100) / 100;
+                document.getElementById('RRLine_Amount').value = Math.round(((replacedCost * replacedQuantity) + (replacedAmount * (replacedVATRate/100))) * 100) / 100;
             }
         }
 
@@ -2680,8 +2680,8 @@
                 var WTAXRate = document.getElementById('RRLine_WTAXRate').value;
 
                 document.getElementById('RRLine_Amount').value = amount.toLocaleString();
-                document.getElementById('RRLine_VATAmount').value = (amount / (1 + VATRate/100)) * (VATRate/100).toLocaleString();
-                document.getElementById('RRLine_WTAXAmount').value = (amount / (1 + VATRate/100)) * (WTAXRate/100).toLocaleString();
+                document.getElementById('RRLine_VATAmount').value = Math.round(((amount / (1 + VATRate/100)) * (VATRate/100)) * 100) / 100;
+                document.getElementById('RRLine_WTAXAmount').value = Math.round(((amount / (1 + VATRate/100)) * (WTAXRate/100)) * 100) / 100;
             });
 
             $('#RRLine_Cost').keyup(function() {
@@ -2695,8 +2695,8 @@
                 var WTAXRate = document.getElementById('RRLine_WTAXRate').value;
 
                 document.getElementById('RRLine_Amount').value = amount.toLocaleString();
-                document.getElementById('RRLine_VATAmount').value = (amount / (1 + VATRate/100)) * (VATRate/100);
-                document.getElementById('RRLine_WTAXAmount').value = (amount / (1 + VATRate/100)) * (WTAXRate/100);
+                document.getElementById('RRLine_VATAmount').value = Math.round(((amount / (1 + VATRate/100)) * (VATRate/100)) * 100) / 100;
+                document.getElementById('RRLine_WTAXAmount').value = Math.round(((amount / (1 + VATRate/100)) * (WTAXRate/100)) * 100) / 100;
             });
 
             $("#RRLine_Quantity").keydown(function (e) {
