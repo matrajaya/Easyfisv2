@@ -1064,7 +1064,7 @@
             //}).fail(function (xhr, textStatus, err) {
             //    alert(err);
             //});
-            //return items;
+            return items;
         }
         // ============================
         // FlexGrid Selection for Items
@@ -1091,7 +1091,7 @@
                 btnPreviousPageGridItem.setAttribute('disabled', 'disabled');
                 btnNextPageGridItem.removeAttribute('disabled');
                 btnLastPageGridItem.removeAttribute('disabled');
-            } else if (journalLedgers.pageIndex === (journalLedgers.pageCount - 1)) {
+            } else if (items.pageIndex === (items.pageCount - 1)) {
                 btnFirstPageGridItem.removeAttribute('disabled');
                 btnPreviousPageGridItem.removeAttribute('disabled');
                 btnLastPageGridItem.setAttribute('disabled', 'disabled');
@@ -1151,94 +1151,98 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Item",
+                                "header": "Item Code",
                                 //"binding": "Date",
                                 "allowSorting": true,
                                 "width": 200,
                             },
                             {
-                                "header": "Particulars",
+                                "header": "Item Description",
                                 // "binding": "Doc Ref.",
                                 "allowSorting": true,
                                 "width": 200,
                             },
                             {
-                                "header": "Item Inventory Code",
+                                "header": "Particulars",
                                 // "binding": "Branch",
                                 "allowSorting": true,
                                 "width": 200,
                             },
                             {
-                                "header": "Quantity",
+                                "header": "Item Inventory Code",
                                 // "binding": "Account",
                                 "allowSorting": true,
                                 "width": 200,
                             },
                             {
-                                "header": "Unit",
+                                "header": "Quantity",
                                 // "binding": "Debit",
                                 "allowSorting": true,
                                 "width": 200,
                             },
                             {
-                                "header": "Price",
+                                "header": "Unit",
                                 // "binding": "Credit",
                                 "allowSorting": true,
                                 "width": 200,
                             },
                              {
-                                 "header": "Discount",
-                                 "header": "Discount Rate",
+                                 "header": "Price Ex-VAT",
                                  //    "binding": "Balance",
                                  "allowSorting": true,
                                  "width": 200,
                              },
                              {
-                                 "header": "Discount Amount",
+                                 "header": "Discount Rate",
                                  //  "binding": "Particulars",
                                  "allowSorting": true,
                                  "width": 200,
                              },
                             {
-                                "header": "Net Price",
+                                "header": "Discount Amount",
                                 //  "binding": "Particulars",
                                 "allowSorting": true,
                                 "width": 200,
                             },
+                           {
+                               "header": "Net Price",
+                               //  "binding": "Particulars",
+                               "allowSorting": true,
+                               "width": 200,
+                           },
                            {
                                "header": "Amount",
                                //  "binding": "Particulars",
                                "allowSorting": true,
                                "width": 200,
                            },
-                           {
-                               "header": "VAT",
-                               "header": "VAT Rate",
-                               //  "binding": "Particulars",
-                               "allowSorting": true,
-                               "width": 200,
-                           },
                           {
-                              "header": "VAT Amount",
+                              "header": "VAT Rate",
                               //  "binding": "Particulars",
                               "allowSorting": true,
                               "width": 200,
                           },
                           {
-                              "header": "Unit",
-                              "binding": "BaseUnit",
+                              "header": "VAT Amount",
+                             // "binding": "BaseUnit",
                               "allowSorting": true,
                               "width": 100,
+                          }, 
+                          {
+                              "header": "Unit",
+                             // "binding": "BaseQuantity",
+                              "allowSorting": true,
+                              "width": 130
                           },
                           {
                               "header": "Quantity",
-                              "binding": "BaseQuantity",
+                             // "binding": "BaseQuantity",
                               "allowSorting": true,
                               "width": 130
                           },
                           {
                               "header": "Price",
-                              "binding": "BaseCost",
+                              //"binding": "BaseCost",
                               "allowSorting": true,
                               "width": 130
                           },
@@ -1246,6 +1250,7 @@
                 autoGenerateColumns: false,
                 //itemsSource: items,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -1265,52 +1270,54 @@
             itemGrid.columnHeaders.setCellData(0, 1, 'Delete');
 
             itemGrid.columnHeaders.columns[2].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 2, 'Item');
+            itemGrid.columnHeaders.setCellData(0, 2, 'Item Code');
 
             itemGrid.columnHeaders.columns[3].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 3, 'Particulars');
+            itemGrid.columnHeaders.setCellData(0, 3, 'Item Description');
 
             itemGrid.columnHeaders.columns[4].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 4, 'Item Inventory Code');
+            itemGrid.columnHeaders.setCellData(0, 4, 'Particulars');
 
             itemGrid.columnHeaders.columns[5].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 5, 'Quantity');
+            itemGrid.columnHeaders.setCellData(0, 5, 'Item Inventory Code');
 
             itemGrid.columnHeaders.columns[6].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 6, 'Unit');
+            itemGrid.columnHeaders.setCellData(0, 6, 'Quantity');
 
             itemGrid.columnHeaders.columns[7].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 7, 'Price');
+            itemGrid.columnHeaders.setCellData(0, 7, 'Unit');
+            
+            itemGrid.columnHeaders.columns[8].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 8, 'Price Ex-VAT');
 
-            itemGrid.columnHeaders.setCellData(0, 8, 'Discount');
-
-            itemGrid.columnHeaders.columns[9].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 9, 'Discount Amount');
-
-            itemGrid.columnHeaders.setCellData(0, 10, 'Net Price');
+            itemGrid.columnHeaders.setCellData(0, 9, 'Discount');
+            
+            itemGrid.columnHeaders.columns[10].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 10, 'Discount Amount');
 
             itemGrid.columnHeaders.columns[11].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 11, 'Amount');
+            itemGrid.columnHeaders.setCellData(0, 11, 'Net Price');
+            
+            itemGrid.columnHeaders.columns[12].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 12, 'Amount');
 
-            itemGrid.columnHeaders.setCellData(0, 12, 'VAT ');
+            itemGrid.columnHeaders.setCellData(0, 13, 'VAT');
+            
+            itemGrid.columnHeaders.columns[14].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 14, 'VAT Amount');
 
-            itemGrid.columnHeaders.setCellData(0, 13, 'VAT Amount ');
-
-            for (var columnBasicUnitConversion = 14; columnBasicUnitConversion <= 17; columnBasicUnitConversion++) {
+            for (var columnBasicUnitConversion = 15; columnBasicUnitConversion <= 17; columnBasicUnitConversion++) {
                 itemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
             }
 
             itemGrid.rows.defaultSize = 55;
-
-            var VATColumn = itemGrid.columns.getColumn("VATPercentage");
-            VATColumn.wordWrap = true;
-
+            
             //Navigation button for Items
-            btnFirstPageGridItem = document.getElementById('btnMoveToFirstPageGridItem ');
-            btnPreviousPageGridItem = document.getElementById('btnMoveToPreviousPageGridItem ');
-            btnNextPageGridItem = document.getElementById('btnMoveToNextPageGridItem ');
-            btnLastPageGridItem = document.getElementById('btnMoveToLastPageGridItem ');
-            btnCurrentPageGridJournalLedger = document.getElementById('btnCurrentPageGridItem ');
+            btnFirstPageGridItem = document.getElementById('btnMoveToFirstPageGridItem');
+            btnPreviousPageGridItem = document.getElementById('btnMoveToPreviousPageGridItem');
+            btnNextPageGridItem = document.getElementById('btnMoveToNextPageGridItem');
+            btnLastPageGridItem = document.getElementById('btnMoveToLastPageGridItem');
+            btnCurrentPageGridItem = document.getElementById('btnCurrentPageGridItem');
 
             updateNavigateButtonsItem();
 
