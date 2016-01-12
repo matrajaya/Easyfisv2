@@ -1133,7 +1133,7 @@
             itemGrid.initialize({
                 columns: [
                             {
-                                "header": "Import",
+                                "header": "Edit",
                                 "binding": "EditId",
                                 "width": 60,
                                 "align": "center",
@@ -1142,7 +1142,7 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Export",
+                                "header": "Delete",
                                 "binding": "DeleteId",
                                 "width": 70,
                                 "align": "center",
@@ -1154,83 +1154,94 @@
                                 "header": "Item",
                                 //"binding": "Date",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": 200,
                             },
                             {
                                 "header": "Particulars",
                                 // "binding": "Doc Ref.",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": 200,
                             },
                             {
                                 "header": "Item Inventory Code",
                                 // "binding": "Branch",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200,
                             },
                             {
                                 "header": "Quantity",
                                 // "binding": "Account",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200,
                             },
                             {
                                 "header": "Unit",
                                 // "binding": "Debit",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200,
                             },
                             {
                                 "header": "Price",
                                 // "binding": "Credit",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200,
                             },
                              {
                                  "header": "Discount",
                                  "header": "Discount Rate",
                                  //    "binding": "Balance",
                                  "allowSorting": true,
-                                 "width": "2*"
+                                 "width": 200,
                              },
                              {
                                  "header": "Discount Amount",
                                  //  "binding": "Particulars",
                                  "allowSorting": true,
-                                 "width": "2*"
+                                 "width": 200,
                              },
                             {
                                 "header": "Net Price",
                                 //  "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": 200,
                             },
                            {
                                "header": "Amount",
                                //  "binding": "Particulars",
                                "allowSorting": true,
-                               "width": "2*"
+                               "width": 200,
                            },
                            {
                                "header": "VAT",
                                "header": "VAT Rate",
                                //  "binding": "Particulars",
-                               //  "binding": "Particulars",
                                "allowSorting": true,
-                               "width": "2*"
+                               "width": 200,
                            },
                           {
                               "header": "VAT Amount",
                               //  "binding": "Particulars",
                               "allowSorting": true,
-                              "width": "2*"
+                              "width": 200,
                           },
                           {
-                              "header": "VAT Amount",
-                              //  "binding": "Particulars",
+                              "header": "Unit",
+                              "binding": "BaseUnit",
                               "allowSorting": true,
-                              "width": "2*"
-                          }
+                              "width": 100,
+                          },
+                          {
+                              "header": "Quantity",
+                              "binding": "BaseQuantity",
+                              "allowSorting": true,
+                              "width": 130
+                          },
+                          {
+                              "header": "Price",
+                              "binding": "BaseCost",
+                              "allowSorting": true,
+                              "width": 130
+                          },
                 ],
                 autoGenerateColumns: false,
                 //itemsSource: items,
@@ -1241,6 +1252,58 @@
             });
 
             itemGrid.trackChanges = true;
+
+            var hr = new wijmo.grid.Row();
+            itemGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+            itemGrid.columnHeaders.rows.push(hr);
+            itemGrid.columnHeaders.rows[0].allowMerging = true;
+
+            itemGrid.columnHeaders.columns[0].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 0, 'Edit');
+
+            itemGrid.columnHeaders.columns[1].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 1, 'Delete');
+
+            itemGrid.columnHeaders.columns[2].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 2, 'Item');
+
+            itemGrid.columnHeaders.columns[3].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 3, 'Particulars');
+
+            itemGrid.columnHeaders.columns[4].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 4, 'Item Inventory Code');
+
+            itemGrid.columnHeaders.columns[5].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 5, 'Quantity');
+
+            itemGrid.columnHeaders.columns[6].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 6, 'Unit');
+
+            itemGrid.columnHeaders.columns[7].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 7, 'Price');
+
+            itemGrid.columnHeaders.setCellData(0, 8, 'Discount');
+
+            itemGrid.columnHeaders.columns[9].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 9, 'Discount Amount');
+
+            itemGrid.columnHeaders.setCellData(0, 10, 'Net Price');
+
+            itemGrid.columnHeaders.columns[11].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 11, 'Amount');
+
+            itemGrid.columnHeaders.setCellData(0, 12, 'VAT ');
+
+            itemGrid.columnHeaders.setCellData(0, 13, 'VAT Amount ');
+
+            for (var columnBasicUnitConversion = 14; columnBasicUnitConversion <= 17; columnBasicUnitConversion++) {
+                itemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
+            }
+
+            itemGrid.rows.defaultSize = 55;
+
+            var VATColumn = itemGrid.columns.getColumn("VATPercentage");
+            VATColumn.wordWrap = true;
 
             //Navigation button for Items
             btnFirstPageGridItem = document.getElementById('btnMoveToFirstPageGridItem ');
@@ -1396,8 +1459,8 @@
             inventoryEntryGrid.initialize({
                 columns: [
                             {
-                                "header": "Contact",
-                                "binding": "Contact",
+                                "header": "Date",
+                                "binding": "Date",
                                 "width": 60,
                                 "align": "center",
                                 "allowResizing": false,
@@ -1405,7 +1468,7 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Contact Number(s)",
+                                "header": "Branch",
                                 //"binding": "ContactNumbers",
                                 "width": 70,
                                 "align": "center",
@@ -1414,7 +1477,37 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Remarks",
+                                "header": "Item",
+                                //"binding": "Remarks",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Particulars",
+                                //"binding": "Remarks",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Code",
+                                //"binding": "Remarks",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Quantity",
+                                //"binding": "Remarks",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Unit",
+                                //"binding": "Remarks",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Amount",
                                 //"binding": "Remarks",
                                 "allowSorting": true,
                                 "width": "1*",
