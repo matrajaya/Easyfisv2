@@ -2058,9 +2058,10 @@
 
                                     document.getElementById('RRLine_VATRate').value =  results.TaxRate;
                                     document.getElementById('RRLine_VATInclusive').value =  results.IsInclusive;
-                                    
+
                                     var IsInclusive = document.getElementById('RRLine_VATInclusive').value;
                                     computeTAX(IsInclusive);
+                                    computeBaseUnit(IsInclusive)
                                 }
                             });
 
@@ -2084,7 +2085,7 @@
 
                                     document.getElementById('RRLine_WTAXRate').value =  results.TaxRate;
                                     document.getElementById('RRLine_WTAXInclusive').value =  results.IsInclusive;
-                                    
+
                                     var IsInclusive = document.getElementById('RRLine_WTAXInclusive').value;
                                     computeTAX(IsInclusive);
                                 }
@@ -2177,12 +2178,13 @@
                                             IsInclusive: results.IsInclusive
                                         });
                                     }
-                                    
+
                                     document.getElementById('RRLine_VATRate').value =  results.TaxRate;
                                     document.getElementById('RRLine_VATInclusive').value =  results.IsInclusive;
-                                    
+
                                     var IsInclusive = document.getElementById('RRLine_VATInclusive').value;
                                     computeTAX(IsInclusive);
+                                    computeBaseUnit(IsInclusive);
                                 }
                             });
 
@@ -2203,7 +2205,7 @@
                                             IsInclusive: results.IsInclusive
                                         });
                                     }
-                                    
+
                                     document.getElementById('RRLine_WTAXRate').value =  results.TaxRate;
                                     document.getElementById('RRLine_WTAXInclusive').value =  results.IsInclusive;
 
@@ -2387,7 +2389,7 @@
             for (var i = 0; i < taxTypeCollection.items.length; i++) {
                 taxList.push(taxTypeCollection.items[i].TaxType);
             }
-            
+
             cboForVATTaxType.dispose();
             cboForVATTaxType = new wijmo.input.ComboBox('#RRLine_VAT', {
                 placeholder: "Select VAT",
@@ -2402,6 +2404,7 @@
 
                     var IsInclusive = taxTypeCollection.items[this.selectedIndex].IsInclusive;
                     computeTAX(IsInclusive);
+                    computeBaseUnit(IsInclusive);
                 }
             });
         }
@@ -2427,7 +2430,7 @@
                     $("#RRLine_WTAX_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
                     $("#RRLine_WTAXRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
                     $("#RRLine_WTAXInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
-                    
+
                     var IsInclusive = taxTypeCollection.items[this.selectedIndex].IsInclusive;
                     computeTAX(IsInclusive);
                 }
@@ -2435,7 +2438,7 @@
         }
 
         // ===========
-        // Compute VAT
+        // Compute Tax
         // ===========
         function computeTAX(IsInclusive) {
             var inputedQuantity = document.getElementById('RRLine_Quantity').value;
@@ -2443,13 +2446,13 @@
             var inputedAmount = document.getElementById('RRLine_Amount').value;
             var inputedVATRate = document.getElementById('RRLine_VATRate').value;
             var inputedWTAXRate = document.getElementById('RRLine_WTAXRate').value;
-                    
+
             var replacedQuantity = inputedQuantity.replace(/\,/g,'');
             var replacedCost = inputedCost.replace(/\,/g,'');
             var replacedAmount = inputedAmount.replace(/\,/g,'');
             var replacedVATRate = inputedVATRate.replace(/\,/g,'');
             var replacedWTAXRate = inputedWTAXRate.replace(/\,/g,'');
-
+            
             if(IsInclusive == true) {
                 document.getElementById('RRLine_VATAmount').value = Math.round(((replacedAmount / (1 + replacedVATRate/100)) * (replacedVATRate/100)) * 100) / 100;
                 document.getElementById('RRLine_WTAXAmount').value = Math.round(((replacedAmount / (1 + replacedVATRate/100)) * (replacedWTAXRate/100)) * 100) / 100;
@@ -2458,6 +2461,55 @@
                 document.getElementById('RRLine_WTAXAmount').value = Math.round((replacedAmount * (replacedWTAXRate/100)) * 100) / 100;
                 document.getElementById('RRLine_Amount').value = Math.round(((replacedCost * replacedQuantity) + (replacedAmount * (replacedVATRate/100))) * 100) / 100;
             }
+        }
+
+        // =================
+        // Compute Base Unit
+        // =================
+        function computeBaseUnit(IsInclusive) {
+            var articleUnits = new wijmo.collections.ObservableArray();
+            var articleId = document.getElementById('RRLine_ItemCode_data').value;
+            var unitId = document.getElementById('RRLine_BUCUnit_data').value;
+
+            var inputedQuantity = document.getElementById('RRLine_Quantity').value;
+            var inputedAmount = document.getElementById('RRLine_Amount').value;
+            var inputedVATAmount = document.getElementById('RRLine_VATAmount').value;
+
+            var replacedQuantity = inputedQuantity.replace(/\,/g,'');
+            var replacedAmount = inputedAmount.replace(/\,/g,'');
+            var replacedVATAmount = inputedVATAmount.replace(/\,/g,'');
+
+            $.ajax({
+                url: '/api/articleUnit/' + articleId + '/' + unitId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        articleUnits.push({
+                            Id: results.Id,
+                            ArticleId: results.ArticleId,
+                            Article: results.Article,
+                            UnitId: results.UnitId,
+                            Unit: results.Unit,
+                            Multiplier: results.Multiplier,
+                            IsCountUnit: results.IsCountUnit,
+                        });
+                    }
+
+                    var multiplier = results.Multiplier;
+                    
+                    if(IsInclusive == true) {
+                        document.getElementById('RRLine_BUCCost').value =  Math.round(((replacedAmount - replacedVATAmount) / (replacedQuantity / multiplier)) * 100 ) / 100;
+                        console.log( document.getElementById('RRLine_BUCCost').value);
+                        console.log("true");
+                    } else {
+                        document.getElementById('RRLine_BUCCost').value =  Math.round((replacedAmount / (replacedQuantity / multiplier)) * 100 ) / 100;
+                        console.log( document.getElementById('RRLine_BUCCost').value);
+                    }
+                }
+            });
         }
 
         // =======================================
@@ -2508,7 +2560,7 @@
                 }
             });
         }
- 
+
         // ===========================
         // Navigation Buttons for Item
         // ===========================
@@ -2682,6 +2734,54 @@
                 document.getElementById('RRLine_Amount').value = amount.toLocaleString();
                 document.getElementById('RRLine_VATAmount').value = Math.round(((amount / (1 + VATRate/100)) * (VATRate/100)) * 100) / 100;
                 document.getElementById('RRLine_WTAXAmount').value = Math.round(((amount / (1 + VATRate/100)) * (WTAXRate/100)) * 100) / 100;
+                document.getElementById('RRLine_BUCQuantity').value = this.value;
+
+                var articleUnits = new wijmo.collections.ObservableArray();
+                var articleId = document.getElementById('RRLine_ItemCode_data').value;
+                var unitId = document.getElementById('RRLine_BUCUnit_data').value;
+
+                var inputedAmount = document.getElementById('RRLine_Amount').value;
+                var inputedVATAmount = document.getElementById('RRLine_VATAmount').value;
+
+                var replacedAmount = inputedAmount.replace(/\,/g,'');
+                var replacedVATAmount = inputedVATAmount.replace(/\,/g,'');
+
+                $.ajax({
+                    url: '/api/articleUnit/' + articleId + '/' + unitId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    statusCode: {
+                        200: function(results) {
+                            if (results.length > 0) {
+                                articleUnits.push({
+                                    Id: results.Id,
+                                    ArticleId: results.ArticleId,
+                                    Article: results.Article,
+                                    UnitId: results.UnitId,
+                                    Unit: results.Unit,
+                                    Multiplier: results.Multiplier,
+                                    IsCountUnit: results.IsCountUnit,
+                                });
+                            }
+
+                            var multiplier = results.Multiplier;
+                            if(document.getElementById('RRLine_VATInclusive').value == 'true') {
+                                document.getElementById('RRLine_BUCCost').value =  Math.round(((replacedAmount - replacedVATAmount) / (replacedQuantity / multiplier)) * 100 ) / 100;
+                            } else {
+                                document.getElementById('RRLine_BUCCost').value =  Math.round((replacedAmount / (replacedQuantity / multiplier)) * 100 ) / 100;
+                            }
+                        },
+                        404: function() {
+                            toastr.error("No Item or Unit");
+                        },
+                        400: function() {
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+
             });
 
             $('#RRLine_Cost').keyup(function() {
@@ -2697,6 +2797,53 @@
                 document.getElementById('RRLine_Amount').value = amount.toLocaleString();
                 document.getElementById('RRLine_VATAmount').value = Math.round(((amount / (1 + VATRate/100)) * (VATRate/100)) * 100) / 100;
                 document.getElementById('RRLine_WTAXAmount').value = Math.round(((amount / (1 + VATRate/100)) * (WTAXRate/100)) * 100) / 100;
+
+                var articleUnits = new wijmo.collections.ObservableArray();
+                var articleId = document.getElementById('RRLine_ItemCode_data').value;
+                var unitId = document.getElementById('RRLine_BUCUnit_data').value;
+
+                var inputedAmount = document.getElementById('RRLine_Amount').value;
+                var inputedVATAmount = document.getElementById('RRLine_VATAmount').value;
+
+                var replacedAmount = inputedAmount.replace(/\,/g,'');
+                var replacedVATAmount = inputedVATAmount.replace(/\,/g,'');
+
+                $.ajax({
+                    url: '/api/articleUnit/' + articleId + '/' + unitId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    statusCode: {
+                        200: function(results) {
+                            if (results.length > 0) {
+                                articleUnits.push({
+                                    Id: results.Id,
+                                    ArticleId: results.ArticleId,
+                                    Article: results.Article,
+                                    UnitId: results.UnitId,
+                                    Unit: results.Unit,
+                                    Multiplier: results.Multiplier,
+                                    IsCountUnit: results.IsCountUnit,
+                                });
+                            }
+
+                            var multiplier = results.Multiplier;
+                            if(document.getElementById('RRLine_VATInclusive').value == 'true') {
+                                document.getElementById('RRLine_BUCCost').value =  Math.round(((replacedAmount - replacedVATAmount) / (replacedQuantity / multiplier)) * 100 ) / 100;
+                            } else {
+                                document.getElementById('RRLine_BUCCost').value =  Math.round((replacedAmount / (replacedQuantity / multiplier)) * 100 ) / 100;
+                            }
+                        },
+                        404: function() {
+                            toastr.error("No Item or Unit");
+                        },
+                        400: function() {
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+
             });
 
             $("#RRLine_Quantity").keydown(function (e) {

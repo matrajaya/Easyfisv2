@@ -17,6 +17,5 @@ namespace easyfis.Models
         public String PriceDescription { get; set; }
         public Decimal Price { get; set; }
         public String Remarks { get; set; }
-       
     }
 }
