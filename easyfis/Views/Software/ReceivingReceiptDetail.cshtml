@@ -46,8 +46,8 @@
                         <button class="btn btn-primary btn-sm" id="cmdRRJournal"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdRRSave" onclick="RRSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdRREdit"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="window.location.href ='@Url.Action("ReceivingReceiptPDF", "Software" , new { rrid = RRId })'"><i class="fa fa-print"></i> Print</button>
-                        <button id="cmdRRClose" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software" , new { branchid = branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="window.location.href ='@Url.Action(" receivingreceiptpdf", "Software" , new { rrid=RRId })'"><i class="fa fa-print"></i> Print</button>
+                        <button id="cmdRRClose" onclick="window.location.href = '@Url.Action(" receivingreceipt", "Software" , new { branchid=branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
 
@@ -185,7 +185,7 @@
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Item" id="itemTabId">Items</a></li>
                     @*
-                    <li role="presentation"><a data-toggle="tab" href="#InventoryEntry" id="inventoryEntryTabId">Inventory Entries</a></li>*@
+                        <li role="presentation"><a data-toggle="tab" href="#InventoryEntry" id="inventoryEntryTabId">Inventory Entries</a></li>*@
                 </ul>
                 <br />
                 <div class="tab-content">
@@ -388,20 +388,18 @@
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_ItemCode"></div>
 
-                                            <input type="hidden" id="RRLine_ItemCode_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_ItemId_data" class="requiredRRLine">
                                             <input type="hidden" id="RRLine_ItemCode_selectedValue" />
                                         </dd>
                                         <dt>Item Description:</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_ItemDescription"></div>
-
-                                            <input type="hidden" id="RRLine_ItemDescription_data" class="requiredRRLine">
                                             <input type="hidden" id="RRLine_ItemDescription_selectedValue" />
                                         </dd>
                                         <dt>Particulars:</dt>
                                         <dd><textarea class="form-control textarea-custom requiredRRLine" id="RRLine_Particulars"></textarea></dd>
                                         <dt>Quantity:</dt>
-                                        <dd><input class="form-control input-sm" id="RRLine_Quantity" /></dd>
+                                        <dd><input class="form-control input-sm requiredRRLine" id="RRLine_Quantity" /></dd>
                                         <dt>Unit:</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_Unit"></div>
@@ -1878,9 +1876,8 @@
                 onSelectedIndexChanged: function () {
                     $("#RRLine_PONo_data").val(POCollection.items[this.selectedIndex].POId);
 
-                    document.getElementById('RRLine_ItemCode_data').value = '';
+                    document.getElementById('RRLine_ItemId_data').value = '';
                     document.getElementById('RRLine_ItemCode_selectedValue').value = '';
-                    document.getElementById('RRLine_ItemDescription_data').value = '';
                     document.getElementById('RRLine_ItemDescription_selectedValue').value = '';
                     document.getElementById('RRLine_Unit_data').value = '';
                     document.getElementById('RRLine_Unit_selectedValue').value = '';
@@ -1996,8 +1993,7 @@
                 required: false,
                 selectedValue: document.getElementById('RRLine_ItemCode_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#RRLine_ItemCode_data").val(POItemCollection.items[this.selectedIndex].ItemId);
-                    $("#RRLine_ItemDescription_data").val(POItemCollection.items[this.selectedIndex].ItemId);
+                    $("#RRLine_ItemId_data").val(POItemCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemDescription_selectedValue").val(POItemCollection.items[this.selectedIndex].ItemDescription);
                     $("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].UnitId);
                     $("#RRLine_Unit_selectedValue").val(POItemCollection.items[this.selectedIndex].Unit);
@@ -2006,10 +2002,10 @@
                     $("#RRLine_Cost").val(POItemCollection.items[this.selectedIndex].Cost);
                     $("#RRLine_Amount").val(POItemCollection.items[this.selectedIndex].Amount);
                     $("#RRLine_BUCQuantity").val(POItemCollection.items[this.selectedIndex].Quantity);
-                    
+
                     createCboPOIteDescription(POItems);
                     getUnitForComboBox();
-                    
+
                     document.getElementById('RRLine_BUCUnit_data').value =  POItemCollection.items[this.selectedIndex].UnitId;
                     document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
                     getBUCUnitForComboBox();
@@ -2114,8 +2110,7 @@
                 required: false,
                 selectedValue: document.getElementById('RRLine_ItemDescription_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#RRLine_ItemDescription_data").val(POItemCollection.items[this.selectedIndex].ItemId);
-                    $("#RRLine_ItemCode_data").val(POItemCollection.items[this.selectedIndex].ItemId);
+                    $("#RRLine_ItemId_data").val(POItemCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemCode_selectedValue").val(POItemCollection.items[this.selectedIndex].ItemCode);
                     $("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].UnitId);
                     $("#RRLine_Unit_selectedValue").val(POItemCollection.items[this.selectedIndex].Unit);
@@ -2127,7 +2122,7 @@
 
                     createCboPOItemCode(POItems);
                     getUnitForComboBox();
-                    
+
                     document.getElementById('RRLine_BUCUnit_data').value =  POItemCollection.items[this.selectedIndex].UnitId;
                     document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
                     getBUCUnitForComboBox();
@@ -2179,7 +2174,7 @@
 
                                     document.getElementById('RRLine_VATRate').value =  results.TaxRate;
                                     document.getElementById('RRLine_TAXInclusive').value =  results.IsInclusive;
-                                    
+
                                     computeTAX();
                                     computeBaseUnit();
                                 }
@@ -2389,7 +2384,7 @@
                     $("#RRLine_VAT_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
                     $("#RRLine_VATRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
                     $("#RRLine_TAXInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
-                    
+
                     computeTAX();
                     computeBaseUnit();
                 }
@@ -2416,7 +2411,7 @@
                 onSelectedIndexChanged: function () {
                     $("#RRLine_WTAX_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
                     $("#RRLine_WTAXRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
-                    
+
                     computeTAX();
                 }
             });
@@ -2453,7 +2448,7 @@
         // =================
         function computeBaseUnit() {
             var articleUnits = new wijmo.collections.ObservableArray();
-            var articleId = document.getElementById('RRLine_ItemCode_data').value;
+            var articleId = document.getElementById('RRLine_ItemId_data').value;
             var unitId = document.getElementById('RRLine_BUCUnit_data').value;
 
             var inputedQuantity = document.getElementById('RRLine_Quantity').value;
@@ -2581,6 +2576,9 @@
                 backdrop: 'static'
             });
 
+            $("#cmdSaveRRLinesButton").prop("disabled", false);
+            $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+
             getPOForComboBox();
             getPOItemForComboBox();
             getUnitForComboBox();
@@ -2591,9 +2589,8 @@
             document.getElementById('RRLine_Id').value = 0;
             document.getElementById('RRLine_PONo_data').value = '';
             document.getElementById('RRLine_PONo_selectedValue').value = '';
-            document.getElementById('RRLine_ItemCode_data').value = '';
+            document.getElementById('RRLine_ItemId_data').value = '';
             document.getElementById('RRLine_ItemCode_selectedValue').value = '';
-            document.getElementById('RRLine_ItemDescription_data').value = '';
             document.getElementById('RRLine_ItemDescription_selectedValue').value = '';
             document.getElementById('RRLine_Particulars').value = '';
             document.getElementById('RRLine_Quantity').value = 0;
@@ -2606,16 +2603,32 @@
             document.getElementById('RRLine_VAT_data').value = '';
             document.getElementById('RRLine_VAT_selectedValue').value = '';
             document.getElementById('RRLine_VATRate').value = 0;
-            document.getElementById('RRLine_VATAmount').value = '';
+            document.getElementById('RRLine_VATAmount').value = 0;
             document.getElementById('RRLine_WTAX_data').value = '';
             document.getElementById('RRLine_WTAX_selectedValue').value = '';
             document.getElementById('RRLine_WTAXRate').value = 0;
-            document.getElementById('RRLine_WTAXAmount').value = '';
+            document.getElementById('RRLine_WTAXAmount').value = 0;
             document.getElementById('RRLine_TAXInclusive').value = '';
             document.getElementById('RRLine_BUCUnit_data').value = '';
             document.getElementById('RRLine_BUCUnit_selectedValue').value = '';
             document.getElementById('RRLine_BUCQuantity').value = 0;
             document.getElementById('RRLine_BUCCost').value = 0;
+
+            document.getElementById("RRLine_PONo").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_ItemCode").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_ItemDescription").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_Unit").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_Branch").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_VAT").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_WTAX").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_BUCUnit").style.border = "1px solid #C8C8C8";
+
+            var isValid = true;
+            $('.requiredRRLine').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
         }
 
@@ -2628,6 +2641,9 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdSaveRRLinesButton").prop("disabled", false);
+            $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
 
             POs = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -2660,33 +2676,241 @@
             getBUCUnitForComboBox();
 
             var item = items.currentEditItem;
-            document.getElementById('RRLine_Id').value = item.Id ? item.Id : '';
-            document.getElementById('RRLine_PONo_data').value = item.POId ? item.POId : '';
-            document.getElementById('RRLine_PONo_selectedValue').value = item.PO ? item.PO : '';
-            document.getElementById('RRLine_ItemCode_data').value = item.ItemId ? item.ItemId : '';
-            document.getElementById('RRLine_ItemCode_selectedValue').value = item.ItemCode ? item.ItemCode : '';
-            document.getElementById('RRLine_ItemDescription_data').value = item.ItemId ? item.ItemId : '';
-            document.getElementById('RRLine_ItemDescription_selectedValue').value = item.Item ? item.Item : '';
-            document.getElementById('RRLine_Particulars').value = item.Particulars ? item.Particulars : '';
-            document.getElementById('RRLine_Quantity').value = item.Quantity ? item.Quantity : '';
-            document.getElementById('RRLine_Unit_data').value = item.UnitId ? item.UnitId : '';
-            document.getElementById('RRLine_Unit_selectedValue').value = item.Unit ? item.Unit : '';
-            document.getElementById('RRLine_Cost').value = item.Cost ? item.Cost : '';
-            document.getElementById('RRLine_Amount').value = item.Amount ? item.Amount : '';
-            document.getElementById('RRLine_Branch_data').value = item.BranchId ? item.BranchId : '';
-            document.getElementById('RRLine_Branch_selectedValue').value = item.Branch ? item.Branch : '';
-            document.getElementById('RRLine_VAT_data').value = item.VATId ? item.VATId : '';
-            document.getElementById('RRLine_VAT_selectedValue').value = item.VAT ? item.VAT : '';
-            document.getElementById('RRLine_VATRate').value = item.VATRate ? item.VATRate : '';
-            document.getElementById('RRLine_VATAmount').value = item.VATAmount ? item.VATAmount : '';
-            document.getElementById('RRLine_WTAX_data').value = item.WTAXId ? item.WTAXId : '';
-            document.getElementById('RRLine_WTAX_selectedValue').value = item.WTAX ? item.WTAX : '';
-            document.getElementById('RRLine_WTAXRate').value = item.WTAXRate ? item.WTAXRate : '';
-            document.getElementById('RRLine_WTAXAmount').value = item.WTaxAmount ? item.WTaxAmount : '';
-            document.getElementById('RRLine_BUCUnit_data').value = item.BaseUnitId ? item.BaseUnitId : '';
-            document.getElementById('RRLine_BUCUnit_selectedValue').value = item.BaseUnit ? item.BaseUnit : '';
-            document.getElementById('RRLine_BUCQuantity').value = item.BaseQuantity ? item.BaseQuantity : '';
-            document.getElementById('RRLine_BUCCost').value = item.BaseCost ? item.BaseCost : '';
+            document.getElementById('RRLine_Id').value = item.Id;
+            document.getElementById('RRLine_PONo_data').value = item.POId;
+            document.getElementById('RRLine_PONo_selectedValue').value = item.PO;
+            document.getElementById('RRLine_ItemId_data').value = item.ItemId;
+            document.getElementById('RRLine_ItemCode_selectedValue').value = item.ItemCode;
+            document.getElementById('RRLine_ItemDescription_selectedValue').value = item.Item;
+            document.getElementById('RRLine_Particulars').value = item.Particulars;
+            document.getElementById('RRLine_Quantity').value = item.Quantity;
+            document.getElementById('RRLine_Unit_data').value = item.UnitId;
+            document.getElementById('RRLine_Unit_selectedValue').value = item.Unit;
+            document.getElementById('RRLine_Cost').value = item.Cost;
+            document.getElementById('RRLine_Amount').value =item.Amount;
+            document.getElementById('RRLine_Branch_data').value = item.BranchId;
+            document.getElementById('RRLine_Branch_selectedValue').value = item.Branch;
+            document.getElementById('RRLine_VAT_data').value = item.VATId;
+            document.getElementById('RRLine_VAT_selectedValue').value = item.VAT;
+            document.getElementById('RRLine_VATRate').value = item.VATRate;
+            document.getElementById('RRLine_VATAmount').value = item.VATAmount;
+            document.getElementById('RRLine_WTAX_data').value = item.WTAXId;
+            document.getElementById('RRLine_WTAX_selectedValue').value = item.WTAX;
+            document.getElementById('RRLine_WTAXRate').value = item.WTAXRate;
+            document.getElementById('RRLine_WTAXAmount').value = item.WTAXAmount;
+            document.getElementById('RRLine_BUCUnit_data').value = item.BaseUnitId;
+            document.getElementById('RRLine_BUCUnit_selectedValue').value = item.BaseUnit;
+            document.getElementById('RRLine_BUCQuantity').value = item.BaseQuantity;
+            document.getElementById('RRLine_BUCCost').value = item.BaseCost;
+
+            document.getElementById("RRLine_PONo").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_ItemCode").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_ItemDescription").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_Unit").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_Branch").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_VAT").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_WTAX").style.border = "1px solid #C8C8C8";
+            document.getElementById("RRLine_BUCUnit").style.border = "1px solid #C8C8C8";
+
+            var isValid = true;
+            $('.requiredRRLine').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
+        }
+
+        // =============
+        // SAVE RR Lines
+        // =============
+        function cmdRRLinesSaveButton_OnClick() {
+            var RRLineObject = new Object();
+            var RRLineId = document.getElementById('RRLine_Id').value;
+            RRLineObject.RRId = @RRId;
+            RRLineObject.POId = document.getElementById('RRLine_PONo_data').value;
+            RRLineObject.ItemId = document.getElementById('RRLine_ItemId_data').value;
+            RRLineObject.Particulars = document.getElementById('RRLine_Particulars').value;
+            RRLineObject.UnitId = document.getElementById('RRLine_Unit_data').value;
+            RRLineObject.Quantity = document.getElementById('RRLine_Quantity').value;
+            RRLineObject.Cost = document.getElementById('RRLine_Cost').value;
+            RRLineObject.Amount = document.getElementById('RRLine_Amount').value;
+            RRLineObject.VATId = document.getElementById('RRLine_VAT_data').value;
+            RRLineObject.VATPercentage = document.getElementById('RRLine_VATRate').value;
+            RRLineObject.VATAmount = document.getElementById('RRLine_VATAmount').value;
+            RRLineObject.WTAXId = document.getElementById('RRLine_WTAX_data').value;
+            RRLineObject.WTAXPercentage = document.getElementById('RRLine_WTAXRate').value;
+            RRLineObject.WTAXAmount = document.getElementById('RRLine_WTAXAmount').value;
+            RRLineObject.BranchId = document.getElementById('RRLine_Branch_data').value;
+            RRLineObject.BaseUnitId = document.getElementById('RRLine_BUCUnit_data').value;
+            RRLineObject.BaseQuantity = document.getElementById('RRLine_BUCQuantity').value;
+            RRLineObject.BaseCost = document.getElementById('RRLine_BUCCost').value;
+            var RRLineData = JSON.stringify(RRLineObject);
+
+            if( document.getElementById('RRLine_PONo_data').value == '') {
+                document.getElementById("RRLine_PONo").style.border = "1px solid red";
+            } else {
+                document.getElementById("RRLine_PONo").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('RRLine_ItemId_data').value == '') {
+                document.getElementById("RRLine_ItemCode").style.border = "1px solid red";
+                document.getElementById("RRLine_ItemDescription").style.border = "1px solid red";
+            } else {
+                document.getElementById("RRLine_ItemCode").style.border = "1px solid #C8C8C8";
+                document.getElementById("RRLine_ItemDescription").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('RRLine_Unit_data').value == '') {
+                document.getElementById("RRLine_Unit").style.border = "1px solid red";
+            } else {
+                document.getElementById("RRLine_Unit").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('RRLine_Branch_data').value == '') {
+                document.getElementById("RRLine_Branch").style.border = "1px solid red";
+            } else {
+                document.getElementById("RRLine_Branch").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('RRLine_VAT_data').value == '') {
+                document.getElementById("RRLine_VAT").style.border = "1px solid red";
+            } else {
+                document.getElementById("RRLine_VAT").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('RRLine_WTAX_data').value == '') {
+                document.getElementById("RRLine_WTAX").style.border = "1px solid red";
+            } else {
+                document.getElementById("RRLine_WTAX").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('RRLine_BUCUnit_data').value == '') {
+                document.getElementById("RRLine_BUCUnit").style.border = "1px solid red";
+            } else {
+                document.getElementById("RRLine_BUCUnit").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredRRLine').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                $("#cmdSaveRRLinesButton").prop("disabled", true);
+                $("#cmdRRLinesDetailCloseButton").prop("disabled", true);
+                if (RRLineId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addReceivingReceiptItem',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: RRLineData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveRRLinesButton").prop("disabled", true);
+                                $("#cmdRRLinesDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                $('#RRLinesEdit').modal('hide');
+
+                                items = new wijmo.collections.CollectionView(getRRItem());
+                                items.canFilter = true;
+                                items.pageSize = 10;
+
+                                var filterTextItem = '';
+                                $('#InputFilterItem').keyup(function () {
+                                    filterTextItem = this.value.toLowerCase();
+                                    items.refresh();
+                                });
+                                items.filter = function (item) {
+                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                }
+                                items.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsItem();
+                                });
+
+                                // Flex Grid for Item
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $('#RRLinesEdit').modal('hide');
+                                $("#cmdSaveRRLinesButton").prop("disabled", false);
+                                $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#RRLinesEdit').modal('hide');
+                                $("#cmdSaveRRLinesButton").prop("disabled", false);
+                                $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateReceivingReceiptItem/' + RRLineId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: RRLineData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveRRLinesButton").prop("disabled", true);
+                                $("#cmdRRLinesDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+
+                                $('#RRLinesEdit').modal('hide');
+
+                                items = new wijmo.collections.CollectionView(getRRItem());
+                                items.canFilter = true;
+                                items.pageSize = 10;
+
+                                var filterTextItem = '';
+                                $('#InputFilterItem').keyup(function () {
+                                    filterTextItem = this.value.toLowerCase();
+                                    items.refresh();
+                                });
+                                items.filter = function (item) {
+                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                }
+                                items.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsItem();
+                                });
+
+                                // Flex Grid for Item
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $('#RRLinesEdit').modal('hide');
+                                $("#cmdSaveRRLinesButton").prop("disabled", false);
+                                $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#RRLinesEdit').modal('hide');
+                                $("#cmdSaveRRLinesButton").prop("disabled", false);
+                                $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
         }
 
         // ========================
@@ -2696,6 +2920,64 @@
             $('#deleteRRLinesConfirm').modal({
                 show: true,
                 backdrop: 'static'
+            });
+
+            $("#cmdConfirmDeleteRRLines").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", false);
+        }
+        // RR lines Confirm Delete Button
+        function cmdRRLinesConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteRRLines").prop("disabled", true);
+            $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", true);
+
+            items.editItem(items.currentItem);
+            var itemId = items.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteReceivingReceiptItem/' + itemId,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteRRLines").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+
+                        $('#deleteRRLinesConfirm').modal('hide');
+
+                        items = new wijmo.collections.CollectionView(getRRItem());
+                        items.canFilter = true;
+                        items.pageSize = 10;
+
+                        var filterTextItem = '';
+                        $('#InputFilterItem').keyup(function () {
+                            filterTextItem = this.value.toLowerCase();
+                            items.refresh();
+                        });
+                        items.filter = function (item) {
+                            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                        }
+                        items.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsItem();
+                        });
+
+                        // Flex Grid for Item
+                        itemGrid.itemsSource = items;
+                        itemGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteRRLinesConfirm').modal('hide');
+                        $("#cmdConfirmDeleteRRLines").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteRRLinesConfirm').modal('hide');
+                        $("#cmdConfirmDeleteRRLines").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", false);
+                    }
+                }
             });
         }
 
@@ -2719,7 +3001,7 @@
                 document.getElementById('RRLine_BUCQuantity').value = this.value;
 
                 var articleUnits = new wijmo.collections.ObservableArray();
-                var articleId = document.getElementById('RRLine_ItemCode_data').value;
+                var articleId = document.getElementById('RRLine_ItemId_data').value;
                 var unitId = document.getElementById('RRLine_BUCUnit_data').value;
 
                 var inputedAmount = document.getElementById('RRLine_Amount').value;
@@ -2756,7 +3038,7 @@
                             }
                         },
                         404: function() {
-                            toastr.error("No Item or Unit");
+                            toastr.error("No Item/Unit");
                         },
                         400: function() {
                             toastr.error("Bad Request");
@@ -2781,7 +3063,7 @@
                 document.getElementById('RRLine_WTAXAmount').value = Math.round(((amount / (1 + VATRate/100)) * (WTAXRate/100)) * 100) / 100;
 
                 var articleUnits = new wijmo.collections.ObservableArray();
-                var articleId = document.getElementById('RRLine_ItemCode_data').value;
+                var articleId = document.getElementById('RRLine_ItemId_data').value;
                 var unitId = document.getElementById('RRLine_BUCUnit_data').value;
 
                 var inputedAmount = document.getElementById('RRLine_Amount').value;
@@ -2818,7 +3100,7 @@
                             }
                         },
                         404: function() {
-                            toastr.error("No Item or Unit");
+                            toastr.error("No Item/Unit");
                         },
                         400: function() {
                             toastr.error("Bad Request");
@@ -2907,7 +3189,7 @@
 
             items = new wijmo.collections.CollectionView(getRRItem());
             items.canFilter = true;
-            items.pageSize = 15;
+            items.pageSize = 10;
 
             var filterTextItem = '';
             $('#InputFilterItem').keyup(function () {
@@ -2915,7 +3197,7 @@
                 items.refresh();
             });
             items.filter = function (item) {
-                return !filterTextItem || (item.item.toLowerCase().indexOf(filterTextItem) > -1);
+                return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
             }
             items.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsItem();
@@ -2947,7 +3229,7 @@
                                 "header": "Purchase Order",
                                 "binding": "PO",
                                 "allowSorting": true,
-                                "width": 200
+                                "width": 150
                             },
                             {
                                 "header": "Item Code",

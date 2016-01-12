@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -93,6 +94,128 @@ namespace easyfis.Controllers
                                             BaseCost = d.BaseCost
                                         };
             return receivingReceiptItems.ToList();
+        }
+
+        // ==========================
+        // ADD Receving Retrieve Item
+        // ==========================
+        [Route("api/addReceivingReceiptItem")]
+        public int Post(Models.TrnReceivingReceiptItem receivingReceiptItem)
+        {
+            try
+            {
+                Data.TrnReceivingReceiptItem newReceivingReceiptItem = new Data.TrnReceivingReceiptItem();
+
+                newReceivingReceiptItem.RRId = receivingReceiptItem.RRId;
+                newReceivingReceiptItem.POId = receivingReceiptItem.POId;
+                newReceivingReceiptItem.ItemId = receivingReceiptItem.ItemId;
+                newReceivingReceiptItem.Particulars = receivingReceiptItem.Particulars;
+                newReceivingReceiptItem.UnitId = receivingReceiptItem.UnitId;
+                newReceivingReceiptItem.Quantity = receivingReceiptItem.Quantity;
+                newReceivingReceiptItem.Cost = receivingReceiptItem.Cost;
+                newReceivingReceiptItem.Amount = receivingReceiptItem.Amount;
+                newReceivingReceiptItem.VATId = receivingReceiptItem.VATId;
+                newReceivingReceiptItem.VATPercentage = receivingReceiptItem.VATPercentage;
+                newReceivingReceiptItem.VATAmount = receivingReceiptItem.VATAmount;
+                newReceivingReceiptItem.WTAXId = receivingReceiptItem.WTAXId;
+                newReceivingReceiptItem.WTAXPercentage = receivingReceiptItem.WTAXPercentage;
+                newReceivingReceiptItem.WTAXAmount = receivingReceiptItem.WTAXAmount;
+                newReceivingReceiptItem.BranchId = receivingReceiptItem.BranchId;
+                newReceivingReceiptItem.BaseUnitId = receivingReceiptItem.BaseUnitId;
+                newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.BaseQuantity;
+                newReceivingReceiptItem.BaseCost = receivingReceiptItem.BaseCost;
+
+                db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
+                db.SubmitChanges();
+
+                return newReceivingReceiptItem.Id;
+
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
+                return 0;
+            }
+        }
+
+        // =============================
+        // UPDATE Receving Retrieve Item
+        // =============================
+        [Route("api/updateReceivingReceiptItem/{id}")]
+        public HttpResponseMessage Put(String id, Models.TrnReceivingReceiptItem receivingReceiptItem)
+        {
+            try
+            {
+                var receivingReceiptItemId = Convert.ToInt32(id);
+                var receivingReceiptItems = from d in db.TrnReceivingReceiptItems where d.Id == receivingReceiptItemId select d;
+
+                if (receivingReceiptItems.Any())
+                {
+                    var updateReceivingReceiptItem = receivingReceiptItems.FirstOrDefault();
+
+                    updateReceivingReceiptItem.RRId = receivingReceiptItem.RRId;
+                    updateReceivingReceiptItem.POId = receivingReceiptItem.POId;
+                    updateReceivingReceiptItem.ItemId = receivingReceiptItem.ItemId;
+                    updateReceivingReceiptItem.Particulars = receivingReceiptItem.Particulars;
+                    updateReceivingReceiptItem.UnitId = receivingReceiptItem.UnitId;
+                    updateReceivingReceiptItem.Quantity = receivingReceiptItem.Quantity;
+                    updateReceivingReceiptItem.Cost = receivingReceiptItem.Cost;
+                    updateReceivingReceiptItem.Amount = receivingReceiptItem.Amount;
+                    updateReceivingReceiptItem.VATId = receivingReceiptItem.VATId;
+                    updateReceivingReceiptItem.VATPercentage = receivingReceiptItem.VATPercentage;
+                    updateReceivingReceiptItem.VATAmount = receivingReceiptItem.VATAmount;
+                    updateReceivingReceiptItem.WTAXId = receivingReceiptItem.WTAXId;
+                    updateReceivingReceiptItem.WTAXPercentage = receivingReceiptItem.WTAXPercentage;
+                    updateReceivingReceiptItem.WTAXAmount = receivingReceiptItem.WTAXAmount;
+                    updateReceivingReceiptItem.BranchId = receivingReceiptItem.BranchId;
+                    updateReceivingReceiptItem.BaseUnitId = receivingReceiptItem.BaseUnitId;
+                    updateReceivingReceiptItem.BaseQuantity = receivingReceiptItem.BaseQuantity;
+                    updateReceivingReceiptItem.BaseCost = receivingReceiptItem.BaseCost;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // =============================
+        // DELETE Receving Retrieve Item
+        // =============================
+        [Route("api/deleteReceivingReceiptItem/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var receivingReceiptItemId = Convert.ToInt32(id);
+                var receivingReceiptItems = from d in db.TrnReceivingReceiptItems where d.Id == receivingReceiptItemId select d;
+
+                if (receivingReceiptItems.Any())
+                {
+                    db.TrnReceivingReceiptItems.DeleteOnSubmit(receivingReceiptItems.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
     }
 }
