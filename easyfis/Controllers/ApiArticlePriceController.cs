@@ -30,6 +30,27 @@ namespace easyfis.Controllers
             return articlePrices.ToList();
         }
 
+        // ================================
+        // LIST Article Price By Article Id
+        // ===========================-=====
+        [Route("api/listArticlePrice/{articleId}")]
+        public List<Models.MstArticlePrice> GetByArticleId(String articleId)
+        {
+            var articlePrices_articleId = Convert.ToInt32(articleId);
+            var articlePrices = from d in db.MstArticlePrices
+                                where d.ArticleId == articlePrices_articleId
+                                select new Models.MstArticlePrice
+                                {
+                                    Id = d.Id,
+                                    ArticleId = d.ArticleId,
+                                    Article = d.MstArticle.Article,
+                                    PriceDescription = d.PriceDescription,
+                                    Price = d.Price,
+                                    Remarks = d.Remarks,
+                                };
+            return articlePrices.ToList();
+        }
+
         // =================
         // GET Article Price
         // =================

@@ -46,8 +46,8 @@
                         <button class="btn btn-primary btn-sm" id="cmdRRJournal"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdRRSave" onclick="RRSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdRREdit"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="window.location.href ='@Url.Action(" receivingreceiptpdf", "Software" , new { rrid=RRId })'"><i class="fa fa-print"></i> Print</button>
-                        <button id="cmdRRClose" onclick="window.location.href = '@Url.Action(" receivingreceipt", "Software" , new { branchid=branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="window.location.href ='@Url.Action("ReceivingReceiptPDF", "Software", new { RRId = RRId })'"><i class="fa fa-print"></i> Print</button>
+                        <button id="cmdRRClose" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
 

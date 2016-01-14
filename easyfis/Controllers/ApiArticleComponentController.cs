@@ -26,7 +26,33 @@ namespace easyfis.Controllers
                                         ComponentArticleId = d.ComponentArticleId,
                                         ComponentArticle = d.MstArticle1.Article,
                                         Quantity = d.Quantity,
-                                        Particulars = d.Particulars
+                                        Unit = d.MstArticle.MstUnit.Unit,
+                                        Cost = Convert.ToDecimal(d.MstArticle.Cost),
+                                        Particulars = d.MstArticle.Particulars,
+                                    };
+            return articleComponents.ToList();
+        }
+
+        // ===================================
+        // LIST Article Component by ArticleId
+        // ===================================
+        [Route("api/listArticleComponent/{articleId}")]
+        public List<Models.MstArticleComponent> GetArticleComponentByArticleTypeId(String articleId)
+        {
+            var articleComponents_articleId = Convert.ToInt32(articleId);
+            var articleComponents = from d in db.MstArticleComponents
+                                    where d.ArticleId == articleComponents_articleId
+                                    select new Models.MstArticleComponent
+                                    {
+                                        Id = d.Id,
+                                        ArticleId = d.ArticleId,
+                                        Article = d.MstArticle.Article,
+                                        ComponentArticleId = d.ComponentArticleId,
+                                        ComponentArticle = d.MstArticle1.Article,
+                                        Quantity = d.Quantity,
+                                        Unit = d.MstArticle.MstUnit.Unit,
+                                        Cost = Convert.ToDecimal(d.MstArticle.Cost),
+                                        Particulars = d.MstArticle.Particulars,
                                     };
             return articleComponents.ToList();
         }
@@ -48,7 +74,9 @@ namespace easyfis.Controllers
                                         ComponentArticleId = d.ComponentArticleId,
                                         ComponentArticle = d.MstArticle1.Article,
                                         Quantity = d.Quantity,
-                                        Particulars = d.Particulars
+                                        Unit = d.MstArticle.MstUnit.Unit,
+                                        Cost = Convert.ToDecimal(d.MstArticle.Cost),
+                                        Particulars = d.MstArticle.Particulars,
                                     };
             return (Models.MstArticleComponent)articleComponents.FirstOrDefault();
         }

@@ -31,6 +31,28 @@ namespace easyfis.Controllers
             return articleUnits.ToList();
         }
 
+        // ===============================
+        // LIST Article Unit By Article Id
+        // ===============================
+        [Route("api/listArticleUnitByArticleId/{articleId}")]
+        public List<Models.MstArticleUnit> GetArticleUnitByArticleTypeId(String articleId)
+        {
+            var articleUnits_articleId = Convert.ToInt32(articleId);
+            var articleUnits = from d in db.MstArticleUnits
+                               where d.ArticleId == articleUnits_articleId
+                               select new Models.MstArticleUnit
+                               {
+                                   Id = d.Id,
+                                   ArticleId = d.ArticleId,
+                                   Article = d.MstArticle.Article,
+                                   UnitId = d.UnitId,
+                                   Unit = d.MstUnit.Unit,
+                                   Multiplier = d.Multiplier,
+                                   IsCountUnit = d.IsCountUnit
+                               };
+            return articleUnits.ToList();
+        }
+
         // ================
         // GET Article Unit
         // ================
