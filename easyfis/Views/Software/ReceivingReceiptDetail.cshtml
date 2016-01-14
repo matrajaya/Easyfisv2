@@ -1434,7 +1434,7 @@
             var POStatus = new wijmo.collections.ObservableArray;
             var POId = document.getElementById('POStatus_PONumber_data').value;
             $.ajax({
-                url: '/api/listPurchaseOrderItemByPOId/' + POId,
+                url: '/api/listPurchaseOrderItemForPOStatusByPOId/' + POId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1455,6 +1455,9 @@
                                 UnitId: Results[i]["UnitId"],
                                 Unit: Results[i]["Unit"],
                                 Particulars: Results[i]["Particulars"],
+                                Received: Results[i]["Received"],
+                                Balance: Results[i]["Quantity"] - Results[i]["Received"],
+                                QuantityBalance: Results[i]["Quantity"] - Results[i]["Received"],
                                 Cost: Results[i]["Cost"],
                                 Amount: Results[i]["Amount"]
                             });
@@ -1525,19 +1528,19 @@
                             },
                             {
                                 "header": "Received",
-                                //"binding": "BaseCost",
+                                "binding": "Received",
                                 "allowSorting": true,
                                 "width": 130
                             },
                             {
                                 "header": "Balance",
-                                //"binding": "BaseCost",
+                                "binding": "Balance",
                                 "allowSorting": true,
                                 "width": 130
                             },
                             {
                                 "header": "Quantity",
-                                //"binding": "BaseCost",
+                                "binding": "QuantityBalance",
                                 "allowSorting": true,
                                 "width": 130
                             },

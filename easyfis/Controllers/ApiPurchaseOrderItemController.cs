@@ -38,6 +38,51 @@ namespace easyfis.Controllers
             return PurchaseOrderItems.ToList();
         }
 
+        // ===================
+        // Get Amount By PO Id
+        // ===================
+        public Decimal getReceived(Int32 POId, Int32 ItemId)
+        {
+            var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                                        where d.POId == POId && d.ItemId == ItemId
+                                        select new Models.TrnReceivingReceiptItem
+                                        {
+                                            Id = d.Id,
+                                            RRId = d.RRId,
+                                            RR = d.TrnReceivingReceipt.RRNumber,
+                                            POId = d.POId,
+                                            PO = d.TrnPurchaseOrder.PONumber,
+                                            ItemId = d.ItemId,
+                                            Item = d.MstArticle.Article,
+                                            ItemCode = d.MstArticle.ManualArticleCode,
+                                            Particulars = d.Particulars,
+                                            UnitId = d.UnitId,
+                                            Unit = d.MstUnit.Unit,
+                                            Quantity = d.Quantity,
+                                            Cost = d.Cost,
+                                            Amount = d.Amount,
+                                            VATId = d.VATId,
+                                            VAT = d.MstTaxType.TaxType,
+                                            VATPercentage = d.VATPercentage,
+                                            VATAmount = d.VATAmount,
+                                            WTAXId = d.WTAXId,
+                                            WTAX = d.MstTaxType1.TaxType,
+                                            WTAXPercentage = d.WTAXPercentage,
+                                            WTAXAmount = d.WTAXAmount,
+                                            BranchId = d.BranchId,
+                                            Branch = d.MstBranch.Branch,
+                                            BaseUnitId = d.BaseUnitId,
+                                            BaseUnit = d.MstUnit1.Unit,
+                                            BaseQuantity = d.BaseQuantity,
+                                            BaseCost = d.BaseCost
+                                        };
+
+            var quantityReceived = receivingReceiptItems.Sum(d => (decimal?) d.Quantity);
+            var convertQuantityToDecimal = Convert.ToDecimal(quantityReceived);
+
+            return convertQuantityToDecimal;
+        }
+
         // =================================
         // LIST Purchase Order Item By PO Id
         // =================================
@@ -65,6 +110,35 @@ namespace easyfis.Controllers
             return PurchaseOrderItems.ToList();
         }
 
+        // ===============================================
+        // LIST Purchase Order Item By PO Id for PO Status
+        // ===============================================
+        [Route("api/listPurchaseOrderItemForPOStatusByPOId/{POId}")]
+        public List<Models.TrnPurchaseOrderItem> GetPOLinesForPOStatusByPOId(String POId)
+        {
+            var PO_Id = Convert.ToInt32(POId);
+            var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
+                                 where d.POId == PO_Id
+                                 select new Models.TrnPurchaseOrderItem
+                                 {
+                                     Id = d.Id,
+                                     POId = d.POId,
+                                     PO = d.TrnPurchaseOrder.PONumber,
+                                     ItemId = d.ItemId,
+                                     Item = d.MstArticle.Article,
+                                     ItemCode = d.MstArticle.ManualArticleCode,
+                                     Particulars = d.Particulars,
+                                     UnitId = d.UnitId,
+                                     Unit = d.MstUnit.Unit,
+                                     Quantity = d.Quantity,
+                                     Received = getReceived(PO_Id, d.ItemId),
+                                     Cost = d.Cost,
+                                     Amount = d.Amount
+                                 };
+
+            return PurchaseOrderItems.ToList();
+        }
+
         // =======================
         // ADD Purchase Order Item
         // =======================
@@ -88,7 +162,7 @@ namespace easyfis.Controllers
 
                 return newPurchaseOrderItem.Id;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
                 return 0;

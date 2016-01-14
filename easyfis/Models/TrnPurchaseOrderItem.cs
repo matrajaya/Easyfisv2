@@ -22,6 +22,7 @@ namespace easyfis.Models
         public Decimal Quantity { get; set; }
         public Decimal Received { get; set; }
         public Decimal Balance { get; set; }
+        public Decimal QuantityBalance { get; set; }
         public Decimal Cost { get; set; }
         public Decimal Amount { get; set; }
     
