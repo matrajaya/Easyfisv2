@@ -25,6 +25,16 @@ namespace easyfis.Models
         public Decimal QuantityBalance { get; set; }
         public Decimal Cost { get; set; }
         public Decimal Amount { get; set; }
-    
+        public Int32 VATId { get; set; }
+        public Decimal VATPercentage { get; set; }
+        public Decimal VATAmount { get; set; }
+        public Boolean IsInclusive { get; set; }
+        public Int32 WTAXId { get; set; }
+        public Decimal WTAXPercentage { get; set; }
+        public Decimal WTAXAmount { get; set; }
+        public Int32 BranchId {get;set;}
+        public Int32 BaseUnitId {get;set;}
+        public Decimal BaseQuantity { get; set; }
+        public Decimal BaseCost { get; set; }
     }
 }

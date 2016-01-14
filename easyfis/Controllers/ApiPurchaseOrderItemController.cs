@@ -38,9 +38,9 @@ namespace easyfis.Controllers
             return PurchaseOrderItems.ToList();
         }
 
-        // ===================
-        // Get Amount By PO Id
-        // ===================
+        // =====================
+        // Get REceived By PO Id
+        // ======================
         public Decimal getReceived(Int32 POId, Int32 ItemId)
         {
             var receivingReceiptItems = from d in db.TrnReceivingReceiptItems

@@ -509,7 +509,7 @@
                         Are you sure that you want to apply all these Purchase Order Items?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAllPOStatusPOItems" onclick=""><i class="fa fa-check"></i> Apply all</button>
+                        <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAllPOStatusPOItems" onclick="btnConfrimApplyAllPOItems_OnClick()"><i class="fa fa-check"></i> Apply all</button>
                         <button id="cmdCloseButtonApplyAllPOStatusPOItems" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
@@ -529,7 +529,7 @@
                         Are you sure that you want to apply this Purchase Order Item?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdConfirmApplyPOStatusPOItems" onclick=""><i class="fa fa-check-square-o"></i> Apply</button>
+                        <button class="btn btn-primary btn-sm" id="cmdConfirmApplyPOStatusPOItems" onclick="btnConfrimApplyPOItems_OnClick()"><i class="fa fa-check-square-o"></i> Apply</button>
                         <button id="cmdCloseButtonApplyPOStatusPOItems" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
@@ -1648,6 +1648,87 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
+            $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
+        }
+        // Confirm Apply ALL PO
+        function btnConfrimApplyAllPOItems_OnClick() {
+            $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", true);
+            $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", true);
+            var RRId = @RRId;
+            var BranchId = @branchId;
+            var POId = document.getElementById('POStatus_PONumber_data').value;
+            $.ajax({
+                url: '/api/applyAllPOItemToReceivingReceiptItem/' + RRId + '/' + BranchId + '/' + POId,
+                type : "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", true);
+                        $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", true);
+                        toastr.success("Successfully Applied");
+
+                        $('#applyAllConfirmPOStatus').modal('hide');
+                        $('#POStatus').modal('hide');
+
+                        items = new wijmo.collections.CollectionView(getRRItem());
+                        items.canFilter = true;
+                        items.pageSize = 10;
+
+                        var filterTextItem = '';
+                        $('#InputFilterItem').keyup(function () {
+                            filterTextItem = this.value.toLowerCase();
+                            items.refresh();
+                        });
+                        items.filter = function (item) {
+                            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                        }
+                        items.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsItem();
+                        });
+
+                        // Flex Grid for Item
+                        itemGrid.itemsSource = items;
+                        itemGrid.trackChanges = true;
+
+                        POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+                        POStatus.canFilter = true;
+                        POStatus.pageSize = 10;
+
+                        var filterTextItem = '';
+                        $('#InputFilterPOItemsPOStatus').keyup(function () {
+                            filterTextItem = this.value.toLowerCase();
+                            POStatus.refresh();
+                        });
+                        POStatus.filter = function (item) {
+                            return !filterTextItem || (item.Item.toLowerCase().indexOf(filterTextItem) > -1);
+                        }
+                        POStatus.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsPOSTatus();
+                        });
+
+                        // Flex Grid for Item
+                        POstatusGrid.itemsSource = POStatus;
+                        POstatusGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#applyAllConfirmPOStatus').modal('hide');
+                        $('#POStatus').modal('hide');
+                        $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
+                        $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#applyAllConfirmPOStatus').modal('hide');
+                        $('#POStatus').modal('hide');
+                        $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
+                        $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
+                    }
+                }
+            });
         }
 
         // =====================
@@ -1658,7 +1739,94 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $("#cmdConfirmApplyPOStatusPOItems").prop("disabled", false);
+            $("#cmdCloseButtonApplyPOStatusPOItems").prop("disabled", false);
         }
+        // Confirm Apply PO Item
+        function btnConfrimApplyPOItems_OnClick() {
+            $("#cmdConfirmApplyPOStatusPOItems").prop("disabled", true);
+            $("#cmdCloseButtonApplyPOStatusPOItems").prop("disabled", true);
+            
+            POStatus.editItem(POStatus.currentItem);
+            var POItem = POStatus.currentEditItem;
+            var POStatusId = POItem.Id;
+
+            console.log(POStatusId);
+
+            var RRId = @RRId;
+            var BranchId = @branchId;
+            var POId = document.getElementById('POStatus_PONumber_data').value;
+            $.ajax({
+                url: '/api/applyPOItemToReceivingReceiptItem/' + RRId + '/' + BranchId + '/' + POId + '/' + POStatusId,
+                type : "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmApplyPOStatusPOItems").prop("disabled", true);
+                        $("#cmdCloseButtonApplyPOStatusPOItems").prop("disabled", true);
+                        toastr.success("Successfully Applied");
+
+                        $('#applyConfirmPOStatus').modal('hide');
+
+                        items = new wijmo.collections.CollectionView(getRRItem());
+                        items.canFilter = true;
+                        items.pageSize = 10;
+
+                        var filterTextItem = '';
+                        $('#InputFilterItem').keyup(function () {
+                            filterTextItem = this.value.toLowerCase();
+                            items.refresh();
+                        });
+                        items.filter = function (item) {
+                            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                        }
+                        items.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsItem();
+                        });
+
+                        // Flex Grid for Item
+                        itemGrid.itemsSource = items;
+                        itemGrid.trackChanges = true;
+
+                        POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+                        POStatus.canFilter = true;
+                        POStatus.pageSize = 10;
+
+                        var filterTextItem = '';
+                        $('#InputFilterPOItemsPOStatus').keyup(function () {
+                            filterTextItem = this.value.toLowerCase();
+                            POStatus.refresh();
+                        });
+                        POStatus.filter = function (item) {
+                            return !filterTextItem || (item.Item.toLowerCase().indexOf(filterTextItem) > -1);
+                        }
+                        POStatus.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsPOSTatus();
+                        });
+
+                        // Flex Grid for Item
+                        POstatusGrid.itemsSource = POStatus;
+                        POstatusGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#applyConfirmPOStatus').modal('hide');
+                        $("#cmdConfirmApplyPOStatusPOItems").prop("disabled", false);
+                        $("#cmdCloseButtonApplyPOStatusPOItems").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#applyConfirmPOStatus').modal('hide');
+                        $("#cmdConfirmApplyPOStatusPOItems").prop("disabled", false);
+                        $("#cmdCloseButtonApplyPOStatusPOItems").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+
 
         // ===============
         // OnLoad Function
