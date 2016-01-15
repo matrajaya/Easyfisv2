@@ -154,13 +154,13 @@
 
                 <!-- Customer Lines -->
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#JournalLedger" id="journalLedgerTabId">Journal Ledger</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#ContactInformation" id="contactInformationTabId">More Contact Information</a></li>
+                    @*<li role="presentation" class="active"><a data-toggle="tab" href="#JournalLedger" id="journalLedgerTabId">Journal Ledger</a></li>*@
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#ContactInformation" id="contactInformationTabId">More Contact Information</a></li>
                 </ul>
                 <br />
                 <div class="tab-content">
                     <!-- Journal Ledger List -->
-                    <div id="JournalLedger" class="tab-pane fade in active">
+                    <div id="JournalLedger" class="tab-pane fade in">
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>Journal Ledger</h4>
@@ -218,7 +218,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
@@ -249,6 +249,56 @@
                 </div>
             </div>
         </section>
+
+        <!-- Contact Edit Detail -->
+        <div class="modal fade" id="contactEdit" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="contactModalLabel">Contact Information - Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="branchDetailForm">
+                            <input type="text" id="contact_Id" />
+                            <dl class="dl-horizontal">
+                                <dt>Contact Person:</dt>
+                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" /></dd>
+                                <dt>Contact Number:</dt>
+                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactNumber" /></dd>
+                                <dt>Remarks:</dt>
+                                <dd><textarea class="form-control textarea-custom requiredContact" id="contact_Remarks"></textarea></dd>
+                            </dl>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" id="cmdSaveContactButton" onclick="cmdContactSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdContactDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Delete Modal Confirmation -->
+        <div class="modal fade" id="deleteContactConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Contact <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteContact" onclick="cmdContactConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteContactCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Loading Modal -->
         <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -1283,53 +1333,287 @@
         // ============================
         function getContactInformation() {
             var contactInformations = new wijmo.collections.ObservableArray;
-            //$('#loadingModal').modal('show');
-            //$.ajax({
-            //    url: '/api/listAccount',
-            //    cache: false,
-            //    type: 'GET',
-            //    contentType: 'application/json; charset=utf-8',
-            //    data: {},
-            //    success: function (Results) {
-            //        $('#loadingModal').modal('hide');
-            //        if (Results.length > 0) {
-            //            for (i = 0; i < Results.length; i++) {
-            //                journalLedger.push({
-            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-            //                    Id: Results[i]["Id"],
-            //                    AccountCode: Results[i]["AccountCode"],
-            //                    Account: Results[i]["Account"],
-            //                    AccountTypeId: Results[i]["AccountTypeId"],
-            //                    AccountType: Results[i]["AccountType"],
-            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
-            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
-            //                    IsLocked: Results[i]["IsLocked"],
-            //                    CreatedById: Results[i]["CreatedById"],
-            //                    CreatedBy: Results[i]["CreatedBy"],
-            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
-            //                    UpdatedById: Results[i]["UpdatedById"],
-            //                    UpdatedBy: Results[i]["UpdatedBy"],
-            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-            //                });
-            //            }
-            //        }
-            //    }
-            //}).fail(function (xhr, textStatus, err) {
-            //    alert(err);
-            //});
+            var articleId = @customerId;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listArticleContactByArticleId/' + articleId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            contactInformations.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                Remarks: Results[i]["Remarks"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
             return contactInformations;
         }
 
-        // ==========================================
-        // FlexGrid Selection for Contact Information
-        // ==========================================
-        function updateDetailsContactInformation() {
-            var item = contactInformations.currentItem;
-            document.getElementById('createdBy').innerHTML = item.CreatedBy;
-            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
-            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
-            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+        // ===========
+        // ADD Contact
+        // ===========
+        function cmdAddContact_OnClick() {
+            $('#contactEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $('.requiredContact').each(function () {
+                $(this).css({
+                    "border": ""
+                });
+            });
+
+            $("#cmdSaveContactButton").prop("disabled", false);
+            $("#cmdContactDetailCloseButton").prop("disabled", false);
+
+            document.getElementById('contact_Id').value = 0;
+            document.getElementById('contact_contactPerson').value = '';
+            document.getElementById('contact_contactNumber').value = '';
+            document.getElementById('contact_Remarks').value = '';
+        }
+
+        // ==================
+        // Contact Edit Button
+        // ==================
+        function btnEditContact_OnClick() {
+            contactInformations.editItem(contactInformations.currentItem);
+            $('#contactEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $('.requiredContact').each(function () {
+                $(this).css({
+                    "border": ""
+                });
+            });
+
+            $("#cmdSaveContactButton").prop("disabled", false);
+            $("#cmdContactDetailCloseButton").prop("disabled", false);
+
+            var contactInformation = contactInformations.currentEditItem;
+
+            document.getElementById('contact_Id').value = contactInformation.Id;
+            document.getElementById('contact_contactPerson').value = contactInformation.ContactPerson;
+            document.getElementById('contact_contactNumber').value = contactInformation.ContactNumber;
+            document.getElementById('contact_Remarks').value = contactInformation.Remarks;
+        }
+
+        // ============
+        // SAVE Contact
+        // ============
+        function cmdContactSaveButton_OnClick() {
+            var contactObject = new Object();
+            var articleId = @customerId;
+            var contactId = document.getElementById('contact_Id').value;
+
+            contactObject.ContactPerson = document.getElementById('contact_contactPerson').value;
+            contactObject.ContactNumber = document.getElementById('contact_contactNumber').value;
+            contactObject.Remarks = document.getElementById('contact_Remarks').value;
+            var contactData = JSON.stringify(contactObject);
+
+            var isValid = true;
+            $('.requiredContact').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": ""
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                $("#cmdSaveContactButton").prop("disabled", true);
+                $("#cmdContactDetailCloseButton").prop("disabled", true);
+
+                if (contactId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addArticleContact/' + articleId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: contactData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveContactButton").prop("disabled", true);
+                                $("#cmdContactDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+
+                                $('#contactEdit').modal('hide');
+
+                                contactInformations = new wijmo.collections.CollectionView(getContactInformation());
+                                contactInformations.canFilter = true;
+                                contactInformations.pageSize = 15;
+
+                                var filterTextContactInformation = '';
+                                $('#InputFilterContactInformation').keyup(function () {
+                                    filterTextContactInformation = this.value.toLowerCase();
+                                    contactInformations.refresh();
+                                });
+                                contactInformations.filter = function (item) {
+                                    return !filterTextContactInformation || (item.ContactPerson.toLowerCase().indexOf(filterTextContactInformation) > -1);
+                                }
+                                contactInformations.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsContactInformation();
+                                });
+                        
+                                // Flex Grid for Contact Information
+                                contactInformationGrid.trackChanges = true;
+                                contactInformationGrid.itemsSource = contactInformations;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdSaveContactButton").prop("disabled", false);
+                                $("#cmdContactDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdSaveContactButton").prop("disabled", false);
+                                $("#cmdContactDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateArticleContact/' + contactId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: contactData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveContactButton").prop("disabled", true);
+                                $("#cmdContactDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+
+                                $('#contactEdit').modal('hide');
+
+                                contactInformations = new wijmo.collections.CollectionView(getContactInformation());
+                                contactInformations.canFilter = true;
+                                contactInformations.pageSize = 15;
+
+                                var filterTextContactInformation = '';
+                                $('#InputFilterContactInformation').keyup(function () {
+                                    filterTextContactInformation = this.value.toLowerCase();
+                                    contactInformations.refresh();
+                                });
+                                contactInformations.filter = function (item) {
+                                    return !filterTextContactInformation || (item.ContactPerson.toLowerCase().indexOf(filterTextContactInformation) > -1);
+                                }
+                                contactInformations.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsContactInformation();
+                                });
+                        
+                                // Flex Grid for Contact Information
+                                contactInformationGrid.trackChanges = true;
+                                contactInformationGrid.itemsSource = contactInformations;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $("#cmdSaveContactButton").prop("disabled", false);
+                                $("#cmdContactDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdSaveContactButton").prop("disabled", false);
+                                $("#cmdContactDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // ==============
+        // DELETE Contact
+        // ==============
+        function btnDeleteContact_OnClick() {
+            $('#deleteContactConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+            
+            $("#cmdConfirmDeleteContact").prop("disabled", false);
+            $("#cmdConfirmDeleteContactCloseButton").prop("disabled", false);
+        }
+        // Contact Confirm Delete
+        function cmdContactConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteContact").prop("disabled", true);
+            $("#cmdConfirmDeleteContactCloseButton").prop("disabled", true);
+           
+            contactInformations.editItem(contactInformations.currentItem);
+            var contactId = contactInformations.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteArticleContact/' + contactId,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteContact").prop("disabled", true);
+                        $("#cmdConfirmDeleteContactCloseButton").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+                        
+                        $('#deleteContactConfirm').modal('hide');
+
+                        contactInformations = new wijmo.collections.CollectionView(getContactInformation());
+                        contactInformations.canFilter = true;
+                        contactInformations.pageSize = 15;
+
+                        var filterTextContactInformation = '';
+                        $('#InputFilterContactInformation').keyup(function () {
+                            filterTextContactInformation = this.value.toLowerCase();
+                            contactInformations.refresh();
+                        });
+                        contactInformations.filter = function (item) {
+                            return !filterTextContactInformation || (item.ContactPerson.toLowerCase().indexOf(filterTextContactInformation) > -1);
+                        }
+                        contactInformations.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsContactInformation();
+                        });
+                        
+                        // Flex Grid for Contact Information
+                        contactInformationGrid.trackChanges = true;
+                        contactInformationGrid.itemsSource = contactInformations;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteContactConfirm').modal('hide');
+                        $("#cmdConfirmDeleteContact").prop("disabled", false);
+                        $("#cmdConfirmDeleteContactCloseButton").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteContactConfirm').modal('hide');
+                        $("#cmdConfirmDeleteContact").prop("disabled", false);
+                        $("#cmdConfirmDeleteContactCloseButton").prop("disabled", false);
+                    }
+                }
+            });
         }
 
         // ==========================================
@@ -1345,7 +1629,7 @@
                 btnFirstPageGridContactInformation.setAttribute('disabled', 'disabled');
                 btnPreviousPageGridContactInformation.setAttribute('disabled', 'disabled');
                 btnNextPageGridContactInformation.removeAttribute('disabled');
-                btnLastPageGridJournalLedger.removeAttribute('disabled');
+                btnLastPageGridContactInformation.removeAttribute('disabled');
             } else if (contactInformations.pageIndex === (contactInformations.pageCount - 1)) {
                 btnFirstPageGridContactInformation.removeAttribute('disabled');
                 btnPreviousPageGridContactInformation.removeAttribute('disabled');
@@ -1364,7 +1648,7 @@
         // On Page Load for Contact Information
         // ====================================
         function contactInformationTab() {
-            contactInformations = new wijmo.collections.CollectionView();
+            contactInformations = new wijmo.collections.CollectionView(getContactInformation());
             contactInformations.canFilter = true;
             contactInformations.pageSize = 15;
 
@@ -1374,13 +1658,10 @@
                 contactInformations.refresh();
             });
             contactInformations.filter = function (item) {
-                return !filterTextContactInformation || (item.ContactInformation.toLowerCase().indexOf(filterTextContactInformation) > -1);
+                return !filterTextContactInformation || (item.ContactPerson.toLowerCase().indexOf(filterTextContactInformation) > -1);
             }
             contactInformations.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsContactInformation();
-            });
-            contactInformations.currentChanged.addHandler(function (sender, args) {
-                updateDetailsContactInformation();
             });
 
             // Flex Grid for Contact Information
@@ -1388,8 +1669,8 @@
             contactInformationGrid.initialize({
                 columns: [
                             {
-                                "header": "Contact",
-                                "binding": "Contact",
+                                "header": "Edit",
+                                "binding": "EditId",
                                 "width": 60,
                                 "align": "center",
                                 "allowResizing": false,
@@ -1397,8 +1678,8 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Contact Number(s)",
-                                //"binding": "ContactNumbers",
+                                "header": "Delete",
+                                "binding": "DeleteId",
                                 "width": 70,
                                 "align": "center",
                                 "allowResizing": false,
@@ -1406,14 +1687,30 @@
                                 "isContentHtml": true
                             },
                             {
+                                "header": "Contact",
+                                "binding": "ContactPerson",
+                                "width": "3*",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Contact Number(s)",
+                                "binding": "ContactNumber",
+                                "width": "2*",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
                                 "header": "Remarks",
-                                //"binding": "Remarks",
+                                "binding": "Remarks",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": "4*",
                             },
                 ],
                 autoGenerateColumns: false,
-                //itemsSource: contactInformations,
+                itemsSource: contactInformations,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
@@ -1468,16 +1765,19 @@
         $('#contactInformationTabId').click(function () {
             $('#JournalLedger').hide();
             $('#ContactInformation').show();
-            contactInformationTab();
+            //contactInformationTab();
             window.contactInformationTab = function () {
                 return true;
             };
         });
 
         $(document).ready(function () {
-            $('#JournalLedger').show();
-            $('#ContactInformation').hide();
-            journalLedgerTab();
+            //$('#JournalLedger').show();
+            //$('#ContactInformation').hide();
+            //journalLedgerTab();
+            $('#JournalLedger').hide();
+            $('#ContactInformation').show();
+            contactInformationTab();
         });
     </script>
 </body>
