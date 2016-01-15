@@ -12,6 +12,7 @@ namespace easyfis.Models
         [Key]
         public Int32 Id { get; set; }
         public Int32 ArticleId { get; set; }
+        public String Article { get; set; }
         public String ContactPerson { get; set; }
         public String ContactNumber { get; set; }
         public String Remarks { get; set; }
