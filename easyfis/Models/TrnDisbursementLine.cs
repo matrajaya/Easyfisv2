@@ -18,7 +18,7 @@ namespace easyfis.Models
         public String Account { get; set; }
         public Int32 ArticleId { get; set; }
         public String Article { get; set; }
-        public Int32 RRId { get; set; }
+        public Int32? RRId { get; set; }
         public String RR { get; set; }
         public String Particulars { get; set; }
         public Decimal Amount { get; set; }

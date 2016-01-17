@@ -14,28 +14,28 @@ namespace easyfis.Models
         public Int32 SIId { get; set; }
         public String SI { get; set; }
         public Int32 ItemId { get; set; }
+        public String ItemCode { get; set; }
         public String Item { get; set; }
-        public Int32 ItemInventoryId { get; set; }
+        public Int32? ItemInventoryId { get; set; }
         public String ItemInventory { get; set; }
         public String Particulars { get; set; }
         public Int32 UnitId { get; set; }
         public String Unit { get; set; }
-        public Boolean Quantity { get; set; }
-        public Boolean Price { get; set; }
+        public Decimal Quantity { get; set; }
+        public Decimal Price { get; set; }
         public Int32 DiscountId { get; set; }
         public String Discount { get; set; }
-        public Boolean DiscountRate { get; set; }
-        public Boolean DiscountAmount { get; set; }
-        public Boolean NetPrice { get; set; }
-        public Boolean Amount { get; set; }
+        public Decimal DiscountRate { get; set; }
+        public Decimal DiscountAmount { get; set; }
+        public Decimal NetPrice { get; set; }
+        public Decimal Amount { get; set; }
         public Int32 VATId { get; set; }
         public String VAT { get; set; }
-        public Boolean VATPercentage { get; set; }
-        public Boolean VATAmount { get; set; }
+        public Decimal VATPercentage { get; set; }
+        public Decimal VATAmount { get; set; }
         public Int32 BaseUnitId { get; set; }
         public String BaseUnit { get; set; }
-        public Boolean BaseQuantity { get; set; }
-        public Boolean BasePrice { get; set; }
-
+        public Decimal BaseQuantity { get; set; }
+        public Decimal BasePrice { get; set; }
     }
 }

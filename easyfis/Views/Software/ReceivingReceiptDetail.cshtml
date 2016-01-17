@@ -181,7 +181,6 @@
                         <h4>Receiving Receipt Line</h4>
                     </div>
                 </div>
-                <br />
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Item" id="itemTabId">Items</a></li>
                     @*
@@ -1445,7 +1444,7 @@
                         $('#cmdApplyPOStatusButton').prop("disabled", false);
                         for (i = 0; i < Results.length; i++) {
                             POStatus.push({
-                                ApplyId: "<button class='btn btn-primary btn-xs' onclick='cmdApplyPOStatusButton_OnClick()'><i class='fa fa-check-square-o'></i> Apply</button>",
+                                ApplyId: "<button class='btn btn-primary btn-xs' onclick='cmdApplyPOStatusButton_OnClick()'><i class='fa fa-check-square-o'></i> Pick</button>",
                                 Id: Results[i]["Id"],
                                 ItemId: Results[i]["ItemId"],
                                 Item: Results[i]["Item"],
@@ -1506,7 +1505,7 @@
                                 "header": "Code",
                                 "binding": "ItemCode",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 150
                             },
                             {
                                 "header": "Item",
@@ -3482,7 +3481,7 @@
                                  "header": "Unit",
                                  "binding": "BaseUnit",
                                  "allowSorting": true,
-                                 "width": 100
+                                 "width": 200
                              },
                              {
                                  "header": "Quantity",

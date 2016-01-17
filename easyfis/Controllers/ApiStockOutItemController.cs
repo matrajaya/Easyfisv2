@@ -21,24 +21,58 @@ namespace easyfis.Controllers
                                 select new Models.TrnStockOutItem
                                 {
                                     Id = d.Id,
-                                    //BranchId = d.BranchId,
-                                    //Branch = d.Branch,
                                     OTId = d.OTId,
-                                    //OT = d.OT,
+                                    OT = d.TrnStockOut.OTNumber,
                                     ExpenseAccountId = d.ExpenseAccountId,
-                                    //ExpenseAccount = d.ExpenseAccount,
+                                    ExpenseAccount = d.MstAccount.Account,
                                     ItemId = d.ItemId,
-                                    //Item = d.Item,
+                                    ItemCode = d.MstArticle.ManualArticleCode,
+                                    Item = d.MstArticle.Article,
                                     ItemInventoryId = d.ItemInventoryId,
-                                    //ItemInventory = d.ItemInventory,
+                                    ItemInventory = d.MstArticleInventory.InventoryCode,
                                     Particulars = d.Particulars,
                                     UnitId = d.UnitId,
-                                    //Unit = d.Unit,
+                                    Unit = d.MstUnit.Unit,
                                     Quantity = d.Quantity,
                                     Cost = d.Cost,
                                     Amount = d.Amount,
                                     BaseUnitId = d.BaseUnitId,
-                                    //BaseUnit = d.BaseUnit,
+                                    BaseUnit = d.MstUnit1.Unit,
+                                    BaseQuantity = d.BaseQuantity,
+                                    BaseCost = d.BaseCost
+                                };
+            return stockOutItems.ToList();
+        }
+
+        // ============================
+        // LIST Stock Out Item by OT Id
+        // ============================
+        [Route("api/listStockOutItemByOTId/{OTId}")]
+        public List<Models.TrnStockOutItem> GetStockOutItemByOTId(String OTId)
+        {
+            var stockOutItem_OTId = Convert.ToInt32(OTId);
+            var stockOutItems = from d in db.TrnStockOutItems
+                                where d.OTId == stockOutItem_OTId
+                                select new Models.TrnStockOutItem
+                                {
+                                    Id = d.Id,
+                                    OTId = d.OTId,
+                                    OT = d.TrnStockOut.OTNumber,
+                                    ExpenseAccountId = d.ExpenseAccountId,
+                                    ExpenseAccount = d.MstAccount.Account,
+                                    ItemId = d.ItemId,
+                                    ItemCode = d.MstArticle.ManualArticleCode,
+                                    Item = d.MstArticle.Article,
+                                    ItemInventoryId = d.ItemInventoryId,
+                                    ItemInventory = d.MstArticleInventory.InventoryCode,
+                                    Particulars = d.Particulars,
+                                    UnitId = d.UnitId,
+                                    Unit = d.MstUnit.Unit,
+                                    Quantity = d.Quantity,
+                                    Cost = d.Cost,
+                                    Amount = d.Amount,
+                                    BaseUnitId = d.BaseUnitId,
+                                    BaseUnit = d.MstUnit1.Unit,
                                     BaseQuantity = d.BaseQuantity,
                                     BaseCost = d.BaseCost
                                 };

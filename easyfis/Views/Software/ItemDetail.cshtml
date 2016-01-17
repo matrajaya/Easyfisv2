@@ -763,7 +763,7 @@
                         $("#Item_AccumDepAccount_selectedValue").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccount);
                         $("#Item_ExpenseAccount_data").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
                         $("#Item_ExpenseAccount_selectedValue").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccount);
-                        
+
                         getAccount();
                     }
                 });
@@ -788,7 +788,7 @@
                         $("#Item_AccumDepAccount_selectedValue").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccount);
                         $("#Item_ExpenseAccount_data").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
                         $("#Item_ExpenseAccount_selectedValue").val(articleItemGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccount);
-                        
+
                         getAccount();
                     }
                 });
@@ -1611,6 +1611,7 @@
                                 Article: Results[i]["Article"],
                                 UnitId: Results[i]["UnitId"],
                                 Unit: Results[i]["Unit"],
+                                Equals: "=",
                                 Multiplier: Results[i]["Multiplier"],
                                 IsCountUnit: Results[i]["IsCountUnit"]
                             });
@@ -1622,7 +1623,7 @@
             });
             return unitConversions;
         }
-       
+
         // ======================================
         // Navigation Buttons for Unit Conversion
         // ======================================
@@ -1700,20 +1701,27 @@
                                 "width": "1*",
                             },
                             {
-                                "header": "Unit.",
-                                 "binding": "Unit",
+                                "header": "Unit",
+                                "binding": "Unit",
                                 "allowSorting": true,
                                 "width": "3*"
                             },
                             {
+                                "header": " ",
+                                "binding": "Equals",
+                                "allowSorting": true,
+                                "width": "0.5*",
+                                "align": "center"
+                            },
+                            {
                                 "header": "Base Unit",
-                                 "binding": "Unit",
+                                "binding": "Unit",
                                 "allowSorting": true,
                                 "width": "3*"
                             },
                             {
                                 "header": "Count Unit",
-                                 "binding": "IsCountUnit",
+                                "binding": "IsCountUnit",
                                 "allowSorting": true,
                                 "width": "1*"
                             },
@@ -1889,37 +1897,37 @@
                             },
                             {
                                 "header": "Component.",
-                                 "binding": "ComponentArticle",
+                                "binding": "ComponentArticle",
                                 "allowSorting": true,
                                 "width": "3*"
                             },
                             {
                                 "header": "Quantity",
-                                 "binding": "Quantity",
+                                "binding": "Quantity",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Unit",
-                                 "binding": "Unit",
+                                "binding": "Unit",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Cost",
-                                 "binding": "Cost",
+                                "binding": "Cost",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Amount",
-                                 "binding": "Account",
+                                "binding": "Account",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Particulars",
-                                 "binding": "Particulars",
+                                "binding": "Particulars",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
@@ -2092,13 +2100,13 @@
                             },
                             {
                                 "header": "Price",
-                                 "binding": "Price",
+                                "binding": "Price",
                                 "allowSorting": true,
                                 "width": "3*"
                             },
                             {
                                 "header": "Remarks",
-                                 "binding": "Remarks",
+                                "binding": "Remarks",
                                 "allowSorting": true,
                                 "width": "2*"
                             }

@@ -22,30 +22,73 @@ namespace easyfis.Controllers
                                     {
                                         Id = d.Id,
                                         SIId = d.SIId,
-                                        //SI = d.SI,
+                                        SI = d.TrnSalesInvoice.SINumber,
                                         ItemId = d.ItemId,
-                                        //Item = d.Item,
-                                        //ItemInventoryId = d.ItemInventoryId,
-                                        //ItemInventory = d.ItemInventory,
+                                        ItemCode = d.MstArticle.ManualArticleCode,
+                                        Item = d.MstArticle.Article,
+                                        ItemInventoryId = d.ItemInventoryId,
+                                        ItemInventory = d.MstArticleInventory.InventoryCode,
                                         Particulars = d.Particulars,
                                         UnitId = d.UnitId,
-                                        //Unit = d.Unit,
-                                        //Quantity = d.Quantity,
-                                        //Price = d.Price,
-                                        //DiscountId = d.DiscountId,
-                                        //Discount = d.Discount,
-                                        //DiscountRate = d.DiscountRate,
-                                        //DiscountAmount = d.DiscountAmount,
-                                        //NetPrice = d.NetPrice,
-                                        //Amount = d.Amount,
-                                        //VATId = d.VATId,
-                                        //VAT = d.VAT,
-                                        //VATPercentage = d.VATPercentage,
-                                        //VATAmount = d.VATAmount,
-                                        //BaseUnitId = d.BaseUnitId,
-                                        //BaseUnit = d.BaseUnit,
-                                        //BaseQuantity = d.BaseQuantity,
-                                        //BasePrice = d.BasePrice
+                                        Unit = d.MstUnit.Unit,
+                                        Quantity = d.Quantity,
+                                        Price = d.Price,
+                                        DiscountId = d.DiscountId,
+                                        Discount = d.MstDiscount.Discount,
+                                        DiscountRate = d.DiscountRate,
+                                        DiscountAmount = d.DiscountAmount,
+                                        NetPrice = d.NetPrice,
+                                        Amount = d.Amount,
+                                        VATId = d.VATId,
+                                        VAT = d.MstTaxType.TaxType,
+                                        VATPercentage = d.VATPercentage,
+                                        VATAmount = d.VATAmount,
+                                        BaseUnitId = d.BaseUnitId,
+                                        BaseUnit = d.MstUnit1.Unit,
+                                        BaseQuantity = d.BaseQuantity,
+                                        BasePrice = d.BasePrice
+                                    };
+            return salesInvoiceItems.ToList();
+        }
+
+        // ================================
+        // LIST Sales Invoice Item By SI Id
+        // ================================
+        [Route("api/listSalesInvoiceItemBySIId/{SIId}")]
+        public List<Models.TrnSalesInvoiceItem> GetSalesInvoiceBySIId(String SIId)
+        {
+            var salesInvoiceItem_SIId = Convert.ToInt32(SIId);
+            var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                    where d.SIId == salesInvoiceItem_SIId
+                                    select new Models.TrnSalesInvoiceItem
+                                    {
+                                        Id = d.Id,
+                                        SIId = d.SIId,
+                                        SI = d.TrnSalesInvoice.SINumber,
+                                        ItemId = d.ItemId,
+                                        ItemCode = d.MstArticle.ManualArticleCode,
+                                        Item = d.MstArticle.Article,
+                                        ItemInventoryId = d.ItemInventoryId,
+                                        ItemInventory = d.MstArticleInventory.InventoryCode,
+                                        Particulars = d.Particulars,
+                                        UnitId = d.UnitId,
+                                        Unit = d.MstUnit.Unit,
+                                        Quantity = d.Quantity,
+                                        Price = d.Price,
+                                        DiscountId = d.DiscountId,
+                                        Discount = d.MstDiscount.Discount,
+                                        DiscountRate = d.DiscountRate,
+                                        DiscountAmount = d.DiscountAmount,
+                                        NetPrice = d.NetPrice,
+                                        Amount = d.Amount,
+                                        VATId = d.VATId,
+                                        VAT = d.MstTaxType.TaxType,
+                                        VATPercentage = d.VATPercentage,
+                                        VATAmount = d.VATAmount,
+                                        BaseUnitId = d.BaseUnitId,
+                                        BaseUnit = d.MstUnit1.Unit,
+                                        BaseQuantity = d.BaseQuantity,
+                                        BasePrice = d.BasePrice
                                     };
             return salesInvoiceItems.ToList();
         }

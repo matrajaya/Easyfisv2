@@ -8,14 +8,13 @@ namespace easyfis.Models
     public class TrnStockOutItem
     {
         public Int32 Id { get; set; }
-        public Int32 BranchId { get; set; }
-        public String Branch { get; set; }
         public Int32 OTId { get; set; }
         public String OT { get; set; }
         public Int32 ExpenseAccountId { get; set; }
         public String ExpenseAccount { get; set; }
         public Int32 ItemId { get; set; }
         public String Item { get; set; }
+        public String ItemCode { get; set; }
         public Int32 ItemInventoryId { get; set; }
         public String ItemInventory { get; set; }
         public String Particulars { get; set; }
