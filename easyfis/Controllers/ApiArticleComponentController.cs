@@ -22,7 +22,7 @@ namespace easyfis.Controllers
                                     {
                                         Id = d.Id,
                                         ArticleId = d.ArticleId,
-                                        Article = d.MstArticle.Article,
+                                        Article = d.MstArticle.ManualArticleCode,
                                         ComponentArticleId = d.ComponentArticleId,
                                         ComponentArticle = d.MstArticle1.Article,
                                         Quantity = d.Quantity,
@@ -46,7 +46,7 @@ namespace easyfis.Controllers
                                     {
                                         Id = d.Id,
                                         ArticleId = d.ArticleId,
-                                        Article = d.MstArticle.Article,
+                                        Article = d.MstArticle.ManualArticleCode,
                                         ComponentArticleId = d.ComponentArticleId,
                                         ComponentArticle = d.MstArticle1.Article,
                                         Quantity = d.Quantity,
@@ -70,7 +70,7 @@ namespace easyfis.Controllers
                                     {
                                         Id = d.Id,
                                         ArticleId = d.ArticleId,
-                                        Article = d.MstArticle.Article,
+                                        Article = d.MstArticle.ManualArticleCode,
                                         ComponentArticleId = d.ComponentArticleId,
                                         ComponentArticle = d.MstArticle1.Article,
                                         Quantity = d.Quantity,

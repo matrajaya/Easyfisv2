@@ -471,7 +471,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="unitConversionDetailForm">
-                            <input type="text" id="unitConversion_Id" />
+                            <input type="hidden" id="unitConversion_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Multiplier: </dt>
                                 <dd><input type="text" class="form-control input-sm requiredUnitConversion" id="unitConversion_multiplier" /></dd>
@@ -479,15 +479,15 @@
                                 <dd>
                                     <div class="comboBox-wide" id="unitConversion_unit"></div>
 
-                                    <input type="text" class="requiredUnitConversion" id="unitConversion_unit_data" />
-                                    <input type="text" id="unitConversion_unit_selectedValue" />
+                                    <input type="hidden" class="requiredUnitConversion" id="unitConversion_unit_data" />
+                                    <input type="hidden" id="unitConversion_unit_selectedValue" />
                                 </dd>
                                 <dt>Base Unit:</dt>
                                 <dd>
                                     <div class="comboBox-wide" id="unitConversion_baseUnit"></div>
 
-                                    <input type="text" class="requiredUnitConversion" id="unitConversion_baseUnit_data" />
-                                    <input type="text" id="unitConversion_baseUnit_selectedValue" />
+                                    <input type="hidden" class="requiredUnitConversion" id="unitConversion_baseUnit_data" />
+                                    <input type="hidden" id="unitConversion_baseUnit_selectedValue" />
                                 </dd>
                                 <dt>Count Unit: </dt>
                                 <dd><input type="checkbox" id="unitConversion_countUnit" /></dd>
@@ -533,25 +533,25 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="componentModalLabel">Unit Componenet - Detail</h4>
+                        <h4 class="modal-title" id="componentModalLabel">Component - Detail</h4>
                     </div>
                     <div class="modal-body">
                         <form id="componentDetailForm">
-                            <input type="text" id="component_Id" />
+                            <input type="hidden" id="component_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Manual Code: </dt>
                                 <dd>
                                     <div class="comboBox-wide" id="component_ManualCode"></div>
 
-                                    <input type="text" class="requiredComponent" id="component_ManualCode_data" />
-                                    <input type="text" id="component_ManualCode_selectedValue" />
+                                    <input type="hidden" class="requiredComponent" id="component_ManualCode_data" />
+                                    <input type="hidden" id="component_ManualCode_selectedValue" />
                                 </dd>
                                 <dt>Component:</dt>
                                 <dd>
                                     <div class="comboBox-wide" id="component_Component"></div>
 
-                                    <input type="text" class="requiredComponent" id="component_Component_data" />
-                                    <input type="text" id="component_Component_selectedValue" />
+                                    <input type="hidden" class="requiredComponent" id="component_Component_data" />
+                                    <input type="hidden" id="component_Component_selectedValue" />
                                 </dd>
                                 <dt>Quantity:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredUnitConversion" id="component_Quantity" /></dd>
@@ -559,8 +559,8 @@
                                 <dd>
                                     <div class="comboBox-wide" id="component_unit"></div>
 
-                                    <input type="text" class="requiredComponent" id="component_unit_data" />
-                                    <input type="text" id="component_unit_selectedValue" />
+                                    <input type="hidden" class="requiredComponent" id="component_unit_data" />
+                                    <input type="hidden" id="component_unit_selectedValue" />
                                 </dd>
                                 <dt>Cost:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredComponent" id="component_cost" /></dd>
@@ -614,7 +614,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="priceDetailForm">
-                            <input type="text" id="price_Id" />
+                            <input type="hidden" id="price_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Price Description: </dt>
                                 <dd><input type="text" class="form-control input-sm requiredPrice" id="price_PriceDescription" /></dd>
@@ -1784,6 +1784,10 @@
         var btnLastPageGridUnitConversion;
         var btnCurrentPageGridUnitConversion;
 
+        var unitConversionUnits;
+        var cboUnitConversionUnit;
+        var cboUnitConversionBaseUnit;
+
         // ========================
         // GET Unit Conversion List
         // ========================
@@ -1825,6 +1829,67 @@
             return unitConversions;
         }
 
+        // ======================
+        // Unit Conversion - Unit
+        // ======================
+        function getUnitConversionUnit() {
+            unitConversionUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            unitConversionUnits.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForUnitConversionUnit(unitConversionUnits);
+                    }
+                }
+            });
+        }
+
+        // ============================
+        // CBO for Unit Conversion Unit
+        // ============================
+        function createCboForUnitConversionUnit(unitConversionUnits) {
+            var UnitConversionUnitCollection = new wijmo.collections.CollectionView(unitConversionUnits);
+            var UnitConversionUnitList = new Array();
+            for (var i = 0; i < UnitConversionUnitCollection.items.length; i++) {
+                UnitConversionUnitList.push(UnitConversionUnitCollection.items[i].Unit);
+            }
+
+            cboUnitConversionUnit.dispose();
+            cboUnitConversionUnit = new wijmo.input.ComboBox('#unitConversion_unit', {
+                placeholder: "Select Unit",
+                itemsSource: UnitConversionUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('unitConversion_unit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#unitConversion_unit_data").val(UnitConversionUnitCollection.items[this.selectedIndex].UnitId);
+                }
+            });
+
+            cboUnitConversionBaseUnit.dispose();
+            cboUnitConversionBaseUnit = new wijmo.input.ComboBox('#unitConversion_baseUnit', {
+                disabled: true,
+                placeholder: "Select Unit",
+                itemsSource: UnitConversionUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('unitConversion_baseUnit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#unitConversion_baseUnit_data").val(UnitConversionUnitCollection.items[this.selectedIndex].UnitId);
+                }
+            });
+        }
+
         // ===================
         // ADD Unit Conversion
         // ===================
@@ -1834,12 +1899,14 @@
                 backdrop: 'static'
             });
 
+            getUnitConversionUnit();
+
             document.getElementById('unitConversion_Id').value = 0;
             document.getElementById('unitConversion_multiplier').value = '';
             document.getElementById('unitConversion_unit_data').value = '';
             document.getElementById('unitConversion_unit_selectedValue').value = '';
             document.getElementById('unitConversion_baseUnit_data').value = '';
-            
+
             var baseUnitId = document.getElementById('articleItem_unit_data').value;
             var baseUnitSelectedValue = document.getElementById('articleItem_unit_SelectedValue').value;
 
@@ -1858,6 +1925,8 @@
                 backdrop: 'static'
             });
 
+            getUnitConversionUnit();
+
             var unitConversion = unitConversions.currentEditItem;
 
             document.getElementById('unitConversion_Id').value = unitConversion.Id;
@@ -1870,14 +1939,13 @@
 
             document.getElementById('unitConversion_baseUnit_data').value = baseUnitId;
             document.getElementById('unitConversion_baseUnit_selectedValue').value = baseUnitSelectedValue;
-
             document.getElementById('unitConversion_countUnit').checked = unitConversion.IsCountUnit;
 
         }
 
-        // ===================
+        // ======================
         // Delete Unit Conversion
-        // ===================
+        // ======================
         function btnDeleteUnitConversion_OnClick() {
             $('#deleteUnitConversionConfirm').modal({
                 show: true,
@@ -1918,6 +1986,9 @@
         //  Unit Conversion
         // ================
         function unitConversionTab() {
+            cboUnitConversionUnit  = new wijmo.input.ComboBox('#unitConversion_unit');
+            cboUnitConversionBaseUnit = new wijmo.input.ComboBox('#unitConversion_baseUnit');
+
             unitConversions = new wijmo.collections.CollectionView(getUnitConversion());
             unitConversions.canFilter = true;
             unitConversions.pageSize = 15;
@@ -2042,6 +2113,12 @@
         var btnLastPageGridComponent;
         var btnCurrentPageGridComponent;
 
+        var articleComponenetsItems;
+        var cboManualCodeArticleItems;
+        var cboComponentArticleItem;
+        var componentUnits;
+        var cboComponentUnit;
+
         // ==================
         // GET Component List
         // ==================
@@ -2080,6 +2157,148 @@
             });
             return components;
         }
+        
+        // ======================================
+        // GET Item Id, Manual Code and Component
+        // ======================================
+        function getArticleItemForManualCodeAndComponent() {
+            articleComponenetsItems = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/1',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            articleComponenetsItems.push({
+                                ItemId: results[i]["Id"],
+                                ItemCode: results[i]["ManualArticleCode"],
+                                ItemComponent: results[i]["Article"],
+                                UnitId: results[i]["UnitId"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForManualCode(articleComponenetsItems);
+                        createCboForItemComponent(articleComponenetsItems);
+                    }
+                }
+            });
+        }
+
+        // ===============
+        // CBO Manual Code
+        // ===============
+        function createCboForManualCode(articleComponenetsItems) {
+            var ManualCodeCollections = new wijmo.collections.CollectionView(articleComponenetsItems);
+            var ManualCodeList = new Array();
+            for (var i = 0; i < ManualCodeCollections.items.length; i++) {
+                ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
+            }
+
+            cboManualCodeArticleItems.dispose();
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#component_ManualCode', {
+                disabled: true,
+                placeholder: "Select Manual Code",
+                itemsSource: ManualCodeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('component_ManualCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#component_ManualCode_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
+                    $("#component_Component_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
+                    $("#component_ManualCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
+                    $("#component_Component_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemComponent);
+                    $("#component_unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    $("#component_unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+
+                    createCboForItemComponent(articleComponenetsItems);
+                    getComponentUnitForComboBox();
+                }
+            });
+        }
+
+
+        // ==================
+        // CBO item Component
+        // ==================
+        function createCboForItemComponent(articleComponenetsItems) {
+            var ItemComponentCollections = new wijmo.collections.CollectionView(articleComponenetsItems);
+            var ItemComponentList = new Array();
+            for (var i = 0; i < ItemComponentCollections.items.length; i++) {
+                ItemComponentList.push(ItemComponentCollections.items[i].ItemComponent);
+            }
+
+            cboComponentArticleItem.dispose();
+            cboComponentArticleItem = new wijmo.input.ComboBox('#component_Component', {
+                placeholder: "Select Item Component",
+                itemsSource: ItemComponentList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('component_Component_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#component_Component_data").val(ItemComponentCollections.items[this.selectedIndex].ItemId);
+                    $("#component_ManualCode_data").val(ItemComponentCollections.items[this.selectedIndex].ItemId);
+                    $("#component_Component_selectedValue").val(ItemComponentCollections.items[this.selectedIndex].ItemComponent);
+                    $("#component_ManualCode_selectedValue").val(ItemComponentCollections.items[this.selectedIndex].ItemCode);
+                    $("#component_unit_data").val(ItemComponentCollections.items[this.selectedIndex].UnitId);
+                    $("#component_unit_selectedValue").val(ItemComponentCollections.items[this.selectedIndex].Unit);
+
+                    createCboForManualCode(articleComponenetsItems);
+                    getComponentUnitForComboBox();
+                }
+            });
+        }
+
+        // =============
+        // Get Item Unit
+        // =============
+        function getComponentUnitForComboBox() {
+            componentUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            componentUnits.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForComponentUnit(componentUnits);
+                    }
+                }
+            });
+        }
+
+        // ======================
+        // CBO for Component Unit
+        // ======================
+        function createCboForComponentUnit(componentUnits) {
+            var ComponentUnitCollection = new wijmo.collections.CollectionView(componentUnits);
+            var ComponentUnitList = new Array();
+            for (var i = 0; i < ComponentUnitCollection.items.length; i++) {
+                ComponentUnitList.push(ComponentUnitCollection.items[i].Unit);
+            }
+
+            cboComponentUnit.dispose();
+            cboComponentUnit = new wijmo.input.ComboBox('#component_unit', {
+                disabled: true,
+                placeholder: "Select Unit",
+                itemsSource: ComponentUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('component_unit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#component_unit_data").val(ComponentUnitCollection.items[this.selectedIndex].UnitId);
+                }
+            });
+        }
 
         // =============
         // ADD component
@@ -2089,6 +2308,9 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            getArticleItemForManualCodeAndComponent();
+            getComponentUnitForComboBox();
 
             document.getElementById('component_Id').value = 0;
             document.getElementById('component_ManualCode_data').value = '';
@@ -2112,12 +2334,14 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            getArticleItemForManualCodeAndComponent();
+            getComponentUnitForComboBox();
 
             var component = components.currentEditItem;
-
             document.getElementById('component_Id').value = component.Id;
-            document.getElementById('component_ManualCode_data').value = component.itemId;
-            document.getElementById('component_ManualCode_selectedValue').value = component.ManualArticleCode;
+            document.getElementById('component_ManualCode_data').value = component.ArticleId;
+            document.getElementById('component_ManualCode_selectedValue').value = component.Article;
             document.getElementById('component_Component_data').value = component.ComponentArticleId;
             document.getElementById('component_Component_selectedValue').value = component.ComponentArticle;
             document.getElementById('component_Quantity').value = component.Quantity;
@@ -2169,6 +2393,10 @@
         //  Component
         // ==========
         function componentTab() {
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#component_ManualCode');
+            cboComponentArticleItem = new wijmo.input.ComboBox('#component_Component');
+            cboComponentUnit = new wijmo.input.ComboBox('#component_unit');
+
             components = new wijmo.collections.CollectionView(getComponent());
             components.canFilter = true;
             components.pageSize = 15;
@@ -2339,7 +2567,7 @@
             });
             return prices;
         }
-        
+
         // =========
         // Add Price
         // =========

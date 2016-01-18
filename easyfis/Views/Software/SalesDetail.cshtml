@@ -45,8 +45,8 @@
                         <button class="btn btn-primary btn-sm" id="cmdSalesJournal"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdSalesSave" onclick="btnSalesSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdSalesEdit"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="cmdSalesPrint" onclick="window.location.href ='@Url.Action("SalesPDF", "Software", new { SalesId = salesId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("Sales", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdSalesClose"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSalesPrint" onclick="window.location.href ='@Url.Action("Salespdf", "Software" , new { salesid=salesId })'"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("Sales", "Software" , new { branchid=branchId })'" class="btn btn-danger btn-sm" id="cmdSalesClose"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -170,7 +170,8 @@
                 <!-- Sales line -->
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
-                    @*<li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>*@
+                    @*
+                    <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>*@
                 </ul>
                 <br />
                 <div class="tab-content">
@@ -337,7 +338,7 @@
 
                                         <dt>VAT:</dt>
                                         <dd>
-                                            <div class="comboBox-wide" id="RRLine_VAT"></div>
+                                            <div class="comboBox-wide" id="saleItem_VAT"></div>
 
                                             <input type="text" id="saleItem_VAT_data" class="requiredSaleItem">
                                             <input type="text" id="saleItem_VAT_selectedValue" />
@@ -1159,9 +1160,25 @@
         var btnLastPageGridItem;
         var btnCurrentPageGridItem;
 
-        // =======================
+        var articleItems;
+        var cboManualCodeArticleItems;
+        var cboItemDescriptionArticleItems;
+
+        var salesItemUnits;
+        var cboSalesItemUnit;
+
+        var inventories;
+        var cboInventoryCode;
+
+        var discounts;
+        var cboDiscount;
+
+        var taxTypes;
+        var cboForVATTaxType;
+
+        // ===================
         // GET Sales Item List
-        // =======================
+        // ===================
         function getItem() {
             var items = new wijmo.collections.ObservableArray;
             var SIId = @salesId;
@@ -1217,7 +1234,369 @@
             });
             return items;
         }
-        
+
+        // ======================================
+        // GET Item Id, Manual Code and Component
+        // ======================================
+        function getArticleItemForManualCodeAndComponent() {
+            articleItems = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/1',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            articleItems.push({
+                                ItemId: results[i]["Id"],
+                                ItemCode: results[i]["ManualArticleCode"],
+                                ItemDescription: results[i]["Article"],
+                                UnitId: results[i]["UnitId"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForManualCode(articleItems);
+                        createCboForItemDescription(articleItems);
+                    }
+                }
+            });
+        }
+
+        // ===============
+        // CBO Manual Code
+        // ===============
+        function createCboForManualCode(articleItems) {
+            var ManualCodeCollections = new wijmo.collections.CollectionView(articleItems);
+            var ManualCodeList = new Array();
+            for (var i = 0; i < ManualCodeCollections.items.length; i++) {
+                ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
+            }
+
+            cboManualCodeArticleItems.dispose();
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#saleItem_ItemCode', {
+                placeholder: "Select Manual Code",
+                itemsSource: ManualCodeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('saleItem_ItemCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#saleItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
+                    $("#saleItem_ItemCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
+                    $("#saleItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
+                    $("#saleItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    $("#saleItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+
+                    createCboForItemDescription(articleItems);
+                    getSalesItemUnitForComboBox();
+                    getItemInventoryCodeForComboBox();
+                }
+            });
+        }
+
+        // ====================
+        // CBO Item Description
+        // ====================
+        function createCboForItemDescription(articleItems) {
+            var ItemDescriptionCollections = new wijmo.collections.CollectionView(articleItems);
+            var ItemDescriptionList = new Array();
+            for (var i = 0; i < ItemDescriptionCollections.items.length; i++) {
+                ItemDescriptionList.push(ItemDescriptionCollections.items[i].ItemDescription);
+            }
+
+            cboItemDescriptionArticleItems.dispose();
+            cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#saleItem_ItemDescription', {
+                placeholder: "Select Item Description",
+                itemsSource: ItemDescriptionList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('saleItem_ItemDescription_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#saleItem_ItemId_data").val(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
+                    $("#saleItem_ItemDescription_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemDescription);
+                    $("#saleItem_ItemCode_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemCode);
+                    $("#saleItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    $("#saleItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+
+                    createCboForManualCode(articleItems);
+                    getSalesItemUnitForComboBox();
+                    getItemInventoryCodeForComboBox();
+
+
+                    var items = new wijmo.collections.ObservableArray;
+                    var articleId = ItemDescriptionCollections.items[this.selectedIndex].ItemId;
+                    $.ajax({
+                        url: '/api/article/' +  articleId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (Results) {
+                            $('#loadingModal').modal('hide');
+                            if (Results.length > 0) {
+                                items.push ({
+                                    Id: Results.Id,
+                                    OutputTaxId : Results.OutputTaxId,
+                                    OutputTax : Results.OutputTax,
+                                    InputTaxId : Results.InputTaxId,
+                                    InputTax : Results.InputTax,
+                                    WTaxTypeId : Results.WTaxTypeId,
+                                    WTaxType : Results.WTaxType
+                                });
+                            }
+
+                            var taxTypesVAT = new wijmo.collections.ObservableArray();
+                            var taxTypeVATId = Results.InputTaxId;
+                            $.ajax({
+                                url: '/api/taxType/' + taxTypeVATId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        taxTypesVAT.push({
+                                            TaxTypeId: results.Id,
+                                            TaxType: results.TaxType,
+                                            TaxRate: results.TaxRate,
+                                            IsInclusive: results.IsInclusive
+                                        });
+                                    }
+
+                                    document.getElementById('saleItem_VAT_data').value =  results.TaxRate;
+                                    document.getElementById('saleItem_TAXInclusive').value =  results.IsInclusive;
+                                }
+                            });
+                        }
+                    });
+
+                }
+            });
+        }
+
+        // =============
+        // Get Item Unit
+        // =============
+        function getSalesItemUnitForComboBox() {
+            salesItemUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            salesItemUnits.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForSalesItemUnit(salesItemUnits);
+                    }
+                }
+            });
+        }
+
+        // =======================
+        // CBO for Sales Item Unit
+        // =======================
+        function createCboForSalesItemUnit(salesItemUnits) {
+            var SalesItemUnitCollection = new wijmo.collections.CollectionView(salesItemUnits);
+            var SalesItemUnitList = new Array();
+            for (var i = 0; i < SalesItemUnitCollection.items.length; i++) {
+                SalesItemUnitList.push(SalesItemUnitCollection.items[i].Unit);
+            }
+
+            cboSalesItemUnit.dispose();
+            cboSalesItemUnit = new wijmo.input.ComboBox('#saleItem_Unit', {
+                placeholder: "Select Unit",
+                itemsSource: SalesItemUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('saleItem_Unit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#saleItem_Unit_data").val(SalesItemUnitCollection.items[this.selectedIndex].UnitId);
+                }
+            });
+
+            cboBaseUnit.dispose();
+            cboBaseUnit = new wijmo.input.ComboBox('#saleItem_BUCUnit', {
+                placeholder: "Select Unit",
+                itemsSource: SalesItemUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('saleItem_BUCUnit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#saleItem_BUCUnit_data").val(SalesItemUnitCollection.items[this.selectedIndex].UnitId);
+                }
+            });
+        }
+
+        // =======================
+        // Get Item Inventory Code
+        // =======================
+        function getItemInventoryCodeForComboBox() {
+            inventories = new wijmo.collections.ObservableArray();
+            var articleId = document.getElementById('saleItem_ItemId_data').value;
+            $.ajax({
+                url: '/api/listArticleInventoryByArticleId/' + articleId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            inventories.push({
+                                Id: results[i]["Id"],
+                                BranchId: results[i]["BranchId"],
+                                ArticleId: results[i]["ArticleId"],
+                                InventoryCode: results[i]["InventoryCode"],
+                                Quantity: results[i]["Quantity"],
+                                Cost: results[i]["Cost"],
+                                Amount: results[i]["Amount"],
+                                Particulars: results[i]["Particulars"]
+                            });
+                        }
+                        createCboForInventoryCode(inventories);
+                    }
+                }
+            });
+        }
+
+        // ===========================
+        // CBO for Item Inventory Code
+        // ===========================
+        function createCboForInventoryCode(inventories) {
+            var InventoryCodeCollection = new wijmo.collections.CollectionView(inventories);
+            var InventoryCodeList = new Array();
+            for (var i = 0; i < InventoryCodeCollection.items.length; i++) {
+                InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
+            }
+
+            cboInventoryCode.dispose();
+            cboInventoryCode = new wijmo.input.ComboBox('#saleItem_InventoryCode', {
+                placeholder: "Select Inventory Code",
+                itemsSource: InventoryCodeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('saleItem_InventoryCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#saleItem_InventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        // ============
+        // Get Discount
+        // ============
+        function getDiscountForComboBox() {
+            discounts = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listDiscount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            discounts.push({
+                                Id: results[i]["Id"],
+                                Discount: results[i]["Discount"],
+                                DiscountRate: results[i]["DiscountRate"],
+                                IsInclusive: results[i]["IsInclusive"],
+                                AccountId: results[i]["AccountId"],
+                                Account: results[i]["Account"],
+                                IsLocked: results[i]["IsLocked"],
+                            });
+                        }
+                        createCboForDiscount(discounts);
+                    }
+                }
+            });
+        }
+
+        // ================
+        // CBO for Discount
+        // ================
+        function createCboForDiscount(discounts) {
+            var DiscountCollection = new wijmo.collections.CollectionView(discounts);
+            var DiscountList = new Array();
+            for (var i = 0; i < DiscountCollection.items.length; i++) {
+                DiscountList.push(DiscountCollection.items[i].Discount);
+            }
+
+            cboDiscount.dispose();
+            cboDiscount = new wijmo.input.ComboBox('#saleItem_Discont', {
+                placeholder: "Select Discount",
+                itemsSource: DiscountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('saleItem_Discont_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#saleItem_Discont_data").val(DiscountCollection.items[this.selectedIndex].Id);
+                    $("#saleItem_DiscountRate").val(DiscountCollection.items[this.selectedIndex].DiscountRate);
+                }
+            });
+        }
+
+        // ===================
+        // Get Artile Tax Type
+        // ===================
+        function getTaxTypeForComboBox() {
+            taxTypes = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listTaxType',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            taxTypes.push({
+                                TaxTypeId: results[i]["Id"],
+                                TaxType: results[i]["TaxType"],
+                                TaxRate: results[i]["TaxRate"],
+                                IsInclusive: results[i]["IsInclusive"],
+                            });
+                        }
+                        createCboForVATTaxType(taxTypes);
+                    }
+                }
+            });
+        }
+
+        // ===========
+        // CBO for VAT
+        // ===========
+        function createCboForVATTaxType(taxTypes) {
+            var taxTypeCollection = new wijmo.collections.CollectionView(taxTypes);
+            var taxList = new Array();
+            for (var i = 0; i < taxTypeCollection.items.length; i++) {
+                taxList.push(taxTypeCollection.items[i].TaxType);
+            }
+
+            cboForVATTaxType.dispose();
+            cboForVATTaxType = new wijmo.input.ComboBox('#saleItem_VAT', {
+                placeholder: "Select VAT",
+                itemsSource: taxList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('saleItem_VAT_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#saleItem_VAT_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
+                    $("#saleItem_VATRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
+                    $("#saleItem_TAXInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
+
+                }
+            });
+        }
+
         // =============
         // ADD Sale Item
         // =============
@@ -1226,6 +1605,12 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            getArticleItemForManualCodeAndComponent();
+            getSalesItemUnitForComboBox();
+            getItemInventoryCodeForComboBox();
+            getDiscountForComboBox();
+            getTaxTypeForComboBox();
 
             document.getElementById('saleItem_Id').value = 0;
             document.getElementById('saleItem_ItemId_data').value = '';
@@ -1264,6 +1649,12 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            getArticleItemForManualCodeAndComponent();
+            getSalesItemUnitForComboBox();
+            getItemInventoryCodeForComboBox();
+            getDiscountForComboBox();
+            getTaxTypeForComboBox();
 
             var item = items.currentEditItem;
             document.getElementById('saleItem_Id').value = item.Id;
@@ -1336,9 +1727,17 @@
         //  Items
         // ======
         function itemTab() {
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#saleItem_ItemCode');
+            cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#saleItem_ItemDescription');
+            cboSalesItemUnit = new wijmo.input.ComboBox('#saleItem_Unit');
+            cboInventoryCode = new wijmo.input.ComboBox('#saleItem_InventoryCode');
+            cboDiscount = new wijmo.input.ComboBox('#saleItem_Discont');
+            cboForVATTaxType = new wijmo.input.ComboBox('#saleItem_VAT');
+            cboBaseUnit = new wijmo.input.ComboBox('#saleItem_BUCUnit');
+
             items = new wijmo.collections.CollectionView(getItem());
             items.canFilter = true;
-            items.pageSize = 15;
+            items.pageSize = 10;
 
             var filterTextItem = '';
             $('#InputFilterItem').keyup(function () {

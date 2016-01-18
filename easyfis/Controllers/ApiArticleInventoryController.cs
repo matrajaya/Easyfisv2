@@ -31,5 +31,28 @@ namespace easyfis.Controllers
                                      };
             return articleInventories.ToList();
         }
+
+        // ====================================
+        // LIST Article Inventory By Article Id
+        // ====================================
+        [Route("api/listArticleInventoryByArticleId/{articleId}")]
+        public List<Models.MstArticleInventory> GetArticleInventoryByArticleId(String articleId)
+        {
+            var articleInventory_articleId = Convert.ToInt32(articleId);
+            var articleInventories = from d in db.MstArticleInventories
+                                     where d.ArticleId == articleInventory_articleId
+                                     select new Models.MstArticleInventory
+                                     {
+                                         Id = d.Id,
+                                         BranchId = d.BranchId,
+                                         ArticleId = d.ArticleId,
+                                         InventoryCode = d.InventoryCode,
+                                         Quantity = d.Quantity,
+                                         Cost = d.Cost,
+                                         Amount = d.Amount,
+                                         Particulars = d.Particulars
+                                     };
+            return articleInventories.ToList();
+        }
     }
 }
