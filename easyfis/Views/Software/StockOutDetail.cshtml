@@ -188,7 +188,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-primary btn-sm" onclick="cmdStockOutItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
@@ -263,6 +263,125 @@
                 </div>
             </div>
         </section>
+
+        <!-- ===================== -->
+        <!-- Stock Out Item Detail -->
+        <!-- ===================== -->
+        <div class="modal fade" id="stockOutItemsEdit" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="stockOutItemsModalLabel">Stock-Out Item - Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="stockOutItemsDetailForm">
+                            <input type="text" id="stockOutItem_Id" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <dl class="dl-horizontal">
+                                        <dt>Item Code:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockOutItem_ItemCode"></div>
+
+                                            <input type="text" id="stockOutItem_ItemId_data" class="requiredStockOutItem">
+                                            <input type="text" id="stockOutItem_ItemCode_selectedValue" />
+                                        </dd>
+                                        <dt>Item Description:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockOutItem_ItemDescription"></div>
+
+                                            <input type="text" id="stockInItem_ItemDescription_selectedValue" />
+                                        </dd>
+                                        <dt>Particulars:</dt>
+                                        <dd><textarea class="form-control textarea-custom requiredStockOutItem" id="stockOutItem_Particulars"></textarea></dd>
+                                        <dt>Item Inventory Code:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockOutItem_ItemInventoryCode"></div>
+
+                                            <input type="text" id="stockOutItem_ItemInventoryCode_data" class="requiredStockOutItem">
+                                            <input type="text" id="stockOutItem_ItemInventoryCode_selectedValue" />
+                                        </dd>
+                                        <dt>Quantity:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockOutItem" id="stockOutItem_Quantity" /></dd>
+                                        <dt>Unit:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockOutItem_Unit"></div>
+
+                                            <input type="text" id="stockOutItem_Unit_data" class="requiredStockOutItem">
+                                            <input type="text" id="stockOutItem_Unit_selectedValue" />
+                                        </dd>
+                                        <dt>Cost:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockOutItem" id="stockOutItem_Cost" /></dd>
+                                        <dt>Amount:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockOutItem" id="stockOutItem_Amount" /></dd>
+                                    </dl>
+                                </div>
+                                <div class="col-md-6">
+                                    <dl class="dl-horizontal">
+                                        <dt></dt>
+                                        <dd>
+                                            <center><label>Basic Unit Conversion</label></center>
+                                            <br />
+                                        </dd>
+                                        <dt>Unit:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockOutItem_BUCUnit"></div>
+
+                                            <input type="text" id="stockOutItem_BUCUnit_data" class="requiredStockOutItem">
+                                            <input type="text" id="stockOutItem_BUCUnit_selectedValue" />
+                                        </dd>
+                                        <dt>Quantity:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockOutItem" id="stockOutItem_BUCQuantity" /></dd>
+                                        <dt>Cost:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockOutItem" id="stockOutItem_BUCCost" /></dd>
+                                        <dt></dt>
+                                        <dd>
+                                            <br />
+                                            <br />
+                                        </dd>
+                                        <dt>Expense Amount:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockOutItem_Unit"></div>
+
+                                            <input type="text" id="stockOutItem_Unit_data" class="requiredStockOutItem">
+                                            <input type="text" id="stockOutItem_Unit_selectedValue" />
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" id="cmdSaveStockOutItemButton" onclick="cmdStockOutItemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdStockOutItemDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================= -->
+        <!-- Stock Out Items Delete Modal Confirmation -->
+        <!-- ========================================= -->
+        <div class="modal fade" id="deletStockOutItemsConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Stock-Out Item <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteStockOutItems" onclick="cmdStockOutItemsConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteStockOutItemsCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Loading Modal -->
         <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -999,8 +1118,8 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             items.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockOutItem_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockOutItem_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 OTId: Results[i]["OTId"],
                                 OT: Results[i]["OT"],
@@ -1029,6 +1148,36 @@
                 alert(err);
             });
             return items;
+        }
+        
+        // ==================
+        // ADD Stock Out Item
+        // ==================
+        function cmdStockOutItem_OnClick() {
+            $('#stockOutItemsEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // ===================
+        // Edit Stock Out Item
+        // ===================
+        function btnEditStockOutItem_OnClick() {
+            $('#stockOutItemsEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // =====================
+        // Delete Stock Out Item
+        // =====================
+        function btnDeleteStockOutItem_OnClick() {
+            $('#deletStockOutItemsConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
         }
 
         // ============================

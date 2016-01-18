@@ -173,7 +173,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-primary btn-sm" onclick="cmdAddStockTransferItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
@@ -248,6 +248,113 @@
                 </div>
             </div>
         </section>
+
+        <!-- ========================== -->
+        <!-- Stock Transfer Item Detail -->
+        <!-- ========================== -->
+        <div class="modal fade" id="stockTransferItemsEdit" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="stockTransferItemsModalLabel">Stock-In Item - Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="stockTransferItemsDetailForm">
+                            <input type="text" id="stockTransferItem_Id" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <dl class="dl-horizontal">
+                                        <dt>Item Code:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockTransferItem_ItemCode"></div>
+
+                                            <input type="text" id="stockTransferItem_ItemId_data" class="requiredStockTransferItem">
+                                            <input type="text" id="stockTransferItem_ItemCode_selectedValue" />
+                                        </dd>
+                                        <dt>Item Description:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockTransferItem_ItemDescription"></div>
+
+                                            <input type="text" id="stockTransferItem_ItemDescription_selectedValue" />
+                                        </dd>
+                                        <dt>Particulars:</dt>
+                                        <dd><textarea class="form-control textarea-custom requiredStockTransferItem" id="stockTransferItem_Particulars"></textarea></dd>
+                                        <dt>Item Inventory Code:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockTransferItem_ItemInventoryCode"></div>
+
+                                            <input type="text" id="stockTransferItem_ItemInventoryCode_data" class="requiredStockTransferItem">
+                                            <input type="text" id="stockTransferItem_ItemInventoryCode_selectedValue" />
+                                        </dd>
+                                        <dt>Quantity:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Quantity" /></dd>
+                                        <dt>Unit:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockTransferItem_Unit"></div>
+
+                                            <input type="text" id="stockTransferItem_Unit_data" class="requiredStockTransferItem">
+                                            <input type="text" id="stockTransferItem_Unit_selectedValue" />
+                                        </dd>
+                                        <dt>Cost:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Cost" /></dd>
+                                        <dt>Amount:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Amount" /></dd>
+                                    </dl>
+                                </div>
+                                <div class="col-md-6">
+                                    <dl class="dl-horizontal">
+                                        <dt></dt>
+                                        <dd>
+                                            <center><label>Basic Unit Conversion</label></center>
+                                            <br />
+                                        </dd>
+                                        <dt>Unit:</dt>
+                                        <dd>
+                                            <div class="comboBox-wide" id="stockTransferItem_BUCUnit"></div>
+
+                                            <input type="text" id="stockTransferItem_BUCUnit_data" class="requiredStockTransferItem">
+                                            <input type="text" id="stockTransferItem_BUCUnit_selectedValue" />
+                                        </dd>
+                                        <dt>Quantity:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_BUCQuantity" /></dd>
+                                        <dt>Cost:</dt>
+                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_BUCCost" /></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" id="cmdSaveStockTransferItemButton" onclick="cmdStockTransferItemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdStockTransferItemDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- Stock-Transfer Items Delete Modal Confirmation -->
+        <!-- ============================================== -->
+        <div class="modal fade" id="deleteStockTransferItemsConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Stock-Transfer Item <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteStockTransferItems" onclick="cmdStockTransferItemsConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteStockTransferItemsCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Loading Modal -->
         <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -891,8 +998,8 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             items.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockTransferItem_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockTransferItem_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 STId: Results[i]["STId"],
                                 ST: Results[i]["ST"],
@@ -919,6 +1026,36 @@
                 alert(err);
             });
             return items;
+        }
+        
+        // =======================
+        // ADD Stock Transfer Item
+        // =======================
+        function cmdAddStockTransferItem_OnClick() {
+            $('#stockTransferItemsEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // ========================
+        // EDIT Stock Transfer Item
+        // ========================
+        function btnEditStockTransferItem_OnClick() {
+            $('#stockTransferItemsEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // ========================
+        // EDIT Stock Transfer Item
+        // ========================
+        function btnDeleteStockTransferItem_OnClick() {
+            $('#deleteStockTransferItemsConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
         }
 
         // ============================

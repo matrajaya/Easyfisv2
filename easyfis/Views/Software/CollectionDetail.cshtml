@@ -153,11 +153,11 @@
                     <div class="col-lg-4">
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                            <input type="text" class="form-control input-sm" id="InputFilterCollectionLine" placeholder="Search Branch">
+                            <input type="text" class="form-control input-sm" id="InputFilterCollectionLine" placeholder="Search">
                         </div>
                     </div>
                     <div class="col-lg-8">
-                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        <button type="submit" class="btn btn-primary pull-right btn-sm" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                     </div>
                 </div>
                 <br />
@@ -222,6 +222,106 @@
                     <div class="modal-footer">
                         <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
                         <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collection Line Edit Detail -->
+        <div class="modal fade" id="collectionLineEdit" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="collectionLineModalLabel">Collection Line Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="collectionLineDetailForm">
+                            <input type="text" id="collectionLine_Id" />
+                            <dl class="dl-horizontal">
+                                <dt>Branch:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="collectionLine_branch"></div>
+
+                                    <input type="text" id="collectionLine_branch_data" class="requiredCollectionLine">
+                                    <input type="text" id="collectionLine_branch_selectedValue" />
+                                </dd>
+                                <dt>Pay Type:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="collectionLine_payType"></div>
+
+                                    <input type="text" id="collectionLine_payType_data" class="requiredCollectionLine">
+                                    <input type="text" id="collectionLine_payType_selectedValue" />
+                                </dd>
+                                <dt>Particulars:</dt>
+                                <dd><textarea class="form-control textarea-custom requiredCollectionLine" id="collectionLine_Particulars"></textarea></dd>
+                                <dt>SI No.:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="collectionLine_SINo"></div>
+
+                                    <input type="text" id="collectionLine_SINo_data" class="requiredCollectionLine">
+                                    <input type="text" id="collectionLine_SINo_selectedValue" />
+                                </dd>
+                                <dt>Amount:</dt>
+                                <dd><input class="form-control input-sm requiredCollectionLine" id="collectionLine_amount" /></dd>
+                                <dt>Account:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="collectionLine_account"></div>
+
+                                    <input type="text" id="collectionLine_account_data" class="requiredCollectionLine">
+                                    <input type="text" id="collectionLine_account_selectedValue" />
+                                </dd>
+                                <dt>Article:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="collectionLine_article"></div>
+
+                                    <input type="text" id="collectionLine_article_data" class="requiredCollectionLine">
+                                    <input type="text" id="collectionLine_article_selectedValue" />
+                                </dd>
+                                <dt>Check No.:</dt>
+                                <dd><input type="text" class=" form-control input-sm requiredCollectionLine" id="collectionLine_checkNo" /></dd>
+                                <dt>Check Date:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="collectionLine_checkDate"></div>
+                                    
+                                    <input class="form-control input-sm requiredCollectionLine" id="collectionLine_checkDate_data" />
+                                </dd>
+                                <dt>Depository Bank:</dt>
+                                <dd>
+                                    <div class="comboBox-wide" id="collectionLine_depositoryBank"></div>
+
+                                    <input type="text" id="collectionLine_depositoryBank_data" class="requiredCollectionLine">
+                                    <input type="text" id="collectionLine_depositoryBank_selectedValue" />
+                                </dd>
+                                <dt>Clear:</dt>
+                                <dd><input type="checkbox" id="collectionLine_Clear"/></dd>
+                            </dl>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" id="cmdSaveCollectionLineButton" onclick="cmdCollectionLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdCollectionLineDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collection Line Delete Modal Confirmation -->
+        <div class="modal fade" id="deleteCollectionLineConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Collection Line <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteCollectionLine" onclick="cmdCollectionLineConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteCollectionLineCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -827,8 +927,8 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             collectionLines.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick=''><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick=''><i class='fa fa-trash'></i> Delete</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditCollectionLine_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteCollectionLine_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 ORId: Results[i]["ORId"],
                                 OR: Results[i]["OR"],
@@ -859,6 +959,37 @@
             });
             return collectionLines;
         }
+
+        // =====================
+        // ADD Disbursement Line
+        // =====================
+        function cmdAddCollectionLineButton_OnClick() {
+            $('#collectionLineEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // ======================
+        // Edit Disbursement Line
+        // ======================
+        function btnEditCollectionLine_OnClick() {
+            $('#collectionLineEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // ========================
+        // Delete Disbursement Line
+        // ========================
+        function btnDeleteCollectionLine_OnClick() {
+            $('#deleteCollectionLineConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
 
         // ======================================
         // Navigation Buttons for Collection Line
@@ -975,7 +1106,7 @@
                 collectionLines.refresh();
             });
             collectionLines.filter = function (item) {
-                return !filterTextCollectionLine || (item.collectionLine.toLowerCase().indexOf(filterTextCollectionLine) > -1);
+                return !filterTextCollectionLine || (item.Branch.toLowerCase().indexOf(filterTextCollectionLine) > -1);
             }
             collectionLines.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsCollectionLine();
