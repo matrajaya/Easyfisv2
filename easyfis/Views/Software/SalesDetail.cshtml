@@ -314,7 +314,7 @@
                                             <input type="text" id="saleItem_Unit_selectedValue" />
                                         </dd>
                                         <dt>Price Ex-VAT:</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_PrieExVAT" /></dd>
+                                        <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_PriceExVAT" /></dd>
                                         <dt>Discont:</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="saleItem_Discont"></div>
@@ -364,7 +364,7 @@
                                         <dt>Quantity:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_BUCQuantity" /></dd>
                                         <dt>Cost:</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_BUCCost" /></dd>
+                                        <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_BUCPrice" /></dd>
                                     </dl>
                                 </div>
                             </div>
@@ -1195,12 +1195,14 @@
                                 DiscountId: Results[i]["DiscountId"],
                                 Discount: Results[i]["Discount"],
                                 DiscountRate: Results[i]["Discount"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + Results[i]["DiscountRate"],
+                                DiscountRateEdit: Results[i]["DiscountRate"],
                                 DiscountAmount: Results[i]["DiscountAmount"],
                                 NetPrice: Results[i]["NetPrice"],
                                 Amount: Results[i]["Amount"],
                                 VATId: Results[i]["VATId"],
                                 VAT: Results[i]["VAT"],
                                 VATPercentage: Results[i]["VAT"] + "<hr style='margin-top: 3px; margin-bottom: 3px; border-color: #cccccc' />" + Results[i]["VATPercentage"],
+                                VATRate: Results[i]["VATPercentage"],
                                 VATAmount: Results[i]["VATAmount"],
                                 BaseUnitId: Results[i]["BaseUnitId"],
                                 BaseUnit: Results[i]["BaseUnit"],
@@ -1224,16 +1226,72 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('saleItem_Id').value = 0;
+            document.getElementById('saleItem_ItemId_data').value = '';
+            document.getElementById('saleItem_ItemCode_selectedValue').value = '';
+            document.getElementById('saleItem_ItemDescription_selectedValue').value = '';
+            document.getElementById('saleItem_Particulars').value = '';
+            document.getElementById('saleItem_InventoryCode_data').value = '';
+            document.getElementById('saleItem_InventoryCode_selectedValue').value = '';
+            document.getElementById('saleItem_Quantity').value = '';
+            document.getElementById('saleItem_Unit_data').value = '';
+            document.getElementById('saleItem_Unit_selectedValue').value = '';
+            document.getElementById('saleItem_PriceExVAT').value = '';
+            document.getElementById('saleItem_Discont_data').value = '';
+            document.getElementById('saleItem_Discont_selectedValue').value = '';
+            document.getElementById('saleItem_DiscountRate').value = '';
+            document.getElementById('saleItem_DiscountAmount').value = '';
+            document.getElementById('saleItem_NetPrice').value = '';
+            document.getElementById('saleItem_Amount').value = '';
+            document.getElementById('saleItem_VAT_data').value = '';
+            document.getElementById('saleItem_VAT_selectedValue').value = '';
+            document.getElementById('saleItem_TAXInclusive').value = '';
+            document.getElementById('saleItem_VATRate').value = '';
+            document.getElementById('saleItem_VATAmount').value = '';
+            document.getElementById('saleItem_BUCUnit_data').value = '';
+            document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
+            document.getElementById('saleItem_BUCQuantity').value = '';
+            document.getElementById('saleItem_BUCPrice').value = '';
         }
 
         // ==============
         // EDIT Sale Item
         // ==============
         function btnEditSaleItem_OnClick() {
+            items.editItem(items.currentItem);
             $('#saleItemsEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
+
+            var item = items.currentEditItem;
+            document.getElementById('saleItem_Id').value = item.Id;
+            document.getElementById('saleItem_ItemId_data').value = item.ItemId;
+            document.getElementById('saleItem_ItemCode_selectedValue').value = item.ItemCode;
+            document.getElementById('saleItem_ItemDescription_selectedValue').value = item.Item;
+            document.getElementById('saleItem_Particulars').value = item.Particulars;
+            document.getElementById('saleItem_InventoryCode_data').value = item.ItemInventoryId;
+            document.getElementById('saleItem_InventoryCode_selectedValue').value = item.ItemInventory;
+            document.getElementById('saleItem_Quantity').value = item.Quantity;
+            document.getElementById('saleItem_Unit_data').value = item.UnitId;
+            document.getElementById('saleItem_Unit_selectedValue').value = item.Unit;
+            document.getElementById('saleItem_PriceExVAT').value = item.Price;
+            document.getElementById('saleItem_Discont_data').value = item.DiscountId;
+            document.getElementById('saleItem_Discont_selectedValue').value = item.Discount;
+            document.getElementById('saleItem_DiscountRate').value = item.DiscountRateEdit;
+            document.getElementById('saleItem_DiscountAmount').value = item.DiscountAmount;
+            document.getElementById('saleItem_NetPrice').value = item.NetPrice;
+            document.getElementById('saleItem_Amount').value = item.Amount;
+            document.getElementById('saleItem_VAT_data').value = item.VATId;
+            document.getElementById('saleItem_VAT_selectedValue').value = item.VAT;
+            //document.getElementById('saleItem_TAXInclusive').value = item.;
+            document.getElementById('saleItem_VATRate').value = item.VATRate;
+            document.getElementById('saleItem_VATAmount').value = item.VATAmount;
+            document.getElementById('saleItem_BUCUnit_data').value = item.BaseUnitId;
+            document.getElementById('saleItem_BUCUnit_selectedValue').value = item.BaseUnit;
+            document.getElementById('saleItem_BUCQuantity').value = item.BaseQuantity;
+            document.getElementById('saleItem_BUCPrice').value = item.BasePrice;
         }
 
         // ================

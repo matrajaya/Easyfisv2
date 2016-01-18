@@ -489,6 +489,8 @@
                                     <input type="text" class="requiredUnitConversion" id="unitConversion_baseUnit_data" />
                                     <input type="text" id="unitConversion_baseUnit_selectedValue" />
                                 </dd>
+                                <dt>Count Unit: </dt>
+                                <dd><input type="checkbox" id="unitConversion_countUnit" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -1789,46 +1791,39 @@
             var unitConversions = new wijmo.collections.ObservableArray;
             var articleId = @itemId;
             $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listArticleUnitByArticleId/' + articleId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            unitConversions.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditUnitConversion_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteUnitConversion_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                UnitId: Results[i]["UnitId"],
-                                Unit: Results[i]["Unit"],
-                                Equals: "=",
-                                Multiplier: Results[i]["Multiplier"],
-                                IsCountUnit: Results[i]["IsCountUnit"]
-                            });
+            setTimeout(function() {
+                $.ajax({
+                    url: '/api/listArticleUnitByArticleId/' + articleId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        $('#loadingModal').modal('hide');
+                        if (Results.length > 0) {
+                            for (i = 0; i < Results.length; i++) {
+                                unitConversions.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditUnitConversion_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteUnitConversion_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    ArticleId: Results[i]["ArticleId"],
+                                    Article: Results[i]["Article"],
+                                    UnitId: Results[i]["UnitId"],
+                                    Unit: Results[i]["Unit"],
+                                    BaseUnit: document.getElementById('articleItem_unit_SelectedValue').value,
+                                    Equals: "=",
+                                    Multiplier: Results[i]["Multiplier"],
+                                    IsCountUnit: Results[i]["IsCountUnit"]
+                                });
+                            }
                         }
                     }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }, 100);
             return unitConversions;
         }
-
-        // ===================
-        // ADD Edit Conversion
-        // ===================
-        function btnEditUnitConversion_OnClick() {
-            $('#unitConversionEdit').modal({
-                show: true,
-                backdrop: 'static'
-            });
-        }
-
 
         // ===================
         // ADD Unit Conversion
@@ -1838,10 +1833,50 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('unitConversion_Id').value = 0;
+            document.getElementById('unitConversion_multiplier').value = '';
+            document.getElementById('unitConversion_unit_data').value = '';
+            document.getElementById('unitConversion_unit_selectedValue').value = '';
+            document.getElementById('unitConversion_baseUnit_data').value = '';
+            
+            var baseUnitId = document.getElementById('articleItem_unit_data').value;
+            var baseUnitSelectedValue = document.getElementById('articleItem_unit_SelectedValue').value;
+
+            document.getElementById('unitConversion_baseUnit_selectedValue').value = baseUnitSelectedValue;
+
+            document.getElementById('unitConversion_countUnit').checked = false;
+        }
+
+        // ====================
+        // Edit Unit Conversion
+        // ====================
+        function btnEditUnitConversion_OnClick() {
+            unitConversions.editItem(unitConversions.currentItem);
+            $('#unitConversionEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            var unitConversion = unitConversions.currentEditItem;
+
+            document.getElementById('unitConversion_Id').value = unitConversion.Id;
+            document.getElementById('unitConversion_multiplier').value = unitConversion.Multiplier;
+            document.getElementById('unitConversion_unit_data').value = unitConversion.UnitId;
+            document.getElementById('unitConversion_unit_selectedValue').value = unitConversion.Unit;
+
+            var baseUnitId = document.getElementById('articleItem_unit_data').value;
+            var baseUnitSelectedValue = document.getElementById('articleItem_unit_SelectedValue').value;
+
+            document.getElementById('unitConversion_baseUnit_data').value = baseUnitId;
+            document.getElementById('unitConversion_baseUnit_selectedValue').value = baseUnitSelectedValue;
+
+            document.getElementById('unitConversion_countUnit').checked = unitConversion.IsCountUnit;
+
         }
 
         // ===================
-        // Delete Edit Conversion
+        // Delete Unit Conversion
         // ===================
         function btnDeleteUnitConversion_OnClick() {
             $('#deleteUnitConversionConfirm').modal({
@@ -1942,7 +1977,7 @@
                             },
                             {
                                 "header": "Base Unit",
-                                "binding": "Unit",
+                                "binding": "BaseUnit",
                                 "allowSorting": true,
                                 "width": "3*"
                             },
@@ -2054,16 +2089,42 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('component_Id').value = 0;
+            document.getElementById('component_ManualCode_data').value = '';
+            document.getElementById('component_ManualCode_selectedValue').value = '';
+            document.getElementById('component_Component_data').value = '';
+            document.getElementById('component_Component_selectedValue').value = '';
+            document.getElementById('component_Quantity').value = '';
+            document.getElementById('component_unit_data').value = '';
+            document.getElementById('component_unit_selectedValue').value = '';
+            document.getElementById('component_cost').value = '';
+            document.getElementById('component_amount').value = '';
+            document.getElementById('component_particulars').value = '';
         }
 
         // ==============
         // Edit component
         // ==============
         function btnEditCompoent_OnClick() {
+            components.editItem(components.currentItem);
             $('#componentEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
+
+            var component = components.currentEditItem;
+
+            document.getElementById('component_Id').value = component.Id;
+            document.getElementById('component_ManualCode_data').value = component.itemId;
+            document.getElementById('component_ManualCode_selectedValue').value = component.ManualArticleCode;
+            document.getElementById('component_Component_data').value = component.ComponentArticleId;
+            document.getElementById('component_Component_selectedValue').value = component.ComponentArticle;
+            document.getElementById('component_Quantity').value = component.Quantity;
+            document.getElementById('component_unit_selectedValue').value = component.Unit;
+            document.getElementById('component_cost').value = component.Cost;
+            document.getElementById('component_amount').value = '';
+            document.getElementById('component_particulars').value = component.Particulars;
         }
 
         // ==============
@@ -2287,16 +2348,28 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('price_Id').value = 0;
+            document.getElementById('price_PriceDescription').value = '';
+            document.getElementById('price_Price').value = '';
+            document.getElementById('price_Remarks').value = '';
         }
 
         // ==========
         // Edit Price
         // ==========
         function btnEditPrice_OnClick() {
+            prices.editItem(prices.currentItem);
             $('#priceEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
+
+            var price = prices.currentEditItem;
+            document.getElementById('price_Id').value = price.Id;
+            document.getElementById('price_PriceDescription').value = price.PriceDescription;
+            document.getElementById('price_Price').value = price.Price;
+            document.getElementById('price_Remarks').value = price.Remarks;
         }
 
         // ============

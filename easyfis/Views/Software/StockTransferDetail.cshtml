@@ -1036,16 +1036,52 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('stockTransferItem_Id').value = 0;
+            document.getElementById('stockTransferItem_ItemId_data').value = '';
+            document.getElementById('stockTransferItem_ItemCode_selectedValue').value = '';
+            document.getElementById('stockTransferItem_ItemDescription_selectedValue').value = '';
+            document.getElementById('stockTransferItem_Particulars').value = '';
+            document.getElementById('stockTransferItem_ItemInventoryCode_data').value = '';
+            document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = '';
+            document.getElementById('stockTransferItem_Quantity').value = '';
+            document.getElementById('stockTransferItem_Unit_data').value = '';
+            document.getElementById('stockTransferItem_Unit_selectedValue').value = '';
+            document.getElementById('stockTransferItem_Cost').value = '';
+            document.getElementById('stockTransferItem_Amount').value = '';
+            document.getElementById('stockTransferItem_BUCUnit_data').value = '';
+            document.getElementById('stockTransferItem_BUCUnit_selectedValue').value = '';
+            document.getElementById('stockTransferItem_BUCQuantity').value = '';
+            document.getElementById('stockTransferItem_BUCCost').value = '';
         }
 
         // ========================
         // EDIT Stock Transfer Item
         // ========================
         function btnEditStockTransferItem_OnClick() {
+            items.editItem(items.currentItem);
             $('#stockTransferItemsEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
+
+            var item = items.currentEditItem;
+            document.getElementById('stockTransferItem_Id').value = item.Id;
+            document.getElementById('stockTransferItem_ItemId_data').value = item.ItemId;
+            document.getElementById('stockTransferItem_ItemCode_selectedValue').value = item.ItemCode;
+            document.getElementById('stockTransferItem_ItemDescription_selectedValue').value = item.Item;
+            document.getElementById('stockTransferItem_Particulars').value = item.Particulars;
+            document.getElementById('stockTransferItem_ItemInventoryCode_data').value = item.ItemInventoryId;
+            document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = item.ItemInventory;
+            document.getElementById('stockTransferItem_Quantity').value = item.Quantity;
+            document.getElementById('stockTransferItem_Unit_data').value = item.UnitId;
+            document.getElementById('stockTransferItem_Unit_selectedValue').value = item.Unit;
+            document.getElementById('stockTransferItem_Cost').value = item.Cost;
+            document.getElementById('stockTransferItem_Amount').value = item.Amount;
+            document.getElementById('stockTransferItem_BUCUnit_data').value = item.BaseUnitId;
+            document.getElementById('stockTransferItem_BUCUnit_selectedValue').value = item.BaseUnit;
+            document.getElementById('stockTransferItem_BUCQuantity').value = item.BaseQuantity;
+            document.getElementById('stockTransferItem_BUCCost').value = item.BaseCost;
         }
 
         // ========================

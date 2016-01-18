@@ -968,16 +968,56 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('collectionLine_Id').value = 0;
+            document.getElementById('collectionLine_branch_data').value = '';
+            document.getElementById('collectionLine_branch_selectedValue').value = '';
+            document.getElementById('collectionLine_payType_data').value = '';
+            document.getElementById('collectionLine_payType_selectedValue').value = '';
+            document.getElementById('collectionLine_Particulars').value = '';
+            document.getElementById('collectionLine_SINo_data').value = '';
+            document.getElementById('collectionLine_SINo_selectedValue').value = '';
+            document.getElementById('collectionLine_amount').value = '';
+            document.getElementById('collectionLine_account_data').value = '';
+            document.getElementById('collectionLine_account_selectedValue').value = '';
+            document.getElementById('collectionLine_article_data').value = '';
+            document.getElementById('collectionLine_article_selectedValue').value = '';
+            document.getElementById('collectionLine_checkNo').value = '';
+            document.getElementById('collectionLine_checkDate_data').value = '';
+            document.getElementById('collectionLine_depositoryBank_data').value = '';
+            document.getElementById('collectionLine_depositoryBank_selectedValue').value = '';
+            document.getElementById('collectionLine_Clear').checked = false;
         }
 
         // ======================
         // Edit Disbursement Line
         // ======================
         function btnEditCollectionLine_OnClick() {
+            collectionLines.editItem(collectionLines.currentItem);
             $('#collectionLineEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
+
+            var collectionLine = collectionLines.currentEditItem;
+            document.getElementById('collectionLine_Id').value = collectionLine.Id;
+            document.getElementById('collectionLine_branch_data').value = collectionLine.BranchId;
+            document.getElementById('collectionLine_branch_selectedValue').value = collectionLine.Branch;
+            document.getElementById('collectionLine_payType_data').value = collectionLine.PayTypeId;
+            document.getElementById('collectionLine_payType_selectedValue').value = collectionLine.PayType;
+            document.getElementById('collectionLine_Particulars').value = collectionLine.Particulars;
+            document.getElementById('collectionLine_SINo_data').value = collectionLine.SIId;
+            document.getElementById('collectionLine_SINo_selectedValue').value = collectionLine.SI;
+            document.getElementById('collectionLine_amount').value = collectionLine.Amount;
+            document.getElementById('collectionLine_account_data').value = collectionLine.AccountId;
+            document.getElementById('collectionLine_account_selectedValue').value = collectionLine.Account;
+            document.getElementById('collectionLine_article_data').value = collectionLine.ArticleId;
+            document.getElementById('collectionLine_article_selectedValue').value = collectionLine.Article;
+            document.getElementById('collectionLine_checkNo').value = collectionLine.CheckNumber;
+            document.getElementById('collectionLine_checkDate_data').value = collectionLine.CheckDate;
+            document.getElementById('collectionLine_depositoryBank_data').value = collectionLine.DepositoryBankId;
+            document.getElementById('collectionLine_depositoryBank_selectedValue').value = collectionLine.DepositoryBank;
+            document.getElementById('collectionLine_Clear').checked = collectionLine.IsClear;
         }
 
         // ========================

@@ -1140,16 +1140,48 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('stockInItem_Id').value = 0;
+            document.getElementById('stockInItem_ItemId_data').value = '';
+            document.getElementById('stockInItem_ItemCode_selectedValue').value = '';
+            document.getElementById('stockInItem_ItemDescription_selectedValue').value = '';
+            document.getElementById('stockInItem_Particulars').value = '';
+            document.getElementById('stockInItem_Quantity').value = '';
+            document.getElementById('stockInItem_Unit_data').value = '';
+            document.getElementById('stockInItem_Unit_selectedValue').value = '';
+            document.getElementById('stockInItem_Cost').value = '';
+            document.getElementById('stockInItem_Amount').value = '';
+            document.getElementById('stockInItem_BUCUnit_data').value = '';
+            document.getElementById('stockInItem_BUCUnit_selectedValue').value = '';
+            document.getElementById('stockInItem_BUCQuantity').value = '';
+            document.getElementById('stockInItem_BUCCost').value = '';
         }
 
         // ==================
         // Edit Stock In Item
         // ==================
         function btnEditStockInItem_Onclick() {
+            items.editItem(items.currentItem);
             $('#stockInItemsEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
+
+            var item = items.currentEditItem;
+            document.getElementById('stockInItem_Id').value = item.Id;
+            document.getElementById('stockInItem_ItemId_data').value = item.ItemId;
+            document.getElementById('stockInItem_ItemCode_selectedValue').value = item.ItemCode;
+            document.getElementById('stockInItem_ItemDescription_selectedValue').value = item.Item;
+            document.getElementById('stockInItem_Particulars').value = item.Particulars;
+            document.getElementById('stockInItem_Quantity').value = item.Quantity;
+            document.getElementById('stockInItem_Unit_data').value = item.UnitId;
+            document.getElementById('stockInItem_Unit_selectedValue').value = item.Unit;
+            document.getElementById('stockInItem_Cost').value = item.Cost;
+            document.getElementById('stockInItem_Amount').value = item.Amount;
+            document.getElementById('stockInItem_BUCUnit_data').value = item.BaseUnitId;
+            document.getElementById('stockInItem_BUCUnit_selectedValue').value = item.BaseUnit;
+            document.getElementById('stockInItem_BUCQuantity').value = item.BaseQuantity;
+            document.getElementById('stockInItem_BUCCost').value = item.BaseCost;
         }
 
         // ====================
