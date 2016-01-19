@@ -45,8 +45,8 @@
                         <button class="btn btn-primary btn-sm" id="cmdSalesJournal"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdSalesSave" onclick="btnSalesSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdSalesEdit"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="cmdSalesPrint" onclick="window.location.href ='@Url.Action("Salespdf", "Software" , new { salesid=salesId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("Sales", "Software" , new { branchid=branchId })'" class="btn btn-danger btn-sm" id="cmdSalesClose"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSalesPrint" onclick="window.location.href ='@Url.Action("Salespdf", "Software", new { SalesId = salesId })'"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("Sales", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdSalesClose"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -171,7 +171,7 @@
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
                     @*
-                    <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>*@
+                        <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>*@
                 </ul>
                 <br />
                 <div class="tab-content">
@@ -279,7 +279,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="SalesLineDetailForm">
-                            <input type="text" id="saleItem_Id" />
+                            <input type="hidden" id="saleItem_Id" />
                             <div class="row">
                                 <div class="col-md-6">
                                     <dl class="dl-horizontal">
@@ -1287,10 +1287,48 @@
                     $("#saleItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
                     $("#saleItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
                     $("#saleItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    $("#saleItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    $("#saleItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
 
                     createCboForItemDescription(articleItems);
                     getSalesItemUnitForComboBox();
-                    getItemInventoryCodeForComboBox();
+
+                    var articleId = ManualCodeCollections.items[this.selectedIndex].ItemId;
+                    getTaxTyoeValues(articleId);
+
+                    var branchId = document.getElementById('SI_Branch_data').value;
+                    $.ajax({
+                        url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            //if (results.length > 0) {
+                            //    inventories.push({
+                            //        Id: results.Id,
+                            //        BranchId: results.BranchId,
+                            //        ArticleId: results.ArticleId,
+                            //        InventoryCode: results.InventoryCode,
+                            //        Quantity: results.Quantity,
+                            //        Cost: results.Cost,
+                            //        Amount: results.Amount,
+                            //        Particulars: results.Particulars
+                            //    });
+                            //}
+                            
+                            if(results == null) {
+                                document.getElementById('saleItem_InventoryCode_data').value ="";
+                                document.getElementById('saleItem_InventoryCode_selectedValue').value = "";
+                            } else {
+                                document.getElementById('saleItem_InventoryCode_data').value = results.Id;
+                                document.getElementById('saleItem_InventoryCode_selectedValue').value = results.InventoryCode;
+                            }
+
+                            getItemInventoryCodeForComboBox();
+                        }
+                    });
+
                 }
             });
         }
@@ -1318,59 +1356,102 @@
                     $("#saleItem_ItemCode_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemCode);
                     $("#saleItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
                     $("#saleItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+                    $("#saleItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    $("#saleItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
 
                     createCboForManualCode(articleItems);
                     getSalesItemUnitForComboBox();
-                    getItemInventoryCodeForComboBox();
 
-
-                    var items = new wijmo.collections.ObservableArray;
                     var articleId = ItemDescriptionCollections.items[this.selectedIndex].ItemId;
+                    getTaxTyoeValues(articleId);
+                    
+                    var branchId = document.getElementById('SI_Branch_data').value;
                     $.ajax({
-                        url: '/api/article/' +  articleId,
+                        url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
                         cache: false,
                         type: 'GET',
                         contentType: 'application/json; charset=utf-8',
                         data: {},
-                        success: function (Results) {
-                            $('#loadingModal').modal('hide');
-                            if (Results.length > 0) {
-                                items.push ({
-                                    Id: Results.Id,
-                                    OutputTaxId : Results.OutputTaxId,
-                                    OutputTax : Results.OutputTax,
-                                    InputTaxId : Results.InputTaxId,
-                                    InputTax : Results.InputTax,
-                                    WTaxTypeId : Results.WTaxTypeId,
-                                    WTaxType : Results.WTaxType
+                        success: function (results) {
+                            //if (results.length > 0) {
+                            //    inventories.push({
+                            //        Id: results.Id,
+                            //        BranchId: results.BranchId,
+                            //        ArticleId: results.ArticleId,
+                            //        InventoryCode: results.InventoryCode,
+                            //        Quantity: results.Quantity,
+                            //        Cost: results.Cost,
+                            //        Amount: results.Amount,
+                            //        Particulars: results.Particulars
+                            //    });
+                            //}
+
+                            if(results == null) {
+                                document.getElementById('saleItem_InventoryCode_data').value ="";
+                                document.getElementById('saleItem_InventoryCode_selectedValue').value = "";
+                            } else {
+                                document.getElementById('saleItem_InventoryCode_data').value = results.Id;
+                                document.getElementById('saleItem_InventoryCode_selectedValue').value = results.InventoryCode;
+                            }
+
+                            getItemInventoryCodeForComboBox();
+                        }
+                    });
+                }
+            });
+        }
+
+        // ===================
+        // Get Tax Type Values
+        // ===================
+        function getTaxTyoeValues(articleId) {
+            var items = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/article/' +  articleId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        items.push ({
+                            Id: Results.Id,
+                            OutputTaxId : Results.OutputTaxId,
+                            OutputTax : Results.OutputTax,
+                            InputTaxId : Results.InputTaxId,
+                            InputTax : Results.InputTax,
+                            WTaxTypeId : Results.WTaxTypeId,
+                            WTaxType : Results.WTaxType
+                        });
+                    }
+
+                    var taxTypesVAT = new wijmo.collections.ObservableArray();
+                    var taxTypeVATId = Results.InputTaxId;
+                    $.ajax({
+                        url: '/api/taxType/' + taxTypeVATId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            if (results.length > 0) {
+                                taxTypesVAT.push({
+                                    TaxTypeId: results.Id,
+                                    TaxType: results.TaxType,
+                                    TaxRate: results.TaxRate,
+                                    IsInclusive: results.IsInclusive
                                 });
                             }
 
-                            var taxTypesVAT = new wijmo.collections.ObservableArray();
-                            var taxTypeVATId = Results.InputTaxId;
-                            $.ajax({
-                                url: '/api/taxType/' + taxTypeVATId,
-                                cache: false,
-                                type: 'GET',
-                                contentType: 'application/json; charset=utf-8',
-                                data: {},
-                                success: function (results) {
-                                    if (results.length > 0) {
-                                        taxTypesVAT.push({
-                                            TaxTypeId: results.Id,
-                                            TaxType: results.TaxType,
-                                            TaxRate: results.TaxRate,
-                                            IsInclusive: results.IsInclusive
-                                        });
-                                    }
+                            document.getElementById('saleItem_VAT_data').value =  results.Id;
+                            document.getElementById('saleItem_VAT_selectedValue').value =  results.TaxType;
+                            document.getElementById('saleItem_VATRate').value =  results.TaxRate;
+                            document.getElementById('saleItem_TAXInclusive').value =  results.IsInclusive;
 
-                                    document.getElementById('saleItem_VAT_data').value =  results.TaxRate;
-                                    document.getElementById('saleItem_TAXInclusive').value =  results.IsInclusive;
-                                }
-                            });
+                            getTaxTypeForComboBox();
                         }
                     });
-
                 }
             });
         }
@@ -1395,6 +1476,7 @@
                             });
                         }
                         createCboForSalesItemUnit(salesItemUnits);
+                        createCboForSalesItemBaseUnit(salesItemUnits);
                     }
                 }
             });
@@ -1419,18 +1501,40 @@
                 selectedValue: document.getElementById('saleItem_Unit_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#saleItem_Unit_data").val(SalesItemUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#saleItem_Unit_selectedValue").val(SalesItemUnitCollection.items[this.selectedIndex].Unit);
+                    $("#saleItem_BUCUnit_data").val(SalesItemUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#saleItem_BUCUnit_selectedValue").val(SalesItemUnitCollection.items[this.selectedIndex].Unit);
+
+                    createCboForSalesItemBaseUnit(salesItemUnits);
                 }
             });
+        }
+
+        // ============================
+        // CBO for Sales Item Base Unit
+        // ============================
+        function createCboForSalesItemBaseUnit(salesItemUnits) {
+            var SalesItemBaseUnitCollection = new wijmo.collections.CollectionView(salesItemUnits);
+            var SalesItemBaseUnitList = new Array();
+            for (var i = 0; i < SalesItemBaseUnitCollection.items.length; i++) {
+                SalesItemBaseUnitList.push(SalesItemBaseUnitCollection.items[i].Unit);
+            }
 
             cboBaseUnit.dispose();
             cboBaseUnit = new wijmo.input.ComboBox('#saleItem_BUCUnit', {
+                disabled: true,
                 placeholder: "Select Unit",
-                itemsSource: SalesItemUnitList,
+                itemsSource: SalesItemBaseUnitList,
                 isEditable: false,
                 required: false,
                 selectedValue: document.getElementById('saleItem_BUCUnit_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#saleItem_BUCUnit_data").val(SalesItemUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#saleItem_BUCUnit_data").val(SalesItemBaseUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#saleItem_BUCUnit_selectedValue").val(SalesItemBaseUnitCollection.items[this.selectedIndex].Unit);
+                    $("#saleItem_Unit_data").val(SalesItemBaseUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#saleItem_Unit_selectedValue").val(SalesItemBaseUnitCollection.items[this.selectedIndex].Unit);
+
+                    createCboForSalesItemUnit(salesItemUnits);
                 }
             });
         }
@@ -1440,31 +1544,36 @@
         // =======================
         function getItemInventoryCodeForComboBox() {
             inventories = new wijmo.collections.ObservableArray();
-            var articleId = document.getElementById('saleItem_ItemId_data').value;
-            $.ajax({
-                url: '/api/listArticleInventoryByArticleId/' + articleId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            inventories.push({
-                                Id: results[i]["Id"],
-                                BranchId: results[i]["BranchId"],
-                                ArticleId: results[i]["ArticleId"],
-                                InventoryCode: results[i]["InventoryCode"],
-                                Quantity: results[i]["Quantity"],
-                                Cost: results[i]["Cost"],
-                                Amount: results[i]["Amount"],
-                                Particulars: results[i]["Particulars"]
-                            });
+            setTimeout(function() {
+                var articleId = document.getElementById('saleItem_ItemId_data').value;
+                var branchId = document.getElementById('SI_Branch_data').value;
+                $.ajax({
+                    url: '/api/listArticleInventoryByBranchIdAndArticleId/' + branchId + '/' + articleId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                inventories.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    ArticleId: results[i]["ArticleId"],
+                                    InventoryCode: results[i]["InventoryCode"],
+                                    Quantity: results[i]["Quantity"],
+                                    Cost: results[i]["Cost"],
+                                    Amount: results[i]["Amount"],
+                                    Particulars: results[i]["Particulars"]
+                                });
+                                createCboForInventoryCode(inventories);
+                            }
+                        } else {
+                            createCboForInventoryCode(inventories);
                         }
-                        createCboForInventoryCode(inventories);
                     }
-                }
-            });
+                });
+            },100);
         }
 
         // ===========================
@@ -1535,13 +1644,16 @@
                 placeholder: "Select Discount",
                 itemsSource: DiscountList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('saleItem_Discont_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#saleItem_Discont_data").val(DiscountCollection.items[this.selectedIndex].Id);
                     $("#saleItem_DiscountRate").val(DiscountCollection.items[this.selectedIndex].DiscountRate);
                 }
             });
+
+            document.getElementById('saleItem_Discont_data').value = DiscountCollection.items[cboDiscount.selectedIndex].Id;
+            document.getElementById('saleItem_Discont_selectedValue').value = DiscountCollection.items[cboDiscount.selectedIndex].Discount;
+
         }
 
         // ===================
@@ -1591,6 +1703,7 @@
                 onSelectedIndexChanged: function () {
                     $("#saleItem_VAT_data").val(taxTypeCollection.items[this.selectedIndex].TaxTypeId);
                     $("#saleItem_VATRate").val(taxTypeCollection.items[this.selectedIndex].TaxRate);
+                    $("#saleItem_VAT_selectedValue").val(taxTypeCollection.items[this.selectedIndex].TaxType);
                     $("#saleItem_TAXInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
 
                 }
@@ -1734,6 +1847,12 @@
             cboDiscount = new wijmo.input.ComboBox('#saleItem_Discont');
             cboForVATTaxType = new wijmo.input.ComboBox('#saleItem_VAT');
             cboBaseUnit = new wijmo.input.ComboBox('#saleItem_BUCUnit');
+
+            document.getElementById('saleItem_DiscountAmount').disabled = true;
+            document.getElementById('saleItem_NetPrice').disabled = true;
+            document.getElementById('saleItem_Amount').disabled = true;
+            document.getElementById('saleItem_BUCQuantity').disabled = true;
+            document.getElementById('saleItem_BUCPrice').disabled = true;
 
             items = new wijmo.collections.CollectionView(getItem());
             items.canFilter = true;
