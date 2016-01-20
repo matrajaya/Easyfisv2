@@ -1257,7 +1257,7 @@
                         }
                     });
 
-                    getStockInItemUnitForComboBox();
+                    getStockOutItemUnitForComboBox();
                 }
             });
         }
@@ -1325,7 +1325,7 @@
                         }
                     });
 
-                    getStockInItemUnitForComboBox();
+                    getStockOutItemUnitForComboBox();
                 }
             });
         }
@@ -1392,7 +1392,7 @@
         // =============
         // Get Item Unit
         // =============
-        function getStockInItemUnitForComboBox() {
+        function getStockOutItemUnitForComboBox() {
             stockOutUnits = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listUnit',
@@ -1567,7 +1567,7 @@
                 });
             },100);
 
-            getStockInItemUnitForComboBox();
+            getStockOutItemUnitForComboBox();
             getStockOutItemAccountForComboBox();
 
             document.getElementById('stockOutItem_Id').value = 0;
@@ -1606,7 +1606,7 @@
             
             getArticleItemForManualCodeAndComponent();
             getItemInventoryCodeForComboBox();
-            getStockInItemUnitForComboBox();
+            getStockOutItemUnitForComboBox();
             getStockOutItemAccountForComboBox();
 
             var item = items.currentEditItem;

@@ -262,7 +262,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="stockTransferItemsDetailForm">
-                            <input type="text" id="stockTransferItem_Id" />
+                            <input type="hidden" id="stockTransferItem_Id" />
                             <div class="row">
                                 <div class="col-md-6">
                                     <dl class="dl-horizontal">
@@ -270,14 +270,14 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_ItemCode"></div>
 
-                                            <input type="text" id="stockTransferItem_ItemId_data" class="requiredStockTransferItem">
-                                            <input type="text" id="stockTransferItem_ItemCode_selectedValue" />
+                                            <input type="hidden" id="stockTransferItem_ItemId_data" class="requiredStockTransferItem">
+                                            <input type="hidden" id="stockTransferItem_ItemCode_selectedValue" />
                                         </dd>
                                         <dt>Item Description:</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_ItemDescription"></div>
 
-                                            <input type="text" id="stockTransferItem_ItemDescription_selectedValue" />
+                                            <input type="hidden" id="stockTransferItem_ItemDescription_selectedValue" />
                                         </dd>
                                         <dt>Particulars:</dt>
                                         <dd><textarea class="form-control textarea-custom requiredStockTransferItem" id="stockTransferItem_Particulars"></textarea></dd>
@@ -285,8 +285,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_ItemInventoryCode"></div>
 
-                                            <input type="text" id="stockTransferItem_ItemInventoryCode_data" class="requiredStockTransferItem">
-                                            <input type="text" id="stockTransferItem_ItemInventoryCode_selectedValue" />
+                                            <input type="hidden" id="stockTransferItem_ItemInventoryCode_data" class="requiredStockTransferItem">
+                                            <input type="hidden" id="stockTransferItem_ItemInventoryCode_selectedValue" />
                                         </dd>
                                         <dt>Quantity:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Quantity" /></dd>
@@ -294,8 +294,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_Unit"></div>
 
-                                            <input type="text" id="stockTransferItem_Unit_data" class="requiredStockTransferItem">
-                                            <input type="text" id="stockTransferItem_Unit_selectedValue" />
+                                            <input type="hidden" id="stockTransferItem_Unit_data" class="requiredStockTransferItem">
+                                            <input type="hidden" id="stockTransferItem_Unit_selectedValue" />
                                         </dd>
                                         <dt>Cost:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Cost" /></dd>
@@ -314,8 +314,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_BUCUnit"></div>
 
-                                            <input type="text" id="stockTransferItem_BUCUnit_data" class="requiredStockTransferItem">
-                                            <input type="text" id="stockTransferItem_BUCUnit_selectedValue" />
+                                            <input type="hidden" id="stockTransferItem_BUCUnit_data" class="requiredStockTransferItem">
+                                            <input type="hidden" id="stockTransferItem_BUCUnit_selectedValue" />
                                         </dd>
                                         <dt>Quantity:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_BUCQuantity" /></dd>
@@ -980,6 +980,13 @@
         var btnLastPageGridItem;
         var btnCurrentPageGridItem;
 
+        var articleItems;
+        var cboManualCodeArticleItems;
+        var cboItemDescriptionArticleItems;
+        
+        var inventories;
+        var cboInventoryCode;
+
         // ============================
         // GET Stock Transfer Item List
         // ============================
@@ -1027,7 +1034,320 @@
             });
             return items;
         }
-        
+
+        // ======================================
+        // GET Item Id, Manual Code and Component
+        // ======================================
+        function getArticleItemForManualCodeAndComponent() {
+            articleItems = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/1',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            articleItems.push({
+                                ItemId: results[i]["Id"],
+                                ItemCode: results[i]["ManualArticleCode"],
+                                ItemDescription: results[i]["Article"],
+                                UnitId: results[i]["UnitId"],
+                                Unit: results[i]["Unit"],
+                                Particulars: results[i]["Particulars"]
+                            });
+                        }
+                        createCboForManualCode(articleItems);
+                        createCboForItemDescription(articleItems);
+                    }
+                }
+            });
+        }
+
+        // ===============
+        // CBO Manual Code
+        // ===============
+        function createCboForManualCode(articleItems) {
+            var ManualCodeCollections = new wijmo.collections.CollectionView(articleItems);
+            var ManualCodeList = new Array();
+            for (var i = 0; i < ManualCodeCollections.items.length; i++) {
+                ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
+            }
+
+            cboManualCodeArticleItems.dispose();
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockTransferItem_ItemCode', {
+                placeholder: "Select Manual Code",
+                itemsSource: ManualCodeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockTransferItem_ItemCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockTransferItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
+                    $("#stockTransferItem_ItemCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
+                    $("#stockTransferItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
+                    $("#stockTransferItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    $("#stockTransferItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    $("#stockTransferItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
+
+                    createCboForItemDescription(articleItems);
+                    
+                    var articleId = ManualCodeCollections.items[this.selectedIndex].ItemId;
+                    var branchId = document.getElementById('stockTransfer_Branch_data').value;
+                    $.ajax({
+                        url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            //if (results.length > 0) {
+                            //    inventories.push({
+                            //        Id: results.Id,
+                            //        BranchId: results.BranchId,
+                            //        ArticleId: results.ArticleId,
+                            //        InventoryCode: results.InventoryCode,
+                            //        Quantity: results.Quantity,
+                            //        Cost: results.Cost,
+                            //        Amount: results.Amount,
+                            //        Particulars: results.Particulars
+                            //    });
+                            //}
+
+                            if(results == null) {
+                                document.getElementById('stockTransferItem_ItemInventoryCode_data').value ="";
+                                document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = "";
+                            } else {
+                                document.getElementById('stockTransferItem_ItemInventoryCode_data').value = results.Id;
+                                document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
+                            }
+                            
+                            getItemInventoryCodeForComboBox();
+                        }
+                    });
+                    
+                    getStockTransferItemUnitForComboBox();
+                }
+            });
+        }
+
+        // ====================
+        // CBO Item Description
+        // ====================
+        function createCboForItemDescription(articleItems) {
+            var ItemDescriptionCollections = new wijmo.collections.CollectionView(articleItems);
+            var ItemDescriptionList = new Array();
+            for (var i = 0; i < ItemDescriptionCollections.items.length; i++) {
+                ItemDescriptionList.push(ItemDescriptionCollections.items[i].ItemDescription);
+            }
+
+            cboItemDescriptionArticleItems.dispose();
+            cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockTransferItem_ItemDescription', {
+                placeholder: "Select Item Description",
+                itemsSource: ItemDescriptionList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockTransferItem_ItemDescription_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockTransferItem_ItemId_data").val(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
+                    $("#stockTransferItem_ItemCode_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemCode);
+                    $("#stockTransferItem_ItemDescription_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemDescription);
+                    $("#stockTransferItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+                    $("#stockTransferItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+                    $("#stockTransferItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
+
+                    createCboForManualCode(articleItems);
+
+                    var articleId = ItemDescriptionCollections.items[this.selectedIndex].ItemId;
+                    var branchId = document.getElementById('stockTransfer_Branch_data').value;
+                    $.ajax({
+                        url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            //if (results.length > 0) {
+                            //    inventories.push({
+                            //        Id: results.Id,
+                            //        BranchId: results.BranchId,
+                            //        ArticleId: results.ArticleId,
+                            //        InventoryCode: results.InventoryCode,
+                            //        Quantity: results.Quantity,
+                            //        Cost: results.Cost,
+                            //        Amount: results.Amount,
+                            //        Particulars: results.Particulars
+                            //    });
+                            //}
+
+                            if(results == null) {
+                                document.getElementById('stockTransferItem_ItemInventoryCode_data').value = "";
+                                document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = "";
+                            } else {
+                                document.getElementById('stockTransferItem_ItemInventoryCode_data').value = results.Id;
+                                document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
+                            }
+                            
+                            getItemInventoryCodeForComboBox();
+                        }
+                    });
+
+                    getStockTransferItemUnitForComboBox();
+                }
+            });
+        }
+
+
+        // =======================
+        // Get Item Inventory Code
+        // =======================
+        function getItemInventoryCodeForComboBox() {
+            inventories = new wijmo.collections.ObservableArray();
+            setTimeout(function() {
+                var articleId = document.getElementById('stockTransferItem_ItemId_data').value;
+                var branchId = document.getElementById('stockTransfer_Branch_data').value;
+                $.ajax({
+                    url: '/api/listArticleInventoryByBranchIdAndArticleId/' + branchId + '/' + articleId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                inventories.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    ArticleId: results[i]["ArticleId"],
+                                    InventoryCode: results[i]["InventoryCode"],
+                                    Quantity: results[i]["Quantity"],
+                                    Cost: results[i]["Cost"],
+                                    Amount: results[i]["Amount"],
+                                    Particulars: results[i]["Particulars"]
+                                });
+                            }
+                            
+                            createCboForInventoryCode(inventories);
+                        } 
+                    }
+                });
+            },100);
+        }
+
+        // ===========================
+        // CBO for Item Inventory Code
+        // ===========================
+        function createCboForInventoryCode(inventories) {
+            var InventoryCodeCollection = new wijmo.collections.CollectionView(inventories);
+            var InventoryCodeList = new Array();
+            for (var i = 0; i < InventoryCodeCollection.items.length; i++) {
+                InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
+            }
+
+            cboInventoryCode.dispose();
+            cboInventoryCode = new wijmo.input.ComboBox('#stockTransferItem_ItemInventoryCode', {
+                placeholder: "Select Inventory Code",
+                itemsSource: InventoryCodeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockTransferItem_ItemInventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        var stockTransferUnits;
+        var cboStockTransferUnit;
+        var cboStockTransferBaseUnit;
+
+        // =============
+        // Get Item Unit
+        // =============
+        function getStockTransferItemUnitForComboBox() {
+            stockTransferUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            stockTransferUnits.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForStockTransferUnit(stockTransferUnits);
+                        createCboForStockTransferBaseUnit(stockTransferUnits);
+                    }
+                }
+            });
+        }
+
+        // ===========================
+        // CBO for Stock Transfer Unit
+        // ===========================
+        function createCboForStockTransferUnit(stockTransferUnits) {
+            var StockTransferUnitCollection = new wijmo.collections.CollectionView(stockTransferUnits);
+            var StockTransferUnitList = new Array();
+            for (var i = 0; i < StockTransferUnitCollection.items.length; i++) {
+                StockTransferUnitList.push(StockTransferUnitCollection.items[i].Unit);
+            }
+
+            cboStockTransferUnit.dispose();
+            cboStockTransferUnit = new wijmo.input.ComboBox('#stockTransferItem_Unit', {
+                placeholder: "Select Unit",
+                itemsSource: StockTransferUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockTransferItem_Unit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockTransferItem_Unit_data").val(StockTransferUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_Unit_selectedValue").val(StockTransferUnitCollection.items[this.selectedIndex].Unit);
+                    $("#stockTransferItem_BUCUnit_data").val(StockTransferUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_BUCUnit_selectedValue").val(StockTransferUnitCollection.items[this.selectedIndex].Unit);
+
+                    createCboForStockTransferBaseUnit(stockTransferUnits);
+                }
+            });
+        }
+
+        // ================================
+        // CBO for STock Transfer Base Unit
+        // =================================
+        function createCboForStockTransferBaseUnit(stockTransferUnits) {
+            var StockTransferBaseUnitCollection = new wijmo.collections.CollectionView(stockTransferUnits);
+            var StockTransferBaseUnitList = new Array();
+            for (var i = 0; i < StockTransferBaseUnitCollection.items.length; i++) {
+                StockTransferBaseUnitList.push(StockTransferBaseUnitCollection.items[i].Unit);
+            }
+
+            cboStockTransferBaseUnit.dispose();
+            cboStockTransferBaseUnit = new wijmo.input.ComboBox('#stockTransferItem_BUCUnit', {
+                disabled: true,
+                placeholder: "Select Unit",
+                itemsSource: StockTransferBaseUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockTransferItem_BUCUnit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockTransferItem_BUCUnit_data").val(StockTransferBaseUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_BUCUnit_selectedValue").val(StockTransferBaseUnitCollection.items[this.selectedIndex].Unit);
+                    $("#stockTransferItem_Unit_data").val(StockTransferBaseUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_Unit_selectedValue").val(StockTransferBaseUnitCollection.items[this.selectedIndex].Unit);
+
+                    createCboForStockTransferUnit(stockTransferUnits);
+                }
+            });
+        }
+
         // =======================
         // ADD Stock Transfer Item
         // =======================
@@ -1036,6 +1356,42 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            getArticleItemForManualCodeAndComponent();
+
+            inventories = new wijmo.collections.ObservableArray();
+            setTimeout(function() {
+                var articleId = document.getElementById('stockTransferItem_ItemId_data').value;
+                var branchId = document.getElementById('stockTransfer_Branch_data').value;
+                $.ajax({
+                    url: '/api/listArticleInventoryByBranchIdAndArticleId/' + branchId + '/' + 0,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                inventories.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    ArticleId: results[i]["ArticleId"],
+                                    InventoryCode: results[i]["InventoryCode"],
+                                    Quantity: results[i]["Quantity"],
+                                    Cost: results[i]["Cost"],
+                                    Amount: results[i]["Amount"],
+                                    Particulars: results[i]["Particulars"]
+                                });
+                                createCboForInventoryCode(inventories);
+                            }
+                        } else {
+                            createCboForInventoryCode(inventories);
+                        }
+                    }
+                });
+            },100);
+
+            getStockTransferItemUnitForComboBox();
 
             document.getElementById('stockTransferItem_Id').value = 0;
             document.getElementById('stockTransferItem_ItemId_data').value = '';
@@ -1064,6 +1420,10 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            getArticleItemForManualCodeAndComponent();
+            getItemInventoryCodeForComboBox();
+            getStockTransferItemUnitForComboBox();
 
             var item = items.currentEditItem;
             document.getElementById('stockTransferItem_Id').value = item.Id;
@@ -1126,6 +1486,12 @@
         //  Items
         // ======
         function itemTab() {
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockTransferItem_ItemCode');
+            cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockTransferItem_ItemDescription');
+            cboInventoryCode = new wijmo.input.ComboBox('#stockTransferItem_ItemInventoryCode');
+            cboStockTransferUnit = new wijmo.input.ComboBox('#stockTransferItem_Unit');
+            cboStockTransferBaseUnit = new wijmo.input.ComboBox('#stockTransferItem_BUCUnit');
+
             items = new wijmo.collections.CollectionView(getItem());
             items.canFilter = true;
             items.pageSize = 15;
@@ -1140,9 +1506,6 @@
             }
             items.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsItem();
-            });
-            items.currentChanged.addHandler(function (sender, args) {
-                updateDetailsItem();
             });
 
             // Flex Grid for Items
