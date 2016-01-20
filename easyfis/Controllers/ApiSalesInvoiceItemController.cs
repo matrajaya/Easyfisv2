@@ -92,5 +92,126 @@ namespace easyfis.Controllers
                                     };
             return salesInvoiceItems.ToList();
         }
+
+        // ======================
+        // ADD Sales Invoice Item
+        // ======================
+        [Route("api/addSalesInvoiceItem")]
+        public int Post(Models.TrnSalesInvoiceItem saleItem)
+        {
+            try
+            {
+                Data.TrnSalesInvoiceItem newSaleItem = new Data.TrnSalesInvoiceItem();
+                
+                newSaleItem.SIId = saleItem.SIId;
+                newSaleItem.ItemId = saleItem.ItemId;
+                newSaleItem.ItemInventoryId = saleItem.ItemInventoryId;
+                newSaleItem.Particulars = saleItem.Particulars;
+                newSaleItem.UnitId = saleItem.UnitId;
+                newSaleItem.Quantity = saleItem.Quantity;
+                newSaleItem.Price = saleItem.Price;
+                newSaleItem.DiscountId = saleItem.DiscountId;
+                newSaleItem.DiscountRate = saleItem.DiscountRate;
+                newSaleItem.DiscountAmount = saleItem.DiscountAmount;
+                newSaleItem.NetPrice = saleItem.NetPrice;
+                newSaleItem.Amount = saleItem.Amount;
+                newSaleItem.VATId = saleItem.VATId;
+                newSaleItem.VATPercentage = saleItem.VATPercentage;
+                newSaleItem.VATAmount = saleItem.VATAmount;
+                newSaleItem.BaseUnitId = saleItem.BaseUnitId;
+                newSaleItem.BaseQuantity = saleItem.BaseQuantity;
+                newSaleItem.BasePrice = saleItem.BasePrice;
+
+                db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleItem);
+                db.SubmitChanges();
+
+                return newSaleItem.Id;
+
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // =========================
+        // UPDATE Sales Invoice Item
+        // =========================
+        [Route("api/updateSalesInvoiceItem/{id}")]
+        public HttpResponseMessage Put(String id, Models.TrnSalesInvoiceItem saleItem)
+        {
+            try
+            {
+                var saleItemId = Convert.ToInt32(id);
+                var saleItems = from d in db.TrnSalesInvoiceItems where d.Id == saleItemId select d;
+
+                if (saleItems.Any())
+                {
+                    var updateSalesInvoiceItem = saleItems.FirstOrDefault();
+
+                    updateSalesInvoiceItem.SIId = saleItem.SIId;
+                    updateSalesInvoiceItem.ItemId = saleItem.ItemId;
+                    updateSalesInvoiceItem.ItemInventoryId = saleItem.ItemInventoryId;
+                    updateSalesInvoiceItem.Particulars = saleItem.Particulars;
+                    updateSalesInvoiceItem.UnitId = saleItem.UnitId;
+                    updateSalesInvoiceItem.Quantity = saleItem.Quantity;
+                    updateSalesInvoiceItem.Price = saleItem.Price;
+                    updateSalesInvoiceItem.DiscountId = saleItem.DiscountId;
+                    updateSalesInvoiceItem.DiscountRate = saleItem.DiscountRate;
+                    updateSalesInvoiceItem.DiscountAmount = saleItem.DiscountAmount;
+                    updateSalesInvoiceItem.NetPrice = saleItem.NetPrice;
+                    updateSalesInvoiceItem.Amount = saleItem.Amount;
+                    updateSalesInvoiceItem.VATId = saleItem.VATId;
+                    updateSalesInvoiceItem.VATPercentage = saleItem.VATPercentage;
+                    updateSalesInvoiceItem.VATAmount = saleItem.VATAmount;
+                    updateSalesInvoiceItem.BaseUnitId = saleItem.BaseUnitId;
+                    updateSalesInvoiceItem.BaseQuantity = saleItem.BaseQuantity;
+                    updateSalesInvoiceItem.BasePrice = saleItem.BasePrice;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // =========================
+        // DELETE Sales Invoice Item
+        // =========================
+        [Route("api/deleteSalesInvoiceItem/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var saleItemId = Convert.ToInt32(id);
+                var saleItems = from d in db.TrnSalesInvoiceItems where d.Id == saleItemId select d;
+
+                if (saleItems.Any())
+                {
+                    db.TrnSalesInvoiceItems.DeleteOnSubmit(saleItems.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
     }
 }

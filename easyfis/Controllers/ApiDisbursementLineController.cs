@@ -64,5 +64,101 @@ namespace easyfis.Controllers
                                     };
             return disbursementLines.ToList();
         }
+
+        // =====================
+        // ADD Disbursement Line
+        // =====================
+        [Route("api/addDisbursementLine")]
+        public int Post(Models.TrnDisbursementLine disbursementLine)
+        {
+            try
+            {
+                Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
+
+                newDisbursementLine.CVId = disbursementLine.CVId;
+                newDisbursementLine.BranchId = disbursementLine.BranchId;
+                newDisbursementLine.AccountId = disbursementLine.AccountId;
+                newDisbursementLine.ArticleId = disbursementLine.ArticleId;
+                newDisbursementLine.RRId = disbursementLine.RRId;
+                newDisbursementLine.Particulars = disbursementLine.Particulars;
+                newDisbursementLine.Amount = disbursementLine.Amount;
+
+                db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
+                db.SubmitChanges();
+
+                return newDisbursementLine.Id;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // ========================
+        // UPDATE Disbursement Line
+        // ========================
+        [Route("api/updateDisbursementLine/{id}")]
+        public HttpResponseMessage Put(String id, Models.TrnDisbursementLine disbursementLine)
+        {
+            try
+            {
+                var disbursementLineId = Convert.ToInt32(id);
+                var disbursementLines = from d in db.TrnDisbursementLines where d.Id == disbursementLineId select d;
+
+                if (disbursementLines.Any())
+                {
+                    var updateDisbursementLine = disbursementLines.FirstOrDefault();
+
+                    updateDisbursementLine.CVId = disbursementLine.CVId;
+                    updateDisbursementLine.BranchId = disbursementLine.BranchId;
+                    updateDisbursementLine.AccountId = disbursementLine.AccountId;
+                    updateDisbursementLine.ArticleId = disbursementLine.ArticleId;
+                    updateDisbursementLine.RRId = disbursementLine.RRId;
+                    updateDisbursementLine.Particulars = disbursementLine.Particulars;
+                    updateDisbursementLine.Amount = disbursementLine.Amount;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // ========================
+        // DELETE Disbursement Line
+        // ========================
+        [Route("api/deleteDisbursementLine/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var disbursementLineId = Convert.ToInt32(id);
+                var disbursementLines = from d in db.TrnDisbursementLines where d.Id == disbursementLineId select d;
+
+                if (disbursementLines.Any())
+                {
+                    db.TrnDisbursementLines.DeleteOnSubmit(disbursementLines.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
     }
 }

@@ -78,5 +78,113 @@ namespace easyfis.Controllers
                                 };
             return stockOutItems.ToList();
         }
+
+        // ==================
+        // ADD Stock Out Item
+        // ==================
+        [Route("api/addStockOutItem")]
+        public int Post(Models.TrnStockOutItem stockOutItem)
+        {
+            try
+            {
+                Data.TrnStockOutItem newStockOutItems = new Data.TrnStockOutItem();
+
+                newStockOutItems.OTId = stockOutItem.OTId;
+                newStockOutItems.ExpenseAccountId = stockOutItem.ExpenseAccountId;
+                newStockOutItems.ItemId = stockOutItem.ItemId;
+                newStockOutItems.ItemInventoryId = stockOutItem.ItemInventoryId;
+                newStockOutItems.Particulars = stockOutItem.Particulars;
+                newStockOutItems.UnitId = stockOutItem.UnitId;
+                newStockOutItems.Quantity = stockOutItem.Quantity;
+                newStockOutItems.Cost = stockOutItem.Cost;
+                newStockOutItems.Amount = stockOutItem.Amount;
+                newStockOutItems.BaseUnitId = stockOutItem.BaseUnitId;
+                newStockOutItems.BaseQuantity = stockOutItem.BaseQuantity;
+                newStockOutItems.BaseCost = stockOutItem.BaseCost;
+
+                db.TrnStockOutItems.InsertOnSubmit(newStockOutItems);
+                db.SubmitChanges();
+
+                return newStockOutItems.Id;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // =====================
+        // UPDATE Stock Out Item
+        // =====================
+        [Route("api/updateStockOutItem/{id}")]
+        public HttpResponseMessage Put(String id, Models.TrnStockOutItem stockOutItem)
+        {
+            try
+            {
+                var stockOutItemId = Convert.ToInt32(id);
+                var stockOutItems = from d in db.TrnStockOutItems where d.Id == stockOutItemId select d;
+
+                if (stockOutItems.Any())
+                {
+                    var updateStockOutItem = stockOutItems.FirstOrDefault();
+
+                    updateStockOutItem.OTId = stockOutItem.OTId;
+                    updateStockOutItem.ExpenseAccountId = stockOutItem.ExpenseAccountId;
+                    updateStockOutItem.ItemId = stockOutItem.ItemId;
+                    updateStockOutItem.ItemInventoryId = stockOutItem.ItemInventoryId;
+                    updateStockOutItem.Particulars = stockOutItem.Particulars;
+                    updateStockOutItem.UnitId = stockOutItem.UnitId;
+                    updateStockOutItem.Quantity = stockOutItem.Quantity;
+                    updateStockOutItem.Cost = stockOutItem.Cost;
+                    updateStockOutItem.Amount = stockOutItem.Amount;
+                    updateStockOutItem.BaseUnitId = stockOutItem.BaseUnitId;
+                    updateStockOutItem.BaseQuantity = stockOutItem.BaseQuantity;
+                    updateStockOutItem.BaseCost = stockOutItem.BaseCost;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // =====================
+        // DELETE Stock Out Item
+        // =====================
+        [Route("api/deleteStockOutItem/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var stockOutItemId = Convert.ToInt32(id);
+                var stockOutItems = from d in db.TrnStockOutItems where d.Id == stockOutItemId select d;
+
+                if (stockOutItems.Any())
+                {
+                    db.TrnStockOutItems.DeleteOnSubmit(stockOutItems.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
     }
 }

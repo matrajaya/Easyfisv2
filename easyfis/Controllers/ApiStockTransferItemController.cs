@@ -75,5 +75,111 @@ namespace easyfis.Controllers
             return stockTransferItems.ToList();
         }
 
+        // =======================
+        // ADD Stock Transfer Item
+        // =======================
+        [Route("api/addStockTransferItem")]
+        public int Post(Models.TrnStockTransferItem stockTransferItem)
+        {
+            try
+            {
+                Data.TrnStockTransferItem newStockTransferItem = new Data.TrnStockTransferItem();
+
+                newStockTransferItem.STId = stockTransferItem.STId;
+                newStockTransferItem.ItemId = stockTransferItem.ItemId;
+                newStockTransferItem.ItemInventoryId = stockTransferItem.ItemInventoryId;
+                newStockTransferItem.Particulars = stockTransferItem.Particulars;
+                newStockTransferItem.UnitId = stockTransferItem.UnitId;
+                newStockTransferItem.Quantity = stockTransferItem.Quantity;
+                newStockTransferItem.Cost = stockTransferItem.Cost;
+                newStockTransferItem.Amount = stockTransferItem.Amount;
+                newStockTransferItem.BaseUnitId = stockTransferItem.BaseUnitId;
+                newStockTransferItem.BaseQuantity = stockTransferItem.BaseQuantity;
+                newStockTransferItem.BaseCost = stockTransferItem.BaseCost;
+
+                db.TrnStockTransferItems.InsertOnSubmit(newStockTransferItem);
+                db.SubmitChanges();
+
+                return newStockTransferItem.Id;
+
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // ==========================
+        // UPDATE Stock Transfer Item
+        // ==========================
+        [Route("api/updateStockTransferItem/{id}")]
+        public HttpResponseMessage Put(String id, Models.TrnStockTransferItem stockTransferItem)
+        {
+            try
+            {
+                var stockTransferItemId = Convert.ToInt32(id);
+                var stockTransferItems = from d in db.TrnStockTransferItems where d.Id == stockTransferItemId select d;
+
+                if (stockTransferItems.Any())
+                {
+                    var updateStockTransferItem = stockTransferItems.FirstOrDefault();
+
+                    updateStockTransferItem.STId = stockTransferItem.STId;
+                    updateStockTransferItem.ItemId = stockTransferItem.ItemId;
+                    updateStockTransferItem.ItemInventoryId = stockTransferItem.ItemInventoryId;
+                    updateStockTransferItem.Particulars = stockTransferItem.Particulars;
+                    updateStockTransferItem.UnitId = stockTransferItem.UnitId;
+                    updateStockTransferItem.Quantity = stockTransferItem.Quantity;
+                    updateStockTransferItem.Cost = stockTransferItem.Cost;
+                    updateStockTransferItem.Amount = stockTransferItem.Amount;
+                    updateStockTransferItem.BaseUnitId = stockTransferItem.BaseUnitId;
+                    updateStockTransferItem.BaseQuantity = stockTransferItem.BaseQuantity;
+                    updateStockTransferItem.BaseCost = stockTransferItem.BaseCost;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // ==========================
+        // DELETE Stock Transfer Item
+        // ==========================
+        [Route("api/deleteStockTransferItem/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var stockTransferItemId = Convert.ToInt32(id);
+                var stockTransferItems = from d in db.TrnStockTransferItems where d.Id == stockTransferItemId select d;
+
+                if (stockTransferItems.Any())
+                {
+                    db.TrnStockTransferItems.DeleteOnSubmit(stockTransferItems.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
     }
 }
