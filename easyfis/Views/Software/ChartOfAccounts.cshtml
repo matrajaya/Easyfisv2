@@ -38,8 +38,8 @@
                     <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Account Category</a></li>
                 </ul>
                 <br />
-                <div class="tab-content">                   
-                     <!-- Account List -->
+                <div class="tab-content">
+                    <!-- Account List -->
                     <div id="Account" class="tab-pane fade in active">
                         <div class="row">
                             <div class="col-lg-12">
@@ -251,10 +251,105 @@
                                 </dd>
                             </dl>
                         </form>
+                        <hr id="hrAccountArticleType" />
+                        <center><label id="loadingAccountArtitleType"></label></center>
+                        <div id="accountArticleTypeDiv">
+                            <label>Account Article Type</label>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control input-sm" id="InputFilterAccountArticleType" placeholder="Search">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4" align="right">
+                                    <button class="btn btn-primary btn-sm" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row" align="left">
+                                <div class="col-lg-12">
+                                    <div id="AccountArticleTypeGrid" class="grid" align="left"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="btn-group col-md-7" id="naviagtionPageGridAccountArticleType">
+                                    <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountArticleType">
+                                        <span class="glyphicon glyphicon-fast-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountArticleType">
+                                        <span class="glyphicon glyphicon-step-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountArticleType"></button>
+                                    <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountArticleType">
+                                        <span class="glyphicon glyphicon-step-forward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountArticleType">
+                                        <span class="glyphicon glyphicon-fast-forward"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-primary btn-sm" id="cmdSaveAccountButton" onclick="cmdAccountSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button id="cmdAccountDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== -->
+        <!-- Account Article Type -->
+        <!-- ==================== -->
+        <div class="modal fade" id="accountArticleTypeModal" role="dialog">
+            <div class="modal-dialog btn-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="accountArticleTypeModalLabel">Account Article Type Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="accountArticleType_id" />
+                        <form id="AccountTypeDetailForm">
+                            <dl class="dl-horizontal">
+                                <dt>Article Type:</dt>
+                                <dd>
+                                    <div id="accountArticleType_articleType" class="comboBox-wide"></div>
+
+                                    <input type="hidden" class="requiredAccountArticleType" id="accountArticleType_articleType_Data" required />
+                                    <input type="hidden" id="accountArticleType_articleType_selectedValue" />
+                                </dd>
+                            </dl>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" id="cmdSaveaccountArticleTypeButton" onclick="cmdAccountArticleTypeSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdaccountArticleTypeDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================== -->
+        <!-- Account Article Type Delete -->
+        <!-- =========================== -->
+        <div class="modal fade" id="deleteAccountArticleTypeConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Article Type<i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountArticleType" onclick="cmdAccountArticleTypeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteCloseButtonAccountArticleType" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -493,6 +588,16 @@
         var btnLastPageGridAccount;
         var btnCurrentPageGridAccount;
 
+        var accountArticleTypes;
+        var btnFirstPageGridAccountArticleType;
+        var btnPreviousPageGridAccountArticleType;
+        var btnNextPageGridAccountArticleType;
+        var btnLastPageGridAccountArticleType;
+        var btnCurrentPageGridAccountArticleType;
+
+        var articleTypes;
+        var cboForArticleType;
+
         // ==============================
         // GET Account Type for Combo Box
         // ==============================
@@ -613,7 +718,7 @@
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
                             accounts.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='btnAccountEditButton' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: Results[i]["Id"],
                                 AccountCode: Results[i]["AccountCode"],
@@ -645,6 +750,12 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $('.requiredAccount').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             getAccountTypeForComboBox();
             getAccountCashFlowForComboBox();
@@ -659,6 +770,40 @@
             document.getElementById('account_type_selectedValue').value = "";
             document.getElementById('account_cash_flow_id_data').value = "";
             document.getElementById('account_cash_flow_selectedValue').value = "";
+
+            //document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+            //$('#loadingAccountArtitleType').show();
+            $('#AccountArticleTypeGrid').hide();
+            $('#accountArticleTypeDiv').hide();
+            $('#hrAccountArticleType').hide();
+
+            //setTimeout(function() {
+            //    $('#loadingAccountArtitleType').hide();
+            //    $('#AccountArticleTypeGrid').show();
+            //    $('#accountArticleTypeDiv').show();
+            //    accountArticleTypes = new wijmo.collections.CollectionView(getAccountArticleType());
+            //    accountArticleTypes.canFilter = true;
+            //    accountArticleTypes.pageSize = 10;
+
+            //    var filterTextAccount = '';
+            //    $('#InputFilterAccountArticleType').keyup(function () {
+            //        filterTextAccount = this.value.toLowerCase();
+            //        accountArticleTypes.refresh();
+            //    });
+            //    accountArticleTypes.filter = function (item) {
+            //        return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+            //    }
+            //    accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
+            //        updateNavigateButtonsAccountArticleType();
+            //    });
+
+            //    // Flex Grid for account article Type
+            //    accountArticleTypeGrid.itemsSource = accountArticleTypes;
+            //    accountArticleTypeGrid.trackChanges = true;
+
+            //    updateNavigateButtonsAccountArticleType();
+            //},500);
+
         }
 
         // ===================
@@ -673,7 +818,7 @@
             accountObject.AccountTypeId = document.getElementById('account_type_id_data').value;
             accountObject.AccountCashFlowId = document.getElementById('account_cash_flow_id_data').value;
             var data = JSON.stringify(accountObject);
-            
+
             if( document.getElementById('account_type_id_data').value == '') {
                 document.getElementById("account_type_id").style.border = "1px solid red";
             } else {
@@ -822,6 +967,12 @@
                 backdrop: 'static'
             });
 
+            $('.requiredAccount').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             getAccountTypeForComboBox();
             getAccountCashFlowForComboBox();
 
@@ -836,6 +987,37 @@
             document.getElementById('account_type_selectedValue').value = account.AccountType ? account.AccountType : '';
             document.getElementById('account_cash_flow_id_data').value = account.AccountCashFlowId ? account.AccountCashFlowId : '';
             document.getElementById('account_cash_flow_selectedValue').value = account.AccountCashFlow ? account.AccountCashFlow : '';
+
+            document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+            $('#loadingAccountArtitleType').show();
+            $('#AccountArticleTypeGrid').hide();
+            $('#accountArticleTypeDiv').hide();
+            $('#hrAccountArticleType').show();
+            setTimeout(function() {
+                $('#loadingAccountArtitleType').hide();
+                $('#AccountArticleTypeGrid').show();
+                $('#accountArticleTypeDiv').show();
+                $('#hrAccountArticleType').show();
+                accountArticleTypes = new wijmo.collections.CollectionView(getAccountArticleType());
+                accountArticleTypes.canFilter = true;
+                accountArticleTypes.pageSize = 10;
+
+                var filterTextAccount = '';
+                $('#InputFilterAccountArticleType').keyup(function () {
+                    filterTextAccount = this.value.toLowerCase();
+                    accountArticleTypes.refresh();
+                });
+                accountArticleTypes.filter = function (item) {
+                    return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                }
+                accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
+                    updateNavigateButtonsAccountArticleType();
+                });
+
+                // Flex Grid for account article Type
+                accountArticleTypeGrid.itemsSource = accountArticleTypes;
+                accountArticleTypeGrid.trackChanges = true;
+            },500);
         }
 
         // ======================
@@ -948,6 +1130,495 @@
             btnCurrentPageGridAccount.innerHTML = (accounts.pageIndex + 1) + ' / ' + accounts.pageCount;
         }
 
+        // =============================
+        // GET Account Article Type List
+        // =============================
+        function getAccountArticleType() {
+            var accountArticleTypes = new wijmo.collections.ObservableArray;
+            var accountId = document.getElementById('account_id').value;
+            $.ajax({
+                url: '/api/listAccountArticleTypeByAccountId/' + accountId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            accountArticleTypes.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"]
+                            });
+                        }
+                    }
+                }
+            });
+            return accountArticleTypes;
+        }
+
+        // ===================================
+        // GET Account Article Type List Empty
+        // ===================================
+        function getAccountArticleTypeEmpty() {
+            var accountArticleTypes = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listAccountArticleTypeByAccountId/0',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            accountArticleTypes.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"]
+                            });
+                        }
+                    }
+                }
+            });
+            return accountArticleTypes;
+        }
+
+        // ========================
+        // Get Account Article Type
+        // ========================
+        function getAccountArticleTypeForComboBox() {
+            articleTypes = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleType',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            articleTypes.push({
+                                Id: results[i]["Id"],
+                                ArticleType: results[i]["ArticleType"],
+                                IsLocked: results[i]["IsLocked"],
+                                CreatedById: results[i]["CreatedById"],
+                                CreatedBy: results[i]["CreatedBy"],
+                                CreatedDateTime: results[i]["CreatedDateTime"],
+                                UpdatedById: results[i]["UpdatedById"],
+                                UpdatedBy: results[i]["UpdatedBy"],
+                                UpdatedDateTime: results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCboFoAccountArticleType(articleTypes);
+                    }
+                }
+            });
+        }
+
+        // ============================
+        // CBO for Account Article Type
+        // ============================
+        function createCboFoAccountArticleType(articleTypes) {
+            var articleTypeCollection = new wijmo.collections.CollectionView(articleTypes);
+            var articleTypeList = new Array();
+            for (var i = 0; i < articleTypeCollection.items.length; i++) {
+                articleTypeList.push(articleTypeCollection.items[i].ArticleType);
+            }
+
+            cboForArticleType.dispose();
+            cboForArticleType = new wijmo.input.ComboBox('#accountArticleType_articleType', {
+                placeholder: "Select Article Type",
+                itemsSource: articleTypeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('accountArticleType_articleType_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#accountArticleType_articleType_Data").val(articleTypeCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        // ========================
+        // ADD Account Article Type
+        // ========================
+        function btnAddAccountArticleType() {
+            $('#accountArticleTypeModal').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $('.requiredAccountArticleType').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
+            $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
+            $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+
+            getAccountArticleTypeForComboBox();
+
+            document.getElementById('accountArticleType_id').value = 0;
+            document.getElementById('accountArticleType_articleType_Data').value = '';
+            document.getElementById('accountArticleType_articleType_selectedValue').value = '';
+        }
+
+        // =========================
+        // EDIT Account Article Type
+        // =========================
+        function btnEditAccountArticleType_OnClick() {
+            accountArticleTypes.editItem(accountArticleTypes.currentItem);
+            $('#accountArticleTypeModal').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $('.requiredAccountArticleType').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
+            $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
+            $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+
+            getAccountArticleTypeForComboBox();
+
+            var accountArticleType = accountArticleTypes.currentEditItem;
+            document.getElementById('accountArticleType_id').value = accountArticleType.Id;
+            document.getElementById('accountArticleType_articleType_Data').value = accountArticleType.ArticleTypeId;
+            document.getElementById('accountArticleType_articleType_selectedValue').value = accountArticleType.ArticleType;
+        }
+
+        // ===========================
+        // DELETE Account Article Type
+        // ===========================
+        function btnDeleteAccountArticleType_OnClick() {
+            $('#deleteAccountArticleTypeConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+            
+            $("#cmdConfirmDeleteAccountArticleType").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", false);
+        }
+        // Account ArticleType Confirm Delete Button
+        function cmdAccountArticleTypeConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteAccountArticleType").prop("disabled", true);
+            $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", true);
+
+            accountArticleTypes.editItem(accountArticleTypes.currentItem);
+            var accountArticleTypeId = accountArticleTypes.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteAccountArticleType/' + accountArticleTypeId,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteAccountArticleType").prop("disabled", true);
+                        $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+
+                        $('#deleteAccountArticleTypeConfirm').modal('hide');
+
+                        accountArticleTypes = new wijmo.collections.CollectionView(getAccountArticleType());
+                        accountArticleTypes.canFilter = true;
+                        accountArticleTypes.pageSize = 10;
+
+                        var filterTextAccount = '';
+                        $('#InputFilterAccountArticleType').keyup(function () {
+                            filterTextAccount = this.value.toLowerCase();
+                            accountArticleTypes.refresh();
+                        });
+                        accountArticleTypes.filter = function (item) {
+                            return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                        }
+                        accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsAccountArticleType();
+                        });
+
+                        // Flex Grid for account article Type
+                        accountArticleTypeGrid.itemsSource = accountArticleTypes;
+                        accountArticleTypeGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteAccountArticleTypeConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccountArticleType").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteAccountArticleTypeConfirm').modal('hide');
+                        $("#cmdConfirmDeleteAccountArticleType").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+        // =========================
+        // SAVE Account Article Type
+        // =========================
+        function cmdAccountArticleTypeSaveButton_OnClick() {
+            var accountArticleTypeeObject = new Object();
+            var accountArticleType_id = document.getElementById('accountArticleType_id').value;
+            accountArticleTypeeObject.AccountId = document.getElementById('account_id').value;
+            accountArticleTypeeObject.ArticleTypeId = document.getElementById('accountArticleType_articleType_Data').value;
+            var accountArticleTypeData = JSON.stringify(accountArticleTypeeObject);
+
+            if( document.getElementById('accountArticleType_articleType_Data').value == '') {
+                document.getElementById("accountArticleType_articleType").style.border = "1px solid red";
+            } else {
+                document.getElementById("accountArticleType_articleType").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredAccountArticleType').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+            }
+            else {
+                $("#cmdSaveaccountArticleTypeButton").prop("disabled", true);
+                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", true);
+                if (accountArticleType_id == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addAccountArticleType',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: accountArticleTypeData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", true);
+                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                $('#accountArticleTypeModal').modal('hide');
+
+                                accountArticleTypes = new wijmo.collections.CollectionView(getAccountArticleType());
+                                accountArticleTypes.canFilter = true;
+                                accountArticleTypes.pageSize = 10;
+
+                                var filterTextAccount = '';
+                                $('#InputFilterAccountArticleType').keyup(function () {
+                                    filterTextAccount = this.value.toLowerCase();
+                                    accountArticleTypes.refresh();
+                                });
+                                accountArticleTypes.filter = function (item) {
+                                    return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                                }
+                                accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccountArticleType();
+                                });
+
+                                // Flex Grid for account article Type
+                                accountArticleTypeGrid.itemsSource = accountArticleTypes;
+                                accountArticleTypeGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $('#accountArticleTypeModal').modal('hide');
+                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
+                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#accountArticleTypeModal').modal('hide');
+                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
+                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateAccountArticleType/' + accountArticleType_id,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: accountArticleTypeData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", true);
+                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+
+                                $('#accountArticleTypeModal').modal('hide');
+
+                                accountArticleTypes = new wijmo.collections.CollectionView(getAccountArticleType());
+                                accountArticleTypes.canFilter = true;
+                                accountArticleTypes.pageSize = 10;
+
+                                var filterTextAccount = '';
+                                $('#InputFilterAccountArticleType').keyup(function () {
+                                    filterTextAccount = this.value.toLowerCase();
+                                    accountArticleTypes.refresh();
+                                });
+                                accountArticleTypes.filter = function (item) {
+                                    return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                                }
+                                accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsAccountArticleType();
+                                });
+
+                                // Flex Grid for account article Type
+                                accountArticleTypeGrid.itemsSource = accountArticleTypes;
+                                accountArticleTypeGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $('#accountArticleTypeModal').modal('hide');
+                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
+                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#accountArticleTypeModal').modal('hide');
+                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
+                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // ===========================================
+        // Navigation Buttons for Account Article Type
+        // ===========================================
+        function updateNavigateButtonsAccountArticleType() {
+            if (accountArticleTypes.pageSize <= 0) {
+                document.getElementById('naviagtionPageGridAccount').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGridAccount').style.display = 'block';
+            if (accountArticleTypes.pageIndex === 0) {
+                btnFirstPageGridAccountArticleType.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridAccountArticleType.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccountArticleType.removeAttribute('disabled');
+                btnLastPageGridAccountArticleType.removeAttribute('disabled');
+            } else if (accountArticleTypes.pageIndex === (accountArticleTypes.pageCount - 1)) {
+                btnFirstPageGridAccountArticleType.removeAttribute('disabled');
+                btnPreviousPageGridAccountArticleType.removeAttribute('disabled');
+                btnLastPageGridAccountArticleType.setAttribute('disabled', 'disabled');
+                btnNextPageGridAccountArticleType.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridAccountArticleType.removeAttribute('disabled');
+                btnPreviousPageGridAccountArticleType.removeAttribute('disabled');
+                btnNextPageGridAccountArticleType.removeAttribute('disabled');
+                btnLastPageGridAccountArticleType.removeAttribute('disabled');
+            }
+            btnCurrentPageGridAccountArticleType.innerHTML = (accountArticleTypes.pageIndex + 1) + ' / ' + accountArticleTypes.pageCount;
+        }
+
+        // =====================================
+        // On Page Load for Account Article Type
+        // =====================================
+        function accountArticleTypeGrid() {
+            cboForArticleType = new wijmo.input.ComboBox('#accountArticleType_articleType');
+
+            accountArticleTypes = new wijmo.collections.CollectionView(getAccountArticleTypeEmpty());
+            accountArticleTypes.canFilter = true;
+            accountArticleTypes.pageSize = 10;
+
+            var filterTextAccount = '';
+            $('#InputFilterAccountArticleType').keyup(function () {
+                filterTextAccount = this.value.toLowerCase();
+                accountArticleTypes.refresh();
+            });
+            accountArticleTypes.filter = function (item) {
+                return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+            }
+            accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountArticleType();
+            });
+
+            // Flex Grid for account article Type
+            accountArticleTypeGrid = new wijmo.grid.FlexGrid('#AccountArticleTypeGrid');
+            accountArticleTypeGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Article Type",
+                                "binding": "ArticleType",
+                                "allowSorting": true,
+                                "width": "2*"
+                            }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: accountArticleTypes,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            accountArticleTypeGrid.trackChanges = true;
+
+            //Navigation button for account
+            btnFirstPageGridAccountArticleType = document.getElementById('btnMoveToFirstPageGridAccountArticleType');
+            btnPreviousPageGridAccountArticleType = document.getElementById('btnMoveToPreviousPageGridAccountArticleType');
+            btnNextPageGridAccountArticleType = document.getElementById('btnMoveToNextPageGridAccountArticleType');
+            btnLastPageGridAccountArticleType = document.getElementById('btnMoveToLastPageGridAccountArticleType');
+            btnCurrentPageGridAccountArticleType = document.getElementById('btnCurrentPageGridAccountArticleType');
+
+            updateNavigateButtonsAccount();
+
+            btnFirstPageGridAccountArticleType.addEventListener('click', function () {
+                accountArticleTypes.moveToFirstPage();
+                updateNavigateButtonsAccountArticleType();
+            });
+            btnPreviousPageGridAccountArticleType.addEventListener('click', function () {
+                accountArticleTypes.moveToPreviousPage();
+                updateNavigateButtonsAccountArticleType();
+            });
+            btnNextPageGridAccountArticleType.addEventListener('click', function () {
+                accountArticleTypes.moveToNextPage();
+                updateNavigateButtonsAccountArticleType();
+            });
+            btnLastPageGridAccountArticleType.addEventListener('click', function () {
+                accountArticleTypes.moveToLastPage();
+                updateNavigateButtonsAccountArticleType();
+            });
+        }
+
         // ========================
         // On Page Load for Account
         // ========================
@@ -1050,6 +1721,8 @@
                 accounts.moveToLastPage();
                 updateNavigateButtonsAccount();
             });
+
+            accountArticleTypeGrid();
         }
     </script>
 
@@ -1170,6 +1843,12 @@
             $('#accountTypeEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+
+            $('.requiredAccountType').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveAccountTypeButton").prop("disabled", false);
@@ -1338,6 +2017,12 @@
             $('#accountTypeEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+
+            $('.requiredAccountType').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveAccountTypeButton").prop("disabled", false);
@@ -1637,6 +2322,12 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $('.requiredAccountCashFlow').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
             $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
@@ -1791,6 +2482,12 @@
             $('#accountCashFlowEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+
+            $('.requiredAccountCashFlow').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
@@ -2071,6 +2768,12 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $('.requiredAccountCategory').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             $("#cmdSaveAccountCategoryButton").prop("disabled", false);
             $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
@@ -2226,6 +2929,12 @@
             $('#accountCategoryEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+            
+            $('.requiredAccountCategory').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveAccountCategoryButton").prop("disabled", false);
@@ -2537,6 +3246,18 @@
             $('#AccountCategory').hide();
 
             accountTab();
+
+            $(document).on('show.bs.modal', '.modal', function (event) {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function() {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
+            });
+
+            $(document).on('hidden.bs.modal', '.modal', function () {
+                $('.modal:visible').length && $(document.body).addClass('modal-open');
+            });
         });
     </script>
 </body>

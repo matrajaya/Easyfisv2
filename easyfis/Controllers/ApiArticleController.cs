@@ -139,9 +139,9 @@ namespace easyfis.Controllers
             return (Models.MstArticle)articles.FirstOrDefault();
         }
 
-        // ===============================
+        // =============================
         // LIST Article by ArticleTypeId
-        // ===============================
+        // =============================
         [Route("api/listArticleByArticleTypeId/{articleTypeId}")]
         public List<Models.MstArticle> GetArticleByArticleTypeId(String articleTypeId)
         {

@@ -11,9 +11,9 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ==================
+        // =================
         // LIST Article Type
-        // ==================
+        // =================
         [Route("api/listArticleType")]
         public List<Models.MstArticleType> Get()
         {
@@ -24,11 +24,11 @@ namespace easyfis.Controllers
                                    ArticleType = d.ArticleType,
                                    IsLocked = d.IsLocked,
                                    CreatedById = d.CreatedById,
-                                   //CreatedBy = d.CreatedBy,
-                                   //CreatedDateTime = d.CreatedDateTime,
+                                   CreatedBy = d.MstUser.FullName,
+                                   CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                    UpdatedById = d.UpdatedById,
-                                   //UpdatedBy = d.UpdatedBy,
-                                   //UpdatedDateTime = d.UpdatedDateTime
+                                   UpdatedBy = d.MstUser1.FullName,
+                                   UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                };
             return articleTypes.ToList();
         }

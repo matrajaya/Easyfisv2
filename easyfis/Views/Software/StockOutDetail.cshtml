@@ -292,7 +292,7 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockOutItem_ItemDescription"></div>
 
-                                            <input type="text" id="stockInItem_ItemDescription_selectedValue" />
+                                            <input type="text" id="stockOutItem_ItemDescription_selectedValue" />
                                         </dd>
                                         <dt>Particulars:</dt>
                                         <dd><textarea class="form-control textarea-custom requiredStockOutItem" id="stockOutItem_Particulars"></textarea></dd>
@@ -1100,6 +1100,17 @@
         var btnLastPageGridItem;
         var btnCurrentPageGridItem;
 
+        var articleItems;
+        var cboManualCodeArticleItems;
+        var cboItemDescriptionArticleItems;
+        
+        var inventories;
+        var cboInventoryCode;
+        
+        var stockOutUnits;
+        var cboStockOutUnit;
+        var cboBaseUnit;
+
         // =======================
         // GET Stock OUT Item List
         // =======================
@@ -1150,6 +1161,316 @@
             return items;
         }
         
+        // ======================================
+        // GET Item Id, Manual Code and Component
+        // ======================================
+        function getArticleItemForManualCodeAndComponent() {
+            articleItems = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/1',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            articleItems.push({
+                                ItemId: results[i]["Id"],
+                                ItemCode: results[i]["ManualArticleCode"],
+                                ItemDescription: results[i]["Article"],
+                                UnitId: results[i]["UnitId"],
+                                Unit: results[i]["Unit"],
+                                Particulars: results[i]["Particulars"]
+                            });
+                        }
+                        createCboForManualCode(articleItems);
+                        createCboForItemDescription(articleItems);
+                    }
+                }
+            });
+        }
+
+        // ===============
+        // CBO Manual Code
+        // ===============
+        function createCboForManualCode(articleItems) {
+            var ManualCodeCollections = new wijmo.collections.CollectionView(articleItems);
+            var ManualCodeList = new Array();
+            for (var i = 0; i < ManualCodeCollections.items.length; i++) {
+                ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
+            }
+
+            cboManualCodeArticleItems.dispose();
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockOutItem_ItemCode', {
+                placeholder: "Select Manual Code",
+                itemsSource: ManualCodeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockOutItem_ItemCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockOutItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
+                    $("#stockOutItem_ItemCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
+                    $("#stockOutItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
+                    $("#stockOutItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    $("#stockOutItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    $("#stockOutItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    $("#stockOutItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    $("#stockOutItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
+
+                    createCboForItemDescription(articleItems);
+                    
+                    var articleId = ManualCodeCollections.items[this.selectedIndex].ItemId;
+                    var branchId = document.getElementById('StockOut_Branch_data').value;
+                    $.ajax({
+                        url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            //if (results.length > 0) {
+                            //    inventories.push({
+                            //        Id: results.Id,
+                            //        BranchId: results.BranchId,
+                            //        ArticleId: results.ArticleId,
+                            //        InventoryCode: results.InventoryCode,
+                            //        Quantity: results.Quantity,
+                            //        Cost: results.Cost,
+                            //        Amount: results.Amount,
+                            //        Particulars: results.Particulars
+                            //    });
+                            //}
+
+                            if(results == null) {
+                                document.getElementById('stockOutItem_ItemInventoryCode_data').value ="";
+                                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
+                            } else {
+                                document.getElementById('stockOutItem_ItemInventoryCode_data').value = results.Id;
+                                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
+                            }
+                            
+                            getItemInventoryCodeForComboBox();
+                        }
+                    });
+
+                    getStockInItemUnitForComboBox();
+                }
+            });
+        }
+
+        // ====================
+        // CBO Item Description
+        // ====================
+        function createCboForItemDescription(articleItems) {
+            var ItemDescriptionCollections = new wijmo.collections.CollectionView(articleItems);
+            var ItemDescriptionList = new Array();
+            for (var i = 0; i < ItemDescriptionCollections.items.length; i++) {
+                ItemDescriptionList.push(ItemDescriptionCollections.items[i].ItemDescription);
+            }
+
+            cboItemDescriptionArticleItems.dispose();
+            cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockOutItem_ItemDescription', {
+                placeholder: "Select Item Description",
+                itemsSource: ItemDescriptionList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockOutItem_ItemDescription_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockOutItem_ItemId_data").val(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
+                    $("#stockOutItem_ItemCode_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemCode);
+                    $("#stockOutItem_ItemDescription_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemDescription);
+                    $("#stockOutItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    $("#stockOutItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+                    $("#stockOutItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    $("#stockOutItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+                    $("#stockOutItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
+
+                    createCboForManualCode(articleItems);
+
+                    var articleId = ItemDescriptionCollections.items[this.selectedIndex].ItemId;
+                    var branchId = document.getElementById('StockOut_Branch_data').value;
+                    $.ajax({
+                        url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            //if (results.length > 0) {
+                            //    inventories.push({
+                            //        Id: results.Id,
+                            //        BranchId: results.BranchId,
+                            //        ArticleId: results.ArticleId,
+                            //        InventoryCode: results.InventoryCode,
+                            //        Quantity: results.Quantity,
+                            //        Cost: results.Cost,
+                            //        Amount: results.Amount,
+                            //        Particulars: results.Particulars
+                            //    });
+                            //}
+
+                            if(results == null) {
+                                document.getElementById('stockOutItem_ItemInventoryCode_data').value ="";
+                                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
+                            } else {
+                                document.getElementById('stockOutItem_ItemInventoryCode_data').value = results.Id;
+                                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
+                            }
+                            
+                            getItemInventoryCodeForComboBox();
+                        }
+                    });
+
+                    getStockInItemUnitForComboBox();
+                }
+            });
+        }
+
+        // =======================
+        // Get Item Inventory Code
+        // =======================
+        function getItemInventoryCodeForComboBox() {
+            inventories = new wijmo.collections.ObservableArray();
+            setTimeout(function() {
+                var articleId = document.getElementById('stockOutItem_ItemId_data').value;
+                var branchId = document.getElementById('StockOut_Branch_data').value;
+                $.ajax({
+                    url: '/api/listArticleInventoryByBranchIdAndArticleId/' + branchId + '/' + articleId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                inventories.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    ArticleId: results[i]["ArticleId"],
+                                    InventoryCode: results[i]["InventoryCode"],
+                                    Quantity: results[i]["Quantity"],
+                                    Cost: results[i]["Cost"],
+                                    Amount: results[i]["Amount"],
+                                    Particulars: results[i]["Particulars"]
+                                });
+                                createCboForInventoryCode(inventories);
+                            }
+                        } else {
+                            createCboForInventoryCode(inventories);
+                        }
+                    }
+                });
+            },100);
+        }
+
+        // ===========================
+        // CBO for Item Inventory Code
+        // ===========================
+        function createCboForInventoryCode(inventories) {
+            var InventoryCodeCollection = new wijmo.collections.CollectionView(inventories);
+            var InventoryCodeList = new Array();
+            for (var i = 0; i < InventoryCodeCollection.items.length; i++) {
+                InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
+            }
+
+            cboInventoryCode.dispose();
+            cboInventoryCode = new wijmo.input.ComboBox('#stockOutItem_ItemInventoryCode', {
+                disabled: true,
+                placeholder: "Select Inventory Code",
+                itemsSource: InventoryCodeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockOutItem_ItemInventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        // =============
+        // Get Item Unit
+        // =============
+        function getStockInItemUnitForComboBox() {
+            stockOutUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            stockOutUnits.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForStockOutUnit(stockOutUnits);
+                        createCboForStockOutBaseUnit(stockOutUnits);
+                    }
+                }
+            });
+        }
+
+        // ======================
+        // CBO for Stock Out Unit
+        // ======================
+        function createCboForStockOutUnit(stockOutUnits) {
+            var StockOutUnitCollection = new wijmo.collections.CollectionView(stockOutUnits);
+            var StockOutUnitList = new Array();
+            for (var i = 0; i < StockOutUnitCollection.items.length; i++) {
+                StockOutUnitList.push(StockOutUnitCollection.items[i].Unit);
+            }
+
+            cboStockOutUnit.dispose();
+            cboStockOutUnit = new wijmo.input.ComboBox('#stockOutItem_Unit', {
+                placeholder: "Select Unit",
+                itemsSource: StockOutUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockOutItem_Unit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockOutItem_Unit_data").val(StockOutUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#stockOutItem_Unit_selectedValue").val(StockOutUnitCollection.items[this.selectedIndex].Unit);
+                    $("#stockOutItem_BUCUnit_data").val(StockOutUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#stockOutItem_BUCUnit_selectedValue").val(StockOutUnitCollection.items[this.selectedIndex].Unit);
+                    
+                    createCboForStockOutBaseUnit(stockOutUnits);
+                }
+            });
+        }
+
+        // ===========================
+        // CBO for STock Out Base Unit
+        // ===========================
+        function createCboForStockOutBaseUnit(stockOutUnits) {
+            var StockOutBaseUnitCollection = new wijmo.collections.CollectionView(stockOutUnits);
+            var StockOutBaseUnitList = new Array();
+            for (var i = 0; i < StockOutBaseUnitCollection.items.length; i++) {
+                StockOutBaseUnitList.push(StockOutBaseUnitCollection.items[i].Unit);
+            }
+
+            cboBaseUnit.dispose();
+            cboBaseUnit = new wijmo.input.ComboBox('#stockOutItem_BUCUnit', {
+                disabled: true,
+                placeholder: "Select Unit",
+                itemsSource: StockOutBaseUnitList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockOutItem_BUCUnit_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockOutItem_BUCUnit_data").val(StockOutBaseUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#stockOutItem_BUCUnit_selectedValue").val(StockOutBaseUnitCollection.items[this.selectedIndex].Unit);
+                    $("#stockOutItem_Unit_data").val(StockOutBaseUnitCollection.items[this.selectedIndex].UnitId);
+                    $("#stockOutItem_Unit_selectedValue").val(StockOutBaseUnitCollection.items[this.selectedIndex].Unit);
+                    
+                    createCboForStockOutUnit(stockOutUnits);
+                }
+            });
+        }
+
         // ==================
         // ADD Stock Out Item
         // ==================
@@ -1159,10 +1480,14 @@
                 backdrop: 'static'
             });
 
+            getArticleItemForManualCodeAndComponent();
+            getItemInventoryCodeForComboBox();
+            getStockInItemUnitForComboBox();
+
             document.getElementById('stockOutItem_Id').value = 0;
             document.getElementById('stockOutItem_ItemId_data').value = '';
             document.getElementById('stockOutItem_ItemCode_selectedValue').value = '';
-            document.getElementById('stockInItem_ItemDescription_selectedValue').value = '';
+            document.getElementById('stockOutItem_ItemDescription_selectedValue').value = '';
             document.getElementById('stockOutItem_Particulars').value = '';
             document.getElementById('stockOutItem_ItemInventoryCode_data').value = '';
             document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = '';
@@ -1188,12 +1513,16 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            getArticleItemForManualCodeAndComponent();
+            getItemInventoryCodeForComboBox();
+            getStockInItemUnitForComboBox();
 
             var item = items.currentEditItem;
             document.getElementById('stockOutItem_Id').value = item.Id;
             document.getElementById('stockOutItem_ItemId_data').value = item.ItemId;
             document.getElementById('stockOutItem_ItemCode_selectedValue').value = item.ItemCode;
-            document.getElementById('stockInItem_ItemDescription_selectedValue').value = item.Item;
+            document.getElementById('stockOutItem_ItemDescription_selectedValue').value = item.Item;
             document.getElementById('stockOutItem_Particulars').value = item.Particulars;
             document.getElementById('stockOutItem_ItemInventoryCode_data').value = item.ItemInventoryId;
             document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = item.ItemInventory;
@@ -1252,6 +1581,12 @@
         //  Items
         // ======
         function itemTab() {
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockOutItem_ItemCode');
+            cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockOutItem_ItemDescription');
+            cboInventoryCode = new wijmo.input.ComboBox('#stockOutItem_ItemInventoryCode');
+            cboStockOutUnit = new wijmo.input.ComboBox('#stockOutItem_Unit');
+            cboBaseUnit = new wijmo.input.ComboBox('#stockOutItem_BUCUnit');
+
             items = new wijmo.collections.CollectionView(getItem());
             items.canFilter = true;
             items.pageSize = 15;
