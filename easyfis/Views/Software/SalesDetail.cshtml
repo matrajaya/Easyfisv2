@@ -302,7 +302,7 @@
                                         <dd>
                                             <div class="comboBox-wide" id="saleItem_InventoryCode"></div>
 
-                                            <input type="hidden" id="saleItem_InventoryCode_data" class="requiredSaleItem">
+                                            <input type="hidden" id="saleItem_InventoryCode_data">
                                             <input type="hidden" id="saleItem_InventoryCode_selectedValue" />
                                         </dd>
                                         <dt>Quantity:</dt>
@@ -1318,7 +1318,7 @@
                             //        Particulars: results.Particulars
                             //    });
                             //}
-                            
+
                             if(results == null) {
                                 document.getElementById('saleItem_InventoryCode_data').value ="";
                                 document.getElementById('saleItem_InventoryCode_selectedValue').value = "";
@@ -1367,7 +1367,7 @@
 
                     var articleId = ItemDescriptionCollections.items[this.selectedIndex].ItemId;
                     getTaxTyoeValues(articleId);
-                    
+
                     var branchId = document.getElementById('SI_Branch_data').value;
                     $.ajax({
                         url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
@@ -1762,6 +1762,15 @@
             getDiscountForComboBox();
             getTaxTypeForComboBox();
 
+            $("#cmdSaveSaleItemsButton").prop("disabled", false);
+            $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
+            
+            $('.requiredSaleItem').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             document.getElementById('saleItem_Id').value = 0;
             document.getElementById('saleItem_ItemId_data').value = '';
             document.getElementById('saleItem_ItemCode_selectedValue').value = '';
@@ -1806,6 +1815,15 @@
             getDiscountForComboBox();
             getTaxTypeForComboBox();
 
+            $("#cmdSaveSaleItemsButton").prop("disabled", false);
+            $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
+
+            $('.requiredSaleItem').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             var item = items.currentEditItem;
             document.getElementById('saleItem_Id').value = item.Id;
             document.getElementById('saleItem_ItemId_data').value = item.ItemId;
@@ -1843,6 +1861,253 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdConfirmDeleteSaleItems").prop("disabled", false);
+            $("#cmdConfirmDeleteSaleItemsCloseButton").prop("disabled", false);
+        }
+        // Sales item confirm delete
+        function cmdSaleItemsConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteSaleItems").prop("disabled", true);
+            $("#cmdConfirmDeleteSaleItemsCloseButton").prop("disabled", true);
+
+            items.editItem(items.currentItem);
+            var item = items.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteSalesInvoiceItem/' + item,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteSaleItems").prop("disabled", true);
+                        $("#cmdConfirmDeleteSaleItemsCloseButton").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+
+                        $('#deletSaleItemsConfirm').modal('hide');
+
+                        items = new wijmo.collections.CollectionView(getItem());
+                        items.canFilter = true;
+                        items.pageSize = 10;
+
+                        var filterTextItem = '';
+                        $('#InputFilterItem').keyup(function () {
+                            filterTextItem = this.value.toLowerCase();
+                            items.refresh();
+                        });
+                        items.filter = function (item) {
+                            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                        }
+                        items.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsItem();
+                        });
+
+                        // Flex Grid for Items
+                        itemGrid.itemsSource = items;
+                        itemGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deletSaleItemsConfirm').modal('hide');
+                        $("#cmdConfirmDeleteSaleItems").prop("disabled", false);
+                        $("#cmdConfirmDeleteSaleItemsCloseButton").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deletSaleItemsConfirm').modal('hide');
+                        $("#cmdConfirmDeleteSaleItems").prop("disabled", false);
+                        $("#cmdConfirmDeleteSaleItemsCloseButton").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+        // ==============
+        // SAVE Sale Item
+        // ==============
+        function cmdSaleItemsSaveButton_OnClick() {
+            var saleItemObject = new Object();
+            var SIId = @salesId;
+
+            var saleItemId = document.getElementById('saleItem_Id').value;
+            saleItemObject.SIId = SIId;
+            saleItemObject.ItemId = document.getElementById('saleItem_ItemId_data').value;
+            saleItemObject.ItemInventoryId = document.getElementById('saleItem_InventoryCode_data').value;
+            saleItemObject.Particulars = document.getElementById('saleItem_Particulars').value;
+            saleItemObject.UnitId = document.getElementById('saleItem_Unit_data').value;
+            saleItemObject.Quantity = document.getElementById('saleItem_Quantity').value;
+            saleItemObject.Price = document.getElementById('saleItem_PriceExVAT').value;
+            saleItemObject.DiscountId = document.getElementById('saleItem_Discont_data').value;
+            saleItemObject.DiscountRate = document.getElementById('saleItem_DiscountRate').value;
+            saleItemObject.DiscountAmount = document.getElementById('saleItem_DiscountAmount').value;
+            saleItemObject.NetPrice = document.getElementById('saleItem_NetPrice').value;
+            saleItemObject.Amount = document.getElementById('saleItem_Amount').value;
+            saleItemObject.VATId = document.getElementById('saleItem_VAT_data').value;
+            saleItemObject.VATPercentage = document.getElementById('saleItem_VATRate').value;
+            saleItemObject.VATAmount = document.getElementById('saleItem_VATAmount').value;
+            saleItemObject.BaseUnitId = document.getElementById('saleItem_BUCUnit_data').value;
+            saleItemObject.BaseQuantity = document.getElementById('saleItem_BUCQuantity').value;
+            saleItemObject.BasePrice = document.getElementById('saleItem_BUCPrice').value;
+            var saleItemData = JSON.stringify(saleItemObject);
+
+
+            if( document.getElementById('saleItem_ItemId_data').value == '') {
+                document.getElementById("saleItem_ItemCode").style.border = "1px solid red";
+                document.getElementById("saleItem_ItemDescription").style.border = "1px solid red";
+            } else {
+                document.getElementById("saleItem_ItemCode").style.border = "1px solid #C8C8C8";
+                document.getElementById("saleItem_ItemDescription").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('saleItem_InventoryCode_data').value == '') {
+                document.getElementById("saleItem_InventoryCode").style.border = "1px solid red";
+            } else {
+                document.getElementById("saleItem_InventoryCode").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('saleItem_Unit_data').value == '') {
+                document.getElementById("saleItem_Unit").style.border = "1px solid red";
+            } else {
+                document.getElementById("saleItem_Unit").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('saleItem_Discont_data').value == '') {
+                document.getElementById("saleItem_Discont").style.border = "1px solid red";
+            } else {
+                document.getElementById("saleItem_Discont").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('saleItem_VAT_data').value == '') {
+                document.getElementById("saleItem_VAT").style.border = "1px solid red";
+            } else {
+                document.getElementById("saleItem_VAT").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('saleItem_BUCUnit_data').value == '') {
+                document.getElementById("saleItem_BUCUnit").style.border = "1px solid red";
+            } else {
+                document.getElementById("saleItem_BUCUnit").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredSaleItem').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+            }
+            else {
+                $("#cmdSaveSaleItemsButton").prop("disabled", true);
+                $("#cmdSaleItemsDetailCloseButton").prop("disabled", true);
+                if (saleItemId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addSalesInvoiceItem',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: saleItemData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveSaleItemsButton").prop("disabled", true);
+                                $("#cmdSaleItemsDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+
+                                $('#saleItemsEdit').modal('hide');
+
+                                items = new wijmo.collections.CollectionView(getItem());
+                                items.canFilter = true;
+                                items.pageSize = 10;
+
+                                var filterTextItem = '';
+                                $('#InputFilterItem').keyup(function () {
+                                    filterTextItem = this.value.toLowerCase();
+                                    items.refresh();
+                                });
+                                items.filter = function (item) {
+                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                }
+                                items.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsItem();
+                                });
+
+                                // Flex Grid for Items
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $('#saleItemsEdit').modal('hide');
+                                $("#cmdSaveSaleItemsButton").prop("disabled", false);
+                                $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#saleItemsEdit').modal('hide');
+                                $("#cmdSaveSaleItemsButton").prop("disabled", false);
+                                $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateSalesInvoiceItem/' + saleItemId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: saleItemData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveSaleItemsButton").prop("disabled", true);
+                                $("#cmdSaleItemsDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+
+                                $('#saleItemsEdit').modal('hide');
+
+                                items = new wijmo.collections.CollectionView(getItem());
+                                items.canFilter = true;
+                                items.pageSize = 10;
+
+                                var filterTextItem = '';
+                                $('#InputFilterItem').keyup(function () {
+                                    filterTextItem = this.value.toLowerCase();
+                                    items.refresh();
+                                });
+                                items.filter = function (item) {
+                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                }
+                                items.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsItem();
+                                });
+
+                                // Flex Grid for Items
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $('#saleItemsEdit').modal('hide');
+                                $("#cmdSaveSaleItemsButton").prop("disabled", false);
+                                $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#saleItemsEdit').modal('hide');
+                                $("#cmdSaveSaleItemsButton").prop("disabled", false);
+                                $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
         }
 
         // ============================
