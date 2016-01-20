@@ -277,7 +277,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="stockOutItemsDetailForm">
-                            <input type="text" id="stockOutItem_Id" />
+                            <input type="hidden" id="stockOutItem_Id" />
                             <div class="row">
                                 <div class="col-md-6">
                                     <dl class="dl-horizontal">
@@ -285,14 +285,14 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockOutItem_ItemCode"></div>
 
-                                            <input type="text" id="stockOutItem_ItemId_data" class="requiredStockOutItem">
-                                            <input type="text" id="stockOutItem_ItemCode_selectedValue" />
+                                            <input type="hidden" id="stockOutItem_ItemId_data" class="requiredStockOutItem">
+                                            <input type="hidden" id="stockOutItem_ItemCode_selectedValue" />
                                         </dd>
                                         <dt>Item Description:</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="stockOutItem_ItemDescription"></div>
 
-                                            <input type="text" id="stockOutItem_ItemDescription_selectedValue" />
+                                            <input type="hidden" id="stockOutItem_ItemDescription_selectedValue" />
                                         </dd>
                                         <dt>Particulars:</dt>
                                         <dd><textarea class="form-control textarea-custom requiredStockOutItem" id="stockOutItem_Particulars"></textarea></dd>
@@ -300,8 +300,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockOutItem_ItemInventoryCode"></div>
 
-                                            <input type="text" id="stockOutItem_ItemInventoryCode_data" class="requiredStockOutItem">
-                                            <input type="text" id="stockOutItem_ItemInventoryCode_selectedValue" />
+                                            <input type="hidden" id="stockOutItem_ItemInventoryCode_data" class="requiredStockOutItem">
+                                            <input type="hidden" id="stockOutItem_ItemInventoryCode_selectedValue" />
                                         </dd>
                                         <dt>Quantity:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockOutItem" id="stockOutItem_Quantity" /></dd>
@@ -309,8 +309,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockOutItem_Unit"></div>
 
-                                            <input type="text" id="stockOutItem_Unit_data" class="requiredStockOutItem">
-                                            <input type="text" id="stockOutItem_Unit_selectedValue" />
+                                            <input type="hidden" id="stockOutItem_Unit_data" class="requiredStockOutItem">
+                                            <input type="hidden" id="stockOutItem_Unit_selectedValue" />
                                         </dd>
                                         <dt>Cost:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockOutItem" id="stockOutItem_Cost" /></dd>
@@ -329,8 +329,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockOutItem_BUCUnit"></div>
 
-                                            <input type="text" id="stockOutItem_BUCUnit_data" class="requiredStockOutItem">
-                                            <input type="text" id="stockOutItem_BUCUnit_selectedValue" />
+                                            <input type="hidden" id="stockOutItem_BUCUnit_data" class="requiredStockOutItem">
+                                            <input type="hidden" id="stockOutItem_BUCUnit_selectedValue" />
                                         </dd>
                                         <dt>Quantity:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockOutItem" id="stockOutItem_BUCQuantity" /></dd>
@@ -345,8 +345,8 @@
                                         <dd>
                                             <div class="comboBox-wide" id="stockOutItem_ExpenseAccount"></div>
 
-                                            <input type="text" id="stockOutItem_ExpenseAccount_data" class="requiredStockOutItem">
-                                            <input type="text" id="stockOutItem_ExpenseAccount_selectedValue" />
+                                            <input type="hidden" id="stockOutItem_ExpenseAccount_data" class="requiredStockOutItem">
+                                            <input type="hidden" id="stockOutItem_ExpenseAccount_selectedValue" />
                                         </dd>
                                     </dl>
                                 </div>
@@ -667,10 +667,10 @@
                 selectedValue: document.getElementById('StockOut_Account_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#StockOut_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    $("#StockOut_Account_selectedValue").val(accountCollection.items[this.selectedIndex].AccountAccount);
                 }
             });
         }
-
 
         // ==========================
         // GET Articles for Combo Box
@@ -1110,6 +1110,9 @@
         var stockOutUnits;
         var cboStockOutUnit;
         var cboBaseUnit;
+        
+        var stockOutItemAccounts;
+        var cboStockOutAccount;
 
         // =======================
         // GET Stock OUT Item List
@@ -1311,7 +1314,7 @@
                             //}
 
                             if(results == null) {
-                                document.getElementById('stockOutItem_ItemInventoryCode_data').value ="";
+                                document.getElementById('stockOutItem_ItemInventoryCode_data').value = "";
                                 document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
                             } else {
                                 document.getElementById('stockOutItem_ItemInventoryCode_data').value = results.Id;
@@ -1354,11 +1357,10 @@
                                     Amount: results[i]["Amount"],
                                     Particulars: results[i]["Particulars"]
                                 });
-                                createCboForInventoryCode(inventories);
                             }
-                        } else {
+                            
                             createCboForInventoryCode(inventories);
-                        }
+                        } 
                     }
                 });
             },100);
@@ -1376,7 +1378,6 @@
 
             cboInventoryCode.dispose();
             cboInventoryCode = new wijmo.input.ComboBox('#stockOutItem_ItemInventoryCode', {
-                disabled: true,
                 placeholder: "Select Inventory Code",
                 itemsSource: InventoryCodeList,
                 isEditable: false,
@@ -1471,6 +1472,58 @@
             });
         }
 
+        // =====================
+        // Get Stock Out Account
+        // =====================
+        function getStockOutItemAccountForComboBox() {
+            stockOutItemAccounts = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            stockOutItemAccounts.push({
+                                AccountId: results[i]["Id"],
+                                AccountAccount: results[i]["Account"]
+                            });
+                        }
+                        createStockOutCboForAccount(stockOutItemAccounts);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+            );
+        }
+
+        // ===============
+        // CBO for Account
+        // ===============
+        function  createStockOutCboForAccount(stockOutItemAccounts) {
+            var stockOutAccountCollection = new wijmo.collections.CollectionView(stockOutItemAccounts);
+            var stockOutAccountList = new Array();
+            for (var i = 0; i < stockOutAccountCollection.items.length; i++) {
+                stockOutAccountList.push(stockOutAccountCollection.items[i].AccountAccount);
+            }
+
+            cboStockOutAccount.dispose();
+            cboStockOutAccount = new wijmo.input.ComboBox('#stockOutItem_ExpenseAccount', {
+                disabled: false,
+                placeholder: "Select Expense Account",
+                itemsSource: stockOutAccountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('stockOutItem_ExpenseAccount_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockOutItem_ExpenseAccount_data").val(stockOutAccountCollection.items[this.selectedIndex].AccountId);
+                }
+            });
+        }
+
         // ==================
         // ADD Stock Out Item
         // ==================
@@ -1481,8 +1534,41 @@
             });
 
             getArticleItemForManualCodeAndComponent();
-            getItemInventoryCodeForComboBox();
+           
+            inventories = new wijmo.collections.ObservableArray();
+            setTimeout(function() {
+                var articleId = document.getElementById('stockOutItem_ItemId_data').value;
+                var branchId = document.getElementById('StockOut_Branch_data').value;
+                $.ajax({
+                    url: '/api/listArticleInventoryByBranchIdAndArticleId/' + branchId + '/' + 0,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                inventories.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    ArticleId: results[i]["ArticleId"],
+                                    InventoryCode: results[i]["InventoryCode"],
+                                    Quantity: results[i]["Quantity"],
+                                    Cost: results[i]["Cost"],
+                                    Amount: results[i]["Amount"],
+                                    Particulars: results[i]["Particulars"]
+                                });
+                                createCboForInventoryCode(inventories);
+                            }
+                        } else {
+                            createCboForInventoryCode(inventories);
+                        }
+                    }
+                });
+            },100);
+
             getStockInItemUnitForComboBox();
+            getStockOutItemAccountForComboBox();
 
             document.getElementById('stockOutItem_Id').value = 0;
             document.getElementById('stockOutItem_ItemId_data').value = '';
@@ -1500,8 +1586,12 @@
             document.getElementById('stockOutItem_BUCUnit_selectedValue').value = '';
             document.getElementById('stockOutItem_BUCQuantity').value = '';
             document.getElementById('stockOutItem_BUCCost').value = '';
-            document.getElementById('stockOutItem_ExpenseAccount_data').value = '';
-            document.getElementById('stockOutItem_ExpenseAccount_selectedValue').value = '';
+
+            var stockOutAccountId = document.getElementById('StockOut_Account_data').value;
+            var stockOutAccount = document.getElementById('StockOut_Account_selectedValue').value;
+
+            document.getElementById('stockOutItem_ExpenseAccount_data').value = stockOutAccountId;
+            document.getElementById('stockOutItem_ExpenseAccount_selectedValue').value = stockOutAccount;
         }
 
         // ===================
@@ -1517,6 +1607,7 @@
             getArticleItemForManualCodeAndComponent();
             getItemInventoryCodeForComboBox();
             getStockInItemUnitForComboBox();
+            getStockOutItemAccountForComboBox();
 
             var item = items.currentEditItem;
             document.getElementById('stockOutItem_Id').value = item.Id;
@@ -1586,6 +1677,7 @@
             cboInventoryCode = new wijmo.input.ComboBox('#stockOutItem_ItemInventoryCode');
             cboStockOutUnit = new wijmo.input.ComboBox('#stockOutItem_Unit');
             cboBaseUnit = new wijmo.input.ComboBox('#stockOutItem_BUCUnit');
+            cboStockOutAccount = new wijmo.input.ComboBox('#stockOutItem_ExpenseAccount');
 
             items = new wijmo.collections.CollectionView(getItem());
             items.canFilter = true;

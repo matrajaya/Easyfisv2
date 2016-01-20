@@ -238,21 +238,21 @@
                     </div>
                     <div class="modal-body">
                         <form id="collectionLineDetailForm">
-                            <input type="text" id="collectionLine_Id" />
+                            <input type="hidden" id="collectionLine_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Branch:</dt>
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_branch"></div>
 
-                                    <input type="text" id="collectionLine_branch_data" class="requiredCollectionLine">
-                                    <input type="text" id="collectionLine_branch_selectedValue" />
+                                    <input type="hidden" id="collectionLine_branch_data" class="requiredCollectionLine">
+                                    <input type="hidden" id="collectionLine_branch_selectedValue" />
                                 </dd>
                                 <dt>Pay Type:</dt>
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_payType"></div>
 
-                                    <input type="text" id="collectionLine_payType_data" class="requiredCollectionLine">
-                                    <input type="text" id="collectionLine_payType_selectedValue" />
+                                    <input type="hidden" id="collectionLine_payType_data" class="requiredCollectionLine">
+                                    <input type="hidden" id="collectionLine_payType_selectedValue" />
                                 </dd>
                                 <dt>Particulars:</dt>
                                 <dd><textarea class="form-control textarea-custom requiredCollectionLine" id="collectionLine_Particulars"></textarea></dd>
@@ -260,8 +260,8 @@
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_SINo"></div>
 
-                                    <input type="text" id="collectionLine_SINo_data" class="requiredCollectionLine">
-                                    <input type="text" id="collectionLine_SINo_selectedValue" />
+                                    <input type="hidden" id="collectionLine_SINo_data" class="requiredCollectionLine">
+                                    <input type="hidden" id="collectionLine_SINo_selectedValue" />
                                 </dd>
                                 <dt>Amount:</dt>
                                 <dd><input class="form-control input-sm requiredCollectionLine" id="collectionLine_amount" /></dd>
@@ -269,15 +269,15 @@
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_account"></div>
 
-                                    <input type="text" id="collectionLine_account_data" class="requiredCollectionLine">
-                                    <input type="text" id="collectionLine_account_selectedValue" />
+                                    <input type="hidden" id="collectionLine_account_data" class="requiredCollectionLine">
+                                    <input type="hidden" id="collectionLine_account_selectedValue" />
                                 </dd>
                                 <dt>Article:</dt>
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_article"></div>
 
-                                    <input type="text" id="collectionLine_article_data" class="requiredCollectionLine">
-                                    <input type="text" id="collectionLine_article_selectedValue" />
+                                    <input type="hidden" id="collectionLine_article_data" class="requiredCollectionLine">
+                                    <input type="hidden" id="collectionLine_article_selectedValue" />
                                 </dd>
                                 <dt>Check No.:</dt>
                                 <dd><input type="text" class=" form-control input-sm requiredCollectionLine" id="collectionLine_checkNo" /></dd>
@@ -285,14 +285,14 @@
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_checkDate"></div>
                                     
-                                    <input class="form-control input-sm requiredCollectionLine" id="collectionLine_checkDate_data" />
+                                    <input type="hidden" class="requiredCollectionLine" id="collectionLine_checkDate_data" />
                                 </dd>
                                 <dt>Depository Bank:</dt>
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_depositoryBank"></div>
 
-                                    <input type="text" id="collectionLine_depositoryBank_data" class="requiredCollectionLine">
-                                    <input type="text" id="collectionLine_depositoryBank_selectedValue" />
+                                    <input type="hidden" id="collectionLine_depositoryBank_data" class="requiredCollectionLine">
+                                    <input type="hidden" id="collectionLine_depositoryBank_selectedValue" />
                                 </dd>
                                 <dt>Clear:</dt>
                                 <dd><input type="checkbox" id="collectionLine_Clear"/></dd>
@@ -375,6 +375,26 @@
         var btnNextPageGridCollectionGrid;
         var btnLastPageGridCollectionGrid;
         var btnCurrentPageGridCollectionGrid;
+        
+        var collectionLineBranches;
+        var cboCollectionBranch;
+        
+        var collectionLinePayTypes;
+        var cboCollectionLinePayType;
+        
+        var collectionLineSales;
+        var cboCollectionLineSI;
+        
+        var collectionLineAccounts;
+        var cboCollectionLineAccount;
+        
+        var collectionLineArticles;
+        var cboCollectionLineArticle;
+        
+        var collectionArticleBanks;
+        var cboCollectionArticleBank;
+        
+        var CheckedDate;
 
         // ====================
         // GET Collection By Id
@@ -959,14 +979,333 @@
             });
             return collectionLines;
         }
+        
+        // ========================================
+        // GET Collection Line Branch for Combo Box
+        // ========================================
+        function getDisbursementBranchesForComboBox() {
+            collectionLineBranches = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listBranch',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            collectionLineBranches.push({
+                                BranchId: results[i]["Id"],
+                                BranchBranch: results[i]["Branch"]
+                            });
+                        }
+                        createCboCollectionBranch(collectionLineBranches);
+                    }
+                }
+            });
+        }
 
-        // =====================
-        // ADD Disbursement Line
-        // =====================
+        // ======================================
+        // Combo Box for Collection Line Branches
+        // ======================================
+        function createCboCollectionBranch(collectionLineBranches) {
+            var collectionBranchCollections = new wijmo.collections.CollectionView(collectionLineBranches);
+            var collectionBranchList = new Array();
+            for (var i = 0; i < collectionBranchCollections.items.length; i++) {
+                collectionBranchList.push(collectionBranchCollections.items[i].BranchBranch);
+            }
+
+            cboCollectionBranch.dispose();
+            cboCollectionBranch = new wijmo.input.ComboBox('#collectionLine_branch', {
+                placeholder: "Select Branch",
+                itemsSource: collectionBranchList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collectionLine_branch_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collectionLine_branch_data").val(collectionBranchCollections.items[this.selectedIndex].BranchId);
+                }
+            });
+        }
+
+        // =========================================
+        // GET Collection Line PayType for Combo Box
+        // =========================================
+        function getDisbursementPayTypeForComboBox() {
+            collectionLinePayTypes = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listPayType',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            collectionLinePayTypes.push({
+                                PayTypeId: results[i]["Id"],
+                                PayType: results[i]["PayType"]
+                            });
+                        }
+                        createCboCollectionPayType(collectionLinePayTypes);
+                    }
+                }
+            });
+        }
+
+        // ======================================
+        // Combo Box for Collection Line PayTypes
+        // ======================================
+        function createCboCollectionPayType(collectionLinePayTypes) {
+            var collectionPayTypeCollections = new wijmo.collections.CollectionView(collectionLinePayTypes);
+            var collectionPayTypeList = new Array();
+            for (var i = 0; i < collectionPayTypeCollections.items.length; i++) {
+                collectionPayTypeList.push(collectionPayTypeCollections.items[i].PayType);
+            }
+
+            cboCollectionLinePayType.dispose();
+            cboCollectionLinePayType = new wijmo.input.ComboBox('#collectionLine_payType', {
+                placeholder: "Select Pay Type",
+                itemsSource: collectionPayTypeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collectionLine_payType_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collectionLine_payType_data").val(collectionPayTypeCollections.items[this.selectedIndex].PayTypeId);
+                }
+            });
+        }
+
+        // ==============================================
+        // GET SI Number for Combo Box in Collection Line
+        // ==============================================
+        function getSalesForComboBoxInCollectionLine() {
+            collectionLineSales = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listSalesInvoice',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            collectionLineSales.push({
+                                SIId: results[i]["Id"],
+                                SINumber: results[i]["SINumber"],
+                                Branch: results[i]["Branch"]
+                            });
+                        }
+                        createCboSIForCollectionLine(collectionLineSales);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+            );
+        }
+
+        // ===========================================
+        // Combo Box for SI Number in  Collection Line
+        // ===========================================
+        function createCboSIForCollectionLine(collectionLineSales) {
+            var SICollections = new wijmo.collections.CollectionView(collectionLineSales);
+            var SIList = new Array();
+            for (var i = 0; i < SICollections.items.length; i++) {
+                SIList.push(SICollections.items[i].SINumber);
+            }
+
+            cboCollectionLineSI.dispose();
+            cboCollectionLineSI = new wijmo.input.ComboBox('#collectionLine_SINo', {
+                placeholder: "Select SI Number",
+                itemsSource: SIList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collectionLine_SINo_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collectionLine_SINo_data").val(SICollections.items[this.selectedIndex].SIId);
+                }
+            });
+        }
+
+        // ===========================
+        // Get Collection Line Account
+        // ===========================
+        function getCollectionLineAccountForComboBox() {
+            collectionLineAccounts = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            collectionLineAccounts.push({
+                                AccountId: results[i]["Id"],
+                                AccountAccount: results[i]["Account"]
+                            });
+                        }
+                        createCollectionLineCboForAccount(collectionLineAccounts);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+        }
+
+        // ===============
+        // CBO for Account
+        // ===============
+        function  createCollectionLineCboForAccount(collectionLineAccounts) {
+            var collectionLineAccountCollection = new wijmo.collections.CollectionView(collectionLineAccounts);
+            var collectionLineAccountList = new Array();
+            for (var i = 0; i < collectionLineAccountCollection.items.length; i++) {
+                collectionLineAccountList.push(collectionLineAccountCollection.items[i].AccountAccount);
+            }
+
+            cboCollectionLineAccount.dispose();
+            cboCollectionLineAccount = new wijmo.input.ComboBox('#collectionLine_account', {
+                disabled: false,
+                placeholder: "Select Account",
+                itemsSource: collectionLineAccountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collectionLine_account_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collectionLine_account_data").val(collectionLineAccountCollection.items[this.selectedIndex].AccountId);
+                }
+            });
+        }
+
+        // ==========================================
+        // GET Collection Line Articles for Combo Box
+        // ==========================================
+        function getCollectionArticlesForComboBox() {
+            collectionLineArticles = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticle',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            collectionLineArticles.push({
+                                ArticleId: results[i]["Id"],
+                                ArticleArticle: results[i]["Article"]
+                            });
+                        }
+                        createCboCollectionLineArticles(collectionLineArticles);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            }
+            );
+        }
+
+        // ======================================
+        // Combo Box for Collection Line Articles
+        // ======================================
+        function createCboCollectionLineArticles(collectionLineArticles) {
+            var collectionLineArticleCollections = new wijmo.collections.CollectionView(collectionLineArticles);
+            var collectiontLineArticleList = new Array();
+            for (var i = 0; i < collectionLineArticleCollections.items.length; i++) {
+                collectiontLineArticleList.push(collectionLineArticleCollections.items[i].ArticleArticle);
+            }
+
+            cboCollectionLineArticle.dispose();
+            cboCollectionLineArticle = new wijmo.input.ComboBox('#collectionLine_article', {
+                placeholder: "Select Article",
+                itemsSource: collectiontLineArticleList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collectionLine_article_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collectionLine_article_data").val(collectiontLineArticleList.items[this.selectedIndex].ArticleId);
+                }
+            });
+        }
+
+        // ===============================================
+        // GET Collection Line Articles Bank for Combo Box
+        // ===============================================
+        function getCollectionArticleBankForComboBox() {
+            collectionArticleBanks = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticle',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            collectionArticleBanks.push({
+                                ArticleId: results[i]["Id"],
+                                ArticleArticle: results[i]["Article"]
+                            });
+                        }
+                        createCboCollectionLineArticleBank(collectionArticleBanks);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+        }
+
+        // ===========================================
+        // Combo Box for Collection Line Articles Bank
+        // ===========================================
+        function createCboCollectionLineArticleBank(collectionArticleBanks) {
+            var collectionLineArticlBankeCollections = new wijmo.collections.CollectionView(collectionArticleBanks);
+            var collectiontLineArticleBankList = new Array();
+            for (var i = 0; i < collectionLineArticlBankeCollections.items.length; i++) {
+                collectiontLineArticleBankList.push(collectionLineArticlBankeCollections.items[i].ArticleArticle);
+            }
+
+            cboCollectionArticleBank.dispose();
+            cboCollectionArticleBank = new wijmo.input.ComboBox('#collectionLine_depositoryBank', {
+                placeholder: "Select Article",
+                itemsSource: collectiontLineArticleBankList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collectionLine_depositoryBank_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collectionLine_depositoryBank_data").val(collectionLineArticlBankeCollections.items[this.selectedIndex].ArticleId);
+                }
+            });
+        }
+
+        // ===================
+        // ADD Collection Line
+        // ===================
         function cmdAddCollectionLineButton_OnClick() {
             $('#collectionLineEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+
+            getDisbursementBranchesForComboBox();
+            getDisbursementPayTypeForComboBox();
+            getSalesForComboBoxInCollectionLine();
+            getCollectionLineAccountForComboBox();
+            getCollectionArticlesForComboBox();
+            getCollectionArticleBankForComboBox();
+            
+            var d = new Date();
+            document.getElementById("collectionLine_checkDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            CheckedDate.dispose();
+            CheckedDate = new wijmo.input.InputDate('#collectionLine_checkDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('collectionLine_checkDate_data').value = this.value.toLocaleDateString();
+                }
             });
 
             document.getElementById('collectionLine_Id').value = 0;
@@ -983,21 +1322,27 @@
             document.getElementById('collectionLine_article_data').value = '';
             document.getElementById('collectionLine_article_selectedValue').value = '';
             document.getElementById('collectionLine_checkNo').value = '';
-            document.getElementById('collectionLine_checkDate_data').value = '';
             document.getElementById('collectionLine_depositoryBank_data').value = '';
             document.getElementById('collectionLine_depositoryBank_selectedValue').value = '';
             document.getElementById('collectionLine_Clear').checked = false;
         }
 
-        // ======================
-        // Edit Disbursement Line
-        // ======================
+        // ====================
+        // Edit Collection Line
+        // ====================
         function btnEditCollectionLine_OnClick() {
             collectionLines.editItem(collectionLines.currentItem);
             $('#collectionLineEdit').modal({
                 show: true,
                 backdrop: 'static'
             });
+
+            getDisbursementBranchesForComboBox();
+            getDisbursementPayTypeForComboBox();
+            getSalesForComboBoxInCollectionLine();
+            getCollectionLineAccountForComboBox();
+            getCollectionArticlesForComboBox();
+            getCollectionArticleBankForComboBox();
 
             var collectionLine = collectionLines.currentEditItem;
             document.getElementById('collectionLine_Id').value = collectionLine.Id;
@@ -1015,14 +1360,26 @@
             document.getElementById('collectionLine_article_selectedValue').value = collectionLine.Article;
             document.getElementById('collectionLine_checkNo').value = collectionLine.CheckNumber;
             document.getElementById('collectionLine_checkDate_data').value = collectionLine.CheckDate;
+
+            var CheckDateCollection = collectionLine.CheckDate;
+            CheckedDate.dispose();
+            CheckedDate = new wijmo.input.InputDate('#collectionLine_checkDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(CheckDateCollection),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('collectionLine_checkDate_data').value = this.value.toLocaleDateString();
+                }
+            });
+
             document.getElementById('collectionLine_depositoryBank_data').value = collectionLine.DepositoryBankId;
             document.getElementById('collectionLine_depositoryBank_selectedValue').value = collectionLine.DepositoryBank;
             document.getElementById('collectionLine_Clear').checked = collectionLine.IsClear;
         }
 
-        // ========================
-        // Delete Disbursement Line
-        // ========================
+        // ======================
+        // Delete Collection Line
+        // ======================
         function btnDeleteCollectionLine_OnClick() {
             $('#deleteCollectionLineConfirm').modal({
                 show: true,
@@ -1063,6 +1420,24 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            cboCollectionBranch = new wijmo.input.ComboBox('#collectionLine_branch');
+            cboCollectionLinePayType = new wijmo.input.ComboBox('#collectionLine_payType');
+            cboCollectionLineSI = new wijmo.input.ComboBox('#collectionLine_SINo');
+            cboCollectionLineAccount = new wijmo.input.ComboBox('#collectionLine_account');
+            cboCollectionLineArticle = new wijmo.input.ComboBox('#collectionLine_article');
+            cboCollectionArticleBank = new wijmo.input.ComboBox('#collectionLine_depositoryBank');
+
+            var d = new Date();
+            document.getElementById("collectionLine_checkDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            CheckedDate = new wijmo.input.InputDate('#collectionLine_checkDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('collectionLine_checkDate_data').value = this.value.toLocaleDateString();
+                }
+            });
+
             $('#cmdAR').click(function () {
                 $('#SalesStatus').modal({
                     show: true,
