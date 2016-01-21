@@ -1085,7 +1085,7 @@
         var btnNextPageGridItem;
         var btnLastPageGridItem;
         var btnCurrentPageGridItem;
-        
+
         var articleItems;
         var cboManualCodeArticleItems;
         var cboItemDescriptionArticleItems;
@@ -1328,6 +1328,15 @@
                 backdrop: 'static'
             });
 
+            $('.requiredStockInItem').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+            
+            $("#cmdSaveStockInItemButton").prop("disabled", false);
+            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+
             getArticleItemForManualCodeAndComponent();
             getStockInItemUnitForComboBox();
 
@@ -1357,6 +1366,15 @@
                 backdrop: 'static'
             });
 
+            $('.requiredStockInItem').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+            
+            $("#cmdSaveStockInItemButton").prop("disabled", false);
+            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+
             getArticleItemForManualCodeAndComponent();
             getStockInItemUnitForComboBox();
 
@@ -1385,6 +1403,227 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $("#cmdConfirmDeleteStockInItems").prop("disabled", false);
+            $("#cmdConfirmDeleteStockInItemsCloseButton").prop("disabled", false);
+        }
+        // confirm delete stock in items
+        function cmdStockInItemsConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteStockInItems").prop("disabled", true);
+            $("#cmdConfirmDeleteStockInItemsCloseButton").prop("disabled", true);
+
+            items.editItem(items.currentItem);
+            var item = items.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteStockInItem/' + item,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteStockInItems").prop("disabled", true);
+                        $("#cmdConfirmDeleteStockInItemsCloseButton").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+
+                        $('#deletStockInItemsConfirm').modal('hide');
+
+                        items = new wijmo.collections.CollectionView(getItem());
+                        items.canFilter = true;
+                        items.pageSize = 15;
+
+                        var filterTextItem = '';
+                        $('#InputFilterItem').keyup(function () {
+                            filterTextItem = this.value.toLowerCase();
+                            items.refresh();
+                        });
+                        items.filter = function (item) {
+                            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                        }
+                        items.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsItem();
+                        });
+
+                        // Flex Grid for Items
+                        itemGrid.itemsSource = items;
+                        itemGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deletStockInItemsConfirm').modal('hide');
+                        $("#cmdConfirmDeleteStockInItems").prop("disabled", false);
+                        $("#cmdConfirmDeleteStockInItemsCloseButton").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deletStockInItemsConfirm').modal('hide');
+                        $("#cmdConfirmDeleteStockInItems").prop("disabled", false);
+                        $("#cmdConfirmDeleteStockInItemsCloseButton").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+
+        // ==================
+        // SAVE Stock In Item
+        // ==================
+        function cmdStockInItemSaveButton_OnClick() {
+            var stockInItmeObject = new Object();
+            var INId = @stockInId;
+            
+            var stockInItemId = document.getElementById('stockInItem_Id').value;
+            stockInItmeObject.INId = INId;
+            stockInItmeObject.ItemId = document.getElementById('stockInItem_ItemId_data').value;
+            stockInItmeObject.Particulars = document.getElementById('stockInItem_Particulars').value;
+            stockInItmeObject.UnitId = document.getElementById('stockInItem_Unit_data').value;
+            stockInItmeObject.Quantity = document.getElementById('stockInItem_Quantity').value;
+            stockInItmeObject.Cost = document.getElementById('stockInItem_Cost').value;
+            stockInItmeObject.Amount = document.getElementById('stockInItem_Amount').value;
+            stockInItmeObject.BaseUnitId = document.getElementById('stockInItem_BUCUnit_data').value;
+            stockInItmeObject.BaseCost = document.getElementById('stockInItem_BUCCost').value;
+            stockInItmeObject.BaseQuantity = document.getElementById('stockInItem_BUCQuantity').value;
+            var stockInItemData = JSON.stringify(stockInItmeObject);
+
+            if( document.getElementById('stockInItem_ItemId_data').value == '') {
+                document.getElementById("stockInItem_ItemCode").style.border = "1px solid red";
+                document.getElementById("stockInItem_ItemDescription").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockInItem_ItemCode").style.border = "1px solid #C8C8C8";
+                document.getElementById("stockInItem_ItemDescription").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('stockInItem_Unit_data').value == '') {
+                document.getElementById("stockInItem_Unit").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockInItem_Unit").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('stockInItem_BUCUnit_data').value == '') {
+                document.getElementById("stockInItem_BUCUnit").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockInItem_BUCUnit").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredStockInItem').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+            }
+            else {
+                $("#cmdSaveStockInItemButton").prop("disabled", true);
+                $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+                if (stockInItemId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addStockInItem',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: stockInItemData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveStockInItemButton").prop("disabled", true);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+
+                                $('#stockInItemsEdit').modal('hide');
+
+                                items = new wijmo.collections.CollectionView(getItem());
+                                items.canFilter = true;
+                                items.pageSize = 15;
+
+                                var filterTextItem = '';
+                                $('#InputFilterItem').keyup(function () {
+                                    filterTextItem = this.value.toLowerCase();
+                                    items.refresh();
+                                });
+                                items.filter = function (item) {
+                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                }
+                                items.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsItem();
+                                });
+
+                                // Flex Grid for Items
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $('#stockInItemsEdit').modal('hide');
+                                $("#cmdSaveStockInItemButton").prop("disabled", false);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#stockInItemsEdit').modal('hide');
+                                $("#cmdSaveStockInItemButton").prop("disabled", false);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateStockInItem/' + stockInItemId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: stockInItemData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveStockInItemButton").prop("disabled", true);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+
+                                $('#stockInItemsEdit').modal('hide');
+
+                                items = new wijmo.collections.CollectionView(getItem());
+                                items.canFilter = true;
+                                items.pageSize = 15;
+
+                                var filterTextItem = '';
+                                $('#InputFilterItem').keyup(function () {
+                                    filterTextItem = this.value.toLowerCase();
+                                    items.refresh();
+                                });
+                                items.filter = function (item) {
+                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                }
+                                items.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsItem();
+                                });
+
+                                // Flex Grid for Items
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $('#stockInItemsEdit').modal('hide');
+                                $("#cmdSaveStockInItemButton").prop("disabled", false);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#stockInItemsEdit').modal('hide');
+                                $("#cmdSaveStockInItemButton").prop("disabled", false);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
         }
 
         // ============================

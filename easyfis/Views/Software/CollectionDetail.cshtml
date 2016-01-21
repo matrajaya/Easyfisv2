@@ -1386,7 +1386,54 @@
                 backdrop: 'static'
             });
         }
+        // confirm delete Collection
+        function cmdCollectionLineConfirmDeleteButton_OnClick() {
 
+
+        }
+        
+        // ====================
+        // SAVE Collection Line
+        // ====================
+        function cmdCollectionLineSaveButton_OnClick() {
+            var collectionObject = new Object();
+            var ORId = @collectonId;
+
+            var collectionId = document.getElementById('collectionLine_Id').value;
+            collectionObject.ORId = ORId;
+            collectionObject.BranchId = document.getElementById('collectionLine_branch_data').value;
+            collectionObject.AccountId = document.getElementById('collectionLine_account_data').value;
+            collectionObject.SIId = document.getElementById('collectionLine_SINo_data').value;
+            collectionObject.Particulars = document.getElementById('collectionLine_Particulars').value;
+            collectionObject.Amount = document.getElementById('collectionLine_amount').value;
+            collectionObject.PayTypeId = document.getElementById('collectionLine_payType_data').value;
+            collectionObject.CheckNumber = document.getElementById('collectionLine_checkNo').value;
+            collectionObject.CheckDate = document.getElementById('collectionLine_checkDate_data').value;
+            collectionObject.CheckBank = document.getElementById('saleItem_ItemId_data').value;
+            collectionObject.DepositoryBankId = document.getElementById('collectionLine_depositoryBank_data').value;
+            collectionObject.IsClear = document.getElementById('collectionLine_Clear').checked;
+            var collectionData = JSON.stringify(collectionObject);
+
+            
+            document.getElementById('collectionLine_Id').value = collectionLine.Id;
+            document.getElementById('collectionLine_branch_data').value = collectionLine.BranchId;
+            document.getElementById('collectionLine_branch_selectedValue').value = collectionLine.Branch;
+            document.getElementById('collectionLine_payType_data').value = collectionLine.PayTypeId;
+            document.getElementById('collectionLine_payType_selectedValue').value = collectionLine.PayType;
+            document.getElementById('collectionLine_Particulars').value = collectionLine.Particulars;
+            document.getElementById('collectionLine_SINo_data').value = collectionLine.SIId;
+            document.getElementById('collectionLine_SINo_selectedValue').value = collectionLine.SI;
+            document.getElementById('collectionLine_amount').value = collectionLine.Amount;
+            document.getElementById('collectionLine_account_data').value = collectionLine.AccountId;
+            document.getElementById('collectionLine_account_selectedValue').value = collectionLine.Account;
+            document.getElementById('collectionLine_article_data').value = collectionLine.ArticleId;
+            document.getElementById('collectionLine_article_selectedValue').value = collectionLine.Article;
+            document.getElementById('collectionLine_checkNo').value = collectionLine.CheckNumber;
+            document.getElementById('collectionLine_checkDate_data').value = collectionLine.CheckDate;
+            document.getElementById('collectionLine_depositoryBank_data').value = collectionLine.DepositoryBankId;
+            document.getElementById('collectionLine_depositoryBank_selectedValue').value = collectionLine.DepositoryBank;
+            document.getElementById('collectionLine_Clear').checked = collectionLine.IsClear;
+        }
 
         // ======================================
         // Navigation Buttons for Collection Line

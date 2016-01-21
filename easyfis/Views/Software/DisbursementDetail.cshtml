@@ -46,7 +46,7 @@
                         <button class="btn btn-primary btn-sm" id="cmdDisbursementSave" onclick="btnDisbursementSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdDisbursementEdit"><i class="fa fa-edit"></i> Edit</button>
                         <button class="btn btn-primary btn-sm" id="cmdDisbursementPrint" onclick="window.location.href ='@Url.Action("DisbursementPDF", "Software", new { DisbursementId = disbursementId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("Disbursement", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdDisbursementClose"><i class="fa fa-times"></i> Close</button>
+                        <button id="cmdDisbursementClose" onclick="window.location.href = '@Url.Action("Disbursement", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -419,10 +419,10 @@
 
         var disbursementLineAccounts;
         var cboDisbursementLineAccount;
-        
+
         var disbursementLineArticles;
         var cboDisbursementLineArticle;
-        
+
         var disbursementReceivingReceipts;
         var cboDisbursementLineRR;
 
@@ -1293,7 +1293,7 @@
                 }
             });
         }
-        
+
         // ================================================
         // GET RR Number for Combo Box in Disbursement Line
         // ================================================
@@ -1356,6 +1356,15 @@
                 backdrop: 'static'
             });
 
+            $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+            $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+            
+            $('.requiredDisbursementLine').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             getDisbursementBranchesForComboBox();
             getDisbursementLineAccountForComboBox();
             getDisbursementArticlesForComboBox();
@@ -1383,7 +1392,16 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
+            $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+            $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+
+            $('.requiredDisbursementLine').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             getDisbursementBranchesForComboBox();
             getDisbursementLineAccountForComboBox();
             getDisbursementArticlesForComboBox();
@@ -1411,6 +1429,228 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+            $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+        }
+        // Confirm Delete Disbursement Line
+        function cmdDisbursementLineConfirmDeleteButton_OnClick() {
+            $("#cmdSaveDisbursementLineButton").prop("disabled", true);
+            $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
+
+            disbursementLines.editItem(disbursementLines.currentItem);
+            var disbursementLineId = disbursementLines.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteDisbursementLine/' + disbursementLineId,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdSaveDisbursementLineButton").prop("disabled", true);
+                        $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+
+                        $('#deleteDisbursementLineConfirm').modal('hide');
+
+                        disbursementLines = new wijmo.collections.CollectionView(getDisbursementLines());
+                        disbursementLines.canFilter = true;
+                        disbursementLines.pageSize = 15;
+
+                        var filterTextDisbursementLine = '';
+                        $('#InputFilterDisbursementLine').keyup(function () {
+                            filterTextDisbursementLine = this.value.toLowerCase();
+                            disbursementLines.refresh();
+                        });
+                        disbursementLines.filter = function (item) {
+                            return !filterTextDisbursementLine || (item.disbursementLine.toLowerCase().indexOf(filterTextDisbursementLine) > -1);
+                        }
+                        disbursementLines.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsDisbursementLine();
+                        });
+
+                        // Flex Grid for disbursement Line
+                        disbursementGrid.itemsSource = disbursementLines;
+                        disbursementGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteDisbursementLineConfirm').modal('hide');
+                        $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+                        $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteDisbursementLineConfirm').modal('hide');
+                        $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+                        $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+        // ======================
+        // SAVE Disbursement Line
+        // ======================
+        function cmdDisbursementLineSaveButton_OnClick() {
+            var disbursementLineObject = new Object();
+            var CVId = @disbursementId;
+
+            var disbursementLineId = document.getElementById('disbursementLine_Id').value;
+            disbursementLineObject.CVId = CVId;
+            disbursementLineObject.BranchId = document.getElementById('disbursementLine_branch_data').value;
+            disbursementLineObject.AccountId = document.getElementById('disbursementLine_account_data').value;
+            disbursementLineObject.ArticleId = document.getElementById('disbursementLine_article_data').value;
+            disbursementLineObject.RRId = document.getElementById('disbursementLine_RRNo_data').value;
+            disbursementLineObject.Particulars = document.getElementById('disbursementLine_Particulars').value;
+            disbursementLineObject.Amount = document.getElementById('disbursementLine_Amount').value;
+            var disbursementLineData = JSON.stringify(disbursementLineObject);
+
+            if( document.getElementById('disbursementLine_branch_data').value == '') {
+                document.getElementById("disbursementLine_branch").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursementLine_branch").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('disbursementLine_account_data').value == '') {
+                document.getElementById("disbursementLine_account").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursementLine_account").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('disbursementLine_article_data').value == '') {
+                document.getElementById("disbursementLine_article").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursementLine_article").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('disbursementLine_RRNo_data').value == '') {
+                document.getElementById("disbursementLine_RRNo").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursementLine_RRNo").style.border = "1px solid #C8C8C8";
+            }
+
+
+            var isValid = true;
+            $('.requiredDisbursementLine').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+            }
+            else {
+                $("#cmdSaveDisbursementLineButton").prop("disabled", true);
+                $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
+                if (disbursementLineId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addDisbursementLine',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: disbursementLineData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveDisbursementLineButton").prop("disabled", true);
+                                $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+
+                                $('#disbursementLineEdit').modal('hide');
+
+                                disbursementLines = new wijmo.collections.CollectionView(getDisbursementLines());
+                                disbursementLines.canFilter = true;
+                                disbursementLines.pageSize = 15;
+
+                                var filterTextDisbursementLine = '';
+                                $('#InputFilterDisbursementLine').keyup(function () {
+                                    filterTextDisbursementLine = this.value.toLowerCase();
+                                    disbursementLines.refresh();
+                                });
+                                disbursementLines.filter = function (item) {
+                                    return !filterTextDisbursementLine || (item.disbursementLine.toLowerCase().indexOf(filterTextDisbursementLine) > -1);
+                                }
+                                disbursementLines.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsDisbursementLine();
+                                });
+
+                                // Flex Grid for disbursement Line
+                                disbursementGrid.itemsSource = disbursementLines;
+                                disbursementGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $('#disbursementLineEdit').modal('hide');
+                                $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+                                $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#disbursementLineEdit').modal('hide');
+                                $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+                                $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateDisbursementLine/' + disbursementLineId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: disbursementLineData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveDisbursementLineButton").prop("disabled", true);
+                                $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+
+                                $('#disbursementLineEdit').modal('hide');
+
+                                disbursementLines = new wijmo.collections.CollectionView(getDisbursementLines());
+                                disbursementLines.canFilter = true;
+                                disbursementLines.pageSize = 15;
+
+                                var filterTextDisbursementLine = '';
+                                $('#InputFilterDisbursementLine').keyup(function () {
+                                    filterTextDisbursementLine = this.value.toLowerCase();
+                                    disbursementLines.refresh();
+                                });
+                                disbursementLines.filter = function (item) {
+                                    return !filterTextDisbursementLine || (item.disbursementLine.toLowerCase().indexOf(filterTextDisbursementLine) > -1);
+                                }
+                                disbursementLines.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsDisbursementLine();
+                                });
+
+                                // Flex Grid for disbursement Line
+                                disbursementGrid.itemsSource = disbursementLines;
+                                disbursementGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $('#disbursementLineEdit').modal('hide');
+                                $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+                                $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#disbursementLineEdit').modal('hide');
+                                $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+                                $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
         }
 
         // ========================================
