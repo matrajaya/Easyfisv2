@@ -983,7 +983,7 @@
         var articleItems;
         var cboManualCodeArticleItems;
         var cboItemDescriptionArticleItems;
-        
+
         var inventories;
         var cboInventoryCode;
 
@@ -1093,7 +1093,7 @@
                     $("#stockTransferItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
 
                     createCboForItemDescription(articleItems);
-                    
+
                     var articleId = ManualCodeCollections.items[this.selectedIndex].ItemId;
                     var branchId = document.getElementById('stockTransfer_Branch_data').value;
                     $.ajax({
@@ -1123,11 +1123,11 @@
                                 document.getElementById('stockTransferItem_ItemInventoryCode_data').value = results.Id;
                                 document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
                             }
-                            
+
                             getItemInventoryCodeForComboBox();
                         }
                     });
-                    
+
                     getStockTransferItemUnitForComboBox();
                 }
             });
@@ -1191,7 +1191,7 @@
                                 document.getElementById('stockTransferItem_ItemInventoryCode_data').value = results.Id;
                                 document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
                             }
-                            
+
                             getItemInventoryCodeForComboBox();
                         }
                     });
@@ -1230,9 +1230,9 @@
                                     Particulars: results[i]["Particulars"]
                                 });
                             }
-                            
+
                             createCboForInventoryCode(inventories);
-                        } 
+                        }
                     }
                 });
             },100);
@@ -1393,6 +1393,15 @@
 
             getStockTransferItemUnitForComboBox();
 
+            $("#cmdSaveStockTransferItemButton").prop("disabled", false);
+            $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
+            
+            $('.requiredStockTransfer').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             document.getElementById('stockTransferItem_Id').value = 0;
             document.getElementById('stockTransferItem_ItemId_data').value = '';
             document.getElementById('stockTransferItem_ItemCode_selectedValue').value = '';
@@ -1425,6 +1434,15 @@
             getItemInventoryCodeForComboBox();
             getStockTransferItemUnitForComboBox();
 
+            $("#cmdSaveStockTransferItemButton").prop("disabled", false);
+            $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
+
+            $('.requiredStockTransfer').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             var item = items.currentEditItem;
             document.getElementById('stockTransferItem_Id').value = item.Id;
             document.getElementById('stockTransferItem_ItemId_data').value = item.ItemId;
@@ -1444,15 +1462,246 @@
             document.getElementById('stockTransferItem_BUCCost').value = item.BaseCost;
         }
 
-        // ========================
-        // EDIT Stock Transfer Item
-        // ========================
+        // ==========================
+        // DELETE Stock Transfer Item
+        // ==========================
         function btnDeleteStockTransferItem_OnClick() {
             $('#deleteStockTransferItemsConfirm').modal({
                 show: true,
                 backdrop: 'static'
             });
+            
+            $("#cmdConfirmDeleteStockTransferItems").prop("disabled", false);
+            $("#cmdConfirmDeleteStockTransferItemsCloseButton").prop("disabled", false);
         }
+        // Confirm Delete Stock Transfer item
+        function cmdStockTransferItemsConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteStockTransferItems").prop("disabled", true);
+            $("#cmdConfirmDeleteStockTransferItemsCloseButton").prop("disabled", true);
+
+            items.editItem(items.currentItem);
+            var itemId = items.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteStockTransferItem/' + itemId,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteCollectionLine").prop("disabled", true);
+                        $("#cmdConfirmDeleteCollectionLineCloseButton").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
+
+                        $('#deleteStockTransferItemsConfirm').modal('hide');
+                        
+                        items = new wijmo.collections.CollectionView(getItem());
+                        items.canFilter = true;
+                        items.pageSize = 15;
+
+                        var filterTextItem = '';
+                        $('#InputFilterItem').keyup(function () {
+                            filterTextItem = this.value.toLowerCase();
+                            items.refresh();
+                        });
+                        items.filter = function (item) {
+                            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                        }
+                        items.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsItem();
+                        });
+
+                        // Flex Grid for Items
+                        itemGrid.itemsSource = items;
+                        itemGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteStockTransferItemsConfirm').modal('hide');
+                        $("#cmdConfirmDeleteStockTransferItems").prop("disabled", false);
+                        $("#cmdConfirmDeleteStockTransferItemsCloseButton").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteStockTransferItemsConfirm').modal('hide');
+                        $("#cmdConfirmDeleteStockTransferItems").prop("disabled", false);
+                        $("#cmdConfirmDeleteStockTransferItemsCloseButton").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+
+        // ========================
+        // SAVE Stock Transfer Item
+        // ========================
+        function cmdStockTransferItemSaveButton_OnClick() {
+            var stockTransferItemObject = new Object();
+            var STId = @stockTransferId;
+
+            var stockTransferItemId = document.getElementById('stockTransferItem_Id').value;
+            stockTransferItemObject.STId = STId;
+            stockTransferItemObject.ItemId = document.getElementById('stockTransferItem_ItemId_data').value;
+            stockTransferItemObject.ItemInventoryId = document.getElementById('stockTransferItem_ItemInventoryCode_data').value;
+            stockTransferItemObject.Particulars = document.getElementById('stockTransferItem_Particulars').value;
+            stockTransferItemObject.UnitId = document.getElementById('stockTransferItem_Unit_data').value;
+            stockTransferItemObject.Quantity = document.getElementById('stockTransferItem_Quantity').value;
+            stockTransferItemObject.Cost = document.getElementById('stockTransferItem_Cost').value;
+            stockTransferItemObject.Amount = document.getElementById('stockTransferItem_Amount').value;
+            stockTransferItemObject.BaseUnitId = document.getElementById('stockTransferItem_BUCUnit_data').value;
+            stockTransferItemObject.BaseQuantity = document.getElementById('stockTransferItem_BUCQuantity').value;
+            stockTransferItemObject.BaseCost = document.getElementById('stockTransferItem_BUCCost').value;
+            var stockTransferItemData = JSON.stringify(stockTransferItemObject);
+
+            if( document.getElementById('stockTransferItem_ItemId_data').value == '') {
+                document.getElementById("stockTransferItem_ItemCode").style.border = "1px solid red";
+                document.getElementById("stockTransferItem_ItemDescription").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransferItem_ItemCode").style.border = "1px solid #C8C8C8";
+                document.getElementById("stockTransferItem_ItemDescription").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('stockTransferItem_ItemInventoryCode_data').value == '') {
+                document.getElementById("stockTransferItem_ItemInventoryCode").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransferItem_ItemInventoryCode").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('stockTransferItem_Unit_data').value == '') {
+                document.getElementById("stockTransferItem_Unit").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransferItem_Unit").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('stockTransferItem_BUCUnit_data').value == '') {
+                document.getElementById("stockTransferItem_BUCUnit").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockTransferItem_BUCUnit").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredStockTransfer').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+            }
+            else {
+                $("#cmdSaveStockTransferItemButton").prop("disabled", true);
+                $("#cmdStockTransferItemDetailCloseButton").prop("disabled", true);
+
+                if (stockTransferItemId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addStockTransferItem',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: stockTransferItemData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveStockTransferItemButton").prop("disabled", true);
+                                $("#cmdStockTransferItemDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+
+                                $('#stockTransferItemsEdit').modal('hide');
+
+                                items = new wijmo.collections.CollectionView(getItem());
+                                items.canFilter = true;
+                                items.pageSize = 15;
+
+                                var filterTextItem = '';
+                                $('#InputFilterItem').keyup(function () {
+                                    filterTextItem = this.value.toLowerCase();
+                                    items.refresh();
+                                });
+                                items.filter = function (item) {
+                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                }
+                                items.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsItem();
+                                });
+
+                                // Flex Grid for Items
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $('#stockTransferItemsEdit').modal('hide');
+                                $("#cmdSaveStockTransferItemButton").prop("disabled", false);
+                                $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#stockTransferItemsEdit').modal('hide');
+                                $("#cmdSaveStockTransferItemButton").prop("disabled", false);
+                                $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateStockTransferItem/' + stockTransferItemId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: stockTransferItemData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveStockTransferItemButton").prop("disabled", true);
+                                $("#cmdStockTransferItemDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+
+                                $('#stockTransferItemsEdit').modal('hide');
+
+                                items = new wijmo.collections.CollectionView(getItem());
+                                items.canFilter = true;
+                                items.pageSize = 15;
+
+                                var filterTextItem = '';
+                                $('#InputFilterItem').keyup(function () {
+                                    filterTextItem = this.value.toLowerCase();
+                                    items.refresh();
+                                });
+                                items.filter = function (item) {
+                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                }
+                                items.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsItem();
+                                });
+
+                                // Flex Grid for Items
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $('#stockTransferItemsEdit').modal('hide');
+                                $("#cmdSaveStockTransferItemButton").prop("disabled", false);
+                                $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#stockTransferItemsEdit').modal('hide');
+                                $("#cmdSaveStockTransferItemButton").prop("disabled", false);
+                                $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+
 
         // ============================
         // Navigation Buttons for Items
@@ -1628,19 +1877,19 @@
 
             itemGrid.columnHeaders.columns[4].allowMerging = true;
             itemGrid.columnHeaders.setCellData(0, 4, 'Particulars');
-            
+
             itemGrid.columnHeaders.columns[5].allowMerging = true;
             itemGrid.columnHeaders.setCellData(0, 5, 'Item Inventory Code');
-            
+
             itemGrid.columnHeaders.columns[6].allowMerging = true;
             itemGrid.columnHeaders.setCellData(0, 6, 'Quantity');
-            
+
             itemGrid.columnHeaders.columns[7].allowMerging = true;
             itemGrid.columnHeaders.setCellData(0, 7, 'Unit');
-            
+
             itemGrid.columnHeaders.columns[8].allowMerging = true;
             itemGrid.columnHeaders.setCellData(0, 8, 'Cost');
-            
+
             itemGrid.columnHeaders.columns[9].allowMerging = true;
             itemGrid.columnHeaders.setCellData(0, 9, 'Amount');
 

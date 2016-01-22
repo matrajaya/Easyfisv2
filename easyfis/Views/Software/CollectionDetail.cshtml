@@ -45,7 +45,7 @@
                         <button class="btn btn-primary btn-sm" id="cmdCollectionJournal"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdCollectionEdit"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="window.location.href ='@Url.Action("CollectionPDF", "Software", new { CollectonId = collectonId })'"><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="window.location.href ='@Url.Action(" CollectionPDF", "Software", new { CollectonId = collectonId })'"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Collection", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
@@ -86,7 +86,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Customer:</label>
                                     <div class="col-sm-8">
-                                        @*<div class="input-group">*@
+                                        @*<div class="input-group">
+                                            *@
                                             <div class="comboBox-wide" id="collection_Customer"></div>
 
                                             <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
@@ -95,7 +96,8 @@
                                                 <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
                                                 <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>
                                             </div>*@
-                                        @*</div>*@
+                                            @*
+                                        </div>*@
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -260,7 +262,7 @@
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_SINo"></div>
 
-                                    <input type="hidden" id="collectionLine_SINo_data" class="requiredCollectionLine">
+                                    <input type="hidden" id="collectionLine_SINo_data" />
                                     <input type="hidden" id="collectionLine_SINo_selectedValue" />
                                 </dd>
                                 <dt>Amount:</dt>
@@ -280,13 +282,15 @@
                                     <input type="hidden" id="collectionLine_article_selectedValue" />
                                 </dd>
                                 <dt>Check No.:</dt>
-                                <dd><input type="text" class=" form-control input-sm requiredCollectionLine" id="collectionLine_checkNo" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkNo" /></dd>
                                 <dt>Check Date:</dt>
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_checkDate"></div>
-                                    
+
                                     <input type="hidden" class="requiredCollectionLine" id="collectionLine_checkDate_data" />
                                 </dd>
+                                <dt>Check Bank:</dt>
+                                <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkBank" /></dd>
                                 <dt>Depository Bank:</dt>
                                 <dd>
                                     <div class="comboBox-wide" id="collectionLine_depositoryBank"></div>
@@ -295,7 +299,7 @@
                                     <input type="hidden" id="collectionLine_depositoryBank_selectedValue" />
                                 </dd>
                                 <dt>Clear:</dt>
-                                <dd><input type="checkbox" id="collectionLine_Clear"/></dd>
+                                <dd><input type="checkbox" id="collectionLine_Clear" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -375,25 +379,25 @@
         var btnNextPageGridCollectionGrid;
         var btnLastPageGridCollectionGrid;
         var btnCurrentPageGridCollectionGrid;
-        
+
         var collectionLineBranches;
         var cboCollectionBranch;
-        
+
         var collectionLinePayTypes;
         var cboCollectionLinePayType;
-        
+
         var collectionLineSales;
         var cboCollectionLineSI;
-        
+
         var collectionLineAccounts;
         var cboCollectionLineAccount;
-        
+
         var collectionLineArticles;
         var cboCollectionLineArticle;
-        
+
         var collectionArticleBanks;
         var cboCollectionArticleBank;
-        
+
         var CheckedDate;
 
         // ====================
@@ -979,7 +983,7 @@
             });
             return collectionLines;
         }
-        
+
         // ========================================
         // GET Collection Line Branch for Combo Box
         // ========================================
@@ -1225,7 +1229,7 @@
                 required: false,
                 selectedValue: document.getElementById('collectionLine_article_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#collectionLine_article_data").val(collectiontLineArticleList.items[this.selectedIndex].ArticleId);
+                    $("#collectionLine_article_data").val(collectionLineArticleCollections.items[this.selectedIndex].ArticleId);
                 }
             });
         }
@@ -1295,7 +1299,16 @@
             getCollectionLineAccountForComboBox();
             getCollectionArticlesForComboBox();
             getCollectionArticleBankForComboBox();
+
+            $("#cmdSaveCollectionLineButton").prop("disabled", false);
+            $("#cmdCollectionLineDetailCloseButton").prop("disabled", false);
             
+            $('.requiredCollectionLine').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             var d = new Date();
             document.getElementById("collectionLine_checkDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
             CheckedDate.dispose();
@@ -1322,6 +1335,7 @@
             document.getElementById('collectionLine_article_data').value = '';
             document.getElementById('collectionLine_article_selectedValue').value = '';
             document.getElementById('collectionLine_checkNo').value = '';
+            document.getElementById('collectionLine_checkBank').value = '';
             document.getElementById('collectionLine_depositoryBank_data').value = '';
             document.getElementById('collectionLine_depositoryBank_selectedValue').value = '';
             document.getElementById('collectionLine_Clear').checked = false;
@@ -1344,6 +1358,15 @@
             getCollectionArticlesForComboBox();
             getCollectionArticleBankForComboBox();
 
+            $("#cmdSaveCollectionLineButton").prop("disabled", false);
+            $("#cmdCollectionLineDetailCloseButton").prop("disabled", false);
+
+            $('.requiredCollectionLine').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             var collectionLine = collectionLines.currentEditItem;
             document.getElementById('collectionLine_Id').value = collectionLine.Id;
             document.getElementById('collectionLine_branch_data').value = collectionLine.BranchId;
@@ -1360,6 +1383,7 @@
             document.getElementById('collectionLine_article_selectedValue').value = collectionLine.Article;
             document.getElementById('collectionLine_checkNo').value = collectionLine.CheckNumber;
             document.getElementById('collectionLine_checkDate_data').value = collectionLine.CheckDate;
+            document.getElementById('collectionLine_checkBank').value = collectionLine.CheckBank;
 
             var CheckDateCollection = collectionLine.CheckDate;
             CheckedDate.dispose();
@@ -1385,13 +1409,66 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $("#cmdConfirmDeleteCollectionLine").prop("disabled", false);
+            $("#cmdConfirmDeleteCollectionLineCloseButton").prop("disabled", false);
         }
         // confirm delete Collection
         function cmdCollectionLineConfirmDeleteButton_OnClick() {
+            $("#cmdConfirmDeleteCollectionLine").prop("disabled", true);
+            $("#cmdConfirmDeleteCollectionLineCloseButton").prop("disabled", true);
 
+            collectionLines.editItem(collectionLines.currentItem);
+            var collectionLineId = collectionLines.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteCollectionLine/' + collectionLineId,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $("#cmdConfirmDeleteCollectionLine").prop("disabled", true);
+                        $("#cmdConfirmDeleteCollectionLineCloseButton").prop("disabled", true);
+                        toastr.success("Successfully Deleted");
 
+                        $('#deleteCollectionLineConfirm').modal('hide');
+
+                        collectionLines = new wijmo.collections.CollectionView(getCollectionLines());
+                        collectionLines.canFilter = true;
+                        collectionLines.pageSize = 15;
+
+                        var filterTextCollectionLine = '';
+                        $('#InputFilterCollectionLine').keyup(function () {
+                            filterTextCollectionLine = this.value.toLowerCase();
+                            collectionLines.refresh();
+                        });
+                        collectionLines.filter = function (item) {
+                            return !filterTextCollectionLine || (item.Branch.toLowerCase().indexOf(filterTextCollectionLine) > -1);
+                        }
+                        collectionLines.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsCollectionLine();
+                        });
+
+                        // Flex Grid for Items
+                        collectionLineGrid.itemsSource = collectionLines;
+                        collectionLineGrid.trackChanges = true;
+                    },
+                    404: function () {
+                        toastr.error("Request Not Found");
+                        $('#deleteCollectionLineConfirm').modal('hide');
+                        $("#cmdConfirmDeleteCollectionLine").prop("disabled", false);
+                        $("#cmdConfirmDeleteCollectionLineCloseButton").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteCollectionLineConfirm').modal('hide');
+                        $("#cmdConfirmDeleteCollectionLine").prop("disabled", false);
+                        $("#cmdConfirmDeleteCollectionLineCloseButton").prop("disabled", false);
+                    }
+                }
+            });
         }
-        
+
         // ====================
         // SAVE Collection Line
         // ====================
@@ -1403,36 +1480,162 @@
             collectionObject.ORId = ORId;
             collectionObject.BranchId = document.getElementById('collectionLine_branch_data').value;
             collectionObject.AccountId = document.getElementById('collectionLine_account_data').value;
+            collectionObject.ArticleId = document.getElementById('collectionLine_article_data').value;
             collectionObject.SIId = document.getElementById('collectionLine_SINo_data').value;
             collectionObject.Particulars = document.getElementById('collectionLine_Particulars').value;
             collectionObject.Amount = document.getElementById('collectionLine_amount').value;
             collectionObject.PayTypeId = document.getElementById('collectionLine_payType_data').value;
             collectionObject.CheckNumber = document.getElementById('collectionLine_checkNo').value;
             collectionObject.CheckDate = document.getElementById('collectionLine_checkDate_data').value;
-            collectionObject.CheckBank = document.getElementById('saleItem_ItemId_data').value;
+            collectionObject.CheckBank = document.getElementById('collectionLine_checkBank').value;
             collectionObject.DepositoryBankId = document.getElementById('collectionLine_depositoryBank_data').value;
             collectionObject.IsClear = document.getElementById('collectionLine_Clear').checked;
             var collectionData = JSON.stringify(collectionObject);
 
-            
-            document.getElementById('collectionLine_Id').value = collectionLine.Id;
-            document.getElementById('collectionLine_branch_data').value = collectionLine.BranchId;
-            document.getElementById('collectionLine_branch_selectedValue').value = collectionLine.Branch;
-            document.getElementById('collectionLine_payType_data').value = collectionLine.PayTypeId;
-            document.getElementById('collectionLine_payType_selectedValue').value = collectionLine.PayType;
-            document.getElementById('collectionLine_Particulars').value = collectionLine.Particulars;
-            document.getElementById('collectionLine_SINo_data').value = collectionLine.SIId;
-            document.getElementById('collectionLine_SINo_selectedValue').value = collectionLine.SI;
-            document.getElementById('collectionLine_amount').value = collectionLine.Amount;
-            document.getElementById('collectionLine_account_data').value = collectionLine.AccountId;
-            document.getElementById('collectionLine_account_selectedValue').value = collectionLine.Account;
-            document.getElementById('collectionLine_article_data').value = collectionLine.ArticleId;
-            document.getElementById('collectionLine_article_selectedValue').value = collectionLine.Article;
-            document.getElementById('collectionLine_checkNo').value = collectionLine.CheckNumber;
-            document.getElementById('collectionLine_checkDate_data').value = collectionLine.CheckDate;
-            document.getElementById('collectionLine_depositoryBank_data').value = collectionLine.DepositoryBankId;
-            document.getElementById('collectionLine_depositoryBank_selectedValue').value = collectionLine.DepositoryBank;
-            document.getElementById('collectionLine_Clear').checked = collectionLine.IsClear;
+            if( document.getElementById('collectionLine_branch_data').value == '') {
+                document.getElementById("collectionLine_branch").style.border = "1px solid red";
+            } else {
+                document.getElementById("collectionLine_branch").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('collectionLine_account_data').value == '') {
+                document.getElementById("collectionLine_account").style.border = "1px solid red";
+            } else {
+                document.getElementById("collectionLine_account").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('collectionLine_payType_data').value == '') {
+                document.getElementById("collectionLine_payType").style.border = "1px solid red";
+            } else {
+                document.getElementById("collectionLine_payType").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('collectionLine_depositoryBank_data').value == '') {
+                document.getElementById("collectionLine_depositoryBank").style.border = "1px solid red";
+            } else {
+                document.getElementById("collectionLine_depositoryBank").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredCollectionLine').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+            }
+            else {
+                $("#cmdSaveCollectionLineButton").prop("disabled", true);
+                $("#cmdCollectionLineDetailCloseButton").prop("disabled", true);
+                if (collectionId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addCollectionLine',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: collectionData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveCollectionLineButton").prop("disabled", true);
+                                $("#cmdCollectionLineDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+
+                                $('#collectionLineEdit').modal('hide');
+
+                                collectionLines = new wijmo.collections.CollectionView(getCollectionLines());
+                                collectionLines.canFilter = true;
+                                collectionLines.pageSize = 15;
+
+                                var filterTextCollectionLine = '';
+                                $('#InputFilterCollectionLine').keyup(function () {
+                                    filterTextCollectionLine = this.value.toLowerCase();
+                                    collectionLines.refresh();
+                                });
+                                collectionLines.filter = function (item) {
+                                    return !filterTextCollectionLine || (item.Branch.toLowerCase().indexOf(filterTextCollectionLine) > -1);
+                                }
+                                collectionLines.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsCollectionLine();
+                                });
+
+                                // Flex Grid for Items
+                                collectionLineGrid.itemsSource = collectionLines;
+                                collectionLineGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $('#collectionLineEdit').modal('hide');
+                                $("#cmdSaveCollectionLineButton").prop("disabled", false);
+                                $("#cmdCollectionLineDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#collectionLineEdit').modal('hide');
+                                $("#cmdSaveCollectionLineButton").prop("disabled", false);
+                                $("#cmdCollectionLineDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateCollectionLine/' + collectionId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: collectionData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveSaleItemsButton").prop("disabled", true);
+                                $("#cmdSaleItemsDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+
+                                $('#collectionLineEdit').modal('hide');
+
+                                collectionLines = new wijmo.collections.CollectionView(getCollectionLines());
+                                collectionLines.canFilter = true;
+                                collectionLines.pageSize = 15;
+
+                                var filterTextCollectionLine = '';
+                                $('#InputFilterCollectionLine').keyup(function () {
+                                    filterTextCollectionLine = this.value.toLowerCase();
+                                    collectionLines.refresh();
+                                });
+                                collectionLines.filter = function (item) {
+                                    return !filterTextCollectionLine || (item.Branch.toLowerCase().indexOf(filterTextCollectionLine) > -1);
+                                }
+                                collectionLines.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsCollectionLine();
+                                });
+
+                                // Flex Grid for Items
+                                collectionLineGrid.itemsSource = collectionLines;
+                                collectionLineGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $('#collectionLineEdit').modal('hide');
+                                $("#cmdSaveCollectionLineButton").prop("disabled", false);
+                                $("#cmdCollectionLineDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#collectionLineEdit').modal('hide');
+                                $("#cmdSaveCollectionLineButton").prop("disabled", false);
+                                $("#cmdCollectionLineDetailCloseButton").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
         }
 
         // ======================================
