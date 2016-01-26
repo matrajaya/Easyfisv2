@@ -41,9 +41,9 @@
                         <h4 id="itemDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="item_saveSaveItem" onclick="itemSaveItemButton_OnClick()"><i class="fa fa-save"></i> Save and Lock</button>
+                        <button class="btn btn-primary btn-sm" id="item_saveSaveItem" onclick="itemSaveItemButton_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="item_saveItem" onclick="itemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id="item_editItem" onclick="itemEditButton_OnClick()"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="item_editItem" onclick="itemEditButton_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
                         <button class="btn btn-primary btn-sm" id="item_printItem" onclick="window.location.href ='@Url.Action("ItemPDF", "Software", new { ItemId = itemId })'"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Items", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="item_closeItem"><i class="fa fa-times"></i> Close</button>
                     </div>
@@ -840,6 +840,21 @@
                         $("#item_editItem").prop("disabled", false);
                         $("#item_printItem").prop("disabled", false);
 
+                        document.getElementById('Item_DateAcquired_data').value = Results.DateAcquired;
+                        var dateAcquired_Result = Results.DateAcquired;
+                        dateAcquired.dispose();
+                        dateAcquired = new wijmo.input.InputDate('#Item_DateAcquired', {
+                            disabled: true,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(dateAcquired_Result),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('Item_DateAcquired_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+                        
+                        $('#btnAddPrice').prop('disabled', true);
+
                     } else if(document.getElementById('Item_IsLocked').value == 'false') {
                         document.getElementById('articleItem_manualCode').disabled = false;
                         document.getElementById('articleItem_item').disabled = false;
@@ -856,6 +871,21 @@
                         $("#item_saveItem").prop("disabled", false);
                         $("#item_editItem").prop("disabled", true);
                         $("#item_printItem").prop("disabled", true);
+
+                        document.getElementById('Item_DateAcquired_data').value = Results.DateAcquired;
+                        var dateAcquired_Result = Results.DateAcquired;
+                        dateAcquired.dispose();
+                        dateAcquired = new wijmo.input.InputDate('#Item_DateAcquired', {
+                            disabled: false,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(dateAcquired_Result),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('Item_DateAcquired_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+                        
+                        $('#btnAddPrice').prop('disabled', false);
                     }
 
                     // comboboxes
@@ -1391,59 +1421,186 @@
         // SAVE Item
         // =========
         function itemSaveItemButton_OnClick() {
-            $("#item_saveSaveItem").prop("disabled", true);
-            $("#item_saveItem").prop("disabled", true);
-            $("#item_editItem").prop("disabled", true);
-            $("#item_printItem").prop("disabled", true);
-            $("#item_closeItem").prop("disabled", true);
-
             var itemObject = new Object();
             var itemId = @itemId;
+            itemObject.ArticleCode = document.getElementById('articleItem_code').value;
+            itemObject.ManualArticleCode = document.getElementById('articleItem_manualCode').value;
+            itemObject.Article = document.getElementById('articleItem_item').value;
+            itemObject.Category = document.getElementById('articleItem_category').value;
+            itemObject.ArticleGroupId = document.getElementById('articleItem_itemGroup_data').value;
+            itemObject.AccountId = document.getElementById('Item_Account_data').value;
+            itemObject.SalesAccountId = document.getElementById('Item_SalesAccount_data').value;
+            itemObject.CostAccountId = document.getElementById('Item_CostAccount_data').value;
+            itemObject.AssetAccountId = document.getElementById('Item_AccumDepAccount_data').value;
+            itemObject.ExpenseAccountId = document.getElementById('Item_ExpenseAccount_data').value;
+            itemObject.UnitId = document.getElementById('articleItem_unit_data').value;
+            itemObject.OutputTaxId = document.getElementById('articleItem_outputTax_data').value;
+            itemObject.InputTaxId = document.getElementById('articleItem_inputTax_data').value;
+            itemObject.WTaxTypeId = document.getElementById('articleItem_withholdingTax_data').value;
+            itemObject.Price = document.getElementById('articleItem_price').value;
+            itemObject.Cost = document.getElementById('articleItem_manualCost').value;
+            itemObject.IsInventory = document.getElementById('articleItem_Inventory').checked;
+            itemObject.Particulars = document.getElementById('articleItem_particulars').value;
+            itemObject.DateAcquired = document.getElementById('Item_DateAcquired_data').value;
+            itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
+            itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
+            itemObject.ManualArticleOldCode = document.getElementById('articleItem_oldManualCode').value;
+            itemObject.IsLocked = true;
+            var data = JSON.stringify(itemObject);
 
-            if(itemId > 0) {
-                itemObject.IsLocked = document.getElementById('Item_IsLocked_defaultTrue').value;
+            if( document.getElementById('articleItem_itemGroup_data').value == '') {
+                document.getElementById("articleItem_itemGroup").style.border = "1px solid red";
             } else {
-                itemObject.IsLocked = document.getElementById('Item_IsLocked_defaultFalse').value;
+                document.getElementById("articleItem_itemGroup").style.border = "1px solid #C8C8C8";
             }
 
-            var dataUpdate = JSON.stringify(itemObject);
-            $.ajax({
-                type: "PUT",
-                url: '/api/updateArticleIsLock/' + itemId,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: dataUpdate,
-                statusCode: {
-                    200: function () {
-                        toastr.success("Saved Item");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
-                        $("#item_saveSaveItem").prop("disabled", true);
-                        $("#item_saveItem").prop("disabled", true);
-                        $("#item_editItem").prop("disabled", true);
-                        $("#item_printItem").prop("disabled", true);
-                        $("#item_closeItem").prop("disabled", true);
-                    },
-                    404: function () {
-                        toastr.error("Can't Update");
-                        $("#item_saveSaveItem").prop("disabled", false);
-                        $("#item_saveItem").prop("disabled", false);
-                        $("#item_editItem").prop("disabled", false);
-                        $("#item_printItem").prop("disabled", false);
-                        $("#item_closeItem").prop("disabled", false);
+            if( document.getElementById('articleItem_unit_data').value == '') {
+                document.getElementById("articleItem_unit").style.border = "1px solid red";
+            } else {
+                document.getElementById("articleItem_unit").style.border = "1px solid #C8C8C8 ";
+            }
 
-                    },
-                    400: function () {
-                        toastr.error("Bad Request");
-                        $("#item_saveSaveItem").prop("disabled", false);
-                        $("#item_saveItem").prop("disabled", false);
-                        $("#item_editItem").prop("disabled", false);
-                        $("#item_printItem").prop("disabled", false);
-                        $("#item_closeItem").prop("disabled", false);
-                    }
+            if( document.getElementById('articleItem_inputTax_data').value == '') {
+                document.getElementById("articleItem_inputTax").style.border = "1px solid red";
+            } else {
+                document.getElementById("articleItem_inputTax").style.border = "1px solid #C8C8C8 ";
+            }
+
+            if( document.getElementById('articleItem_outputTax_data').value == '') {
+                document.getElementById("articleItem_outputTax").style.border = "1px solid red";
+            } else {
+                document.getElementById("articleItem_outputTax").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('articleItem_withholdingTax_data').value == '') {
+                document.getElementById("articleItem_withholdingTax").style.border = "1px solid red";
+            } else {
+                document.getElementById("articleItem_withholdingTax").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('Item_Account_data').value == '') {
+                document.getElementById("Item_Account").style.border = "1px solid red";
+            } else {
+                document.getElementById("Item_Account").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('Item_SalesAccount_data').value == '') {
+                document.getElementById("Item_SalesAccount").style.border = "1px solid red";
+            } else {
+                document.getElementById("Item_SalesAccount").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('Item_CostAccount_data').value == '') {
+                document.getElementById("Item_CostAccount").style.border = "1px solid red";
+            } else {
+                document.getElementById("Item_CostAccount").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('Item_AccumDepAccount_data').value == '') {
+                document.getElementById("Item_AccumDepAccount").style.border = "1px solid red";
+            } else {
+                document.getElementById("Item_AccumDepAccount").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('Item_ExpenseAccount_data').value == '') {
+                document.getElementById("Item_ExpenseAccount").style.border = "1px solid red";
+            } else {
+                document.getElementById("Item_ExpenseAccount").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredItem').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
                 }
             });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                if(itemId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addArticle/1',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#item_saveSaveItem").prop("disabled", true);
+                                $("#item_saveItem").prop("disabled", true);
+                                $("#item_editItem").prop("disabled", true);
+                                $("#item_printItem").prop("disabled", true);
+                                $("#item_closeItem").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getLastInsertedIdItemByArticleTypeId, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#item_saveSaveItem").prop("disabled", true);
+                                $("#item_saveItem").prop("disabled", true);
+                                $("#item_editItem").prop("disabled", true);
+                                $("#item_printItem").prop("disabled", true);
+                                $("#item_closeItem").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#item_saveSaveItem").prop("disabled", true);
+                                $("#item_saveItem").prop("disabled", true);
+                                $("#item_editItem").prop("disabled", true);
+                                $("#item_printItem").prop("disabled", true);
+                                $("#item_closeItem").prop("disabled", true);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateArticle/' + itemId + '/1',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#item_saveSaveItem").prop("disabled", true);
+                                $("#item_saveItem").prop("disabled", true);
+                                $("#item_editItem").prop("disabled", true);
+                                $("#item_printItem").prop("disabled", true);
+                                $("#item_closeItem").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#item_saveSaveItem").prop("disabled", true);
+                                $("#item_saveItem").prop("disabled", true);
+                                $("#item_editItem").prop("disabled", true);
+                                $("#item_printItem").prop("disabled", true);
+                                $("#item_closeItem").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#item_saveSaveItem").prop("disabled", true);
+                                $("#item_saveItem").prop("disabled", true);
+                                $("#item_editItem").prop("disabled", true);
+                                $("#item_printItem").prop("disabled", true);
+                                $("#item_closeItem").prop("disabled", true);
+                            }
+                        }
+                    });
+                }
+            }
         }
 
         // =========
@@ -2548,23 +2705,52 @@
                 success: function (Results) {
                     $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            prices.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPrice_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePrice_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                PriceDescription: Results[i]["PriceDescription"],
-                                Price: Results[i]["Price"],
-                                Remarks: Results[i]["Remarks"]
-                            });
-                        }
-                        $("#item_saveItem").hide();
-                        $("#item_saveSaveItem").show();
-                    }else {
-                        $("#item_saveItem").show();
-                        $("#item_saveSaveItem").hide();
+                        var items = new wijmo.collections.ObservableArray;
+                        var articleId = @itemId;
+                        $.ajax({
+                            url: '/api/article/' +  articleId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (ItemResults) {
+                                $('#loadingModal').modal('hide');
+                                if (ItemResults.length > 0) {
+                                    items.push ({
+                                        Id: ItemResults.Id,
+                                        IsLocked: ItemResults.IsLocked
+                                    });
+                                }
+
+                                if(ItemResults.IsLocked == true) {
+                                    for (i = 0; i < Results.length; i++) {
+                                        prices.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPrice_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePrice_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            ArticleId: Results[i]["ArticleId"],
+                                            Article: Results[i]["Article"],
+                                            PriceDescription: Results[i]["PriceDescription"],
+                                            Price: Results[i]["Price"],
+                                            Remarks: Results[i]["Remarks"]
+                                        });
+                                    }
+                                } else {
+                                    for (i = 0; i < Results.length; i++) {
+                                        prices.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPrice_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePrice_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            ArticleId: Results[i]["ArticleId"],
+                                            Article: Results[i]["Article"],
+                                            PriceDescription: Results[i]["PriceDescription"],
+                                            Price: Results[i]["Price"],
+                                            Remarks: Results[i]["Remarks"]
+                                        });
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -3036,11 +3222,15 @@
             priceTab();
 
             var ItemId = @itemId;
-
             if(ItemId == 0) {
                 $('#item_saveSaveItem').hide();
+                $("#item_saveItem").show();
                 $('#btnAddPrice').prop('disabled', true);
+            } else {
+                $("#item_saveItem").hide();
+                $("#item_saveSaveItem").show();
             }
+
         });
     </script>
 </body>

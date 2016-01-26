@@ -41,9 +41,9 @@
                         <h4 id="customerDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="customer_saveSaveCustomer" onclick="customerSaveCustomerButton_OnClick()"><i class="fa fa-save"></i> Save and Lock</button>
+                        <button class="btn btn-primary btn-sm" id="customer_saveSaveCustomer" onclick="customerSaveCustomerButton_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="customer_saveCustomer" onclick="customerSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id="customer_editCustomer" onclick="customerEditButton_OnClick()"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="customer_editCustomer" onclick="customerEditButton_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
                         <button class="btn btn-primary btn-sm" id="customer_printCustomer" onclick="window.location.href ='@Url.Action("CustomerPDF", "Software", new { CustomerId = customerId })'"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Customer", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="customer_CloseCustomer"><i class="fa fa-times"></i> Close</button>
                     </div>
@@ -439,64 +439,7 @@
                         $("#customer_editCustomer").prop("disabled", false);
                         $("#customer_printCustomer").prop("disabled", false);
                         document.getElementById('isLocked_Status').checked = true;
-
                         $('#btnAddContactInformation').prop('disabled', true);
-                        
-                        // Flex Grid for Contact Information
-                        contactInformationGrid.dispose();
-                        contactInformationGrid = new wijmo.grid.FlexGrid('#ContactInformationGrid');
-                        contactInformationGrid.initialize({
-                            columns: [
-                                        //{
-                                        //    "header": "Edit",
-                                        //    "binding": "EditId",
-                                        //    "width": 60,
-                                        //    "align": "center",
-                                        //    "allowResizing": false,
-                                        //    "allowSorting": false,
-                                        //    "isContentHtml": true
-                                        //},
-                                        //{
-                                        //    "header": "Delete",
-                                        //    "binding": "DeleteId",
-                                        //    "width": 70,
-                                        //    "align": "center",
-                                        //    "allowResizing": false,
-                                        //    "allowSorting": false,
-                                        //    "isContentHtml": true
-                                        //},
-                                        {
-                                            "header": "Contact",
-                                            "binding": "ContactPerson",
-                                            "width": "3*",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Contact Number(s)",
-                                            "binding": "ContactNumber",
-                                            "width": "2*",
-                                            "allowResizing": false,
-                                            "allowSorting": false,
-                                            "isContentHtml": true
-                                        },
-                                        {
-                                            "header": "Remarks",
-                                            "binding": "Remarks",
-                                            "allowSorting": true,
-                                            "width": "4*",
-                                        },
-                            ],
-                            autoGenerateColumns: false,
-                            itemsSource: contactInformations,
-                            isReadOnly: true,
-                            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                            allowDragging: wijmo.grid.AllowDragging.None,
-                            selectionMode: wijmo.grid.SelectionMode.Row
-                        });
-
-                        contactInformationGrid.trackChanges = true;
 
                     } else if(document.getElementById('Customer_IsLocked').value == 'false') {
                         document.getElementById('artcileCustomer_customer').disabled = false;
@@ -511,6 +454,8 @@
                         $("#customer_editCustomer").prop("disabled", true);
                         $("#customer_printCustomer").prop("disabled", true);
                         document.getElementById('isLocked_Status').checked = false;
+                        $('#btnAddContactInformation').prop('disabled', false);
+
                     } else {
                         console.log("Invalid Lock");
                     }
@@ -612,7 +557,7 @@
                         $("#artcileCustomer_CostAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupCostAccountId);
                         $("#artcileCustomer_AssetAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
                         $("#artcileCustomer_ExpenseAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
-                        
+
                         getArticleAccountForComboBox();
                     }
                 });
@@ -633,7 +578,7 @@
                         $("#artcileCustomer_CostAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupCostAccountId);
                         $("#artcileCustomer_AssetAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
                         $("#artcileCustomer_ExpenseAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
-                        
+
                         getArticleAccountForComboBox();
                     }
                 });
@@ -830,58 +775,137 @@
         // SAVE Customer Customer Button
         // =============================
         function customerSaveCustomerButton_OnClick() {
-            $("#customer_saveSaveCustomer").prop("disabled", true);
-            $("#customer_saveCustomer").prop("disabled", true);
-            $("#customer_editCustomer").prop("disabled", true);
-            $("#customer_printCustomer").prop("disabled", true);
-            $("#customer_CloseCustomer").prop("disabled", true);
-
             var customerObject = new Object();
             var customerId = @customerId;
-            if(customerId > 0) {
-                customerObject.IsLocked = document.getElementById('Customer_IsLocked_defaultTrue').value;
+            customerObject.ArticleCode = document.getElementById('artcileCustomer_code').value;
+            customerObject.Article = document.getElementById('artcileCustomer_customer').value;
+            customerObject.ArticleGroupId = document.getElementById('artcileCustomer_customerGroup_data').value;
+            customerObject.AccountId = document.getElementById('artcileCustomer_account_data').value;
+            customerObject.SalesAccountId = document.getElementById('artcileCustomer_SalesAccountId').value;
+            customerObject.CostAccountId = document.getElementById('artcileCustomer_CostAccountId').value;
+            customerObject.AssetAccountId = document.getElementById('artcileCustomer_AssetAccountId').value;
+            customerObject.ExpenseAccountId = document.getElementById('artcileCustomer_ExpenseAccountId').value;
+            customerObject.Particulars = document.getElementById('artcileCustomer_particulars').value;
+            customerObject.Address = document.getElementById('artcileCustomer_address').value;
+            customerObject.TermId = document.getElementById('artcileCustomer_term_data').value;
+            customerObject.CreditLimit = document.getElementById('artcileCustomer_creditLimit').value;
+            customerObject.ContactNumber = document.getElementById('artcileCustomer_contactNo').value;
+            customerObject.ContactPerson = document.getElementById('artcileCustomer_contactPerson').value;
+            customerObject.TaxNumber = document.getElementById('artcileCustomer_TIN').value;
+            customerObject.IsLocked = true;
+            var data = JSON.stringify(customerObject);
+
+            if( document.getElementById('artcileCustomer_customerGroup_data').value == '') {
+                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid red";
             } else {
-                customerObject.IsLocked = document.getElementById('Customer_IsLocked_defaultFalse').value;
+                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid #C8C8C8   ";
             }
 
-            var dataUpdate = JSON.stringify(customerObject);
-            $.ajax({
-                type: "PUT",
-                url: '/api/updateArticleIsLock/' + customerId,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: dataUpdate,
-                statusCode: {
-                    200: function () {
-                        toastr.success("Saved Customer");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
-                        $("#customer_saveSaveCustomer").prop("disabled", true);
-                        $("#customer_saveCustomer").prop("disabled", true);
-                        $("#customer_editCustomer").prop("disabled", true);
-                        $("#customer_printCustomer").prop("disabled", true);
-                        $("#customer_CloseCustomer").prop("disabled", true);
-                    },
-                    404: function () {
-                        toastr.error("Can't Update");
-                        $("#customer_saveSaveCustomer").prop("disabled", false);
-                        $("#customer_saveCustomer").prop("disabled", false);
-                        $("#customer_editCustomer").prop("disabled", false);
-                        $("#customer_printCustomer").prop("disabled", false);
-                        $("#customer_CloseCustomer").prop("disabled", false);
+            if( document.getElementById('artcileCustomer_account_data').value == '') {
+                document.getElementById("artcileCustomer_account").style.border = "1px solid red";
+            } else {
+                document.getElementById("artcileCustomer_account").style.border = "1px solid #C8C8C8   ";
+            }
 
-                    },
-                    400: function () {
-                        toastr.error("Bad Request");
-                        $("#customer_saveSaveCustomer").prop("disabled", false);
-                        $("#customer_saveCustomer").prop("disabled", false);
-                        $("#customer_editCustomer").prop("disabled", false);
-                        $("#customer_printCustomer").prop("disabled", false);
-                        $("#customer_CloseCustomer").prop("disabled", false);
-                    }
+            if( document.getElementById('artcileCustomer_term_data').value == '') {
+                document.getElementById("artcileCustomer_term").style.border = "1px solid red";
+            } else {
+                document.getElementById("artcileCustomer_term").style.border = "1px solid #C8C8C8   ";
+            }
+
+            var isValid = true;
+            $('.requiredCustomer').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
                 }
             });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                if(customerId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addArticle/2',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getLastInsertedIdCustomerByArticleTypeId, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateArticle/' + customerId + '/2',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#customer_saveSaveCustomer").prop("disabled", true);
+                                $("#customer_saveCustomer").prop("disabled", true);
+                                $("#customer_editCustomer").prop("disabled", true);
+                                $("#customer_printCustomer").prop("disabled", true);
+                                $("#customer_CloseCustomer").prop("disabled", true);
+                            }
+                        }
+                    });
+                }
+            }
         }
 
         // ====================
@@ -902,7 +926,7 @@
             } else {
                 customerObject.IsLocked = document.getElementById('Customer_IsLocked_defaultTrue').value;
             }
-            
+
             var dataUpdate = JSON.stringify(customerObject);
             $.ajax({
                 type: "PUT",
@@ -1132,7 +1156,7 @@
 
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Customer", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Customer</a> ' + ' > Customer Detail';
             document.getElementById('artcileCustomer_code').disabled = true;
-            
+
             // combo box
             cboArticleGroupForCustomer  = new wijmo.input.ComboBox('#artcileCustomer_customerGroup');
             cboForAccount  = new wijmo.input.ComboBox('#artcileCustomer_account');
@@ -1402,25 +1426,53 @@
                 success: function (Results) {
                     $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            contactInformations.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                ContactPerson: Results[i]["ContactPerson"],
-                                ContactNumber: Results[i]["ContactNumber"],
-                                Remarks: Results[i]["Remarks"]
-                            });
-                        }
 
-                        $('#customer_saveSaveCustomer').show();
-                        $('#customer_saveCustomer').hide();
-                    } else {
-                    
-                        $('#customer_saveSaveCustomer').hide();
-                        $('#customer_saveCustomer').show();
+                        var customers = new wijmo.collections.ObservableArray;
+                        var customerId = @customerId;
+                        $.ajax({
+                            url: '/api/article/' +  customerId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (CustomerResults) {
+                                $('#loadingModal').modal('hide');
+                                if (CustomerResults.length > 0) {
+                                    customers.push ({
+                                        Id: CustomerResults.Id,
+                                        IsLocked: CustomerResults.IsLocked
+                                    });
+                                }
+
+                                if(CustomerResults.IsLocked == true) {
+                                    for (i = 0; i < Results.length; i++) {
+                                        contactInformations.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            ArticleId: Results[i]["ArticleId"],
+                                            Article: Results[i]["Article"],
+                                            ContactPerson: Results[i]["ContactPerson"],
+                                            ContactNumber: Results[i]["ContactNumber"],
+                                            Remarks: Results[i]["Remarks"]
+                                        });
+                                    }
+                                } else {
+                                    for (i = 0; i < Results.length; i++) {
+                                        contactInformations.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            ArticleId: Results[i]["ArticleId"],
+                                            Article: Results[i]["Article"],
+                                            ContactPerson: Results[i]["ContactPerson"],
+                                            ContactNumber: Results[i]["ContactNumber"],
+                                            Remarks: Results[i]["Remarks"]
+                                        });
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1545,7 +1597,7 @@
                                 contactInformations.collectionChanged.addHandler(function (sender, args) {
                                     updateNavigateButtonsContactInformation();
                                 });
-                        
+
                                 // Flex Grid for Contact Information
                                 contactInformationGrid.trackChanges = true;
                                 contactInformationGrid.itemsSource = contactInformations;
@@ -1592,7 +1644,7 @@
                                 contactInformations.collectionChanged.addHandler(function (sender, args) {
                                     updateNavigateButtonsContactInformation();
                                 });
-                        
+
                                 // Flex Grid for Contact Information
                                 contactInformationGrid.trackChanges = true;
                                 contactInformationGrid.itemsSource = contactInformations;
@@ -1621,7 +1673,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#cmdConfirmDeleteContact").prop("disabled", false);
             $("#cmdConfirmDeleteContactCloseButton").prop("disabled", false);
         }
@@ -1629,7 +1681,7 @@
         function cmdContactConfirmDeleteButton_OnClick() {
             $("#cmdConfirmDeleteContact").prop("disabled", true);
             $("#cmdConfirmDeleteContactCloseButton").prop("disabled", true);
-           
+
             contactInformations.editItem(contactInformations.currentItem);
             var contactId = contactInformations.currentEditItem.Id;
             $.ajax({
@@ -1642,7 +1694,7 @@
                         $("#cmdConfirmDeleteContact").prop("disabled", true);
                         $("#cmdConfirmDeleteContactCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        
+
                         $('#deleteContactConfirm').modal('hide');
 
                         contactInformations = new wijmo.collections.CollectionView(getContactInformation());
@@ -1660,7 +1712,7 @@
                         contactInformations.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsContactInformation();
                         });
-                        
+
                         // Flex Grid for Contact Information
                         contactInformationGrid.trackChanges = true;
                         contactInformationGrid.itemsSource = contactInformations;
@@ -1842,11 +1894,15 @@
             //journalLedgerTab();
 
             var CustomerId = @customerId;
-
             if(CustomerId == 0) {
                 $('#customer_saveSaveCustomer').hide();
+                $('#customer_saveCustomer').show();
                 $('#btnAddContactInformation').prop('disabled', true);
-            } 
+            } else {
+
+                $('#customer_saveSaveCustomer').show();
+                $('#customer_saveCustomer').hide();
+            }
 
             $('#JournalLedger').hide();
             $('#ContactInformation').show();

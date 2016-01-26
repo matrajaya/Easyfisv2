@@ -47,7 +47,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = true;
+                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -58,7 +58,7 @@ namespace easyfis.Controllers
                 newAccount.Account = account.Account;
                 newAccount.AccountTypeId = account.AccountTypeId;
                 newAccount.AccountCashFlowId = account.AccountCashFlowId;
-                newAccount.IsLocked = isLocked;
+                newAccount.IsLocked = account.IsLocked;
                 newAccount.CreatedById = mstUserId;
                 newAccount.CreatedDateTime = date;
                 newAccount.UpdatedById = mstUserId;
@@ -83,7 +83,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = true;
+                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -99,7 +99,7 @@ namespace easyfis.Controllers
                     updateAccount.Account = account.Account;
                     updateAccount.AccountTypeId = account.AccountTypeId;
                     updateAccount.AccountCashFlowId = account.AccountCashFlowId;
-                    updateAccount.IsLocked = isLocked;
+                    updateAccount.IsLocked = account.IsLocked;
                     updateAccount.UpdatedById = mstUserId;
                     updateAccount.UpdatedDateTime = date;
 
