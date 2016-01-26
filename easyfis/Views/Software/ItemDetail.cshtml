@@ -2560,6 +2560,11 @@
                                 Remarks: Results[i]["Remarks"]
                             });
                         }
+                        $("#item_saveItem").hide();
+                        $("#item_saveSaveItem").show();
+                    }else {
+                        $("#item_saveItem").show();
+                        $("#item_saveSaveItem").hide();
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
