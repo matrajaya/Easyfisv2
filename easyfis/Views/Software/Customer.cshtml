@@ -241,9 +241,31 @@
                         $("#cmdConfirmDeleteCustomer").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+
+                        $('#deleteCustomerConfirm').modal('hide');
+
+                        customers = new wijmo.collections.CollectionView(getArtcileForCustomers());
+                        customers.canFilter = true;
+                        customers.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            customers.refresh();
+                        });
+                        customers.filter = function (item) {
+                            return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        customers.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsCustomer();
+                        });
+                        customers.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        customerGrid.itemsSource = customers;
+                        customerGrid.trackChanges = true;
+
                     },
                     404: function () {
                         toastr.error("Request Not Found");

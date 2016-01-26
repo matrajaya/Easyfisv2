@@ -218,7 +218,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-primary btn-sm" id="btnAddContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
@@ -439,6 +439,64 @@
                         $("#customer_editCustomer").prop("disabled", false);
                         $("#customer_printCustomer").prop("disabled", false);
                         document.getElementById('isLocked_Status').checked = true;
+
+                        $('#btnAddContactInformation').prop('disabled', true);
+                        
+                        // Flex Grid for Contact Information
+                        contactInformationGrid.dispose();
+                        contactInformationGrid = new wijmo.grid.FlexGrid('#ContactInformationGrid');
+                        contactInformationGrid.initialize({
+                            columns: [
+                                        //{
+                                        //    "header": "Edit",
+                                        //    "binding": "EditId",
+                                        //    "width": 60,
+                                        //    "align": "center",
+                                        //    "allowResizing": false,
+                                        //    "allowSorting": false,
+                                        //    "isContentHtml": true
+                                        //},
+                                        //{
+                                        //    "header": "Delete",
+                                        //    "binding": "DeleteId",
+                                        //    "width": 70,
+                                        //    "align": "center",
+                                        //    "allowResizing": false,
+                                        //    "allowSorting": false,
+                                        //    "isContentHtml": true
+                                        //},
+                                        {
+                                            "header": "Contact",
+                                            "binding": "ContactPerson",
+                                            "width": "3*",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                        {
+                                            "header": "Contact Number(s)",
+                                            "binding": "ContactNumber",
+                                            "width": "2*",
+                                            "allowResizing": false,
+                                            "allowSorting": false,
+                                            "isContentHtml": true
+                                        },
+                                        {
+                                            "header": "Remarks",
+                                            "binding": "Remarks",
+                                            "allowSorting": true,
+                                            "width": "4*",
+                                        },
+                            ],
+                            autoGenerateColumns: false,
+                            itemsSource: contactInformations,
+                            isReadOnly: true,
+                            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                            allowDragging: wijmo.grid.AllowDragging.None,
+                            selectionMode: wijmo.grid.SelectionMode.Row
+                        });
+
+                        contactInformationGrid.trackChanges = true;
 
                     } else if(document.getElementById('Customer_IsLocked').value == 'false') {
                         document.getElementById('artcileCustomer_customer').disabled = false;
@@ -1356,6 +1414,13 @@
                                 Remarks: Results[i]["Remarks"]
                             });
                         }
+
+                        $('#customer_saveSaveCustomer').show();
+                        $('#customer_saveCustomer').hide();
+                    } else {
+                    
+                        $('#customer_saveSaveCustomer').hide();
+                        $('#customer_saveCustomer').show();
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1775,6 +1840,14 @@
             //$('#JournalLedger').show();
             //$('#ContactInformation').hide();
             //journalLedgerTab();
+
+            var CustomerId = @customerId;
+
+            if(CustomerId == 0) {
+                $('#customer_saveSaveCustomer').hide();
+                $('#btnAddContactInformation').prop('disabled', true);
+            } 
+
             $('#JournalLedger').hide();
             $('#ContactInformation').show();
             contactInformationTab();

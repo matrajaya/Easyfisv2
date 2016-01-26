@@ -170,9 +170,9 @@
 
                 <!-- Item Lines -->
                 <ul class="nav nav-tabs " role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#UnitConversion" id="unitConversionTabId">Unit Conversion</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Component" id="componentTabId">Component</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#Price" id="priceTabId">Price</a></li>
+                    @*<li role="presentation" class="active"><a data-toggle="tab" href="#UnitConversion" id="unitConversionTabId">Unit Conversion</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#Component" id="componentTabId">Component</a></li>*@
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#Price" id="priceTabId">Price</a></li>
                     @*<li role="presentation"><a data-toggle="tab" href="#Inventory" id="inventoryTabId">Inventory</a></li>*@
                     <li role="presentation"><a data-toggle="tab" href="#GLAccount" id="glAccountTabId">GL Account</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#FixedAsset" id="fixedAssetTabId">Fixed Asset</a></li>
@@ -180,7 +180,7 @@
                 <br />
                 <div class="tab-content">
                     <!-- UnitConversion List -->
-                    <div id="UnitConversion" class="tab-pane fade in active">
+                    <div id="UnitConversion" class="tab-pane fade">
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>Unit Conversion</h4>
@@ -268,7 +268,7 @@
                     </div>
 
                     <!-- Price List -->
-                    <div id="Price" class="tab-pane fade">
+                    <div id="Price" class="tab-pane fade in active">
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4>Price</h4>
@@ -282,7 +282,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddPrice_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <button class="btn btn-primary btn-sm" id="btnAddPrice" onclick="cmdAddPrice_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
@@ -2962,6 +2962,7 @@
             $('#Inventory').hide();
             $('#GLAccount').hide();
             $('#FixedAsset').hide();
+            unitConversionTab();
             window.unitConversionTab = function () {
                 return true;
             };
@@ -2985,7 +2986,7 @@
             $('#Inventory').hide();
             $('#GLAccount').hide();
             $('#FixedAsset').hide();
-            priceTab();
+            //priceTab();
             window.priceTab = function () {
                 return true;
             };
@@ -3020,13 +3021,21 @@
         });
 
         $(document).ready(function () {
-            $('#UnitConversion').show();
+            $('#UnitConversion').hide();
             $('#Component').hide();
-            $('#Price').hide();
+            $('#Price').show();
             $('#Inventory').hide();
             $('#GLAccount').hide();
             $('#FixedAsset').hide();
-            unitConversionTab();
+            //unitConversionTab();
+            priceTab();
+
+            var ItemId = @itemId;
+
+            if(ItemId == 0) {
+                $('#item_saveSaveItem').hide();
+                $('#btnAddPrice').prop('disabled', true);
+            }
         });
     </script>
 </body>

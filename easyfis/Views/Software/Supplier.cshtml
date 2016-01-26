@@ -128,7 +128,7 @@
         // ================
         var suppliers;
         var supplierGrid;
-        
+
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
         var btnNextPageGrid;
@@ -222,7 +222,7 @@
                 show: true,
                 backdrop: 'static'
             });
-           
+
         }
         // Supplier Confirm Delete Button
         function cmdSupplierConfirmDeleteButton_OnClick() {
@@ -241,9 +241,32 @@
                         $("#cmdConfirmDeleteSupplier").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+
+                        $('#deleteSupplierConfirm').modal('hide');
+
+                        suppliers = new wijmo.collections.CollectionView(getArtcileForSuppliers());
+                        suppliers.canFilter = true;
+                        suppliers.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            suppliers.refresh();
+                        });
+                        suppliers.filter = function (item) {
+                            return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        suppliers.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsSupplier();
+                        });
+                        suppliers.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        // Flex Grid
+                        supplierGrid.itemsSource = suppliers;
+                        supplierGrid.trackChanges = true;
+
                     },
                     404: function () {
                         toastr.error("Request Not Found");
@@ -411,7 +434,7 @@
                                 "binding": "IsLocked",
                                 "allowSorting": true,
                                 "width": "0.5*"
-                            }  
+                            }
                 ],
                 autoGenerateColumns: false,
                 itemsSource: suppliers,
