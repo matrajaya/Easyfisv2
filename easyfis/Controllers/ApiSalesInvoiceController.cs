@@ -286,9 +286,9 @@ namespace easyfis.Controllers
             }
         }
 
-        // ==============
-        // UPDATE Company
-        // ==============
+        // ============
+        // UPDATE Sales
+        // ============
         [Route("api/updateSales/{id}")]
         public HttpResponseMessage Put(String id, Models.TrnSalesInvoice sales)
         {
@@ -322,6 +322,46 @@ namespace easyfis.Controllers
                     updateSales.PreparedById = sales.PreparedById;
                     updateSales.CheckedById = sales.CheckedById;
                     updateSales.ApprovedById = sales.ApprovedById;
+
+                    updateSales.IsLocked = sales.IsLocked;
+                    updateSales.UpdatedById = mstUserId;
+                    updateSales.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // =======================
+        // UPDATE Sales - IsLocked
+        // =======================
+        [Route("api/updateSalesIsLocked/{id}")]
+        public HttpResponseMessage PutSalesIsLocked(String id, Models.TrnSalesInvoice sales)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var sales_Id = Convert.ToInt32(id);
+                var salesInvoces = from d in db.TrnSalesInvoices where d.Id == sales_Id select d;
+
+                if (salesInvoces.Any())
+                {
+                    var updateSales = salesInvoces.FirstOrDefault();
 
                     updateSales.IsLocked = sales.IsLocked;
                     updateSales.UpdatedById = mstUserId;
