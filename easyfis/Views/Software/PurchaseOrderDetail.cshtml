@@ -1381,13 +1381,13 @@
                         $("#cmdEditPO").prop("disabled", true);
                         $("#cmdPrintPO").prop("disabled", true);
                         $("#cmdClosePO").prop("disabled", true);
-                        toastr.success("Successfully Updated");
+                        toastr.success("Unlocked");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
                     },
                     404: function () {
-                        toastr.error("Can't Save");
+                        toastr.error("Can't Unlock");
                         $("#cmdSaveLockPO").prop("disabled", false);
                         $("#cmdSavePO").prop("disabled", false);
                         $("#cmdEditPO").prop("disabled", false);

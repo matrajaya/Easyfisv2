@@ -350,6 +350,46 @@ namespace easyfis.Controllers
             }
         }
 
+        // ====================
+        // UPDATE RR - isLocked
+        // ====================
+        [Route("api/updateReceivingReceiptIsLocked/{id}")]
+        public HttpResponseMessage PutUpdateRRIsLocked(String id, Models.TrnReceivingReceipt receivingReceipt)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var receivingReceipt_Id = Convert.ToInt32(id);
+                var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == receivingReceipt_Id select d;
+
+                if (receivingReceipts.Any())
+                {
+                    var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
+                   
+                    updatereceivingReceipt.IsLocked = receivingReceipt.IsLocked;
+                    updatereceivingReceipt.UpdatedById = mstUserId;
+                    updatereceivingReceipt.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
         // =========
         // DELETE RR
         // =========
