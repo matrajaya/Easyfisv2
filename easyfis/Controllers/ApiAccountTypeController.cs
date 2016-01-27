@@ -47,7 +47,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = true;
+                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -58,7 +58,7 @@ namespace easyfis.Controllers
                 newAccountType.AccountType = accountType.AccountType;
                 newAccountType.AccountCategoryId = accountType.AccountCategoryId;
                 newAccountType.SubCategoryDescription = accountType.SubCategoryDescription;
-                newAccountType.IsLocked = isLocked;
+                newAccountType.IsLocked = accountType.IsLocked;
                 newAccountType.CreatedById = mstUserId;
                 newAccountType.CreatedDateTime = date;
                 newAccountType.UpdatedById = mstUserId;
@@ -83,7 +83,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = true;
+                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -99,7 +99,7 @@ namespace easyfis.Controllers
                     updateAccountType.AccountType = accountType.AccountType;
                     updateAccountType.AccountCategoryId = accountType.AccountCategoryId;
                     updateAccountType.SubCategoryDescription = accountType.SubCategoryDescription;
-                    updateAccountType.IsLocked = isLocked;
+                    updateAccountType.IsLocked = accountType.IsLocked;
                     updateAccountType.UpdatedById = mstUserId;
                     updateAccountType.UpdatedDateTime = date;
 

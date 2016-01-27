@@ -43,7 +43,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = true;
+                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -52,7 +52,7 @@ namespace easyfis.Controllers
 
                 newAccountCashFlow.AccountCashFlowCode = accountCashFlow.AccountCashFlowCode;
                 newAccountCashFlow.AccountCashFlow = accountCashFlow.AccountCashFlow;
-                newAccountCashFlow.IsLocked = isLocked;
+                newAccountCashFlow.IsLocked = accountCashFlow.IsLocked;
                 newAccountCashFlow.CreatedById = mstUserId;
                 newAccountCashFlow.CreatedDateTime = date;
                 newAccountCashFlow.UpdatedById = mstUserId;
@@ -77,7 +77,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = true;
+                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -91,7 +91,7 @@ namespace easyfis.Controllers
 
                     updateAccountCashFlow.AccountCashFlowCode = accountCashFlow.AccountCashFlowCode;
                     updateAccountCashFlow.AccountCashFlow = accountCashFlow.AccountCashFlow;
-                    updateAccountCashFlow.IsLocked = isLocked;
+                    updateAccountCashFlow.IsLocked = accountCashFlow.IsLocked;
                     updateAccountCashFlow.UpdatedById = mstUserId;
                     updateAccountCashFlow.UpdatedDateTime = date;
 

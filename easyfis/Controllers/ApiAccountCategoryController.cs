@@ -52,7 +52,7 @@ namespace easyfis.Controllers
 
                 newAccountCategory.AccountCategoryCode = accountCategory.AccountCategoryCode;
                 newAccountCategory.AccountCategory = accountCategory.AccountCategory;
-                newAccountCategory.IsLocked = isLocked;
+                newAccountCategory.IsLocked = accountCategory.IsLocked;
                 newAccountCategory.CreatedById = mstUserId;
                 newAccountCategory.CreatedDateTime = date;
                 newAccountCategory.UpdatedById = mstUserId;
@@ -91,7 +91,7 @@ namespace easyfis.Controllers
 
                     updateAccountCategory.AccountCategoryCode = accountCategory.AccountCategoryCode;
                     updateAccountCategory.AccountCategory = accountCategory.AccountCategory;
-                    updateAccountCategory.IsLocked = isLocked;
+                    updateAccountCategory.IsLocked = accountCategory.IsLocked;
                     updateAccountCategory.UpdatedById = mstUserId;
                     updateAccountCategory.UpdatedDateTime = date;
 
