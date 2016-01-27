@@ -554,6 +554,26 @@
             </div>
         </div>
 
+        <!-- Delete Lock -->
+        <div class="modal fade" id="deleteRecordLock" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Sorry, the record is lock! It can't be deleted!
+                    </div>
+                    <div class="modal-footer">
+                        <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- ============= -->
         <!-- Loading Modal -->
         <!-- ============= -->
@@ -784,29 +804,60 @@
                     $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            accounts.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='btnAccountEditButton' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                AccountCode: Results[i]["AccountCode"],
-                                Account: Results[i]["Account"],
-                                AccountTypeId: Results[i]["AccountTypeId"],
-                                AccountType: Results[i]["AccountType"],
-                                AccountCashFlowId: Results[i]["AccountCashFlowId"],
-                                AccountCashFlow: Results[i]["AccountCashFlow"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                            });
+                            if(Results[i]["IsLocked"] == true) {
+                                accounts.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='btnAccountEditButton' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountCode: Results[i]["AccountCode"],
+                                    Account: Results[i]["Account"],
+                                    AccountTypeId: Results[i]["AccountTypeId"],
+                                    AccountType: Results[i]["AccountType"],
+                                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+                                    AccountCashFlow: Results[i]["AccountCashFlow"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            } else {
+                                accounts.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='btnAccountEditButton' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountCode: Results[i]["AccountCode"],
+                                    Account: Results[i]["Account"],
+                                    AccountTypeId: Results[i]["AccountTypeId"],
+                                    AccountType: Results[i]["AccountType"],
+                                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
+                                    AccountCashFlow: Results[i]["AccountCashFlow"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            }
                         }
                     }
                 }
             });
             return accounts;
+        }
+
+        // ==========================
+        // Account Delete Lock Button
+        // ==========================
+        function cmdAccountDeleteLockButton_OnClick() {
+            $('#deleteRecordLock').modal({
+                show: true,
+                backdrop: 'static'
+            });
         }
 
         // ======================
@@ -1073,7 +1124,7 @@
                 document.getElementById("accountLockAndUnLock").innerHTML = '<i class="fa fa-lock"></i>';
 
                 $('#btnAddACcountArticleType').prop('disabled', true);
-                
+
                 getAccountTypeForComboBox();
                 getAccountCashFlowForComboBox();
 
@@ -1084,7 +1135,7 @@
                 document.getElementById("accountLockAndUnLock").innerHTML = '<i class="fa fa-unlock"></i>';
 
                 $('#btnAddACcountArticleType').prop('disabled', false);
-                
+
                 getAccountTypeForComboBox();
                 getAccountCashFlowForComboBox();
             } else {
@@ -1905,7 +1956,7 @@
             for (var i = 0; i < accountCategoryCollection.items.length; i++) {
                 accountCategoryList.push(accountCategoryCollection.items[i].AccountCategory);
             }
-            
+
             if(document.getElementById('accountTypeEdit_IsLocked').checked == true) {
                 cboAccountCategory.dispose();
                 cboAccountCategory = new wijmo.input.ComboBox('#accountType_CategoryId', {
@@ -1963,28 +2014,58 @@
                     $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            accountTypes.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                AccountTypeCode: Results[i]["AccountTypeCode"],
-                                AccountType: Results[i]["AccountType"],
-                                AccountCategoryId: Results[i]["AccountCategoryId"],
-                                AccountCategory: Results[i]["AccountCategory"],
-                                SubCategoryDescription: Results[i]["SubCategoryDescription"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                            });
+                            if(Results[i]["IsLocked"] == true) {
+                                accountTypes.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountTypeCode: Results[i]["AccountTypeCode"],
+                                    AccountType: Results[i]["AccountType"],
+                                    AccountCategoryId: Results[i]["AccountCategoryId"],
+                                    AccountCategory: Results[i]["AccountCategory"],
+                                    SubCategoryDescription: Results[i]["SubCategoryDescription"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            } else {
+                                accountTypes.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountTypeCode: Results[i]["AccountTypeCode"],
+                                    AccountType: Results[i]["AccountType"],
+                                    AccountCategoryId: Results[i]["AccountCategoryId"],
+                                    AccountCategory: Results[i]["AccountCategory"],
+                                    SubCategoryDescription: Results[i]["SubCategoryDescription"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            }
                         }
                     }
                 }
             });
             return accountTypes;
+        }
+
+        // ===============================
+        // Account Type Delete Lock Button
+        // ===============================
+        function cmdAccountTypeDeleteLockButton_OnClick() {
+            $('#deleteRecordLock').modal({
+                show: true,
+                backdrop: 'static'
+            });
         }
 
         // ====================
@@ -2011,14 +2092,14 @@
                 document.getElementById('accountType_code').disabled = true;
                 document.getElementById('accountType_accountType').disabled = true;
                 document.getElementById('accountType_SubCategoryDescription').disabled = true;
-                
+
                 document.getElementById('accountTypeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                
+
             } else {
                 document.getElementById('accountType_code').disabled = false;
                 document.getElementById('accountType_accountType').disabled = false;
                 document.getElementById('accountType_SubCategoryDescription').disabled = false;
-                
+
                 document.getElementById('accountTypeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
             }
 
@@ -2212,13 +2293,13 @@
                 document.getElementById('accountType_code').disabled = true;
                 document.getElementById('accountType_accountType').disabled = true;
                 document.getElementById('accountType_SubCategoryDescription').disabled = true;
-                
+
                 document.getElementById('accountTypeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
             } else {
                 document.getElementById('accountType_code').disabled = false;
                 document.getElementById('accountType_accountType').disabled = false;
                 document.getElementById('accountType_SubCategoryDescription').disabled = false;
-                
+
                 document.getElementById('accountTypeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
             }
         }
@@ -2481,20 +2562,37 @@
                     $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            accountCashFlows.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                AccountCashFlowCode: Results[i]["AccountCashFlowCode"],
-                                AccountCashFlow: Results[i]["AccountCashFlow"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                            });
+                            if(Results[i]["IsLocked"] == true) {
+                                accountCashFlows.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountCashFlowCode: Results[i]["AccountCashFlowCode"],
+                                    AccountCashFlow: Results[i]["AccountCashFlow"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            } else {
+                                accountCashFlows.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountCashFlowCode: Results[i]["AccountCashFlowCode"],
+                                    AccountCashFlow: Results[i]["AccountCashFlow"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            }
                         }
                     }
                 }
@@ -2502,6 +2600,16 @@
                 alert(err);
             });
             return accountCashFlows;
+        }
+
+        // =====================================
+        // Account Cash Flows Delete Lock Button
+        // =====================================
+        function cmdAccountCashFlowDeleteLockButton_OnClick() {
+            $('#deleteRecordLock').modal({
+                show: true,
+                backdrop: 'static'
+            });
         }
 
         // =========================
@@ -2530,13 +2638,13 @@
             if(document.getElementById('accountCashFlowEdit_IsLocked').checked == true) {
                 document.getElementById('accountCashFlow_Code').disabled = true;
                 document.getElementById('accountCashFlow_CashFlow').disabled = true;
-                
+
                 document.getElementById('accountCashFlowLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                
+
             } else {
                 document.getElementById('accountCashFlow_Code').disabled = false;
                 document.getElementById('accountCashFlow_CashFlow').disabled = false;
-                
+
                 document.getElementById('accountCashFlowLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
             }
         }
@@ -2707,13 +2815,13 @@
             if(accountCashFlow.IsLocked == true) {
                 document.getElementById('accountCashFlow_Code').disabled = true;
                 document.getElementById('accountCashFlow_CashFlow').disabled = true;
-                
+
                 document.getElementById('accountCashFlowLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
-                
+
             } else {
                 document.getElementById('accountCashFlow_Code').disabled = false;
                 document.getElementById('accountCashFlow_CashFlow').disabled = false;
-                
+
                 document.getElementById('accountCashFlowLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
             }
         }
@@ -2962,20 +3070,37 @@
                     $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            accountCategories.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                AccountCategoryCode: Results[i]["AccountCategoryCode"],
-                                AccountCategory: Results[i]["AccountCategory"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                            });
+                            if(Results[i]["IsLocked"] == true) {
+                                accountCategories.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountCategoryCode: Results[i]["AccountCategoryCode"],
+                                    AccountCategory: Results[i]["AccountCategory"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            } else {
+                                accountCategories.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountCategoryCode: Results[i]["AccountCategoryCode"],
+                                    AccountCategory: Results[i]["AccountCategory"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            }
                         }
                     }
                 }
@@ -2984,6 +3109,17 @@
             });
             return accountCategories;
         }
+
+        // ===================================
+        // Account Category Delete Lock Button
+        // ===================================
+        function cmdAccountCategoryDeleteLockButton_OnClick() {
+            $('#deleteRecordLock').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
 
         // ========================
         // ADD New Account Category
@@ -3011,13 +3147,13 @@
             if(document.getElementById('accountCategoryEdit_IsLocked').checked == true) {
                 document.getElementById('accountCategory_Code').disabled = true;
                 document.getElementById('accountCategory_Category').disabled = true;
-                
+
                 document.getElementById('accountCategoryLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";s
-                
+
             } else {
                 document.getElementById('accountCategory_Code').disabled = false;
                 document.getElementById('accountCategory_Category').disabled = false;
-                
+
                 document.getElementById('accountCategoryLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
             }
 
@@ -3033,7 +3169,7 @@
             accountCategoryObject.AccountCategoryCode = document.getElementById('accountCategory_Code').value;
             accountCategoryObject.AccountCategory = document.getElementById('accountCategory_Category').value;
             accountCategoryObject.IsLocked = document.getElementById('accountCategoryEdit_IsLocked').checked;
-            
+
             var data = JSON.stringify(accountCategoryObject);
 
             var isValid = true;
@@ -3190,13 +3326,13 @@
             if(accountCategory.IsLocked == true) {
                 document.getElementById('accountCategory_Code').disabled = true;
                 document.getElementById('accountCategory_Category').disabled = true;
-                
+
                 document.getElementById('accountCategoryLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";s
-                
+
             } else {
                 document.getElementById('accountCategory_Code').disabled = false;
                 document.getElementById('accountCategory_Category').disabled = false;
-                
+
                 document.getElementById('accountCategoryLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
             }
         }
@@ -3519,38 +3655,38 @@
             $(document).on('hidden.bs.modal', '.modal', function () {
                 $('.modal:visible').length && $(document.body).addClass('modal-open');
             });
-            
+
             // Account Category Lock - IsLocked
             $("#accountCategoryEdit_IsLocked").click( function(){
                 if( $(this).is(':checked') ) {
                     document.getElementById('accountCategory_Code').disabled = true;
                     document.getElementById('accountCategory_Category').disabled = true;
-                
+
                     document.getElementById('accountCategoryLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";s
                 } else {
                     document.getElementById('accountCategory_Code').disabled = false;
                     document.getElementById('accountCategory_Category').disabled = false;
-                
+
                     document.getElementById('accountCategoryLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
                 }
             });
-            
+
 
             // Account Cash Flow Lock - IsLocked
             $("#accountCashFlowEdit_IsLocked").click( function(){
                 if( $(this).is(':checked') ) {
                     document.getElementById('accountCashFlow_Code').disabled = true;
                     document.getElementById('accountCashFlow_CashFlow').disabled = true;
-                
+
                     document.getElementById('accountCashFlowLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
                 } else {
                     document.getElementById('accountCashFlow_Code').disabled = false;
                     document.getElementById('accountCashFlow_CashFlow').disabled = false;
-                
+
                     document.getElementById('accountCashFlowLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
                 }
             });
-            
+
             // Account Type Lock - IsLocked
             $("#accountTypeEdit_IsLocked").click( function(){
                 if( $(this).is(':checked') ) {
@@ -3559,7 +3695,7 @@
                     document.getElementById('accountType_SubCategoryDescription').disabled = true;
 
                     getAccountCategoryForComboBox();
-                    
+
                     document.getElementById('accountTypeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
                 } else {
                     document.getElementById('accountType_code').disabled = false;
@@ -3567,7 +3703,7 @@
                     document.getElementById('accountType_SubCategoryDescription').disabled = false;
 
                     getAccountCategoryForComboBox();
-                    
+
                     document.getElementById('accountTypeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
                 }
             });
