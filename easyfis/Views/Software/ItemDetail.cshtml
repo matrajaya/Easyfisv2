@@ -3225,12 +3225,14 @@
             if(ItemId == 0) {
                 $('#item_saveSaveItem').hide();
                 $("#item_saveItem").show();
+                $('#item_editItem').hide();
                 $('#btnAddPrice').prop('disabled', true);
             } else {
                 $("#item_saveItem").hide();
                 $("#item_saveSaveItem").show();
+                $('#item_editItem').show();
             }
-
+            
         });
     </script>
 </body>

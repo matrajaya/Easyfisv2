@@ -42,9 +42,9 @@
                         <h4 id="PODetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <!-- <button class="btn btn-primary btn-sm" id=""><i class="fa fa-save"></i> Save and Lock</button> -->
+                        <button class="btn btn-primary btn-sm" id="cmdSaveLockPO" onclick="btnSaveLockPO_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdSavePO" onclick="btnSavePO_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id="cmdEditPO"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="cmdEditPO" onclick="btnEditPO_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdPrintPO" onclick="window.location.href ='@Url.Action("PurchaseOrderPDF", "Software", new { POId = POId })'"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdClosePO"><i class="fa fa-times"></i> Close</button>
                     </div>
@@ -459,6 +459,83 @@
                     document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
                     document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
+                    document.getElementById('PO_IsLocked').value = Results.IsLocked;
+
+                    if(document.getElementById('PO_IsLocked').value == 'true') {
+                        document.getElementById('PO_PONumber').disabled = true;
+                        document.getElementById('PO_ManualPONumber').disabled = true;
+                        document.getElementById('PO_Remarks').disabled = true;
+                        document.getElementById('PO_RequestNumber').disabled = true;
+                        document.getElementById('PO_ClosePO').disabled = true;
+
+                        var PODate_Result = Results.PODate
+                        PODate.dispose();
+                        PODate = new wijmo.input.InputDate('#PO_Date', {
+                            disabled: true,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(PODate_Result),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('PO_Date_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+
+                        var PODateNeeded_Result = Results.DateNeeded
+                        PODateNeeded.dispose();
+                        PODateNeeded = new wijmo.input.InputDate('#PO_DateNeeded', {
+                            disabled: true,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(PODateNeeded_Result),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('PO_DateNeeded_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+
+                        $("#cmdSaveLockPO").prop("disabled", true);
+                        $("#cmdEditPO").prop("disabled", false);
+                        $("#cmdPrintPO").prop("disabled", false);
+                        $("#cmdPOLineAddButton").prop("disabled", true);
+
+                    } else if(document.getElementById('PO_IsLocked').value == 'false')  {
+                        document.getElementById('PO_ManualPONumber').disabled = false;
+                        document.getElementById('PO_Remarks').disabled = false;
+                        document.getElementById('PO_RequestNumber').disabled = false;
+                        document.getElementById('PO_ClosePO').disabled = false;
+
+                        var PODate_Result = Results.PODate
+                        PODate.dispose();
+                        PODate = new wijmo.input.InputDate('#PO_Date', {
+                            disabled: false,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(PODate_Result),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('PO_Date_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+
+                        var PODateNeeded_Result = Results.DateNeeded
+                        PODateNeeded.dispose();
+                        PODateNeeded = new wijmo.input.InputDate('#PO_DateNeeded', {
+                            disabled: false,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(PODateNeeded_Result),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('PO_DateNeeded_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+
+                        $("#cmdSaveLockPO").prop("disabled", false);
+                        $("#cmdEditPO").prop("disabled", true);
+                        $("#cmdPrintPO").prop("disabled", true);
+                        $("#cmdPOLineAddButton").prop("disabled", false);
+
+                    } else {
+                        console.log("Invalid Lock");
+                    }
+
                     getBranchesForComboBox();
                     getSupplierForComboBox();
                     getTermForComboBox();
@@ -605,17 +682,46 @@
                 supplierList.push(supplierCollection.items[i].Supplier);
             }
 
-            cboSupplier.dispose();
-            cboSupplier = new wijmo.input.ComboBox('#PO_Supplier', {
-                placeholder: "Select Supplier",
-                itemsSource: supplierList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('PO_Supplier_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#PO_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
-                }
-            });
+            if(document.getElementById('PO_IsLocked').value == 'true') {
+                cboSupplier.dispose();
+                cboSupplier = new wijmo.input.ComboBox('#PO_Supplier', {
+                    disabled: true,
+                    placeholder: "Select Supplier",
+                    itemsSource: supplierList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('PO_Supplier_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#PO_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                    }
+                });
+            } else if(document.getElementById('PO_IsLocked').value == 'false') {
+                cboSupplier.dispose();
+                cboSupplier = new wijmo.input.ComboBox('#PO_Supplier', {
+                    disabled: false,
+                    placeholder: "Select Supplier",
+                    itemsSource: supplierList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('PO_Supplier_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#PO_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                    }
+                });
+            } else {
+                cboSupplier.dispose();
+                cboSupplier = new wijmo.input.ComboBox('#PO_Supplier', {
+                    placeholder: "Select Supplier",
+                    itemsSource: supplierList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('PO_Supplier_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#PO_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                    }
+                });
+            }
+
         }
 
         // =======================
@@ -654,17 +760,45 @@
                 termList.push(termCollections.items[i].Term);
             }
 
-            cboTerm.dispose();
-            cboTerm = new wijmo.input.ComboBox('#PO_Term', {
-                placeholder: "Select Term",
-                itemsSource: termList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('PO_Term_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#PO_Term_data").val(termCollections.items[this.selectedIndex].TermId);
-                }
-            });
+            if(document.getElementById('PO_IsLocked').value == 'true') {
+                cboTerm.dispose();
+                cboTerm = new wijmo.input.ComboBox('#PO_Term', {
+                    disabled: true,
+                    placeholder: "Select Term",
+                    itemsSource: termList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('PO_Term_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#PO_Term_data").val(termCollections.items[this.selectedIndex].TermId);
+                    }
+                });
+            } else if(document.getElementById('PO_IsLocked').value == 'false') {
+                cboTerm.dispose();
+                cboTerm = new wijmo.input.ComboBox('#PO_Term', {
+                    disabled: false,
+                    placeholder: "Select Term",
+                    itemsSource: termList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('PO_Term_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#PO_Term_data").val(termCollections.items[this.selectedIndex].TermId);
+                    }
+                });
+            } else {
+                cboTerm.dispose();
+                cboTerm = new wijmo.input.ComboBox('#PO_Term', {
+                    placeholder: "Select Term",
+                    itemsSource: termList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('PO_Term_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#PO_Term_data").val(termCollections.items[this.selectedIndex].TermId);
+                    }
+                });
+            }
         }
 
         // =======================
@@ -736,17 +870,45 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            cboRequestedBy.dispose();
-            cboRequestedBy = new wijmo.input.ComboBox('#RequestedBy', {
-                placeholder: "Select User",
-                itemsSource: userList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('RequestedBy_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#RequestedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                }
-            });
+            if(document.getElementById('PO_IsLocked').value == 'true') {
+                cboRequestedBy.dispose();
+                cboRequestedBy = new wijmo.input.ComboBox('#RequestedBy', {
+                    disabled: true,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('RequestedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#RequestedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            } else if(document.getElementById('PO_IsLocked').value == 'false') {
+                cboRequestedBy.dispose();
+                cboRequestedBy = new wijmo.input.ComboBox('#RequestedBy', {
+                    disabled: false,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('RequestedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#RequestedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            } else {
+                cboRequestedBy.dispose();
+                cboRequestedBy = new wijmo.input.ComboBox('#RequestedBy', {
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('RequestedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#RequestedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            }
         }
 
         // ==================================
@@ -783,17 +945,46 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            cboCheckedBy.dispose();
-            cboCheckedBy = new wijmo.input.ComboBox('#CheckedBy', {
-                placeholder: "Select User",
-                itemsSource: userList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('CheckedBy_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                }
-            });
+            if(document.getElementById('PO_IsLocked').value == 'true') {
+                cboCheckedBy.dispose();
+                cboCheckedBy = new wijmo.input.ComboBox('#CheckedBy', {
+                    disabled: true,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('CheckedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            } else if(document.getElementById('PO_IsLocked').value == 'false') {
+                cboCheckedBy.dispose();
+                cboCheckedBy = new wijmo.input.ComboBox('#CheckedBy', {
+                    disabled: false,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('CheckedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            }
+            else {
+                cboCheckedBy.dispose();
+                cboCheckedBy = new wijmo.input.ComboBox('#CheckedBy', {
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('CheckedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            }
         }
 
         // ==================================
@@ -806,17 +997,45 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            cboApprovedBy.dispose();
-            cboApprovedBy = new wijmo.input.ComboBox('#ApprovedBy', {
-                placeholder: "Select User",
-                itemsSource: userList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('ApprovedBy_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                }
-            });
+            if(document.getElementById('PO_IsLocked').value == 'true') {
+                cboApprovedBy.dispose();
+                cboApprovedBy = new wijmo.input.ComboBox('#ApprovedBy', {
+                    disabled: true,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('ApprovedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            } else if(document.getElementById('PO_IsLocked').value == 'false') {
+                cboApprovedBy.dispose();
+                cboApprovedBy = new wijmo.input.ComboBox('#ApprovedBy', {
+                    disabled: false,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('ApprovedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            } else {
+                cboApprovedBy.dispose();
+                cboApprovedBy = new wijmo.input.ComboBox('#ApprovedBy', {
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('ApprovedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            }
         }
 
         // =====================================================
@@ -919,6 +1138,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
+                                $("#cmdSaveLockPO").prop("disabled", true);
                                 $("#cmdSavePO").prop("disabled", true);
                                 $("#cmdEditPO").prop("disabled", true);
                                 $("#cmdPrintPO").prop("disabled", true);
@@ -928,18 +1148,19 @@
                             },
                             404: function () {
                                 toastr.error("Can't Save");
-
-                                $("#cmdSavePO").prop("disabled", true);
-                                $("#cmdEditPO").prop("disabled", true);
-                                $("#cmdPrintPO").prop("disabled", true);
-                                $("#cmdClosePO").prop("disabled", true);
+                                $("#cmdSaveLockPO").prop("disabled", false);
+                                $("#cmdSavePO").prop("disabled", false);
+                                $("#cmdEditPO").prop("disabled", false);
+                                $("#cmdPrintPO").prop("disabled", false);
+                                $("#cmdClosePO").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
-                                $("#cmdSavePO").prop("disabled", true);
-                                $("#cmdEditPO").prop("disabled", true);
-                                $("#cmdPrintPO").prop("disabled", true);
-                                $("#cmdClosePO").prop("disabled", true);
+                                $("#cmdSaveLockPO").prop("disabled", false);
+                                $("#cmdSavePO").prop("disabled", false);
+                                $("#cmdEditPO").prop("disabled", false);
+                                $("#cmdPrintPO").prop("disabled", false);
+                                $("#cmdClosePO").prop("disabled", false);
                             }
                         }
                     });
@@ -952,6 +1173,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
+                                $("#cmdSaveLockPO").prop("disabled", true);
                                 $("#cmdSavePO").prop("disabled", true);
                                 $("#cmdEditPO").prop("disabled", true);
                                 $("#cmdPrintPO").prop("disabled", true);
@@ -963,23 +1185,225 @@
                             },
                             404: function () {
                                 toastr.error("Can't Save");
-
-                                $("#cmdSavePO").prop("disabled", true);
-                                $("#cmdEditPO").prop("disabled", true);
-                                $("#cmdPrintPO").prop("disabled", true);
-                                $("#cmdClosePO").prop("disabled", true);
+                                $("#cmdSaveLockPO").prop("disabled", false);
+                                $("#cmdSavePO").prop("disabled", false);
+                                $("#cmdEditPO").prop("disabled", false);
+                                $("#cmdPrintPO").prop("disabled", false);
+                                $("#cmdClosePO").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
-                                $("#cmdSavePO").prop("disabled", true);
-                                $("#cmdEditPO").prop("disabled", true);
-                                $("#cmdPrintPO").prop("disabled", true);
-                                $("#cmdClosePO").prop("disabled", true);
+                                $("#cmdSaveLockPO").prop("disabled", false);
+                                $("#cmdSavePO").prop("disabled", false);
+                                $("#cmdEditPO").prop("disabled", false);
+                                $("#cmdPrintPO").prop("disabled", false);
+                                $("#cmdClosePO").prop("disabled", false);
                             }
                         }
                     });
                 }
             }
+        }
+
+        // ==================
+        // Save Lock PO Lines
+        // ==================
+        function btnSaveLockPO_OnClick() {
+            var POObject = new Object();
+            var POId = @POId;
+            POObject.BranchId = document.getElementById('PO_Branch_data').value;
+            POObject.PONumber = document.getElementById('PO_PONumber').value;
+            POObject.PODate = document.getElementById('PO_Date_data').value;
+            POObject.SupplierId = document.getElementById('PO_Supplier_data').value;
+            POObject.TermId = document.getElementById('PO_Term_data').value;
+            POObject.ManualRequestNumber = document.getElementById('PO_RequestNumber').value;
+            POObject.ManualPONumber = document.getElementById('PO_ManualPONumber').value;
+            POObject.DateNeeded = document.getElementById('PO_DateNeeded_data').value;
+            POObject.Remarks = document.getElementById('PO_Remarks').value;
+            POObject.IsClose = document.getElementById('PO_ClosePO').checked;
+            POObject.RequestedById = document.getElementById('RequestedBy_data').value;
+            POObject.PreparedById = document.getElementById('PreparedBy_data').value;
+            POObject.CheckedById = document.getElementById('CheckedBy_data').value;
+            POObject.ApprovedById = document.getElementById('ApprovedBy_data').value;
+            POObject.IsLocked = true;
+            var data = JSON.stringify(POObject);
+
+            if( document.getElementById('PO_Branch_data').value == '') {
+                document.getElementById("PO_Branch").style.border = "1px solid red";
+            } else {
+                document.getElementById("PO_Branch").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('PO_Supplier_data').value == '') {
+                document.getElementById("PO_Supplier").style.border = "1px solid red";
+            } else {
+                document.getElementById("PO_Supplier").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('PO_Term_data').value == '') {
+                document.getElementById("PO_Term").style.border = "1px solid red";
+            } else {
+                document.getElementById("PO_Term").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('RequestedBy_data').value == '') {
+                document.getElementById("RequestedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("RequestedBy").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('CheckedBy_data').value == '') {
+                document.getElementById("CheckedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("CheckedBy").style.border = "1px solid #C8C8C8";
+            }
+
+            if( document.getElementById('ApprovedBy_data').value == '') {
+                document.getElementById("ApprovedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("ApprovedBy").style.border = "1px solid #C8C8C8";
+            }
+
+            var isValid = true;
+            $('.requiredPO').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                if (POId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addPurchaseOrder',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveLockPO").prop("disabled", true);
+                                $("#cmdSavePO").prop("disabled", true);
+                                $("#cmdEditPO").prop("disabled", true);
+                                $("#cmdPrintPO").prop("disabled", true);
+                                $("#cmdClosePO").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getPOLastInsertedId, 1000)
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdSaveLockPO").prop("disabled", false);
+                                $("#cmdSavePO").prop("disabled", false);
+                                $("#cmdEditPO").prop("disabled", false);
+                                $("#cmdPrintPO").prop("disabled", false);
+                                $("#cmdClosePO").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdSaveLockPO").prop("disabled", false);
+                                $("#cmdSavePO").prop("disabled", false);
+                                $("#cmdEditPO").prop("disabled", false);
+                                $("#cmdPrintPO").prop("disabled", false);
+                                $("#cmdClosePO").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updatePurchaseOrder/' + POId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveLockPO").prop("disabled", true);
+                                $("#cmdSavePO").prop("disabled", true);
+                                $("#cmdEditPO").prop("disabled", true);
+                                $("#cmdPrintPO").prop("disabled", true);
+                                $("#cmdClosePO").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdSaveLockPO").prop("disabled", false);
+                                $("#cmdSavePO").prop("disabled", false);
+                                $("#cmdEditPO").prop("disabled", false);
+                                $("#cmdPrintPO").prop("disabled", false);
+                                $("#cmdClosePO").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdSaveLockPO").prop("disabled", false);
+                                $("#cmdSavePO").prop("disabled", false);
+                                $("#cmdEditPO").prop("disabled", false);
+                                $("#cmdPrintPO").prop("disabled", false);
+                                $("#cmdClosePO").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // ==================
+        // Edit PO - unlocked
+        // ==================
+        function btnEditPO_OnClick() {
+            var POObject = new Object();
+            var POId = @POId;
+            POObject.IsLocked = false;
+            var data = JSON.stringify(POObject);
+            $.ajax({
+                type: "PUT",
+                url: '/api/updatePurchaseOrderIsLocked/' + POId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: data,
+                statusCode: {
+                    200: function () {
+                        $("#cmdSaveLockPO").prop("disabled", true);
+                        $("#cmdSavePO").prop("disabled", true);
+                        $("#cmdEditPO").prop("disabled", true);
+                        $("#cmdPrintPO").prop("disabled", true);
+                        $("#cmdClosePO").prop("disabled", true);
+                        toastr.success("Successfully Updated");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Can't Save");
+                        $("#cmdSaveLockPO").prop("disabled", false);
+                        $("#cmdSavePO").prop("disabled", false);
+                        $("#cmdEditPO").prop("disabled", false);
+                        $("#cmdPrintPO").prop("disabled", false);
+                        $("#cmdClosePO").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $("#cmdSaveLockPO").prop("disabled", false);
+                        $("#cmdSavePO").prop("disabled", false);
+                        $("#cmdEditPO").prop("disabled", false);
+                        $("#cmdPrintPO").prop("disabled", false);
+                        $("#cmdClosePO").prop("disabled", false);
+                    }
+                }
+            });
         }
 
         // ==========================================
@@ -1026,23 +1450,60 @@
                 success: function (Results) {
                     //$('#loadingModal').modal('hide');
                     if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            POLines.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditPOLines_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeletePOLines_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                ItemId: Results[i]["ItemId"],
-                                Item: Results[i]["Item"],
-                                ItemCode: Results[i]["ItemCode"],
-                                POId: Results[i]["POId"],
-                                Quantity: Results[i]["Quantity"],
-                                UnitId: Results[i]["UnitId"],
-                                Unit: Results[i]["Unit"],
-                                Particulars: Results[i]["Particulars"],
-                                Cost: Results[i]["Cost"],
-                                Amount: Results[i]["Amount"]
-                            });
-                        }
+                        var POs = new wijmo.collections.ObservableArray;
+                        var POId = @POId;
+                        $.ajax({
+                            url: '/api/purchaseOrder/' + POId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (POResults) {
+                                if (POResults.length > 0) {
+                                    POs.push({
+                                        IsLocked: POResults.IsLocked,
+                                    });
+                                }
+
+                                if (POResults.IsLocked == true) {
+                                    for (i = 0; i < Results.length; i++) {
+                                        POLines.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditPOLines_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeletePOLines_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            ItemId: Results[i]["ItemId"],
+                                            Item: Results[i]["Item"],
+                                            ItemCode: Results[i]["ItemCode"],
+                                            POId: Results[i]["POId"],
+                                            Quantity: Results[i]["Quantity"],
+                                            UnitId: Results[i]["UnitId"],
+                                            Unit: Results[i]["Unit"],
+                                            Particulars: Results[i]["Particulars"],
+                                            Cost: Results[i]["Cost"],
+                                            Amount: Results[i]["Amount"]
+                                        });
+                                    }
+                                } else {
+                                    for (i = 0; i < Results.length; i++) {
+                                        POLines.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditPOLines_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeletePOLines_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            ItemId: Results[i]["ItemId"],
+                                            Item: Results[i]["Item"],
+                                            ItemCode: Results[i]["ItemCode"],
+                                            POId: Results[i]["POId"],
+                                            Quantity: Results[i]["Quantity"],
+                                            UnitId: Results[i]["UnitId"],
+                                            Unit: Results[i]["Unit"],
+                                            Particulars: Results[i]["Particulars"],
+                                            Cost: Results[i]["Cost"],
+                                            Amount: Results[i]["Amount"]
+                                        });
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1162,7 +1623,7 @@
                     $("#POLine_ItemCode_selectedValue").val(itemDescriptionCollection.items[this.selectedIndex].ItemCode);
                     $("#POLine_Unit_data").val(itemDescriptionCollection.items[this.selectedIndex].UnitId);
                     $("#POLine_Unit_selectedValue").val(itemDescriptionCollection.items[this.selectedIndex].Unit);
-                    
+
                     getItemCodeForComboBox();
                     getItemUnitForComboBox();
                 }
@@ -1227,7 +1688,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#cmdSavePOLinesButton").prop("disabled", false);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
 
@@ -1257,7 +1718,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#cmdSavePOLinesButton").prop("disabled", false);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
 
@@ -1286,7 +1747,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#cmdConfirmDeletePOLines").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
@@ -1294,7 +1755,7 @@
         function cmdPOLinesConfirmDeleteButton_OnClick() {
             $("#cmdConfirmDeletePOLines").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
-           
+
             POLines.editItem(POLines.currentItem);
             var POLineId = POLines.currentEditItem.Id;
             $.ajax({
@@ -1495,14 +1956,26 @@
                     });
                 }
             }
-
-
         }
 
         // ===========
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var POId = @POId;
+            if(POId == 0) {
+                $('#cmdSaveLockPO').hide();
+                $('#cmdSavePO').show();
+                $('#cmdEditPO').hide();
+                $("#cmdPrintPO").prop("disabled", true);
+                $('#cmdPOLineAddButton').prop('disabled', true);
+
+            } else {
+                $('#cmdSaveLockPO').show();
+                $('#cmdSavePO').hide();
+                $('#cmdEditPO').prop('disabled', true);
+            }
+
             $('#POLine_Quantity').keyup(function() {
                 var inputQuantity = this.value;
                 var inputCost = document.getElementById('POLine_Cost').value;
@@ -1521,7 +1994,7 @@
                 var replacedCost = inputCost.replace(/\,/g,'');
                 var replacedQuantity = inputQuantity.replace(/\,/g,'');
                 var amount = replacedCost * replacedQuantity;
-                    
+
                 document.getElementById('POLine_Amount').value = amount.toLocaleString();
             });
 

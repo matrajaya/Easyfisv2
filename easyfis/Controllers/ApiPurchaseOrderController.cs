@@ -77,7 +77,16 @@ namespace easyfis.Controllers
                                          Cost = d.Cost,
                                          Amount = d.Amount
                                      };
-            decimal amount = PurchaseOrderItems.Sum(d => d.Amount);
+            decimal amount;
+
+            if (!PurchaseOrderItems.Any())
+            {
+                amount = 0;
+            }
+            else 
+            {
+                amount = PurchaseOrderItems.Sum(d => d.Amount);
+            }
 
             return amount;
         }
@@ -409,6 +418,47 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
+
+        // ================================
+        // Update Puschase Order - IsLocked
+        // ================================
+        [Route("api/updatePurchaseOrderIsLocked/{id}")]
+        public HttpResponseMessage PutIsLocked(String id, Models.TrnPurchaseOrder purchaseOrder)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var PO_Id = Convert.ToInt32(id);
+                var POs = from d in db.TrnPurchaseOrders where d.Id == PO_Id select d;
+
+                if (POs.Any())
+                {
+                    var updatePO = POs.FirstOrDefault();
+
+                    updatePO.IsLocked = purchaseOrder.IsLocked;
+                    updatePO.UpdatedById = mstUserId;
+                    updatePO.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
 
         // =========
         // DELETE PO
