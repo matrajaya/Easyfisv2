@@ -54,6 +54,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8" align="right">
+                                <input type="hidden" id="account_IsLocked" />
                                 <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                 <button onclick="window.location.href = '@Url.Action("Index", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonChartOfAccounts"><i class="fa fa-times"></i> Close</button>
                             </div>
@@ -225,7 +226,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="accountModalLabel">Account Detail</h4>
+                        <h4 class="modal-title" id="accountModalLabel">Account Detail <span id="lockAndUnLock"></span> </h4>
                     </div>
                     <div class="modal-body">
                         <form id="AccountDetailForm">
@@ -249,7 +250,12 @@
                                     <input type="hidden" class="requiredAccount" id="account_cash_flow_id_data" required />
                                     <input type="hidden" id="account_cash_flow_selectedValue" />
                                 </dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd>
+                                   <input type="checkbox" id="accountEdit_IsLocked" />
+                                </dd>
                             </dl>
+                            
                         </form>
                         <hr id="hrAccountArticleType" />
                         <center><label id="loadingAccountArtitleType"></label></center>
@@ -263,7 +269,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4" align="right">
-                                    <button class="btn btn-primary btn-sm" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-primary btn-sm" id="btnAddACcountArticleType" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
                                 </div>
                             </div>
                             <br />
@@ -638,17 +644,45 @@
                 accountTypeList.push(accountTypeCollections.items[i].AccountType);
             }
 
-            cboAccountType.dispose();
-            cboAccountType = new wijmo.input.ComboBox('#account_type_id', {
-                placeholder: "Select a Account Type",
-                itemsSource: accountTypeList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('account_type_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#account_type_id_data").val(accountTypeCollections.items[this.selectedIndex].AccountTypeId);
-                }
-            });
+            if(document.getElementById('account_IsLocked').value == 'true') {
+                cboAccountType.dispose();
+                cboAccountType = new wijmo.input.ComboBox('#account_type_id', {
+                    disabled: true,
+                    placeholder: "Select a Account Type",
+                    itemsSource: accountTypeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('account_type_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#account_type_id_data").val(accountTypeCollections.items[this.selectedIndex].AccountTypeId);
+                    }
+                });
+            } else if(document.getElementById('account_IsLocked').value == 'false') {
+                cboAccountType.dispose();
+                cboAccountType = new wijmo.input.ComboBox('#account_type_id', {
+                    disabled: false,
+                    placeholder: "Select a Account Type",
+                    itemsSource: accountTypeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('account_type_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#account_type_id_data").val(accountTypeCollections.items[this.selectedIndex].AccountTypeId);
+                    }
+                });
+            } else {
+                cboAccountType.dispose();
+                cboAccountType = new wijmo.input.ComboBox('#account_type_id', {
+                    placeholder: "Select a Account Type",
+                    itemsSource: accountTypeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('account_type_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#account_type_id_data").val(accountTypeCollections.items[this.selectedIndex].AccountTypeId);
+                    }
+                });
+            }
         }
 
         // ===================================
@@ -688,17 +722,45 @@
                 accountCashFlowList.push(accountCashFlowCollections.items[i].AccountCashFlow);
             }
 
-            cboAccountCashFlow.dispose();
-            cboAccountCashFlow = new wijmo.input.ComboBox('#account_cash_flow_id', {
-                placeholder: "Select a Account Cash Flow",
-                itemsSource: accountCashFlowList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('account_cash_flow_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#account_cash_flow_id_data").val(accountCashFlowCollections.items[this.selectedIndex].AccountCashFlowId);
-                }
-            });
+            if(document.getElementById('account_IsLocked').value == 'true') {
+                cboAccountCashFlow.dispose();
+                cboAccountCashFlow = new wijmo.input.ComboBox('#account_cash_flow_id', {
+                    disabled: true,
+                    placeholder: "Select a Account Cash Flow",
+                    itemsSource: accountCashFlowList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('account_cash_flow_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#account_cash_flow_id_data").val(accountCashFlowCollections.items[this.selectedIndex].AccountCashFlowId);
+                    }
+                });
+            } else if(document.getElementById('account_IsLocked').value == 'false') {
+                cboAccountCashFlow.dispose();
+                cboAccountCashFlow = new wijmo.input.ComboBox('#account_cash_flow_id', {
+                    disabled: false,
+                    placeholder: "Select a Account Cash Flow",
+                    itemsSource: accountCashFlowList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('account_cash_flow_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#account_cash_flow_id_data").val(accountCashFlowCollections.items[this.selectedIndex].AccountCashFlowId);
+                    }
+                });
+            } else {
+                cboAccountCashFlow.dispose();
+                cboAccountCashFlow = new wijmo.input.ComboBox('#account_cash_flow_id', {
+                    placeholder: "Select a Account Cash Flow",
+                    itemsSource: accountCashFlowList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('account_cash_flow_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#account_cash_flow_id_data").val(accountCashFlowCollections.items[this.selectedIndex].AccountCashFlowId);
+                    }
+                });
+            }
         }
 
         // ================
@@ -750,18 +812,29 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredAccount').each(function () {
                 $(this).css({
                     "border": "",
                 });
             });
+            
+            document.getElementById('account_IsLocked').value = "";
+            document.getElementById('accountEdit_IsLocked').checked = false;
+            document.getElementById('accountEdit_IsLocked').disabled = true;
+            
+            document.getElementById("lockAndUnLock").innerHTML = '<i class="fa fa-unlock"></i>';
 
             getAccountTypeForComboBox();
             getAccountCashFlowForComboBox();
 
             $("#cmdSaveAccountButton").prop("disabled", false);
             $("#cmdAccountDetailCloseButton").prop("disabled", false);
+
+            document.getElementById('account_code').disabled = false;
+            document.getElementById('account_account').disabled = false;
+            
+            $('#cmdEditUnLockAccountButton').prop('disabled', true);
 
             document.getElementById('account_id').value = 0;
             document.getElementById('account_code').value = "";
@@ -817,6 +890,7 @@
             accountObject.Account = document.getElementById('account_account').value;
             accountObject.AccountTypeId = document.getElementById('account_type_id_data').value;
             accountObject.AccountCashFlowId = document.getElementById('account_cash_flow_id_data').value;
+            accountObject.IsLocked = document.getElementById('accountEdit_IsLocked').checked;
             var data = JSON.stringify(accountObject);
 
             if( document.getElementById('account_type_id_data').value == '') {
@@ -973,6 +1047,92 @@
                 });
             });
 
+            $("#accountEdit_IsLocked").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('account_code').disabled = true;
+                    document.getElementById('account_account').disabled = true;
+                    document.getElementById('account_IsLocked').value = "true";
+                    getAccountTypeForComboBox();
+                    getAccountCashFlowForComboBox();
+                    
+                    $('#btnAddACcountArticleType').prop('disabled', true); 
+
+                    document.getElementById("lockAndUnLock").innerHTML = '<i class="fa fa-lock"></i>';
+                    document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+                    $('#loadingAccountArtitleType').show();
+                    $('#AccountArticleTypeGrid').hide();
+                    $('#accountArticleTypeDiv').hide();
+                    $('#hrAccountArticleType').show();
+                    setTimeout(function() {
+                        $('#loadingAccountArtitleType').hide();
+                        $('#AccountArticleTypeGrid').show();
+                        $('#accountArticleTypeDiv').show();
+                        $('#hrAccountArticleType').show();
+                        accountArticleTypes = new wijmo.collections.CollectionView(getAccountArticleType());
+                        accountArticleTypes.canFilter = true;
+                        accountArticleTypes.pageSize = 10;
+
+                        var filterTextAccount = '';
+                        $('#InputFilterAccountArticleType').keyup(function () {
+                            filterTextAccount = this.value.toLowerCase();
+                            accountArticleTypes.refresh();
+                        });
+                        accountArticleTypes.filter = function (item) {
+                            return !filterTextAccount || (item.ArticleType.toLowerCase().indexOf(filterTextAccount) > -1);
+                        }
+                        accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsAccountArticleType();
+                        });
+
+                        // Flex Grid for account article Type
+                        accountArticleTypeGrid.itemsSource = accountArticleTypes;
+                        accountArticleTypeGrid.trackChanges = true;
+                    },500);
+                } else {
+                    document.getElementById('account_code').disabled = false;
+                    document.getElementById('account_account').disabled = false;
+                    document.getElementById('account_IsLocked').value = "false";
+                    getAccountTypeForComboBox();
+                    getAccountCashFlowForComboBox();
+                    
+                    $('#btnAddACcountArticleType').prop('disabled', false); 
+
+                    document.getElementById("lockAndUnLock").innerHTML = '<i class="fa fa-unlock"></i>';
+                    document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+                    $('#loadingAccountArtitleType').show();
+                    $('#AccountArticleTypeGrid').hide();
+                    $('#accountArticleTypeDiv').hide();
+                    $('#hrAccountArticleType').show();
+                    setTimeout(function() {
+                        $('#loadingAccountArtitleType').hide();
+                        $('#AccountArticleTypeGrid').show();
+                        $('#accountArticleTypeDiv').show();
+                        $('#hrAccountArticleType').show();
+                        accountArticleTypes = new wijmo.collections.CollectionView(getAccountArticleType());
+                        accountArticleTypes.canFilter = true;
+                        accountArticleTypes.pageSize = 10;
+
+                        var filterTextAccount = '';
+                        $('#InputFilterAccountArticleType').keyup(function () {
+                            filterTextAccount = this.value.toLowerCase();
+                            accountArticleTypes.refresh();
+                        });
+                        accountArticleTypes.filter = function (item) {
+                            return !filterTextAccount || (item.ArticleType.toLowerCase().indexOf(filterTextAccount) > -1);
+                        }
+                        accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsAccountArticleType();
+                        });
+
+                        // Flex Grid for account article Type
+                        accountArticleTypeGrid.itemsSource = accountArticleTypes;
+                        accountArticleTypeGrid.trackChanges = true;
+                    },500);
+                }
+            });
+            
+            document.getElementById('accountEdit_IsLocked').disabled = false;
+
             getAccountTypeForComboBox();
             getAccountCashFlowForComboBox();
 
@@ -987,6 +1147,27 @@
             document.getElementById('account_type_selectedValue').value = account.AccountType ? account.AccountType : '';
             document.getElementById('account_cash_flow_id_data').value = account.AccountCashFlowId ? account.AccountCashFlowId : '';
             document.getElementById('account_cash_flow_selectedValue').value = account.AccountCashFlow ? account.AccountCashFlow : '';
+            document.getElementById('accountEdit_IsLocked').checked = account.IsLocked;
+
+            if(account.IsLocked == true) {
+                document.getElementById('account_code').disabled = true;
+                document.getElementById('account_account').disabled = true;
+                
+                document.getElementById("lockAndUnLock").innerHTML = '<i class="fa fa-lock"></i>';
+                
+                $('#btnAddACcountArticleType').prop('disabled', true); 
+               
+            } else if(account.IsLocked == false) {
+                document.getElementById('account_code').disabled = false;
+                document.getElementById('account_account').disabled = false;
+                
+                document.getElementById("lockAndUnLock").innerHTML = '<i class="fa fa-unlock"></i>';
+                
+                $('#btnAddACcountArticleType').prop('disabled', false); 
+
+            } else {
+                console.log('Invalid IsLocked');
+            }
 
             document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
             $('#loadingAccountArtitleType').show();
@@ -1008,7 +1189,7 @@
                     accountArticleTypes.refresh();
                 });
                 accountArticleTypes.filter = function (item) {
-                    return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                    return !filterTextAccount || (item.ArticleType.toLowerCase().indexOf(filterTextAccount) > -1);
                 }
                 accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
                     updateNavigateButtonsAccountArticleType();
@@ -1100,6 +1281,7 @@
             document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
             document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
             document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
+            document.getElementById('account_IsLocked').value = item.IsLocked;
         }
 
         // ===============================
@@ -1145,15 +1327,29 @@
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            accountArticleTypes.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                AccountId: Results[i]["AccountId"],
-                                Account: Results[i]["Account"],
-                                ArticleTypeId: Results[i]["ArticleTypeId"],
-                                ArticleType: Results[i]["ArticleType"]
-                            });
+                            if(document.getElementById('account_IsLocked').value == 'true') {
+                                accountArticleTypes.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountId: Results[i]["AccountId"],
+                                    Account: Results[i]["Account"],
+                                    ArticleTypeId: Results[i]["ArticleTypeId"],
+                                    ArticleType: Results[i]["ArticleType"]
+                                });
+                            } else if(document.getElementById('account_IsLocked').value == 'false') {
+                                accountArticleTypes.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    AccountId: Results[i]["AccountId"],
+                                    Account: Results[i]["Account"],
+                                    ArticleTypeId: Results[i]["ArticleTypeId"],
+                                    ArticleType: Results[i]["ArticleType"]
+                                });
+                            } else {
+                                console.log('invalid islocked');
+                            }
                         }
                     }
                 }
@@ -1306,7 +1502,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#cmdConfirmDeleteAccountArticleType").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", false);
         }
@@ -1340,7 +1536,7 @@
                             accountArticleTypes.refresh();
                         });
                         accountArticleTypes.filter = function (item) {
-                            return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                            return !filterTextAccount || (item.ArticleType.toLowerCase().indexOf(filterTextAccount) > -1);
                         }
                         accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
                             updateNavigateButtonsAccountArticleType();
@@ -1426,7 +1622,7 @@
                                     accountArticleTypes.refresh();
                                 });
                                 accountArticleTypes.filter = function (item) {
-                                    return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                                    return !filterTextAccount || (item.ArticleType.toLowerCase().indexOf(filterTextAccount) > -1);
                                 }
                                 accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
                                     updateNavigateButtonsAccountArticleType();
@@ -1475,7 +1671,7 @@
                                     accountArticleTypes.refresh();
                                 });
                                 accountArticleTypes.filter = function (item) {
-                                    return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                                    return !filterTextAccount || (item.ArticleType.toLowerCase().indexOf(filterTextAccount) > -1);
                                 }
                                 accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
                                     updateNavigateButtonsAccountArticleType();
@@ -1547,7 +1743,7 @@
                 accountArticleTypes.refresh();
             });
             accountArticleTypes.filter = function (item) {
-                return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+                return !filterTextAccount || (item.ArticleType.toLowerCase().indexOf(filterTextAccount) > -1);
             }
             accountArticleTypes.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsAccountArticleType();
@@ -1684,6 +1880,12 @@
                                 "binding": "AccountType",
                                 "allowSorting": true,
                                 "width": "3*"
+                            },
+                            {
+                                "header": "Lock",
+                                "binding": "IsLocked",
+                                "allowSorting": true,
+                                "width": "0.5*"
                             }
                 ],
                 autoGenerateColumns: false,
@@ -2322,7 +2524,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredAccountCashFlow').each(function () {
                 $(this).css({
                     "border": "",
@@ -2768,7 +2970,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredAccountCategory').each(function () {
                 $(this).css({
                     "border": "",
@@ -2930,7 +3132,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredAccountCategory').each(function () {
                 $(this).css({
                     "border": "",
