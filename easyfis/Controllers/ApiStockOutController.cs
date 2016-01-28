@@ -275,8 +275,46 @@ namespace easyfis.Controllers
                     updateStockOut.CheckedById = stockOut.CheckedById;
                     updateStockOut.ApprovedById = stockOut.ApprovedById;
                     updateStockOut.IsLocked = stockOut.IsLocked;
-                    updateStockOut.CreatedById = mstUserId;
-                    updateStockOut.CreatedDateTime = date;
+                    updateStockOut.UpdatedById = mstUserId;
+                    updateStockOut.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // ===========================
+        // UPDATE Stock Out - IsLocked
+        // ===========================
+        [Route("api/updateStockOutIsLocked/{id}")]
+        public HttpResponseMessage PutUpdateStockOutIsLocked(String id, Models.TrnStockOut stockOut)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var stockOut_Id = Convert.ToInt32(id);
+                var stockOuts = from d in db.TrnStockOuts where d.Id == stockOut_Id select d;
+
+                if (stockOuts.Any())
+                {
+                    var updateStockOut = stockOuts.FirstOrDefault();
+
+                    updateStockOut.IsLocked = stockOut.IsLocked;
                     updateStockOut.UpdatedById = mstUserId;
                     updateStockOut.UpdatedDateTime = date;
 
