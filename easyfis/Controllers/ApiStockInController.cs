@@ -232,6 +232,7 @@ namespace easyfis.Controllers
                 newStockIn.PreparedById = stockIn.PreparedById;
                 newStockIn.CheckedById = stockIn.CheckedById;
                 newStockIn.ApprovedById = stockIn.ApprovedById;
+
                 newStockIn.IsLocked = isLocked;
                 newStockIn.CreatedById = mstUserId;
                 newStockIn.CreatedDateTime = date;
@@ -281,9 +282,48 @@ namespace easyfis.Controllers
                     updateStockIn.PreparedById = stockIn.PreparedById;
                     updateStockIn.CheckedById = stockIn.CheckedById;
                     updateStockIn.ApprovedById = stockIn.ApprovedById;
+
                     updateStockIn.IsLocked = stockIn.IsLocked;
-                    updateStockIn.CreatedById = mstUserId;
-                    updateStockIn.CreatedDateTime = date;
+                    updateStockIn.UpdatedById = mstUserId;
+                    updateStockIn.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // ==========================
+        // UPDATE Stock In - IsLocked
+        // ==========================
+        [Route("api/updateStockInIsLocked/{id}")]
+        public HttpResponseMessage PutUpdateStockInIsLocked(String id, Models.TrnStockIn stockIn)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var stockIn_Id = Convert.ToInt32(id);
+                var stockIns = from d in db.TrnStockIns where d.Id == stockIn_Id select d;
+
+                if (stockIns.Any())
+                {
+                    var updateStockIn = stockIns.FirstOrDefault();
+
+                    updateStockIn.IsLocked = stockIn.IsLocked;
                     updateStockIn.UpdatedById = mstUserId;
                     updateStockIn.UpdatedDateTime = date;
 
