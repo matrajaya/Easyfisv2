@@ -43,8 +43,9 @@
                     </div>
                     <div class="col-md-6" align="right">
                         <button class="btn btn-primary btn-sm" id="cmdDisbursementJournal"><i class="fa fa-book"></i> Journal</button>
+                        <button class="btn btn-primary btn-sm" id="cmdDisbursementSaveLock" onclick="btnDisbursementSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdDisbursementSave" onclick="btnDisbursementSave_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id="cmdDisbursementEdit"><i class="fa fa-edit"></i> Edit</button>
+                        <button class="btn btn-primary btn-sm" id="cmdDisbursementEdit" onclick="btnDisbursementEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdDisbursementPrint" onclick="window.location.href ='@Url.Action("DisbursementPDF", "Software", new { DisbursementId = disbursementId })'"><i class="fa fa-print"></i> Print</button>
                         <button id="cmdDisbursementClose" onclick="window.location.href = '@Url.Action("Disbursement", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
                     </div>
@@ -214,7 +215,7 @@
                         </div>
                     </div>
                     <div class="col-lg-8">
-                        <button type="submit" class="btn btn-primary pull-right btn-sm" onclick="cmdAddDisbursementLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="btnAddDisbursementLine" onclick="cmdAddDisbursementLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                     </div>
                 </div>
                 <br />
@@ -529,6 +530,95 @@
                     document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
                     document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
+                    document.getElementById('disbursement_IsLocked').value = Results.IsLocked;
+
+                    if(document.getElementById('disbursement_IsLocked').value == 'true') {
+
+                        var CVDate_date = Results.CVDate;
+                        CVDate.dispose();
+                        CVDate = new wijmo.input.InputDate('#disbursement_CVDate', {
+                            disabled: true,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(CVDate_date),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('disbursement_CVDate_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+
+                        var CheckDate_date = Results.CheckDate;
+                        CheckDate.dispose();
+                        CheckDate = new wijmo.input.InputDate('#disbursement_CheckDate', {
+                            disabled: true,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(CheckDate_date),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('disbursement_CheckDate_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+                        document.getElementById('disbursement_ManualCVNumber').disabled = true;
+                        document.getElementById('disbursement_Particulars').disabled = true
+                        document.getElementById('disbursement_Payee').disabled = true;
+                        document.getElementById('disbursement_CheckNumber').disabled = true;
+                        document.getElementById('disbursement_Amount').disabled = true;
+
+
+                        $("#cmdDisbursementJournal").prop("disabled", false);
+                        $("#cmdDisbursementSaveLock").prop("disabled", true);
+                        $("#cmdDisbursementSave").prop("disabled", true);
+                        $("#cmdDisbursementEdit").prop("disabled", false);
+                        $("#cmdDisbursementPrint").prop("disabled", false);
+
+                        $("#cmdAP").prop("disabled", true);
+                        $("#cmdAdvances").prop("disabled", true);
+                        $("#btnAddDisbursementLine").prop("disabled", true);
+
+                    } else if(document.getElementById('disbursement_IsLocked').value == 'false') {
+
+                        var CVDate_date = Results.CVDate;
+                        CVDate.dispose();
+                        CVDate = new wijmo.input.InputDate('#disbursement_CVDate', {
+                            disabled: false,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(CVDate_date),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('disbursement_CVDate_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+
+                        var CheckDate_date = Results.CheckDate;
+                        CheckDate.dispose();
+                        CheckDate = new wijmo.input.InputDate('#disbursement_CheckDate', {
+                            disabled: false,
+                            format: 'MM/dd/yyyy',
+                            value: new Date(CheckDate_date),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('disbursement_CheckDate_data').value = this.value.toLocaleDateString();
+                            }
+                        });
+                        document.getElementById('disbursement_ManualCVNumber').disabled = false;
+                        document.getElementById('disbursement_Particulars').disabled = false;
+                        document.getElementById('disbursement_Payee').disabled = false;
+                        document.getElementById('disbursement_CheckNumber').disabled = false;
+                        document.getElementById('disbursement_Amount').disabled = false;
+
+                        $("#cmdDisbursementJournal").prop("disabled", true);
+                        $("#cmdDisbursementSaveLock").prop("disabled", false);
+                        $("#cmdDisbursementSave").prop("disabled", true);
+                        $("#cmdDisbursementEdit").prop("disabled", true);
+                        $("#cmdDisbursementPrint").prop("disabled", true);
+
+                        $("#cmdAP").prop("disabled", false);
+                        $("#cmdAdvances").prop("disabled", false);
+                        $("#btnAddDisbursementLine").prop("disabled", false);
+
+                    } else {
+                        console.log("Invalid IsLocked");
+                    }
+
                     getBranchesForComboBox();
                     getSupplierForComboBox();
                     getPaytypeForComboBox();
@@ -676,17 +766,45 @@
                 supplierList.push(supplierCollection.items[i].Supplier);
             }
 
-            cboSupplier.dispose();
-            cboSupplier = new wijmo.input.ComboBox('#disbursement_Supplier', {
-                placeholder: "Select Supplier",
-                itemsSource: supplierList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#disbursement_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
-                }
-            });
+            if(document.getElementById('disbursement_IsLocked').value == 'true') {
+                cboSupplier.dispose();
+                cboSupplier = new wijmo.input.ComboBox('#disbursement_Supplier', {
+                    disabled: true,
+                    placeholder: "Select Supplier",
+                    itemsSource: supplierList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                    }
+                });
+            } else if(document.getElementById('disbursement_IsLocked').value == 'false') {
+                cboSupplier.dispose();
+                cboSupplier = new wijmo.input.ComboBox('#disbursement_Supplier', {
+                    disabled: false,
+                    placeholder: "Select Supplier",
+                    itemsSource: supplierList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                    }
+                });
+            } else {
+                cboSupplier.dispose();
+                cboSupplier = new wijmo.input.ComboBox('#disbursement_Supplier', {
+                    placeholder: "Select Supplier",
+                    itemsSource: supplierList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                    }
+                });
+            }
         }
 
         // =========================
@@ -725,17 +843,45 @@
                 payTypeList.push(payTypeCollection.items[i].PayType);
             }
 
-            cboPayType.dispose();
-            cboPayType = new wijmo.input.ComboBox('#disbursement_PayType', {
-                placeholder: "Select Pay Type",
-                itemsSource: payTypeList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('disbursement_PayType_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#disbursement_PayType_data").val(payTypeCollection.items[this.selectedIndex].PayTypeId);
-                }
-            });
+            if(document.getElementById('disbursement_IsLocked').value == 'true') { 
+                cboPayType.dispose();
+                cboPayType = new wijmo.input.ComboBox('#disbursement_PayType', {
+                    disabled: true,
+                    placeholder: "Select Pay Type",
+                    itemsSource: payTypeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_PayType_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_PayType_data").val(payTypeCollection.items[this.selectedIndex].PayTypeId);
+                    }
+                });
+            } else if(document.getElementById('disbursement_IsLocked').value == 'false') { 
+                cboPayType.dispose();
+                cboPayType = new wijmo.input.ComboBox('#disbursement_PayType', {
+                    disabled: false,
+                    placeholder: "Select Pay Type",
+                    itemsSource: payTypeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_PayType_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_PayType_data").val(payTypeCollection.items[this.selectedIndex].PayTypeId);
+                    }
+                });
+            } else {
+                cboPayType.dispose();
+                cboPayType = new wijmo.input.ComboBox('#disbursement_PayType', {
+                    placeholder: "Select Pay Type",
+                    itemsSource: payTypeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_PayType_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_PayType_data").val(payTypeCollection.items[this.selectedIndex].PayTypeId);
+                    }
+                });
+            }
         }
 
         // ======================
@@ -774,17 +920,45 @@
                 bankList.push(bankCollection.items[i].Bank);
             }
 
-            cboBank.dispose();
-            cboBank = new wijmo.input.ComboBox('#disbursement_Bank', {
-                placeholder: "Select Bank",
-                itemsSource: bankList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('disbursement_Bank_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#disbursement_Bank_data").val(bankCollection.items[this.selectedIndex].BankId);
-                }
-            });
+            if(document.getElementById('disbursement_IsLocked').value == 'true') { 
+                cboBank.dispose();
+                cboBank = new wijmo.input.ComboBox('#disbursement_Bank', {
+                    disabled: true,
+                    placeholder: "Select Bank",
+                    itemsSource: bankList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_Bank_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_Bank_data").val(bankCollection.items[this.selectedIndex].BankId);
+                    }
+                });
+            } else if(document.getElementById('disbursement_IsLocked').value == 'false') { 
+                cboBank.dispose();
+                cboBank = new wijmo.input.ComboBox('#disbursement_Bank', {
+                    disabled: false,
+                    placeholder: "Select Bank",
+                    itemsSource: bankList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_Bank_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_Bank_data").val(bankCollection.items[this.selectedIndex].BankId);
+                    }
+                });
+            } else {
+                cboBank.dispose();
+                cboBank = new wijmo.input.ComboBox('#disbursement_Bank', {
+                    placeholder: "Select Bank",
+                    itemsSource: bankList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_Bank_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_Bank_data").val(bankCollection.items[this.selectedIndex].BankId);
+                    }
+                });
+            }
         }
 
         // =======================
@@ -877,17 +1051,45 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            cboCheckedBy.dispose();
-            cboCheckedBy = new wijmo.input.ComboBox('#disbursement_CheckedBy', {
-                placeholder: "Select User",
-                itemsSource: userList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('disbursement_CheckedBy_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#disbursement_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                }
-            });
+            if(document.getElementById('disbursement_IsLocked').value == 'true') { 
+                cboCheckedBy.dispose();
+                cboCheckedBy = new wijmo.input.ComboBox('#disbursement_CheckedBy', {
+                    disabled: true,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_CheckedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            } else if(document.getElementById('disbursement_IsLocked').value == 'false') { 
+                cboCheckedBy.dispose();
+                cboCheckedBy = new wijmo.input.ComboBox('#disbursement_CheckedBy', {
+                    disabled: false,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_CheckedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            } else {
+                cboCheckedBy.dispose();
+                cboCheckedBy = new wijmo.input.ComboBox('#disbursement_CheckedBy', {
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_CheckedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            }
         }
 
         // ==================================
@@ -900,17 +1102,45 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            cboApprovedBy.dispose();
-            cboApprovedBy = new wijmo.input.ComboBox('#disbursement_ApprovedBy', {
-                placeholder: "Select User",
-                itemsSource: userList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('disbursement_ApprovedBy_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#disbursement_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                }
-            });
+            if(document.getElementById('disbursement_IsLocked').value == 'true') {
+                cboApprovedBy.dispose();
+                cboApprovedBy = new wijmo.input.ComboBox('#disbursement_ApprovedBy', {
+                    disabled: true,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_ApprovedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            } else if(document.getElementById('disbursement_IsLocked').value == 'false') { 
+                cboApprovedBy.dispose();
+                cboApprovedBy = new wijmo.input.ComboBox('#disbursement_ApprovedBy', {
+                    disabled: false,
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_ApprovedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            } else {
+                cboApprovedBy.dispose();
+                cboApprovedBy = new wijmo.input.ComboBox('#disbursement_ApprovedBy', {
+                    placeholder: "Select User",
+                    itemsSource: userList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('disbursement_ApprovedBy_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#disbursement_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                    }
+                });
+            }
         }
 
         // =====================================================
@@ -1035,6 +1265,7 @@
                         statusCode: {
                             200: function () {
                                 $("#cmdDisbursementJournal").prop("disabled", true);
+                                $("#cmdDisbursementSaveLock").prop("disabled", true);
                                 $("#cmdDisbursementSave").prop("disabled", true);
                                 $("#cmdDisbursementEdit").prop("disabled", true);
                                 $("#cmdDisbursementPrint").prop("disabled", true);
@@ -1044,19 +1275,21 @@
                             },
                             404: function () {
                                 toastr.error("Can't Save");
-                                $("#cmdDisbursementJournal").prop("disabled", true);
-                                $("#cmdDisbursementSave").prop("disabled", true);
-                                $("#cmdDisbursementEdit").prop("disabled", true);
-                                $("#cmdDisbursementPrint").prop("disabled", true);
-                                $("#cmdDisbursementClose").prop("disabled", true);
+                                $("#cmdDisbursementJournal").prop("disabled", false);
+                                $("#cmdDisbursementSaveLock").prop("disabled", false);
+                                $("#cmdDisbursementSave").prop("disabled", false);
+                                $("#cmdDisbursementEdit").prop("disabled", false);
+                                $("#cmdDisbursementPrint").prop("disabled", false);
+                                $("#cmdDisbursementClose").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
-                                $("#cmdDisbursementJournal").prop("disabled", true);
-                                $("#cmdDisbursementSave").prop("disabled", true);
-                                $("#cmdDisbursementEdit").prop("disabled", true);
-                                $("#cmdDisbursementPrint").prop("disabled", true);
-                                $("#cmdDisbursementClose").prop("disabled", true);
+                                $("#cmdDisbursementJournal").prop("disabled", false);
+                                $("#cmdDisbursementSaveLock").prop("disabled", false);
+                                $("#cmdDisbursementSave").prop("disabled", false);
+                                $("#cmdDisbursementEdit").prop("disabled", false);
+                                $("#cmdDisbursementPrint").prop("disabled", false);
+                                $("#cmdDisbursementClose").prop("disabled", false);
                             }
                         }
                     });
@@ -1070,6 +1303,7 @@
                         statusCode: {
                             200: function () {
                                 $("#cmdDisbursementJournal").prop("disabled", true);
+                                $("#cmdDisbursementSaveLock").prop("disabled", true);
                                 $("#cmdDisbursementSave").prop("disabled", true);
                                 $("#cmdDisbursementEdit").prop("disabled", true);
                                 $("#cmdDisbursementPrint").prop("disabled", true);
@@ -1081,19 +1315,21 @@
                             },
                             404: function () {
                                 toastr.error("Can't Save");
-                                $("#cmdDisbursementJournal").prop("disabled", true);
-                                $("#cmdDisbursementSave").prop("disabled", true);
-                                $("#cmdDisbursementEdit").prop("disabled", true);
-                                $("#cmdDisbursementPrint").prop("disabled", true);
-                                $("#cmdDisbursementClose").prop("disabled", true);
+                                $("#cmdDisbursementJournal").prop("disabled", false);
+                                $("#cmdDisbursementSaveLock").prop("disabled", false);
+                                $("#cmdDisbursementSave").prop("disabled", false);
+                                $("#cmdDisbursementEdit").prop("disabled", false);
+                                $("#cmdDisbursementPrint").prop("disabled", false);
+                                $("#cmdDisbursementClose").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
-                                $("#cmdDisbursementJournal").prop("disabled", true);
-                                $("#cmdDisbursementSave").prop("disabled", true);
-                                $("#cmdDisbursementEdit").prop("disabled", true);
-                                $("#cmdDisbursementPrint").prop("disabled", true);
-                                $("#cmdDisbursementClose").prop("disabled", true);
+                                $("#cmdDisbursementJournal").prop("disabled", false);
+                                $("#cmdDisbursementSaveLock").prop("disabled", false);
+                                $("#cmdDisbursementSave").prop("disabled", false);
+                                $("#cmdDisbursementEdit").prop("disabled", false);
+                                $("#cmdDisbursementPrint").prop("disabled", false);
+                                $("#cmdDisbursementClose").prop("disabled", false);
                             }
                         }
                     });
@@ -1101,7 +1337,238 @@
             }
         }
 
-        // ===========================
+        // =============================
+        // Save Lock Disbursement - lock
+        // =============================
+        function btnDisbursementSaveLock_OnClick() {
+            var disbursementObject = new Object();
+            var disbursementId = @disbursementId;
+            disbursementObject.BranchId = document.getElementById('disbursement_Branch_data').value;
+            disbursementObject.CVNumber = document.getElementById('disbursement_CVNumber').value;
+            disbursementObject.CVDate = document.getElementById('disbursement_CVDate_data').value;
+            disbursementObject.SupplierId = document.getElementById('disbursement_Supplier_data').value;
+            disbursementObject.Payee = document.getElementById('disbursement_Payee').value;
+            disbursementObject.PayTypeId = document.getElementById('disbursement_PayType_data').value;
+            disbursementObject.BankId = document.getElementById('disbursement_Bank_data').value;
+            disbursementObject.ManualCVNumber = document.getElementById('disbursement_ManualCVNumber').value;
+            disbursementObject.Particulars = document.getElementById('disbursement_Particulars').value;
+            disbursementObject.CheckNumber = document.getElementById('disbursement_CheckNumber').value;
+            disbursementObject.CheckDate = document.getElementById('disbursement_CheckDate_data').value;
+            disbursementObject.Amount = document.getElementById('disbursement_Amount').value;
+            disbursementObject.IsCrossCheck = document.getElementById('disbursement_CrossCheck').checked;
+            disbursementObject.IsClear = false;
+            disbursementObject.PreparedById = document.getElementById('disbursement_PreparedBy_data').value;
+            disbursementObject.CheckedById = document.getElementById('disbursement_CheckedBy_data').value;
+            disbursementObject.ApprovedById = document.getElementById('disbursement_ApprovedBy_data').value;
+            disbursementObject.IsLocked = true;
+            var data = JSON.stringify(disbursementObject);
+
+            if( document.getElementById('disbursement_Branch_data').value == '') {
+                document.getElementById("disbursement_Branch").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursement_Branch").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('disbursement_CVDate_data').value == '') {
+                document.getElementById("disbursement_CVDate").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursement_CVDate").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('disbursement_Supplier_data').value == '') {
+                document.getElementById("disbursement_Supplier").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursement_Supplier").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('disbursement_PayType_data').value == '') {
+                document.getElementById("disbursement_PayType").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursement_PayType").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('disbursement_Bank_data').value == '') {
+                document.getElementById("disbursement_Bank").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursement_Bank").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('disbursement_CheckDate_data').value == '') {
+                document.getElementById("disbursement_CheckDate").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursement_CheckDate").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('disbursement_PreparedBy_data').value == '') {
+                document.getElementById("disbursement_PreparedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursement_PreparedBy").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('disbursement_CheckedBy_data').value == '') {
+                document.getElementById("disbursement_CheckedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursement_CheckedBy").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if( document.getElementById('disbursement_ApprovedBy_data').value == '') {
+                document.getElementById("disbursement_ApprovedBy").style.border = "1px solid red";
+            } else {
+                document.getElementById("disbursement_ApprovedBy").style.border = "1px solid #C8C8C8   ";
+            }
+
+            var isValid = true;
+            $('.requiredDisbursement').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
+                e.preventDefault();
+            }
+            else {
+                if (disbursementId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addDisbursement',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdDisbursementJournal").prop("disabled", true);
+                                $("#cmdDisbursementSaveLock").prop("disabled", true);
+                                $("#cmdDisbursementSave").prop("disabled", true);
+                                $("#cmdDisbursementEdit").prop("disabled", true);
+                                $("#cmdDisbursementPrint").prop("disabled", true);
+                                $("#cmdDisbursementClose").prop("disabled", true);
+                                toastr.success("Successfully Saved");
+                                setTimeout(getDisbursementLastInsertedId, 1000)
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdDisbursementJournal").prop("disabled", false);
+                                $("#cmdDisbursementSaveLock").prop("disabled", false);
+                                $("#cmdDisbursementSave").prop("disabled", false);
+                                $("#cmdDisbursementEdit").prop("disabled", false);
+                                $("#cmdDisbursementPrint").prop("disabled", false);
+                                $("#cmdDisbursementClose").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdDisbursementJournal").prop("disabled", false);
+                                $("#cmdDisbursementSaveLock").prop("disabled", false);
+                                $("#cmdDisbursementSave").prop("disabled", false);
+                                $("#cmdDisbursementEdit").prop("disabled", false);
+                                $("#cmdDisbursementPrint").prop("disabled", false);
+                                $("#cmdDisbursementClose").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateDisbursement/' + disbursementId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdDisbursementJournal").prop("disabled", true);
+                                $("#cmdDisbursementSaveLock").prop("disabled", true);
+                                $("#cmdDisbursementSave").prop("disabled", true);
+                                $("#cmdDisbursementEdit").prop("disabled", true);
+                                $("#cmdDisbursementPrint").prop("disabled", true);
+                                $("#cmdDisbursementClose").prop("disabled", true);
+                                toastr.success("Successfully Updated");
+                                window.setTimeout(function () {
+                                    location.reload()
+                                }, 1000);
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $("#cmdDisbursementJournal").prop("disabled", false);
+                                $("#cmdDisbursementSaveLock").prop("disabled", false);
+                                $("#cmdDisbursementSave").prop("disabled", false);
+                                $("#cmdDisbursementEdit").prop("disabled", false);
+                                $("#cmdDisbursementPrint").prop("disabled", false);
+                                $("#cmdDisbursementClose").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdDisbursementJournal").prop("disabled", false);
+                                $("#cmdDisbursementSaveLock").prop("disabled", false);
+                                $("#cmdDisbursementSave").prop("disabled", false);
+                                $("#cmdDisbursementEdit").prop("disabled", false);
+                                $("#cmdDisbursementPrint").prop("disabled", false);
+                                $("#cmdDisbursementClose").prop("disabled", false);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // ================
+        // Edit Disbursment
+        // ================
+        function btnDisbursementEdit_OnClick() {
+            var disbursementObject = new Object();
+            var disbursementId = @disbursementId;
+            disbursementObject.IsLocked = false;
+            var data = JSON.stringify(disbursementObject);
+            $.ajax({
+                type: "PUT",
+                url: '/api/updateDisbursementIsLocked/' + disbursementId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: data,
+                statusCode: {
+                    200: function () {
+                        $("#cmdDisbursementJournal").prop("disabled", true);
+                        $("#cmdDisbursementSaveLock").prop("disabled", true);
+                        $("#cmdDisbursementSave").prop("disabled", true);
+                        $("#cmdDisbursementEdit").prop("disabled", true);
+                        $("#cmdDisbursementPrint").prop("disabled", true);
+                        $("#cmdDisbursementClose").prop("disabled", true);
+                        toastr.success("Unlocked");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        toastr.error("Can't Save");
+                        $("#cmdDisbursementJournal").prop("disabled", false);
+                        $("#cmdDisbursementSaveLock").prop("disabled", false);
+                        $("#cmdDisbursementSave").prop("disabled", false);
+                        $("#cmdDisbursementEdit").prop("disabled", false);
+                        $("#cmdDisbursementPrint").prop("disabled", false);
+                        $("#cmdDisbursementClose").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $("#cmdDisbursementJournal").prop("disabled", false);
+                        $("#cmdDisbursementSaveLock").prop("disabled", false);
+                        $("#cmdDisbursementSave").prop("disabled", false);
+                        $("#cmdDisbursementEdit").prop("disabled", false);
+                        $("#cmdDisbursementPrint").prop("disabled", false);
+                        $("#cmdDisbursementClose").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+        // ==========================
         // GET Disbursement Line List
         // ==========================
         function getDisbursementLines() {
@@ -1117,25 +1584,65 @@
                 success: function (Results) {
                     $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            disbursementLines.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                CVId: Results[i]["CVId"],
-                                CV: Results[i]["CV"],
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                AccountId: Results[i]["AccountId"],
-                                Account: Results[i]["Account"],
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                RRId: Results[i]["RRId"],
-                                RR: Results[i]["RR"],
-                                Particulars: Results[i]["Particulars"],
-                                Amount: Results[i]["Amount"]
-                            });
-                        }
+                        var disbursements = new wijmo.collections.ObservableArray;
+                        var disbursementId = @disbursementId;
+                        $.ajax({
+                            url: '/api/disbursement/' + disbursementId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (DisbursementResults) {
+                                if (DisbursementResults.length > 0) {
+                                    disbursements.push({
+                                        Id: DisbursementResults.Id,
+                                        IsLocked: DisbursementResults.IsLocked
+                                    });
+                                }
+
+                                if(DisbursementResults.IsLocked == true) {
+                                    for (i = 0; i < Results.length; i++) {
+                                        disbursementLines.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            CVId: Results[i]["CVId"],
+                                            CV: Results[i]["CV"],
+                                            BranchId: Results[i]["BranchId"],
+                                            Branch: Results[i]["Branch"],
+                                            AccountId: Results[i]["AccountId"],
+                                            Account: Results[i]["Account"],
+                                            ArticleId: Results[i]["ArticleId"],
+                                            Article: Results[i]["Article"],
+                                            RRId: Results[i]["RRId"],
+                                            RR: Results[i]["RR"],
+                                            Particulars: Results[i]["Particulars"],
+                                            Amount: Results[i]["Amount"]
+                                        });
+                                    }
+                                } else {
+                                    for (i = 0; i < Results.length; i++) {
+                                        disbursementLines.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            CVId: Results[i]["CVId"],
+                                            CV: Results[i]["CV"],
+                                            BranchId: Results[i]["BranchId"],
+                                            Branch: Results[i]["Branch"],
+                                            AccountId: Results[i]["AccountId"],
+                                            Account: Results[i]["Account"],
+                                            ArticleId: Results[i]["ArticleId"],
+                                            Article: Results[i]["Article"],
+                                            RRId: Results[i]["RRId"],
+                                            RR: Results[i]["RR"],
+                                            Particulars: Results[i]["Particulars"],
+                                            Amount: Results[i]["Amount"]
+                                        });
+                                    }
+                                }
+                            }
+                        });
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1358,7 +1865,7 @@
 
             $("#cmdSaveDisbursementLineButton").prop("disabled", false);
             $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
-            
+
             $('.requiredDisbursementLine').each(function () {
                 $(this).css({
                     "border": "",
@@ -1429,7 +1936,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#cmdSaveDisbursementLineButton").prop("disabled", false);
             $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
         }
@@ -1685,6 +2192,21 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var disbursementId = @disbursementId;
+            if(disbursementId == 0) {
+                $('#cmdDisbursementJournal').hide();
+                $('#cmdDisbursementSaveLock').hide();
+                $('#cmdDisbursementSave').show();
+                $('#cmdDisbursementEdit').hide();
+                $("#cmdDisbursementPrint").prop("disabled", true);
+                $('#btnAddDisbursementLine').prop('disabled', true);
+
+            } else {
+                $('#cmdDisbursementSaveLock').show();
+                $('#cmdDisbursementSave').hide();
+                $('#cmdDisbursementEdit').show();
+            }
+
             cboDisbursementBranch = new wijmo.input.ComboBox('#disbursementLine_branch');
             cboDisbursementLineAccount = new wijmo.input.ComboBox('#disbursementLine_account');
             cboDisbursementLineArticle = new wijmo.input.ComboBox('#disbursementLine_article');

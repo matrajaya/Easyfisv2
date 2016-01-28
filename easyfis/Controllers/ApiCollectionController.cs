@@ -237,8 +237,8 @@ namespace easyfis.Controllers
         // =================
         // UPDATE Collection
         // =================
-        [Route("api/updateCollectionIsLock/{id}")]
-        public HttpResponseMessage PutIslock(String id, Models.TrnCollection collection)
+        [Route("api/updateCollection/{id}")]
+        public HttpResponseMessage Put(String id, Models.TrnCollection collection)
         {
             try
             {
@@ -284,6 +284,45 @@ namespace easyfis.Controllers
             }
         }
 
+        // ============================
+        // UPDATE Collection - isLocked
+        // ============================
+        [Route("api/updateCollectionIsLocked/{id}")]
+        public HttpResponseMessage PutIslock(String id, Models.TrnCollection collection)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var collection_Id = Convert.ToInt32(id);
+                var collections = from d in db.TrnCollections where d.Id == collection_Id select d;
+
+                if (collections.Any())
+                {
+                    var updateCollection = collections.FirstOrDefault();
+
+                    updateCollection.IsLocked = collection.IsLocked;
+                    updateCollection.UpdatedById = mstUserId;
+                    updateCollection.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
 
         // =================
         // DELETE Collection

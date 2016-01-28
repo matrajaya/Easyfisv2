@@ -351,6 +351,44 @@ namespace easyfis.Controllers
             }
         }
 
+        // ==============================
+        // UPDATE Disbursement - IsLocked
+        // ==============================
+        [Route("api/updateDisbursementIsLocked/{id}")]
+        public HttpResponseMessage PutUpdateDisbursementIsLocked(String id, Models.TrnDisbursement disbursement)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var disbursement_Id = Convert.ToInt32(id);
+                var disbursements = from d in db.TrnDisbursements where d.Id == disbursement_Id select d;
+
+                if (disbursements.Any())
+                {
+                    var updateDisbursement = disbursements.FirstOrDefault();
+                   
+                    updateDisbursement.IsLocked = disbursement.IsLocked;
+                    updateDisbursement.UpdatedById = mstUserId;
+                    updateDisbursement.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
 
         // ===================
         // DELETE Disbursement
