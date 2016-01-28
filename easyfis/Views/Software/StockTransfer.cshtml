@@ -106,6 +106,25 @@
             </div>
         </div>
 
+        <!-- Delete Lock -->
+        <div class="modal fade" id="deleteRecordLock" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Sorry, the record is lock! It can't be deleted!
+                    </div>
+                    <div class="modal-footer">
+                        <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Loading Modal -->
         <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
             <div class=" modal-dialog modal-sm">
@@ -159,32 +178,61 @@
                     $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            stockTransfers.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='StockTransferEditButton' onclick='cmdStockTransferEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='StockTransferDeleteButton' onclick='cmdStockTransferDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                STNumber: Results[i]["STNumber"],
-                                STDate: Results[i]["STDate"],
-                                ToBranchId: Results[i]["ToBranchId"],
-                                ToBranch: Results[i]["ToBranch"],
-                                Particulars: Results[i]["Particulars"],
-                                ManualSTNumber: Results[i]["ManualSTNumber"],
-                                PreparedById: Results[i]["PreparedById"],
-                                PreparedBy: Results[i]["PreparedBy"],
-                                CheckedById: Results[i]["CheckedById"],
-                                CheckedBy: Results[i]["CheckedBy"],
-                                ApprovedById: Results[i]["ApprovedById"],
-                                ApprovedBy: Results[i]["ApprovedBy"],
-                                IsLocked: Results[i]["IsLocked"],
-                                CreatedById: Results[i]["CreatedById"],
-                                CreatedBy: Results[i]["CreatedBy"],
-                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                UpdatedById: Results[i]["UpdatedById"],
-                                UpdatedBy: Results[i]["UpdatedBy"],
-                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                            });
+                            if(Results[i]["IsLocked"] == true) {
+                                stockTransfers.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='StockTransferEditButton' onclick='cmdStockTransferEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='StockTransferDeleteButton' onclick='cmdStockTransferDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    BranchId: Results[i]["BranchId"],
+                                    Branch: Results[i]["Branch"],
+                                    STNumber: Results[i]["STNumber"],
+                                    STDate: Results[i]["STDate"],
+                                    ToBranchId: Results[i]["ToBranchId"],
+                                    ToBranch: Results[i]["ToBranch"],
+                                    Particulars: Results[i]["Particulars"],
+                                    ManualSTNumber: Results[i]["ManualSTNumber"],
+                                    PreparedById: Results[i]["PreparedById"],
+                                    PreparedBy: Results[i]["PreparedBy"],
+                                    CheckedById: Results[i]["CheckedById"],
+                                    CheckedBy: Results[i]["CheckedBy"],
+                                    ApprovedById: Results[i]["ApprovedById"],
+                                    ApprovedBy: Results[i]["ApprovedBy"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            } else {
+                                stockTransfers.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='StockTransferEditButton' onclick='cmdStockTransferEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='StockTransferDeleteButton' onclick='cmdStockTransferDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    BranchId: Results[i]["BranchId"],
+                                    Branch: Results[i]["Branch"],
+                                    STNumber: Results[i]["STNumber"],
+                                    STDate: Results[i]["STDate"],
+                                    ToBranchId: Results[i]["ToBranchId"],
+                                    ToBranch: Results[i]["ToBranch"],
+                                    Particulars: Results[i]["Particulars"],
+                                    ManualSTNumber: Results[i]["ManualSTNumber"],
+                                    PreparedById: Results[i]["PreparedById"],
+                                    PreparedBy: Results[i]["PreparedBy"],
+                                    CheckedById: Results[i]["CheckedById"],
+                                    CheckedBy: Results[i]["CheckedBy"],
+                                    ApprovedById: Results[i]["ApprovedById"],
+                                    ApprovedBy: Results[i]["ApprovedBy"],
+                                    IsLocked: Results[i]["IsLocked"],
+                                    CreatedById: Results[i]["CreatedById"],
+                                    CreatedBy: Results[i]["CreatedBy"],
+                                    CreatedDateTime: Results[i]["CreatedDateTime"],
+                                    UpdatedById: Results[i]["UpdatedById"],
+                                    UpdatedBy: Results[i]["UpdatedBy"],
+                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                });
+                            }
                         }
                     }
                 }
@@ -192,6 +240,16 @@
                 alert(err);
             });
             return stockTransfers;
+        }
+        
+        // =================================
+        // Stock Transfer Delete Lock Button
+        // =================================
+        function cmdStockTransferDeleteLockButton_OnClick() {
+            $('#deleteRecordLock').modal({
+                show: true,
+                backdrop: 'static'
+            });
         }
 
         // ==========================

@@ -285,6 +285,46 @@ namespace easyfis.Controllers
             }
         }
 
+        // ================================
+        // UPDATE Stock Transfer - IsLocked
+        // ================================
+        [Route("api/updateStockTransferIsLocked/{id}")]
+        public HttpResponseMessage PutStockTransferIsLocked(String id, Models.TrnStockTransfer stockTransfer)
+        {
+            try
+            {
+                //var isLocked = true;
+                var identityUserId = User.Identity.GetUserId();
+                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
+                var date = DateTime.Now;
+
+                var stockTransfer_Id = Convert.ToInt32(id);
+                var stockTransfers = from d in db.TrnStockTransfers where d.Id == stockTransfer_Id select d;
+
+                if (stockTransfers.Any())
+                {
+                    var updateStockTransfer = stockTransfers.FirstOrDefault();
+                    
+                    updateStockTransfer.IsLocked = stockTransfer.IsLocked;
+                    updateStockTransfer.UpdatedById = mstUserId;
+                    updateStockTransfer.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
         // =====================
         // DELETE Stock Transfer
         // =====================
