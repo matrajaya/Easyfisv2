@@ -423,7 +423,7 @@ namespace easyfis.Controllers
                     newArticle.SalvageValue = 0;
                     newArticle.ManualArticleOldCode = "NULL";
 
-                    newArticle.IsLocked = isLocked;
+                    newArticle.IsLocked = article.IsLocked;
                     newArticle.CreatedById = mstUserId;
                     newArticle.CreatedDateTime = date;
                     newArticle.UpdatedById = mstUserId;

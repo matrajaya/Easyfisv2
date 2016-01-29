@@ -84,7 +84,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="BankModalLabel">Bank Detail</h4>
+                        <h4 class="modal-title" id="BankModalLabel">Bank Detail <span id="bankLockAndUnLock"></span></h4>
                     </div>
                     <div class="modal-body">
                         <form id="bankDetailForm">
@@ -118,6 +118,8 @@
                                 <dd><input type="text" class="form-control input-sm requiredBank" id="bank_ContactNumber" /></dd>
                                 <dt>Contect Person:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredBank" id="branch_ContactPerson" /></dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd><input type="checkbox" id="bank_Lock" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -380,8 +382,16 @@
                 articleGroupList.push(bankArticleGroupCollection.items[i].ArticleGroupArticleGroup);
             }
         
+            var disabledDropdown;
+            if(document.getElementById('bank_Lock').checked == true) {
+                disabledDropdown = true;
+            } else {
+                disabledDropdown = false;
+            }
+
             cboArticleGroup.dispose();
             cboArticleGroup = new wijmo.input.ComboBox('#bank_BankGroup', {
+                disabled: disabledDropdown,
                 placeholder: "Select Bank Group",
                 itemsSource: articleGroupList,
                 isEditable: false,
@@ -532,6 +542,23 @@
             document.getElementById('bank_ContactNumber').value = '';
             document.getElementById('branch_ContactPerson').value = '';
 
+            document.getElementById('bank_Lock').checked = false 
+            if(document.getElementById('bank_Lock').checked == true) {
+                document.getElementById('bank_bank').disabled = true;
+                document.getElementById('bank_Address').disabled = true;
+                document.getElementById('bank_ContactNumber').disabled = true;
+                document.getElementById('branch_ContactPerson').disabled = true;
+                getBankArticleGroupForComboBox();
+                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('bank_bank').disabled = false;
+                document.getElementById('bank_Address').disabled = false;
+                document.getElementById('bank_ContactNumber').disabled = false;
+                document.getElementById('branch_ContactPerson').disabled = false;
+                getBankArticleGroupForComboBox();
+                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
+
             var banks = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/articleLastArticleCodeByArticleTypeId/5',
@@ -588,7 +615,23 @@
             document.getElementById('bank_Address').value = bank.Address ? bank.Address : '';
             document.getElementById('bank_ContactNumber').value = bank.ContactNumber ? bank.ContactNumber : '';
             document.getElementById('branch_ContactPerson').value = bank.ContactPerson ? bank.ContactPerson : '';
+            document.getElementById('bank_Lock').checked = bank.IsLocked;
 
+            if(document.getElementById('bank_Lock').checked == true) {
+                document.getElementById('bank_bank').disabled = true;
+                document.getElementById('bank_Address').disabled = true;
+                document.getElementById('bank_ContactNumber').disabled = true;
+                document.getElementById('branch_ContactPerson').disabled = true;
+                getBankArticleGroupForComboBox();
+                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('bank_bank').disabled = false;
+                document.getElementById('bank_Address').disabled = false;
+                document.getElementById('bank_ContactNumber').disabled = false;
+                document.getElementById('branch_ContactPerson').disabled = false;
+                getBankArticleGroupForComboBox();
+                document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // ==================
@@ -683,6 +726,7 @@
             bankObject.Address = document.getElementById('bank_Address').value;
             bankObject.ContactNumber = document.getElementById('bank_ContactNumber').value;
             bankObject.ContactPerson = document.getElementById('branch_ContactPerson').value;
+            bankObject.IsLocked = document.getElementById('bank_Lock').checked;
             var bankData = JSON.stringify(bankObject);
 
             if( document.getElementById('bank_BankGroup_data').value == '') {
@@ -864,6 +908,25 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            // Bank Lock - IsLocked
+            $("#bank_Lock").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('bank_bank').disabled = true;
+                    document.getElementById('bank_Address').disabled = true;
+                    document.getElementById('bank_ContactNumber').disabled = true;
+                    document.getElementById('branch_ContactPerson').disabled = true;
+                    getBankArticleGroupForComboBox();
+                    document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('bank_bank').disabled = false;
+                    document.getElementById('bank_Address').disabled = false;
+                    document.getElementById('bank_ContactNumber').disabled = false;
+                    document.getElementById('branch_ContactPerson').disabled = false;
+                    getBankArticleGroupForComboBox();
+                    document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
+
             cboBankForAccount = new wijmo.input.ComboBox('#bank_Account');
             cboArticleGroup = new wijmo.input.ComboBox('#bank_BankGroup');
 
