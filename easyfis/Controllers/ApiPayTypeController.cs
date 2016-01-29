@@ -44,7 +44,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = false;
+                //var isLocked = false;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -53,7 +53,7 @@ namespace easyfis.Controllers
 
                 newPayType.PayType = payType.PayType;
                 newPayType.AccountId = payType.AccountId;
-                newPayType.IsLocked = isLocked;
+                newPayType.IsLocked = payType.IsLocked; ;
                 newPayType.CreatedById = mstUserId;
                 newPayType.CreatedDateTime = date;
                 newPayType.UpdatedById = mstUserId;

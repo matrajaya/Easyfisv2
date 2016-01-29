@@ -104,7 +104,7 @@ namespace easyfis.Controllers
                 newArticleGroup.CostAccountId = articleGroup.CostAccountId;
                 newArticleGroup.AssetAccountId = articleGroup.AssetAccountId;
                 newArticleGroup.ExpenseAccountId = articleGroup.ExpenseAccountId;
-                newArticleGroup.IsLocked = isLocked;
+                newArticleGroup.IsLocked = articleGroup.IsLocked;
                 newArticleGroup.CreatedById = mstUserId;
                 newArticleGroup.CreatedDateTime = date;
                 newArticleGroup.UpdatedById = mstUserId;

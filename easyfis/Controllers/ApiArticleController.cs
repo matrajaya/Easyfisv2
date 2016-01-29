@@ -381,6 +381,12 @@ namespace easyfis.Controllers
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
                     newArticle.ManualArticleOldCode = "NULL";
+
+                    newArticle.IsLocked = article.IsLocked;
+                    newArticle.CreatedById = mstUserId;
+                    newArticle.CreatedDateTime = date;
+                    newArticle.UpdatedById = mstUserId;
+                    newArticle.UpdatedDateTime = date;
                 }
                 else if (articleType_Id == 5)
                 {
@@ -416,6 +422,12 @@ namespace easyfis.Controllers
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
                     newArticle.ManualArticleOldCode = "NULL";
+
+                    newArticle.IsLocked = isLocked;
+                    newArticle.CreatedById = mstUserId;
+                    newArticle.CreatedDateTime = date;
+                    newArticle.UpdatedById = mstUserId;
+                    newArticle.UpdatedDateTime = date;
                 }
                 else if (articleType_Id == 4)
                 {
@@ -451,6 +463,12 @@ namespace easyfis.Controllers
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
                     newArticle.ManualArticleOldCode = "NULL";
+                    newArticle.IsLocked = article.IsLocked;
+
+                    newArticle.CreatedById = mstUserId;
+                    newArticle.CreatedDateTime = date;
+                    newArticle.UpdatedById = mstUserId;
+                    newArticle.UpdatedDateTime = date;
                 }
                 else if (articleType_Id == 3)
                 {
@@ -486,6 +504,12 @@ namespace easyfis.Controllers
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
                     newArticle.ManualArticleOldCode = " ";
+
+                    newArticle.IsLocked = isLocked;
+                    newArticle.CreatedById = mstUserId;
+                    newArticle.CreatedDateTime = date;
+                    newArticle.UpdatedById = mstUserId;
+                    newArticle.UpdatedDateTime = date;
                 }
                 else if (articleType_Id == 2)
                 {
@@ -521,6 +545,12 @@ namespace easyfis.Controllers
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
                     newArticle.ManualArticleOldCode = " ";
+
+                    newArticle.IsLocked = isLocked;
+                    newArticle.CreatedById = mstUserId;
+                    newArticle.CreatedDateTime = date;
+                    newArticle.UpdatedById = mstUserId;
+                    newArticle.UpdatedDateTime = date;
                 }
                 else if (articleType_Id == 1)
                 {
@@ -556,17 +586,17 @@ namespace easyfis.Controllers
                     newArticle.UsefulLife = article.UsefulLife;
                     newArticle.SalvageValue = article.SalvageValue;
                     newArticle.ManualArticleOldCode = article.ManualArticleOldCode;
+
+                    newArticle.IsLocked = isLocked;
+                    newArticle.CreatedById = mstUserId;
+                    newArticle.CreatedDateTime = date;
+                    newArticle.UpdatedById = mstUserId;
+                    newArticle.UpdatedDateTime = date;
                 }
                 else
                 {
                     Debug.WriteLine("Not an Article Type Id");
                 }
-
-                newArticle.IsLocked = isLocked;
-                newArticle.CreatedById = mstUserId;
-                newArticle.CreatedDateTime = date;
-                newArticle.UpdatedById = mstUserId;
-                newArticle.UpdatedDateTime = date;
 
                 db.MstArticles.InsertOnSubmit(newArticle);
                 db.SubmitChanges();
@@ -609,6 +639,10 @@ namespace easyfis.Controllers
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.Address = article.Address;
                         updateArticle.ContactNumber = article.ContactNumber;
+
+                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.UpdatedById = mstUserId;
+                        updateArticle.UpdatedDateTime = date;
                     }
                     else if (articleType_Id == 5)
                     {
@@ -620,6 +654,10 @@ namespace easyfis.Controllers
                         updateArticle.Address = article.Address;
                         updateArticle.ContactNumber = article.ContactNumber;
                         updateArticle.ContactPerson = article.ContactPerson;
+
+                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.UpdatedById = mstUserId;
+                        updateArticle.UpdatedDateTime = date;
                     }
                     else if (articleType_Id == 4)
                     {
@@ -629,6 +667,10 @@ namespace easyfis.Controllers
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.Address = article.Address;
                         updateArticle.ContactNumber = article.ContactNumber;
+
+                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.UpdatedById = mstUserId;
+                        updateArticle.UpdatedDateTime = date;
                     }
                     else if (articleType_Id == 3)
                     {
@@ -664,6 +706,10 @@ namespace easyfis.Controllers
                         updateArticle.UsefulLife = 0;
                         updateArticle.SalvageValue = 0;
                         updateArticle.ManualArticleOldCode = " ";
+
+                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.UpdatedById = mstUserId;
+                        updateArticle.UpdatedDateTime = date;
                     }
                     else if (articleType_Id == 2)
                     {
@@ -699,6 +745,10 @@ namespace easyfis.Controllers
                         updateArticle.UsefulLife = 0;
                         updateArticle.SalvageValue = 0;
                         updateArticle.ManualArticleOldCode = " ";
+
+                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.UpdatedById = mstUserId;
+                        updateArticle.UpdatedDateTime = date;
                     }
                     else if (articleType_Id == 1)
                     {
@@ -734,15 +784,15 @@ namespace easyfis.Controllers
                         updateArticle.UsefulLife = article.UsefulLife;
                         updateArticle.SalvageValue = article.SalvageValue;
                         updateArticle.ManualArticleOldCode = article.ManualArticleOldCode;
+
+                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.UpdatedById = mstUserId;
+                        updateArticle.UpdatedDateTime = date;
                     }
                     else
                     {
                         Debug.WriteLine("Not an Article Type Id");
                     }
-
-                    updateArticle.IsLocked = article.IsLocked;
-                    updateArticle.UpdatedById = mstUserId;
-                    updateArticle.UpdatedDateTime = date;
 
                     db.SubmitChanges();
 

@@ -66,7 +66,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = false;
+                //var isLocked = false;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -74,7 +74,7 @@ namespace easyfis.Controllers
                 Data.MstUnit newUnit = new Data.MstUnit();
 
                 newUnit.Unit = unit.Unit;
-                newUnit.IsLocked = isLocked;
+                newUnit.IsLocked = unit.IsLocked;
                 newUnit.CreatedById = mstUserId;
                 newUnit.CreatedDateTime = date;
                 newUnit.UpdatedById = mstUserId;

@@ -74,7 +74,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = false;
+                //var isLocked = false;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -85,7 +85,7 @@ namespace easyfis.Controllers
                 newTaxType.TaxRate = taxType.TaxRate;
                 newTaxType.IsInclusive = taxType.IsInclusive;
                 newTaxType.AccountId = taxType.AccountId;
-                newTaxType.IsLocked = isLocked;
+                newTaxType.IsLocked = taxType.IsLocked;
                 newTaxType.CreatedById = mstUserId;
                 newTaxType.CreatedDateTime = date;
                 newTaxType.UpdatedById = mstUserId;

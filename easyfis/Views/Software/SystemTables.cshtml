@@ -406,7 +406,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="discountModalLabel">Discount Detail</h4>
+                        <h4 class="modal-title" id="discountModalLabel">Discount Detail <span id="discountLockAndUnLock"></span></h4>
                     </div>
                     <div class="modal-body">
                         <form id="DiscountDetailForm">
@@ -425,6 +425,8 @@
                                     <input type="hidden" class="requiredDiscount" id="discount_Account_data" />
                                     <input type="hidden" id="discount_Account_selectedValue" />
                                 </dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd><input type="checkbox" id="discount_Lock" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -467,7 +469,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="PayTypeModalLabel">Pay Type Detail</h4>
+                        <h4 class="modal-title" id="PayTypeModalLabel">Pay Type Detail <span id="payTypeLockAndUnLock"></span></h4>
                     </div>
                     <div class="modal-body">
                         <form id="PayTypeDetailForm">
@@ -482,6 +484,8 @@
                                     <input type="hidden" class="requiredPayType" id="payType_Account_data" />
                                     <input type="hidden" id="payType_Account_selectedValue" />
                                 </dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd><input type="checkbox" id="payType_Lock" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -524,7 +528,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="TaxTypeModalLabel">Tax Type Detail</h4>
+                        <h4 class="modal-title" id="TaxTypeModalLabel">Tax Type Detail <span id="taxTypeLockAndUnLock"></span></h4>
                     </div>
                     <div class="modal-body">
                         <form id="TaxDetailForm">
@@ -543,6 +547,8 @@
                                     <input type="hidden" class="requiredTaxType" id="taxType_Account_data" />
                                     <input type="hidden" id="taxType_Account_selectedValue" />
                                 </dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd><input type="checkbox" id="taxType_Lock" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -585,7 +591,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="unitModalLabel">Unit Detail</h4>
+                        <h4 class="modal-title" id="unitModalLabel">Unit Detail <span id="unitLockAndUnLock"></span></h4>
                     </div>
                     <div class="modal-body">
                         <form id="UnitDetailForm">
@@ -593,6 +599,8 @@
                             <dl class="dl-horizontal">
                                 <dt>Unit:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredUnit" id="unit_Unit" /></dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd><input type="checkbox" id="unit_Lock" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -635,7 +643,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="termModalLabel">Term Detail</h4>
+                        <h4 class="modal-title" id="termModalLabel">Term Detail <span id="termLockAndUnLock"></span></h4>
                     </div>
                     <div class="modal-body">
                         <form id="TermDetailForm">
@@ -645,6 +653,8 @@
                                 <dd><input type="text" class="form-control input-sm requiredTerm" id="term_Term" /></dd>
                                 <dt>No. of Days:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredTerm" id="term_NoOfDays" /></dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd><input type="checkbox" id="term_Lock" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -687,7 +697,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="employeeModalLabel">Employee Detail</h4>
+                        <h4 class="modal-title" id="employeeModalLabel">Employee Detail <span id="employeeLockAndUnLock"></span></h4>
                     </div>
                     <div class="modal-body">
                         <form id="employeeDetailForm">
@@ -708,6 +718,8 @@
                                 <dd><textarea class="form-control input-sm textarea-custom requiredEmployee" id="employee_Address"></textarea></dd>
                                 <dt>Contact Number:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_ContactNumber" /></dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd><input type="checkbox" id="employee_Lock" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -750,7 +762,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="articleGroupModalLabel">Article Group Detail</h4>
+                        <h4 class="modal-title" id="articleGroupModalLabel">Article Group Detail <span id="articleGroupLockAndUnLock"></span></h4>
                     </div>
                     <div class="modal-body">
                         <form id="articleGroupDetailForm">
@@ -800,6 +812,8 @@
                                     <input type="hidden" class="requiredArticleGroup" id="articleGroup_ExpenseAccount_data" />
                                     <input type="hidden" id="articleGroup_ExpenseAccount_selectedValue" />
                                 </dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd><input type="checkbox" id="articleGroup_Lock" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -842,7 +856,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="articleModalLabel"> Article Detail</h4>
+                        <h4 class="modal-title" id="articleModalLabel"> Article Detail <span id="articleLockAndUnLock"></span></h4>
                     </div>
                     <div class="modal-body">
                         <form id="articleDetailForm">
@@ -863,6 +877,8 @@
                                 <dd><textarea class="form-control input-sm textarea-custom requiredArticle" id="article_Address"></textarea></dd>
                                 <dt>Contact Number:</dt>
                                 <dd><input type="text" class="form-control input-sm requiredArticle" id="article_ContactNumber" /></dd>
+                                <dt>Lock (Edit):</dt>
+                                <dd><input type="checkbox" id="article_Lock" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -1104,17 +1120,33 @@
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
 
-            cboDiscountForAccount.dispose();
-            cboDiscountForAccount = new wijmo.input.ComboBox('#discount_Account', {
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('discount_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#discount_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+            if(document.getElementById('discount_Lock').checked == true) {
+                cboDiscountForAccount.dispose();
+                cboDiscountForAccount = new wijmo.input.ComboBox('#discount_Account', {
+                    disabled: true,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('discount_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#discount_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else {
+                cboDiscountForAccount.dispose();
+                cboDiscountForAccount = new wijmo.input.ComboBox('#discount_Account', {
+                    disabled: false,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('discount_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#discount_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            }
         }
 
         // ============
@@ -1137,6 +1169,21 @@
             document.getElementById('discount_VATInclusive').checked = "";
             document.getElementById('discount_Account_data').value = "";
             document.getElementById('discount_Account_selectedValue').value = "";
+            document.getElementById('discount_Lock').checked = false;
+
+            if(document.getElementById('discount_Lock').checked == true) {
+                document.getElementById('discount_Discount').disabled = true;
+                document.getElementById('discount_DiscountRate').disabled = true;
+                document.getElementById('discount_VATInclusive').disabled = true;
+                getDiscountAccountForComboBox();
+                document.getElementById('discountLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('discount_Discount').disabled = false;
+                document.getElementById('discount_DiscountRate').disabled = false;
+                document.getElementById('discount_VATInclusive').disabled = false;
+                getDiscountAccountForComboBox();
+                document.getElementById('discountLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // =============
@@ -1157,10 +1204,26 @@
             var discount = discounts.currentEditItem;
             document.getElementById('discount_id').value = discount.Id ? discount.Id : '';
             document.getElementById('discount_Discount').value = discount.Discount ? discount.Discount : '';
-            document.getElementById('discount_DiscountRate').value = discount.DiscountRate ? discount.DiscountRate : '';
+            document.getElementById('discount_DiscountRate').value = discount.DiscountRate;
             document.getElementById('discount_VATInclusive').checked = discount.IsInclusive ? discount.IsInclusive : '';
             document.getElementById('discount_Account_data').value = discount.AccountId ? discount.AccountId : '';
             document.getElementById('discount_Account_selectedValue').value = discount.Account ? discount.Account : '';
+            document.getElementById('discount_Lock').checked = discount.IsLocked;
+
+            if(document.getElementById('discount_Lock').checked == true) {
+                document.getElementById('discount_Discount').disabled = true;
+                document.getElementById('discount_DiscountRate').disabled = true;
+                document.getElementById('discount_VATInclusive').disabled = true;
+                getDiscountAccountForComboBox();
+                document.getElementById('discountLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('discount_Discount').disabled = false;
+                document.getElementById('discount_DiscountRate').disabled = false;
+                document.getElementById('discount_VATInclusive').disabled = false;
+                getDiscountAccountForComboBox();
+                document.getElementById('discountLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
+
         }
 
         // ===============
@@ -1244,6 +1307,7 @@
             discountObject.DiscountRate = document.getElementById('discount_DiscountRate').value;
             discountObject.IsInclusive = document.getElementById('discount_VATInclusive').checked;
             discountObject.AccountId = document.getElementById('discount_Account_data').value;
+            discountObject.IsLocked  = document.getElementById('discount_Lock').checked;
             var discountData = JSON.stringify(discountObject);
 
             if( document.getElementById('discount_Account_data').value == '') {
@@ -1651,17 +1715,33 @@
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
 
-            cboPayTypeForAccount.dispose();
-            cboPayTypeForAccount = new wijmo.input.ComboBox('#payType_Account', {
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('payType_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#payType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+            if(document.getElementById('payType_Lock').checked == true) {
+                cboPayTypeForAccount.dispose();
+                cboPayTypeForAccount = new wijmo.input.ComboBox('#payType_Account', {
+                    disabled: true,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('payType_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#payType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else {
+                cboPayTypeForAccount.dispose();
+                cboPayTypeForAccount = new wijmo.input.ComboBox('#payType_Account', {
+                    disabled: false,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('payType_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#payType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            }
         }
 
         // ============
@@ -1682,6 +1762,17 @@
             document.getElementById('payType_PayType').value = "";
             document.getElementById('payType_Account_data').value = "";
             document.getElementById('payType_Account_selectedValue').value = "";
+            document.getElementById('payType_Lock').checked = false;
+
+            if(document.getElementById('payType_Lock').checked == true) {
+                document.getElementById('payType_PayType').disabled = true;
+                getPayTypeAccountForComboBox();
+                document.getElementById('payTypeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('payType_PayType').disabled = false;
+                getPayTypeAccountForComboBox();
+                document.getElementById('payTypeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // =============
@@ -1704,6 +1795,17 @@
             document.getElementById('payType_PayType').value = paytype.PayType ? paytype.PayType : '';
             document.getElementById('payType_Account_data').value = paytype.AccountId ? paytype.AccountId : '';
             document.getElementById('payType_Account_selectedValue').value = paytype.Account ? paytype.Account : '';
+            document.getElementById('payType_Lock').checked = paytype.IsLocked;
+
+            if(document.getElementById('payType_Lock').checked == true) {
+                document.getElementById('payType_PayType').disabled = true;
+                getPayTypeAccountForComboBox();
+                document.getElementById('payTypeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('payType_PayType').disabled = false;
+                getPayTypeAccountForComboBox();
+                document.getElementById('payTypeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // ===============
@@ -1785,6 +1887,7 @@
             var payTypeId = document.getElementById('payType_id').value;
             payTypeObject.PayType = document.getElementById('payType_PayType').value;
             payTypeObject.AccountId = document.getElementById('payType_Account_data').value;
+            payTypeObject.IsLocked = document.getElementById('payType_Lock').checked;
             var payTypeData = JSON.stringify(payTypeObject);
 
             if( document.getElementById('payType_Account_data').value == '') {
@@ -2184,17 +2287,33 @@
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
 
-            cboTaxForAccount.dispose();
-            cboTaxForAccount = new wijmo.input.ComboBox('#taxType_Account', {
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('taxType_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#taxType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+            if(document.getElementById('taxType_Lock').checked == true) {
+                cboTaxForAccount.dispose();
+                cboTaxForAccount = new wijmo.input.ComboBox('#taxType_Account', {
+                    disabled: true,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('taxType_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#taxType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else {
+                cboTaxForAccount.dispose();
+                cboTaxForAccount = new wijmo.input.ComboBox('#taxType_Account', {
+                    disabled: false,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('taxType_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#taxType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            }
         }
 
         // =======
@@ -2217,6 +2336,21 @@
             document.getElementById('taxType_TaxVATInclusive').checked = "";
             document.getElementById('taxType_Account_data').value = "";
             document.getElementById('taxType_Account_selectedValue').value = "";
+            document.getElementById('taxType_Lock').checked = false;
+
+            if(document.getElementById('taxType_Lock').checked == true) {
+                document.getElementById('taxType_TaxType').disabled = true;
+                document.getElementById('taxType_TaxRate').disabled = true;
+                document.getElementById('taxType_TaxVATInclusive').disabled = true;
+                getTaxAccountForComboBox();
+                document.getElementById('taxTypeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('taxType_TaxType').disabled = false;
+                document.getElementById('taxType_TaxRate').disabled = false;
+                document.getElementById('taxType_TaxVATInclusive').disabled = false;
+                getTaxAccountForComboBox();
+                document.getElementById('taxTypeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // ========
@@ -2237,10 +2371,25 @@
             var tax = taxes.currentEditItem;
             document.getElementById('taxType_id').value = tax.Id ? tax.Id : '';
             document.getElementById('taxType_TaxType').value = tax.TaxType ? tax.TaxType : '';
-            document.getElementById('taxType_TaxRate').value = tax.TaxRate ? tax.TaxRate : '';
+            document.getElementById('taxType_TaxRate').value = tax.TaxRate;
             document.getElementById('taxType_TaxVATInclusive').checked = tax.IsInclusive ? tax.IsInclusive : '';
             document.getElementById('taxType_Account_data').value = tax.AccountId ? tax.AccountId : '';
             document.getElementById('taxType_Account_selectedValue').value = tax.Account ? tax.Account : '';
+            document.getElementById('taxType_Lock').checked = tax.IsLocked;
+
+            if(document.getElementById('taxType_Lock').checked == true) {
+                document.getElementById('taxType_TaxType').disabled = true;
+                document.getElementById('taxType_TaxRate').disabled = true;
+                document.getElementById('taxType_TaxVATInclusive').disabled = true;
+                getTaxAccountForComboBox();
+                document.getElementById('taxTypeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('taxType_TaxType').disabled = false;
+                document.getElementById('taxType_TaxRate').disabled = false;
+                document.getElementById('taxType_TaxVATInclusive').disabled = false;
+                getTaxAccountForComboBox();
+                document.getElementById('taxTypeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // ========
@@ -2253,6 +2402,7 @@
             taxObject.TaxRate = document.getElementById('taxType_TaxRate').value;
             taxObject.IsInclusive = document.getElementById('taxType_TaxVATInclusive').checked;
             taxObject.AccountId = document.getElementById('taxType_Account_data').value;
+            taxObject.IsLocked = document.getElementById('taxType_Lock').checked;
             var taxData = JSON.stringify(taxObject);
 
             if( document.getElementById('taxType_Account_data').value == '') {
@@ -2704,6 +2854,13 @@
 
             document.getElementById('unit_id').value = 0;
             document.getElementById('unit_Unit').value = "";
+            document.getElementById('unit_Lock').checked = false;
+
+            if(document.getElementById('unit_Lock').checked == true) {
+                document.getElementById('unit_Unit').disabled = true;
+            } else {
+                document.getElementById('unit_Unit').disabled = false;
+            }
         }
 
         // =========
@@ -2722,6 +2879,13 @@
             var unit = units.currentEditItem;
             document.getElementById('unit_id').value = unit.Id ? unit.Id : '';
             document.getElementById('unit_Unit').value = unit.Unit ? unit.Unit : '';
+            document.getElementById('unit_Lock').checked = unit.IsLocked;
+
+            if(document.getElementById('unit_Lock').checked == true) {
+                document.getElementById('unit_Unit').disabled = true;
+            } else {
+                document.getElementById('unit_Unit').disabled = false;
+            }
         }
 
         // =========
@@ -2731,6 +2895,7 @@
             var unitObject = new Object();
             var unitId = document.getElementById('unit_id').value;
             unitObject.Unit = document.getElementById('unit_Unit').value;
+            unitObject.IsLocked = document.getElementById('unit_Lock').checked;
             var unitData = JSON.stringify(unitObject);
 
             var isValid = true;
@@ -3159,6 +3324,19 @@
             document.getElementById('term_id').value = 0;
             document.getElementById('term_Term').value = "";
             document.getElementById('term_NoOfDays').value = "";
+            document.getElementById('term_Lock').checked = false;
+
+            if(document.getElementById('term_Lock').checked == true) {
+                document.getElementById('term_Term').disabled = true;
+                document.getElementById('term_NoOfDays').disabled = true;
+
+                document.getElementById('termLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('term_Term').disabled = false;
+                document.getElementById('term_NoOfDays').disabled = false;
+
+                document.getElementById('termLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // =========
@@ -3177,7 +3355,20 @@
             var term = terms.currentEditItem;
             document.getElementById('term_id').value = term.Id ? term.Id : '';
             document.getElementById('term_Term').value = term.Term ? term.Term : '';
-            document.getElementById('term_NoOfDays').value = term.NumberOfDays ? term.NumberOfDays : '';
+            document.getElementById('term_NoOfDays').value = term.NumberOfDays;
+            document.getElementById('term_Lock').checked = term.IsLocked;
+
+            if(document.getElementById('term_Lock').checked == true) {
+                document.getElementById('term_Term').disabled = true;
+                document.getElementById('term_NoOfDays').disabled = true;
+
+                document.getElementById('termLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('term_Term').disabled = false;
+                document.getElementById('term_NoOfDays').disabled = false;
+
+                document.getElementById('termLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // ===========
@@ -3259,6 +3450,7 @@
             var termId = document.getElementById('term_id').value;
             termObject.Term = document.getElementById('term_Term').value;
             termObject.NumberOfDays = document.getElementById('term_NoOfDays').value;
+            termObject.IsLocked = document.getElementById('term_Lock').checked;
             var termData = JSON.stringify(termObject);
 
             var isValid = true;
@@ -3706,17 +3898,33 @@
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
 
-            cboEmployeeForAccount.dispose();
-            cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account', {
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('employee_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#employee_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+            if(document.getElementById('employee_Lock').checked == true) {
+                cboEmployeeForAccount.dispose();
+                cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account', {
+                    disabled: true,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('employee_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#employee_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else {
+                cboEmployeeForAccount.dispose();
+                cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account', {
+                    disabled: false,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('employee_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#employee_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            }
         }
 
         // ============
@@ -3740,6 +3948,21 @@
             document.getElementById('employee_Account_selectedValue').value = "";
             document.getElementById('employee_Address').value = "";
             document.getElementById('employee_ContactNumber').value = "";
+            document.getElementById('employee_Lock').checked = false;
+
+            if(document.getElementById('employee_Lock').checked == true) {
+                document.getElementById('employee_Employee').disabled = true;
+                document.getElementById('employee_Address').disabled = true;
+                document.getElementById('employee_ContactNumber').disabled = true;
+                getEmployeeAccountForComboBox();
+                document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('employee_Employee').disabled = false;
+                document.getElementById('employee_Address').disabled = false;
+                document.getElementById('employee_ContactNumber').disabled = false;
+                getEmployeeAccountForComboBox();
+                document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
 
             var employees = new wijmo.collections.ObservableArray;
             $.ajax({
@@ -3787,6 +4010,21 @@
             document.getElementById('employee_Account_selectedValue').value = employee.Account ? employee.Account : '';
             document.getElementById('employee_Address').value = employee.Address ? employee.Address : '';
             document.getElementById('employee_ContactNumber').value = employee.ContactNumber ? employee.ContactNumber : '';
+            document.getElementById('employee_Lock').checked = employee.IsLocked;
+
+            if(document.getElementById('employee_Lock').checked == true) {
+                document.getElementById('employee_Employee').disabled = true;
+                document.getElementById('employee_Address').disabled = true;
+                document.getElementById('employee_ContactNumber').disabled = true;
+                getEmployeeAccountForComboBox();
+                document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('employee_Employee').disabled = false;
+                document.getElementById('employee_Address').disabled = false;
+                document.getElementById('employee_ContactNumber').disabled = false;
+                getEmployeeAccountForComboBox();
+                document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // ===============
@@ -3871,6 +4109,7 @@
             employeeObject.AccountId = document.getElementById('employee_Account_data').value;
             employeeObject.Address = document.getElementById('employee_Address').value;
             employeeObject.ContactNumber = document.getElementById('employee_ContactNumber').value;
+            employeeObject.IsLocked =  document.getElementById('employee_Lock').checked;
             var employeeData = JSON.stringify(employeeObject);
 
             if( document.getElementById('employee_Account_data').value == '') {
@@ -4312,17 +4551,33 @@
                 aeticleTypeList.push(articleTypeCollection.items[i].ArticleType);
             }
 
-            cboArticleType.dispose();
-            cboArticleType = new wijmo.input.ComboBox('#articleGroup_ArticleType', {
-                placeholder: "Select Article Type",
-                itemsSource: aeticleTypeList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('articleGroup_ArticleType_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#articleGroup_ArticleType_data").val(articleTypeCollection.items[this.selectedIndex].ArticleTypeId);
-                }
-            });
+            if(document.getElementById('articleGroup_Lock').checked == true) {
+                cboArticleType.dispose();
+                cboArticleType = new wijmo.input.ComboBox('#articleGroup_ArticleType', {
+                    disabled: true,
+                    placeholder: "Select Article Type",
+                    itemsSource: aeticleTypeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_ArticleType_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_ArticleType_data").val(articleTypeCollection.items[this.selectedIndex].ArticleTypeId);
+                    }
+                });
+            } else {
+                cboArticleType.dispose();
+                cboArticleType = new wijmo.input.ComboBox('#articleGroup_ArticleType', {
+                    disabled: false,
+                    placeholder: "Select Article Type",
+                    itemsSource: aeticleTypeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_ArticleType_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_ArticleType_data").val(articleTypeCollection.items[this.selectedIndex].ArticleTypeId);
+                    }
+                });
+            }
         }
 
         // ===========
@@ -4360,65 +4615,138 @@
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
 
-            cboArticleGroupAccount.dispose();
-            cboArticleGroupAccount = new wijmo.input.ComboBox('#articleGroup_Account', {
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('articleGroup_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#articleGroup_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+            if(document.getElementById('articleGroup_Lock').checked == true) {
+                cboArticleGroupAccount.dispose();
+                cboArticleGroupAccount = new wijmo.input.ComboBox('#articleGroup_Account', {
+                    disabled: true,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
 
-            cboArticleGroupSaleAccount.dispose();
-            cboArticleGroupSaleAccount = new wijmo.input.ComboBox('#articleGroup_SalesAccount', {
-                placeholder: "Select Sales Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('articleGroup_SalesAccount_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#articleGroup_SalesAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+                cboArticleGroupSaleAccount.dispose();
+                cboArticleGroupSaleAccount = new wijmo.input.ComboBox('#articleGroup_SalesAccount', {
+                    disabled: true,
+                    placeholder: "Select Sales Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_SalesAccount_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_SalesAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
 
-            cboArticleGroupCostAccount.dispose();
-            cboArticleGroupCostAccount = new wijmo.input.ComboBox('#articleGroup_CostAccount', {
-                placeholder: "Select Cost Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('articleGroup_CostAccount_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#articleGroup_CostAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+                cboArticleGroupCostAccount.dispose();
+                cboArticleGroupCostAccount = new wijmo.input.ComboBox('#articleGroup_CostAccount', {
+                    disabled: true,
+                    placeholder: "Select Cost Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_CostAccount_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_CostAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
 
-            cboArticleGroupAssetAccount.dispose();
-            cboArticleGroupAssetAccount = new wijmo.input.ComboBox('#articleGroup_AssetAccount', {
-                placeholder: "Select Asset Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('articleGroup_AssetAccount_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#articleGroup_AssetAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+                cboArticleGroupAssetAccount.dispose();
+                cboArticleGroupAssetAccount = new wijmo.input.ComboBox('#articleGroup_AssetAccount', {
+                    disabled: true,
+                    placeholder: "Select Asset Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_AssetAccount_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_AssetAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
 
-            cboArticleGroupExpenseAccount.dispose();
-            cboArticleGroupExpenseAccount = new wijmo.input.ComboBox('#articleGroup_ExpenseAccount', {
-                placeholder: "Select Expense Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('articleGroup_ExpenseAccount_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#articleGroup_ExpenseAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+                cboArticleGroupExpenseAccount.dispose();
+                cboArticleGroupExpenseAccount = new wijmo.input.ComboBox('#articleGroup_ExpenseAccount', {
+                    disabled: true,
+                    placeholder: "Select Expense Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_ExpenseAccount_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_ExpenseAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else {
+                cboArticleGroupAccount.dispose();
+                cboArticleGroupAccount = new wijmo.input.ComboBox('#articleGroup_Account', {
+                    disabled: false,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+
+                cboArticleGroupSaleAccount.dispose();
+                cboArticleGroupSaleAccount = new wijmo.input.ComboBox('#articleGroup_SalesAccount', {
+                    disabled: false,
+                    placeholder: "Select Sales Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_SalesAccount_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_SalesAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+
+                cboArticleGroupCostAccount.dispose();
+                cboArticleGroupCostAccount = new wijmo.input.ComboBox('#articleGroup_CostAccount', {
+                    disabled: false,
+                    placeholder: "Select Cost Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_CostAccount_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_CostAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+
+                cboArticleGroupAssetAccount.dispose();
+                cboArticleGroupAssetAccount = new wijmo.input.ComboBox('#articleGroup_AssetAccount', {
+                    disabled: false,
+                    placeholder: "Select Asset Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_AssetAccount_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_AssetAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+
+                cboArticleGroupExpenseAccount.dispose();
+                cboArticleGroupExpenseAccount = new wijmo.input.ComboBox('#articleGroup_ExpenseAccount', {
+                    disabled: false,
+                    placeholder: "Select Expense Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('articleGroup_ExpenseAccount_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#articleGroup_ExpenseAccount_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            }
+
         }
 
         // =================
@@ -4450,6 +4778,19 @@
             document.getElementById('articleGroup_AssetAccount_selectedValue').value = "";
             document.getElementById('articleGroup_ExpenseAccount_data').value = "";
             document.getElementById('articleGroup_ExpenseAccount_selectedValue').value = "";
+            document.getElementById('articleGroup_Lock').checked = false;
+
+            if(document.getElementById('articleGroup_Lock').checked == true) {
+                document.getElementById('articleGroup_ArticleGroup').disabled = true;
+                getArticleType();
+                getArticleGroupAccount();
+                document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('articleGroup_ArticleGroup').disabled = false;
+                getArticleType();
+                getArticleGroupAccount();
+                document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // ==================
@@ -4483,6 +4824,19 @@
             document.getElementById('articleGroup_AssetAccount_selectedValue').value = articlegroup.AssetAccount ? articlegroup.AssetAccount : '';
             document.getElementById('articleGroup_ExpenseAccount_data').value = articlegroup.ExpenseAccountId ? articlegroup.ExpenseAccountId : '';
             document.getElementById('articleGroup_ExpenseAccount_selectedValue').value = articlegroup.ExpenseAccount ? articlegroup.ExpenseAccount : '';
+            document.getElementById('articleGroup_Lock').checked = articlegroup.IsLocked;
+
+            if(document.getElementById('articleGroup_Lock').checked == true) {
+                document.getElementById('articleGroup_ArticleGroup').disabled = true;
+                getArticleType();
+                getArticleGroupAccount();
+                document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('articleGroup_ArticleGroup').disabled = false;
+                getArticleType();
+                getArticleGroupAccount();
+                document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // ====================
@@ -4569,6 +4923,7 @@
             articleGroupObject.CostAccountId = document.getElementById('articleGroup_CostAccount_data').value;
             articleGroupObject.AssetAccountId = document.getElementById('articleGroup_AssetAccount_data').value;
             articleGroupObject.ExpenseAccountId = document.getElementById('articleGroup_ExpenseAccount_data').value;
+            articleGroupObject.IsLocked = document.getElementById('articleGroup_Lock').checked;
             var articleGroupData = JSON.stringify(articleGroupObject);
 
             if( document.getElementById('articleGroup_ArticleType_data').value == '') {
@@ -5072,17 +5427,33 @@
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
 
-            cboArticleForAccount.dispose();
-            cboArticleForAccount = new wijmo.input.ComboBox('#article_Account', {
-                placeholder: "Select Account",
-                itemsSource: accountList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('article_Account_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#article_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
-            });
+            if(document.getElementById('article_Lock').checked == true) {
+                cboArticleForAccount.dispose();
+                cboArticleForAccount = new wijmo.input.ComboBox('#article_Account', {
+                    disabled: true,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('article_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#article_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            } else {
+                cboArticleForAccount.dispose();
+                cboArticleForAccount = new wijmo.input.ComboBox('#article_Account', {
+                    disabled: false,
+                    placeholder: "Select Account",
+                    itemsSource: accountList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('article_Account_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#article_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    }
+                });
+            }
         }
 
         // =================
@@ -5106,6 +5477,21 @@
             document.getElementById('article_Account_selectedValue').value = "";
             document.getElementById('article_Address').value = "";
             document.getElementById('article_ContactNumber').value = "";
+            document.getElementById('article_Lock').checked = false;
+
+            if(document.getElementById('article_Lock').checked == true) {
+                document.getElementById('article_Article').disabled = true;
+                document.getElementById('article_Address').disabled = true;
+                document.getElementById('article_ContactNumber').disabled = true;
+                getArticleAccountForComboBox();
+                document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('article_Article').disabled = false;
+                document.getElementById('article_Address').disabled = false;
+                document.getElementById('article_ContactNumber').disabled = false;
+                getArticleAccountForComboBox();
+                document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
 
             var articles = new wijmo.collections.ObservableArray;
             $.ajax({
@@ -5154,6 +5540,21 @@
             document.getElementById('article_Account_selectedValue').value = otherarticle.Account ? otherarticle.Account : '';
             document.getElementById('article_Address').value = otherarticle.Address ? otherarticle.Address : '';
             document.getElementById('article_ContactNumber').value = otherarticle.ContactNumber ? otherarticle.ContactNumber : '';
+            document.getElementById('article_Lock').checked = otherarticle.IsLocked;
+
+            if(document.getElementById('article_Lock').checked == true) {
+                document.getElementById('article_Article').disabled = true;
+                document.getElementById('article_Address').disabled = true;
+                document.getElementById('article_ContactNumber').disabled = true;
+                getArticleAccountForComboBox();
+                document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+            } else {
+                document.getElementById('article_Article').disabled = false;
+                document.getElementById('article_Address').disabled = false;
+                document.getElementById('article_ContactNumber').disabled = false;
+                getArticleAccountForComboBox();
+                document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+            }
         }
 
         // ====================
@@ -5227,7 +5628,6 @@
             });
         }
 
-
         // ==================
         // Save Other Article
         // ==================
@@ -5239,6 +5639,8 @@
             otherArticleObject.AccountId = document.getElementById('article_Account_data').value;
             otherArticleObject.Address = document.getElementById('article_Address').value;
             otherArticleObject.ContactNumber = document.getElementById('article_ContactNumber').value;
+            otherArticleObject.IsLocked = document.getElementById('article_Lock').checked;
+            
             var otherArticleData = JSON.stringify(otherArticleObject);
 
             if( document.getElementById('article_Account_data').value == '') {
@@ -5625,6 +6027,130 @@
         });
 
         $(document).ready(function () {
+            // Discount Lock - IsLocked
+            $("#discount_Lock").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('discount_Discount').disabled = true;
+                    document.getElementById('discount_DiscountRate').disabled = true;
+                    document.getElementById('discount_VATInclusive').disabled = true;
+                    getDiscountAccountForComboBox();
+                    document.getElementById('discountLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('discount_Discount').disabled = false;
+                    document.getElementById('discount_DiscountRate').disabled = false;
+                    document.getElementById('discount_VATInclusive').disabled = false;
+                    getDiscountAccountForComboBox();
+                    document.getElementById('discountLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
+
+            // payType Lock - IsLocked
+            $("#payType_Lock").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('payType_PayType').disabled = true;
+                    getPayTypeAccountForComboBox();
+                    document.getElementById('payTypeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('payType_PayType').disabled = false;
+                    getPayTypeAccountForComboBox();
+                    document.getElementById('payTypeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
+
+            // taxType Lock - IsLocked
+            $("#taxType_Lock").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('taxType_TaxType').disabled = true;
+                    document.getElementById('taxType_TaxRate').disabled = true;
+                    document.getElementById('taxType_TaxVATInclusive').disabled = true;
+                    getTaxAccountForComboBox();
+                    document.getElementById('taxTypeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('taxType_TaxType').disabled = false;
+                    document.getElementById('taxType_TaxRate').disabled = false;
+                    document.getElementById('taxType_TaxVATInclusive').disabled = false;
+                    getTaxAccountForComboBox();
+                    document.getElementById('taxTypeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
+
+            // Unit Lock - IsLocked
+            $("#unit_Lock").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('unit_Unit').disabled = true;
+
+                    document.getElementById('unitLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('unit_Unit').disabled = false;
+
+                    document.getElementById('unitLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
+
+            // term Lock - IsLocked
+            $("#term_Lock").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('term_Term').disabled = true;
+                    document.getElementById('term_NoOfDays').disabled = true;
+
+                    document.getElementById('termLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('term_Term').disabled = false;
+                    document.getElementById('term_NoOfDays').disabled = false;
+
+                    document.getElementById('termLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
+
+            // employee Lock - IsLocked
+            $("#employee_Lock").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('employee_Employee').disabled = true;
+                    document.getElementById('employee_Address').disabled = true;
+                    document.getElementById('employee_ContactNumber').disabled = true;
+                    getEmployeeAccountForComboBox();
+                    document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('employee_Employee').disabled = false;
+                    document.getElementById('employee_Address').disabled = false;
+                    document.getElementById('employee_ContactNumber').disabled = false;
+                    getEmployeeAccountForComboBox();
+                    document.getElementById('employeeLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
+
+            // article Group - IsLocked
+            $("#articleGroup_Lock").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('articleGroup_ArticleGroup').disabled = true;
+                    getArticleType();
+                    getArticleGroupAccount();
+                    document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('articleGroup_ArticleGroup').disabled = false;
+                    getArticleType();
+                    getArticleGroupAccount();
+                    document.getElementById('articleGroupLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
+
+            // article Lock - IsLocked
+            $("#article_Lock").click( function(){
+                if( $(this).is(':checked') ) {
+                    document.getElementById('article_Article').disabled = true;
+                    document.getElementById('article_Address').disabled = true;
+                    document.getElementById('article_ContactNumber').disabled = true;
+                    getArticleAccountForComboBox();
+                    document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
+                } else {
+                    document.getElementById('article_Article').disabled = false;
+                    document.getElementById('article_Address').disabled = false;
+                    document.getElementById('article_ContactNumber').disabled = false;
+                    getArticleAccountForComboBox();
+                    document.getElementById('articleLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
+                }
+            });
+
             $.ajax({
                 url: '/api/listBranchById/' + @branchId,
                 cache: false,

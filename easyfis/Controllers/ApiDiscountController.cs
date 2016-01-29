@@ -46,7 +46,7 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = false;
+                //var isLocked = false;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -57,7 +57,7 @@ namespace easyfis.Controllers
                 newDiscount.DiscountRate = discount.DiscountRate;
                 newDiscount.IsInclusive = discount.IsInclusive;
                 newDiscount.AccountId = discount.AccountId;
-                newDiscount.IsLocked = isLocked;
+                newDiscount.IsLocked = discount.IsLocked;
                 newDiscount.CreatedById = mstUserId;
                 newDiscount.CreatedDateTime = date;
                 newDiscount.UpdatedById = mstUserId;
