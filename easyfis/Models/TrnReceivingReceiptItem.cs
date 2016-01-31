@@ -33,6 +33,7 @@ namespace easyfis.Models
         public Decimal WTAXAmount { get; set; }
         public Int32 BranchId { get; set; }
         public String Branch { get; set; }
+        public String BranchCode { get; set; }
         public Int32 BaseUnitId { get; set; }
         public String BaseUnit { get; set; }
         public Decimal BaseQuantity { get; set; }

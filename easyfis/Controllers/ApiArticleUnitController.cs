@@ -84,8 +84,7 @@ namespace easyfis.Controllers
             var articleUnit_articleId = Convert.ToInt32(articleId);
             var articleUnit_unitId = Convert.ToInt32(unitId);
             var articleUnits = from d in db.MstArticleUnits
-                               where d.ArticleId == articleUnit_articleId
-                               where d.UnitId == articleUnit_unitId
+                               where d.ArticleId == articleUnit_articleId && d.UnitId == articleUnit_unitId
                                select new Models.MstArticleUnit
                                {
                                    Id = d.Id,
