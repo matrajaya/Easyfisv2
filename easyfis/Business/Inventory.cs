@@ -29,6 +29,7 @@ namespace easyfis.Business
                                             Id = d.Id,
                                             RRId = d.RRId,
                                             RR = d.TrnReceivingReceipt.RRNumber,
+                                            RRDate = d.TrnReceivingReceipt.RRDate.ToShortDateString(),
                                             POId = d.POId,
                                             PO = d.TrnPurchaseOrder.PONumber,
                                             ItemId = d.ItemId,
@@ -57,18 +58,14 @@ namespace easyfis.Business
                                             BaseCost = d.BaseCost
                                         };
 
-            
-
-            Data.TrnInventory newInventory = new Data.TrnInventory();
-            Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
-            Data.MstArticleInventory updateArticleInventory = new Data.MstArticleInventory();
-
             try
             {
-                var InventoryDate = (from d in db.TrnReceivingReceipts where d.Id == RRId select d.RRDate).SingleOrDefault();
-
                 foreach (var RRItems in receivingReceiptItems)
                 {
+                    Data.TrnInventory newInventory = new Data.TrnInventory();
+                    Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
+                    Data.MstArticleInventory updateArticleInventory = new Data.MstArticleInventory();
+
                     // Retrieve Items for Id only and Inventory items only
                     var articleItems = from d in db.MstArticles
                                        where d.IsInventory == true && d.Id == RRItems.ItemId
@@ -83,7 +80,6 @@ namespace easyfis.Business
                     {
                         ArticleId = items.Id;
                     }
-
 
                     // retrieve Artticle Inventory
                     var articleInventories = from d in db.MstArticleInventories
@@ -109,7 +105,7 @@ namespace easyfis.Business
                     if (articleInventories.Any())
                     {
                         newInventory.BranchId = RRItems.BranchId;
-                        newInventory.InventoryDate = Convert.ToDateTime(InventoryDate);
+                        newInventory.InventoryDate = Convert.ToDateTime(RRItems.RRDate);
                         newInventory.ArticleId = ArticleId;
                         newInventory.ArticleInventoryId = articleInventoryId;
                         newInventory.RRId = RRId;
@@ -137,7 +133,7 @@ namespace easyfis.Business
                         db.SubmitChanges();
 
                         newInventory.BranchId = RRItems.BranchId;
-                        newInventory.InventoryDate = Convert.ToDateTime(InventoryDate);
+                        newInventory.InventoryDate =Convert.ToDateTime(RRItems.RRDate);
                         newInventory.ArticleId = ArticleId;
                         newInventory.ArticleInventoryId = articleInventoryId;
                         newInventory.RRId = RRId;
@@ -153,7 +149,6 @@ namespace easyfis.Business
                     }
 
                     db.TrnInventories.InsertOnSubmit(newInventory);
-
                 }
 
                 db.SubmitChanges();

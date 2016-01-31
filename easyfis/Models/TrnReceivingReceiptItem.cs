@@ -12,6 +12,7 @@ namespace easyfis.Models
         public Int32 Id { get; set; }
         public Int32 RRId { get; set; }
         public String RR { get; set; }
+        public String RRDate { get; set; }
         public Int32 POId { get; set; }
         public String PO { get; set; }
         public Int32 ItemId { get; set; }
