@@ -276,6 +276,7 @@
                 show: true,
                 backdrop: 'static'
             });
+
             $("#cmdConfirmDeleteStockIn").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
@@ -296,9 +297,32 @@
                         $("#cmdConfirmDeleteStockIn").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                       
+                        $('#deleteStockInConfirm').modal('hide');
+
+                        var INDateFilter = document.getElementById('filterDate_data').value;
+                        stockIns = new wijmo.collections.CollectionView(getStockInFilterByINDate(INDateFilter));
+                        stockIns.canFilter = true;
+                        stockIns.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            stockIns.refresh();
+                        });
+                        stockIns.filter = function (item) {
+                            return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        stockIns.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsStockIn();
+                        });
+                        stockIns.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        // Flex Grid
+                        stockInGrid.itemsSource = stockIns;
+                        stockInGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");

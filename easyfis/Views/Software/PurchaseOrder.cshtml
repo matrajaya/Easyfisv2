@@ -290,6 +290,7 @@
                 show: true,
                 backdrop: 'static'
             });
+
             $("#cmdConfirmDeletePO").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
@@ -310,9 +311,32 @@
                         $("#cmdConfirmDeletePO").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                       
+                        $('#deletePOConfirm').modal('hide');
+
+                        var PODateFilter = document.getElementById('filterDate_data').value;
+                        POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilter));
+                        POs.canFilter = true;
+                        POs.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            POs.refresh();
+                        });
+                        POs.filter = function (item) {
+                            return !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        POs.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsPO();
+                        });
+                        POs.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        // Flex Grid
+                        POGrid.itemsSource = POs;
+                        POGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");

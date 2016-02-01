@@ -67,8 +67,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">OT Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredStockOut" id="StockOut_OTNumber" />
-                                        <input type="hidden" id="StockOut_OTNumber_Display" />
+                                        <input type="text" class="form-control input-sm requiredStockOut" id="StockOut_OTNumber_Display" />
+                                        <input type="hidden" id="StockOut_OTNumber" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -1038,7 +1038,7 @@
             var stockOutObject = new Object();
             var stockOutId = @stockOutId;
             stockOutObject.BranchId = document.getElementById('StockOut_Branch_data').value;
-            stockOutObject.OTNumber = document.getElementById('StockOut_OTNumber').value;
+            stockOutObject.OTNumber = document.getElementById('StockOut_OTNumber_Display').value;
             stockOutObject.OTDate = document.getElementById('StockOut_OTDate_data').value;
             stockOutObject.AccountId = document.getElementById('StockOut_Account_data').value;
             stockOutObject.ArticleId = document.getElementById('StockOut_Article_data').value;
@@ -1194,7 +1194,7 @@
             var stockOutObject = new Object();
             var stockOutId = @stockOutId;
             stockOutObject.BranchId = document.getElementById('StockOut_Branch_data').value;
-            stockOutObject.OTNumber = document.getElementById('StockOut_OTNumber').value;
+            stockOutObject.OTNumber = document.getElementById('StockOut_OTNumber_Display').value;
             stockOutObject.OTDate = document.getElementById('StockOut_OTDate_data').value;
             stockOutObject.AccountId = document.getElementById('StockOut_Account_data').value;
             stockOutObject.ArticleId = document.getElementById('StockOut_Article_data').value;
@@ -1414,7 +1414,7 @@
             }
 
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("StockOut", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Sock Out</a> ' + ' > Stock Out Detail';
-            document.getElementById('StockOut_OTNumber').disabled = true;
+            document.getElementById('StockOut_OTNumber_Display').disabled = true;
             document.getElementById('StockOut_Lock').disabled = true;
 
             cboBranch = new wijmo.input.ComboBox('#StockOut_Branch');

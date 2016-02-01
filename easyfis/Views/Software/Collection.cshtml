@@ -271,6 +271,7 @@
                 show: true,
                 backdrop: 'static'
             });
+
             $("#cmdConfirmDeleteCollecion").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
@@ -291,9 +292,32 @@
                         $("#cmdConfirmDeleteCollecion").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                        
+                        $('#deleteCollecionConfirm').modal('hide');
+
+                        var ORDateFilter = document.getElementById('filterDate_data').value;
+                        collections = new wijmo.collections.CollectionView(getCollectionFilterByORDate(ORDateFilter));
+                        collections.canFilter = true;
+                        collections.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            collections.refresh();
+                        });
+                        collections.filter = function (item) {
+                            return !filterText || (item.ORNumber.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        collections.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsCollections();
+                        });
+                        collections.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        // Flex Grid
+                        collectionGrid.itemsSource = collections;
+                        collectionGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");

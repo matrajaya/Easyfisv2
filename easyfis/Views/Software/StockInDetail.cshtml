@@ -67,8 +67,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">IN Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_INnumber" />
-                                        <input type="hidden" id="StockIn_INnumber_Display" />
+                                        <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_INnumber_Display" />
+                                        <input type="hidden" id="StockIn_INnumber" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -1027,7 +1027,7 @@
             var stockInObject = new Object();
             var stockInId = @stockInId;
             stockInObject.BranchId = document.getElementById('StockIn_Branch_data').value;
-            stockInObject.INNumber = document.getElementById('StockIn_INnumber').value;
+            stockInObject.INNumber = document.getElementById('StockIn_INnumber_Display').value;
             stockInObject.INDate = document.getElementById('StockIn_InDate_data').value;
             stockInObject.AccountId = document.getElementById('StockIn_Account_data').value;
             stockInObject.ArticleId = document.getElementById('StockIn_Article_data').value;
@@ -1178,7 +1178,7 @@
             var stockInObject = new Object();
             var stockInId = @stockInId;
             stockInObject.BranchId = document.getElementById('StockIn_Branch_data').value;
-            stockInObject.INNumber = document.getElementById('StockIn_INnumber').value;
+            stockInObject.INNumber = document.getElementById('StockIn_INnumber_Display').value;
             stockInObject.INDate = document.getElementById('StockIn_InDate_data').value;
             stockInObject.AccountId = document.getElementById('StockIn_Account_data').value;
             stockInObject.ArticleId = document.getElementById('StockIn_Article_data').value;
@@ -1395,7 +1395,7 @@
             }
 
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("StockIn", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Sock In</a> ' + ' > Stock In Detail';
-            document.getElementById('StockIn_INnumber').disabled = true;
+            document.getElementById('StockIn_INnumber_Display').disabled = true;
             document.getElementById('StockIn_Lock').disabled = true;
 
             cboBranch = new wijmo.input.ComboBox('#StockIn_Branch');

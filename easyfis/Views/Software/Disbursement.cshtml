@@ -291,6 +291,7 @@
                 show: true,
                 backdrop: 'static'
             });
+
             $("#cmdConfirmDeleteDisbursement").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
@@ -311,9 +312,32 @@
                         $("#cmdConfirmDeleteDisbursement").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                       
+                        $('#deleteDisbursementConfirm').modal('hide');
+
+                        var CVDateFilter = document.getElementById('filterDate_data').value;
+                        disbursements = new wijmo.collections.CollectionView(getDisbursementFilterByCVDate(CVDateFilter));
+                        disbursements.canFilter = true;
+                        disbursements.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            disbursements.refresh();
+                        });
+                        disbursements.filter = function (item) {
+                            return !filterText || (item.CVNumber.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        disbursements.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsDisbursement();
+                        });
+                        disbursements.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        // Flex Grid
+                        disbursementGrid.itemsSource = disbursements;
+                        disbursementGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");

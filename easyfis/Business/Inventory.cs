@@ -21,9 +21,9 @@ namespace easyfis.Business
                                         RRDate = d.RRDate.ToShortDateString()
                                     };
 
-            // retrieve Receiving Receipt Items 
+            // retrieve Receiving Receipt Items IsInventory == TRUE
             var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
-                                        where d.RRId == RRId
+                                        where d.RRId == RRId && d.MstArticle.IsInventory == true
                                         select new Models.TrnReceivingReceiptItem
                                         {
                                             Id = d.Id,
@@ -66,24 +66,9 @@ namespace easyfis.Business
                     Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
                     Data.MstArticleInventory updateArticleInventory = new Data.MstArticleInventory();
 
-                    // Retrieve Items for Id only and Inventory items only
-                    var articleItems = from d in db.MstArticles
-                                       where d.IsInventory == true && d.Id == RRItems.ItemId
-                                       select new Models.MstArticle
-                                       {
-                                           Id = d.Id,
-                                           IsInventory = d.IsInventory
-                                       };
-
-                    Int32 ArticleId = 0;
-                    foreach (var items in articleItems)
-                    {
-                        ArticleId = items.Id;
-                    }
-
                     // retrieve Artticle Inventory
                     var articleInventories = from d in db.MstArticleInventories
-                                             where d.ArticleId == ArticleId
+                                             where d.BranchId == RRItems.BranchId && d.ArticleId == RRItems.ItemId && d.InventoryCode == "RR-" + RRItems.BranchCode + "-" + RRItems.PO
                                              select new Models.MstArticleInventory
                                              {
                                                  Id = d.Id,
@@ -106,7 +91,7 @@ namespace easyfis.Business
                     {
                         newInventory.BranchId = RRItems.BranchId;
                         newInventory.InventoryDate = Convert.ToDateTime(RRItems.RRDate);
-                        newInventory.ArticleId = ArticleId;
+                        newInventory.ArticleId = RRItems.ItemId;
                         newInventory.ArticleInventoryId = articleInventoryId;
                         newInventory.RRId = RRId;
                         newInventory.SIId = null;
@@ -122,7 +107,7 @@ namespace easyfis.Business
                     else
                     {
                         newArticleInventory.BranchId = RRItems.BranchId;
-                        newArticleInventory.ArticleId = ArticleId;
+                        newArticleInventory.ArticleId = RRItems.ItemId;
                         newArticleInventory.InventoryCode = "RR-" + RRItems.BranchCode + "-" + RRItems.PO;
                         newArticleInventory.Quantity = RRItems.Quantity;
                         newArticleInventory.Cost = RRItems.Cost;
@@ -134,7 +119,7 @@ namespace easyfis.Business
 
                         newInventory.BranchId = RRItems.BranchId;
                         newInventory.InventoryDate =Convert.ToDateTime(RRItems.RRDate);
-                        newInventory.ArticleId = ArticleId;
+                        newInventory.ArticleId = RRItems.ItemId;
                         newInventory.ArticleInventoryId = articleInventoryId;
                         newInventory.RRId = RRId;
                         newInventory.SIId = null;

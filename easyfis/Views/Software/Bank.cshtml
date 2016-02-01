@@ -519,6 +519,12 @@
                 backdrop: 'static'
             });
             
+            $('.requiredBank').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             $("#cmdBankSave").prop("disabled", false);
             $("#cmdBankCloseButton").prop("disabled", false);
 
@@ -590,6 +596,12 @@
             $('#BankModal').modal({
                 show: true,
                 backdrop: 'static'
+            });
+
+            $('.requiredBank').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdBankSave").prop("disabled", false);

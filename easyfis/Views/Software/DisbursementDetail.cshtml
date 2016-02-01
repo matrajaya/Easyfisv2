@@ -67,8 +67,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">CV Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_CVNumber" />
-                                        <input type="hidden" id="disbursement_CVNumber_Display" />
+                                        <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_CVNumber_Display" />
+                                        <input type="hidden" id="disbursement_CVNumber" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -1163,7 +1163,7 @@
             var disbursementObject = new Object();
             var disbursementId = @disbursementId;
             disbursementObject.BranchId = document.getElementById('disbursement_Branch_data').value;
-            disbursementObject.CVNumber = document.getElementById('disbursement_CVNumber').value;
+            disbursementObject.CVNumber = document.getElementById('disbursement_CVNumber_Display').value;
             disbursementObject.CVDate = document.getElementById('disbursement_CVDate_data').value;
             disbursementObject.SupplierId = document.getElementById('disbursement_Supplier_data').value;
             disbursementObject.Payee = document.getElementById('disbursement_Payee').value;
@@ -1344,7 +1344,7 @@
             var disbursementObject = new Object();
             var disbursementId = @disbursementId;
             disbursementObject.BranchId = document.getElementById('disbursement_Branch_data').value;
-            disbursementObject.CVNumber = document.getElementById('disbursement_CVNumber').value;
+            disbursementObject.CVNumber = document.getElementById('disbursement_CVNumber_Display').value;
             disbursementObject.CVDate = document.getElementById('disbursement_CVDate_data').value;
             disbursementObject.SupplierId = document.getElementById('disbursement_Supplier_data').value;
             disbursementObject.Payee = document.getElementById('disbursement_Payee').value;
@@ -2215,7 +2215,7 @@
             cboDisbursementLineRR = new wijmo.input.ComboBox('#disbursementLine_RRNo');
 
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Disbursement</a> ' + ' > Disbursement Detail';
-            document.getElementById('disbursement_CVNumber').disabled = true;
+            document.getElementById('disbursement_CVNumber_Display').disabled = true;
             document.getElementById('disbursement_Lock').disabled = true;
 
             $('#cmdAP').click(function () {

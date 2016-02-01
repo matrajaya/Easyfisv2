@@ -67,8 +67,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">ST Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_STNumber" />
-                                        <input type="hidden" id="stockTransfer_STNumber_Display" />
+                                        <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_STNumber_Display" />
+                                        <input type="hidden" id="stockTransfer_STNumber" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -894,7 +894,7 @@
             var stockTransferObject = new Object();
             var stockTransferId = @stockTransferId;
             stockTransferObject.BranchId = document.getElementById('stockTransfer_Branch_data').value;
-            stockTransferObject.STNumber = document.getElementById('stockTransfer_STNumber').value;
+            stockTransferObject.STNumber = document.getElementById('stockTransfer_STNumber_Display').value;
             stockTransferObject.STDate = document.getElementById('stockTransfer_STDate_data').value;
             stockTransferObject.ToBranchId = document.getElementById('stockTransfer_ToBranch_data').value;
             stockTransferObject.Particulars = document.getElementById('stockTransfer_Particulars').value;
@@ -1049,7 +1049,7 @@
             var stockTransferObject = new Object();
             var stockTransferId = @stockTransferId;
             stockTransferObject.BranchId = document.getElementById('stockTransfer_Branch_data').value;
-            stockTransferObject.STNumber = document.getElementById('stockTransfer_STNumber').value;
+            stockTransferObject.STNumber = document.getElementById('stockTransfer_STNumber_Display').value;
             stockTransferObject.STDate = document.getElementById('stockTransfer_STDate_data').value;
             stockTransferObject.ToBranchId = document.getElementById('stockTransfer_ToBranch_data').value;
             stockTransferObject.Particulars = document.getElementById('stockTransfer_Particulars').value;
@@ -1267,7 +1267,7 @@
             }
 
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Stock Transfer</a> ' + ' > Stock Transfer Detail';
-            document.getElementById('stockTransfer_STNumber').disabled = true;
+            document.getElementById('stockTransfer_STNumber_Display').disabled = true;
             document.getElementById('StockTransfer_Lock').disabled = true;
 
             getStockTransferById();

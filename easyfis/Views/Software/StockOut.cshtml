@@ -293,9 +293,32 @@
                         $("#cmdConfirmDeleteStockOut").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                        
+                        $('#deleteStockOutConfirm').modal('hide');
+
+                        var OUTdateFilter = document.getElementById('filterDate_data').value;
+                        stockOuts = new wijmo.collections.CollectionView(getStockOutFilterByOUTdate(OUTdateFilter));
+                        stockOuts.canFilter = true;
+                        stockOuts.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            stockOuts.refresh();
+                        });
+                        stockOuts.filter = function (item) {
+                            return !filterText || (item.OTNumber.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        stockOuts.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsStockOut();
+                        });
+                        stockOuts.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        // Flex Grid
+                        stockOutGrid.itemsSource = stockOuts;
+                        stockOutGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");

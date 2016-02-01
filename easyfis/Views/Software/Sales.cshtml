@@ -288,6 +288,7 @@
                 show: true,
                 backdrop: 'static'
             });
+
             $("#cmdConfirmDeleteSales").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
@@ -311,7 +312,8 @@
                         
                         $('#deleteSalesConfirm').modal('hide');
 
-                        sales = new wijmo.collections.CollectionView(getSalesFilterBySIDate(SIDateFilterValue));
+                        var SIDateFilter = document.getElementById('filterDate_data').value;
+                        sales = new wijmo.collections.CollectionView(getSalesFilterBySIDate(SIDateFilter));
                         sales.canFilter = true;
                         sales.pageSize = 15;
 

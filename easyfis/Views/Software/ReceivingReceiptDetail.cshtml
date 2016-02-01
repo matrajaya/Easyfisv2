@@ -68,8 +68,8 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">RR Number:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredRR" id="RRRRNumber" />
-                                        <input type="hidden" id="RRRRNumber_Display" />
+                                        <input type="text" class="form-control input-sm requiredRR" id="RRRRNumber_Display" />
+                                        <input type="hidden" id="RRRRNumber" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -649,8 +649,9 @@
                     }
                     document.getElementById('RRbranch_data').value = Results.BranchId;
                     document.getElementById('RRbranch_selectedValue').value = Results.Branch;
-
+                    
                     document.getElementById('RRRRNumber').value = Results.RRNumber;
+                    document.getElementById('RRRRNumber_Display').value = Results.RRNumber;
                     document.getElementById('RRRRDate_data').value = Results.RRDate;
 
                     var RRdate_date = Results.RRDate;
@@ -1295,7 +1296,7 @@
             var RRId = @RRId;
             RRObject.BranchId = document.getElementById('RRbranch_data').value;
             RRObject.RRDate = document.getElementById('RRRRDate_data').value;
-            RRObject.RRNumber = document.getElementById('RRRRNumber').value;
+            RRObject.RRNumber = document.getElementById('RRRRNumber_Display').value;
             RRObject.SupplierId = document.getElementById('RRSupplier_data').value;
             RRObject.TermId = document.getElementById('RRTerm_data').value;
             RRObject.DocumentReference = document.getElementById('RRDocReference').value;
@@ -1463,7 +1464,7 @@
             var RRId = @RRId;
             RRObject.BranchId = document.getElementById('RRbranch_data').value;
             RRObject.RRDate = document.getElementById('RRRRDate_data').value;
-            RRObject.RRNumber = document.getElementById('RRRRNumber').value;
+            RRObject.RRNumber = document.getElementById('RRRRNumber_Display').value;
             RRObject.SupplierId = document.getElementById('RRSupplier_data').value;
             RRObject.TermId = document.getElementById('RRTerm_data').value;
             RRObject.DocumentReference = document.getElementById('RRDocReference').value;
@@ -2290,7 +2291,7 @@
             getPOBySupplierInPOStatus();
             document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Receiving Receipt</a> ' + ' > Receiving Receipt Detail';
             document.getElementById('RR_Lock').disabled = true;
-            document.getElementById('RRRRNumber').disabled = true;
+            document.getElementById('RRRRNumber_Display').disabled = true;
 
             cboBranch = new wijmo.input.ComboBox('#RRbranch');
 

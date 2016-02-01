@@ -844,6 +844,12 @@
                 backdrop: 'static'
             });
 
+            $('.requiredBranch').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             $("#cmdSaveBranchButton").prop("disabled", false);
             $("#cmdBranchDetailCloseButton").prop("disabled", false);
 
@@ -933,17 +939,41 @@
                                 $("#cmdSaveBranchButton").prop("disabled", true);
                                 $("#cmdBranchDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
+
+                                $('#branchEdit').modal('hide');
+
+                                branches = new wijmo.collections.CollectionView(getBranchByCompanyId());
+                                branches.canFilter = true;
+                                branches.pageSize = 15;
+
+                                var filterText = '';
+                                $('#InputFilter').keyup(function () {
+                                    filterText = this.value.toLowerCase();
+                                    branches.refresh();
+                                });
+                                branches.filter = function (item) {
+                                    return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1);
+                                }
+                                branches.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsBranch();
+                                });
+                                //branches.currentChanged.addHandler(function (sender, args) {
+                                //    updateDetails();
+                                //});
+
+                                // Flex Grid
+                                branchGrid.itemsSource = branches;
+                                branchGrid.trackChanges = true;
                             },
                             404: function () {
                                 toastr.error("Can't Save");
+                                $('#branchEdit').modal('hide');
                                 $("#cmdSaveBranchButton").prop("disabled", false);
                                 $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $('#branchEdit').modal('hide');
                                 $("#cmdSaveBranchButton").prop("disabled", false);
                                 $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             }
@@ -961,17 +991,41 @@
                                 $("#cmdSaveBranchButton").prop("disabled", true);
                                 $("#cmdBranchDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
+
+                                $('#branchEdit').modal('hide');
+
+                                branches = new wijmo.collections.CollectionView(getBranchByCompanyId());
+                                branches.canFilter = true;
+                                branches.pageSize = 15;
+
+                                var filterText = '';
+                                $('#InputFilter').keyup(function () {
+                                    filterText = this.value.toLowerCase();
+                                    branches.refresh();
+                                });
+                                branches.filter = function (item) {
+                                    return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1);
+                                }
+                                branches.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsBranch();
+                                });
+                                //branches.currentChanged.addHandler(function (sender, args) {
+                                //    updateDetails();
+                                //});
+
+                                // Flex Grid
+                                branchGrid.itemsSource = branches;
+                                branchGrid.trackChanges = true;
                             },
                             404: function () {
                                 toastr.error("Can't Update");
+                                $('#branchEdit').modal('hide');
                                 $("#cmdSaveBranchButton").prop("disabled", false);
                                 $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $('#branchEdit').modal('hide');
                                 $("#cmdSaveBranchButton").prop("disabled", false);
                                 $("#cmdBranchDetailCloseButton").prop("disabled", false);
                             }
@@ -989,6 +1043,12 @@
             $('#branchEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+            
+            $('.requiredBranch').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveBranchButton").prop("disabled", false);
@@ -1014,6 +1074,7 @@
                 show: true,
                 backdrop: 'static'
             });
+
             $("#cmdConfirmDeleteBranch").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
@@ -1034,9 +1095,31 @@
                         $("#cmdConfirmDeleteBranch").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+
+                        $('#deleteBranchConfirm').modal('hide');
+
+                        branches = new wijmo.collections.CollectionView(getBranchByCompanyId());
+                        branches.canFilter = true;
+                        branches.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            branches.refresh();
+                        });
+                        branches.filter = function (item) {
+                            return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        branches.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsBranch();
+                        });
+                        //branches.currentChanged.addHandler(function (sender, args) {
+                        //    updateDetails();
+                        //});
+
+                        // Flex Grid
+                        branchGrid.itemsSource = branches;
+                        branchGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");

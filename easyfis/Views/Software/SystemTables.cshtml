@@ -1158,6 +1158,12 @@
                 backdrop: 'static'
             });
 
+            $('.requiredDiscount').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             $("#cmdSaveDiscountButton").prop("disabled", false);
             $("#cmdDiscountDetailCloseButton").prop("disabled", false);
 
@@ -1194,6 +1200,12 @@
             $('#discountEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+
+            $('.requiredDiscount').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveDiscountButton").prop("disabled", false);
@@ -1753,6 +1765,12 @@
                 backdrop: 'static'
             });
 
+            $('.requiredPayType').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
             $("#cmdSavePayTypeButton").prop("disabled", false);
             $("#cmdPayTypeDetailCloseButton").prop("disabled", false);
 
@@ -1783,6 +1801,12 @@
             $('#payTypeEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+
+            $('.requiredPayType').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSavePayTypeButton").prop("disabled", false);
@@ -2324,6 +2348,12 @@
                 show: true,
                 backdrop: 'static'
             });
+        
+            $('.requiredTaxType').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             $("#cmdSaveTaxTypeButton").prop("disabled", false);
             $("#cmdTaxTypeDetailCloseButton").prop("disabled", false);
@@ -2361,6 +2391,12 @@
             $('#taxEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+            
+            $('.requiredTaxType').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveTaxTypeButton").prop("disabled", false);
@@ -2848,6 +2884,12 @@
                 show: true,
                 backdrop: 'static'
             });
+        
+            $('.requiredUnit').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             $("#cmdSaveUnitButton").prop("disabled", false);
             $("#cmdUnitDetailCloseButton").prop("disabled", false);
@@ -2871,6 +2913,12 @@
             $('#unitEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+            
+            $('.requiredUnit').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveUnitButton").prop("disabled", false);
@@ -3317,6 +3365,12 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $('.requiredTerm').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             $("#cmdSaveTermButton").prop("disabled", false);
             $("#cmdTermDetailCloseButton").prop("disabled", false);
@@ -3347,6 +3401,12 @@
             $('#termEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+            
+            $('.requiredTerm').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveTermButton").prop("disabled", false);
@@ -3935,6 +3995,12 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $('.requiredEmployee').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             $("#cmdSaveEmployeeButton").prop("disabled", false);
             $("#cmdEmployeeDetailCloseButton").prop("disabled", false);
@@ -3995,6 +4061,12 @@
             $('#employeeEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+            
+            $('.requiredEmployee').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveEmployeeButton").prop("disabled", false);
@@ -4757,6 +4829,12 @@
                 show: true,
                 backdrop: 'static'
             });
+        
+            $('.requiredArticleGroup').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             $("#cmdSaveArticleGroupButton").prop("disabled", false);
             $("#cmdArticleGroupDetailCloseButton").prop("disabled", false);
@@ -4801,6 +4879,12 @@
             $('#articleGroupEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+            
+            $('.requiredArticleGroup').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveArticleGroupButton").prop("disabled", false);
@@ -5464,6 +5548,12 @@
                 show: true,
                 backdrop: 'static'
             });
+        
+            $('.requiredArticle').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             $("#cmdSaveArticleButton").prop("disabled", false);
             $("#cmdArticleDetailCloseButton").prop("disabled", false);
@@ -5525,6 +5615,12 @@
             $('#articleEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+            
+            $('.requiredArticle').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             $("#cmdSaveArticleButton").prop("disabled", false);
@@ -5640,7 +5736,7 @@
             otherArticleObject.Address = document.getElementById('article_Address').value;
             otherArticleObject.ContactNumber = document.getElementById('article_ContactNumber').value;
             otherArticleObject.IsLocked = document.getElementById('article_Lock').checked;
-            
+
             var otherArticleData = JSON.stringify(otherArticleObject);
 
             if( document.getElementById('article_Account_data').value == '') {

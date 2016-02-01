@@ -301,7 +301,9 @@
                 show: true,
                 backdrop: 'static'
             });
-           
+
+            $("#cmdConfirmDeleteItem").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
         // Item Confirm Delete Button
         function cmdItemConfirmDeleteButton_OnClick() {
@@ -320,9 +322,31 @@
                         $("#cmdConfirmDeleteItem").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                        
+                        $('#deleteItemConfirm').modal('hide');
+
+                        items = new wijmo.collections.CollectionView(getArtcileForItems());
+                        items.canFilter = true;
+                        items.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            items.refresh();
+                        });
+                        items.filter = function (item) {
+                            return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        items.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsItems();
+                        });
+                        items.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        // Flex Grid
+                        itemGrid.itemsSource = items;
+                        itemGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");

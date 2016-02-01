@@ -270,6 +270,7 @@
                 show: true,
                 backdrop: 'static'
             });
+
             $("#cmdConfirmDeleteStockTransfer").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
@@ -290,9 +291,32 @@
                         $("#cmdConfirmDeleteStockTransfer").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                       
+                        $('#deleteStockTransferConfirm').modal('hide');
+
+                        var STDateFilter = document.getElementById('filterDate_data').value;
+                        stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate(STDateFilter));
+                        stockTransfers.canFilter = true;
+                        stockTransfers.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            stockTransfers.refresh();
+                        });
+                        stockTransfers.filter = function (item) {
+                            return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        stockTransfers.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsStockTransfer();
+                        });
+                        stockTransfers.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        // Flex Grid
+                        stockTransferGrid.itemsSource = stockTransfers;
+                        stockTransferGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");

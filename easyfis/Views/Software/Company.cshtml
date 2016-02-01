@@ -243,6 +243,7 @@
                 show: true,
                 backdrop: 'static'
             });
+
             $("#cmdConfirmDeleteCompany").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
@@ -263,9 +264,31 @@
                         $("#cmdConfirmDeleteCompany").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                        
+                        $('#deleteCompanyConfirm').modal('hide');
+
+                        companies = new wijmo.collections.CollectionView(getCompany());
+                        companies.canFilter = true;
+                        companies.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            companies.refresh();
+                        });
+                        companies.filter = function (item) {
+                            return !filterText || (item.Company.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        companies.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsCompany();
+                        });
+                        companies.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        // Flex Grid
+                        companyGrid.itemsSource = companies;
+                        companyGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");
