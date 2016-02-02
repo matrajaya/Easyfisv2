@@ -10,9 +10,26 @@ namespace easyfis.Business
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        public void postJournal(Int32 JVId)
-        {
+        // ============================
+        // Receiving Receipt in Journal
+        // ============================
+        // Insert Receiving Receipt in Journal
+        public void insertRRJournal(Int32 RRId)
+        { 
+        
+        }
+        // delete Receiving Receipt in Journal
+        public void deleteRRJournal(Int32 RRId)
+        { 
+        
+        }
 
+        // ==========================
+        // Journal Voucher in Journal
+        // ==========================
+        // Insert Journal Voucher in Journal
+        public void insertJVJournal(Int32 JVId)
+        {
             var journalVoucherLines = from d in db.TrnJournalVoucherLines
                                       where d.JVId == JVId
                                       select new Models.TrnJournalVoucherLine
@@ -68,8 +85,8 @@ namespace easyfis.Business
                 Debug.WriteLine(e);
             }
         }
-
-        public void deleteJournal(Int32 JVId)
+        // Delete Journal Voucher in Journal
+        public void deleteJVJournal(Int32 JVId)
         {
             try
             {

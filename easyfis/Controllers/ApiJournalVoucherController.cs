@@ -278,16 +278,13 @@ namespace easyfis.Controllers
                     updateJournalVoucher.UpdatedById = mstUserId;
                     updateJournalVoucher.UpdatedDateTime = date;
 
-
                     if (updateJournalVoucher.IsLocked == true)
                     {
-                        Debug.WriteLine(updateJournalVoucher.IsLocked);
-                        postJournal.postJournal(journalVoucherId);
+                        postJournal.insertJVJournal(journalVoucherId);
                     }
                     else
                     {
-                        Debug.WriteLine(updateJournalVoucher.IsLocked);
-                        postJournal.deleteJournal(journalVoucherId);
+                        postJournal.deleteJVJournal(journalVoucherId);
                     }
 
                     db.SubmitChanges();
@@ -329,16 +326,13 @@ namespace easyfis.Controllers
                     updateJournalVoucher.UpdatedById = mstUserId;
                     updateJournalVoucher.UpdatedDateTime = date;
 
-
                     if (updateJournalVoucher.IsLocked == true)
                     {
-                        Debug.WriteLine(updateJournalVoucher.IsLocked);
-                        postJournal.postJournal(journalVoucherId);
+                        postJournal.insertJVJournal(journalVoucherId);
                     }
                     else
                     {
-                        Debug.WriteLine(updateJournalVoucher.IsLocked);
-                        postJournal.deleteJournal(journalVoucherId);
+                        postJournal.deleteJVJournal(journalVoucherId);
                     }
 
                     db.SubmitChanges();
