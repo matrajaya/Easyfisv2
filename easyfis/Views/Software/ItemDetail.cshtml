@@ -173,9 +173,9 @@
                     @*<li role="presentation" class="active"><a data-toggle="tab" href="#UnitConversion" id="unitConversionTabId">Unit Conversion</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#Component" id="componentTabId">Component</a></li>*@
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Price" id="priceTabId">Price</a></li>
-                    @*<li role="presentation"><a data-toggle="tab" href="#Inventory" id="inventoryTabId">Inventory</a></li>*@
+                    <li role="presentation"><a data-toggle="tab" href="#Inventory" id="inventoryTabId">Inventory</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#GLAccount" id="glAccountTabId">GL Account</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#FixedAsset" id="fixedAssetTabId">Fixed Asset</a></li>
+                    @*<li role="presentation"><a data-toggle="tab" href="#FixedAsset" id="fixedAssetTabId">Fixed Asset</a></li>*@
                 </ul>
                 <br />
                 <div class="tab-content">
@@ -325,9 +325,9 @@
                                     <input type="text" class="form-control input-sm" id="InputFilterInventory" placeholder="Search">
                                 </div>
                             </div>
-                            <div class="col-lg-8" align="right">
+                            @*<div class="col-lg-8" align="right">
                                 <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            </div>
+                            </div>*@
                         </div>
                         <br />
                         <div class="row" align="left">
@@ -439,13 +439,13 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Useful Life (Years):</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredItem" id="Item_UsefulLife" />
+                                                <input type="text" class="form-control input-sm" id="Item_UsefulLife" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Salvage Value:</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredItem" id="Item_SalvageValue" />
+                                                <input type="text" class="form-control input-sm" id="Item_SalvageValue" />
                                             </div>
                                         </div>
                                     </div>
@@ -1442,8 +1442,8 @@
             itemObject.IsInventory = document.getElementById('articleItem_Inventory').checked;
             itemObject.Particulars = document.getElementById('articleItem_particulars').value;
             itemObject.DateAcquired = document.getElementById('Item_DateAcquired_data').value;
-            itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
-            itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
+            //itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
+            //itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
             itemObject.ManualArticleOldCode = document.getElementById('articleItem_oldManualCode').value;
             itemObject.IsLocked = true;
             var data = JSON.stringify(itemObject);
@@ -1687,8 +1687,8 @@
             itemObject.IsInventory = document.getElementById('articleItem_Inventory').checked;
             itemObject.Particulars = document.getElementById('articleItem_particulars').value;
             itemObject.DateAcquired = document.getElementById('Item_DateAcquired_data').value;
-            itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
-            itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
+            //itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
+            //itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
             itemObject.ManualArticleOldCode = document.getElementById('articleItem_oldManualCode').value;
             var data = JSON.stringify(itemObject);
 
@@ -2949,42 +2949,37 @@
         // ==================
         function getInventory() {
             var inventories = new wijmo.collections.ObservableArray;
-            //$('#loadingModal').modal('show');
-            //$.ajax({
-            //    url: '/api/listAccount',
-            //    cache: false,
-            //    type: 'GET',
-            //    contentType: 'application/json; charset=utf-8',
-            //    data: {},
-            //    success: function (Results) {
-            //        $('#loadingModal').modal('hide');
-            //        if (Results.length > 0) {
-            //            for (i = 0; i < Results.length; i++) {
-            //                journalLedger.push({
-            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-            //                    Id: Results[i]["Id"],
-            //                    AccountCode: Results[i]["AccountCode"],
-            //                    Account: Results[i]["Account"],
-            //                    AccountTypeId: Results[i]["AccountTypeId"],
-            //                    AccountType: Results[i]["AccountType"],
-            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
-            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
-            //                    IsLocked: Results[i]["IsLocked"],
-            //                    CreatedById: Results[i]["CreatedById"],
-            //                    CreatedBy: Results[i]["CreatedBy"],
-            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
-            //                    UpdatedById: Results[i]["UpdatedById"],
-            //                    UpdatedBy: Results[i]["UpdatedBy"],
-            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-            //                });
-            //            }
-            //        }
-            //    }
-            //}).fail(function (xhr, textStatus, err) {
-            //    alert(err);
-            //});
-            //return inventories;
+            var articleId = @itemId;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listArticleInventoryByArticleId/' + articleId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            inventories.push({
+                                Id: Results[i]["Id"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
+                                InventoryCode: Results[i]["InventoryCode"],
+                                Quantity: Results[i]["Quantity"],
+                                Cost: Results[i]["Cost"],
+                                Amount: Results[i]["Amount"],
+                                Particulars: Results[i]["Particulars"],
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return inventories;
         }
         // ================================
         // FlexGrid Selection for Inventory
@@ -3029,7 +3024,7 @@
         //  Inventory
         // ==========
         function inventoryTab() {
-            inventories = new wijmo.collections.CollectionView();
+            inventories = new wijmo.collections.CollectionView(getInventory());
             inventories.canFilter = true;
             inventories.pageSize = 15;
 
@@ -3039,7 +3034,7 @@
                 inventories.refresh();
             });
             inventories.filter = function (item) {
-                return !filterTextUnitInventory || (item.inventories.toLowerCase().indexOf(filterTextUnitInventory) > -1);
+                return !filterTextUnitInventory || (item.InventoryCode.toLowerCase().indexOf(filterTextUnitInventory) > -1);
             }
             inventories.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsInventory();
@@ -3053,56 +3048,38 @@
             inventoryGrid.initialize({
                 columns: [
                             {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 60,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
                                 "header": "Branch",
-                                //"binding": "Date",
+                                "binding": "Branch",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": "3*",
                             },
                             {
                                 "header": "Code.",
-                                // "binding": "Doc Ref.",
+                                "binding": "InventoryCode",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": "2*"
                             },
                             {
                                 "header": "Quantity",
-                                // "binding": "Branch",
+                                "binding": "Quantity",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": "1*"
                             },
                             {
                                 "header": "Cost",
-                                // "binding": "Account",
+                                "binding": "Cost",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": "1*"
                             },
                             {
                                 "header": "Amount",
-                                // "binding": "Account",
+                                "binding": "Amount",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": "1*"
                             },
                 ],
                 autoGenerateColumns: false,
-                //itemsSource: inventories,
+                itemsSource: inventories,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,

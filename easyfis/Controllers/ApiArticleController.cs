@@ -583,8 +583,8 @@ namespace easyfis.Controllers
                     newArticle.TaxNumber = "NA";
                     newArticle.CreditLimit = 0;
                     newArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
-                    newArticle.UsefulLife = article.UsefulLife;
-                    newArticle.SalvageValue = article.SalvageValue;
+                    newArticle.UsefulLife = 0;
+                    newArticle.SalvageValue = 0;
                     newArticle.ManualArticleOldCode = article.ManualArticleOldCode;
 
                     newArticle.IsLocked = isLocked;
@@ -781,8 +781,8 @@ namespace easyfis.Controllers
                         updateArticle.TaxNumber = "NA";
                         updateArticle.CreditLimit = 0;
                         updateArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
-                        updateArticle.UsefulLife = article.UsefulLife;
-                        updateArticle.SalvageValue = article.SalvageValue;
+                        updateArticle.UsefulLife = 0;
+                        updateArticle.SalvageValue = 0;
                         updateArticle.ManualArticleOldCode = article.ManualArticleOldCode;
 
                         updateArticle.IsLocked = article.IsLocked;

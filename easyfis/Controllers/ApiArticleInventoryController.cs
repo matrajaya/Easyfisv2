@@ -45,7 +45,9 @@ namespace easyfis.Controllers
                                      {
                                          Id = d.Id,
                                          BranchId = d.BranchId,
+                                         Branch = d.MstBranch.Branch,
                                          ArticleId = d.ArticleId,
+                                         Article = d.MstArticle.Article,
                                          InventoryCode = d.InventoryCode,
                                          Quantity = d.Quantity,
                                          Cost = d.Cost,

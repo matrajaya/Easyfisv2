@@ -240,14 +240,14 @@
                                 <dd>
                                     <div id="JVL_APRRId" class="comboBox-wide"></div>
 
-                                    <input type="hidden" id="JVL_APRRId_data" class="requiredJournalVoucherLine" />
+                                    <input type="hidden" id="JVL_APRRId_data"/>
                                     <input type="hidden" id="JVL_APRRId_selectedValue" />
                                 </dd>
                                 <dt>SI No:</dt>
                                 <dd>
                                     <div id="JVL_ARSIId" class="comboBox-wide"></div>
 
-                                    <input type="hidden" id="JVL_ARSIId_data" class="requiredJournalVoucherLine" />
+                                    <input type="hidden" id="JVL_ARSIId_data" />
                                     <input type="hidden" id="JVL_ARSIId_selectedValue" />
                                 </dd>
                                 <dt>Is Clear:</dt>
@@ -1648,6 +1648,12 @@
                 show: true,
                 backdrop: 'static'
             });
+            
+            $('.requiredJournalVoucherLine').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
 
             getBranchesForComboBoxInJournalVoucherLine();
             getAccountsForComboBoxInJournalVoucherLine();
@@ -1684,6 +1690,12 @@
             $('#journalVoucherLineEdit').modal({
                 show: true,
                 backdrop: 'static'
+            });
+
+            $('.requiredJournalVoucherLine').each(function () {
+                $(this).css({
+                    "border": "",
+                });
             });
 
             getBranchesForComboBoxInJournalVoucherLine();
@@ -1754,18 +1766,6 @@
                 document.getElementById("JVL_Aritcle_Id").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('JVL_APRRId_data').value == '') {
-                document.getElementById("JVL_APRRId").style.border = "1px solid red";
-            } else {
-                document.getElementById("JVL_APRRId").style.border = "1px solid #C8C8C8   ";
-            }
-
-            if( document.getElementById('JVL_ARSIId_data').value == '') {
-                document.getElementById("JVL_ARSIId").style.border = "1px solid red";
-            } else {
-                document.getElementById("JVL_ARSIId").style.border = "1px solid #C8C8C8   ";
-            }
-
             var isValid = true;
             $('.requiredJournalVoucherLine').each(function () {
                 if ($.trim($(this).val()) == '') {
@@ -1799,17 +1799,38 @@
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
+                                
+                                $('#journalVoucherLineEdit').modal('hide');
+
+                                journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLineByJVId());
+                                journalVoucherLines.canFilter = true;
+                                journalVoucherLines.pageSize = 15;
+
+                                var filterTextJournalVoucherLine = '';
+                                $('#InputFilterJournalVoucherLine').keyup(function () {
+                                    filterTextJournalVoucherLine = this.value.toLowerCase();
+                                    journalVoucherLines.refresh();
+                                });
+                                journalVoucherLines.filter = function (item) {
+                                    return !filterTextJournalVoucherLine || (item.Branch.toLowerCase().indexOf(filterTextJournalVoucherLine) > -1);
+                                }
+                                journalVoucherLines.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsJournalVoucherLine();
+                                });
+
+                                // Flex Grid
+                                journalVoucherLineGrid.itemsSource = journalVoucherLines;
+                                journalVoucherLineGrid.trackChanges = true;
                             },
                             404: function () {
                                 toastr.error("Can't Save");
+                                $('#journalVoucherLineEdit').modal('hide');
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $('#journalVoucherLineEdit').modal('hide');
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                             }
@@ -1827,17 +1848,38 @@
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
+                               
+                                $('#journalVoucherLineEdit').modal('hide');
+
+                                journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLineByJVId());
+                                journalVoucherLines.canFilter = true;
+                                journalVoucherLines.pageSize = 15;
+
+                                var filterTextJournalVoucherLine = '';
+                                $('#InputFilterJournalVoucherLine').keyup(function () {
+                                    filterTextJournalVoucherLine = this.value.toLowerCase();
+                                    journalVoucherLines.refresh();
+                                });
+                                journalVoucherLines.filter = function (item) {
+                                    return !filterTextJournalVoucherLine || (item.Branch.toLowerCase().indexOf(filterTextJournalVoucherLine) > -1);
+                                }
+                                journalVoucherLines.collectionChanged.addHandler(function (sender, args) {
+                                    updateNavigateButtonsJournalVoucherLine();
+                                });
+
+                                // Flex Grid
+                                journalVoucherLineGrid.itemsSource = journalVoucherLines;
+                                journalVoucherLineGrid.trackChanges = true;
                             },
                             404: function () {
                                 toastr.error("Can't Update");
+                                $('#journalVoucherLineEdit').modal('hide');
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                             },
                             400: function () {
                                 toastr.error("Bad Request");
+                                $('#journalVoucherLineEdit').modal('hide');
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
                             }
@@ -1855,6 +1897,7 @@
                 show: true,
                 backdrop: 'static'
             });
+
             $("#cmdConfirmDeleteJournalVoucherLine").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButtonJournalVoucherLine").prop("disabled", false);
         }
@@ -1875,17 +1918,40 @@
                         $("#cmdConfirmDeleteJournalVoucherLine").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButtonJournalVoucherLine").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                        
+                        $('#deleteJournalVoucherConfirm').modal('hide');
+
+                        journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLineByJVId());
+                        journalVoucherLines.canFilter = true;
+                        journalVoucherLines.pageSize = 15;
+
+                        var filterTextJournalVoucherLine = '';
+                        $('#InputFilterJournalVoucherLine').keyup(function () {
+                            filterTextJournalVoucherLine = this.value.toLowerCase();
+                            journalVoucherLines.refresh();
+                        });
+                        journalVoucherLines.filter = function (item) {
+                            return !filterTextJournalVoucherLine || (item.Branch.toLowerCase().indexOf(filterTextJournalVoucherLine) > -1);
+                        }
+                        journalVoucherLines.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsJournalVoucherLine();
+                        });
+
+                        // Flex Grid
+                        journalVoucherLineGrid.itemsSource = journalVoucherLines;
+                        journalVoucherLineGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");
                         $('#deleteJournalVoucherConfirm').modal('hide');
+                        $("#cmdConfirmDeleteJournalVoucherLine").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonJournalVoucherLine").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deleteJournalVoucherConfirm').modal('hide');
+                        $("#cmdConfirmDeleteJournalVoucherLine").prop("disabled", false);
+                        $("#cmdConfirmDeleteCloseButtonJournalVoucherLine").prop("disabled", false);
                     }
                 }
             });

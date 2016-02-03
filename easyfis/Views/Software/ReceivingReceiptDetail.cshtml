@@ -43,7 +43,7 @@
                         <h4 id="RRDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="cmdRRJournal"><i class="fa fa-book"></i> Journal</button>
+                        <button class="btn btn-primary btn-sm" id="cmdRRJournal" onclick="RRJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdSaveRRSave" onclick="RRSaveSaveButton_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdRRSave" onclick="RRSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdRREdit" onclick="RREditButton_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
@@ -357,6 +357,67 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journal Detail -->
+        <div class="modal fade" id="journalDetail" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row" align="left">
+                            <center>
+                                <h4>
+                                    <span id="loadingJournalGridList"></span>
+                                </h4>
+                            </center>
+                            <div class="col-lg-12">
+                                <div id="journalGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="row" id="footerModalJournalNavigationButtons">
+                            <div class="btn-group col-md-9" id="navigationPageGridJournal">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournal"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <table>
+                                    <tr>
+                                        <td align="right"> <b>Total Debit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalDebitInJournal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"> <b>Total Credit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalCreditInJournal"></span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @*<button class="btn btn-primary btn-sm" id="cmdSaveJournalButton" onclick="cmdJournalSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                        <button id="cmdJournalDetailCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
                     </div>
                 </div>
             </div>
@@ -4292,6 +4353,177 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
+        var journals;
+        var journalListGrid;
+        
+        var btnFirstPageGridJournal;
+        var btnPreviousPageGridJournal;
+        var btnNextPageGridJournal;
+        var btnLastPageGridJournal;
+        var btnCurrentPageGridJournal;
+
+        // ==============================
+        // Navigation Buttons for Journal
+        // ==============================
+        function updateNavigateButtonsJournal() {
+            if (journals.pageSize <= 0) {
+                document.getElementById('navigationPageGridJournal').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridJournal').style.display = 'block';
+            if (journals.pageIndex === 0) {
+                btnFirstPageGridJournal.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            } else if (journals.pageIndex === (journals.pageCount - 1)) {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            }
+            btnCurrentPageGridJournal.innerHTML = (journals.pageIndex + 1) + ' / ' + journals.pageCount;
+        }
+
+        // ============
+        // Journal List
+        // ============
+        function RRJournal_OnClick() {
+            journals = new wijmo.collections.CollectionView();
+            journals.pageSize = 10;
+
+            document.getElementById("loadingJournalGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Journal...';
+
+            $("#loadingJournalGridList").show();
+            $("#footerModalJournalNavigationButtons").hide();
+            setTimeout(function() {
+                $("#loadingJournalGridList").hide();
+                $("#footerModalJournalNavigationButtons").show();
+                // Flex Grid
+                journalListGrid = new wijmo.grid.FlexGrid('#journalGrid');
+                journalListGrid.initialize({
+                    columns: [
+                                //{
+                                //    "header": "Edit",
+                                //    "binding": "EditId",
+                                //    "width": 60,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                //{
+                                //    "header": "Delete",
+                                //    "binding": "DeleteId",
+                                //    "width": 70,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                {
+                                    "header": "Journal Date",
+                                    "binding": "JournalDate",
+                                    "allowSorting": true,
+                                    "width": 150,
+                                },
+                                {
+                                    "header": "Branch",
+                                    "binding": "Branch",
+                                    "allowSorting": true,
+                                    "width": 220
+                                },
+                                {
+                                    "header": "Account",
+                                    "binding": "Account",
+                                    "allowSorting": true,
+                                    "width": 250
+                                },
+                                {
+                                    "header": "Article",
+                                    "binding": "Article",
+                                    "allowSorting": true,
+                                    "width": 350
+                                }
+                                ,
+                                {
+                                    "header": "Particulars",
+                                    "binding": "Particulars",
+                                    "allowSorting": true,
+                                    "width": 300
+                                }
+                                ,
+                                {
+                                    "header": "Debit Amount",
+                                    "binding": "DebitAmount",
+                                    "allowSorting": true,
+                                    "width": 130
+                                }
+                                ,
+                                {
+                                    "header": "Credit Amount",
+                                    "binding": "CreditAmount",
+                                    "allowSorting": true,
+                                    "width": 130
+                                }
+
+                    ],
+                    autoGenerateColumns: false,
+                    itemsSource: journals,
+                    isReadOnly: true,
+                    autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                    allowDragging: wijmo.grid.AllowDragging.None,
+                    selectionMode: wijmo.grid.SelectionMode.Row
+                });
+
+                journalListGrid.trackChanges = true;
+
+
+                //Navigation button
+                btnFirstPageGridJournal = document.getElementById('btnMoveToFirstPageGridJournal');
+                btnPreviousPageGridJournal = document.getElementById('btnMoveToPreviousPageGridJournal');
+                btnNextPageGridJournal = document.getElementById('btnMoveToNextPageGridJournal');
+                btnLastPageGridJournal = document.getElementById('btnMoveToLastPageGridJournal');
+                btnCurrentPageGridJournal = document.getElementById('btnCurrentPageGridJournal');
+
+                updateNavigateButtonsJournal();
+
+                btnFirstPageGridJournal.addEventListener('click', function () {
+                    journals.moveToFirstPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnPreviousPageGridJournal.addEventListener('click', function () {
+                    journals.moveToPreviousPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnNextPageGridJournal.addEventListener('click', function () {
+                    journals.moveToNextPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnLastPageGridJournal.addEventListener('click', function () {
+                    journals.moveToLastPage();
+                    updateNavigateButtonsJournal();
+                });
+
+            }, 1000);
+        }
+
+        $('#cmdRRJournal').click(function () {
+            $('#journalDetail').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            window.RRJournal_OnClick = function () {
+                return true;
+            };
+        });
+
         // ====
         // TABS
         // ====
