@@ -5,12 +5,15 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
     public class ApiReceivingReceiptController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+        private Business.Inventory inventory = new Business.Inventory();
+        private Business.PostJournal journal = new Business.PostJournal();
 
         // ======================
         // LIST Receiving Receipt
@@ -336,13 +339,13 @@ namespace easyfis.Controllers
 
                     if (updatereceivingReceipt.IsLocked == true)
                     {
-                        Business.Inventory inventory = new Business.Inventory();
                         inventory.InsertRRInventory(receivingReceipt_Id);
+                        journal.insertRRJournal(receivingReceipt_Id);
                     }
                     else
                     {
-                        Business.Inventory inventory = new Business.Inventory();
                         inventory.deleteRRInventory(receivingReceipt_Id);
+                        journal.deleteRRJournal(receivingReceipt_Id);
                     }
 
                     db.SubmitChanges();
@@ -355,8 +358,9 @@ namespace easyfis.Controllers
                 }
 
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
@@ -387,13 +391,13 @@ namespace easyfis.Controllers
 
                     if (updatereceivingReceipt.IsLocked == true)
                     {
-                        Business.Inventory inventory = new Business.Inventory();
                         inventory.InsertRRInventory(receivingReceipt_Id);
+                        journal.insertRRJournal(receivingReceipt_Id);
                     }
                     else
                     {
-                        Business.Inventory inventory = new Business.Inventory();
                         inventory.deleteRRInventory(receivingReceipt_Id);
+                        journal.deleteRRJournal(receivingReceipt_Id);
                     }
 
                     db.SubmitChanges();
