@@ -297,8 +297,9 @@ namespace easyfis.Controllers
                 }
 
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }

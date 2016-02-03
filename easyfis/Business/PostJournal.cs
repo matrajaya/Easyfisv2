@@ -21,6 +21,8 @@ namespace easyfis.Business
                                         group d by new
                                         {
                                             BranchId = d.BranchId,
+                                            BranchCode = d.MstBranch.BranchCode,
+                                            RRNumber = d.TrnReceivingReceipt.RRNumber,
                                             AccountId = d.MstArticle.AccountId,
                                             VATId = d.VATId,
                                             RRId = d.RRId,
@@ -31,6 +33,8 @@ namespace easyfis.Business
                                         select new Models.TrnReceivingReceiptItem
                                         {
                                             BranchId = g.Key.BranchId,
+                                            BranchCode = g.Key.BranchCode,
+                                            RR = g.Key.RRNumber,
                                             ItemAccountId = g.Key.AccountId,
                                             VATId = g.Key.VATId,
                                             RRId = g.Key.RRId,
@@ -101,7 +105,7 @@ namespace easyfis.Business
                         // Items
                         foreach (var rrItems in receivingReceiptItems)
                         {
-                            Data.TrnJournal newJournalForAccountItems = new Data.TrnJournal();
+                            Data.TrnJournal newRRJournalForAccountItems = new Data.TrnJournal();
 
                             var IsInclusive = (from d in db.MstTaxTypes where d.Id == rrItems.VATId select d.IsInclusive).SingleOrDefault();
 
@@ -114,29 +118,27 @@ namespace easyfis.Business
                                 amount = totalAmount;
                             }
 
-                            Debug.WriteLine("Lahos 1 dri 1");
-                            newJournalForAccountItems.JournalDate = Convert.ToDateTime(rrItems.RRDate);
-                            Debug.WriteLine("Lahos 1 dri 2");
-                            newJournalForAccountItems.BranchId = rrItems.BranchId;
-                            newJournalForAccountItems.JVId = null;
-                            newJournalForAccountItems.AccountId = rrItems.ItemAccountId;
-                            newJournalForAccountItems.ArticleId = rrItems.SupplierId;
-                            newJournalForAccountItems.Particulars = "Items";
-                            newJournalForAccountItems.DebitAmount = amount;
-                            newJournalForAccountItems.CreditAmount = 0;
-                            newJournalForAccountItems.ORId = null;
-                            newJournalForAccountItems.CVId = null;
-                            newJournalForAccountItems.JVId = null;
-                            newJournalForAccountItems.RRId = RRId;
-                            newJournalForAccountItems.SIId = null;
-                            newJournalForAccountItems.INId = null;
-                            newJournalForAccountItems.OTId = null;
-                            newJournalForAccountItems.STId = null;
-                            newJournalForAccountItems.DocumentReference = "RR-" + rrItems.BranchCode + "-" + rrItems.RR;
-                            newJournalForAccountItems.APRRId = null;
-                            newJournalForAccountItems.ARSIId = null;
+                            newRRJournalForAccountItems.JournalDate = Convert.ToDateTime(rrItems.RRDate);
+                            newRRJournalForAccountItems.BranchId = rrItems.BranchId;
+                            newRRJournalForAccountItems.JVId = null;
+                            newRRJournalForAccountItems.AccountId = rrItems.ItemAccountId;
+                            newRRJournalForAccountItems.ArticleId = rrItems.SupplierId;
+                            newRRJournalForAccountItems.Particulars = "Items";
+                            newRRJournalForAccountItems.DebitAmount = amount;
+                            newRRJournalForAccountItems.CreditAmount = 0;
+                            newRRJournalForAccountItems.ORId = null;
+                            newRRJournalForAccountItems.CVId = null;
+                            newRRJournalForAccountItems.JVId = null;
+                            newRRJournalForAccountItems.RRId = RRId;
+                            newRRJournalForAccountItems.SIId = null;
+                            newRRJournalForAccountItems.INId = null;
+                            newRRJournalForAccountItems.OTId = null;
+                            newRRJournalForAccountItems.STId = null;
+                            newRRJournalForAccountItems.DocumentReference = "RR-" + rrItems.BranchCode + "-" + rrItems.RR;
+                            newRRJournalForAccountItems.APRRId = null;
+                            newRRJournalForAccountItems.ARSIId = null;
 
-                            db.TrnJournals.InsertOnSubmit(newJournalForAccountItems);
+                            db.TrnJournals.InsertOnSubmit(newRRJournalForAccountItems);
                         }
 
                         //db.SubmitChanges();
@@ -144,65 +146,62 @@ namespace easyfis.Business
                         // VAT
                         foreach (var rrItemVAT in receivingReceiptItems)
                         {
-                            Data.TrnJournal newJournalForVAT = new Data.TrnJournal();
+                            Data.TrnJournal newRRJournalForVAT = new Data.TrnJournal();
 
                             var VATAccountId = (from d in db.MstTaxTypes where d.Id == rrItemVAT.VATId select d.AccountId).SingleOrDefault();
-                            Debug.WriteLine("Lahos 2 dri 1");
-                            newJournalForVAT.JournalDate = Convert.ToDateTime(rrItemVAT.RRDate);
-                            Debug.WriteLine("Lahos 2 dri 2");
-                            newJournalForVAT.BranchId = rrItemVAT.BranchId;
-                            newJournalForVAT.JVId = null;
-                            newJournalForVAT.AccountId = VATAccountId;
-                            newJournalForVAT.ArticleId = rrItemVAT.SupplierId;
-                            newJournalForVAT.Particulars = "VAT";
-                            newJournalForVAT.DebitAmount = totalVATAmount;
-                            newJournalForVAT.CreditAmount = 0;
-                            newJournalForVAT.ORId = null;
-                            newJournalForVAT.CVId = null;
-                            newJournalForVAT.JVId = null;
-                            newJournalForVAT.RRId = RRId;
-                            newJournalForVAT.SIId = null;
-                            newJournalForVAT.INId = null;
-                            newJournalForVAT.OTId = null;
-                            newJournalForVAT.STId = null;
-                            newJournalForVAT.DocumentReference = "RR-" + rrItemVAT.BranchCode + "-" + rrItemVAT.RR;
-                            newJournalForVAT.APRRId = null;
-                            newJournalForVAT.ARSIId = null;
 
-                            db.TrnJournals.InsertOnSubmit(newJournalForVAT);
+                            newRRJournalForVAT.JournalDate = Convert.ToDateTime(rrItemVAT.RRDate);
+                            newRRJournalForVAT.BranchId = rrItemVAT.BranchId;
+                            newRRJournalForVAT.JVId = null;
+                            newRRJournalForVAT.AccountId = VATAccountId;
+                            newRRJournalForVAT.ArticleId = rrItemVAT.SupplierId;
+                            newRRJournalForVAT.Particulars = "VAT";
+                            newRRJournalForVAT.DebitAmount = totalVATAmount;
+                            newRRJournalForVAT.CreditAmount = 0;
+                            newRRJournalForVAT.ORId = null;
+                            newRRJournalForVAT.CVId = null;
+                            newRRJournalForVAT.JVId = null;
+                            newRRJournalForVAT.RRId = RRId;
+                            newRRJournalForVAT.SIId = null;
+                            newRRJournalForVAT.INId = null;
+                            newRRJournalForVAT.OTId = null;
+                            newRRJournalForVAT.STId = null;
+                            newRRJournalForVAT.DocumentReference = "RR-" + rrItemVAT.BranchCode + "-" + rrItemVAT.RR;
+                            newRRJournalForVAT.APRRId = null;
+                            newRRJournalForVAT.ARSIId = null;
+
+                            db.TrnJournals.InsertOnSubmit(newRRJournalForVAT);
                         }
 
                         //db.SubmitChanges();
 
                         foreach (var rrItemAccountsPayable in receivingReceiptItems)
                         {
-                            Data.TrnJournal newJournalForVAT = new Data.TrnJournal();
+                            Data.TrnJournal newRRJournalForAccountsPayable = new Data.TrnJournal();
 
                             var SupplierAccountId = (from d in db.TrnReceivingReceipts where d.Id == rrItemAccountsPayable.RRId select d.MstArticle.AccountId).SingleOrDefault();
-                            Debug.WriteLine("Lahos 3 dri 1");
-                            newJournalForVAT.JournalDate = Convert.ToDateTime(rrItemAccountsPayable.RRDate);
 
-                            Debug.WriteLine("Lahos 3 dri 2");
-                            newJournalForVAT.BranchId = rrItemAccountsPayable.BranchId;
-                            newJournalForVAT.JVId = null;
-                            newJournalForVAT.AccountId = SupplierAccountId;
-                            newJournalForVAT.ArticleId = rrItemAccountsPayable.SupplierId;
-                            newJournalForVAT.Particulars = "AP";
-                            newJournalForVAT.DebitAmount = 0;
-                            newJournalForVAT.CreditAmount = totalAmount - totalWTAXAmount;
-                            newJournalForVAT.ORId = null;
-                            newJournalForVAT.CVId = null;
-                            newJournalForVAT.JVId = null;
-                            newJournalForVAT.RRId = RRId;
-                            newJournalForVAT.SIId = null;
-                            newJournalForVAT.INId = null;
-                            newJournalForVAT.OTId = null;
-                            newJournalForVAT.STId = null;
-                            newJournalForVAT.DocumentReference = "RR-" + rrItemAccountsPayable.BranchCode + "-" + rrItemAccountsPayable.RR;
-                            newJournalForVAT.APRRId = null;
-                            newJournalForVAT.ARSIId = null;
+                            newRRJournalForAccountsPayable.JournalDate = Convert.ToDateTime(rrItemAccountsPayable.RRDate);
+                            newRRJournalForAccountsPayable.BranchId = rrItemAccountsPayable.BranchId;
+                            newRRJournalForAccountsPayable.JVId = null;
+                            newRRJournalForAccountsPayable.AccountId = SupplierAccountId;
+                            newRRJournalForAccountsPayable.ArticleId = rrItemAccountsPayable.SupplierId;
+                            newRRJournalForAccountsPayable.Particulars = "AP";
+                            newRRJournalForAccountsPayable.DebitAmount = 0;
+                            newRRJournalForAccountsPayable.CreditAmount = totalAmount - totalWTAXAmount;
+                            newRRJournalForAccountsPayable.ORId = null;
+                            newRRJournalForAccountsPayable.CVId = null;
+                            newRRJournalForAccountsPayable.JVId = null;
+                            newRRJournalForAccountsPayable.RRId = RRId;
+                            newRRJournalForAccountsPayable.SIId = null;
+                            newRRJournalForAccountsPayable.INId = null;
+                            newRRJournalForAccountsPayable.OTId = null;
+                            newRRJournalForAccountsPayable.STId = null;
+                            newRRJournalForAccountsPayable.DocumentReference = "RR-" + rrItemAccountsPayable.BranchCode + "-" + rrItemAccountsPayable.RR;
+                            newRRJournalForAccountsPayable.APRRId = null;
+                            newRRJournalForAccountsPayable.ARSIId = null;
 
-                            db.TrnJournals.InsertOnSubmit(newJournalForVAT);
+                            db.TrnJournals.InsertOnSubmit(newRRJournalForAccountsPayable);
                         }
 
                         db.SubmitChanges();
@@ -241,52 +240,86 @@ namespace easyfis.Business
         {
             var journalVoucherLines = from d in db.TrnJournalVoucherLines
                                       where d.JVId == JVId
+                                      group d by new
+                                      {
+                                          BranchId = d.BranchId,
+                                          BranchCode = d.MstBranch.BranchCode,
+                                          JVNumber = d.TrnJournalVoucher.JVNumber,
+                                          AccountId = d.MstArticle.AccountId,
+                                          ArticleId = d.ArticleId,
+                                          JVId = d.JVId,
+                                          JVDate = d.TrnJournalVoucher.JVDate
+
+                                      } into g
                                       select new Models.TrnJournalVoucherLine
                                       {
-                                          Id = d.Id,
-                                          JVId = d.JVId,
-                                          JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
-                                          JVNumber = d.TrnJournalVoucher.JVNumber,
-                                          JVParticulars = d.TrnJournalVoucher.Particulars,
-                                          BranchId = d.BranchId,
-                                          Branch = d.MstBranch.Branch,
-                                          BranchCode = d.MstBranch.BranchCode,
-                                          AccountId = d.AccountId,
-                                          ArticleId = d.ArticleId,
-                                          Particulars = d.Particulars,
-                                          DebitAmount = d.DebitAmount,
-                                          CreditAmount = d.CreditAmount,
-                                          APRRId = d.APRRId,
-                                          ARSIId = d.ARSIId,
-                                          IsClear = d.IsClear
+                                          BranchId = g.Key.BranchId,
+                                          BranchCode = g.Key.BranchCode,
+                                          JVNumber = g.Key.JVNumber,
+                                          AccountId = g.Key.AccountId,
+                                          ArticleId = g.Key.ArticleId,
+                                          JVId = g.Key.JVId,
+                                          JVDate = g.Key.JVDate.ToShortDateString(),
+                                          DebitAmount = g.Sum(d => d.DebitAmount),
+                                          CreditAmount = g.Sum(d => d.CreditAmount),
+                                          //Id = d.Id,
+                                          //JVId = d.JVId,
+                                          //JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                          //JVNumber = d.TrnJournalVoucher.JVNumber,
+                                          //JVParticulars = d.TrnJournalVoucher.Particulars,
+                                          //BranchId = d.BranchId,
+                                          //Branch = d.MstBranch.Branch,
+                                          //BranchCode = d.MstBranch.BranchCode,
+                                          //AccountId = d.AccountId,
+                                          //ArticleId = d.ArticleId,
+                                          //Particulars = d.Particulars,
+                                          //DebitAmount = d.DebitAmount,
+                                          //CreditAmount = d.CreditAmount,
+                                          //APRRId = d.APRRId,
+                                          //ARSIId = d.ARSIId,
+                                          //IsClear = d.IsClear
                                       };
+
+            Decimal totalDebitAmount;
+            Decimal totalCreditAmount;
+
+            if (!journalVoucherLines.Any())
+            {
+                totalDebitAmount = 0;
+                totalCreditAmount = 0;
+            }
+            else
+            {
+                totalDebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
+                totalCreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
+            }
 
             try
             {
                 foreach (var JVLs in journalVoucherLines)
                 {
-                    Data.TrnJournal newJournal = new Data.TrnJournal();
+                    Data.TrnJournal newJVJournal = new Data.TrnJournal();
 
-                    newJournal.JournalDate = Convert.ToDateTime(JVLs.JVDate);
-                    newJournal.BranchId = JVLs.BranchId;
-                    newJournal.AccountId = JVLs.AccountId;
-                    newJournal.ArticleId = JVLs.ArticleId;
-                    newJournal.Particulars = JVLs.Particulars;
-                    newJournal.DebitAmount = JVLs.DebitAmount;
-                    newJournal.CreditAmount = JVLs.CreditAmount;
-                    newJournal.ORId = null;
-                    newJournal.CVId = null;
-                    newJournal.JVId = JVId;
-                    newJournal.RRId = null;
-                    newJournal.SIId = null;
-                    newJournal.INId = null;
-                    newJournal.OTId = null;
-                    newJournal.STId = null;
-                    newJournal.DocumentReference = "JV-" + JVLs.BranchCode + "-" + JVLs.JVNumber;
-                    newJournal.APRRId = null;
-                    newJournal.ARSIId = null;
+                    newJVJournal.JournalDate = Convert.ToDateTime(JVLs.JVDate);
+                    newJVJournal.BranchId = JVLs.BranchId;
+                    newJVJournal.AccountId = JVLs.AccountId;
+                    newJVJournal.ArticleId = JVLs.ArticleId;
+                    newJVJournal.Particulars = "JV";
+                    newJVJournal.DebitAmount = totalDebitAmount;
+                    newJVJournal.CreditAmount = totalCreditAmount;
+                    newJVJournal.ORId = null;
+                    newJVJournal.CVId = null;
+                    newJVJournal.JVId = JVId;
+                    newJVJournal.RRId = null;
+                    newJVJournal.SIId = null;
+                    newJVJournal.INId = null;
+                    newJVJournal.OTId = null;
+                    newJVJournal.STId = null;
+                    newJVJournal.DocumentReference = "JV-" + JVLs.BranchCode + "-" + JVLs.JVNumber;
+                    newJVJournal.APRRId = null;
+                    newJVJournal.ARSIId = null;
 
-                    db.TrnJournals.InsertOnSubmit(newJournal);
+                    db.TrnJournals.InsertOnSubmit(newJVJournal);
                 }
 
                 db.SubmitChanges();
