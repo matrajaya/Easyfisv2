@@ -616,8 +616,19 @@ namespace easyfis.Controllers
                                ARSIId = d.ARSIId,
                            };
 
-            decimal debitTotal = journals.Sum(d => d.DebitAmount);
-            decimal creditTotal = journals.Sum(d => d.CreditAmount);
+            decimal debitTotal;
+            decimal creditTotal;
+
+            if (!journals.Any())
+            {
+                debitTotal = 0;
+                creditTotal = 0;
+            }
+            else
+            {
+                debitTotal = journals.Sum(d => d.DebitAmount);
+                creditTotal = journals.Sum(d => d.CreditAmount);
+            }
 
             foreach (var j in journals)
             {

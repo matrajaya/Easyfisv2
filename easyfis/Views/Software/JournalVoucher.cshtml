@@ -276,6 +276,9 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdJournalVoucherDeleteCompany").prop("disabled", false);
+            $("#cmdConfirmDeleteCloseButtonJournalVoucher").prop("disabled", false);
         }
         // Journal Voucher Confirm Delete Button
         function cmdJournalVoucherConfirmDeleteButton_OnClick() {
@@ -294,9 +297,31 @@
                         $("#cmdJournalVoucherDeleteCompany").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButtonJournalVoucher").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        window.setTimeout(function () {
-                            location.reload()
-                        }, 1000);
+                        
+                        $('#deleteJournalVoucherConfirm').modal('hide');
+
+                        journalVouchers = new wijmo.collections.CollectionView(getJournalVoucher());
+                        journalVouchers.canFilter = true;
+                        journalVouchers.pageSize = 15;
+
+                        var filterTextJournalVoucher = '';
+                        $('#InputFilterJournalVoucher').keyup(function () {
+                            filterTextJournalVoucher = this.value.toLowerCase();
+                            journalVouchers.refresh();
+                        });
+                        journalVouchers.filter = function (item) {
+                            return !filterTextJournalVoucher || (item.JVNumber.toLowerCase().indexOf(filterTextJournalVoucher) > -1);
+                        }
+                        journalVouchers.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsJournalVoucher();
+                        });
+                        journalVouchers.currentChanged.addHandler(function (sender, args) {
+                            updateDetailsJournalVoucher();
+                        });
+
+                        // Flex Grid
+                        journalVoucherGrid.itemsSource = journalVouchers;
+                        journalVoucherGrid.trackChanges = true;
                     },
                     404: function () {
                         toastr.error("Request Not Found");
