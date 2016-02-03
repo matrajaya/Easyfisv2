@@ -18,40 +18,59 @@ namespace easyfis.Business
         {
             var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
                                         where d.RRId == RRId
+                                        group d by new
+                                        {
+                                            BranchId = d.BranchId,
+                                            AccountId = d.MstArticle.AccountId,
+                                            VATId = d.VATId,
+                                            RRId = d.RRId,
+                                            SupplierId = d.TrnReceivingReceipt.SupplierId,
+                                            RRDate = d.TrnReceivingReceipt.RRDate
+
+                                        } into g
                                         select new Models.TrnReceivingReceiptItem
                                         {
-                                            Id = d.Id,
-                                            RRId = d.RRId,
-                                            RR = d.TrnReceivingReceipt.RRNumber,
-                                            RRDate = d.TrnReceivingReceipt.RRDate.ToShortDateString(),
-                                            SupplierId = d.TrnReceivingReceipt.SupplierId,
-                                            POId = d.POId,
-                                            PO = d.TrnPurchaseOrder.PONumber,
-                                            ItemId = d.ItemId,
-                                            Item = d.MstArticle.Article,
-                                            ItemCode = d.MstArticle.ManualArticleCode,
-                                            ItemAccountId = d.MstArticle.AccountId,
-                                            Particulars = d.Particulars,
-                                            UnitId = d.UnitId,
-                                            Unit = d.MstUnit.Unit,
-                                            Quantity = d.Quantity,
-                                            Cost = d.Cost,
-                                            Amount = d.Amount,
-                                            VATId = d.VATId,
-                                            VAT = d.MstTaxType.TaxType,
-                                            VATPercentage = d.VATPercentage,
-                                            VATAmount = d.VATAmount,
-                                            WTAXId = d.WTAXId,
-                                            WTAX = d.MstTaxType1.TaxType,
-                                            WTAXPercentage = d.WTAXPercentage,
-                                            WTAXAmount = d.WTAXAmount,
-                                            BranchId = d.BranchId,
-                                            Branch = d.MstBranch.Branch,
-                                            BranchCode = d.MstBranch.BranchCode,
-                                            BaseUnitId = d.BaseUnitId,
-                                            BaseUnit = d.MstUnit1.Unit,
-                                            BaseQuantity = d.BaseQuantity,
-                                            BaseCost = d.BaseCost
+                                            BranchId = g.Key.BranchId,
+                                            ItemAccountId = g.Key.AccountId,
+                                            VATId = g.Key.VATId,
+                                            RRId = g.Key.RRId,
+                                            SupplierId = g.Key.SupplierId,
+                                            RRDate = g.Key.RRDate.ToShortDateString(),
+                                            VATAmount = g.Sum(d => d.VATAmount),
+                                            WTAXAmount = g.Sum(d => d.WTAXAmount),
+                                            Amount = g.Sum(d => d.Amount)
+                                            //Id = g.Id,
+                                            //RRId = d.RRId,
+                                            //RR = d.TrnReceivingReceipt.RRNumber,
+                                            //RRDate = d.TrnReceivingReceipt.RRDate.ToShortDateString(),
+                                            //SupplierId = d.TrnReceivingReceipt.SupplierId,
+                                            //POId = d.POId,
+                                            //PO = d.TrnPurchaseOrder.PONumber,
+                                            //ItemId = d.ItemId,
+                                            //Item = d.MstArticle.Article,
+                                            //ItemCode = d.MstArticle.ManualArticleCode,
+                                            //ItemAccountId = d.MstArticle.AccountId,
+                                            //Particulars = d.Particulars,
+                                            //UnitId = d.UnitId,
+                                            //Unit = d.MstUnit.Unit,
+                                            //Quantity = d.Quantity,
+                                            //Cost = d.Cost,
+                                            //Amount = d.Amount,
+                                            //VATId = d.VATId,
+                                            //VAT = d.MstTaxType.TaxType,
+                                            //VATPercentage = d.VATPercentage,
+                                            //VATAmount = d.VATAmount,
+                                            //WTAXId = d.WTAXId,
+                                            //WTAX = d.MstTaxType1.TaxType,
+                                            //WTAXPercentage = d.WTAXPercentage,
+                                            //WTAXAmount = d.WTAXAmount,
+                                            //BranchId = d.BranchId,
+                                            //Branch = d.MstBranch.Branch,
+                                            //BranchCode = d.MstBranch.BranchCode,
+                                            //BaseUnitId = d.BaseUnitId,
+                                            //BaseUnit = d.MstUnit1.Unit,
+                                            //BaseQuantity = d.BaseQuantity,
+                                            //BaseCost = d.BaseCost
                                         };
 
             Decimal amount;
@@ -78,6 +97,7 @@ namespace easyfis.Business
                 {
                     if (totalAmount != 0)
                     {
+                      
                         // Items
                         foreach (var rrItems in receivingReceiptItems)
                         {
@@ -94,7 +114,9 @@ namespace easyfis.Business
                                 amount = totalAmount;
                             }
 
+                            Debug.WriteLine("Lahos 1 dri 1");
                             newJournalForAccountItems.JournalDate = Convert.ToDateTime(rrItems.RRDate);
+                            Debug.WriteLine("Lahos 1 dri 2");
                             newJournalForAccountItems.BranchId = rrItems.BranchId;
                             newJournalForAccountItems.JVId = null;
                             newJournalForAccountItems.AccountId = rrItems.ItemAccountId;
@@ -125,8 +147,9 @@ namespace easyfis.Business
                             Data.TrnJournal newJournalForVAT = new Data.TrnJournal();
 
                             var VATAccountId = (from d in db.MstTaxTypes where d.Id == rrItemVAT.VATId select d.AccountId).SingleOrDefault();
-
+                            Debug.WriteLine("Lahos 2 dri 1");
                             newJournalForVAT.JournalDate = Convert.ToDateTime(rrItemVAT.RRDate);
+                            Debug.WriteLine("Lahos 2 dri 2");
                             newJournalForVAT.BranchId = rrItemVAT.BranchId;
                             newJournalForVAT.JVId = null;
                             newJournalForVAT.AccountId = VATAccountId;
@@ -149,15 +172,17 @@ namespace easyfis.Business
                             db.TrnJournals.InsertOnSubmit(newJournalForVAT);
                         }
 
-                        db.SubmitChanges();
+                        //db.SubmitChanges();
 
                         foreach (var rrItemAccountsPayable in receivingReceiptItems)
                         {
                             Data.TrnJournal newJournalForVAT = new Data.TrnJournal();
 
                             var SupplierAccountId = (from d in db.TrnReceivingReceipts where d.Id == rrItemAccountsPayable.RRId select d.MstArticle.AccountId).SingleOrDefault();
-
+                            Debug.WriteLine("Lahos 3 dri 1");
                             newJournalForVAT.JournalDate = Convert.ToDateTime(rrItemAccountsPayable.RRDate);
+
+                            Debug.WriteLine("Lahos 3 dri 2");
                             newJournalForVAT.BranchId = rrItemAccountsPayable.BranchId;
                             newJournalForVAT.JVId = null;
                             newJournalForVAT.AccountId = SupplierAccountId;
