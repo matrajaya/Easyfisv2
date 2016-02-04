@@ -311,7 +311,7 @@
                                         <dd>
                                             <div class="comboBox-wide" id="saleItem_InventoryCode"></div>
 
-                                            <input type="hidden" id="saleItem_InventoryCode_data">
+                                            <input type="hidden" id="saleItem_InventoryCode_data" class="requiredSaleItem">
                                             <input type="hidden" id="saleItem_InventoryCode_selectedValue" />
                                         </dd>
                                         <dt>Quantity:</dt>
@@ -331,6 +331,7 @@
 
                                             <input type="hidden" id="saleItem_Discont_data" class="requiredSaleItem">
                                             <input type="hidden" id="saleItem_Discont_selectedValue" />
+                                            <input type="hidden" id="saleItem_DiscontInclusive" />
                                         </dd>
                                         <dt>Discount Rate:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_DiscountRate" /></dd>
@@ -373,7 +374,7 @@
                                         </dd>
                                         <dt>Quantity:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_BUCQuantity" /></dd>
-                                        <dt>Cost:</dt>
+                                        <dt>Price:</dt>
                                         <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_BUCPrice" /></dd>
                                     </dl>
                                 </div>
@@ -510,7 +511,7 @@
 
                     document.getElementById('SI_Branch_data').value = Results.BranchId;
                     document.getElementById('SI_Branch_selectedValue').value = Results.Branch;
-                    
+
                     document.getElementById('SI_SINumber').value = Results.SINumber;
                     document.getElementById('SI_SINumber_Display').value = Results.SINumber;
                     document.getElementById('SI_SIDate_data').value = Results.SIDate;
@@ -581,7 +582,7 @@
                         $("#cmdSalesEdit").prop("disabled", false);
                         $("#cmdSalesPrint").prop("disabled", false);
                         $("#btnAddSaleItem").prop("disabled", true);
-                        
+
                     } else if(document.getElementById('Sales_IsLocked').value == 'false') {
                         document.getElementById('SI_DocReference').disabled = false;
                         document.getElementById('SI_SIRemarks').disabled = false;
@@ -1749,7 +1750,8 @@
                                 ItemDescription: results[i]["Article"],
                                 UnitId: results[i]["UnitId"],
                                 Unit: results[i]["Unit"],
-                                Particulars: results[i]["Particulars"]
+                                Particulars: results[i]["Particulars"],
+                                Price: results[i]["Price"]
                             });
                         }
                         createCboForManualCode(articleItems);
@@ -1785,6 +1787,7 @@
                     $("#saleItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
                     $("#saleItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
                     $("#saleItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
+                    $("#saleItem_PriceExVAT").val(ManualCodeCollections.items[this.selectedIndex].Price);
 
                     createCboForItemDescription(articleItems);
                     getSalesItemUnitForComboBox();
@@ -1824,7 +1827,12 @@
                             getItemInventoryCodeForComboBox();
                         }
                     });
+                    
+                    var quantity = document.getElementById('saleItem_Quantity').value;
+                    var price = document.getElementById('saleItem_PriceExVAT').value;
 
+                    document.getElementById('saleItem_BUCQuantity').value = quantity;
+                    document.getElementById('saleItem_BUCPrice').value = price;
                 }
             });
         }
@@ -1855,6 +1863,7 @@
                     $("#saleItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
                     $("#saleItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
                     $("#saleItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
+                    $("#saleItem_PriceExVAT").val(ItemDescriptionCollections.items[this.selectedIndex].Price);
 
                     createCboForManualCode(articleItems);
                     getSalesItemUnitForComboBox();
@@ -1894,6 +1903,16 @@
                             getItemInventoryCodeForComboBox();
                         }
                     });
+
+
+                    computeNetPrice();
+                    computeAmount();
+                    
+                    var quantity = document.getElementById('saleItem_Quantity').value;
+                    var price = document.getElementById('saleItem_PriceExVAT').value;
+
+                    document.getElementById('saleItem_BUCQuantity').value = quantity;
+                    document.getElementById('saleItem_BUCPrice').value = price;
                 }
             });
         }
@@ -2083,18 +2102,34 @@
                 InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
             }
 
-            cboInventoryCode.dispose();
-            cboInventoryCode = new wijmo.input.ComboBox('#saleItem_InventoryCode', {
-                disabled: true,
-                placeholder: "Select Inventory Code",
-                itemsSource: InventoryCodeList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('saleItem_InventoryCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#saleItem_InventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
-                }
-            });
+            if(inventories == 0) {
+                cboInventoryCode.dispose();
+                cboInventoryCode = new wijmo.input.ComboBox('#saleItem_InventoryCode', {
+                    disabled: true,
+                    placeholder: "Inventory Code",
+                    itemsSource: InventoryCodeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('saleItem_InventoryCode_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#saleItem_InventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
+                    }
+                });
+            } else {
+                cboInventoryCode.dispose();
+                cboInventoryCode = new wijmo.input.ComboBox('#saleItem_InventoryCode', {
+                    disabled: false,
+                    placeholder: "Select Inventory Code",
+                    itemsSource: InventoryCodeList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('saleItem_InventoryCode_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#saleItem_InventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
+                    }
+                });
+            }
+
         }
 
         // ============
@@ -2146,11 +2181,16 @@
                 onSelectedIndexChanged: function () {
                     $("#saleItem_Discont_data").val(DiscountCollection.items[this.selectedIndex].Id);
                     $("#saleItem_DiscountRate").val(DiscountCollection.items[this.selectedIndex].DiscountRate);
+                    $("#saleItem_DiscontInclusive").val(DiscountCollection.items[this.selectedIndex].IsInclusive);
+
+                    computeNetPrice();
+                    computeAmount();
                 }
             });
 
             document.getElementById('saleItem_Discont_data').value = DiscountCollection.items[cboDiscount.selectedIndex].Id;
             document.getElementById('saleItem_Discont_selectedValue').value = DiscountCollection.items[cboDiscount.selectedIndex].Discount;
+            document.getElementById('saleItem_DiscontInclusive').value = DiscountCollection.items[cboDiscount.selectedIndex].IsInclusive;
 
         }
 
@@ -2204,9 +2244,78 @@
                     $("#saleItem_VAT_selectedValue").val(taxTypeCollection.items[this.selectedIndex].TaxType);
                     $("#saleItem_TAXInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
 
+                    computeTax();
                 }
             });
         }
+
+        // =================
+        // Compute NET Price
+        // =================
+        function computeNetPrice() {
+            var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value;
+            var DiscountRate = document.getElementById('saleItem_DiscountRate').value;
+            var PriceExVATPrice = document.getElementById('saleItem_PriceExVAT').value;
+            var VATPercentage = document.getElementById('saleItem_VATRate').value;
+            var discountAmount = document.getElementById('saleItem_DiscountAmount').value;
+
+            var price;
+            if(document.getElementById('saleItem_DiscontInclusive').value == 'false') {
+                price = PriceExVATPrice / (1 + ( VATPercentage / 100 ) );
+
+                document.getElementById('saleItem_DiscountAmount').value = Math.round((price * (DiscountRate / 100) ) * 100 ) / 100;
+
+                var newDiscountAmount = price * (DiscountRate / 100);
+                document.getElementById('saleItem_NetPrice').value = Math.round((price - newDiscountAmount) * 100) / 100;
+
+                computeAmount();
+            } else {
+
+                document.getElementById('saleItem_DiscountAmount').value = Math.round((PriceExVATPrice * (DiscountRate / 100)) * 100) / 100;
+                var newDiscountAmount = PriceExVATPrice * (DiscountRate / 100);
+                document.getElementById('saleItem_NetPrice').value = Math.round((PriceExVATPrice - newDiscountAmount) * 100) / 100;
+            }
+        }
+
+        // ==============
+        // Compute Amount
+        // ==============
+        function computeAmount() {
+            var quantity = document.getElementById('saleItem_Quantity').value;
+            var netPrice =  document.getElementById('saleItem_NetPrice').value;
+
+            document.getElementById('saleItem_Amount').value =  Math.round((quantity * netPrice) * 100) / 100;
+            
+            computeTax();
+
+        }
+
+        // ===========
+        // Compute Tax
+        // ===========
+        function computeTax() {
+            var PriceExVATPrice = document.getElementById('saleItem_PriceExVAT').value;
+            var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value;
+            var VATPercentage = document.getElementById('saleItem_VATRate').value;
+            var netPrice =  document.getElementById('saleItem_NetPrice').value;
+            var VATAmount = document.getElementById('saleItem_VATAmount').value;
+            var amount = document.getElementById('saleItem_Amount').value;
+            var quantity = document.getElementById('saleItem_Quantity').value;
+
+            if(document.getElementById('saleItem_TAXInclusive').value == 'true') {
+                document.getElementById('saleItem_VATAmount').value = Math.round((amount / (1 + (VATPercentage / 100)) * (VATPercentage / 100)) * 100) / 100;
+            } else {
+                document.getElementById('saleItem_VATAmount').value = Math.round((amount * (VATPercentage / 100)) * 100) / 100;
+                document.getElementById('saleItem_Amount').value = Math.round((netPrice * quantity) * 100) / 100; 
+            }
+        }
+
+        //// =================
+        //// Compute Base Unit
+        //// =================
+        //function computeBaseUnit() {
+            
+        //}
 
         // =============
         // ADD Sale Item
@@ -2272,25 +2381,29 @@
             document.getElementById('saleItem_Particulars').value = '';
             document.getElementById('saleItem_InventoryCode_data').value = '';
             document.getElementById('saleItem_InventoryCode_selectedValue').value = '';
-            document.getElementById('saleItem_Quantity').value = '';
+            document.getElementById('saleItem_Quantity').value = 0;
             document.getElementById('saleItem_Unit_data').value = '';
             document.getElementById('saleItem_Unit_selectedValue').value = '';
-            document.getElementById('saleItem_PriceExVAT').value = '';
+            document.getElementById('saleItem_PriceExVAT').value = 0;
             document.getElementById('saleItem_Discont_data').value = '';
             document.getElementById('saleItem_Discont_selectedValue').value = '';
-            document.getElementById('saleItem_DiscountRate').value = '';
-            document.getElementById('saleItem_DiscountAmount').value = '';
-            document.getElementById('saleItem_NetPrice').value = '';
-            document.getElementById('saleItem_Amount').value = '';
+            document.getElementById('saleItem_DiscountRate').value = 0;
+            document.getElementById('saleItem_DiscountAmount').value = 0;
+            document.getElementById('saleItem_NetPrice').value = 0;
+            document.getElementById('saleItem_Amount').value = 0;
             document.getElementById('saleItem_VAT_data').value = '';
             document.getElementById('saleItem_VAT_selectedValue').value = '';
             document.getElementById('saleItem_TAXInclusive').value = '';
-            document.getElementById('saleItem_VATRate').value = '';
-            document.getElementById('saleItem_VATAmount').value = '';
+            document.getElementById('saleItem_VATRate').value = 0;
+            document.getElementById('saleItem_VATAmount').value = 0;
             document.getElementById('saleItem_BUCUnit_data').value = '';
             document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
-            document.getElementById('saleItem_BUCQuantity').value = '';
-            document.getElementById('saleItem_BUCPrice').value = '';
+            document.getElementById('saleItem_BUCQuantity').value = 0;
+            document.getElementById('saleItem_BUCPrice').value = 0;
+
+            computeNetPrice();
+            computeAmount();
+
         }
 
         // ==============
@@ -2345,6 +2458,10 @@
             document.getElementById('saleItem_BUCUnit_selectedValue').value = item.BaseUnit;
             document.getElementById('saleItem_BUCQuantity').value = item.BaseQuantity;
             document.getElementById('saleItem_BUCPrice').value = item.BasePrice;
+
+            computeNetPrice();
+            computeAmount();
+
         }
 
         // ================
@@ -2644,11 +2761,12 @@
             cboForVATTaxType = new wijmo.input.ComboBox('#saleItem_VAT');
             cboBaseUnit = new wijmo.input.ComboBox('#saleItem_BUCUnit');
 
-            document.getElementById('saleItem_DiscountAmount').disabled = true;
             document.getElementById('saleItem_NetPrice').disabled = true;
             document.getElementById('saleItem_Amount').disabled = true;
             document.getElementById('saleItem_BUCQuantity').disabled = true;
             document.getElementById('saleItem_BUCPrice').disabled = true;
+            document.getElementById('saleItem_VATRate').disabled = true;
+            document.getElementById('saleItem_VATAmount').disabled = true;
 
             items = new wijmo.collections.CollectionView(getItem());
             items.canFilter = true;
@@ -3104,6 +3222,84 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
+        // ========================
+        // Key Up without letter
+        // ========================
+        $("#saleItem_PriceExVAT").keyup(function (e) {
+            computeNetPrice();
+            computeAmount();
+
+            var quantity = document.getElementById('saleItem_Quantity').value;
+            var price = document.getElementById('saleItem_PriceExVAT').value;
+
+            document.getElementById('saleItem_BUCQuantity').value = quantity;
+            document.getElementById('saleItem_BUCPrice').value = price;
+        });
+
+        $("#saleItem_Quantity").keyup(function (e) {
+            computeNetPrice();
+            computeAmount();
+
+            var quantity = document.getElementById('saleItem_Quantity').value;
+            var price = document.getElementById('saleItem_PriceExVAT').value;
+
+            document.getElementById('saleItem_BUCQuantity').value = quantity;
+            document.getElementById('saleItem_BUCPrice').value = price;
+        });
+
+        $("#saleItem_DiscountRate").keyup(function (e) {
+            computeNetPrice();
+            computeAmount();
+        });
+
+        $("#saleItem_DiscountAmount").keyup(function (e) {
+            computeNetPrice();
+            computeAmount();
+        });
+
+        // ========================
+        // Key Press without letter
+        // ========================
+        $("#saleItem_Quantity").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $("#saleItem_PriceExVAT").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
         // ====
         // TABS
         // ====

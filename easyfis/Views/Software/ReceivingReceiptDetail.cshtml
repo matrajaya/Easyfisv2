@@ -2798,7 +2798,7 @@
                                     document.getElementById('RRLine_TAXInclusive').value =  results.IsInclusive;
 
                                     computeTAX();
-                                    computeBaseUnit();
+                                    //computeBaseUnit();
                                 }
                             });
 
@@ -2827,6 +2827,9 @@
                             getTaxTypeForComboBox();
                         }
                     });
+
+                    var RRLine_cost = document.getElementById('RRLine_Cost').value;
+                    document.getElementById('RRLine_BUCCost').value = RRLine_cost;
                 }
             });
         }
@@ -2915,7 +2918,7 @@
                                     document.getElementById('RRLine_TAXInclusive').value =  results.IsInclusive;
 
                                     computeTAX();
-                                    computeBaseUnit();
+                                   // computeBaseUnit();
                                 }
                             });
 
@@ -2943,6 +2946,10 @@
                             getTaxTypeForComboBox();
                         }
                     });
+                
+                    var RRLine_cost = document.getElementById('RRLine_Cost').value;
+                    document.getElementById('RRLine_BUCCost').value = RRLine_cost;
+
                 }
             });
         }
@@ -3125,7 +3132,7 @@
                     $("#RRLine_TAXInclusive").val(taxTypeCollection.items[this.selectedIndex].IsInclusive);
 
                     computeTAX();
-                    computeBaseUnit();
+                    //computeBaseUnit();
                 }
             });
         }
@@ -3182,52 +3189,52 @@
             }
         }
 
-        // =================
-        // Compute Base Unit
-        // =================
-        function computeBaseUnit() {
-            var articleUnits = new wijmo.collections.ObservableArray();
-            var articleId = document.getElementById('RRLine_ItemId_data').value;
-            var unitId = document.getElementById('RRLine_BUCUnit_data').value;
+        //// =================
+        //// Compute Base Unit
+        //// =================
+        //function computeBaseUnit() {
+        //    var articleUnits = new wijmo.collections.ObservableArray();
+        //    var articleId = document.getElementById('RRLine_ItemId_data').value;
+        //    var unitId = document.getElementById('RRLine_BUCUnit_data').value;
 
-            var inputedQuantity = document.getElementById('RRLine_Quantity').value;
-            var inputedAmount = document.getElementById('RRLine_Amount').value;
-            var inputedVATAmount = document.getElementById('RRLine_VATAmount').value;
+        //    var inputedQuantity = document.getElementById('RRLine_Quantity').value;
+        //    var inputedAmount = document.getElementById('RRLine_Amount').value;
+        //    var inputedVATAmount = document.getElementById('RRLine_VATAmount').value;
 
-            var replacedQuantity = inputedQuantity.replace(/\,/g,'');
-            var replacedAmount = inputedAmount.replace(/\,/g,'');
-            var replacedVATAmount = inputedVATAmount.replace(/\,/g,'');
+        //    var replacedQuantity = inputedQuantity.replace(/\,/g,'');
+        //    var replacedAmount = inputedAmount.replace(/\,/g,'');
+        //    var replacedVATAmount = inputedVATAmount.replace(/\,/g,'');
 
-            $.ajax({
-                url: '/api/articleUnit/' + articleId + '/' + unitId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        articleUnits.push({
-                            Id: results.Id,
-                            ArticleId: results.ArticleId,
-                            Article: results.Article,
-                            UnitId: results.UnitId,
-                            Unit: results.Unit,
-                            Multiplier: results.Multiplier,
-                            IsCountUnit: results.IsCountUnit,
-                        });
-                    }
+        //    $.ajax({
+        //        url: '/api/articleUnit/' + articleId + '/' + unitId,
+        //        cache: false,
+        //        type: 'GET',
+        //        contentType: 'application/json; charset=utf-8',
+        //        data: {},
+        //        success: function (results) {
+        //            if (results.length > 0) {
+        //                articleUnits.push({
+        //                    Id: results.Id,
+        //                    ArticleId: results.ArticleId,
+        //                    Article: results.Article,
+        //                    UnitId: results.UnitId,
+        //                    Unit: results.Unit,
+        //                    Multiplier: results.Multiplier,
+        //                    IsCountUnit: results.IsCountUnit,
+        //                });
+        //            }
 
-                    var multiplier = results.Multiplier;
-                    var AmountAndVATAmount = replacedAmount - replacedVATAmount;
+        //            var multiplier = results.Multiplier;
+        //            var AmountAndVATAmount = replacedAmount - replacedVATAmount;
 
-                    if(document.getElementById('RRLine_TAXInclusive').value == 'true') {
-                        document.getElementById('RRLine_BUCCost').value =  Math.round(((replacedAmount - replacedVATAmount) / (replacedQuantity / multiplier)) * 100 ) / 100;
-                    } else {
-                        document.getElementById('RRLine_BUCCost').value =  Math.round((replacedAmount / (replacedQuantity / multiplier)) * 100 ) / 100;
-                    }
-                }
-            });
-        }
+        //            if(document.getElementById('RRLine_TAXInclusive').value == 'true') {
+        //                document.getElementById('RRLine_BUCCost').value =  Math.round(((replacedAmount - replacedVATAmount) / (replacedQuantity / multiplier)) * 100 ) / 100;
+        //            } else {
+        //                document.getElementById('RRLine_BUCCost').value =  Math.round((replacedAmount / (replacedQuantity / multiplier)) * 100 ) / 100;
+        //            }
+        //        }
+        //    });
+        //}
 
         // =======================================
         // Get Item Unit for Basic Unit Conversion
@@ -3749,41 +3756,44 @@
                 var replacedAmount = inputedAmount.replace(/\,/g,'');
                 var replacedVATAmount = inputedVATAmount.replace(/\,/g,'');
 
-                $.ajax({
-                    url: '/api/articleUnit/' + articleId + '/' + unitId,
-                    cache: false,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    data: {},
-                    statusCode: {
-                        200: function(results) {
-                            if (results.length > 0) {
-                                articleUnits.push({
-                                    Id: results.Id,
-                                    ArticleId: results.ArticleId,
-                                    Article: results.Article,
-                                    UnitId: results.UnitId,
-                                    Unit: results.Unit,
-                                    Multiplier: results.Multiplier,
-                                    IsCountUnit: results.IsCountUnit,
-                                });
-                            }
+                //$.ajax({
+                //    url: '/api/articleUnit/' + articleId + '/' + unitId,
+                //    cache: false,
+                //    type: 'GET',
+                //    contentType: 'application/json; charset=utf-8',
+                //    data: {},
+                //    statusCode: {
+                //        200: function(results) {
+                //            if (results.length > 0) {
+                //                articleUnits.push({
+                //                    Id: results.Id,
+                //                    ArticleId: results.ArticleId,
+                //                    Article: results.Article,
+                //                    UnitId: results.UnitId,
+                //                    Unit: results.Unit,
+                //                    Multiplier: results.Multiplier,
+                //                    IsCountUnit: results.IsCountUnit,
+                //                });
+                //            }
 
-                            var multiplier = results.Multiplier;
-                            if(document.getElementById('RRLine_TAXInclusive').value == 'true') {
-                                document.getElementById('RRLine_BUCCost').value =  Math.round(((replacedAmount - replacedVATAmount) / (replacedQuantity / multiplier)) * 100 ) / 100;
-                            } else {
-                                document.getElementById('RRLine_BUCCost').value =  Math.round((replacedAmount / (replacedQuantity / multiplier)) * 100 ) / 100;
-                            }
-                        },
-                        404: function() {
-                            toastr.error("No Item/Unit");
-                        },
-                        400: function() {
-                            toastr.error("Bad Request");
-                        }
-                    }
-                });
+                //            var multiplier = results.Multiplier;
+                //            if(document.getElementById('RRLine_TAXInclusive').value == 'true') {
+                //                document.getElementById('RRLine_BUCCost').value =  Math.round(((replacedAmount - replacedVATAmount) / (replacedQuantity / multiplier)) * 100 ) / 100;
+                //            } else {
+                //                document.getElementById('RRLine_BUCCost').value =  Math.round((replacedAmount / (replacedQuantity / multiplier)) * 100 ) / 100;
+                //            }
+                //        },
+                //        404: function() {
+                //            toastr.error("No Item/Unit");
+                //        },
+                //        400: function() {
+                //            toastr.error("Bad Request");
+                //        }
+                //    }
+                //});
+                
+                var RRLine_cost = document.getElementById('RRLine_Cost').value;
+                document.getElementById('RRLine_BUCCost').value = RRLine_cost;
 
             });
 
@@ -3813,42 +3823,43 @@
                 var replacedAmount = inputedAmount.replace(/\,/g,'');
                 var replacedVATAmount = inputedVATAmount.replace(/\,/g,'');
 
-                $.ajax({
-                    url: '/api/articleUnit/' + articleId + '/' + unitId,
-                    cache: false,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    data: {},
-                    statusCode: {
-                        200: function(results) {
-                            if (results.length > 0) {
-                                articleUnits.push({
-                                    Id: results.Id,
-                                    ArticleId: results.ArticleId,
-                                    Article: results.Article,
-                                    UnitId: results.UnitId,
-                                    Unit: results.Unit,
-                                    Multiplier: results.Multiplier,
-                                    IsCountUnit: results.IsCountUnit,
-                                });
-                            }
+                //$.ajax({
+                //    url: '/api/articleUnit/' + articleId + '/' + unitId,
+                //    cache: false,
+                //    type: 'GET',
+                //    contentType: 'application/json; charset=utf-8',
+                //    data: {},
+                //    statusCode: {
+                //        200: function(results) {
+                //            if (results.length > 0) {
+                //                articleUnits.push({
+                //                    Id: results.Id,
+                //                    ArticleId: results.ArticleId,
+                //                    Article: results.Article,
+                //                    UnitId: results.UnitId,
+                //                    Unit: results.Unit,
+                //                    Multiplier: results.Multiplier,
+                //                    IsCountUnit: results.IsCountUnit,
+                //                });
+                //            }
 
-                            var multiplier = results.Multiplier;
-                            if(document.getElementById('RRLine_TAXInclusive').value == 'true') {
-                                document.getElementById('RRLine_BUCCost').value =  Math.round(((replacedAmount - replacedVATAmount) / (replacedQuantity / multiplier)) * 100 ) / 100;
-                            } else {
-                                document.getElementById('RRLine_BUCCost').value =  Math.round((replacedAmount / (replacedQuantity / multiplier)) * 100 ) / 100;
-                            }
-                        },
-                        404: function() {
-                            toastr.error("No Item/Unit");
-                        },
-                        400: function() {
-                            toastr.error("Bad Request");
-                        }
-                    }
-                });
-
+                //            var multiplier = results.Multiplier;
+                //            if(document.getElementById('RRLine_TAXInclusive').value == 'true') {
+                //                document.getElementById('RRLine_BUCCost').value =  Math.round(((replacedAmount - replacedVATAmount) / (replacedQuantity / multiplier)) * 100 ) / 100;
+                //            } else {
+                //                document.getElementById('RRLine_BUCCost').value =  Math.round((replacedAmount / (replacedQuantity / multiplier)) * 100 ) / 100;
+                //            }
+                //        },
+                //        404: function() {
+                //            toastr.error("No Item/Unit");
+                //        },
+                //        400: function() {
+                //            toastr.error("Bad Request");
+                //        }
+                //    }
+                //});
+                var RRLine_cost = document.getElementById('RRLine_Cost').value;
+                document.getElementById('RRLine_BUCCost').value = RRLine_cost;
             });
 
             $("#RRLine_Quantity").keydown(function (e) {
