@@ -338,7 +338,7 @@
                     </div>
                     <div class="modal-footer">
                         <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
-                        <button type="button" id="cmdJournalListCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                        <button type="button" id="cmdJournalListCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
                     </div>
                 </div>
             </div>
@@ -1982,6 +1982,7 @@
                                 BranchId: Results[i]["BranchId"],
                                 Branch: Results[i]["Branch"],
                                 AccountId: Results[i]["AccountId"],
+                                AccountCode: Results[i]["AccountCode"],
                                 Account: Results[i]["Account"],
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
@@ -2059,7 +2060,7 @@
                                 //    "isContentHtml": true
                                 //},
                                 {
-                                    "header": "Journal Date",
+                                    "header": "Date",
                                     "binding": "JournalDate",
                                     "allowSorting": true,
                                     "width": 150,
@@ -2069,6 +2070,12 @@
                                     "binding": "Branch",
                                     "allowSorting": true,
                                     "width": 220
+                                },
+                                {
+                                    "header": "Code",
+                                    "binding": "AccountCode",
+                                    "allowSorting": true,
+                                    "width": 100
                                 },
                                 {
                                     "header": "Account",
@@ -2081,15 +2088,7 @@
                                     "binding": "Article",
                                     "allowSorting": true,
                                     "width": 350
-                                }
-                                ,
-                                {
-                                    "header": "Particulars",
-                                    "binding": "Particulars",
-                                    "allowSorting": true,
-                                    "width": 300
-                                }
-                                ,
+                                },
                                 {
                                     "header": "Debit Amount",
                                     "binding": "DebitAmount",
@@ -2103,7 +2102,6 @@
                                     "allowSorting": true,
                                     "width": 130
                                 }
-
                     ],
                     autoGenerateColumns: false,
                     itemsSource: journals,

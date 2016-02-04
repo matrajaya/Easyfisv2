@@ -710,7 +710,7 @@
                     }
                     document.getElementById('RRbranch_data').value = Results.BranchId;
                     document.getElementById('RRbranch_selectedValue').value = Results.Branch;
-                    
+
                     document.getElementById('RRRRNumber').value = Results.RRNumber;
                     document.getElementById('RRRRNumber_Display').value = Results.RRNumber;
                     document.getElementById('RRRRDate_data').value = Results.RRDate;
@@ -4355,7 +4355,7 @@
     <script type="text/javascript">
         var journals;
         var journalListGrid;
-        
+
         var btnFirstPageGridJournal;
         var btnPreviousPageGridJournal;
         var btnNextPageGridJournal;
@@ -4387,6 +4387,7 @@
                                 BranchId: Results[i]["BranchId"],
                                 Branch: Results[i]["Branch"],
                                 AccountId: Results[i]["AccountId"],
+                                AccountCode: Results[i]["AccountCode"],
                                 Account: Results[i]["Account"],
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
@@ -4492,7 +4493,7 @@
                                 //    "isContentHtml": true
                                 //},
                                 {
-                                    "header": "Journal Date",
+                                    "header": "Date",
                                     "binding": "JournalDate",
                                     "allowSorting": true,
                                     "width": 150,
@@ -4502,6 +4503,12 @@
                                     "binding": "Branch",
                                     "allowSorting": true,
                                     "width": 220
+                                },
+                                {
+                                    "header": "Code",
+                                    "binding": "AccountCode",
+                                    "allowSorting": true,
+                                    "width": 100
                                 },
                                 {
                                     "header": "Account",
@@ -4514,15 +4521,7 @@
                                     "binding": "Article",
                                     "allowSorting": true,
                                     "width": 350
-                                }
-                                ,
-                                {
-                                    "header": "Particulars",
-                                    "binding": "Particulars",
-                                    "allowSorting": true,
-                                    "width": 300
-                                }
-                                ,
+                                },
                                 {
                                     "header": "Debit Amount",
                                     "binding": "DebitAmount",
