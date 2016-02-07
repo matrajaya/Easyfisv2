@@ -10,6 +10,13 @@ namespace easyfis.Business
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+
+        public void insertSIJournal(Int32 SIId)
+        {
+
+
+        }
+
         // ============================
         // Receiving Receipt in Journal
         // ============================

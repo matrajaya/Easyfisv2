@@ -11,6 +11,7 @@ namespace easyfis.Controllers
     public class ApiSalesInvoiceController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+        private Business.Inventory inventory = new Business.Inventory();
 
         // ==================
         // LIST Sales Invoice
@@ -327,6 +328,17 @@ namespace easyfis.Controllers
                     updateSales.UpdatedById = mstUserId;
                     updateSales.UpdatedDateTime = date;
 
+                    if (updateSales.IsLocked == true)
+                    {
+                        inventory.InsertSIInventory(sales_Id);
+                        //journal.insertRRJournal(receivingReceipt_Id);
+                    }
+                    else
+                    {
+                        inventory.deleteSIInventory(sales_Id);
+                        //journal.deleteRRJournal(receivingReceipt_Id);
+                    }
+
                     db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
@@ -366,6 +378,17 @@ namespace easyfis.Controllers
                     updateSales.IsLocked = sales.IsLocked;
                     updateSales.UpdatedById = mstUserId;
                     updateSales.UpdatedDateTime = date;
+
+                    if (updateSales.IsLocked == true)
+                    {
+                        inventory.InsertSIInventory(sales_Id);
+                        //journal.insertRRJournal(receivingReceipt_Id);
+                    }
+                    else
+                    {
+                        inventory.deleteSIInventory(sales_Id);
+                        //journal.deleteRRJournal(receivingReceipt_Id);
+                    }
 
                     db.SubmitChanges();
 

@@ -42,7 +42,7 @@
                         <h4 id="salesDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="cmdSalesJournal"><i class="fa fa-book"></i> Journal</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSalesJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdSalesSaveLock" onclick="btnSaveLockSales_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdSalesSave" onclick="btnSalesSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdSalesEdit" onclick="btnSalesEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
@@ -388,6 +388,69 @@
                 </div>
             </div>
         </div>
+
+        <!-- ============== -->
+        <!-- Journal Detail -->
+        <!-- ============== -->
+        <div class="modal fade" id="journalDetail" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row" align="left">
+                            <center>
+                                <h4>
+                                    <span id="loadingJournalGridList"></span>
+                                </h4>
+                            </center>
+                            <div class="col-lg-12">
+                                <div id="journalGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="row" id="footerModalJournalNavigationButtons">
+                            <div class="btn-group col-md-9" id="navigationPageGridJournal">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournal"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <table>
+                                    <tr>
+                                        <td align="right"> <b>Total Debit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalDebitInJournal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"> <b>Total Credit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalCreditInJournal"></span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="cmdJournalDetailCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- ===================================== -->
         <!-- Sales Items Delete Modal Confirmation -->
@@ -3222,6 +3285,241 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
+        var journals;
+        var journalListGrid;
+
+        var btnFirstPageGridJournal;
+        var btnPreviousPageGridJournal;
+        var btnNextPageGridJournal;
+        var btnLastPageGridJournal;
+        var btnCurrentPageGridJournal;
+
+        // ===========
+        // Get Journal
+        // ===========
+        function getJournalListForRR() {
+            var journals = new wijmo.collections.ObservableArray;
+            var SalesId = @salesId;
+            //$('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listJournalBySIId/' + SalesId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    //$('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            journals.push({
+                                //EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                //DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdJournalVoucherLineDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                JournalDate: Results[i]["JournalDate"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                AccountId: Results[i]["AccountId"],
+                                AccountCode: Results[i]["AccountCode"],
+                                Account: Results[i]["Account"],
+                                ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
+                                Particulars: Results[i]["Particulars"],
+                                DebitAmount: Results[i]["DebitAmount"],
+                                CreditAmount: Results[i]["CreditAmount"],
+                                ORId: Results[i]["ORId"],
+                                CVId: Results[i]["CVId"],
+                                JVId: Results[i]["JVId"],
+                                RRId: Results[i]["RRId"],
+                                SIId: Results[i]["SIId"],
+                                INId: Results[i]["INId"],
+                                OTId: Results[i]["OTId"],
+                                STId: Results[i]["STId"],
+                                DocumentReference: Results[i]["DocumentReference"],
+                                APRRId: Results[i]["APRRId"],
+                                ARSIId: Results[i]["ARSIId"]
+                            });
+
+                            var debitAmountTotal = 0;
+                            var creditAmountTotal = 0;
+
+                            var a = 0;
+                            while (a < Results.length) {
+                                debitAmountTotal += Results[a]["DebitAmount"];
+                                creditAmountTotal += Results[a]["CreditAmount"];
+                                a++;
+                            }
+                        }
+
+                        document.getElementById('totalDebitInJournal').innerHTML = debitAmountTotal.toLocaleString();
+                        document.getElementById('totalCreditInJournal').innerHTML = creditAmountTotal.toLocaleString();
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return journals;
+        }
+
+        // ==============================
+        // Navigation Buttons for Journal
+        // ==============================
+        function updateNavigateButtonsJournal() {
+            if (journals.pageSize <= 0) {
+                document.getElementById('navigationPageGridJournal').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridJournal').style.display = 'block';
+            if (journals.pageIndex === 0) {
+                btnFirstPageGridJournal.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            } else if (journals.pageIndex === (journals.pageCount - 1)) {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            }
+            btnCurrentPageGridJournal.innerHTML = (journals.pageIndex + 1) + ' / ' + journals.pageCount;
+        }
+
+        // ============
+        // Journal List
+        // ============
+        function btnJournalDetail_OnClick() {
+            journals = new wijmo.collections.CollectionView();
+            journals.pageSize = 10;
+
+            document.getElementById("loadingJournalGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Journal...';
+
+            $("#loadingJournalGridList").show();
+            $("#footerModalJournalNavigationButtons").hide();
+            setTimeout(function() {
+                $("#loadingJournalGridList").hide();
+                $("#footerModalJournalNavigationButtons").show();
+                // Flex Grid
+                journalListGrid = new wijmo.grid.FlexGrid('#journalGrid');
+                journalListGrid.initialize({
+                    columns: [
+                                //{
+                                //    "header": "Edit",
+                                //    "binding": "EditId",
+                                //    "width": 60,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                //{
+                                //    "header": "Delete",
+                                //    "binding": "DeleteId",
+                                //    "width": 70,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                {
+                                    "header": "Date",
+                                    "binding": "JournalDate",
+                                    "allowSorting": true,
+                                    "width": 150,
+                                },
+                                {
+                                    "header": "Branch",
+                                    "binding": "Branch",
+                                    "allowSorting": true,
+                                    "width": 220
+                                },
+                                {
+                                    "header": "Code",
+                                    "binding": "AccountCode",
+                                    "allowSorting": true,
+                                    "width": 100
+                                },
+                                {
+                                    "header": "Account",
+                                    "binding": "Account",
+                                    "allowSorting": true,
+                                    "width": 250
+                                },
+                                {
+                                    "header": "Article",
+                                    "binding": "Article",
+                                    "allowSorting": true,
+                                    "width": 350
+                                },
+                                {
+                                    "header": "Debit Amount",
+                                    "binding": "DebitAmount",
+                                    "allowSorting": true,
+                                    "width": 130
+                                }
+                                ,
+                                {
+                                    "header": "Credit Amount",
+                                    "binding": "CreditAmount",
+                                    "allowSorting": true,
+                                    "width": 130
+                                }
+
+                    ],
+                    autoGenerateColumns: false,
+                    itemsSource: journals,
+                    isReadOnly: true,
+                    autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                    allowDragging: wijmo.grid.AllowDragging.None,
+                    selectionMode: wijmo.grid.SelectionMode.Row
+                });
+
+                journalListGrid.trackChanges = true;
+
+
+                //Navigation button
+                btnFirstPageGridJournal = document.getElementById('btnMoveToFirstPageGridJournal');
+                btnPreviousPageGridJournal = document.getElementById('btnMoveToPreviousPageGridJournal');
+                btnNextPageGridJournal = document.getElementById('btnMoveToNextPageGridJournal');
+                btnLastPageGridJournal = document.getElementById('btnMoveToLastPageGridJournal');
+                btnCurrentPageGridJournal = document.getElementById('btnCurrentPageGridJournal');
+
+                updateNavigateButtonsJournal();
+
+                btnFirstPageGridJournal.addEventListener('click', function () {
+                    journals.moveToFirstPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnPreviousPageGridJournal.addEventListener('click', function () {
+                    journals.moveToPreviousPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnNextPageGridJournal.addEventListener('click', function () {
+                    journals.moveToNextPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnLastPageGridJournal.addEventListener('click', function () {
+                    journals.moveToLastPage();
+                    updateNavigateButtonsJournal();
+                });
+
+            }, 1000);
+        }
+
+        $('#cmdSalesJournal').click(function () {
+            $('#journalDetail').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            window.btnJournalDetail_OnClick = function () {
+                return true;
+            };
+        });
+
         // ========================
         // Key Up without letter
         // ========================

@@ -25,7 +25,5 @@ namespace easyfis.Models
         public Decimal QuantityOut { get; set; }
         public Decimal Amount { get; set; }
         public String Particulars { get; set; }
-
-
     }
 }
