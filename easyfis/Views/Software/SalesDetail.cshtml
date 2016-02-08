@@ -3298,7 +3298,7 @@
         // ===========
         // Get Journal
         // ===========
-        function getJournalListForRR() {
+        function getJournalListForSales() {
             var journals = new wijmo.collections.ObservableArray;
             var SalesId = @salesId;
             //$('#loadingModal').modal('show');
@@ -3393,7 +3393,7 @@
         // Journal List
         // ============
         function btnJournalDetail_OnClick() {
-            journals = new wijmo.collections.CollectionView();
+            journals = new wijmo.collections.CollectionView(getJournalListForSales());
             journals.pageSize = 10;
 
             document.getElementById("loadingJournalGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Journal...';

@@ -37,5 +37,8 @@ namespace easyfis.Models
         public String BaseUnit { get; set; }
         public Decimal BaseQuantity { get; set; }
         public Decimal BasePrice { get; set; }
+        public Int32 SalesAccountId { get; set; }
+        public Int32 CostAccountId { get; set; }
+        public Int32 AccountId { get; set; }
     }
 }

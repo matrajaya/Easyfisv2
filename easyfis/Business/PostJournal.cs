@@ -21,11 +21,10 @@ namespace easyfis.Business
             String BranchCode = "";
             Int32 CustomerId = 0;
             Int32 AccountId = 0;
-            Int32 CostAccountId = 0;
             String SINumber = "";
             Decimal Amount;
-            Decimal Cost;
 
+            // SI Header
             var salesInvoiceHeader = from d in db.TrnSalesInvoices
                                      where d.Id == SIId
                                      select new Models.TrnSalesInvoice
@@ -48,19 +47,262 @@ namespace easyfis.Business
 
             Debug.WriteLine(siHeaderAmount);
 
+            // SI Items - LINES
+            var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                    where d.SIId == SIId
+                                    group d by new
+                                    {
+                                        SalesAccountId = d.MstArticle.SalesAccountId,
+                                        VATId = d.VATId,
+                                        SIId = d.SIId
+                                    } into g
+                                    select new Models.TrnSalesInvoiceItem
+                                    {
+                                        SalesAccountId = g.Key.SalesAccountId,
+                                        VATId = g.Key.VATId,
+                                        SIId = g.Key.SIId,
+                                        Amount = g.Sum(d => d.Amount),
+                                        VATAmount = g.Sum(d => d.VATAmount)
+                                    };
+
+            // SI Items - VAT
+            var salesInvoiceItemsForVAT = from d in db.TrnSalesInvoiceItems
+                                          where d.SIId == SIId
+                                          group d by new
+                                          {
+                                              VATId = d.VATId,
+                                              SIId = d.SIId
+                                          } into g
+                                          select new Models.TrnSalesInvoiceItem
+                                          {
+                                              VATId = g.Key.VATId,
+                                              SIId = g.Key.SIId,
+                                              VATAmount = g.Sum(d => d.VATAmount)
+                                          };
+
+            // SI Items - Amount
+            var salesInvoiceItemsForAmount = from d in db.TrnSalesInvoiceItems
+                                             where d.SIId == SIId
+                                             group d by new
+                                             {
+                                                 SIId = d.SIId,
+                                                 CostAccountId = d.MstArticle.CostAccountId
+                                             } into g
+                                             select new Models.TrnSalesInvoiceItem
+                                             {
+                                                 SIId = g.Key.SIId,
+                                                 CostAccountId = g.Key.CostAccountId,
+                                                 Amount = g.Sum(d => d.Amount)
+                                             };
+
+            // SI Items - Inventory
+            var salesInvoiceItemsForInventory = from d in db.TrnSalesInvoiceItems
+                                                where d.SIId == SIId
+                                                group d by new
+                                                {
+                                                    SIId = d.SIId,
+                                                    AccountId = d.MstArticle.AccountId
+                                                } into g
+                                                select new Models.TrnSalesInvoiceItem
+                                                {
+                                                    SIId = g.Key.SIId,
+                                                    AccountId = g.Key.AccountId,
+                                                    Amount = g.Sum(d => d.Amount)
+                                                };
+
+
             try
             {
-                foreach (var salesInvoice in salesInvoiceHeader)
+                if (salesInvoiceHeader.Any())
                 {
-                    JournalDate = salesInvoice.SIDate;
-                    BranchId = salesInvoice.BranchId;
-                    BranchCode = salesInvoice.BranchCode;
-                    SINumber = salesInvoice.SINumber;
-                    CustomerId = salesInvoice.CustomerId;
+                    foreach (var salesInvoice in salesInvoiceHeader)
+                    {
+                        JournalDate = salesInvoice.SIDate;
+                        BranchId = salesInvoice.BranchId;
+                        BranchCode = salesInvoice.BranchCode;
+                        SINumber = salesInvoice.SINumber;
+                        CustomerId = salesInvoice.CustomerId;
+                    }
+
+                    // Accounts Receivable
+                    if (siHeaderAmount > 0)
+                    {
+                        Data.TrnJournal newSIJournalForAccountItems = new Data.TrnJournal();
+
+                        AccountId = (from d in db.MstArticles where d.Id == CustomerId select d.AccountId).SingleOrDefault();
+
+                        newSIJournalForAccountItems.JournalDate = Convert.ToDateTime(JournalDate);
+                        newSIJournalForAccountItems.BranchId = BranchId;
+                        newSIJournalForAccountItems.AccountId = AccountId;
+                        newSIJournalForAccountItems.ArticleId = CustomerId;
+                        newSIJournalForAccountItems.Particulars = "Customer";
+                        newSIJournalForAccountItems.DebitAmount = siHeaderAmount;
+                        newSIJournalForAccountItems.CreditAmount = 0;
+                        newSIJournalForAccountItems.ORId = null;
+                        newSIJournalForAccountItems.CVId = null;
+                        newSIJournalForAccountItems.JVId = null;
+                        newSIJournalForAccountItems.RRId = null;
+                        newSIJournalForAccountItems.SIId = SIId;
+                        newSIJournalForAccountItems.INId = null;
+                        newSIJournalForAccountItems.OTId = null;
+                        newSIJournalForAccountItems.STId = null;
+                        newSIJournalForAccountItems.DocumentReference = "SI-" + BranchCode + "-" + SINumber;
+                        newSIJournalForAccountItems.APRRId = null;
+                        newSIJournalForAccountItems.ARSIId = null;
+
+                        db.TrnJournals.InsertOnSubmit(newSIJournalForAccountItems);
+                    }
+
+                    // Sales
+                    if (salesInvoiceItems.Any())
+                    {
+                        foreach (var salesItem in salesInvoiceItems)
+                        {
+                            if (salesItem.Amount > 0)
+                            {
+                                Boolean IsInclusive;
+                                IsInclusive = (from d in db.MstTaxTypes where d.Id == salesItem.VATId select d.IsInclusive).SingleOrDefault();
+
+                                if (IsInclusive == true)
+                                {
+                                    Amount = salesItem.Amount - salesItem.VATAmount;
+                                }
+                                else
+                                {
+                                    Amount = salesItem.Amount;
+                                }
+
+                                Data.TrnJournal newSIJournalForSales = new Data.TrnJournal();
+
+                                AccountId = (from d in db.MstArticles where d.Id == CustomerId select d.AccountId).SingleOrDefault();
+
+                                newSIJournalForSales.JournalDate = Convert.ToDateTime(JournalDate);
+                                newSIJournalForSales.BranchId = BranchId;
+                                newSIJournalForSales.AccountId = AccountId;
+                                newSIJournalForSales.ArticleId = CustomerId;
+                                newSIJournalForSales.Particulars = "Sales";
+                                newSIJournalForSales.DebitAmount = 0;
+                                newSIJournalForSales.CreditAmount = Amount;
+                                newSIJournalForSales.ORId = null;
+                                newSIJournalForSales.CVId = null;
+                                newSIJournalForSales.JVId = null;
+                                newSIJournalForSales.RRId = null;
+                                newSIJournalForSales.SIId = SIId;
+                                newSIJournalForSales.INId = null;
+                                newSIJournalForSales.OTId = null;
+                                newSIJournalForSales.STId = null;
+                                newSIJournalForSales.DocumentReference = "SI-" + BranchCode + "-" + SINumber;
+                                newSIJournalForSales.APRRId = null;
+                                newSIJournalForSales.ARSIId = null;
+
+                                db.TrnJournals.InsertOnSubmit(newSIJournalForSales);
+                            }
+                        }
+                    }
+
+                    // VAT
+                    if (salesInvoiceItemsForVAT.Any())
+                    {
+                        foreach (var siItemVAT in salesInvoiceItemsForVAT)
+                        {
+                            if (siItemVAT.VATAmount > 0)
+                            {
+                                Data.TrnJournal newSIJournalForVAT = new Data.TrnJournal();
+
+                                AccountId = (from d in db.MstTaxTypes where d.Id == siItemVAT.VATId select d.AccountId).SingleOrDefault();
+
+                                newSIJournalForVAT.JournalDate = Convert.ToDateTime(JournalDate);
+                                newSIJournalForVAT.BranchId = BranchId;
+                                newSIJournalForVAT.AccountId = AccountId;
+                                newSIJournalForVAT.ArticleId = CustomerId;
+                                newSIJournalForVAT.Particulars = "VAT Amount";
+                                newSIJournalForVAT.DebitAmount = 0;
+                                newSIJournalForVAT.CreditAmount = siItemVAT.VATAmount;
+                                newSIJournalForVAT.ORId = null;
+                                newSIJournalForVAT.CVId = null;
+                                newSIJournalForVAT.JVId = null;
+                                newSIJournalForVAT.RRId = null;
+                                newSIJournalForVAT.SIId = SIId;
+                                newSIJournalForVAT.INId = null;
+                                newSIJournalForVAT.OTId = null;
+                                newSIJournalForVAT.STId = null;
+                                newSIJournalForVAT.DocumentReference = "SI-" + BranchCode + "-" + SINumber;
+                                newSIJournalForVAT.APRRId = null;
+                                newSIJournalForVAT.ARSIId = null;
+
+                                db.TrnJournals.InsertOnSubmit(newSIJournalForVAT);
+                            }
+                        }
+                    }
+
+                    // cost of goods
+                    if (salesInvoiceItemsForAmount.Any())
+                    {
+                        foreach (var siItemAmount in salesInvoiceItemsForAmount)
+                        {
+                            if (siItemAmount.Amount > 0)
+                            {
+                                Data.TrnJournal newSIJournalForAmount = new Data.TrnJournal();
+
+                                newSIJournalForAmount.JournalDate = Convert.ToDateTime(JournalDate);
+                                newSIJournalForAmount.BranchId = BranchId;
+                                newSIJournalForAmount.AccountId = siItemAmount.CostAccountId;
+                                newSIJournalForAmount.ArticleId = CustomerId;
+                                newSIJournalForAmount.Particulars = "Item Components";
+                                newSIJournalForAmount.DebitAmount = Math.Round((siItemAmount.Amount) * 100) / 100;
+                                newSIJournalForAmount.CreditAmount = 0;
+                                newSIJournalForAmount.ORId = null;
+                                newSIJournalForAmount.CVId = null;
+                                newSIJournalForAmount.JVId = null;
+                                newSIJournalForAmount.RRId = null;
+                                newSIJournalForAmount.SIId = SIId;
+                                newSIJournalForAmount.INId = null;
+                                newSIJournalForAmount.OTId = null;
+                                newSIJournalForAmount.STId = null;
+                                newSIJournalForAmount.DocumentReference = "SI-" + BranchCode + "-" + SINumber;
+                                newSIJournalForAmount.APRRId = null;
+                                newSIJournalForAmount.ARSIId = null;
+
+                                db.TrnJournals.InsertOnSubmit(newSIJournalForAmount);
+                            }
+                        }
+                    }
+
+                    // Inventory
+                    if (salesInvoiceItemsForInventory.Any())
+                    {
+                        foreach(var siItemInventory in salesInvoiceItemsForInventory)
+                        {
+                            if (siItemInventory.Amount > 0)
+                            {
+                                Data.TrnJournal newSIJournalForInventory = new Data.TrnJournal();
+
+                                newSIJournalForInventory.JournalDate = Convert.ToDateTime(JournalDate);
+                                newSIJournalForInventory.BranchId = BranchId;
+                                newSIJournalForInventory.AccountId = siItemInventory.AccountId;
+                                newSIJournalForInventory.ArticleId = CustomerId;
+                                newSIJournalForInventory.Particulars = "Item Components";
+                                newSIJournalForInventory.DebitAmount = 0;
+                                newSIJournalForInventory.CreditAmount = Math.Round((siItemInventory.Amount) * 100) / 100;
+                                newSIJournalForInventory.ORId = null;
+                                newSIJournalForInventory.CVId = null;
+                                newSIJournalForInventory.JVId = null;
+                                newSIJournalForInventory.RRId = null;
+                                newSIJournalForInventory.SIId = SIId;
+                                newSIJournalForInventory.INId = null;
+                                newSIJournalForInventory.OTId = null;
+                                newSIJournalForInventory.STId = null;
+                                newSIJournalForInventory.DocumentReference = "SI-" + BranchCode + "-" + SINumber;
+                                newSIJournalForInventory.APRRId = null;
+                                newSIJournalForInventory.ARSIId = null;
+
+                                db.TrnJournals.InsertOnSubmit(newSIJournalForInventory);
+                            }
+                        }
+                    }
+
+                    db.SubmitChanges();
                 }
-
-                // Accounts Receivable
-
             }
             catch (Exception e)
             {
@@ -229,7 +471,6 @@ namespace easyfis.Business
 
                             newRRJournalForAccountItems.JournalDate = Convert.ToDateTime(JournalDate);
                             newRRJournalForAccountItems.BranchId = rrItems.BranchId;
-                            newRRJournalForAccountItems.JVId = null;
                             newRRJournalForAccountItems.AccountId = rrItems.ItemAccountId;
                             newRRJournalForAccountItems.ArticleId = SupplierId;
                             newRRJournalForAccountItems.Particulars = "Items";
@@ -263,7 +504,6 @@ namespace easyfis.Business
 
                             newRRJournalForVAT.JournalDate = Convert.ToDateTime(JournalDate);
                             newRRJournalForVAT.BranchId = rrItemVAT.BranchId;
-                            newRRJournalForVAT.JVId = null;
                             newRRJournalForVAT.AccountId = AccountId;
                             newRRJournalForVAT.ArticleId = SupplierId;
                             newRRJournalForVAT.Particulars = "VAT";
@@ -294,7 +534,6 @@ namespace easyfis.Business
 
                         newRRJournalForAccountsPayable.JournalDate = Convert.ToDateTime(JournalDate);
                         newRRJournalForAccountsPayable.BranchId = BranchId;
-                        newRRJournalForAccountsPayable.JVId = null;
                         newRRJournalForAccountsPayable.AccountId = AccountId;
                         newRRJournalForAccountsPayable.ArticleId = SupplierId;
                         newRRJournalForAccountsPayable.Particulars = "AP";
@@ -326,7 +565,6 @@ namespace easyfis.Business
 
                             newRRJournalForWTAX.JournalDate = Convert.ToDateTime(JournalDate);
                             newRRJournalForWTAX.BranchId = rrItemWTAX.BranchId;
-                            newRRJournalForWTAX.JVId = null;
                             newRRJournalForWTAX.AccountId = AccountId;
                             newRRJournalForWTAX.ArticleId = SupplierId;
                             newRRJournalForWTAX.Particulars = "WTAX";
