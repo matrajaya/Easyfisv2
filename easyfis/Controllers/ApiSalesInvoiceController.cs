@@ -12,6 +12,7 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
         private Business.Inventory inventory = new Business.Inventory();
+        private Business.PostJournal journal = new Business.PostJournal();
 
         // ===================
         // Get Amount in Sales
@@ -382,12 +383,12 @@ namespace easyfis.Controllers
                     if (updateSales.IsLocked == true)
                     {
                         inventory.InsertSIInventory(sales_Id);
-                        //journal.insertRRJournal(receivingReceipt_Id);
+                        journal.insertSIJournal(sales_Id);
                     }
                     else
                     {
                         inventory.deleteSIInventory(sales_Id);
-                        //journal.deleteRRJournal(receivingReceipt_Id);
+                        journal.deleteSIJournal(sales_Id);
                     }
 
                     db.SubmitChanges();
@@ -433,12 +434,12 @@ namespace easyfis.Controllers
                     if (updateSales.IsLocked == true)
                     {
                         inventory.InsertSIInventory(sales_Id);
-                        //journal.insertRRJournal(receivingReceipt_Id);
+                        journal.insertSIJournal(sales_Id);
                     }
                     else
                     {
                         inventory.deleteSIInventory(sales_Id);
-                        //journal.deleteRRJournal(receivingReceipt_Id);
+                        journal.deleteSIJournal(sales_Id);
                     }
 
                     db.SubmitChanges();

@@ -3679,8 +3679,9 @@
 
             items.editItem(items.currentItem);
             var itemId = items.currentEditItem.Id;
+            var RRId = items.currentEditItem.RRId;
             $.ajax({
-                url: '/api/deleteReceivingReceiptItem/' + itemId,
+                url: '/api/deleteReceivingReceiptItem/' + itemId + '/' + RRId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

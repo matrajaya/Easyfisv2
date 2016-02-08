@@ -2546,8 +2546,9 @@
 
             items.editItem(items.currentItem);
             var item = items.currentEditItem.Id;
+            var itemSIId = items.currentEditItem.SIId;
             $.ajax({
-                url: '/api/deleteSalesInvoiceItem/' + item,
+                url: '/api/deleteSalesInvoiceItem/' + item + "/" + itemSIId,
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

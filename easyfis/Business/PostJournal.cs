@@ -36,8 +36,17 @@ namespace easyfis.Business
                                          BranchCode = d.MstBranch.BranchCode,
                                          SINumber = d.SINumber,
                                          SIDate = d.SIDate.ToShortDateString(),
-                                         CustomerId = d.CustomerId
+                                         CustomerId = d.CustomerId,
+                                         Amount = d.Amount
                                      };
+
+            Decimal siHeaderAmount = 0;
+            foreach (var siHeader in salesInvoiceHeader)
+            {
+                siHeaderAmount = siHeader.Amount;
+            }
+
+            Debug.WriteLine(siHeaderAmount);
 
             try
             {
@@ -53,7 +62,7 @@ namespace easyfis.Business
                 // Accounts Receivable
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
             }
@@ -101,9 +110,15 @@ namespace easyfis.Business
                                              BranchId = d.BranchId,
                                              BranchCode = d.MstBranch.BranchCode,
                                              RRNumber = d.RRNumber,
-                                             SupplierId = d.SupplierId
+                                             SupplierId = d.SupplierId,
+                                             Amount = d.Amount
                                          };
 
+            Decimal rrHeaderTotalAmount = 0;
+            foreach (var rrHeader in receivingReceiptHeader)
+            {
+                rrHeaderTotalAmount = rrHeader.Amount;
+            }
 
             // rritems
             var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
@@ -167,9 +182,18 @@ namespace easyfis.Business
                                                               WTAXAmount = d.WTAXAmount
                                                           };
 
-
+            Decimal rrItemsTotalAmount = 0;
+            Decimal rrItemsTotalVATAmount = 0;
             Decimal totalWTAXAmount = 0;
-            totalWTAXAmount = receivingReceiptItemsForTotalWTAXAmount.Sum(d => d.WTAXAmount);
+
+            if (!receivingReceiptItemsForTotalWTAXAmount.Any())
+            {
+                totalWTAXAmount = 0;
+            }
+            else
+            {
+                totalWTAXAmount = receivingReceiptItemsForTotalWTAXAmount.Sum(d => d.WTAXAmount);
+            }
 
             try
             {
@@ -187,99 +211,109 @@ namespace easyfis.Business
                     // Items
                     foreach (var rrItems in receivingReceiptItems)
                     {
-                        Data.TrnJournal newRRJournalForAccountItems = new Data.TrnJournal();
-
-                        IsInclusive = (from d in db.MstTaxTypes where d.Id == rrItems.VATId select d.IsInclusive).SingleOrDefault();
-
-                        if (IsInclusive == true)
+                        rrItemsTotalAmount = rrItems.Amount;
+                        if (rrItemsTotalAmount > 0)
                         {
-                            amount = rrItems.Amount - rrItems.VATAmount;
-                        }
-                        else
-                        {
-                            amount = rrItems.Amount;
-                        }
+                            Data.TrnJournal newRRJournalForAccountItems = new Data.TrnJournal();
 
-                        newRRJournalForAccountItems.JournalDate = Convert.ToDateTime(JournalDate);
-                        newRRJournalForAccountItems.BranchId = rrItems.BranchId;
-                        newRRJournalForAccountItems.JVId = null;
-                        newRRJournalForAccountItems.AccountId = rrItems.ItemAccountId;
-                        newRRJournalForAccountItems.ArticleId = SupplierId;
-                        newRRJournalForAccountItems.Particulars = "Items";
-                        newRRJournalForAccountItems.DebitAmount = amount;
-                        newRRJournalForAccountItems.CreditAmount = 0;
-                        newRRJournalForAccountItems.ORId = null;
-                        newRRJournalForAccountItems.CVId = null;
-                        newRRJournalForAccountItems.JVId = null;
-                        newRRJournalForAccountItems.RRId = RRId;
-                        newRRJournalForAccountItems.SIId = null;
-                        newRRJournalForAccountItems.INId = null;
-                        newRRJournalForAccountItems.OTId = null;
-                        newRRJournalForAccountItems.STId = null;
-                        newRRJournalForAccountItems.DocumentReference = "RR-" + BranchCode + "-" + RRNumber;
-                        newRRJournalForAccountItems.APRRId = null;
-                        newRRJournalForAccountItems.ARSIId = null;
+                            IsInclusive = (from d in db.MstTaxTypes where d.Id == rrItems.VATId select d.IsInclusive).SingleOrDefault();
 
-                        db.TrnJournals.InsertOnSubmit(newRRJournalForAccountItems);
+                            if (IsInclusive == true)
+                            {
+                                amount = rrItems.Amount - rrItems.VATAmount;
+                            }
+                            else
+                            {
+                                amount = rrItems.Amount;
+                            }
+
+                            newRRJournalForAccountItems.JournalDate = Convert.ToDateTime(JournalDate);
+                            newRRJournalForAccountItems.BranchId = rrItems.BranchId;
+                            newRRJournalForAccountItems.JVId = null;
+                            newRRJournalForAccountItems.AccountId = rrItems.ItemAccountId;
+                            newRRJournalForAccountItems.ArticleId = SupplierId;
+                            newRRJournalForAccountItems.Particulars = "Items";
+                            newRRJournalForAccountItems.DebitAmount = amount;
+                            newRRJournalForAccountItems.CreditAmount = 0;
+                            newRRJournalForAccountItems.ORId = null;
+                            newRRJournalForAccountItems.CVId = null;
+                            newRRJournalForAccountItems.JVId = null;
+                            newRRJournalForAccountItems.RRId = RRId;
+                            newRRJournalForAccountItems.SIId = null;
+                            newRRJournalForAccountItems.INId = null;
+                            newRRJournalForAccountItems.OTId = null;
+                            newRRJournalForAccountItems.STId = null;
+                            newRRJournalForAccountItems.DocumentReference = "RR-" + BranchCode + "-" + RRNumber;
+                            newRRJournalForAccountItems.APRRId = null;
+                            newRRJournalForAccountItems.ARSIId = null;
+
+                            db.TrnJournals.InsertOnSubmit(newRRJournalForAccountItems);
+                        }
                     }
 
                     // VAT
                     foreach (var rrItemVAT in receivingReceiptItemsForVAT)
                     {
-                        Data.TrnJournal newRRJournalForVAT = new Data.TrnJournal();
+                        rrItemsTotalVATAmount = rrItemVAT.VATAmount;
+                        if (rrItemsTotalVATAmount > 0)
+                        {
+                            Data.TrnJournal newRRJournalForVAT = new Data.TrnJournal();
 
-                        AccountId = (from d in db.MstTaxTypes where d.Id == rrItemVAT.VATId select d.AccountId).SingleOrDefault();
+                            AccountId = (from d in db.MstTaxTypes where d.Id == rrItemVAT.VATId select d.AccountId).SingleOrDefault();
 
-                        newRRJournalForVAT.JournalDate = Convert.ToDateTime(JournalDate);
-                        newRRJournalForVAT.BranchId = rrItemVAT.BranchId;
-                        newRRJournalForVAT.JVId = null;
-                        newRRJournalForVAT.AccountId = AccountId;
-                        newRRJournalForVAT.ArticleId = SupplierId;
-                        newRRJournalForVAT.Particulars = "VAT";
-                        newRRJournalForVAT.DebitAmount = rrItemVAT.VATAmount;
-                        newRRJournalForVAT.CreditAmount = 0;
-                        newRRJournalForVAT.ORId = null;
-                        newRRJournalForVAT.CVId = null;
-                        newRRJournalForVAT.JVId = null;
-                        newRRJournalForVAT.RRId = RRId;
-                        newRRJournalForVAT.SIId = null;
-                        newRRJournalForVAT.INId = null;
-                        newRRJournalForVAT.OTId = null;
-                        newRRJournalForVAT.STId = null;
-                        newRRJournalForVAT.DocumentReference = "RR-" + BranchCode + "-" + RRNumber;
-                        newRRJournalForVAT.APRRId = null;
-                        newRRJournalForVAT.ARSIId = null;
+                            newRRJournalForVAT.JournalDate = Convert.ToDateTime(JournalDate);
+                            newRRJournalForVAT.BranchId = rrItemVAT.BranchId;
+                            newRRJournalForVAT.JVId = null;
+                            newRRJournalForVAT.AccountId = AccountId;
+                            newRRJournalForVAT.ArticleId = SupplierId;
+                            newRRJournalForVAT.Particulars = "VAT";
+                            newRRJournalForVAT.DebitAmount = rrItemVAT.VATAmount;
+                            newRRJournalForVAT.CreditAmount = 0;
+                            newRRJournalForVAT.ORId = null;
+                            newRRJournalForVAT.CVId = null;
+                            newRRJournalForVAT.JVId = null;
+                            newRRJournalForVAT.RRId = RRId;
+                            newRRJournalForVAT.SIId = null;
+                            newRRJournalForVAT.INId = null;
+                            newRRJournalForVAT.OTId = null;
+                            newRRJournalForVAT.STId = null;
+                            newRRJournalForVAT.DocumentReference = "RR-" + BranchCode + "-" + RRNumber;
+                            newRRJournalForVAT.APRRId = null;
+                            newRRJournalForVAT.ARSIId = null;
 
-                        db.TrnJournals.InsertOnSubmit(newRRJournalForVAT);
+                            db.TrnJournals.InsertOnSubmit(newRRJournalForVAT);
+                        }
                     }
 
+                    // Accounts Payable
+                    if (rrHeaderTotalAmount > 0)
+                    {
+                        Data.TrnJournal newRRJournalForAccountsPayable = new Data.TrnJournal();
 
-                    Data.TrnJournal newRRJournalForAccountsPayable = new Data.TrnJournal();
+                        AccountId = (from d in db.MstArticles where d.Id == SupplierId select d.AccountId).SingleOrDefault();
 
-                    AccountId = (from d in db.MstArticles where d.Id == SupplierId select d.AccountId).SingleOrDefault();
+                        newRRJournalForAccountsPayable.JournalDate = Convert.ToDateTime(JournalDate);
+                        newRRJournalForAccountsPayable.BranchId = BranchId;
+                        newRRJournalForAccountsPayable.JVId = null;
+                        newRRJournalForAccountsPayable.AccountId = AccountId;
+                        newRRJournalForAccountsPayable.ArticleId = SupplierId;
+                        newRRJournalForAccountsPayable.Particulars = "AP";
+                        newRRJournalForAccountsPayable.DebitAmount = 0;
+                        newRRJournalForAccountsPayable.CreditAmount = receivingReceiptItems.Sum(d => d.Amount) - totalWTAXAmount;
+                        newRRJournalForAccountsPayable.ORId = null;
+                        newRRJournalForAccountsPayable.CVId = null;
+                        newRRJournalForAccountsPayable.JVId = null;
+                        newRRJournalForAccountsPayable.RRId = RRId;
+                        newRRJournalForAccountsPayable.SIId = null;
+                        newRRJournalForAccountsPayable.INId = null;
+                        newRRJournalForAccountsPayable.OTId = null;
+                        newRRJournalForAccountsPayable.STId = null;
+                        newRRJournalForAccountsPayable.DocumentReference = "RR-" + BranchCode + "-" + RRNumber;
+                        newRRJournalForAccountsPayable.APRRId = null;
+                        newRRJournalForAccountsPayable.ARSIId = null;
 
-                    newRRJournalForAccountsPayable.JournalDate = Convert.ToDateTime(JournalDate);
-                    newRRJournalForAccountsPayable.BranchId = BranchId;
-                    newRRJournalForAccountsPayable.JVId = null;
-                    newRRJournalForAccountsPayable.AccountId = AccountId;
-                    newRRJournalForAccountsPayable.ArticleId = SupplierId;
-                    newRRJournalForAccountsPayable.Particulars = "AP";
-                    newRRJournalForAccountsPayable.DebitAmount = 0;
-                    newRRJournalForAccountsPayable.CreditAmount = receivingReceiptItems.Sum(d => d.Amount) - totalWTAXAmount;
-                    newRRJournalForAccountsPayable.ORId = null;
-                    newRRJournalForAccountsPayable.CVId = null;
-                    newRRJournalForAccountsPayable.JVId = null;
-                    newRRJournalForAccountsPayable.RRId = RRId;
-                    newRRJournalForAccountsPayable.SIId = null;
-                    newRRJournalForAccountsPayable.INId = null;
-                    newRRJournalForAccountsPayable.OTId = null;
-                    newRRJournalForAccountsPayable.STId = null;
-                    newRRJournalForAccountsPayable.DocumentReference = "RR-" + BranchCode + "-" + RRNumber;
-                    newRRJournalForAccountsPayable.APRRId = null;
-                    newRRJournalForAccountsPayable.ARSIId = null;
-
-                    db.TrnJournals.InsertOnSubmit(newRRJournalForAccountsPayable);
-
+                        db.TrnJournals.InsertOnSubmit(newRRJournalForAccountsPayable);
+                    }
 
                     // WTAX
                     foreach (var rrItemWTAX in receivingReceiptItemsForWTAX)

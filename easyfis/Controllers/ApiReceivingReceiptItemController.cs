@@ -269,7 +269,7 @@ namespace easyfis.Controllers
                                          BaseQuantity = d.Quantity,
                                      };
 
-            Data.TrnReceivingReceiptItem newReceivingReceiptItem = new Data.TrnReceivingReceiptItem();; 
+            Data.TrnReceivingReceiptItem newReceivingReceiptItem = new Data.TrnReceivingReceiptItem(); ;
 
 
             var multipier = 0;
@@ -293,7 +293,6 @@ namespace easyfis.Controllers
                 foreach (var m in mutlipliers)
                 {
                     convertMultiplier = m.Multiplier;
-                    Debug.WriteLine("Multiplier");
                     break;
                 }
             }
@@ -596,13 +595,13 @@ namespace easyfis.Controllers
                     if (receivingReceipts.Any())
                     {
                         var rrItems = from d in db.TrnReceivingReceiptItems
-                                                    where d.RRId == receivingReceiptItem.RRId
-                                                    select new Models.TrnReceivingReceiptItem
-                                                    {
-                                                        Id = d.Id,
-                                                        RRId = d.RRId,
-                                                        Amount = d.Amount
-                                                    };
+                                      where d.RRId == receivingReceiptItem.RRId
+                                      select new Models.TrnReceivingReceiptItem
+                                      {
+                                          Id = d.Id,
+                                          RRId = d.RRId,
+                                          Amount = d.Amount
+                                      };
 
                         Decimal amount;
                         if (!rrItems.Any())
@@ -614,10 +613,12 @@ namespace easyfis.Controllers
                             amount = rrItems.Sum(d => d.Amount);
                         }
 
-                        var updatereceivingReceipt = rrItems.FirstOrDefault();
+                        var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
 
                         updatereceivingReceipt.Amount = amount;
                         db.SubmitChanges();
+
+                        Debug.WriteLine("Lahos ka duha" + amount);
                     }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
@@ -637,12 +638,13 @@ namespace easyfis.Controllers
         // =============================
         // DELETE Receving Retrieve Item
         // =============================
-        [Route("api/deleteReceivingReceiptItem/{id}")]
-        public HttpResponseMessage Delete(String id)
+        [Route("api/deleteReceivingReceiptItem/{id}/{RRId}")]
+        public HttpResponseMessage Delete(String id, String RRId)
         {
             try
             {
                 var receivingReceiptItemId = Convert.ToInt32(id);
+                var receivingReceiptItemRRId = Convert.ToInt32(RRId);
                 var receivingReceiptItems = from d in db.TrnReceivingReceiptItems where d.Id == receivingReceiptItemId select d;
 
                 if (receivingReceiptItems.Any())
@@ -650,6 +652,34 @@ namespace easyfis.Controllers
                     db.TrnReceivingReceiptItems.DeleteOnSubmit(receivingReceiptItems.First());
                     db.SubmitChanges();
 
+                    var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == receivingReceiptItemRRId select d;
+                    if (receivingReceipts.Any())
+                    {
+                        var rrItems = from d in db.TrnReceivingReceiptItems
+                                      where d.RRId == receivingReceiptItemRRId
+                                      select new Models.TrnReceivingReceiptItem
+                                      {
+                                          Id = d.Id,
+                                          RRId = d.RRId,
+                                          Amount = d.Amount
+                                      };
+
+                        Decimal amount;
+                        if (!rrItems.Any())
+                        {
+                            amount = 0;
+                        }
+                        else
+                        {
+                            amount = rrItems.Sum(d => d.Amount);
+                        }
+
+                        var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
+
+                        updatereceivingReceipt.Amount = amount;
+                        db.SubmitChanges();
+                    }
+                    
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else

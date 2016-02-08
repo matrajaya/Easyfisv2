@@ -245,18 +245,47 @@ namespace easyfis.Controllers
         // =========================
         // DELETE Sales Invoice Item
         // =========================
-        [Route("api/deleteSalesInvoiceItem/{id}")]
-        public HttpResponseMessage Delete(String id)
+        [Route("api/deleteSalesInvoiceItem/{id}/{SIId}")]
+        public HttpResponseMessage Delete(String id, String SIId)
         {
             try
             {
                 var saleItemId = Convert.ToInt32(id);
+                var saleItemSIId = Convert.ToInt32(SIId);
                 var saleItems = from d in db.TrnSalesInvoiceItems where d.Id == saleItemId select d;
 
                 if (saleItems.Any())
                 {
                     db.TrnSalesInvoiceItems.DeleteOnSubmit(saleItems.First());
                     db.SubmitChanges();
+
+                    var salesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItemSIId select d;
+                    if (salesInvoces.Any())
+                    {
+                        var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                                where d.SIId == saleItemSIId
+                                                select new Models.TrnSalesInvoiceItem
+                                                {
+                                                    Id = d.Id,
+                                                    SIId = d.SIId,
+                                                    Amount = d.Amount,
+                                                    VATAmount = d.VATAmount
+                                                };
+
+                        Decimal amount;
+                        if (!salesInvoiceItems.Any())
+                        {
+                            amount = 0;
+                        }
+                        else
+                        {
+                            amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                        }
+
+                        var updateSales = salesInvoces.FirstOrDefault();
+                        updateSales.Amount = amount;
+                        db.SubmitChanges();
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
