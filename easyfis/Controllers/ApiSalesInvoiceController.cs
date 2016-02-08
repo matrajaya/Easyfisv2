@@ -13,6 +13,57 @@ namespace easyfis.Controllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
         private Business.Inventory inventory = new Business.Inventory();
 
+        // ===================
+        // Get Amount in Sales
+        // ===================
+        public Decimal getAmount(Int32 SIId)
+        {
+            var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                    where d.SIId == SIId
+                                    select new Models.TrnSalesInvoiceItem
+                                    {
+                                        Id = d.Id,
+                                        SIId = d.SIId,
+                                        SI = d.TrnSalesInvoice.SINumber,
+                                        ItemId = d.ItemId,
+                                        ItemCode = d.MstArticle.ManualArticleCode,
+                                        Item = d.MstArticle.Article,
+                                        ItemInventoryId = d.ItemInventoryId,
+                                        ItemInventory = d.MstArticleInventory.InventoryCode,
+                                        Particulars = d.Particulars,
+                                        UnitId = d.UnitId,
+                                        Unit = d.MstUnit.Unit,
+                                        Quantity = d.Quantity,
+                                        Price = d.Price,
+                                        DiscountId = d.DiscountId,
+                                        Discount = d.MstDiscount.Discount,
+                                        DiscountRate = d.DiscountRate,
+                                        DiscountAmount = d.DiscountAmount,
+                                        NetPrice = d.NetPrice,
+                                        Amount = d.Amount,
+                                        VATId = d.VATId,
+                                        VAT = d.MstTaxType.TaxType,
+                                        VATPercentage = d.VATPercentage,
+                                        VATAmount = d.VATAmount,
+                                        BaseUnitId = d.BaseUnitId,
+                                        BaseUnit = d.MstUnit1.Unit,
+                                        BaseQuantity = d.BaseQuantity,
+                                        BasePrice = d.BasePrice
+                                    };
+
+            Decimal amount;
+            if (!salesInvoiceItems.Any())
+            {
+                amount = 0;
+            }
+            else
+            {
+                amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+            }
+            
+            return amount;
+        }
+
         // ==================
         // LIST Sales Invoice
         // ==================
@@ -261,7 +312,7 @@ namespace easyfis.Controllers
                 newSales.DocumentReference = sales.DocumentReference;
                 newSales.ManualSINumber = sales.ManualSINumber;
                 newSales.Remarks = sales.Remarks;
-                newSales.Amount = sales.Amount;
+                newSales.Amount = 0;
                 newSales.PaidAmount = sales.PaidAmount;
                 newSales.AdjustmentAmount = sales.AdjustmentAmount;
                 newSales.BalanceAmount = sales.BalanceAmount;
@@ -315,7 +366,7 @@ namespace easyfis.Controllers
                     updateSales.DocumentReference = sales.DocumentReference;
                     updateSales.ManualSINumber = sales.ManualSINumber;
                     updateSales.Remarks = sales.Remarks;
-                    updateSales.Amount = sales.Amount;
+                    updateSales.Amount = getAmount(sales_Id);
                     updateSales.PaidAmount = sales.PaidAmount;
                     updateSales.AdjustmentAmount = sales.AdjustmentAmount;
                     updateSales.BalanceAmount = sales.BalanceAmount;

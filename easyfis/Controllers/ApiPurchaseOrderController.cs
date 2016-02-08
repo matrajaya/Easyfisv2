@@ -77,7 +77,7 @@ namespace easyfis.Controllers
                                          Cost = d.Cost,
                                          Amount = d.Amount
                                      };
-            decimal amount;
+            Decimal amount;
 
             if (!PurchaseOrderItems.Any())
             {
@@ -348,18 +348,15 @@ namespace easyfis.Controllers
                 newPO.UpdatedById = mstUserId;
                 newPO.UpdatedDateTime = date;
 
-                Debug.WriteLine("Lahos");
                 db.TrnPurchaseOrders.InsertOnSubmit(newPO);
                 db.SubmitChanges();
 
-                Debug.WriteLine("Lahos2");
                 return newPO.Id;
 
             }
             catch(Exception e)
             {
                 Debug.WriteLine(e);
-                Debug.WriteLine("wala");
                 return 0;
             }
         }

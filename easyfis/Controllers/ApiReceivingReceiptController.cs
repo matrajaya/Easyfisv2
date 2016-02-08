@@ -15,6 +15,58 @@ namespace easyfis.Controllers
         private Business.Inventory inventory = new Business.Inventory();
         private Business.PostJournal journal = new Business.PostJournal();
 
+        // ===================
+        // Get Amount in Sales
+        // ===================
+        public Decimal getAmount(Int32 RRId)
+        {
+            var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                                        where d.RRId == RRId
+                                        select new Models.TrnReceivingReceiptItem
+                                        {
+                                            Id = d.Id,
+                                            RRId = d.RRId,
+                                            RR = d.TrnReceivingReceipt.RRNumber,
+                                            POId = d.POId,
+                                            PO = d.TrnPurchaseOrder.PONumber,
+                                            ItemId = d.ItemId,
+                                            Item = d.MstArticle.Article,
+                                            ItemCode = d.MstArticle.ManualArticleCode,
+                                            Particulars = d.Particulars,
+                                            UnitId = d.UnitId,
+                                            Unit = d.MstUnit.Unit,
+                                            Quantity = d.Quantity,
+                                            Cost = d.Cost,
+                                            Amount = d.Amount,
+                                            VATId = d.VATId,
+                                            VAT = d.MstTaxType.TaxType,
+                                            VATPercentage = d.VATPercentage,
+                                            VATAmount = d.VATAmount,
+                                            WTAXId = d.WTAXId,
+                                            WTAX = d.MstTaxType1.TaxType,
+                                            WTAXPercentage = d.WTAXPercentage,
+                                            WTAXAmount = d.WTAXAmount,
+                                            BranchId = d.BranchId,
+                                            Branch = d.MstBranch.Branch,
+                                            BaseUnitId = d.BaseUnitId,
+                                            BaseUnit = d.MstUnit1.Unit,
+                                            BaseQuantity = d.BaseQuantity,
+                                            BaseCost = d.BaseCost
+                                        };
+
+            Decimal amount;
+            if (!receivingReceiptItems.Any())
+            {
+                amount = 0;
+            }
+            else
+            {
+                amount = receivingReceiptItems.Sum(d => d.Amount);
+            }
+
+            return amount;
+        }
+
         // ======================
         // LIST Receiving Receipt
         // ======================
@@ -267,7 +319,7 @@ namespace easyfis.Controllers
                 newReceivingReceipt.DocumentReference = receivingReceipt.DocumentReference;
                 newReceivingReceipt.ManualRRNumber = receivingReceipt.ManualRRNumber;
                 newReceivingReceipt.Remarks = receivingReceipt.Remarks;
-                newReceivingReceipt.Amount = receivingReceipt.Amount;
+                newReceivingReceipt.Amount = 0;
                 newReceivingReceipt.WTaxAmount = receivingReceipt.WTaxAmount;
                 newReceivingReceipt.PaidAmount = receivingReceipt.PaidAmount;
                 newReceivingReceipt.AdjustmentAmount = receivingReceipt.AdjustmentAmount;
@@ -323,7 +375,7 @@ namespace easyfis.Controllers
                     updatereceivingReceipt.DocumentReference = receivingReceipt.DocumentReference;
                     updatereceivingReceipt.ManualRRNumber = receivingReceipt.ManualRRNumber;
                     updatereceivingReceipt.Remarks = receivingReceipt.Remarks;
-                    updatereceivingReceipt.Amount = receivingReceipt.Amount;
+                    updatereceivingReceipt.Amount = getAmount(receivingReceipt_Id);
                     updatereceivingReceipt.WTaxAmount = receivingReceipt.WTaxAmount;
                     updatereceivingReceipt.PaidAmount = receivingReceipt.PaidAmount;
                     updatereceivingReceipt.AdjustmentAmount = receivingReceipt.AdjustmentAmount;

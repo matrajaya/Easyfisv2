@@ -322,13 +322,39 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
                 newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Amount, POItems.VATPercentage, POItems.IsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.IsInclusive);
 
-
-                Debug.WriteLine(convertMultiplier);
-
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }
 
             db.SubmitChanges();
+
+            var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == RRItem_Id select d;
+            if (receivingReceipts.Any())
+            {
+                var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                                            where d.RRId == RRItem_Id
+                                            select new Models.TrnReceivingReceiptItem
+                                            {
+                                                Id = d.Id,
+                                                RRId = d.RRId,
+                                                Amount = d.Amount
+                                            };
+
+                Decimal amount;
+                if (!receivingReceiptItems.Any())
+                {
+                    amount = 0;
+                }
+                else
+                {
+                    amount = receivingReceiptItems.Sum(d => d.Amount);
+                }
+
+                var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
+
+                updatereceivingReceipt.Amount = amount;
+                db.SubmitChanges();
+            }
+
             return newReceivingReceiptItem.Id;
         }
 
@@ -424,13 +450,39 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
                 newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Amount, POItems.VATPercentage, POItems.IsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.IsInclusive);
 
-
-                Debug.WriteLine(convertMultiplier);
-
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }
 
             db.SubmitChanges();
+
+            var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == RRItem_Id select d;
+            if (receivingReceipts.Any())
+            {
+                var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                                            where d.RRId == RRItem_Id
+                                            select new Models.TrnReceivingReceiptItem
+                                            {
+                                                Id = d.Id,
+                                                RRId = d.RRId,
+                                                Amount = d.Amount
+                                            };
+
+                Decimal amount;
+                if (!receivingReceiptItems.Any())
+                {
+                    amount = 0;
+                }
+                else
+                {
+                    amount = receivingReceiptItems.Sum(d => d.Amount);
+                }
+
+                var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
+
+                updatereceivingReceipt.Amount = amount;
+                db.SubmitChanges();
+            }
+
             return newReceivingReceiptItem.Id;
         }
 
@@ -465,6 +517,34 @@ namespace easyfis.Controllers
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
                 db.SubmitChanges();
+
+                var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == receivingReceiptItem.RRId select d;
+                if (receivingReceipts.Any())
+                {
+                    var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                                                where d.RRId == receivingReceiptItem.RRId
+                                                select new Models.TrnReceivingReceiptItem
+                                                {
+                                                    Id = d.Id,
+                                                    RRId = d.RRId,
+                                                    Amount = d.Amount
+                                                };
+
+                    Decimal amount;
+                    if (!receivingReceiptItems.Any())
+                    {
+                        amount = 0;
+                    }
+                    else
+                    {
+                        amount = receivingReceiptItems.Sum(d => d.Amount);
+                    }
+
+                    var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
+
+                    updatereceivingReceipt.Amount = amount;
+                    db.SubmitChanges();
+                }
 
                 return newReceivingReceiptItem.Id;
 
@@ -511,6 +591,34 @@ namespace easyfis.Controllers
                     updateReceivingReceiptItem.BaseCost = receivingReceiptItem.BaseCost;
 
                     db.SubmitChanges();
+
+                    var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == receivingReceiptItem.RRId select d;
+                    if (receivingReceipts.Any())
+                    {
+                        var rrItems = from d in db.TrnReceivingReceiptItems
+                                                    where d.RRId == receivingReceiptItem.RRId
+                                                    select new Models.TrnReceivingReceiptItem
+                                                    {
+                                                        Id = d.Id,
+                                                        RRId = d.RRId,
+                                                        Amount = d.Amount
+                                                    };
+
+                        Decimal amount;
+                        if (!rrItems.Any())
+                        {
+                            amount = 0;
+                        }
+                        else
+                        {
+                            amount = rrItems.Sum(d => d.Amount);
+                        }
+
+                        var updatereceivingReceipt = rrItems.FirstOrDefault();
+
+                        updatereceivingReceipt.Amount = amount;
+                        db.SubmitChanges();
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

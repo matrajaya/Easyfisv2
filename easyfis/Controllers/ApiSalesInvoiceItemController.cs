@@ -126,6 +126,34 @@ namespace easyfis.Controllers
                 db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleItem);
                 db.SubmitChanges();
 
+                var salesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItem.SIId select d;
+                if (salesInvoces.Any())
+                {
+                    var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                            where d.SIId == saleItem.SIId
+                                            select new Models.TrnSalesInvoiceItem
+                                            {
+                                                Id = d.Id,
+                                                SIId = d.SIId,
+                                                Amount = d.Amount,
+                                                VATAmount = d.VATAmount
+                                            };
+
+                    Decimal amount;
+                    if (!salesInvoiceItems.Any())
+                    {
+                        amount = 0;
+                    }
+                    else
+                    {
+                        amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                    }
+
+                    var updateSales = salesInvoces.FirstOrDefault();
+                    updateSales.Amount = amount;
+                    db.SubmitChanges();
+                }
+
                 return newSaleItem.Id;
 
             }
@@ -170,6 +198,34 @@ namespace easyfis.Controllers
                     updateSalesInvoiceItem.BasePrice = saleItem.BasePrice;
 
                     db.SubmitChanges();
+
+                    var salesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItem.SIId select d;
+                    if (salesInvoces.Any())
+                    {
+                        var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                                where d.SIId == saleItem.SIId
+                                                select new Models.TrnSalesInvoiceItem
+                                                {
+                                                    Id = d.Id,
+                                                    SIId = d.SIId,
+                                                    Amount = d.Amount,
+                                                    VATAmount = d.VATAmount
+                                                };
+
+                        Decimal amount;
+                        if (!salesInvoiceItems.Any())
+                        {
+                            amount = 0;
+                        }
+                        else
+                        {
+                            amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                        }
+
+                        var updateSales = salesInvoces.FirstOrDefault();
+                        updateSales.Amount = amount;
+                        db.SubmitChanges();
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

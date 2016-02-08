@@ -10,11 +10,71 @@ namespace easyfis.Business
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-
+        // ========================
+        // Sales Invoice in Journal
+        // ========================
+        // Insert Sales Invoice in Journal
         public void insertSIJournal(Int32 SIId)
         {
+            String JournalDate = "";
+            Int32 BranchId = 0;
+            String BranchCode = "";
+            Int32 CustomerId = 0;
+            Int32 AccountId = 0;
+            Int32 CostAccountId = 0;
+            String SINumber = "";
+            Decimal Amount;
+            Decimal Cost;
 
+            var salesInvoiceHeader = from d in db.TrnSalesInvoices
+                                     where d.Id == SIId
+                                     select new Models.TrnSalesInvoice
+                                     {
+                                         Id = d.Id,
+                                         BranchId = d.BranchId,
+                                         Branch = d.MstBranch.Branch,
+                                         BranchCode = d.MstBranch.BranchCode,
+                                         SINumber = d.SINumber,
+                                         SIDate = d.SIDate.ToShortDateString(),
+                                         CustomerId = d.CustomerId
+                                     };
 
+            try
+            {
+                foreach (var salesInvoice in salesInvoiceHeader)
+                {
+                    JournalDate = salesInvoice.SIDate;
+                    BranchId = salesInvoice.BranchId;
+                    BranchCode = salesInvoice.BranchCode;
+                    SINumber = salesInvoice.SINumber;
+                    CustomerId = salesInvoice.CustomerId;
+                }
+
+                // Accounts Receivable
+
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+        }
+        // delete Sales Invoice in Journal
+        public void deleteSIJournal(Int32 SIId)
+        {
+            try
+            {
+                var journals = db.TrnJournals.Where(d => d.SIId == SIId).ToList();
+                foreach (var j in journals)
+                {
+                    db.TrnJournals.DeleteOnSubmit(j);
+                    db.SubmitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
 
         // ============================
