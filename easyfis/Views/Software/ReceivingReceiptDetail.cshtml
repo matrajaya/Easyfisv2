@@ -2152,7 +2152,7 @@
             $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", true);
             $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", true);
             var RRId = @RRId;
-            var BranchId = @branchId;
+            var BranchId = document.getElementById('RRbranch_data').value;
             var POId = document.getElementById('POStatus_PONumber_data').value;
             $.ajax({
                 url: '/api/applyAllPOItemToReceivingReceiptItem/' + RRId + '/' + BranchId + '/' + POId,
@@ -2250,7 +2250,7 @@
             console.log(POStatusId);
 
             var RRId = @RRId;
-            var BranchId = @branchId;
+            var BranchId = document.getElementById('RRbranch_data').value;
             var POId = document.getElementById('POStatus_PONumber_data').value;
             $.ajax({
                 url: '/api/applyPOItemToReceivingReceiptItem/' + RRId + '/' + BranchId + '/' + POId + '/' + POStatusId,
