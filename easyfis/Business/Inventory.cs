@@ -46,7 +46,7 @@ namespace easyfis.Business
                         inventoryAverageCost = 0;
                     }
                 }
-                else 
+                else
                 {
                     inventoryAverageCost = Math.Round((inventoryTotalAmount / inventoryTotalQuantity) * 100) / 100;
                 }
@@ -406,7 +406,7 @@ namespace easyfis.Business
                         }
 
                         Data.TrnInventory newInventory = new Data.TrnInventory();
-                        
+
                         if (RRItems.BaseQuantity > 0)
                         {
                             if (articleInventories.Any())
@@ -483,6 +483,43 @@ namespace easyfis.Business
         // Delete Inventory
         public void deleteRRInventory(Int32 RRId)
         {
+            // retrieve Receiving Receipt Items IsInventory == TRUE
+            var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                                        where d.RRId == RRId && d.MstArticle.IsInventory == true
+                                        select new Models.TrnReceivingReceiptItem
+                                        {
+                                            Id = d.Id,
+                                            RRId = d.RRId,
+                                            RR = d.TrnReceivingReceipt.RRNumber,
+                                            RRDate = d.TrnReceivingReceipt.RRDate.ToShortDateString(),
+                                            POId = d.POId,
+                                            PO = d.TrnPurchaseOrder.PONumber,
+                                            ItemId = d.ItemId,
+                                            Item = d.MstArticle.Article,
+                                            ItemCode = d.MstArticle.ManualArticleCode,
+                                            Particulars = d.Particulars,
+                                            UnitId = d.UnitId,
+                                            Unit = d.MstUnit.Unit,
+                                            Quantity = d.Quantity,
+                                            Cost = d.Cost,
+                                            Amount = d.Amount,
+                                            VATId = d.VATId,
+                                            VAT = d.MstTaxType.TaxType,
+                                            VATPercentage = d.VATPercentage,
+                                            VATAmount = d.VATAmount,
+                                            WTAXId = d.WTAXId,
+                                            WTAX = d.MstTaxType1.TaxType,
+                                            WTAXPercentage = d.WTAXPercentage,
+                                            WTAXAmount = d.WTAXAmount,
+                                            BranchId = d.BranchId,
+                                            Branch = d.MstBranch.Branch,
+                                            BranchCode = d.MstBranch.BranchCode,
+                                            BaseUnitId = d.BaseUnitId,
+                                            BaseUnit = d.MstUnit1.Unit,
+                                            BaseQuantity = d.BaseQuantity,
+                                            BaseCost = d.BaseCost
+                                        };
+
             try
             {
                 var RRInventories = db.TrnInventories.Where(d => d.RRId == RRId).ToList();
@@ -490,6 +527,33 @@ namespace easyfis.Business
                 {
                     db.TrnInventories.DeleteOnSubmit(RRInventory);
                     db.SubmitChanges();
+                }
+
+                if (receivingReceiptItems.Any())
+                {
+                    foreach (var RRItems in receivingReceiptItems)
+                    {
+                        // retrieve Artticle Inventory
+                        var articleInventories = from d in db.MstArticleInventories
+                                                 where d.BranchId == RRItems.BranchId && d.ArticleId == RRItems.ItemId && d.InventoryCode == "RR-" + RRItems.BranchCode + "-" + RRItems.RR
+                                                 select new Models.MstArticleInventory
+                                                 {
+                                                     Id = d.Id,
+                                                     BranchId = d.BranchId,
+                                                     ArticleId = d.ArticleId,
+                                                     InventoryCode = d.InventoryCode,
+                                                     Quantity = d.Quantity,
+                                                     Cost = d.Cost,
+                                                     Amount = d.Amount,
+                                                     Particulars = d.Particulars
+                                                 };
+
+                        foreach (var articleInventory in articleInventories)
+                        {
+                            UpdateArticleInventory(articleInventory.Id);
+                            Debug.WriteLine(articleInventory.Id);
+                        }
+                    }
                 }
             }
             catch (Exception e)
