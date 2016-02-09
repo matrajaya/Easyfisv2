@@ -65,6 +65,16 @@ namespace easyfis.Business
                                         VATAmount = g.Sum(d => d.VATAmount)
                                     };
 
+            //foreach (var siitemsdisplay in salesInvoiceItems)
+            //{
+            //    Debug.WriteLine("SalesAccountId " + siitemsdisplay.SalesAccountId);
+            //    Debug.WriteLine("VATId " + siitemsdisplay.VATId);
+            //    Debug.WriteLine("SIId " + siitemsdisplay.SIId);
+            //    Debug.WriteLine("Amount " + siitemsdisplay.Amount);
+            //    Debug.WriteLine("VATAmount " + siitemsdisplay.VATAmount);
+
+            //}
+
             // SI Items - VAT
             var salesInvoiceItemsForVAT = from d in db.TrnSalesInvoiceItems
                                           where d.SIId == SIId
@@ -109,6 +119,15 @@ namespace easyfis.Business
                                                     AccountId = g.Key.AccountId,
                                                     Amount = g.Sum(d => d.Amount)
                                                 };
+
+
+            foreach (var siitemsdisplays in salesInvoiceItemsForInventory)
+            {
+                Debug.WriteLine("SIId " + siitemsdisplays.SIId);
+                Debug.WriteLine("AccountId " + siitemsdisplays.AccountId);
+                Debug.WriteLine("Amount " + siitemsdisplays.Amount);
+
+            }
 
 
             try
@@ -173,12 +192,10 @@ namespace easyfis.Business
                                 }
 
                                 Data.TrnJournal newSIJournalForSales = new Data.TrnJournal();
-
-                                AccountId = (from d in db.MstArticles where d.Id == CustomerId select d.AccountId).SingleOrDefault();
-
+                                
                                 newSIJournalForSales.JournalDate = Convert.ToDateTime(JournalDate);
                                 newSIJournalForSales.BranchId = BranchId;
-                                newSIJournalForSales.AccountId = AccountId;
+                                newSIJournalForSales.AccountId = salesItem.SalesAccountId;
                                 newSIJournalForSales.ArticleId = CustomerId;
                                 newSIJournalForSales.Particulars = "Sales";
                                 newSIJournalForSales.DebitAmount = 0;
