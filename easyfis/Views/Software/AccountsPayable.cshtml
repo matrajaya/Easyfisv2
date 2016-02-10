@@ -15,6 +15,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
+    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
     <div id="wrapper" class="wrapper">
@@ -32,7 +33,7 @@
                     <span id="currentPage"></span>
                 </div>
                 @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>*@
+                    <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>*@
                 @*<br /><br />*@
                 @*<h2>Accounts Payable</h2>*@
                 <div class="row">
@@ -60,24 +61,64 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Date as of:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="accountsPaybleReport_DateAsOf"></div>
+                                                        <input type="hidden" id="accountsPaybleReport_DateAsOf_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Company:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="accountsPaybleReport_Comapny"></div>
+
+                                                        <input type="hidden" id="accountsPaybleReport_Comapny_data" />
+                                                        <input type="hidden" id="accountsPaybleReport_Comapny_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="checkbox" id="" />
+                                                        <input type="checkbox" id="filterAccountAndSupplier" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                                <div id="filterTabs">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div id="one" class="tab-pane fade in active">
+                                            <div class="well">
+                                                <form class="form-horizontal" role="form">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Account:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="accountsPaybleReport_Accounts"></div>
+
+                                                                    <input type="hidden" id="accountsPaybleReport_Accounts_data" />
+                                                                    <input type="hidden" id="accountsPaybleReport_Accounts_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Supplier:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="accountsPaybleReport_Supplier"></div>
+
+                                                                    <input type="hidden" id="accountsPaybleReport_Supplier_data" />
+                                                                    <input type="hidden" id="accountsPaybleReport_Supplier_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div id="APV" class="tab-pane fade">
@@ -235,10 +276,282 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
+    @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var accountsPayableReportDateAsOf;
+        var companies;
+        var cboCompany;
+        var accounts;
+        var cboAccounts;
+        var suppliers;
+        var cboSuppliers;
 
-        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Accounts Payable';
+        // ===========
+        // Get company
+        // ===========
+        function getCompanies() {
+            companies = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listCompany',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            companies.push({
+                                Id: results[i]["Id"],
+                                Company: results[i]["Company"],
+                                Address: results[i]["Address"],
+                                ContactNumber: results[i]["ContactNumber"],
+                                TaxNumber: results[i]["TaxNumber"],
+                            });
+                        }
 
+                        createCboComapny(companies);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return companies;
+        }
+
+        // ===================
+        // Company - Combo Box
+        // ===================
+        function createCboComapny(companies) {
+            var companyCollection = new wijmo.collections.CollectionView(companies);
+            var companyList = new Array();
+            for (var i = 0; i < companyCollection.items.length; i++) {
+                companyList.push(companyCollection.items[i].Company);
+            }
+
+            cboCompany.dispose();
+            cboCompany = new wijmo.input.ComboBox('#accountsPaybleReport_Comapny', {
+                placeholder: "Select Company",
+                itemsSource: companyList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('accountsPaybleReport_Comapny_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#accountsPaybleReport_Comapny_data").val(companyCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        // ============
+        // Get Accounts
+        // ============
+        function getAccounts() {
+            accounts = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            accounts.push({
+                                Id: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
+                                Account: results[i]["Account"],
+                                AccountTypeId: results[i]["AccountTypeId"],
+                                AccountType: results[i]["AccountType"],
+                                AccountCashFlowId: results[i]["AccountCashFlowId"],
+                                AccountCashFlow: results[i]["AccountCashFlow"]
+                            });
+                        }
+
+                        createCboAccount(accounts);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return accounts;
+        }
+
+        // ===================
+        // Company - Combo Box
+        // ===================
+        function createCboAccount(accounts) {
+            var accountCollection = new wijmo.collections.CollectionView(accounts);
+            var accountList = new Array();
+            for (var i = 0; i < accountCollection.items.length; i++) {
+                accountList.push(accountCollection.items[i].Account);
+            }
+
+            cboAccounts.dispose();
+            cboAccounts = new wijmo.input.ComboBox('#accountsPaybleReport_Accounts', {
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('accountsPaybleReport_Accounts_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#accountsPaybleReport_Accounts_data").val(accountCollection.items[this.selectedIndex].Id);
+
+                    getSuppliers();
+                }
+            });
+        }
+
+
+        // ============
+        // Get supplier
+        // ============
+        function getSuppliers() {
+            suppliers = new wijmo.collections.ObservableArray();
+            var accountId = document.getElementById('accountsPaybleReport_Accounts_data').value;
+
+            var disabled;
+            if (document.getElementById('accountsPaybleReport_Accounts_data').value == "") {
+                var accountId = 0;
+            }
+            else {
+                var accountId = document.getElementById('accountsPaybleReport_Accounts_data').value;
+            }
+
+            $.ajax({
+                url: '/api/articleForSupplierByArticleTypeId/' + accountId + "/" + '3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            suppliers.push({
+                                Id: Results[i]["Id"],
+                                ArticleCode: Results[i]["ArticleCode"],
+                                ManualArticleCode: Results[i]["ManualArticleCode"],
+                                Article: Results[i]["Article"],
+                                Category: Results[i]["Category"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                ArticleGroupId: Results[i]["ArticleGroupId"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                UnitId: Results[i]["UnitId"],
+                                OutputTaxId: Results[i]["OutputTaxId"],
+                                InputTaxId: Results[i]["InputTaxId"],
+                                WTaxTypeId: Results[i]["WTaxTypeId"],
+                                Price: Results[i]["Price"],
+                                Cost: Results[i]["Cost"],
+                                IsInventory: Results[i]["IsInventory"],
+                                Particulars: Results[i]["Particulars"],
+                                Address: Results[i]["Address"],
+                                TermId: Results[i]["TermId"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                CreditLimit: Results[i]["CreditLimit"],
+                                DateAcquired: Results[i]["DateAcquired"],
+                                UsefulLife: Results[i]["UsefulLife"],
+                                SalvageValue: Results[i]["SalvageValue"],
+                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCboSupplier(suppliers);
+                    } else {
+                        createCboSupplier(suppliers);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return suppliers;
+        }
+
+        // ====================
+        // Supplier - Combo Box
+        // ====================
+        function createCboSupplier(suppliers) {
+            var supplierCollection = new wijmo.collections.CollectionView(suppliers);
+            var supplierList = new Array();
+            for (var i = 0; i < supplierCollection.items.length; i++) {
+                supplierList.push(supplierCollection.items[i].Article);
+            }
+
+            var disabled;
+            if (document.getElementById('accountsPaybleReport_Accounts_data').value = "") {
+                disabled = true;
+            }
+            else {
+                disabled = false;
+            }
+
+            cboSuppliers.dispose();
+            cboSuppliers = new wijmo.input.ComboBox('#accountsPaybleReport_Supplier', {
+                disabled: disabled,
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('accountsPaybleReport_Supplier_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#accountsPaybleReport_Supplier_data").val(supplierCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+
+        // ===========
+        // OnLoad Page
+        // ===========
+        $(document).ready(function () {
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Accounts Payable';
+
+            // accounts payable date as of..
+            accountsPayableReportDateAsOf = new wijmo.input.InputDate('#accountsPaybleReport_DateAsOf', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('accountsPaybleReport_DateAsOf_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+            document.getElementById('accountsPaybleReport_DateAsOf_data').value = new Date().toLocaleDateString();
+
+            getCompanies();
+            getAccounts();
+            getSuppliers();
+
+            cboCompany = new wijmo.input.ComboBox('#accountsPaybleReport_Comapny')
+            cboAccounts = new wijmo.input.ComboBox('#accountsPaybleReport_Accounts');
+            cboSuppliers = new wijmo.input.ComboBox('#accountsPaybleReport_Supplier');
+
+            $('#filterTabs').hide();
+
+            // filter accounts payable and supplier
+            $("#filterAccountAndSupplier").click(function () {
+                if ($(this).is(':checked')) {
+                    $('#filterTabs').show();
+                } else {
+                    $('#filterTabs').hide();
+                }
+            });
+        });
     </script>
 </body>
 </html>
