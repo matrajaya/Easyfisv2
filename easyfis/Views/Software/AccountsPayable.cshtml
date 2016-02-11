@@ -189,7 +189,7 @@
                                                     <label class="control-label col-sm-2">Start Date:</label>
                                                     <div class="col-sm-6">
                                                         <div class="comboBox-wide" id="withHoldingTAXDetailReport_StartDate"></div>
-                                                        <input type="text" id="withHoldingTAXDetailReport_StartDate_data" />
+                                                        <input type="hidden" id="withHoldingTAXDetailReport_StartDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -200,7 +200,7 @@
                                                     <label class="control-label col-sm-2">End Date:</label>
                                                     <div class="col-sm-6">
                                                         <div class="comboBox-wide" id="withHoldingTAXDetailReport_EndDate"></div>
-                                                        <input type="text" id="withHoldingTAXDetailReport_EndDate_data" />
+                                                        <input type="hidden" id="withHoldingTAXDetailReport_EndDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -220,7 +220,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Start Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="withHoldingTAXSummarryReport_StartDate"></div>
+                                                        <input type="hidden" id="withHoldingTAXSummarryReport_StartDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -230,7 +231,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">End Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="withHoldingTAXSummarryReport_EndDate"></div>
+                                                        <input type="hidden" id="withHoldingTAXSummarryReport_EndDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -250,7 +252,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Start Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="certificateOfCreditableTaxWithheld_StartDate"></div>
+                                                        <input type="hidden" id="certificateOfCreditableTaxWithheld_StartDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -260,7 +263,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">End Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="certificateOfCreditableTaxWithheld_EndDate"></div>
+                                                        <input type="hidden" id="certificateOfCreditableTaxWithheld_EndDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -303,6 +307,12 @@
 
         var withHoldingTAXDetailReportStartDate;
         var withHoldingTAXDetailReportEndDate;
+
+        var withHoldingTAXSummarryReportStartDate;
+        var withHoldingTAXSummarryReportEndDate;
+
+        var certificateOfCreditableTaxWithheldStartDate;
+        var certificateOfCreditableTaxWithheldEndDate;
 
         // ===========
         // Get company
@@ -673,6 +683,78 @@
             });
         }
 
+        // get WithHolding TAX Summary Report Start Date
+        function getWithHoldingTAXSummarryReportStartDate() {
+            // WithHolding TAX Summary Report End Date
+            withHoldingTAXSummarryReportStartDate.dispose();
+            withHoldingTAXSummarryReportStartDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('withHoldingTAXSummarryReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('withHoldingTAXSummarryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('withHoldingTAXSummarryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getWithHoldingTAXSummarryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get WithHolding TAX Summary Report End Date
+        function getWithHoldingTAXSummarryReportEndDate() {
+            // WithHolding TAX Summary Report End Date
+            withHoldingTAXSummarryReportEndDate.dispose();
+            withHoldingTAXSummarryReportEndDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('withHoldingTAXSummarryReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('withHoldingTAXSummarryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('withHoldingTAXSummarryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getWithHoldingTAXSummarryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Certificate Of Creditable Tax Withheld Start Date
+        function getCertificateOfCreditableTaxWithheldStartDate() {
+            // Certificate Of Creditable Tax Withheld Start Date
+            certificateOfCreditableTaxWithheldStartDate.dispose();
+            certificateOfCreditableTaxWithheldStartDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('certificateOfCreditableTaxWithheld_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('certificateOfCreditableTaxWithheld_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('certificateOfCreditableTaxWithheld_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getCertificateOfCreditableTaxWithheldEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Certificate Of Creditable Tax Withheld End Date
+        function getCertificateOfCreditableTaxWithheldEndDate() {
+            // Certificate Of Creditable Tax Withheld End Date
+            certificateOfCreditableTaxWithheldEndDate.dispose();
+            certificateOfCreditableTaxWithheldEndDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('certificateOfCreditableTaxWithheld_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('certificateOfCreditableTaxWithheld_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('certificateOfCreditableTaxWithheld_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getCertificateOfCreditableTaxWithheldStartDate();
+                    }, 50);
+                }
+            });
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -689,7 +771,7 @@
             getInputVATSummaryReportStartDate();
             getInputVATSummaryReportEndDate();
 
-            // WithHolding TAX Detail Report Start Date
+            // WithHolding TAX Detail Report Dates
             document.getElementById('withHoldingTAXDetailReport_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('withHoldingTAXDetailReport_EndDate_data').value = new Date().toLocaleDateString();
 
@@ -698,6 +780,26 @@
 
             getWithHoldingTAXDetailReportStartDate();
             getWithHoldingTAXDetailReportEndDate();
+
+            // WithHolding TAX Summary Report Dates
+            document.getElementById('withHoldingTAXSummarryReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('withHoldingTAXSummarryReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            withHoldingTAXSummarryReportStartDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_StartDate');
+            withHoldingTAXSummarryReportEndDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_EndDate');
+
+            getWithHoldingTAXSummarryReportStartDate();
+            getWithHoldingTAXSummarryReportEndDate();
+
+            // certificate Of Creditable Tax Withheld Dates
+            document.getElementById('certificateOfCreditableTaxWithheld_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('certificateOfCreditableTaxWithheld_EndDate_data').value = new Date().toLocaleDateString();
+
+            certificateOfCreditableTaxWithheldStartDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_StartDate');
+            certificateOfCreditableTaxWithheldEndDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_EndDate');
+
+            getCertificateOfCreditableTaxWithheldStartDate();
+            getCertificateOfCreditableTaxWithheldEndDate();
 
             // accounts payable date as of..
             accountsPayableReportDateAsOf = new wijmo.input.InputDate('#accountsPaybleReport_DateAsOf', {
