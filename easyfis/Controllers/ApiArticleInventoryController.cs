@@ -90,7 +90,7 @@ namespace easyfis.Controllers
             var articleInventory_branchId = Convert.ToInt32(branchId);
             var articleInventory_articleId = Convert.ToInt32(articleId);
             var articleInventories = from d in db.MstArticleInventories
-                                     where d.BranchId == articleInventory_branchId && d.ArticleId == articleInventory_articleId
+                                     where d.BranchId == articleInventory_branchId && d.ArticleId == articleInventory_articleId && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,
