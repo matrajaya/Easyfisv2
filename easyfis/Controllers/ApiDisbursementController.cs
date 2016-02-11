@@ -11,6 +11,7 @@ namespace easyfis.Controllers
     public class ApiDisbursementController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+        private Business.PostJournal journal = new Business.PostJournal();
 
         // =================
         // LIST Disbursement
@@ -335,6 +336,15 @@ namespace easyfis.Controllers
                     updateDisbursement.UpdatedById = mstUserId;
                     updateDisbursement.UpdatedDateTime = date;
 
+                    if (updateDisbursement.IsLocked == true)
+                    {
+                        journal.insertCVJournal(disbursement_Id);
+                    }
+                    else
+                    {
+                        journal.deleteCVJournal(disbursement_Id);
+                    }
+
                     db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
@@ -374,6 +384,16 @@ namespace easyfis.Controllers
                     updateDisbursement.IsLocked = disbursement.IsLocked;
                     updateDisbursement.UpdatedById = mstUserId;
                     updateDisbursement.UpdatedDateTime = date;
+
+                    if (updateDisbursement.IsLocked == true)
+                    {
+                        journal.insertCVJournal(disbursement_Id);
+                    }
+                    else
+                    {
+                        journal.deleteCVJournal(disbursement_Id);
+                    }
+
 
                     db.SubmitChanges();
 

@@ -43,13 +43,11 @@ namespace easyfis.Business
                     if (inventoryTotalAmount == 0)
                     {
                         inventoryAverageCost = 0;
-                        Debug.WriteLine("if Inventor Average Cost" + inventoryAverageCost);
                     }
                 }
                 else
                 {
                     inventoryAverageCost = Math.Round((inventoryTotalAmount / inventoryTotalQuantity) * 100) / 100;
-                    Debug.WriteLine("else Inventor Average Cost" + inventoryAverageCost);
                 }
             }
 
@@ -62,7 +60,7 @@ namespace easyfis.Business
             {
                 if (inventoryTotalQuantity >= 0)
                 {
-                    if (inventoryTotalAmount > 0)
+                    if (inventoryTotalAmount >= 0)
                     {
                         // update the Article Inventory
                         if (updateArticleInventories.Any())
@@ -90,6 +88,10 @@ namespace easyfis.Business
                             db.SubmitChanges();
                         }
                     }
+                }
+                else
+                {
+
                 }
             }
             else
@@ -553,7 +555,6 @@ namespace easyfis.Business
                         foreach (var articleInventory in articleInventories)
                         {
                             UpdateArticleInventory(articleInventory.Id);
-                            Debug.WriteLine(articleInventory.Id);
                         }
                     }
                 }

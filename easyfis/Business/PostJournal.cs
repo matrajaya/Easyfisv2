@@ -10,6 +10,235 @@ namespace easyfis.Business
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // =======================
+        // Disbursement in Journal
+        // =======================
+        // Insert Disbursement in Journal
+        public void insertCVJournal(Int32 CVId)
+        {
+            String JournalDate = "";
+            Int32 BranchId = 0;
+            String BranchCode = "";
+            Int32 AccountId = 0;
+            Int32 BankId = 0;
+            String CVNumber = "";
+            Decimal Amount;
+
+            // disbursement Header
+            var disbursementHeader = from d in db.TrnDisbursements
+                                     where d.Id == CVId
+                                     select new Models.TrnDisbursement
+                                     {
+                                         Id = d.Id,
+                                         BranchId = d.BranchId,
+                                         Branch = d.MstBranch.Branch,
+                                         BranchCode = d.MstBranch.BranchCode,
+                                         CVNumber = d.CVNumber,
+                                         CVDate = d.CVDate.ToShortDateString(),
+                                         SupplierId = d.SupplierId,
+                                         Supplier = d.MstArticle.Article,
+                                         Payee = d.Payee,
+                                         PayTypeId = d.PayTypeId,
+                                         PayType = d.MstPayType.PayType,
+                                         BankId = d.BankId,
+                                         Bank = d.MstArticle1.Article,
+                                         ManualCVNumber = d.ManualCVNumber,
+                                         Particulars = d.Particulars,
+                                         CheckNumber = d.CheckNumber,
+                                         CheckDate = d.CheckDate.ToShortDateString(),
+                                         Amount = d.Amount,
+                                         IsCrossCheck = d.IsCrossCheck,
+                                         IsClear = d.IsClear,
+                                         PreparedById = d.PreparedById,
+                                         PreparedBy = d.MstUser3.FullName,
+                                         CheckedById = d.CheckedById,
+                                         CheckedBy = d.MstUser1.FullName,
+                                         ApprovedById = d.ApprovedById,
+                                         ApprovedBy = d.MstUser.FullName,
+                                         IsLocked = d.IsLocked,
+                                         CreatedById = d.CreatedById,
+                                         CreatedBy = d.MstUser2.FullName,
+                                         CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                         UpdatedById = d.UpdatedById,
+                                         UpdatedBy = d.MstUser4.FullName,
+                                         UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                     };
+
+            // disbursement Lines
+            var disbursementLines = from d in db.TrnDisbursementLines
+                                     where d.CVId == CVId
+                                    select new Models.TrnDisbursementLine
+                                    {
+                                        Id = d.Id,
+                                        CVId = d.CVId,
+                                        CV = d.TrnDisbursement.CVNumber,
+                                        BranchId = d.BranchId,
+                                        Branch = d.MstBranch.Branch,
+                                        AccountId = d.AccountId,
+                                        Account = d.MstAccount.Account,
+                                        ArticleId = d.ArticleId,
+                                        Article = d.MstArticle.Article,
+                                        RRId = d.RRId,
+                                        RR = d.TrnReceivingReceipt.RRNumber,
+                                        Particulars = d.Particulars,
+                                        Amount = d.Amount
+                                    };
+
+            // disbursement Lines total Amount
+            var disbursementLinesTotalAmount = from d in db.TrnDisbursementLines
+                                               where d.CVId == CVId
+                                               group d by new
+                                               {
+                                                   BranchId = d.BranchId,
+                                                   AccountId = d.AccountId,
+                                                   ArticleId = d.ArticleId
+                                               } into g
+                                               select new Models.TrnDisbursementLine
+                                               {
+                                                   BranchId = g.Key.BranchId,
+                                                   AccountId = g.Key.AccountId,
+                                                   ArticleId = g.Key.ArticleId,
+                                                   Amount = g.Sum(d => d.Amount)
+                                               };
+
+            try
+            {
+                // disbursement Header
+                foreach (var disbursement in disbursementHeader)
+                {
+                    JournalDate = disbursement.CVDate;
+                    BranchId = disbursement.BranchId;
+                    BranchCode = disbursement.BranchCode;
+                    CVNumber = disbursement.CVNumber;
+                    BankId = disbursement.BankId;
+                }
+
+                // Accounts payable
+                if (disbursementLinesTotalAmount.Any())
+                {
+                    Debug.WriteLine("wewew");
+                    foreach (var disbursementLineTotalAmount in disbursementLinesTotalAmount)
+                    {
+                        if (disbursementLineTotalAmount.Amount > 0)
+                        {
+                            Debug.WriteLine(disbursementLineTotalAmount.Amount);
+
+                            Data.TrnJournal newCVJournalForAccountPayables = new Data.TrnJournal();
+
+                            newCVJournalForAccountPayables.JournalDate = Convert.ToDateTime(JournalDate);
+                            newCVJournalForAccountPayables.BranchId = disbursementLineTotalAmount.BranchId;
+                            newCVJournalForAccountPayables.AccountId = disbursementLineTotalAmount.AccountId;
+                            newCVJournalForAccountPayables.ArticleId = disbursementLineTotalAmount.ArticleId;
+                            newCVJournalForAccountPayables.Particulars = "Disbursement";
+                            newCVJournalForAccountPayables.DebitAmount = disbursementLineTotalAmount.Amount;
+                            newCVJournalForAccountPayables.CreditAmount = 0;
+                            newCVJournalForAccountPayables.ORId = null;
+                            newCVJournalForAccountPayables.CVId = CVId;
+                            newCVJournalForAccountPayables.JVId = null;
+                            newCVJournalForAccountPayables.RRId = null;
+                            newCVJournalForAccountPayables.SIId = null;
+                            newCVJournalForAccountPayables.INId = null;
+                            newCVJournalForAccountPayables.OTId = null;
+                            newCVJournalForAccountPayables.STId = null;
+                            newCVJournalForAccountPayables.DocumentReference = "CV-" + BranchCode + "-" + CVNumber;
+                            newCVJournalForAccountPayables.APRRId = null;
+                            newCVJournalForAccountPayables.ARSIId = null;
+
+                            db.TrnJournals.InsertOnSubmit(newCVJournalForAccountPayables);
+                        }
+                        else if(disbursementLineTotalAmount.Amount < 0)
+                        {
+
+                            Debug.WriteLine(disbursementLineTotalAmount.Amount);
+                            Data.TrnJournal newCVJournalForAccountPayables = new Data.TrnJournal();
+
+                            newCVJournalForAccountPayables.JournalDate = Convert.ToDateTime(JournalDate);
+                            newCVJournalForAccountPayables.BranchId = disbursementLineTotalAmount.BranchId;
+                            newCVJournalForAccountPayables.AccountId = disbursementLineTotalAmount.AccountId;
+                            newCVJournalForAccountPayables.ArticleId = disbursementLineTotalAmount.ArticleId;
+                            newCVJournalForAccountPayables.Particulars = "Disbursement";
+                            newCVJournalForAccountPayables.DebitAmount = 0;
+                            newCVJournalForAccountPayables.CreditAmount = disbursementLineTotalAmount.Amount * -1;
+                            newCVJournalForAccountPayables.ORId = null;
+                            newCVJournalForAccountPayables.CVId = CVId;
+                            newCVJournalForAccountPayables.JVId = null;
+                            newCVJournalForAccountPayables.RRId = null;
+                            newCVJournalForAccountPayables.SIId = null;
+                            newCVJournalForAccountPayables.INId = null;
+                            newCVJournalForAccountPayables.OTId = null;
+                            newCVJournalForAccountPayables.STId = null;
+                            newCVJournalForAccountPayables.DocumentReference = "CV-" + BranchCode + "-" + CVNumber;
+                            newCVJournalForAccountPayables.APRRId = null;
+                            newCVJournalForAccountPayables.ARSIId = null;
+
+                            db.TrnJournals.InsertOnSubmit(newCVJournalForAccountPayables);
+                        }
+                        else
+                        {
+                            Debug.WriteLine("");
+                        }
+
+                    }
+                }
+
+                // disbursement Header
+                foreach (var disbursementAmount in disbursementHeader)
+                {
+                    if (disbursementAmount.Amount > 0)
+                    {
+                        AccountId = (from d in db.MstArticles where d.Id == BankId select d.AccountId).SingleOrDefault();
+                        Data.TrnJournal newCVJournalForAmount = new Data.TrnJournal();
+
+                        newCVJournalForAmount.JournalDate = Convert.ToDateTime(JournalDate);
+                        newCVJournalForAmount.BranchId = BranchId;
+                        newCVJournalForAmount.AccountId = AccountId;
+                        newCVJournalForAmount.ArticleId = BankId;
+                        newCVJournalForAmount.Particulars = "Bank";
+                        newCVJournalForAmount.DebitAmount = 0;
+                        newCVJournalForAmount.CreditAmount = disbursementAmount.Amount;
+                        newCVJournalForAmount.ORId = null;
+                        newCVJournalForAmount.CVId = CVId;
+                        newCVJournalForAmount.JVId = null;
+                        newCVJournalForAmount.RRId = null;
+                        newCVJournalForAmount.SIId = null;
+                        newCVJournalForAmount.INId = null;
+                        newCVJournalForAmount.OTId = null;
+                        newCVJournalForAmount.STId = null;
+                        newCVJournalForAmount.DocumentReference = "CV-" + BranchCode + "-" + CVNumber;
+                        newCVJournalForAmount.APRRId = null;
+                        newCVJournalForAmount.ARSIId = null;
+
+                        db.TrnJournals.InsertOnSubmit(newCVJournalForAmount);
+                    }
+                }
+
+                db.SubmitChanges();
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+        }
+        // Delete Disbursement in Journal
+        public void deleteCVJournal(Int32 CVId)
+        {
+            try
+            {
+                var journals = db.TrnJournals.Where(d => d.CVId == CVId).ToList();
+                foreach (var j in journals)
+                {
+                    db.TrnJournals.DeleteOnSubmit(j);
+                    db.SubmitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
+
         // ========================
         // Sales Invoice in Journal
         // ========================
@@ -45,8 +274,6 @@ namespace easyfis.Business
                 siHeaderAmount = siHeader.Amount;
             }
 
-            Debug.WriteLine(siHeaderAmount);
-
             // SI Items - LINES
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                     where d.SIId == SIId
@@ -64,16 +291,6 @@ namespace easyfis.Business
                                         Amount = g.Sum(d => d.Amount),
                                         VATAmount = g.Sum(d => d.VATAmount)
                                     };
-
-            //foreach (var siitemsdisplay in salesInvoiceItems)
-            //{
-            //    Debug.WriteLine("SalesAccountId " + siitemsdisplay.SalesAccountId);
-            //    Debug.WriteLine("VATId " + siitemsdisplay.VATId);
-            //    Debug.WriteLine("SIId " + siitemsdisplay.SIId);
-            //    Debug.WriteLine("Amount " + siitemsdisplay.Amount);
-            //    Debug.WriteLine("VATAmount " + siitemsdisplay.VATAmount);
-
-            //}
 
             // SI Items - VAT
             var salesInvoiceItemsForVAT = from d in db.TrnSalesInvoiceItems
@@ -119,16 +336,6 @@ namespace easyfis.Business
                                                     AccountId = g.Key.AccountId,
                                                     Amount = g.Sum(d => d.Amount)
                                                 };
-
-
-            foreach (var siitemsdisplays in salesInvoiceItemsForInventory)
-            {
-                Debug.WriteLine("SIId " + siitemsdisplays.SIId);
-                Debug.WriteLine("AccountId " + siitemsdisplays.AccountId);
-                Debug.WriteLine("Amount " + siitemsdisplays.Amount);
-
-            }
-
 
             try
             {
@@ -192,7 +399,7 @@ namespace easyfis.Business
                                 }
 
                                 Data.TrnJournal newSIJournalForSales = new Data.TrnJournal();
-                                
+
                                 newSIJournalForSales.JournalDate = Convert.ToDateTime(JournalDate);
                                 newSIJournalForSales.BranchId = BranchId;
                                 newSIJournalForSales.AccountId = salesItem.SalesAccountId;
@@ -288,7 +495,7 @@ namespace easyfis.Business
                     // Inventory
                     if (salesInvoiceItemsForInventory.Any())
                     {
-                        foreach(var siItemInventory in salesInvoiceItemsForInventory)
+                        foreach (var siItemInventory in salesInvoiceItemsForInventory)
                         {
                             if (siItemInventory.Amount > 0)
                             {
