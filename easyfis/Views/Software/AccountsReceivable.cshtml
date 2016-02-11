@@ -15,6 +15,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
+    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
     <div id="wrapper" class="wrapper">
@@ -57,13 +58,16 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Date as of:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="accountReceivableReport_DateAsOf"></div>
+                                                        <input type="hidden" id="accountReceivableReport_DateAsOf_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Company:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="accountReceivableReport_Company"></div>
+                                                        <input type="hidden" id="accountReceivableReport_Company_data" />
+                                                        <input type="hidden" id="accountReceivableReport_Company_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -89,13 +93,16 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Date as of:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="accountReceivableSummaryReport_DateAsOf"></div>
+                                                        <input type="hidden" id="accountReceivableSummaryReport_DateAsOf_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Company:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="accountReceivableSummaryReport_Company"></div>
+                                                        <input type="hidden" id="accountReceivableSummaryReport_Company_data" />
+                                                        <input type="hidden" id="accountReceivableSummaryReport_Company_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -121,19 +128,24 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Date as of:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="StatementOfTheAccount_DateAsOf"></div>
+                                                        <input type="hidden" id="StatementOfTheAccount_DateAsOf_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Company:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="StatementOfTheAccount_Company"></div>
+                                                        <input type="hidden" id="StatementOfTheAccount_Company_data" />
+                                                        <input type="hidden" id="StatementOfTheAccount_Company_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Customer:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="StatementOfTheAccount_Customer"></div>
+                                                        <input type="hidden" id="StatementOfTheAccount_Customer_data" />
+                                                        <input type="hidden" id="StatementOfTheAccount_Customer_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -162,9 +174,199 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
+    @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var accountsReceivableDateAsOf;
+        var accountsReceivableSummaryDateAsOf;
+        var StatementOfTheAccountDateAsOf;
 
-        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Accounts Receivable';
+        var companies;
+        var accountReceivableCboCompany;
+        var accountReceivableSummaryCboCompany;
+        var StatementOfTheAccountCboCompany;
+
+        var customers;
+        var cboCustomer;
+
+        // ===========
+        // Get company
+        // ===========
+        function getCompanies() {
+            companies = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listCompany',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            companies.push({
+                                Id: results[i]["Id"],
+                                Company: results[i]["Company"],
+                                Address: results[i]["Address"],
+                                ContactNumber: results[i]["ContactNumber"],
+                                TaxNumber: results[i]["TaxNumber"],
+                            });
+                        }
+
+                        createCboComapny(companies);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return companies;
+        }
+
+        // ===================
+        // Company - Combo Box
+        // ===================
+        function createCboComapny(companies) {
+            var companyCollection = new wijmo.collections.CollectionView(companies);
+            var companyList = new Array();
+            for (var i = 0; i < companyCollection.items.length; i++) {
+                companyList.push(companyCollection.items[i].Company);
+            }
+
+            accountReceivableCboCompany.dispose();
+            accountReceivableCboCompany = new wijmo.input.ComboBox('#accountReceivableReport_Company', {
+                placeholder: "Select Company",
+                itemsSource: companyList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('accountReceivableReport_Company_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#accountReceivableReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                }
+            });
+
+            accountReceivableSummaryCboCompany.dispose();
+            accountReceivableSummaryCboCompany = new wijmo.input.ComboBox('#accountReceivableSummaryReport_Company', {
+                placeholder: "Select Company",
+                itemsSource: companyList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('accountReceivableSummaryReport_Company_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#accountReceivableSummaryReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                }
+            });
+
+            StatementOfTheAccountCboCompany.dispose();
+            StatementOfTheAccountCboCompany = new wijmo.input.ComboBox('#StatementOfTheAccount_Company', {
+                placeholder: "Select Company",
+                itemsSource: companyList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StatementOfTheAccount_Company_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StatementOfTheAccount_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        // ============
+        // GET Customer
+        // ============
+        function getCustomers() {
+            customers = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/2',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            customers.push({
+                                CustomerId: results[i]["Id"],
+                                Customer: results[i]["Article"]
+                            });
+                        }
+                        createCboCustomer(customers);
+                    }
+                }
+            });
+            return customers;
+        }
+
+        // ======================
+        // Combo Box for Customer
+        // ======================
+        function createCboCustomer(customers) {
+            var customerCollection = new wijmo.collections.CollectionView(customers);
+            var customerList = new Array();
+            for (var i = 0; i < customerCollection.items.length; i++) {
+                customerList.push(customerCollection.items[i].Customer);
+            }
+
+            cboCustomer.dispose();
+            cboCustomer = new wijmo.input.ComboBox('#StatementOfTheAccount_Customer', {
+                placeholder: "Select Customer",
+                itemsSource: customerList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StatementOfTheAccount_Customer_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StatementOfTheAccount_Customer_data").val(customerCollection.items[this.selectedIndex].CustomerId);
+                }
+            });
+        }
+
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Accounts Receivable';
+
+            accountReceivableCboCompany = new wijmo.input.ComboBox('#accountReceivableReport_Company');
+            accountReceivableSummaryCboCompany = new wijmo.input.ComboBox('#accountReceivableSummaryReport_Company');
+            StatementOfTheAccountCboCompany = new wijmo.input.ComboBox('#StatementOfTheAccount_Company');
+            cboCustomer = new wijmo.input.ComboBox('#StatementOfTheAccount_Customer');
+            getCompanies();
+            getCustomers();
+
+            document.getElementById('accountReceivableReport_DateAsOf_data').value = new Date().toLocaleDateString();
+            document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = new Date().toLocaleDateString();
+            document.getElementById('StatementOfTheAccount_DateAsOf_data').value = new Date().toLocaleDateString();
+
+            // Accounts Receivable Date As Of
+            accountsReceivableDateAsOf = new wijmo.input.InputDate('#accountReceivableReport_DateAsOf', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('accountReceivableReport_DateAsOf_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+            // Accounts Receivable Summary Date As Of
+            accountsReceivableSummaryDateAsOf = new wijmo.input.InputDate('#accountReceivableSummaryReport_DateAsOf', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+            // Statement Of The Account Date As Of
+            StatementOfTheAccountDateAsOf = new wijmo.input.InputDate('#StatementOfTheAccount_DateAsOf', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+                onValueChanged: function () {
+                    document.getElementById('StatementOfTheAccount_DateAsOf_data').value = this.value.toLocaleDateString();
+                }
+            });
+
+        });
 
     </script>
 </body>
