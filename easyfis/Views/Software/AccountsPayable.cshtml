@@ -601,6 +601,78 @@
             });
         }
 
+        // get Input VAT Summary Report Start Date
+        function getInputVATSummaryReportStartDate() {
+            // Input Vat Summary Report Start Date
+            InputVATSummaryReportStartDate.dispose();
+            InputVATSummaryReportStartDate = new wijmo.input.InputDate('#InputVATSummaryReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('InputVATSummaryReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('InputVATSummaryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('InputVATSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getInputVATSummaryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Input VAT Summary Report End Date
+        function getInputVATSummaryReportEndDate() {
+            // Input Vat Summary Report End Date
+            InputVATSummaryReportEndDate.dispose();
+            InputVATSummaryReportEndDate = new wijmo.input.InputDate('#InputVATSummaryReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('InputVATSummaryReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('InputVATSummaryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('InputVATSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getInputVATSummaryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get WithHolding TAX Detail Report Start Date
+        function getWithHoldingTAXDetailReportStartDate() {
+            // WithHolding TAX Detail Report Start Date
+            withHoldingTAXDetailReportStartDate.dispose();
+            withHoldingTAXDetailReportStartDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('withHoldingTAXDetailReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('withHoldingTAXDetailReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('withHoldingTAXDetailReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getWithHoldingTAXDetailReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get WithHolding TAX Detail Report End Date
+        function getWithHoldingTAXDetailReportEndDate() {
+            // WithHolding TAX Detail Report End Date
+            withHoldingTAXDetailReportEndDate.dispose();
+            withHoldingTAXDetailReportEndDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('withHoldingTAXDetailReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('withHoldingTAXDetailReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('withHoldingTAXDetailReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getWithHoldingTAXDetailReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -611,53 +683,21 @@
             document.getElementById('InputVATSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('InputVATSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
 
-            // Input Vat Summary Report Start Date
-            InputVATSummaryReportStartDate = new wijmo.input.InputDate('#InputVATSummaryReport_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('InputVATSummaryReport_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('InputVATSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
-                }
-            });
+            InputVATSummaryReportStartDate = new wijmo.input.InputDate('#InputVATSummaryReport_StartDate');
+            InputVATSummaryReportEndDate = new wijmo.input.InputDate('#InputVATSummaryReport_EndDate');
 
-            // Input Vat Summary Report End Date
-            InputVATSummaryReportEndDate = new wijmo.input.InputDate('#InputVATSummaryReport_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('InputVATSummaryReport_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('InputVATSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
-                }
-            });
+            getInputVATSummaryReportStartDate();
+            getInputVATSummaryReportEndDate();
 
             // WithHolding TAX Detail Report Start Date
             document.getElementById('withHoldingTAXDetailReport_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('withHoldingTAXDetailReport_EndDate_data').value = new Date().toLocaleDateString();
 
-            // WithHolding TAX Detail Report Start Date
-            withHoldingTAXDetailReportStartDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('withHoldingTAXDetailReport_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('withHoldingTAXDetailReport_StartDate_data').value = this.value.toLocaleDateString();
-                }
-            });
+            withHoldingTAXDetailReportStartDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_StartDate');
+            withHoldingTAXDetailReportEndDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_EndDate');
 
-            // WithHolding TAX Detail Report End Date
-            withHoldingTAXDetailReportEndDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('withHoldingTAXDetailReport_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('withHoldingTAXDetailReport_EndDate_data').value = this.value.toLocaleDateString();
-                }
-            });
+            getWithHoldingTAXDetailReportStartDate();
+            getWithHoldingTAXDetailReportEndDate();
 
             // accounts payable date as of..
             accountsPayableReportDateAsOf = new wijmo.input.InputDate('#accountsPaybleReport_DateAsOf', {
