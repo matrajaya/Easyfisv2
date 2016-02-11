@@ -36,7 +36,6 @@ namespace easyfis.Business
             foreach (var inventory in inventories)
             {
                 inventoryTotalQuantity = inventory.Quantity;
-
                 inventoryTotalAmount = inventory.Amount;
 
                 if (inventoryTotalQuantity == 0)
@@ -44,11 +43,13 @@ namespace easyfis.Business
                     if (inventoryTotalAmount == 0)
                     {
                         inventoryAverageCost = 0;
+                        Debug.WriteLine("if Inventor Average Cost" + inventoryAverageCost);
                     }
                 }
                 else
                 {
                     inventoryAverageCost = Math.Round((inventoryTotalAmount / inventoryTotalQuantity) * 100) / 100;
+                    Debug.WriteLine("else Inventor Average Cost" + inventoryAverageCost);
                 }
             }
 
@@ -59,7 +60,7 @@ namespace easyfis.Business
 
             if (inventories.Any())
             {
-                if (inventoryTotalQuantity > 0)
+                if (inventoryTotalQuantity >= 0)
                 {
                     if (inventoryTotalAmount > 0)
                     {
@@ -82,6 +83,7 @@ namespace easyfis.Business
                         {
                             var updateArticleInventory = updateArticleInventories.FirstOrDefault();
 
+                            //updateArticleInventory.Cost = inventoryAverageCost;
                             updateArticleInventory.Quantity = inventoryTotalQuantity;
                             updateArticleInventory.Amount = 0;
 
@@ -442,7 +444,7 @@ namespace easyfis.Business
                                 newArticleInventory.Quantity = RRItems.Quantity;
                                 newArticleInventory.Cost = Math.Round(((RRItems.Amount - RRItems.VATAmount) / RRItems.Quantity) * 100) / 100;
                                 newArticleInventory.Amount = RRItems.Amount - RRItems.VATAmount;
-                                newArticleInventory.Particulars = "MOVING AVERAGE";
+                                newArticleInventory.Particulars = "SPECIFIC IDENTIFICATION";
 
                                 db.MstArticleInventories.InsertOnSubmit(newArticleInventory);
                                 db.SubmitChanges();
