@@ -15,6 +15,7 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
+    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
     <div id="wrapper" class="wrapper">
@@ -53,7 +54,7 @@
                         <div class="tab-content">
                             <div id="Inventory" class="tab-pane fade in active">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsPayablePDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("InventoryReportPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -63,35 +64,76 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Start Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="inventory_StartDate"></div>
+                                                        <input type="hidden" id="inventory_StartDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">End Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="inventory_EndDate"></div>
+                                                        <input type="hidden" id="inventory_EndDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Company:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="Inventory_Company"></div>
+
+                                                        <input type="hidden" id="Inventory_Company_data" />
+                                                        <input type="hidden" id="Inventory_Company_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="checkbox" id="" />
+                                                        <input type="checkbox" id="filterAccountAndSupplier" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
+                                <div id="filterTabs">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div id="one" class="tab-pane fade in active">
+                                            <div class="well">
+                                                <form class="form-horizontal" role="form">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Account:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="Inventory_Accounts"></div>
+
+                                                                    <input type="hidden" id="Inventory_Accounts_data" />
+                                                                    <input type="hidden" id="Inventory_Accounts_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Supplier:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="Inventory_Supplier"></div>
+
+                                                                    <input type="hidden" id="Inventory_Supplier_data" />
+                                                                    <input type="hidden" id="Inventory_Supplier_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div id="SC" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("InventoryReportStockCardPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -101,41 +143,84 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Start Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="stockCard_StartDate"></div>
+                                                        <input type="hidden" id="stockCard_StartDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">End Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="stockCard_EndDate"></div>
+                                                        <input type="hidden" id="stockCard_EndDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Company:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="StockCard_Company"></div>
+
+                                                        <input type="hidden" id="StockCard_Company_data" />
+                                                        <input type="hidden" id="StockCard_Company_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Item:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="Items_Item"></div>
+                                                        <input type="hidden" id="Items_Item_data" />
+                                                        <input type="hidden" id="Items_Item_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="checkbox" id="" />
+                                                        <input type="checkbox" id="filterAccountAndSupplierStockCard" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
+                                <div id="filterTabsStockCard">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div id="one" class="tab-pane fade in active">
+                                            <div class="well">
+                                                <form class="form-horizontal" role="form">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Account:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockCard_Accounts"></div>
+
+                                                                    <input type="hidden" id="StockCard_Accounts_data" />
+                                                                    <input type="hidden" id="StockCard_Accounts_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Supplier:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockCard_Supplier"></div>
+
+                                                                    <input type="hidden" id="StockCard_Supplier_data" />
+                                                                    <input type="hidden" id="StockCard_Supplier_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div id="SIDR" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("InventoryReportStockInDetailPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -173,7 +258,7 @@
                             </div>
                             <div id="SODR" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("InventoryReportStockOutDetailPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -211,7 +296,7 @@
                             </div>
                             <div id="STDR" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("InventoryReportStockTransferDetailPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -249,7 +334,7 @@
                             </div>
                             <div id="IL" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("InventoryReportItemListPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -269,7 +354,7 @@
                             </div>
                             <div id="ICL" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("InventoryReportItemComponentListPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -289,7 +374,7 @@
                             </div>
                             <div id="PCS" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("InventoryReportPhysicalCountSheetPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -309,7 +394,8 @@
                             </div>
                             <div id="FAR" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+
+                                    <button onclick="window.location.href ='@Url.Action("InventoryReportFixedAssetsPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -360,10 +446,588 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
+    @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var companies;
+        var cboCompany;
+        var cboStockCardCompany;
+        var accounts;
+        var cboAccounts;
+        var cboStockCardAccounts;
+        var suppliers;
+        var suppliersStockCard;
+        var cboSuppliers;
+        var cboStockCardSuppliers;
+        var cboItems;
+        var inventoryStartDate;
+        var inventoryEndDate;
+        var stockCardStartDate;
+        var stockCardEndDate;
 
-        document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Inventory Report';
+        // ===========
+        // Get company
+        // ===========
+        function getCompanies() {
+            companies = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listCompany',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            companies.push({
+                                Id: results[i]["Id"],
+                                Company: results[i]["Company"],
+                                Address: results[i]["Address"],
+                                ContactNumber: results[i]["ContactNumber"],
+                                TaxNumber: results[i]["TaxNumber"],
+                            });
+                        }
 
+                        createCboComapny(companies);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return companies;
+        }
+
+        // ===================
+        // Company - Combo Box
+        // ===================
+        function createCboComapny(companies) {
+            var companyCollection = new wijmo.collections.CollectionView(companies);
+            var companyList = new Array();
+            for (var i = 0; i < companyCollection.items.length; i++) {
+                companyList.push(companyCollection.items[i].Company);
+            }
+
+            cboCompany.dispose();
+            cboCompany = new wijmo.input.ComboBox('#Inventory_Company', {
+                placeholder: "Select Company",
+                itemsSource: companyList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('Inventory_Company_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#Inventory_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                }
+            });
+
+            cboStockCardCompany.dispose();
+            cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company', {
+                placeholder: "Select Company",
+                itemsSource: companyList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockCard_Company_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockCard_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        // ============
+        // Get Accounts
+        // ============
+        function getAccounts() {
+            accounts = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listAccount',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            accounts.push({
+                                Id: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
+                                Account: results[i]["Account"],
+                                AccountTypeId: results[i]["AccountTypeId"],
+                                AccountType: results[i]["AccountType"],
+                                AccountCashFlowId: results[i]["AccountCashFlowId"],
+                                AccountCashFlow: results[i]["AccountCashFlow"]
+                            });
+                        }
+
+                        createCboAccount(accounts);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return accounts;
+        }
+
+        // ===================
+        // Company - Combo Box
+        // ===================
+        function createCboAccount(accounts) {
+            var accountCollection = new wijmo.collections.CollectionView(accounts);
+            var accountList = new Array();
+            for (var i = 0; i < accountCollection.items.length; i++) {
+                accountList.push(accountCollection.items[i].Account);
+            }
+
+            cboAccounts.dispose();
+            cboAccounts = new wijmo.input.ComboBox('#Inventory_Accounts', {
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('Inventory_Accounts_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#Inventory_Accounts_data").val(accountCollection.items[this.selectedIndex].Id);
+
+                    getSuppliers();
+                }
+            });
+
+            cboStockCardAccounts.dispose();
+            cboStockCardAccounts = new wijmo.input.ComboBox('#StockCard_Accounts', {
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockCard_Accounts_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockCard_Accounts_data").val(accountCollection.items[this.selectedIndex].Id);
+
+                    getSuppliersStockCard();
+                }
+            });
+        }
+
+
+        // =========================
+        // Get supplier of Inventory
+        // =========================
+        function getSuppliers() {
+            // Inventory Supplier
+            suppliers = new wijmo.collections.ObservableArray();
+            var accountId = document.getElementById('Inventory_Accounts_data').value;
+
+            var disabled;
+            if (document.getElementById('Inventory_Accounts_data').value == "") {
+                var accountId = 0;
+            }
+            else {
+                var accountId = document.getElementById('Inventory_Accounts_data').value;
+            }
+
+            $.ajax({
+                url: '/api/articleForSupplierByArticleTypeId/' + accountId + "/" + '3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            suppliers.push({
+                                Id: Results[i]["Id"],
+                                ArticleCode: Results[i]["ArticleCode"],
+                                ManualArticleCode: Results[i]["ManualArticleCode"],
+                                Article: Results[i]["Article"],
+                                Category: Results[i]["Category"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                ArticleGroupId: Results[i]["ArticleGroupId"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                UnitId: Results[i]["UnitId"],
+                                OutputTaxId: Results[i]["OutputTaxId"],
+                                InputTaxId: Results[i]["InputTaxId"],
+                                WTaxTypeId: Results[i]["WTaxTypeId"],
+                                Price: Results[i]["Price"],
+                                Cost: Results[i]["Cost"],
+                                IsInventory: Results[i]["IsInventory"],
+                                Particulars: Results[i]["Particulars"],
+                                Address: Results[i]["Address"],
+                                TermId: Results[i]["TermId"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                CreditLimit: Results[i]["CreditLimit"],
+                                DateAcquired: Results[i]["DateAcquired"],
+                                UsefulLife: Results[i]["UsefulLife"],
+                                SalvageValue: Results[i]["SalvageValue"],
+                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCboSupplier(suppliers);
+                    } else {
+                        createCboSupplier(suppliers);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return suppliers;
+        }
+
+        // ==========================
+        // Get supplier of Stock Card
+        // ==========================
+        function getSuppliersStockCard() {
+            // Stock Card Supplier
+            suppliersStockCard = new wijmo.collections.ObservableArray();
+            var accountId = document.getElementById('StockCard_Accounts_data').value;
+
+            var disabled;
+            if (document.getElementById('StockCard_Accounts_data').value == "") {
+                var accountId = 0;
+            }
+            else {
+                var accountId = document.getElementById('StockCard_Accounts_data').value;
+            }
+
+            $.ajax({
+                url: '/api/articleForSupplierByArticleTypeId/' + accountId + "/" + '3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            suppliersStockCard.push({
+                                Id: Results[i]["Id"],
+                                ArticleCode: Results[i]["ArticleCode"],
+                                ManualArticleCode: Results[i]["ManualArticleCode"],
+                                Article: Results[i]["Article"],
+                                Category: Results[i]["Category"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                ArticleGroupId: Results[i]["ArticleGroupId"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                UnitId: Results[i]["UnitId"],
+                                OutputTaxId: Results[i]["OutputTaxId"],
+                                InputTaxId: Results[i]["InputTaxId"],
+                                WTaxTypeId: Results[i]["WTaxTypeId"],
+                                Price: Results[i]["Price"],
+                                Cost: Results[i]["Cost"],
+                                IsInventory: Results[i]["IsInventory"],
+                                Particulars: Results[i]["Particulars"],
+                                Address: Results[i]["Address"],
+                                TermId: Results[i]["TermId"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                CreditLimit: Results[i]["CreditLimit"],
+                                DateAcquired: Results[i]["DateAcquired"],
+                                UsefulLife: Results[i]["UsefulLife"],
+                                SalvageValue: Results[i]["SalvageValue"],
+                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCboSupplier(suppliersStockCard);
+                    } else {
+                        createCboSupplier(suppliersStockCard);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return suppliersStockCard;
+        }
+
+        // ====================
+        // Supplier - Combo Box
+        // ====================
+        function createCboSupplier(suppliers) {
+            var supplierCollection = new wijmo.collections.CollectionView(suppliers);
+            var supplierList = new Array();
+            for (var i = 0; i < supplierCollection.items.length; i++) {
+                supplierList.push(supplierCollection.items[i].Article);
+            }
+
+            cboSuppliers.dispose();
+            cboSuppliers = new wijmo.input.ComboBox('#Inventory_Supplier', {
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('Inventory_Supplier_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#Inventory_Supplier_data").val(supplierCollection.items[this.selectedIndex].Id);
+                }
+            });
+
+            cboStockCardSuppliers.dispose();
+            cboStockCardSuppliers = new wijmo.input.ComboBox('#StockCard_Supplier', {
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockCard_Supplier_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockCard_Supplier_data").val(supplierCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        // ======================
+        // Get Item of Stock Card
+        // ======================
+        function getItemStockCard() {
+            ItemsStockCard = new wijmo.collections.ObservableArray();
+
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/1',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            ItemsStockCard.push({
+                                Id: Results[i]["Id"],
+                                ArticleCode: Results[i]["ArticleCode"],
+                                ManualArticleCode: Results[i]["ManualArticleCode"],
+                                Article: Results[i]["Article"],
+                                Category: Results[i]["Category"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                ArticleGroupId: Results[i]["ArticleGroupId"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                UnitId: Results[i]["UnitId"],
+                                OutputTaxId: Results[i]["OutputTaxId"],
+                                InputTaxId: Results[i]["InputTaxId"],
+                                WTaxTypeId: Results[i]["WTaxTypeId"],
+                                Price: Results[i]["Price"],
+                                Cost: Results[i]["Cost"],
+                                IsInventory: Results[i]["IsInventory"],
+                                Particulars: Results[i]["Particulars"],
+                                Address: Results[i]["Address"],
+                                TermId: Results[i]["TermId"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                CreditLimit: Results[i]["CreditLimit"],
+                                DateAcquired: Results[i]["DateAcquired"],
+                                UsefulLife: Results[i]["UsefulLife"],
+                                SalvageValue: Results[i]["SalvageValue"],
+                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCboItems(ItemsStockCard);
+                    } else {
+                        createCboItems(ItemsStockCard);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return ItemsStockCard;
+        }
+
+        // =================
+        // Items - Combo Box
+        // =================
+        function createCboItems(ItemsStockCard) {
+            var itemCollection = new wijmo.collections.CollectionView(ItemsStockCard);
+            var itemList = new Array();
+            for (var i = 0; i < itemCollection.items.length; i++) {
+                itemList.push(itemCollection.items[i].Article);
+            }
+
+            cboItems.dispose();
+            cboItems = new wijmo.input.ComboBox('#Items_Item', {
+                placeholder: "Select Items",
+                itemsSource: itemList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('Items_Item_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#Items_Item_data").val(itemCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        // get Inventory Start Date
+        function getInventoryStartDate() {
+            // Input Inventory Start Date
+            inventoryStartDate.dispose();
+            inventoryStartDate = new wijmo.input.InputDate('#inventory_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('inventory_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('inventory_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('inventory_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getInventoryEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Inventory End Date
+        function getInventoryEndDate() {
+            // Input Inventory End Date
+            inventoryEndDate.dispose();
+            inventoryEndDate = new wijmo.input.InputDate('#inventory_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('inventory_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('inventory_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('inventory_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getInventoryStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Stock Card Start Date
+        function getStockCardStartDate() {
+            // Input Stock Card Start Date
+            stockCardStartDate.dispose();
+            stockCardStartDate = new wijmo.input.InputDate('#stockCard_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('stockCard_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('stockCard_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('stockCard_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getStockCardEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Stock Card End Date
+        function getStockCardEndDate() {
+            // Input Stock Card End Date
+            stockCardEndDate.dispose();
+            stockCardEndDate = new wijmo.input.InputDate('#stockCard_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('stockCard_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('stockCard_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('stockCard_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getStockCardStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // ===========
+        // OnLoad Page
+        // ===========
+        $(document).ready(function () {
+            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Inventory Report';
+
+            // Inventory Dates
+            document.getElementById('inventory_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('inventory_EndDate_data').value = new Date().toLocaleDateString();
+
+            inventoryStartDate = new wijmo.input.InputDate('#inventory_StartDate');
+            inventoryEndDate = new wijmo.input.InputDate('#inventory_EndDate');
+
+            getInventoryStartDate();
+            getInventoryEndDate();
+
+            // Stock Card Dates
+            document.getElementById('stockCard_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('stockCard_EndDate_data').value = new Date().toLocaleDateString();
+
+            stockCardStartDate = new wijmo.input.InputDate('#stockCard_StartDate');
+            stockCardEndDate = new wijmo.input.InputDate('#stockCard_EndDate');
+
+            getStockCardStartDate();
+            getStockCardEndDate();
+
+            // Wijmo CBO Combo Box
+            cboCompany = new wijmo.input.ComboBox('#Inventory_Company')
+            cboAccounts = new wijmo.input.ComboBox('#Inventory_Accounts');
+            cboSuppliers = new wijmo.input.ComboBox('#Inventory_Supplier');
+
+            cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company')
+            cboStockCardAccounts = new wijmo.input.ComboBox('#StockCard_Accounts');
+            cboStockCardSuppliers = new wijmo.input.ComboBox('#StockCard_Supplier');
+
+            cboItems = new wijmo.input.ComboBox('#Items_Item');
+
+            getCompanies();
+            getAccounts();
+            getSuppliers();
+            getItemStockCard();
+
+            $('#filterTabs').hide();
+            $('#filterTabsStockCard').hide();
+
+            // filter accounts and supplier in Inventory
+            $("#filterAccountAndSupplier").click(function () {
+                if ($(this).is(':checked')) {
+                    $('#filterTabs').show();
+                } else {
+                    $('#filterTabs').hide();
+                }
+            });
+
+            // filter accounts and supplier in Stock Card
+            $("#filterAccountAndSupplierStockCard").click(function () {
+                if ($(this).is(':checked')) {
+                    $('#filterTabsStockCard').show();
+                } else {
+                    $('#filterTabsStockCard').hide();
+                }
+            });
+        });
     </script>
 </body>
 </html>
