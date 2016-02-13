@@ -230,30 +230,71 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Start Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="stockIn_StartDate"></div>
+                                                        <input type="hidden" id="stockIn_StartDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">End Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="stockIn_EndDate"></div>
+                                                        <input type="hidden" id="stockIn_EndDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Company:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="StockIn_Company"></div>
+
+                                                        <input type="hidden" id="StockIn_Company_data" />
+                                                        <input type="hidden" id="StockIn_Company_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="checkbox" id="" />
+                                                        <input type="checkbox" id="filterAccountAndSupplierStockIn" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                                <div id="filterTabsStockIn">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div id="one" class="tab-pane fade in active">
+                                            <div class="well">
+                                                <form class="form-horizontal" role="form">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Account:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockIn_Accounts"></div>
+
+                                                                    <input type="hidden" id="StockIn_Accounts_data" />
+                                                                    <input type="hidden" id="StockIn_Accounts_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Supplier:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockIn_Supplier"></div>
+
+                                                                    <input type="hidden" id="StockIn_Supplier_data" />
+                                                                    <input type="hidden" id="StockIn_Supplier_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div id="SODR" class="tab-pane fade">
@@ -268,30 +309,71 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Start Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="stockOut_StartDate"></div>
+                                                        <input type="hidden" id="stockOut_StartDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">End Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="stockOut_EndDate"></div>
+                                                        <input type="hidden" id="stockOut_EndDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Company:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="StockOut_Company"></div>
+
+                                                        <input type="hidden" id="StockOut_Company_data" />
+                                                        <input type="hidden" id="StockOut_Company_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="checkbox" id="" />
+                                                        <input type="checkbox" id="filterAccountAndSupplierStockOut" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                                <div id="filterTabsStockOut">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div id="one" class="tab-pane fade in active">
+                                            <div class="well">
+                                                <form class="form-horizontal" role="form">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Account:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockOut_Accounts"></div>
+
+                                                                    <input type="hidden" id="StockOut_Accounts_data" />
+                                                                    <input type="hidden" id="StockOut_Accounts_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Supplier:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockOut_Supplier"></div>
+
+                                                                    <input type="hidden" id="StockOut_Supplier_data" />
+                                                                    <input type="hidden" id="StockOut_Supplier_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div id="STDR" class="tab-pane fade">
@@ -306,30 +388,71 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Start Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="stockTransfer_StartDate"></div>
+                                                        <input type="hidden" id="stockTransfer_StartDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">End Date:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="stockTransfer_EndDate"></div>
+                                                        <input type="hidden" id="stockTransfer_EndDate_data" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Company:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="StockTransfer_Company"></div>
+
+                                                        <input type="hidden" id="StockTransfer_Company_data" />
+                                                        <input type="hidden" id="StockTransfer_Company_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="checkbox" id="" />
+                                                        <input type="checkbox" id="filterAccountAndSupplierStockTransfer" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                                <div id="filterTabsStockTransfer">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div id="one" class="tab-pane fade in active">
+                                            <div class="well">
+                                                <form class="form-horizontal" role="form">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Account:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockTransfer_Accounts"></div>
+
+                                                                    <input type="hidden" id="StockTransfer_Accounts_data" />
+                                                                    <input type="hidden" id="StockTransfer_Accounts_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label col-sm-2">Supplier:</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockTransfer_Supplier"></div>
+
+                                                                    <input type="hidden" id="StockTransfer_Supplier_data" />
+                                                                    <input type="hidden" id="StockTransfer_Supplier_selectedValue" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div id="IL" class="tab-pane fade">
@@ -344,7 +467,10 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Item Group:</label>
                                                     <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-sm" id="" />
+                                                        <div class="comboBox-wide" id="ItemGroup_Item"></div>
+
+                                                        <input type="hidden" id="ItemGroup_Item_data" />
+                                                        <input type="hidden" id="ItemGroup_Item_selectedValue" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -454,6 +580,8 @@
         var companies;
         var cboCompany;
         var cboStockCardCompany;
+        var cboStockInCompany;
+        var cboStockOutCompany;
         var accounts;
         var cboAccounts;
         var cboStockCardAccounts;
@@ -461,11 +589,15 @@
         var suppliersStockCard;
         var cboSuppliers;
         var cboStockCardSuppliers;
+        var cboStockInSuppliers;
         var cboItems;
+        var cboItemGroup;
         var inventoryStartDate;
         var inventoryEndDate;
         var stockCardStartDate;
         var stockCardEndDate;
+        var stockInStartDate;
+        var stockInEndDate;
 
         // ===========
         // Get company
@@ -508,7 +640,7 @@
             for (var i = 0; i < companyCollection.items.length; i++) {
                 companyList.push(companyCollection.items[i].Company);
             }
-
+            // Inventory
             cboCompany.dispose();
             cboCompany = new wijmo.input.ComboBox('#Inventory_Company', {
                 placeholder: "Select Company",
@@ -520,7 +652,7 @@
                     $("#Inventory_Company_data").val(companyCollection.items[this.selectedIndex].Id);
                 }
             });
-
+            // Stock Card
             cboStockCardCompany.dispose();
             cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company', {
                 placeholder: "Select Company",
@@ -532,11 +664,47 @@
                     $("#StockCard_Company_data").val(companyCollection.items[this.selectedIndex].Id);
                 }
             });
+            // Stock In
+            cboStockInCompany.dispose();
+            cboStockInCompany = new wijmo.input.ComboBox('#StockIn_Company', {
+                placeholder: "Select Company",
+                itemsSource: companyList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockIn_Company_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockIn_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                }
+            });
+            // Stock Out
+            cboStockOutCompany.dispose();
+            cboStockOutCompany = new wijmo.input.ComboBox('#StockOut_Company', {
+                placeholder: "Select Company",
+                itemsSource: companyList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockOut_Company_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockOut_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                }
+            });
+            // Stock Transfer
+            cboStockTransferCompany.dispose();
+            cboStockTransferCompany = new wijmo.input.ComboBox('#StockTransfer_Company', {
+                placeholder: "Select Company",
+                itemsSource: companyList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockTransfer_Company_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockTransfer_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+                }
+            });
         }
 
-        // ============
-        // Get Accounts
-        // ============
+        // =========================
+        // Get Accounts of Inventory
+        // =========================
         function getAccounts() {
             accounts = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -568,16 +736,16 @@
             return accounts;
         }
 
-        // ===================
-        // Company - Combo Box
-        // ===================
+        // ====================0
+        // Accounts - Combo Box
+        // ====================
         function createCboAccount(accounts) {
             var accountCollection = new wijmo.collections.CollectionView(accounts);
             var accountList = new Array();
             for (var i = 0; i < accountCollection.items.length; i++) {
                 accountList.push(accountCollection.items[i].Account);
             }
-
+            // Inventory
             cboAccounts.dispose();
             cboAccounts = new wijmo.input.ComboBox('#Inventory_Accounts', {
                 placeholder: "Select Account",
@@ -591,7 +759,7 @@
                     getSuppliers();
                 }
             });
-
+            // Stock Card
             cboStockCardAccounts.dispose();
             cboStockCardAccounts = new wijmo.input.ComboBox('#StockCard_Accounts', {
                 placeholder: "Select Account",
@@ -603,6 +771,48 @@
                     $("#StockCard_Accounts_data").val(accountCollection.items[this.selectedIndex].Id);
 
                     getSuppliersStockCard();
+                }
+            });
+            // Stock In
+            cboStockInAccounts.dispose();
+            cboStockInAccounts = new wijmo.input.ComboBox('#StockIn_Accounts', {
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockIn_Accounts_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockIn_Accounts_data").val(accountCollection.items[this.selectedIndex].Id);
+
+                    getSuppliersStockIn();
+                }
+            });
+            // Stock Out
+            cboStockOutAccounts.dispose();
+            cboStockOutAccounts = new wijmo.input.ComboBox('#StockOut_Accounts', {
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockOut_Accounts_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockOut_Accounts_data").val(accountCollection.items[this.selectedIndex].Id);
+
+                    getSuppliersStockOut();
+                }
+            });
+            // Stock Transfer
+            cboStockTransferAccounts.dispose();
+            cboStockTransferAccounts = new wijmo.input.ComboBox('#StockTransfer_Accounts', {
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockTransfer_Accounts_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockTransfer_Accounts_data").val(accountCollection.items[this.selectedIndex].Id);
+
+                    getSuppliersStockTransfer();
                 }
             });
         }
@@ -766,6 +976,243 @@
             return suppliersStockCard;
         }
 
+        // ========================
+        // Get supplier of Stock In
+        // ========================
+        function getSuppliersStockIn() {
+            // Stock Card Supplier
+            suppliersStockIn = new wijmo.collections.ObservableArray();
+            var accountId = document.getElementById('StockIn_Accounts_data').value;
+
+            var disabled;
+            if (document.getElementById('StockIn_Accounts_data').value == "") {
+                var accountId = 0;
+            }
+            else {
+                var accountId = document.getElementById('StockIn_Accounts_data').value;
+            }
+
+            $.ajax({
+                url: '/api/articleForSupplierByArticleTypeId/' + accountId + "/" + '3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            suppliersStockIn.push({
+                                Id: Results[i]["Id"],
+                                ArticleCode: Results[i]["ArticleCode"],
+                                ManualArticleCode: Results[i]["ManualArticleCode"],
+                                Article: Results[i]["Article"],
+                                Category: Results[i]["Category"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                ArticleGroupId: Results[i]["ArticleGroupId"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                UnitId: Results[i]["UnitId"],
+                                OutputTaxId: Results[i]["OutputTaxId"],
+                                InputTaxId: Results[i]["InputTaxId"],
+                                WTaxTypeId: Results[i]["WTaxTypeId"],
+                                Price: Results[i]["Price"],
+                                Cost: Results[i]["Cost"],
+                                IsInventory: Results[i]["IsInventory"],
+                                Particulars: Results[i]["Particulars"],
+                                Address: Results[i]["Address"],
+                                TermId: Results[i]["TermId"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                CreditLimit: Results[i]["CreditLimit"],
+                                DateAcquired: Results[i]["DateAcquired"],
+                                UsefulLife: Results[i]["UsefulLife"],
+                                SalvageValue: Results[i]["SalvageValue"],
+                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCboSupplier(suppliersStockIn);
+                    } else {
+                        createCboSupplier(suppliersStockIn);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return suppliersStockIn;
+        }
+
+        // =========================
+        // Get supplier of Stock Out
+        // =========================
+        function getSuppliersStockOut() {
+            // Stock Card Supplier
+            suppliersStockOut = new wijmo.collections.ObservableArray();
+            var accountId = document.getElementById('StockOut_Accounts_data').value;
+
+            var disabled;
+            if (document.getElementById('StockOut_Accounts_data').value == "") {
+                var accountId = 0;
+            }
+            else {
+                var accountId = document.getElementById('StockOut_Accounts_data').value;
+            }
+
+            $.ajax({
+                url: '/api/articleForSupplierByArticleTypeId/' + accountId + "/" + '3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            suppliersStockOut.push({
+                                Id: Results[i]["Id"],
+                                ArticleCode: Results[i]["ArticleCode"],
+                                ManualArticleCode: Results[i]["ManualArticleCode"],
+                                Article: Results[i]["Article"],
+                                Category: Results[i]["Category"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                ArticleGroupId: Results[i]["ArticleGroupId"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                UnitId: Results[i]["UnitId"],
+                                OutputTaxId: Results[i]["OutputTaxId"],
+                                InputTaxId: Results[i]["InputTaxId"],
+                                WTaxTypeId: Results[i]["WTaxTypeId"],
+                                Price: Results[i]["Price"],
+                                Cost: Results[i]["Cost"],
+                                IsInventory: Results[i]["IsInventory"],
+                                Particulars: Results[i]["Particulars"],
+                                Address: Results[i]["Address"],
+                                TermId: Results[i]["TermId"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                CreditLimit: Results[i]["CreditLimit"],
+                                DateAcquired: Results[i]["DateAcquired"],
+                                UsefulLife: Results[i]["UsefulLife"],
+                                SalvageValue: Results[i]["SalvageValue"],
+                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCboSupplier(suppliersStockOut);
+                    } else {
+                        createCboSupplier(suppliersStockOut);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return suppliersStockOut;
+        }
+
+        // ==============================
+        // Get supplier of Stock Transfer
+        // ==============================
+        function getSuppliersStockTransfer() {
+            // Stock Card Supplier
+            suppliersStockTransfer = new wijmo.collections.ObservableArray();
+            var accountId = document.getElementById('StockTransfer_Accounts_data').value;
+
+            var disabled;
+            if (document.getElementById('StockTransfer_Accounts_data').value == "") {
+                var accountId = 0;
+            }
+            else {
+                var accountId = document.getElementById('StockTransfer_Accounts_data').value;
+            }
+
+            $.ajax({
+                url: '/api/articleForSupplierByArticleTypeId/' + accountId + "/" + '3',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            suppliersStockTransfer.push({
+                                Id: Results[i]["Id"],
+                                ArticleCode: Results[i]["ArticleCode"],
+                                ManualArticleCode: Results[i]["ManualArticleCode"],
+                                Article: Results[i]["Article"],
+                                Category: Results[i]["Category"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                ArticleGroupId: Results[i]["ArticleGroupId"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                UnitId: Results[i]["UnitId"],
+                                OutputTaxId: Results[i]["OutputTaxId"],
+                                InputTaxId: Results[i]["InputTaxId"],
+                                WTaxTypeId: Results[i]["WTaxTypeId"],
+                                Price: Results[i]["Price"],
+                                Cost: Results[i]["Cost"],
+                                IsInventory: Results[i]["IsInventory"],
+                                Particulars: Results[i]["Particulars"],
+                                Address: Results[i]["Address"],
+                                TermId: Results[i]["TermId"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                CreditLimit: Results[i]["CreditLimit"],
+                                DateAcquired: Results[i]["DateAcquired"],
+                                UsefulLife: Results[i]["UsefulLife"],
+                                SalvageValue: Results[i]["SalvageValue"],
+                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCboSupplier(suppliersStockTransfer);
+                    } else {
+                        createCboSupplier(suppliersStockTransfer);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return suppliersStockTransfer;
+        }
+
         // ====================
         // Supplier - Combo Box
         // ====================
@@ -775,7 +1222,7 @@
             for (var i = 0; i < supplierCollection.items.length; i++) {
                 supplierList.push(supplierCollection.items[i].Article);
             }
-
+            // Inventory
             cboSuppliers.dispose();
             cboSuppliers = new wijmo.input.ComboBox('#Inventory_Supplier', {
                 placeholder: "Select Supplier",
@@ -787,7 +1234,7 @@
                     $("#Inventory_Supplier_data").val(supplierCollection.items[this.selectedIndex].Id);
                 }
             });
-
+            // Stock Card
             cboStockCardSuppliers.dispose();
             cboStockCardSuppliers = new wijmo.input.ComboBox('#StockCard_Supplier', {
                 placeholder: "Select Supplier",
@@ -797,6 +1244,42 @@
                 selectedValue: document.getElementById('StockCard_Supplier_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#StockCard_Supplier_data").val(supplierCollection.items[this.selectedIndex].Id);
+                }
+            });
+            // Stock In
+            cboStockInSuppliers.dispose();
+            cboStockInSuppliers = new wijmo.input.ComboBox('#StockIn_Supplier', {
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockIn_Supplier_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockIn_Supplier_data").val(supplierCollection.items[this.selectedIndex].Id);
+                }
+            });
+            // Stock Out
+            cboStockOutSuppliers.dispose();
+            cboStockOutSuppliers = new wijmo.input.ComboBox('#StockOut_Supplier', {
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockOut_Supplier_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockOut_Supplier_data").val(supplierCollection.items[this.selectedIndex].Id);
+                }
+            });
+            // Stock Transfer
+            cboStockTransferSuppliers.dispose();
+            cboStockTransferSuppliers = new wijmo.input.ComboBox('#StockTransfer_Supplier', {
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('StockTransfer_Supplier_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockTransfer_Supplier_data").val(supplierCollection.items[this.selectedIndex].Id);
                 }
             });
         }
@@ -893,6 +1376,83 @@
             });
         }
 
+        // ==============
+        // Get Item Group
+        // ==============
+        function getItemGroup() {
+            ItemGroup = new wijmo.collections.ObservableArray();
+
+            $.ajax({
+                url: 'api/listArticleGroupByArticleTypeId/2',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            ItemGroup.push({
+                                Id: Results[i]["Id"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                SalesAccount: Results[i]["SalesAccount"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                CostAccount: Results[i]["CostAccount"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                AssetAccount: Results[i]["AssetAccount"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                ExpenseAccount: Results[i]["ExpenseAccount"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCboItemGroup(ItemGroup);
+                    } else {
+                        createCboItemGroup(ItemGroup);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return ItemGroup;
+        }
+
+        // ======================
+        // Item Group - Combo Box
+        // ======================
+        function createCboItemGroup(ItemGroup) {
+            var itemGroupCollection = new wijmo.collections.CollectionView(ItemGroup);
+            var itemGroupList = new Array();
+            for (var i = 0; i < itemGroupCollection.items.length; i++) {
+                itemGroupList.push(itemGroupCollection.items[i].Article);
+            }
+
+            cboItemGroup.dispose();
+            cboItemGroup = new wijmo.input.ComboBox('#ItemGroup_Item', {
+                placeholder: "Select Item Group",
+                itemsSource: itemGroupList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('ItemGroup_Item_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#ItemGroup_Item_data").val(itemGroupCollection.items[this.selectedIndex].Id);
+                }
+            });
+        }
+
+        // =============================
+        // Start and End Dates Functions
+        // =============================
+
         // get Inventory Start Date
         function getInventoryStartDate() {
             // Input Inventory Start Date
@@ -965,6 +1525,114 @@
             });
         }
 
+        // get Stock In Start Date
+        function getStockInStartDate() {
+            // Input Stock In Start Date
+            stockInStartDate.dispose();
+            stockInStartDate = new wijmo.input.InputDate('#stockIn_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('stockIn_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('stockIn_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('stockIn_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getStockInEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Stock In End Date
+        function getStockInEndDate() {
+            // Input Stock In End Date
+            stockInEndDate.dispose();
+            stockInEndDate = new wijmo.input.InputDate('#stockIn_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('stockIn_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('stockIn_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('stockIn_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getStockInStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Stock Out Start Date
+        function getStockOutStartDate() {
+            // Input Stock In Start Date
+            stockOutStartDate.dispose();
+            stockOutStartDate = new wijmo.input.InputDate('#stockOut_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('stockOut_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('stockOut_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('stockOut_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getStockOutEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Stock Out End Date
+        function getStockOutEndDate() {
+            // Input Stock Out End Date
+            stockOutEndDate.dispose();
+            stockOutEndDate = new wijmo.input.InputDate('#stockOut_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('stockOut_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('stockOut_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('stockOut_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getStockOutStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Stock Transfer Start Date
+        function getStockTransferStartDate() {
+            // Input Stock Transfer Start Date
+            stockTransferStartDate.dispose();
+            stockTransferStartDate = new wijmo.input.InputDate('#stockTransfer_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('stockTransfer_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('stockTransfer_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('stockTransfer_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getStockTransferEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Stock Transfer End Date
+        function getStockTransferEndDate() {
+            // Input Stock Transfer End Date
+            stockTransferEndDate.dispose();
+            stockTransferEndDate = new wijmo.input.InputDate('#stockTransfer_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('stockTransfer_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('stockTransfer_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('stockTransfer_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getStockTransferStartDate();
+                    }, 50);
+                }
+            });
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -991,24 +1659,76 @@
             getStockCardStartDate();
             getStockCardEndDate();
 
-            // Wijmo CBO Combo Box
-            cboCompany = new wijmo.input.ComboBox('#Inventory_Company')
+            // Stock In Dates
+            document.getElementById('stockIn_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('stockIn_EndDate_data').value = new Date().toLocaleDateString();
+
+            stockInStartDate = new wijmo.input.InputDate('#stockIn_StartDate');
+            stockInEndDate = new wijmo.input.InputDate('#stockIn_EndDate');
+
+            getStockInStartDate();
+            getStockInEndDate();
+
+            // Stock Out Dates
+            document.getElementById('stockOut_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('stockOut_EndDate_data').value = new Date().toLocaleDateString();
+
+            stockOutStartDate = new wijmo.input.InputDate('#stockOut_StartDate');
+            stockOutEndDate = new wijmo.input.InputDate('#stockOut_EndDate');
+
+            getStockOutStartDate();
+            getStockOutEndDate();
+
+            // Stock Out Transfer
+            document.getElementById('stockTransfer_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('stockTransfer_EndDate_data').value = new Date().toLocaleDateString();
+
+            stockTransferStartDate = new wijmo.input.InputDate('#stockTransfer_StartDate');
+            stockTransferEndDate = new wijmo.input.InputDate('#stockTransfer_EndDate');
+
+            getStockTransferStartDate();
+            getStockTransferEndDate();
+
+            // Wijmo CBO Combo Box for Iventory
+            cboCompany = new wijmo.input.ComboBox('#Inventory_Company');
             cboAccounts = new wijmo.input.ComboBox('#Inventory_Accounts');
             cboSuppliers = new wijmo.input.ComboBox('#Inventory_Supplier');
-
-            cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company')
+            // Wijmo CBO Combo Box for Stock Card
+            cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company');
             cboStockCardAccounts = new wijmo.input.ComboBox('#StockCard_Accounts');
             cboStockCardSuppliers = new wijmo.input.ComboBox('#StockCard_Supplier');
-
             cboItems = new wijmo.input.ComboBox('#Items_Item');
+            // Wijmo CBO Combo Box for Stock In
+            cboStockInCompany = new wijmo.input.ComboBox('#StockIn_Company');
+            cboStockInAccounts = new wijmo.input.ComboBox('#StockIn_Accounts');
+            cboStockInSuppliers = new wijmo.input.ComboBox('#StockIn_Supplier');
+            // Wijmo CBO Combo Box for Stock Out
+            cboStockOutCompany = new wijmo.input.ComboBox('#StockOut_Company');
+            cboStockOutAccounts = new wijmo.input.ComboBox('#StockOut_Accounts');
+            cboStockOutSuppliers = new wijmo.input.ComboBox('#StockOut_Supplier');
+            // Wijmo CBO Combo Box for Stock Transfer
+            cboStockTransferCompany = new wijmo.input.ComboBox('#StockTransfer_Company');
+            cboStockTransferAccounts = new wijmo.input.ComboBox('#StockTransfer_Accounts');
+            cboStockTransferSuppliers = new wijmo.input.ComboBox('#StockTransfer_Supplier');
+            // Wijmo CBO Combo Box for Item List
+            cboItemGroup = new wijmo.input.ComboBox('#ItemGroup_Item');
 
+            // Call Function
             getCompanies();
             getAccounts();
             getSuppliers();
+            getSuppliersStockCard();
+            getSuppliersStockIn();
+            getSuppliersStockOut();
+            getSuppliersStockTransfer();
             getItemStockCard();
+            getItemGroup();
 
             $('#filterTabs').hide();
             $('#filterTabsStockCard').hide();
+            $('#filterTabsStockIn').hide();
+            $('#filterTabsStockOut').hide();
+            $('#filterTabsStockTransfer').hide();
 
             // filter accounts and supplier in Inventory
             $("#filterAccountAndSupplier").click(function () {
@@ -1025,6 +1745,33 @@
                     $('#filterTabsStockCard').show();
                 } else {
                     $('#filterTabsStockCard').hide();
+                }
+            });
+
+            // filter accounts and supplier in Stock In
+            $("#filterAccountAndSupplierStockIn").click(function () {
+                if ($(this).is(':checked')) {
+                    $('#filterTabsStockIn').show();
+                } else {
+                    $('#filterTabsStockIn').hide();
+                }
+            });
+
+            // filter accounts and supplier in Stock Out
+            $("#filterAccountAndSupplierStockOut").click(function () {
+                if ($(this).is(':checked')) {
+                    $('#filterTabsStockOut').show();
+                } else {
+                    $('#filterTabsStockOut').hide();
+                }
+            });
+
+            // filter accounts and supplier in Stock Transfer
+            $("#filterAccountAndSupplierStockTransfer").click(function () {
+                if ($(this).is(':checked')) {
+                    $('#filterTabsStockTransfer').show();
+                } else {
+                    $('#filterTabsStockTransfer').hide();
                 }
             });
         });
