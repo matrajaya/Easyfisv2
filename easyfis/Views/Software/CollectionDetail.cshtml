@@ -87,18 +87,16 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Customer:</label>
                                     <div class="col-sm-8">
-                                        @*<div class="input-group">
-                                        *@
-                                        <div class="comboBox-wide" id="collection_Customer"></div>
+                                        <div class="input-group">
+                                            <div class="comboBox-wide" id="collection_Customer"></div>
 
-                                        <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
-                                        <input type="hidden" id="collection_Customer_selectedValue" />
-                                        @*<div class="input-group-btn">
+                                            <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
+                                            <input type="hidden" id="collection_Customer_selectedValue" />
+                                            <div class="input-group-btn">
                                                 <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
-                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>
-                                            </div>*@
-                                        @*
-                                            </div>*@
+                                                @*<button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>*@
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -166,7 +164,7 @@
                         </div>
                     </div>
                     <div class="col-lg-8">
-                        <button type="submit" class="btn btn-primary pull-right btn-sm"  id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                     </div>
                 </div>
                 <br />
@@ -503,11 +501,11 @@
                         $("#cmdCollectionEdit").prop("disabled", false);
                         $("#cmdCollectionPrint").prop("disabled", false);
                         $("#btnAddCollectionLine").prop("disabled", true);
-                        
+
                     } else if(document.getElementById('collection_IsLocked').value == 'false') {
                         document.getElementById('collection_ManualORNumber').disabled = false;
                         document.getElementById('collection_Particulars').disabled = false;
-                    
+
                         var ORdate_date = Results.ORDate;
                         ORDate.dispose();
                         ORDate = new wijmo.input.InputDate('#collection_ORDate', {
@@ -700,7 +698,7 @@
                         $("#collection_Customer_data").val(customerCollection.items[this.selectedIndex].CustomerId);
                     }
                 });
-            } else if(document.getElementById('collection_IsLocked').value == 'false') { 
+            } else if(document.getElementById('collection_IsLocked').value == 'false') {
                 cboCustomer.dispose();
                 cboCustomer = new wijmo.input.ComboBox('#collection_Customer', {
                     disabled: false,
@@ -833,7 +831,7 @@
                         $("#collection_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                     }
                 });
-            } else if(document.getElementById('collection_IsLocked').value == 'false') { 
+            } else if(document.getElementById('collection_IsLocked').value == 'false') {
                 cboCheckedBy.dispose();
                 cboCheckedBy = new wijmo.input.ComboBox('#collection_CheckedBy', {
                     disabled: false,
@@ -884,7 +882,7 @@
                         $("#collection_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                     }
                 });
-            } else if(document.getElementById('collection_IsLocked').value == 'false') { 
+            } else if(document.getElementById('collection_IsLocked').value == 'false') {
                 cboApprovedBy.dispose();
                 cboApprovedBy = new wijmo.input.ComboBox('#collection_ApprovedBy', {
                     disabled: false,
@@ -2146,6 +2144,7 @@
                 getBranchesForComboBox();
                 getCustomerForComboBox();
                 getUsersForComboBox();
+                document.getElementById('cmdAR').disabled = true;
 
                 if(document.getElementById('collection_ORNumber').value == 0) {
                     document.getElementById('collection_ORNumber_Display').value = "0000000001";
@@ -2325,7 +2324,6 @@
             });
 
         });
-
     </script>
 </body>
 </html>
