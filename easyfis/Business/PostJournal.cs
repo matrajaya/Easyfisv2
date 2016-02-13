@@ -10,6 +10,119 @@ namespace easyfis.Business
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // =====================
+        // Collection in journal
+        // =====================
+        // insert collection in journal
+        public void insertORJournal(Int32 ORId)
+        {
+            String JournalDate = "";
+            Int32 BranchId = 0;
+            String BranchCode = "";
+            Int32 AccountId = 0;
+            Int32 ArticleId = 0;
+            Int32 BankId = 0;
+            String ORNumber = "";
+            Decimal Amount;
+            Int32 PayTypeAccountId = 0;
+
+            // collection Header
+            var collectionHeader = from d in db.TrnCollections
+                                   where d.Id == ORId
+                                   select new Models.TrnCollection
+                                   {
+                                       Id = d.Id,
+                                       BranchId = d.BranchId,
+                                       Branch = d.MstBranch.Branch,
+                                       BranchCode = d.MstBranch.BranchCode,
+                                       ORNumber = d.ORNumber,
+                                       ORDate = d.ORDate.ToShortDateString(),
+                                       CustomerId = d.CustomerId,
+                                       Customer = d.MstArticle.Article,
+                                       AccountId = d.MstArticle.AccountId,
+                                       Particulars = d.Particulars,
+                                       ManualORNumber = d.ManualORNumber,
+                                       PreparedById = d.PreparedById,
+                                       PreparedBy = d.MstUser3.FullName,
+                                       CheckedById = d.CheckedById,
+                                       CheckedBy = d.MstUser.FullName,
+                                       ApprovedById = d.ApprovedById,
+                                       ApprovedBy = d.MstUser1.FullName,
+                                       IsLocked = d.IsLocked,
+                                       CreatedById = d.CreatedById,
+                                       CreatedBy = d.MstUser2.FullName,
+                                       CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                       UpdatedById = d.UpdatedById,
+                                       UpdatedBy = d.MstUser4.FullName,
+                                       UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                   };
+
+            // collection Lines
+            var collectionLines = from d in db.TrnCollectionLines
+                                  select new Models.TrnCollectionLine
+                                  {
+                                      Id = d.Id,
+                                      ORId = d.ORId,
+                                      OR = d.TrnCollection.ORNumber,
+                                      BranchId = d.BranchId,
+                                      Branch = d.MstBranch.Branch,
+                                      AccountId = d.AccountId,
+                                      Account = d.MstAccount.Account,
+                                      ArticleId = d.ArticleId,
+                                      Article = d.MstArticle.Article,
+                                      SIId = d.SIId,
+                                      SI = d.TrnSalesInvoice.SINumber,
+                                      Particulars = d.Particulars,
+                                      Amount = d.Amount,
+                                      PayTypeId = d.PayTypeId,
+                                      PayType = d.MstPayType.PayType,
+                                      CheckNumber = d.CheckNumber,
+                                      CheckDate = d.CheckDate.ToShortDateString(),
+                                      CheckBank = d.CheckBank,
+                                      DepositoryBankId = d.DepositoryBankId,
+                                      DepositoryBank = d.MstArticle1.Article,
+                                      IsClear = d.IsClear,
+                                  };
+
+            try
+            {
+                if (collectionHeader.Any())
+                {
+                    foreach(var collection in collectionHeader)
+                    {
+                        JournalDate = collection.ORDate;
+                        BranchId = collection.BranchId;
+                        ArticleId = collection.CustomerId;
+                        BranchCode = collection.BranchCode;
+                        AccountId = collection.AccountId;
+                    }
+
+
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
+        // delete collection in Journal
+        public void deleteORJournal(Int32 ORId)
+        {
+            try
+            {
+                var journals = db.TrnJournals.Where(d => d.ORId == ORId).ToList();
+                foreach (var j in journals)
+                {
+                    db.TrnJournals.DeleteOnSubmit(j);
+                    db.SubmitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
+
         // =======================
         // Disbursement in Journal
         // =======================
@@ -22,7 +135,7 @@ namespace easyfis.Business
             Int32 AccountId = 0;
             Int32 BankId = 0;
             String CVNumber = "";
-            Decimal Amount;
+            //Decimal Amount;
 
             // disbursement Header
             var disbursementHeader = from d in db.TrnDisbursements
@@ -66,7 +179,7 @@ namespace easyfis.Business
 
             // disbursement Lines
             var disbursementLines = from d in db.TrnDisbursementLines
-                                     where d.CVId == CVId
+                                    where d.CVId == CVId
                                     select new Models.TrnDisbursementLine
                                     {
                                         Id = d.Id,
@@ -116,13 +229,10 @@ namespace easyfis.Business
                 // Accounts payable
                 if (disbursementLinesTotalAmount.Any())
                 {
-                    Debug.WriteLine("wewew");
                     foreach (var disbursementLineTotalAmount in disbursementLinesTotalAmount)
                     {
                         if (disbursementLineTotalAmount.Amount > 0)
                         {
-                            Debug.WriteLine(disbursementLineTotalAmount.Amount);
-
                             Data.TrnJournal newCVJournalForAccountPayables = new Data.TrnJournal();
 
                             newCVJournalForAccountPayables.JournalDate = Convert.ToDateTime(JournalDate);
@@ -146,10 +256,8 @@ namespace easyfis.Business
 
                             db.TrnJournals.InsertOnSubmit(newCVJournalForAccountPayables);
                         }
-                        else if(disbursementLineTotalAmount.Amount < 0)
+                        else if (disbursementLineTotalAmount.Amount < 0)
                         {
-
-                            Debug.WriteLine(disbursementLineTotalAmount.Amount);
                             Data.TrnJournal newCVJournalForAccountPayables = new Data.TrnJournal();
 
                             newCVJournalForAccountPayables.JournalDate = Convert.ToDateTime(JournalDate);
