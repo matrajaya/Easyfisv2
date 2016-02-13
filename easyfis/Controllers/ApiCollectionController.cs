@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -206,7 +207,7 @@ namespace easyfis.Controllers
                 var date = DateTime.Now;
 
                 Data.TrnCollection newCollection = new Data.TrnCollection();
-                
+
                 newCollection.BranchId = collection.BranchId;
                 newCollection.ORNumber = collection.ORNumber;
                 newCollection.ORDate = Convert.ToDateTime(collection.ORDate);
@@ -272,6 +273,8 @@ namespace easyfis.Controllers
                     if (updateCollection.IsLocked == true)
                     {
                         journal.insertORJournal(collection_Id);
+
+                        UpdateARCollection(collection_Id);
                     }
                     else
                     {
@@ -371,6 +374,207 @@ namespace easyfis.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
+        }
+
+        public void UpdateARCollection(Int32 ORId)
+        {
+            // collection header
+            var collectionHeader = from d in db.TrnCollections
+                                   where d.Id == ORId
+                                   select new Models.TrnCollection
+                                   {
+                                       Id = d.Id,
+                                       BranchId = d.BranchId,
+                                       Branch = d.MstBranch.Branch,
+                                       ORNumber = d.ORNumber,
+                                       ORDate = d.ORDate.ToShortDateString(),
+                                       CustomerId = d.CustomerId,
+                                       Customer = d.MstArticle.Article,
+                                       Particulars = d.Particulars,
+                                       ManualORNumber = d.ManualORNumber,
+                                       PreparedById = d.PreparedById,
+                                       PreparedBy = d.MstUser3.FullName,
+                                       CheckedById = d.CheckedById,
+                                       CheckedBy = d.MstUser.FullName,
+                                       ApprovedById = d.ApprovedById,
+                                       ApprovedBy = d.MstUser1.FullName,
+                                       IsLocked = d.IsLocked,
+                                       CreatedById = d.CreatedById,
+                                       CreatedBy = d.MstUser2.FullName,
+                                       CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                       UpdatedById = d.UpdatedById,
+                                       UpdatedBy = d.MstUser4.FullName,
+                                       UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                   };
+            
+            // colelction lines
+            var collectionLines = from d in db.TrnCollectionLines
+                                  where d.ORId == ORId
+                                  group d by new
+                                  {
+                                      SIId = d.SIId
+                                  } into g
+                                  select new Models.TrnCollectionLine
+                                  {
+                                      SIId = g.Key.SIId
+                                  };
+
+            try
+            {
+                if(collectionHeader.Any())
+                {
+                    if(collectionLines.Any())
+                    {
+                        foreach (var siIdcollectionLines in collectionLines)
+                        {
+                            if (siIdcollectionLines.SIId != null)
+                            {
+                                updateAR(Convert.ToInt32(siIdcollectionLines.SIId));
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+        }
+
+        public void updateAR(Int32 SIId)
+        {
+            // sales Invoice Header
+            var salesInvoices = from d in db.TrnSalesInvoices
+                                where d.Id == SIId
+                                select new Models.TrnSalesInvoice
+                                {
+                                    Id = d.Id,
+                                    BranchId = d.BranchId,
+                                    Branch = d.MstBranch.Branch,
+                                    SINumber = d.SINumber,
+                                    SIDate = d.SIDate.ToShortDateString(),
+                                    CustomerId = d.CustomerId,
+                                    Customer = d.MstArticle.Article,
+                                    TermId = d.TermId,
+                                    Term = d.MstTerm.Term,
+                                    DocumentReference = d.DocumentReference,
+                                    ManualSINumber = d.ManualSINumber,
+                                    Remarks = d.Remarks,
+                                    Amount = d.Amount,
+                                    PaidAmount = d.PaidAmount,
+                                    AdjustmentAmount = d.AdjustmentAmount,
+                                    BalanceAmount = d.BalanceAmount,
+                                    SoldById = d.SoldById,
+                                    SoldBy = d.MstUser4.FullName,
+                                    PreparedById = d.PreparedById,
+                                    PreparedBy = d.MstUser3.FullName,
+                                    CheckedById = d.CheckedById,
+                                    CheckedBy = d.MstUser1.FullName,
+                                    ApprovedById = d.ApprovedById,
+                                    ApprovedBy = d.MstUser.FullName,
+                                    IsLocked = d.IsLocked,
+                                    CreatedById = d.CreatedById,
+                                    CreatedBy = d.MstUser2.FullName,
+                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                    UpdatedById = d.UpdatedById,
+                                    UpdatedBy = d.MstUser5.FullName,
+                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                };
+
+            try
+            {
+                if(salesInvoices.Any())
+                {
+                    var salesInvoceUpdate = from d in db.TrnSalesInvoices where d.Id == SIId select d;
+                    Debug.WriteLine(SIId);
+                    if (salesInvoceUpdate.Any())
+                    {
+                        Decimal PaidAmount = 0;
+                        Decimal AdjustmentAmount = 0;
+
+                        var collectionLines = from d in db.TrnCollectionLines
+                                              where d.SIId == SIId
+                                              select new Models.TrnCollectionLine
+                                              {
+                                                  Id = d.Id,
+                                                  ORId = d.ORId,
+                                                  OR = d.TrnCollection.ORNumber,
+                                                  BranchId = d.BranchId,
+                                                  Branch = d.MstBranch.Branch,
+                                                  AccountId = d.AccountId,
+                                                  Account = d.MstAccount.Account,
+                                                  ArticleId = d.ArticleId,
+                                                  Article = d.MstArticle.Article,
+                                                  SIId = d.SIId,
+                                                  SI = d.TrnSalesInvoice.SINumber,
+                                                  Particulars = d.Particulars,
+                                                  Amount = d.Amount,
+                                                  PayTypeId = d.PayTypeId,
+                                                  PayType = d.MstPayType.PayType,
+                                                  CheckNumber = d.CheckNumber,
+                                                  CheckDate = d.CheckDate.ToShortDateString(),
+                                                  CheckBank = d.CheckBank,
+                                                  DepositoryBankId = d.DepositoryBankId,
+                                                  DepositoryBank = d.MstArticle1.Article,
+                                                  IsClear = d.IsClear,
+                                              };
+
+                        var journalVoucherLines = from d in db.TrnJournalVoucherLines
+                                                  where d.ARSIId == SIId
+                                                  select new Models.TrnJournalVoucherLine
+                                                  {
+                                                      Id = d.Id,
+                                                      JVId = d.JVId,
+                                                      BranchId = d.BranchId,
+                                                      Branch = d.MstBranch.Branch,
+                                                      AccountId = d.AccountId,
+                                                      Account = d.MstAccount.Account,
+                                                      ArticleId = d.ArticleId,
+                                                      Article = d.MstArticle.Article,
+                                                      Particulars = d.Particulars,
+                                                      DebitAmount = d.DebitAmount,
+                                                      CreditAmount = d.CreditAmount,
+                                                      APRRId = d.APRRId,
+                                                      APRR = d.TrnReceivingReceipt.RRNumber,
+                                                      APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
+                                                      ARSIId = d.ARSIId,
+                                                      ARSI = d.TrnSalesInvoice.SINumber,
+                                                      ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
+                                                      IsClear = d.IsClear
+                                                  };
+
+                        Decimal DebitAmount;
+                        Decimal CreditAmount;
+                        DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
+                        CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
+
+                        PaidAmount = collectionLines.Sum(d => d.Amount);
+                        AdjustmentAmount = DebitAmount - CreditAmount;
+
+                        var updateSI = salesInvoceUpdate.FirstOrDefault();
+                        updateSI.PaidAmount = PaidAmount;
+                        updateSI.AdjustmentAmount = AdjustmentAmount;
+                        db.SubmitChanges();
+
+                        Decimal RRamount = 0;
+                        Decimal RRPaidAmount = 0;
+                        foreach (var siForUpdate in salesInvoices)
+                        {
+                            RRamount = siForUpdate.Amount;
+                            RRPaidAmount = siForUpdate.PaidAmount;
+                        }
+
+                        updateSI.BalanceAmount = (RRamount - RRPaidAmount) + AdjustmentAmount;
+                        db.SubmitChanges();
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
         }
     }
 }

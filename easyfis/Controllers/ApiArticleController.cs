@@ -331,10 +331,10 @@ namespace easyfis.Controllers
             return (Models.MstArticle)articles.FirstOrDefault();
         }
 
-        // ===================================================
-        // GET Article Supplier by AccountId and AccountTypeId
-        // ===================================================
-        [Route("api/articleForSupplierByArticleTypeId/{accountId}/{articleTypeId}")]
+        // ==========================================
+        // GET Article by AccountId and AccountTypeId
+        // ==========================================
+        [Route("api/articleByAccountTypeIdAndArticleTypeId/{accountId}/{articleTypeId}")]
         public List<Models.MstArticle> GetArticleSupplierByAccountIdAndArticleTypeId(String accountId, String articleTypeId)
         {
             var article_accountId = Convert.ToInt32(accountId);
@@ -396,10 +396,10 @@ namespace easyfis.Controllers
             return articles.ToList();
         }
 
-        // =================================
-        // GET Article Supplier by AccountId 
-        // =================================
-        [Route("api/articleForSupplierByAccountId/{accountId}")]
+        // ========================
+        // GET Article by AccountId 
+        // ========================
+        [Route("api/articleByAccountId/{accountId}")]
         public List<Models.MstArticle> GetArticleSupplierByAccountIdAndArticleTypeId(String accountId)
         {
             var article_accountId = Convert.ToInt32(accountId);

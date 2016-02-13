@@ -1545,8 +1545,9 @@
         // ==============================================
         function getSalesForComboBoxInCollectionLine() {
             collectionLineSales = new wijmo.collections.ObservableArray();
+            var customerId = document.getElementById('collection_Customer_data').value;
             $.ajax({
-                url: '/api/listSalesInvoice',
+                url: '/api/salesInvoiceByCustomerId/' + customerId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1557,9 +1558,12 @@
                             collectionLineSales.push({
                                 SIId: results[i]["Id"],
                                 SINumber: results[i]["SINumber"],
-                                Branch: results[i]["Branch"]
+                                Branch: results[i]["Branch"],
+                                Amount: results[i]["Amount"]
                             });
                         }
+                        createCboSIForCollectionLine(collectionLineSales);
+                    } else {
                         createCboSIForCollectionLine(collectionLineSales);
                     }
                 }
@@ -1579,17 +1583,37 @@
                 SIList.push(SICollections.items[i].SINumber);
             }
 
-            cboCollectionLineSI.dispose();
-            cboCollectionLineSI = new wijmo.input.ComboBox('#collectionLine_SINo', {
-                placeholder: "Select SI Number",
-                itemsSource: SIList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('collectionLine_SINo_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#collectionLine_SINo_data").val(SICollections.items[this.selectedIndex].SIId);
-                }
-            });
+            if(collectionLineSales == 0) {
+                document.getElementById('collectionLine_SINo_data').value = "";
+
+                cboCollectionLineSI.dispose();
+                cboCollectionLineSI = new wijmo.input.ComboBox('#collectionLine_SINo', {
+                    disabled: true,
+                    placeholder: "Select SI Number",
+                    itemsSource: SIList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('collectionLine_SINo_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#collectionLine_SINo_data").val(SICollections.items[this.selectedIndex].SIId);
+                        $("#collectionLine_amount").val(SICollections.items[this.selectedIndex].Amount);
+                    }
+                });
+            } else {
+                cboCollectionLineSI.dispose();
+                cboCollectionLineSI = new wijmo.input.ComboBox('#collectionLine_SINo', {
+                    disabled: false,
+                    placeholder: "Select SI Number",
+                    itemsSource: SIList,
+                    isEditable: false,
+                    required: false,
+                    selectedValue: document.getElementById('collectionLine_SINo_selectedValue').value.toString(),
+                    onSelectedIndexChanged: function () {
+                        $("#collectionLine_SINo_data").val(SICollections.items[this.selectedIndex].SIId);
+                        $("#collectionLine_amount").val(SICollections.items[this.selectedIndex].Amount);
+                    }
+                });
+            }
         }
 
         // ===========================
@@ -1658,7 +1682,7 @@
             }
 
             $.ajax({
-                url: '/api/articleForSupplierByAccountId/' + accountId,
+                url: '/api/articleByAccountId/' + accountId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1672,15 +1696,13 @@
                             });
                         }
                         createCboCollectionLineArticles(collectionLineArticles);
-                    }
-                    else {
+                    } else {
                         createCboCollectionLineArticles(collectionLineArticles);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
-            }
-            );
+            });
         }
 
         // ======================================
