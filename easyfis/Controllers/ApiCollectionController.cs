@@ -11,6 +11,7 @@ namespace easyfis.Controllers
     public class ApiCollectionController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+        private Business.PostJournal journal = new Business.PostJournal();
 
         // ===============
         // LIST Collection
@@ -268,6 +269,15 @@ namespace easyfis.Controllers
                     updateCollection.UpdatedById = mstUserId;
                     updateCollection.UpdatedDateTime = date;
 
+                    if (updateCollection.IsLocked == true)
+                    {
+                        journal.insertORJournal(collection_Id);
+                    }
+                    else
+                    {
+                        journal.deleteORJournal(collection_Id);
+                    }
+
                     db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
@@ -307,6 +317,15 @@ namespace easyfis.Controllers
                     updateCollection.IsLocked = collection.IsLocked;
                     updateCollection.UpdatedById = mstUserId;
                     updateCollection.UpdatedDateTime = date;
+
+                    if (updateCollection.IsLocked == true)
+                    {
+                        journal.insertORJournal(collection_Id);
+                    }
+                    else
+                    {
+                        journal.deleteORJournal(collection_Id);
+                    }
 
                     db.SubmitChanges();
 

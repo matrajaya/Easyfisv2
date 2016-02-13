@@ -396,6 +396,70 @@ namespace easyfis.Controllers
             return articles.ToList();
         }
 
+        // =================================
+        // GET Article Supplier by AccountId 
+        // =================================
+        [Route("api/articleForSupplierByAccountId/{accountId}")]
+        public List<Models.MstArticle> GetArticleSupplierByAccountIdAndArticleTypeId(String accountId)
+        {
+            var article_accountId = Convert.ToInt32(accountId);
+            var articles = from d in db.MstArticles
+                           where d.AccountId == article_accountId
+                           select new Models.MstArticle
+                           {
+                               Id = d.Id,
+                               ArticleCode = d.ArticleCode,
+                               ManualArticleCode = d.ManualArticleCode,
+                               Article = d.Article,
+                               Category = d.Category,
+                               ArticleTypeId = d.ArticleTypeId,
+                               ArticleType = d.MstArticleType.ArticleType,
+                               ArticleGroupId = d.ArticleGroupId,
+                               ArticleGroup = d.MstArticleGroup.ArticleGroup,
+                               AccountId = d.AccountId,
+                               Account = d.MstAccount.Account,
+                               SalesAccountId = d.SalesAccountId,
+                               SalesAccount = d.MstAccount1.Account,
+                               CostAccountId = d.CostAccountId,
+                               CostAccount = d.MstAccount2.Account,
+                               AssetAccountId = d.AssetAccountId,
+                               AssetAccount = d.MstAccount3.Account,
+                               ExpenseAccountId = d.ExpenseAccountId,
+                               ExpenseAccount = d.MstAccount4.Account,
+                               UnitId = d.UnitId,
+                               Unit = d.MstUnit.Unit,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType.TaxType,
+                               InputTaxId = d.InputTaxId,
+                               InputTax = d.MstTaxType1.TaxType,
+                               WTaxTypeId = d.WTaxTypeId,
+                               WTaxType = d.MstTaxType2.TaxType,
+                               Price = d.Price,
+                               Cost = d.Cost,
+                               IsInventory = d.IsInventory,
+                               Particulars = d.Particulars,
+                               Address = d.Address,
+                               TermId = d.TermId,
+                               Term = d.MstTerm.Term,
+                               ContactNumber = d.ContactNumber,
+                               ContactPerson = d.ContactPerson,
+                               TaxNumber = d.TaxNumber,
+                               CreditLimit = d.CreditLimit,
+                               DateAcquired = d.DateAcquired.ToShortDateString(),
+                               UsefulLife = d.UsefulLife,
+                               SalvageValue = d.SalvageValue,
+                               ManualArticleOldCode = d.ManualArticleOldCode,
+                               IsLocked = d.IsLocked,
+                               CreatedById = d.CreatedById,
+                               CreatedBy = d.MstUser.FullName,
+                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                               UpdatedById = d.UpdatedById,
+                               UpdatedBy = d.MstUser1.FullName,
+                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                           };
+            return articles.ToList();
+        }
+
         // ===========
         // ADD Article
         // ===========
