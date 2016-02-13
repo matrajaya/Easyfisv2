@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -312,6 +313,36 @@ namespace easyfis.Controllers
 
                 if (disbursements.Any())
                 {
+                    // disbursement Lines total Amount
+                    var disbursementLinesTotalAmount = from d in db.TrnDisbursementLines
+                                                       where d.CVId == disbursement_Id
+                                                       group d by new
+                                                       {
+                                                           BranchId = d.BranchId,
+                                                           AccountId = d.AccountId,
+                                                           ArticleId = d.ArticleId
+                                                       } into g
+                                                       select new Models.TrnDisbursementLine
+                                                       {
+                                                           BranchId = g.Key.BranchId,
+                                                           AccountId = g.Key.AccountId,
+                                                           ArticleId = g.Key.ArticleId,
+                                                           Amount = g.Sum(d => d.Amount)
+                                                       };
+
+                    Decimal Amount = 0;
+                    if(disbursementLinesTotalAmount.Any())
+                    {
+                        foreach (var disbursementLinesAmount in disbursementLinesTotalAmount)
+                        {
+                            Amount = disbursementLinesAmount.Amount;
+                        }
+                    }
+                    else
+                    {
+                        Amount = 0;
+                    }
+                    
                     var updateDisbursement = disbursements.FirstOrDefault();
 
                     updateDisbursement.BranchId = disbursement.BranchId;
@@ -325,7 +356,8 @@ namespace easyfis.Controllers
                     updateDisbursement.Particulars = disbursement.Particulars;
                     updateDisbursement.CheckNumber = disbursement.CheckNumber;
                     updateDisbursement.CheckDate = Convert.ToDateTime(disbursement.CheckDate);
-                    updateDisbursement.Amount = disbursement.Amount;
+                    //updateDisbursement.Amount = disbursement.Amount;
+                    updateDisbursement.Amount = Amount;
                     updateDisbursement.IsCrossCheck = disbursement.IsCrossCheck;
                     updateDisbursement.IsClear = disbursement.IsClear;
                     updateDisbursement.PreparedById = disbursement.PreparedById;
@@ -336,16 +368,19 @@ namespace easyfis.Controllers
                     updateDisbursement.UpdatedById = mstUserId;
                     updateDisbursement.UpdatedDateTime = date;
 
+                    db.SubmitChanges();
+
                     if (updateDisbursement.IsLocked == true)
                     {
                         journal.insertCVJournal(disbursement_Id);
+
+                        UpdateAPDisbursement(disbursement_Id);
                     }
                     else
                     {
                         journal.deleteCVJournal(disbursement_Id);
                     }
 
-                    db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -355,8 +390,9 @@ namespace easyfis.Controllers
                 }
 
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
@@ -438,6 +474,190 @@ namespace easyfis.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
+        }
+
+        public void UpdateAPDisbursement(Int32 CVId)
+        {
+            // disbursement Header
+            var disbursementHeader = from d in db.TrnDisbursements
+                                     where d.Id == CVId
+                                     select new Models.TrnDisbursement
+                                     {
+                                         Id = d.Id,
+                                         BranchId = d.BranchId,
+                                         Branch = d.MstBranch.Branch,
+                                         BranchCode = d.MstBranch.BranchCode,
+                                         CVNumber = d.CVNumber,
+                                         CVDate = d.CVDate.ToShortDateString(),
+                                         SupplierId = d.SupplierId,
+                                         Supplier = d.MstArticle.Article,
+                                         Payee = d.Payee,
+                                         PayTypeId = d.PayTypeId,
+                                         PayType = d.MstPayType.PayType,
+                                         BankId = d.BankId,
+                                         Bank = d.MstArticle1.Article,
+                                         ManualCVNumber = d.ManualCVNumber,
+                                         Particulars = d.Particulars,
+                                         CheckNumber = d.CheckNumber,
+                                         CheckDate = d.CheckDate.ToShortDateString(),
+                                         Amount = d.Amount,
+                                         IsCrossCheck = d.IsCrossCheck,
+                                         IsClear = d.IsClear,
+                                         PreparedById = d.PreparedById,
+                                         PreparedBy = d.MstUser3.FullName,
+                                         CheckedById = d.CheckedById,
+                                         CheckedBy = d.MstUser1.FullName,
+                                         ApprovedById = d.ApprovedById,
+                                         ApprovedBy = d.MstUser.FullName,
+                                         IsLocked = d.IsLocked,
+                                         CreatedById = d.CreatedById,
+                                         CreatedBy = d.MstUser2.FullName,
+                                         CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                         UpdatedById = d.UpdatedById,
+                                         UpdatedBy = d.MstUser4.FullName,
+                                         UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                     };
+
+            // disbursement Lines
+            var disbursementLines = from d in db.TrnDisbursementLines
+                                    where d.CVId == CVId
+                                    group d by new
+                                    {
+                                        RRId = d.RRId
+                                    } into g
+                                    select new Models.TrnDisbursementLine
+                                    {
+                                        RRId = g.Key.RRId
+                                    };
+
+            if(disbursementLines.Any())
+            {
+                foreach(var rrIdDisursementLines in disbursementLines)
+                {
+                    if(rrIdDisursementLines.RRId != null)
+                    {
+                        updateAP(Convert.ToInt32(rrIdDisursementLines.RRId));
+                    }
+                }
+            }
+        }
+
+        public void updateAP(Int32 RRId)
+        {
+             var receivingReceipts = from d in db.TrnReceivingReceipts
+                                     where d.Id == RRId
+                                    select new Models.TrnReceivingReceipt
+                                    {
+                                        Id = d.Id,
+                                        BranchId = d.BranchId,
+                                        Branch = d.MstBranch.Branch,
+                                        RRDate = d.RRDate.ToShortDateString(),
+                                        RRNumber = d.RRNumber,
+                                        SupplierId = d.SupplierId,
+                                        Supplier = d.MstArticle.Article,
+                                        TermId = d.TermId,
+                                        Term = d.MstTerm.Term,
+                                        DocumentReference = d.DocumentReference,
+                                        ManualRRNumber = d.ManualRRNumber,
+                                        Remarks = d.Remarks,
+                                        Amount = d.Amount,
+                                        WTaxAmount = d.WTaxAmount,
+                                        PaidAmount = d.PaidAmount,
+                                        AdjustmentAmount = d.AdjustmentAmount,
+                                        BalanceAmount = d.BalanceAmount,
+                                        ReceivedById = d.ReceivedById,
+                                        ReceivedBy = d.MstUser4.FullName,
+                                        PreparedById = d.PreparedById,
+                                        PreparedBy = d.MstUser3.FullName,
+                                        CheckedById = d.CheckedById,
+                                        CheckedBy = d.MstUser1.FullName,
+                                        ApprovedById = d.ApprovedById,
+                                        ApprovedBy = d.MstUser.FullName,
+                                        IsLocked = d.IsLocked,
+                                        CreatedById = d.CreatedById,
+                                        CreatedBy = d.MstUser2.FullName,
+                                        CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                        UpdatedById = d.UpdatedById,
+                                        UpdatedBy = d.MstUser5.FullName,
+                                        UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                    };
+
+            var receivingReceiptsUpdate = from d in db.TrnReceivingReceipts where d.Id == RRId select d;
+            if (receivingReceiptsUpdate.Any()) 
+            {
+                Decimal PaidAmount = 0;
+                Decimal AdjustmentAmount = 0;
+
+                var disbursementLines = from d in db.TrnDisbursementLines
+                                        where d.RRId == RRId
+                                        select new Models.TrnDisbursementLine
+                                        {
+                                            Id = d.Id,
+                                            CVId = d.CVId,
+                                            CV = d.TrnDisbursement.CVNumber,
+                                            BranchId = d.BranchId,
+                                            Branch = d.MstBranch.Branch,
+                                            AccountId = d.AccountId,
+                                            Account = d.MstAccount.Account,
+                                            ArticleId = d.ArticleId,
+                                            Article = d.MstArticle.Article,
+                                            RRId = d.RRId,
+                                            RR = d.TrnReceivingReceipt.RRNumber,
+                                            Particulars = d.Particulars,
+                                            Amount = d.Amount
+                                        };
+
+                var journalVoucherLines = from d in db.TrnJournalVoucherLines
+                                          where d.APRRId == RRId
+                                          select new Models.TrnJournalVoucherLine
+                                          {
+                                              Id = d.Id,
+                                              JVId = d.JVId,
+                                              BranchId = d.BranchId,
+                                              Branch = d.MstBranch.Branch,
+                                              AccountId = d.AccountId,
+                                              Account = d.MstAccount.Account,
+                                              ArticleId = d.ArticleId,
+                                              Article = d.MstArticle.Article,
+                                              Particulars = d.Particulars,
+                                              DebitAmount = d.DebitAmount,
+                                              CreditAmount = d.CreditAmount,
+                                              APRRId = d.APRRId,
+                                              APRR = d.TrnReceivingReceipt.RRNumber,
+                                              APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
+                                              ARSIId = d.ARSIId,
+                                              ARSI = d.TrnSalesInvoice.SINumber,
+                                              ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
+                                              IsClear = d.IsClear
+                                          };
+
+                Decimal DebitAmount;
+                Decimal CreditAmount;
+                DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
+                CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
+
+                PaidAmount = disbursementLines.Sum(d => d.Amount);
+                AdjustmentAmount = CreditAmount - DebitAmount;
+
+                var updateRR = receivingReceiptsUpdate.FirstOrDefault();
+                updateRR.PaidAmount = PaidAmount;
+                updateRR.AdjustmentAmount = AdjustmentAmount;
+                db.SubmitChanges();
+
+                Decimal RRamount = 0;
+                Decimal RRWTAXAmount = 0;
+                Decimal RRPaidAmount = 0;
+                foreach (var rrForUpdate in receivingReceipts)
+                {
+                    RRamount = rrForUpdate.Amount;
+                    RRWTAXAmount = rrForUpdate.WTaxAmount;
+                    RRPaidAmount = rrForUpdate.PaidAmount;
+                }
+
+                updateRR.BalanceAmount = (RRamount - RRWTAXAmount - RRPaidAmount) + AdjustmentAmount;
+                db.SubmitChanges();
+            }
+
         }
     }
 }

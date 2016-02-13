@@ -22,7 +22,7 @@ namespace easyfis.Business
             Int32 AccountId = 0;
             Int32 BankId = 0;
             String CVNumber = "";
-            Decimal Amount;
+            //Decimal Amount;
 
             // disbursement Header
             var disbursementHeader = from d in db.TrnDisbursements
@@ -116,13 +116,10 @@ namespace easyfis.Business
                 // Accounts payable
                 if (disbursementLinesTotalAmount.Any())
                 {
-                    Debug.WriteLine("wewew");
                     foreach (var disbursementLineTotalAmount in disbursementLinesTotalAmount)
                     {
                         if (disbursementLineTotalAmount.Amount > 0)
                         {
-                            Debug.WriteLine(disbursementLineTotalAmount.Amount);
-
                             Data.TrnJournal newCVJournalForAccountPayables = new Data.TrnJournal();
 
                             newCVJournalForAccountPayables.JournalDate = Convert.ToDateTime(JournalDate);
@@ -148,8 +145,6 @@ namespace easyfis.Business
                         }
                         else if(disbursementLineTotalAmount.Amount < 0)
                         {
-
-                            Debug.WriteLine(disbursementLineTotalAmount.Amount);
                             Data.TrnJournal newCVJournalForAccountPayables = new Data.TrnJournal();
 
                             newCVJournalForAccountPayables.JournalDate = Convert.ToDateTime(JournalDate);
