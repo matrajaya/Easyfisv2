@@ -22,23 +22,57 @@ namespace easyfis.Controllers
                               {
                                   Id = d.Id,
                                   BranchId = d.BranchId,
-                                  //Branch = d.Branch,
+                                  Branch = d.MstBranch.Branch,
                                   SCNumber = d.SCNumber,
-                                  //SCDate = d.SCDate,
+                                  SCDate = d.SCDate.ToShortDateString(),
                                   Particulars = d.Particulars,
-                                  //PreparedBy = d.PreparedBy,
+                                  PreparedBy = d.MstUser3.FullName,
                                   PreparedById = d.PreparedById,
-                                  //CheckedBy = d.CheckedBy,
+                                  CheckedBy = d.MstUser1.FullName,
                                   CheckedById = d.CheckedById,
-                                  //ApprovedBy = d.ApprovedBy,
+                                  ApprovedBy = d.MstUser.FullName,
                                   ApprovedById = d.ApprovedById,
                                   IsLocked = d.IsLocked,
                                   CreatedById = d.CreatedById,
-                                  //CreatedBy = d.CreatedBy,
-                                  //CreatedDateTime = d.CreatedDateTime,
+                                  CreatedBy = d.MstUser2.FullName,
+                                  CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
                                   UpdatedById = d.UpdatedById,
-                                  //UpdatedBy = d.UpdatedBy,
-                                  //UpdatedDateTime = d.UpdatedDateTime
+                                  UpdatedBy = d.MstUser4.FullName,
+                                  UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                              };
+            return stockCounts.ToList();
+        }
+
+        // =============================
+        // LIST Stock Count by Branch Id
+        // =============================
+        [Route("api/listStockCountByBranchId/{branchId}")]
+        public List<Models.TrnStockCount> GetStockCountByBranchId(String branchId)
+        {
+            var stockCount_branchId = Convert.ToInt32(branchId);
+            var stockCounts = from d in db.TrnStockCounts
+                              where d.BranchId == stockCount_branchId
+                              select new Models.TrnStockCount
+                              {
+                                  Id = d.Id,
+                                  BranchId = d.BranchId,
+                                  Branch = d.MstBranch.Branch,
+                                  SCNumber = d.SCNumber,
+                                  SCDate = d.SCDate.ToShortDateString(),
+                                  Particulars = d.Particulars,
+                                  PreparedBy = d.MstUser3.FullName,
+                                  PreparedById = d.PreparedById,
+                                  CheckedBy = d.MstUser1.FullName,
+                                  CheckedById = d.CheckedById,
+                                  ApprovedBy = d.MstUser.FullName,
+                                  ApprovedById = d.ApprovedById,
+                                  IsLocked = d.IsLocked,
+                                  CreatedById = d.CreatedById,
+                                  CreatedBy = d.MstUser2.FullName,
+                                  CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                  UpdatedById = d.UpdatedById,
+                                  UpdatedBy = d.MstUser4.FullName,
+                                  UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                               };
             return stockCounts.ToList();
         }

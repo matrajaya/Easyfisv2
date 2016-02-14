@@ -513,8 +513,16 @@
                 supplierList.push(supplierCollection.items[i].Article);
             }
 
+            var disabled;
+            if (suppliers == 0) {
+                disabled = true;
+            } else {
+                disabled = false;
+            }
+
             cboSuppliers.dispose();
             cboSuppliers = new wijmo.input.ComboBox('#accountsPaybleReport_Supplier', {
+                disabled: disabled,
                 placeholder: "Select Supplier",
                 itemsSource: supplierList,
                 isEditable: false,
