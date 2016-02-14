@@ -48,7 +48,7 @@
                         <div class="tab-content">
                             <div id="AR" class="tab-pane fade in active">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("AccountsReceivablePDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -83,7 +83,7 @@
                             </div>
                             <div id="ARS" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("AccountsReceivableSummaryPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -118,7 +118,7 @@
                             </div>
                             <div id="SOA" class="tab-pane fade">
                                 <div align="right">
-                                    <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="window.location.href ='@Url.Action("AccountsReceivableStatementOfAccountPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">

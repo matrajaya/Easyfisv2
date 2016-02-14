@@ -1841,7 +1841,6 @@
         // =============================
         // Start and End Dates Functions
         // =============================
-
         // get Inventory Start Date
         function getInventoryStartDate() {
             // Input Inventory Start Date
@@ -1940,7 +1939,7 @@
                 format: 'MM/dd/yyyy',
                 value: new Date(document.getElementById('stockIn_EndDate_data').value),
                 mask: '99/99/9999',
-                min: new Date(document.getElementById('stockIn_EndDate_data').value),
+                min: new Date(document.getElementById('stockIn_StartDate_data').value),
                 onValueChanged: function () {
                     document.getElementById('stockIn_EndDate_data').value = this.value.toLocaleDateString();
                     setTimeout(function () {
@@ -1976,7 +1975,7 @@
                 format: 'MM/dd/yyyy',
                 value: new Date(document.getElementById('stockOut_EndDate_data').value),
                 mask: '99/99/9999',
-                min: new Date(document.getElementById('stockOut_EndDate_data').value),
+                min: new Date(document.getElementById('stockOut_StartDate_data').value),
                 onValueChanged: function () {
                     document.getElementById('stockOut_EndDate_data').value = this.value.toLocaleDateString();
                     setTimeout(function () {
@@ -2012,7 +2011,7 @@
                 format: 'MM/dd/yyyy',
                 value: new Date(document.getElementById('stockTransfer_EndDate_data').value),
                 mask: '99/99/9999',
-                min: new Date(document.getElementById('stockTransfer_EndDate_data').value),
+                min: new Date(document.getElementById('stockTransfer_StartDate_data').value),
                 onValueChanged: function () {
                     document.getElementById('stockTransfer_EndDate_data').value = this.value.toLocaleDateString();
                     setTimeout(function () {
