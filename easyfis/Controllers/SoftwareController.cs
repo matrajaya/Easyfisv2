@@ -672,14 +672,34 @@ namespace easyfis.Controllers
             float[] widthscellsheader = new float[] { 100f, 75f };
             tableHeader.SetWidths(widthscellsheader);
             tableHeader.WidthPercentage = 100;
-            tableHeader.AddCell(new PdfPCell(new Phrase("Company Information Sheet", headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("GGSS Companya sa mga Gwapo", headerFont)) { Border = 0 });
             tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            //tableHeader.AddCell(new PdfPCell(new Phrase(branchName, headerDetailFont)) { Border = 0, PaddingTop = 5f });
-            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Heaven, Lugar sa mga gwapo(hehe)", headerDetailFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("+63 41-796-8383 ", headerDetailFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             document.Add(tableHeader);
+           
+            PdfPTable tableHeaderDetail = new PdfPTable(9);
+            PdfPCell Cell = new PdfPCell();
+            float[] widthscellsheader2 = new float[] { 10f, 30f, 10f, 10f, 10f, 10f, 10f, 10f, 10f };
+            tableHeaderDetail.SetWidths(widthscellsheader2);
+            tableHeaderDetail.WidthPercentage = 100;
 
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            document.Add(line);
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2 });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Item", columnFont)) { HorizontalAlignment = 1, Rowspan = 2 });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2 });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Cost", columnFont)) { HorizontalAlignment = 1, Rowspan = 2 });
+            PdfPCell header = (new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1 });
+            header.Colspan = 4;
+            tableHeaderDetail.AddCell(header);
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("On Hand", columnFont)) { HorizontalAlignment = 1, Rowspan = 2 });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Beginning", columnFont)) { HorizontalAlignment = 1 });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("In", columnFont)) { HorizontalAlignment = 1 });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Out", columnFont)) { HorizontalAlignment = 1 });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("End", columnFont)) { HorizontalAlignment = 1 });
+            document.Add(tableHeaderDetail);
+  
 
             // Document End
             document.Close();
