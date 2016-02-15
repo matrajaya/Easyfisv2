@@ -2128,29 +2128,37 @@
             cboCompany = new wijmo.input.ComboBox('#Inventory_Company');
             cboAccounts = new wijmo.input.ComboBox('#Inventory_Accounts');
             cboSuppliers = new wijmo.input.ComboBox('#Inventory_Supplier');
+
             // Wijmo CBO Combo Box for Stock Card
             cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company');
             cboStockCardAccounts = new wijmo.input.ComboBox('#StockCard_Accounts');
             cboStockCardSuppliers = new wijmo.input.ComboBox('#StockCard_Supplier');
             cboItems = new wijmo.input.ComboBox('#Items_Item');
+
             // Wijmo CBO Combo Box for Stock In
             cboStockInCompany = new wijmo.input.ComboBox('#StockIn_Company');
             cboStockInAccounts = new wijmo.input.ComboBox('#StockIn_Accounts');
             cboStockInSuppliers = new wijmo.input.ComboBox('#StockIn_Supplier');
+
             // Wijmo CBO Combo Box for Stock Out
             cboStockOutCompany = new wijmo.input.ComboBox('#StockOut_Company');
             cboStockOutAccounts = new wijmo.input.ComboBox('#StockOut_Accounts');
             cboStockOutSuppliers = new wijmo.input.ComboBox('#StockOut_Supplier');
+
             // Wijmo CBO Combo Box for Stock Transfer
             cboStockTransferCompany = new wijmo.input.ComboBox('#StockTransfer_Company');
             cboStockTransferAccounts = new wijmo.input.ComboBox('#StockTransfer_Accounts');
             cboStockTransferSuppliers = new wijmo.input.ComboBox('#StockTransfer_Supplier');
+
             // Wijmo CBO Combo Box for Item List
             cboItemGroup = new wijmo.input.ComboBox('#ItemGroup_Item');
+
             // Wijmo CBO Combo Box for Item Component List
             cboItemComponentGroup = new wijmo.input.ComboBox('#ItemGroup_ItemComponent');
+
             // Wijmo CBO Combo Box for Item Physical Count Sheet List
             cboPhysicalCountSheetItemGroup = new wijmo.input.ComboBox('#ItemGroup_PhysicalCountSheet');
+
             // Wijmo CBO Combo Box for fixed Asset Report
             cboFixedAssetReportCompany = new wijmo.input.ComboBox('#fixedAssetReport_Company');
             cboStockCount = new wijmo.input.ComboBox('#FixedAssetReport_StockCountNo');
@@ -2170,14 +2178,10 @@
             getBranches();
             getStockCount();
 
-            $('#filterTabs').hide();
-            $('#filterTabsStockCard').hide();
-            $('#filterTabsStockIn').hide();
-            $('#filterTabsStockOut').hide();
-            $('#filterTabsStockTransfer').hide();
-            $('#filterTabsFixedAssetReport').hide();
 
             // filter accounts and supplier in Inventory
+            $('#filterTabs').hide();
+            document.getElementById('filterAccountAndSupplier').checked = false;
             $("#filterAccountAndSupplier").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabs').show();
@@ -2187,6 +2191,8 @@
             });
 
             // filter accounts and supplier in Stock Card
+            $('#filterTabsStockCard').hide();
+            document.getElementById('filterAccountAndSupplierStockCard').checked = false;
             $("#filterAccountAndSupplierStockCard").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabsStockCard').show();
@@ -2196,6 +2202,8 @@
             });
 
             // filter accounts and supplier in Stock In
+            $('#filterTabsStockIn').hide();
+            document.getElementById('filterAccountAndSupplierStockIn').checked = false;
             $("#filterAccountAndSupplierStockIn").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabsStockIn').show();
@@ -2205,6 +2213,8 @@
             });
 
             // filter accounts and supplier in Stock Out
+            $('#filterTabsStockOut').hide();
+            document.getElementById('filterAccountAndSupplierStockOut').checked = false;
             $("#filterAccountAndSupplierStockOut").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabsStockOut').show();
@@ -2214,6 +2224,8 @@
             });
 
             // filter accounts and supplier in Stock Transfer
+            $('#filterTabsStockTransfer').hide();
+            document.getElementById('filterAccountAndSupplierStockTransfer').checked = false;
             $("#filterAccountAndSupplierStockTransfer").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabsStockTransfer').show();
@@ -2223,6 +2235,8 @@
             });
 
             // filter Branch Stock Count and Item Group in Fixed Asset Report
+            $('#filterTabsFixedAssetReport').hide();
+            document.getElementById('filterBranchStockCountNoAndItemGroup').checked = false;
             $("#filterBranchStockCountNoAndItemGroup").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabsFixedAssetReport').show();
@@ -2230,8 +2244,6 @@
                     $('#filterTabsFixedAssetReport').hide();
                 }
             });
-
-
         });
     </script>
 </body>
