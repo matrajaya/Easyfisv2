@@ -747,15 +747,15 @@ namespace easyfis.Controllers
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.ManualArticleCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Cost.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Cost.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Amount.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
             }
 
             
