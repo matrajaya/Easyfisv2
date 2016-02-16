@@ -54,7 +54,7 @@
                         <div class="tab-content">
                             <div id="Inventory" class="tab-pane fade in active">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="ÏnventoryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -84,12 +84,12 @@
                                                         <input type="hidden" id="Inventory_Company_selectedValue" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="Inventory_Filter" />
                                                     </div>
-                                                </div>
+                                                </div>*@
                                             </div>
                                         </div>
                                     </form>
@@ -2332,6 +2332,23 @@
         }
 
 
+        function ÏnventoryReportPDF_OnClick() {
+            var inventoryReportStartDate = document.getElementById('inventory_StartDate_data').value;
+            var inventoryReportEndDate = document.getElementById('inventory_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('Inventory_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('Inventory_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('Inventory_Company_data').value;
+                document.getElementById('Inventory_Company').style.border = " ";
+                window.location.href = '/Software/InventoryReportPDF?StartDate=' + inventoryReportStartDate + '&EndDate=' + inventoryReportEndDate + '&CompanyId=' + companyId;
+            }
+
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -2399,6 +2416,8 @@
             getfixedAssetReportEndDate();
 
             // Wijmo CBO Combo Box for Iventory
+            document.getElementById('Inventory_Company_data').value = "";
+            document.getElementById('Inventory_Branch_data').value = "";
             cboCompanyForInventory = new wijmo.input.ComboBox('#Inventory_Company');
             cboInventoryBranches = new wijmo.input.ComboBox('#Inventory_Branch');
             cboStockCountForInventory = new wijmo.input.ComboBox('#Inventory_StockCountNo');
@@ -2462,7 +2481,7 @@
             getStockCountForStockTransfer();
 
             // filter Inventory
-            document.getElementById('Inventory_Filter').checked = false;
+            //document.getElementById('Inventory_Filter').checked = false;
             $('#filterTabsInventory').hide();
             $("#Inventory_Filter").click(function () {
                 if ($(this).is(':checked')) {

@@ -14,6 +14,11 @@ namespace easyfis.Models
         public String Branch { get; set; }
         public String InventoryDate { get; set; }
         public Int32 ArticleId { get; set; }
+        public String Article { get; set; }
+        public Int32 UnitId { get; set; }
+        public String Unit { get; set; }
+        public Decimal Cost { get; set; }
+        public String ManualArticleCode { get; set; }
         public Int32 ArticleInventoryId { get; set; }
         public Int32? RRId { get; set; }
         public Int32? SIId { get; set; }

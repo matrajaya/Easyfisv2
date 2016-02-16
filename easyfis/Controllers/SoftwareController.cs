@@ -650,8 +650,44 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult InventoryReportPDF()
+        public ActionResult InventoryReportPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
+            // inventories
+            var inventories = from d in db.TrnInventories
+                              where d.InventoryDate >= Convert.ToDateTime(StartDate) 
+                              && d.InventoryDate <= Convert.ToDateTime(EndDate)
+                              && d.MstBranch.CompanyId == CompanyId
+                              select new Models.TrnInventory
+                              {
+                                  Id = d.Id,
+                                  BranchId = d.BranchId,
+                                  Branch = d.MstBranch.Branch,
+                                  InventoryDate = d.InventoryDate.ToShortDateString(),
+                                  ManualArticleCode = d.MstArticleInventory.MstArticle.ManualArticleCode,
+                                  ArticleId = d.ArticleId,
+                                  Article = d.MstArticleInventory.MstArticle.Article,
+                                  UnitId = d.MstArticleInventory.MstArticle.MstUnit.Id,
+                                  Unit = d.MstArticleInventory.MstArticle.MstUnit.Unit,
+                                  Cost = d.MstArticleInventory.Cost,
+                                  ArticleInventoryId = d.ArticleInventoryId,
+                                  RRId = d.RRId,
+                                  SIId = d.SIId,
+                                  INId = d.INId,
+                                  OTId = d.OTId,
+                                  STId = d.STId,
+                                  QuantityIn = d.QuantityIn,
+                                  Quantity = d.Quantity,
+                                  QuantityOut = d.QuantityOut,
+                                  Amount = d.Amount,
+                                  Particulars = d.Particulars
+                              };
+
+            
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -662,7 +698,7 @@ namespace easyfis.Controllers
             Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
             Font headerDetailFont = FontFactory.GetFont("Arial", 11);
             Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
-            Font cellFont = FontFactory.GetFont("Arial", 11);
+            Font cellFont = FontFactory.GetFont("Arial", 9);
 
             // Document Starts
             document.Open();
@@ -672,35 +708,66 @@ namespace easyfis.Controllers
             float[] widthscellsheader = new float[] { 100f, 75f };
             tableHeader.SetWidths(widthscellsheader);
             tableHeader.WidthPercentage = 100;
-            tableHeader.AddCell(new PdfPCell(new Phrase("GGSS Companya sa mga Gwapo", headerFont)) { Border = 0 });
-            tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableHeader.AddCell(new PdfPCell(new Phrase("Heaven, Lugar sa mga gwapo(hehe)", headerDetailFont)) { Border = 0 });
-            tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableHeader.AddCell(new PdfPCell(new Phrase("+63 41-796-8383 ", headerDetailFont)) { Border = 0, PaddingBottom = 25f });
-            tableHeader.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 25f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Inventory", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            
             document.Add(tableHeader);
 
-            PdfPTable tableHeaderDetail = new PdfPTable(9);
+            PdfPTable tableHeaderDetail = new PdfPTable(12);
             PdfPCell Cell = new PdfPCell();
-            float[] widthscellsheader2 = new float[] { 10f, 30f, 10f, 10f, 10f, 10f, 10f, 10f, 10f };
+            float[] widthscellsheader2 = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 16f, 16f, 16f, 16f, 16f, 16f };
             tableHeaderDetail.SetWidths(widthscellsheader2);
             tableHeaderDetail.WidthPercentage = 100;
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Item", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Cost", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-            PdfPCell header = (new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Item", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Cost", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            PdfPCell header = (new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
             header.Colspan = 4;
             tableHeaderDetail.AddCell(header);
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("On Hand", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Beginning", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("In", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Out", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("End", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Total Amount", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
+            PdfPCell headerColspan = (new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            headerColspan.Colspan = 2;
+            tableHeaderDetail.AddCell(headerColspan);
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Variance Amount", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Beginning", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("In", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Out", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("End", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Count", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Variance", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+
+            foreach (var inventory in inventories)
+            {
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.ManualArticleCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Cost.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Amount.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            }
+
+            
+            
             document.Add(tableHeaderDetail);
 
-            PdfPTable tableFooter = new PdfPTable(3);
-            float[] widthscellsfooter = new float[] { 75f, 15f, 10f };
+            document.Add(Chunk.NEWLINE);
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            PdfPTable tableFooter = new PdfPTable(12);
+            float[] widthscellsfooter = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
             tableFooter.SetWidths(widthscellsfooter);
             tableFooter.WidthPercentage = 100;
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
@@ -713,13 +780,45 @@ namespace easyfis.Controllers
             tableFooter.AddCell(new PdfPCell(new Phrase("Sub Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase("Sub Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase("Grand Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             document.Add(tableFooter);
 
+            PdfPTable tableFooter2 = new PdfPTable(12);
+            float[] widthscellsfooter2 = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
+            tableFooter2.SetWidths(widthscellsfooter2);
+            tableFooter2.WidthPercentage = 100;
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase("Sub Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            document.Add(tableFooter2);
+
+            PdfPTable tableFooter3 = new PdfPTable(12);
+            float[] widthscellsfooter3 = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
+            tableFooter3.SetWidths(widthscellsfooter3);
+            tableFooter3.WidthPercentage = 100;
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase("Grand Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            document.Add(tableFooter3);
 
             // Document End
             document.Close();
