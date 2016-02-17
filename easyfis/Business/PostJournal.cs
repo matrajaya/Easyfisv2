@@ -21,9 +21,9 @@ namespace easyfis.Business
             String BranchCode = "";
             Int32 AccountId = 0;
             Int32 ArticleId = 0;
-            Int32 BankId = 0;
+            //Int32 BankId = 0;
             String ORNumber = "";
-            Decimal Amount;
+            //Decimal Amount;
             Int32 PayTypeAccountId = 0;
 
             // collection Header

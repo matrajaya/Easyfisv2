@@ -652,37 +652,29 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult InventoryReportPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
-            // inventories
-            var inventories = from d in db.TrnInventories
-                              where d.InventoryDate >= Convert.ToDateTime(StartDate) 
-                              && d.InventoryDate <= Convert.ToDateTime(EndDate)
-                              && d.MstBranch.CompanyId == CompanyId
-                              select new Models.TrnInventory
-                              {
-                                  Id = d.Id,
-                                  BranchId = d.BranchId,
-                                  Branch = d.MstBranch.Branch,
-                                  InventoryDate = d.InventoryDate.ToShortDateString(),
-                                  ManualArticleCode = d.MstArticleInventory.MstArticle.ManualArticleCode,
-                                  ArticleId = d.ArticleId,
-                                  Article = d.MstArticleInventory.MstArticle.Article,
-                                  UnitId = d.MstArticleInventory.MstArticle.MstUnit.Id,
-                                  Unit = d.MstArticleInventory.MstArticle.MstUnit.Unit,
-                                  Cost = d.MstArticleInventory.Cost,
-                                  ArticleInventoryId = d.ArticleInventoryId,
-                                  RRId = d.RRId,
-                                  SIId = d.SIId,
-                                  INId = d.INId,
-                                  OTId = d.OTId,
-                                  STId = d.STId,
-                                  QuantityIn = d.QuantityIn,
-                                  Quantity = d.Quantity,
-                                  QuantityOut = d.QuantityOut,
-                                  Amount = d.Amount,
-                                  Particulars = d.Particulars
-                              };
+            // article Inventories
+            var articleInventories = from d in db.MstArticleInventories
+                                     where d.TrnInventories.Any(i => i.InventoryDate >= Convert.ToDateTime(StartDate))
+                                     && d.TrnInventories.Any(i => i.InventoryDate <= Convert.ToDateTime(EndDate))
+                                     && d.MstBranch.CompanyId == CompanyId
+                                     && d.MstArticle.IsInventory == true
+                                     && d.Quantity >= 0
+                                     select new Models.MstArticleInventory
+                                     {
+                                         Id = d.Id,
+                                         BranchId = d.BranchId,
+                                         ArticleId = d.ArticleId,
+                                         Article = d.MstArticle.Article,
+                                         InventoryCode = d.InventoryCode,
+                                         Quantity = d.Quantity,
+                                         Cost = d.Cost,
+                                         Amount = d.Amount,
+                                         Particulars = d.Particulars,
+                                         ManualArticleCode = d.MstArticle.ManualArticleCode,
+                                         UnitId = d.MstArticle.MstUnit.Id,
+                                         Unit = d.MstArticle.MstUnit.Unit
+                                     };
 
-            
             // Company Detail
             var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
             var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
@@ -741,30 +733,45 @@ namespace easyfis.Controllers
             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Count", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Variance", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
+            Decimal totalAmount = 0;
+            Decimal count = 0;
+            Decimal quantityVariance = 0;
+            Decimal varianceAmount = 0;
 
-            foreach (var inventory in inventories)
+            Decimal totalTotalAmount = 0;
+            Decimal totalVarianceAmount = 0;
+
+            foreach (var articleInventory in articleInventories)
             {
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.ManualArticleCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Cost.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                totalTotalAmount = totalTotalAmount + (articleInventory.Cost * articleInventory.Quantity);
+                quantityVariance = articleInventory.Quantity - count;
+                totalVarianceAmount = totalVarianceAmount + (articleInventory.Cost * quantityVariance);
             }
 
-            
-            
+            foreach (var articleInventory in articleInventories)
+            {
+                totalAmount = articleInventory.Cost * articleInventory.Quantity;
+                count = 0;
+                quantityVariance = articleInventory.Quantity - count;
+                varianceAmount = articleInventory.Cost * quantityVariance;
+
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.ManualArticleCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Cost.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(quantityVariance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(varianceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            }
+
             document.Add(tableHeaderDetail);
 
             document.Add(Chunk.NEWLINE);
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            document.Add(line);
 
             PdfPTable tableFooter = new PdfPTable(12);
             float[] widthscellsfooter = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
@@ -777,48 +784,12 @@ namespace easyfis.Controllers
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase("Sub Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(totalTotalAmount.ToString("0.00"), cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 11f });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(totalVarianceAmount.ToString("0.00"), cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 11f });
             document.Add(tableFooter);
-
-            PdfPTable tableFooter2 = new PdfPTable(12);
-            float[] widthscellsfooter2 = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
-            tableFooter2.SetWidths(widthscellsfooter2);
-            tableFooter2.WidthPercentage = 100;
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase("Sub Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            document.Add(tableFooter2);
-
-            PdfPTable tableFooter3 = new PdfPTable(12);
-            float[] widthscellsfooter3 = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
-            tableFooter3.SetWidths(widthscellsfooter3);
-            tableFooter3.WidthPercentage = 100;
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase("Grand Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            document.Add(tableFooter3);
 
             // Document End
             document.Close();
