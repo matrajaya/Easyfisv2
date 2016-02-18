@@ -41,13 +41,13 @@
                         <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
                             <li class="active"><a data-toggle="pill" href="#Inventory">Inventory</a></li>
                             <li><a data-toggle="pill" href="#SC">Stock Card</a></li>
-                            <li><a data-toggle="pill" href="#SIDR">Stock-in Detail Report</a></li>
+                            @*<li><a data-toggle="pill" href="#SIDR">Stock-in Detail Report</a></li>
                             <li><a data-toggle="pill" href="#SODR">Stock-out Detail Report</a></li>
                             <li><a data-toggle="pill" href="#STDR">Stock Transfer Detail Report</a></li>
                             <li><a data-toggle="pill" href="#IL">Item List</a></li>
                             <li><a data-toggle="pill" href="#ICL">Item Component List</a></li>
                             <li><a data-toggle="pill" href="#PCS">Physical Count Sheet</a></li>
-                            <li><a data-toggle="pill" href="#FAR">Fixed Assets Report</a></li>
+                            <li><a data-toggle="pill" href="#FAR">Fixed Assets Report</a></li>*@
                         </ul>
                     </div>
                     <div class="col-md-8">
@@ -180,12 +180,12 @@
                                                         <input type="hidden" id="Items_Item_selectedValue" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="StockCard_Filter" />
                                                     </div>
-                                                </div>
+                                                </div>*@
                                             </div>
                                         </div>
                                     </form>
@@ -2492,7 +2492,7 @@
             });
 
             // filter Stock Card
-            document.getElementById('StockCard_Filter').checked = false;
+            //document.getElementById('StockCard_Filter').checked = false;
             $('#filterTabsStockCardFilter').hide();
             $("#StockCard_Filter").click(function () {
                 if ($(this).is(':checked')) {
