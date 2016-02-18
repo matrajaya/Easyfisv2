@@ -59,7 +59,7 @@
                         <div class="tab-content">
                             <div id="BS" class="tab-pane fade in active">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementBalanceSheetPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementBalanceSheetPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -82,12 +82,12 @@
                                                         <input type="hidden" id="FinancialStatementBalanceSheet_Company_selectedValue" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="FinancialStatementBalanceSheet_filter" />
                                                     </div>
-                                                </div>
+                                                </div>*@
                                             </div>
                                         </div>
                                     </form>
@@ -2744,6 +2744,21 @@
             });
         }
 
+        function FinancialStatementBalanceSheetPDF_OnClick() {
+            var financialStatementBalanceSheetDateAsOf = document.getElementById('FinancialStatementBalanceSheet_DateAsOf_data').value;
+            
+            var companyId;
+            if (document.getElementById('FinancialStatementBalanceSheet_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementBalanceSheet_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementBalanceSheet_Company_data').value;
+                document.getElementById('FinancialStatementBalanceSheet_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementBalanceSheetPDF?DateAsOf=' + financialStatementBalanceSheetDateAsOf + '&CompanyId=' + companyId;
+            }
+        }
+
         // ============
         // On Load Page
         // ============
@@ -2764,7 +2779,7 @@
 
             // filter financial Balance Sheet Branch
             $('#filterTabsFinancialStatementBalanceSheet').hide();
-            document.getElementById('FinancialStatementBalanceSheet_filter').checked = false;
+            //document.getElementById('FinancialStatementBalanceSheet_filter').checked = false;
             $("#FinancialStatementBalanceSheet_filter").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabsFinancialStatementBalanceSheet').show();
@@ -3026,6 +3041,7 @@
             getFinancialStatementJournalVoucherBookEndDate();
 
             // wijmo cbo financial Statement Balance Sheet
+            document.getElementById('FinancialStatementBalanceSheet_Company_data').value = "";
             cboFinancialStatementBalanceSheetCompany = new wijmo.input.ComboBox('#FinancialStatementBalanceSheet_Company');
             cboFinancialStatementBalanceSheetBranches = new wijmo.input.ComboBox('#FinancialStatementBalanceSheet_Branch');
 
