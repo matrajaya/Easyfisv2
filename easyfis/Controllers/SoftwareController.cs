@@ -657,7 +657,6 @@ namespace easyfis.Controllers
                               where d.InventoryDate >= Convert.ToDateTime(StartDate) 
                               && d.InventoryDate <= Convert.ToDateTime(EndDate)
                               && d.MstBranch.CompanyId == CompanyId
-                              && d.Quantity >= 0
                               select new Models.TrnInventory
                               {
                                   Id = d.Id,
@@ -720,7 +719,7 @@ namespace easyfis.Controllers
 
             PdfPTable tableHeaderDetail = new PdfPTable(12);
             PdfPCell Cell = new PdfPCell();
-            float[] widthscellsheader2 = new float[] { 20f, 30f, 15f, 10f, 20f, 16f, 16f, 16f, 16f, 16f, 16f, 16f };
+            float[] widthscellsheader2 = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 16f, 16f, 16f, 16f, 16f, 16f };
             tableHeaderDetail.SetWidths(widthscellsheader2);
             tableHeaderDetail.WidthPercentage = 100;
             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
@@ -745,9 +744,6 @@ namespace easyfis.Controllers
 
             foreach (var inventory in inventories)
             {
-                Decimal totalAmount = inventory.Cost * inventory.Quantity;
-                Decimal varianceAmount = inventory.Cost * inventory.Quantity;
-
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.ManualArticleCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
@@ -755,22 +751,14 @@ namespace easyfis.Controllers
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString(), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
                 tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(varianceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
             }
 
-            Decimal subTotalAmount;
-            if (!inventories.Any()) 
-            {
-                subTotalAmount = 0;
-            }
-            else
-            {
-                subTotalAmount = inventories.Sum(d => d.Amount);
-            }
+            
             
             document.Add(tableHeaderDetail);
 
@@ -779,7 +767,7 @@ namespace easyfis.Controllers
             document.Add(line);
 
             PdfPTable tableFooter = new PdfPTable(12);
-            float[] widthscellsfooter = new float[] { 20f, 30f, 15f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
+            float[] widthscellsfooter = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
             tableFooter.SetWidths(widthscellsfooter);
             tableFooter.WidthPercentage = 100;
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
@@ -790,14 +778,14 @@ namespace easyfis.Controllers
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter.AddCell(new PdfPCell(new Phrase("Sub Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
-            tableFooter.AddCell(new PdfPCell(new Phrase(subTotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, PaddingTop = 11f, HorizontalAlignment = 1 });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(subTotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, PaddingTop = 11f, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             document.Add(tableFooter);
 
             PdfPTable tableFooter2 = new PdfPTable(12);
-            float[] widthscellsfooter2 = new float[] { 20f, 30f, 15f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
+            float[] widthscellsfooter2 = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
             tableFooter2.SetWidths(widthscellsfooter2);
             tableFooter2.WidthPercentage = 100;
             tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
@@ -808,14 +796,14 @@ namespace easyfis.Controllers
             tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter2.AddCell(new PdfPCell(new Phrase("Sub Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(subTotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, PaddingTop = 11f, HorizontalAlignment = 1 });
             tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter2.AddCell(new PdfPCell(new Phrase(subTotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, PaddingTop = 11f, HorizontalAlignment = 1 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter2.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             document.Add(tableFooter2);
 
             PdfPTable tableFooter3 = new PdfPTable(12);
-            float[] widthscellsfooter3 = new float[] { 20f, 30f, 15f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
+            float[] widthscellsfooter3 = new float[] { 20f, 30f, 10f, 10f, 20f, 16f, 1f, 31f, 16f, 16f, 16f, 16f };
             tableFooter3.SetWidths(widthscellsfooter3);
             tableFooter3.WidthPercentage = 100;
             tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
@@ -826,10 +814,10 @@ namespace easyfis.Controllers
             tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter3.AddCell(new PdfPCell(new Phrase("Grand Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(subTotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, PaddingTop = 11f, HorizontalAlignment = 1 });
             tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter3.AddCell(new PdfPCell(new Phrase(subTotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, PaddingTop = 11f, HorizontalAlignment = 1 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter3.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             document.Add(tableFooter3);
 
             // Document End
