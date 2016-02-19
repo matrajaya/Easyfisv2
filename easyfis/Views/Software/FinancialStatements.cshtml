@@ -262,7 +262,7 @@
                             </div>
                             <div id="TB" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementTrialBalancePDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementTrialBalancePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -292,12 +292,12 @@
                                                         <input type="hidden" id="FinancialStatementTrialBalance_Company_selectedValue" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="FinancialStatementTrialBalance_filter" />
                                                     </div>
-                                                </div>
+                                                </div>*@
                                             </div>
                                         </div>
                                     </form>
@@ -2759,6 +2759,23 @@
             }
         }
 
+        function FinancialStatementTrialBalancePDF_OnClick() {
+            var financialStatementTrialBalance_StartDate = document.getElementById('FinancialStatementTrialBalance_StartDate_data').value;
+            var financialStatementTrialBalance_EndDate = document.getElementById('FinancialStatementTrialBalance_EndDate_data').value;
+            
+            var companyId;
+            if (document.getElementById('FinancialStatementTrialBalance_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementTrialBalance_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementTrialBalance_Company_data').value;
+                document.getElementById('FinancialStatementTrialBalance_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementTrialBalancePDF?StartDate=' + financialStatementTrialBalance_StartDate + '&EndDate=' + financialStatementTrialBalance_EndDate + '&CompanyId=' + companyId;
+            }
+            
+        }
+
         // ============
         // On Load Page
         // ============
@@ -2812,7 +2829,7 @@
 
             // filter financial trial balance
             $('#filterTabsFinancialStatementTrialBalance').hide();
-            document.getElementById('FinancialStatementTrialBalance_filter').checked = false;
+            //document.getElementById('FinancialStatementTrialBalance_filter').checked = false;
             $("#FinancialStatementTrialBalance_filter").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabsFinancialStatementTrialBalance').show();
@@ -3054,6 +3071,7 @@
             cboFinancialStatementCashFlowBranch = new wijmo.input.ComboBox('#FinancialStatementCashFlow_Branch');
 
             // Wijmo CBO combobox Financial Statement Trial Balance
+            document.getElementById('FinancialStatementTrialBalance_Company_data').value = "";
             cboFinancialStatementTrialBalanceCompany = new wijmo.input.ComboBox('#FinancialStatementTrialBalance_Company');
             cboFinancialStatementTrialBalanceBranch = new wijmo.input.ComboBox('#FinancialStatementTrialBalance_Branch');
             
