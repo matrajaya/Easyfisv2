@@ -1465,7 +1465,7 @@ namespace easyfis.Controllers
             // retrieve account sub category journal for Asset
             var accountTypeSubCategory_Journal_Assets = from d in db.TrnJournals
                                                         where d.JournalDate == Convert.ToDateTime(DateAsOf)
-                                                        && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Asset"
+                                                        && d.MstAccount.MstAccountType.MstAccountCategory.Id == 1
                                                         && d.MstBranch.CompanyId == CompanyId
                                                         group d by new
                                                         {
@@ -1475,13 +1475,15 @@ namespace easyfis.Controllers
                                                         select new Models.TrnJournal
                                                         {
                                                             AccountCategory = g.Key.AccountCategory,
-                                                            SubCategoryDescription = g.Key.SubCategoryDescription
+                                                            SubCategoryDescription = g.Key.SubCategoryDescription, 
+                                                            DebitAmount = g.Sum(d => d.DebitAmount),
+                                                            CreditAmount = g.Sum(d => d.CreditAmount)
                                                         };
 
             // retrieve account type journal for Asset
             var accountType_Journal_Assets = from d in db.TrnJournals
                                              where d.JournalDate == Convert.ToDateTime(DateAsOf)
-                                             && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Asset"
+                                             && d.MstAccount.MstAccountType.MstAccountCategory.Id == 1
                                              && d.MstBranch.CompanyId == CompanyId
                                              group d by new
                                              {
@@ -1489,7 +1491,9 @@ namespace easyfis.Controllers
                                              } into g
                                              select new Models.TrnJournal
                                              {
-                                                 AccountType = g.Key.AccountType
+                                                 AccountType = g.Key.AccountType,
+                                                 DebitAmount = g.Sum(d => d.DebitAmount),
+                                                 CreditAmount = g.Sum(d => d.CreditAmount)
                                              };
 
 
@@ -1497,6 +1501,8 @@ namespace easyfis.Controllers
             {
                 if (accountType_Journal_Assets.Any())
                 {
+                    Decimal totalCurrentAsset = 0;
+
                     foreach (var accountTypeSubCategory_Journal_Asset in accountTypeSubCategory_Journal_Assets)
                     {
                         // table Balance Sheet header
@@ -1512,6 +1518,9 @@ namespace easyfis.Controllers
                         tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
 
                         document.Add(tableBalanceSheetHeader);
+
+                        totalCurrentAsset = accountTypeSubCategory_Journal_Asset.DebitAmount;
+                        Debug.WriteLine(totalCurrentAsset);
                     }
 
                     foreach (var accountType_JournalAsset in accountType_Journal_Assets)
@@ -1524,13 +1533,13 @@ namespace easyfis.Controllers
 
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountType_JournalAsset.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountType_JournalAsset.DebitAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
 
                         // retrieve accounts journal Asset
                         var accounts_JournalAssets = from d in db.TrnJournals
                                                      where d.JournalDate == Convert.ToDateTime(DateAsOf)
                                                      && d.MstAccount.MstAccountType.AccountType == accountType_JournalAsset.AccountType
-                                                     && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Asset"
+                                                     && d.MstAccount.MstAccountType.MstAccountCategory.Id == 1
                                                      && d.MstBranch.CompanyId == CompanyId
                                                      group d by new
                                                      {
@@ -1540,14 +1549,16 @@ namespace easyfis.Controllers
                                                      select new Models.TrnJournal
                                                      {
                                                          AccountCode = g.Key.AccountCode,
-                                                         Account = g.Key.Account
+                                                         Account = g.Key.Account,
+                                                         DebitAmount = g.Sum(d => d.DebitAmount),
+                                                         CreditAmount = g.Sum(d => d.CreditAmount)
                                                      };
 
                         foreach (var accounts_JournalAsset in accounts_JournalAssets)
                         {
                             tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalAsset.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
                             tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalAsset.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalAsset.DebitAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         }
 
                         document.Add(tableBalanceSheetAccounts);
@@ -1564,12 +1575,12 @@ namespace easyfis.Controllers
                     tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
                     tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("Total Current Assets", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase(totalCurrentAsset.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
                     tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("Total Asset", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase(totalCurrentAsset.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     document.Add(tableBalanceSheetFooterAsset);
                     document.Add(Chunk.NEWLINE);
@@ -1580,7 +1591,7 @@ namespace easyfis.Controllers
             // retrieve account sub category journal Liabilities
             var accountTypeSubCategory_JournalLiabilities = from d in db.TrnJournals
                                                             where d.JournalDate == Convert.ToDateTime(DateAsOf)
-                                                            && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Liabilities"
+                                                            && d.MstAccount.MstAccountType.MstAccountCategory.Id == 2
                                                             && d.MstBranch.CompanyId == CompanyId
                                                             group d by new
                                                             {
@@ -1590,13 +1601,15 @@ namespace easyfis.Controllers
                                                             select new Models.TrnJournal
                                                             {
                                                                 AccountCategory = g.Key.AccountCategory,
-                                                                SubCategoryDescription = g.Key.SubCategoryDescription
+                                                                SubCategoryDescription = g.Key.SubCategoryDescription,
+                                                                DebitAmount = g.Sum(d => d.DebitAmount),
+                                                                CreditAmount = g.Sum(d => d.CreditAmount)
                                                             };
 
             // retrieve account type journal Liabilities
             var accountTypeJournal_Liabilities = from d in db.TrnJournals
                                                  where d.JournalDate == Convert.ToDateTime(DateAsOf)
-                                                 && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Liabilities"
+                                                 && d.MstAccount.MstAccountType.MstAccountCategory.Id == 2
                                                  && d.MstBranch.CompanyId == CompanyId
                                                  group d by new
                                                  {
@@ -1604,13 +1617,17 @@ namespace easyfis.Controllers
                                                  } into g
                                                  select new Models.TrnJournal
                                                  {
-                                                     AccountType = g.Key.AccountType
+                                                     AccountType = g.Key.AccountType,
+                                                     DebitAmount = g.Sum(d => d.DebitAmount),
+                                                     CreditAmount = g.Sum(d => d.CreditAmount)
                                                  };
 
             if (accountTypeSubCategory_JournalLiabilities.Any())
             {
                 if (accountTypeJournal_Liabilities.Any())
                 {
+                    Decimal totalCurrentLiabilities = 0;
+
                     foreach (var accountTypeSubCategory_JournalsLiability in accountTypeSubCategory_JournalLiabilities)
                     {
                         // table Balance Sheet account Type Sub Category liabilities
@@ -1626,6 +1643,7 @@ namespace easyfis.Controllers
                         tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
 
                         document.Add(tableBalanceSheetHeader);
+                        totalCurrentLiabilities = accountTypeSubCategory_JournalsLiability.CreditAmount;
                     }
 
                     foreach (var accountTypeJournal_Liability in accountTypeJournal_Liabilities)
@@ -1638,13 +1656,13 @@ namespace easyfis.Controllers
 
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountTypeJournal_Liability.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountTypeJournal_Liability.CreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
 
                         // retrieve accounts journal Liabilities
                         var accounts_JournalsLiabilities = from d in db.TrnJournals
                                                            where d.JournalDate == Convert.ToDateTime(DateAsOf)
                                                            && d.MstAccount.MstAccountType.AccountType == accountTypeJournal_Liability.AccountType
-                                                           && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Liabilities"
+                                                           && d.MstAccount.MstAccountType.MstAccountCategory.Id == 2
                                                            && d.MstBranch.CompanyId == CompanyId
                                                            group d by new
                                                            {
@@ -1654,14 +1672,16 @@ namespace easyfis.Controllers
                                                            select new Models.TrnJournal
                                                            {
                                                                AccountCode = g.Key.AccountCode,
-                                                               Account = g.Key.Account
+                                                               Account = g.Key.Account,
+                                                               DebitAmount = g.Sum(d => d.DebitAmount),
+                                                               CreditAmount = g.Sum(d => d.CreditAmount)
                                                            };
 
                         foreach (var accounts_JournalsLiability in accounts_JournalsLiabilities)
                         {
                             tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalsLiability.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
                             tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalsLiability.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalsLiability.CreditAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         }
 
                         document.Add(tableBalanceSheetAccounts);
@@ -1678,12 +1698,12 @@ namespace easyfis.Controllers
                     tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
                     tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("Total Current Liabilities", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase(totalCurrentLiabilities.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
                     tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("Total Liabilities", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase(totalCurrentLiabilities.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     document.Add(tableBalanceSheetFooterLiabilities);
                     document.Add(Chunk.NEWLINE);
@@ -1693,7 +1713,7 @@ namespace easyfis.Controllers
             // retrieve account sub category journal Equity
             var accountTypeSubCategory_JournalEquities = from d in db.TrnJournals
                                                          where d.JournalDate == Convert.ToDateTime(DateAsOf)
-                                                         && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Equity"
+                                                         && d.MstAccount.MstAccountType.MstAccountCategory.Id == 4
                                                          && d.MstBranch.CompanyId == CompanyId
                                                          group d by new
                                                          {
@@ -1709,7 +1729,7 @@ namespace easyfis.Controllers
             // retrieve account type journal Equity
             var accountTypeJournal_Equities = from d in db.TrnJournals
                                               where d.JournalDate == Convert.ToDateTime(DateAsOf)
-                                              && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Equity"
+                                              && d.MstAccount.MstAccountType.MstAccountCategory.Id == 4
                                               && d.MstBranch.CompanyId == CompanyId
                                               group d by new
                                               {
@@ -1717,7 +1737,9 @@ namespace easyfis.Controllers
                                               } into g
                                               select new Models.TrnJournal
                                               {
-                                                  AccountType = g.Key.AccountType
+                                                  AccountType = g.Key.AccountType,
+                                                  DebitAmount = g.Sum(d => d.DebitAmount),
+                                                  CreditAmount = g.Sum(d => d.CreditAmount)
                                               };
 
             if (accountTypeSubCategory_JournalEquities.Any())
@@ -1757,7 +1779,7 @@ namespace easyfis.Controllers
                         var accounts_JournalEquities = from d in db.TrnJournals
                                                        where d.JournalDate == Convert.ToDateTime(DateAsOf)
                                                        && d.MstAccount.MstAccountType.AccountType == accountTypeJournal_Equity.AccountType
-                                                       && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Equity"
+                                                       && d.MstAccount.MstAccountType.MstAccountCategory.Id == 4
                                                        && d.MstBranch.CompanyId == CompanyId
                                                        group d by new
                                                        {
@@ -1767,7 +1789,9 @@ namespace easyfis.Controllers
                                                        select new Models.TrnJournal
                                                        {
                                                            AccountCode = g.Key.AccountCode,
-                                                           Account = g.Key.Account
+                                                           Account = g.Key.Account,
+                                                           DebitAmount = g.Sum(d => d.DebitAmount),
+                                                           CreditAmount = g.Sum(d => d.CreditAmount)
                                                        };
 
                         foreach (var accounts_JournalEquity in accounts_JournalEquities)
@@ -1779,6 +1803,8 @@ namespace easyfis.Controllers
 
                         document.Add(tableBalanceSheetAccounts);
                     }
+
+                    document.Add(line);
 
                     // table Balance Sheet
                     PdfPTable tableBalanceSheetFooterEquity = new PdfPTable(4);
@@ -1800,6 +1826,28 @@ namespace easyfis.Controllers
                     document.Add(Chunk.NEWLINE);
                 }
             }
+
+            document.Add(line);
+
+            // table Balance Sheet
+            PdfPTable tableBalanceSheetFooterTotalLiabilityAndEquity = new PdfPTable(4);
+            float[] widthCellsTableBalanceSheetFooterTotalLiabilityAndEquity = new float[] { 20f, 20f, 150f, 30f };
+            tableBalanceSheetFooterTotalLiabilityAndEquity.SetWidths(widthCellsTableBalanceSheetFooterTotalLiabilityAndEquity);
+            tableBalanceSheetFooterTotalLiabilityAndEquity.WidthPercentage = 100;
+
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("Total Liability and Equity", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("Balance", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+            document.Add(tableBalanceSheetFooterTotalLiabilityAndEquity);
+            document.Add(Chunk.NEWLINE);
+
             // Document End
             document.Close();
 
