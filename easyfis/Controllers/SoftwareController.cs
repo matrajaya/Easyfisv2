@@ -1401,6 +1401,31 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult FinancialStatementBalanceSheetPDF(String DateAsOf, Int32 CompanyId)
         {
+            // retrieve account category journal
+            var journals = from d in db.TrnJournals
+                           where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                           && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory != "Income"
+                           && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory != "Expenses"
+                           && d.MstBranch.CompanyId == CompanyId
+                           group d by new
+                           {
+                               AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
+                               SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription,
+                               AccountType = d.MstAccount.MstAccountType.AccountType,
+                               AccountCode = d.MstAccount.AccountCode,
+                               Account = d.MstAccount.Account
+                           } into g
+                           select new Models.TrnJournal
+                           {
+                               AccountCategory = g.Key.AccountCategory,
+                               SubCategoryDescription = g.Key.SubCategoryDescription,
+                               AccountType = g.Key.AccountType,
+                               AccountCode = g.Key.AccountCode,
+                               Account = g.Key.Account,
+                               DebitAmount = g.Sum(d => d.DebitAmount),
+                               CreditAmount = g.Sum(d => d.CreditAmount)
+                           };
+
             // Company Detail
             var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
             var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
@@ -1436,69 +1461,345 @@ namespace easyfis.Controllers
             document.Add(tableHeader);
 
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            document.Add(line);
 
-            // table Balance Sheet
-            PdfPTable tableBalanceSheet = new PdfPTable(3);
-            float[] widthCellsTableBalanceSheet = new float[] { 50f, 100f, 50f };
-            tableBalanceSheet.SetWidths(widthCellsTableBalanceSheet);
-            tableBalanceSheet.WidthPercentage = 100;
-            PdfPCell headerSubCategoryColspan = (new PdfPCell(new Phrase("Account Type - Sub Categoy", cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            headerSubCategoryColspan.Colspan = 3;
-            tableBalanceSheet.AddCell(headerSubCategoryColspan);
+            // retrieve account sub category journal for Asset
+            var accountTypeSubCategory_Journal_Assets = from d in db.TrnJournals
+                                                        where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                        && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Asset"
+                                                        && d.MstBranch.CompanyId == CompanyId
+                                                        group d by new
+                                                        {
+                                                            AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
+                                                            SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription
+                                                        } into g
+                                                        select new Models.TrnJournal
+                                                        {
+                                                            AccountCategory = g.Key.AccountCategory,
+                                                            SubCategoryDescription = g.Key.SubCategoryDescription
+                                                        };
 
-            // =========
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("Account Type", cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
-
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("0000", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("Account", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-
-            // =========
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("Account Type", cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
-
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("0000", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("Account", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-
-            // =========
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("Account Type", cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
-
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("0000", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("Account", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-            tableBalanceSheet.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            // retrieve account type journal for Asset
+            var accountType_Journal_Assets = from d in db.TrnJournals
+                                             where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                             && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Asset"
+                                             && d.MstBranch.CompanyId == CompanyId
+                                             group d by new
+                                             {
+                                                 AccountType = d.MstAccount.MstAccountType.AccountType
+                                             } into g
+                                             select new Models.TrnJournal
+                                             {
+                                                 AccountType = g.Key.AccountType
+                                             };
 
 
-            document.Add(tableBalanceSheet);
+            if (accountTypeSubCategory_Journal_Assets.Any())
+            {
+                if (accountType_Journal_Assets.Any())
+                {
+                    foreach (var accountTypeSubCategory_Journal_Asset in accountTypeSubCategory_Journal_Assets)
+                    {
+                        // table Balance Sheet header
+                        PdfPTable tableBalanceSheetHeader = new PdfPTable(3);
+                        float[] widthCellsTableBalanceSheetHeader = new float[] { 50f, 100f, 50f };
+                        tableBalanceSheetHeader.SetWidths(widthCellsTableBalanceSheetHeader);
+                        tableBalanceSheetHeader.WidthPercentage = 100;
 
-            document.Add(line);
+                        document.Add(line);
 
-            // table Balance Sheet
-            PdfPTable tableBalanceSheetFooter = new PdfPTable(4);
-            float[] widthCellsTableBalanceSheetFooter = new float[] { 20f, 20f, 150f, 30f };
-            tableBalanceSheetFooter.SetWidths(widthCellsTableBalanceSheetFooter);
-            tableBalanceSheetFooter.WidthPercentage = 100;
+                        PdfPCell headerSubCategoryColspan = (new PdfPCell(new Phrase(accountTypeSubCategory_Journal_Asset.SubCategoryDescription, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                        headerSubCategoryColspan.Colspan = 3;
+                        tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
 
-            // =========
-            tableBalanceSheetFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
-            tableBalanceSheetFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
-            tableBalanceSheetFooter.AddCell(new PdfPCell(new Phrase("Total Current Assets", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-            tableBalanceSheetFooter.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        document.Add(tableBalanceSheetHeader);
+                    }
 
-            // =========
-            tableBalanceSheetFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
-            tableBalanceSheetFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
-            tableBalanceSheetFooter.AddCell(new PdfPCell(new Phrase("Total Asset", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-            tableBalanceSheetFooter.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    foreach (var accountType_JournalAsset in accountType_Journal_Assets)
+                    {
+                        // table Balance Sheet
+                        PdfPTable tableBalanceSheetAccounts = new PdfPTable(3);
+                        float[] widthCellsTableBalanceSheetAccounts = new float[] { 50f, 100f, 50f };
+                        tableBalanceSheetAccounts.SetWidths(widthCellsTableBalanceSheetAccounts);
+                        tableBalanceSheetAccounts.WidthPercentage = 100;
 
-            document.Add(tableBalanceSheetFooter);
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountType_JournalAsset.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
 
+                        // retrieve accounts journal Asset
+                        var accounts_JournalAssets = from d in db.TrnJournals
+                                                     where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                     && d.MstAccount.MstAccountType.AccountType == accountType_JournalAsset.AccountType
+                                                     && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Asset"
+                                                     && d.MstBranch.CompanyId == CompanyId
+                                                     group d by new
+                                                     {
+                                                         AccountCode = d.MstAccount.AccountCode,
+                                                         Account = d.MstAccount.Account
+                                                     } into g
+                                                     select new Models.TrnJournal
+                                                     {
+                                                         AccountCode = g.Key.AccountCode,
+                                                         Account = g.Key.Account
+                                                     };
+
+                        foreach (var accounts_JournalAsset in accounts_JournalAssets)
+                        {
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalAsset.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalAsset.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        }
+
+                        document.Add(tableBalanceSheetAccounts);
+                    }
+
+                    document.Add(line);
+
+                    // table Balance Sheet footer in Asset CAtegory
+                    PdfPTable tableBalanceSheetFooterAsset = new PdfPTable(4);
+                    float[] widthCellsTableBalanceSheetFooterAsset = new float[] { 20f, 20f, 150f, 30f };
+                    tableBalanceSheetFooterAsset.SetWidths(widthCellsTableBalanceSheetFooterAsset);
+                    tableBalanceSheetFooterAsset.WidthPercentage = 100;
+
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("Total Current Assets", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("Total Asset", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                    tableBalanceSheetFooterAsset.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                    document.Add(tableBalanceSheetFooterAsset);
+                    document.Add(Chunk.NEWLINE);
+
+                }
+            }
+
+            // retrieve account sub category journal Liabilities
+            var accountTypeSubCategory_JournalLiabilities = from d in db.TrnJournals
+                                                            where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                            && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Liabilities"
+                                                            && d.MstBranch.CompanyId == CompanyId
+                                                            group d by new
+                                                            {
+                                                                AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
+                                                                SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription
+                                                            } into g
+                                                            select new Models.TrnJournal
+                                                            {
+                                                                AccountCategory = g.Key.AccountCategory,
+                                                                SubCategoryDescription = g.Key.SubCategoryDescription
+                                                            };
+
+            // retrieve account type journal Liabilities
+            var accountTypeJournal_Liabilities = from d in db.TrnJournals
+                                                 where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                 && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Liabilities"
+                                                 && d.MstBranch.CompanyId == CompanyId
+                                                 group d by new
+                                                 {
+                                                     AccountType = d.MstAccount.MstAccountType.AccountType
+                                                 } into g
+                                                 select new Models.TrnJournal
+                                                 {
+                                                     AccountType = g.Key.AccountType
+                                                 };
+
+            if (accountTypeSubCategory_JournalLiabilities.Any())
+            {
+                if (accountTypeJournal_Liabilities.Any())
+                {
+                    foreach (var accountTypeSubCategory_JournalsLiability in accountTypeSubCategory_JournalLiabilities)
+                    {
+                        // table Balance Sheet account Type Sub Category liabilities
+                        PdfPTable tableBalanceSheetHeader = new PdfPTable(3);
+                        float[] widthCellsTableBalanceSheetHeader = new float[] { 50f, 100f, 50f };
+                        tableBalanceSheetHeader.SetWidths(widthCellsTableBalanceSheetHeader);
+                        tableBalanceSheetHeader.WidthPercentage = 100;
+
+                        document.Add(line);
+
+                        PdfPCell headerSubCategoryColspan = (new PdfPCell(new Phrase(accountTypeSubCategory_JournalsLiability.SubCategoryDescription, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                        headerSubCategoryColspan.Colspan = 3;
+                        tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
+
+                        document.Add(tableBalanceSheetHeader);
+                    }
+
+                    foreach (var accountTypeJournal_Liability in accountTypeJournal_Liabilities)
+                    {
+                        // table Balance Sheet liabilities
+                        PdfPTable tableBalanceSheetAccounts = new PdfPTable(3);
+                        float[] widthCellsTableBalanceSheetAccounts = new float[] { 50f, 100f, 50f };
+                        tableBalanceSheetAccounts.SetWidths(widthCellsTableBalanceSheetAccounts);
+                        tableBalanceSheetAccounts.WidthPercentage = 100;
+
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountTypeJournal_Liability.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                        // retrieve accounts journal Liabilities
+                        var accounts_JournalsLiabilities = from d in db.TrnJournals
+                                                           where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                           && d.MstAccount.MstAccountType.AccountType == accountTypeJournal_Liability.AccountType
+                                                           && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Liabilities"
+                                                           && d.MstBranch.CompanyId == CompanyId
+                                                           group d by new
+                                                           {
+                                                               AccountCode = d.MstAccount.AccountCode,
+                                                               Account = d.MstAccount.Account
+                                                           } into g
+                                                           select new Models.TrnJournal
+                                                           {
+                                                               AccountCode = g.Key.AccountCode,
+                                                               Account = g.Key.Account
+                                                           };
+
+                        foreach (var accounts_JournalsLiability in accounts_JournalsLiabilities)
+                        {
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalsLiability.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalsLiability.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        }
+
+                        document.Add(tableBalanceSheetAccounts);
+                    }
+
+                    document.Add(line);
+
+                    // table Balance Sheet
+                    PdfPTable tableBalanceSheetFooterLiabilities = new PdfPTable(4);
+                    float[] widthCellsTableBalanceSheetFooterLiablities = new float[] { 20f, 20f, 150f, 30f };
+                    tableBalanceSheetFooterLiabilities.SetWidths(widthCellsTableBalanceSheetFooterLiablities);
+                    tableBalanceSheetFooterLiabilities.WidthPercentage = 100;
+
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("Total Current Liabilities", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("Total Liabilities", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                    tableBalanceSheetFooterLiabilities.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                    document.Add(tableBalanceSheetFooterLiabilities);
+                    document.Add(Chunk.NEWLINE);
+                }
+            }
+
+            // retrieve account sub category journal Equity
+            var accountTypeSubCategory_JournalEquities = from d in db.TrnJournals
+                                                         where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                         && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Equity"
+                                                         && d.MstBranch.CompanyId == CompanyId
+                                                         group d by new
+                                                         {
+                                                             AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
+                                                             SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription
+                                                         } into g
+                                                         select new Models.TrnJournal
+                                                         {
+                                                             AccountCategory = g.Key.AccountCategory,
+                                                             SubCategoryDescription = g.Key.SubCategoryDescription
+                                                         };
+
+            // retrieve account type journal Equity
+            var accountTypeJournal_Equities = from d in db.TrnJournals
+                                              where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                              && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Equity"
+                                              && d.MstBranch.CompanyId == CompanyId
+                                              group d by new
+                                              {
+                                                  AccountType = d.MstAccount.MstAccountType.AccountType
+                                              } into g
+                                              select new Models.TrnJournal
+                                              {
+                                                  AccountType = g.Key.AccountType
+                                              };
+
+            if (accountTypeSubCategory_JournalEquities.Any())
+            {
+                if (accountTypeJournal_Equities.Any())
+                {
+                    foreach (var accountTypeSubCategory_JournalEquity in accountTypeSubCategory_JournalEquities)
+                    {
+                        // table Balance Sheet Equity
+                        PdfPTable tableBalanceSheetHeader = new PdfPTable(3);
+                        float[] widthCellsTableBalanceSheetHeader = new float[] { 50f, 100f, 50f };
+                        tableBalanceSheetHeader.SetWidths(widthCellsTableBalanceSheetHeader);
+                        tableBalanceSheetHeader.WidthPercentage = 100;
+
+                        document.Add(line);
+
+                        PdfPCell headerSubCategoryColspan = (new PdfPCell(new Phrase(accountTypeSubCategory_JournalEquity.SubCategoryDescription, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                        headerSubCategoryColspan.Colspan = 3;
+                        tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
+
+                        document.Add(tableBalanceSheetHeader);
+                    }
+
+                    foreach (var accountTypeJournal_Equity in accountTypeJournal_Equities)
+                    {
+                        // table Balance Sheet Equity
+                        PdfPTable tableBalanceSheetAccounts = new PdfPTable(3);
+                        float[] widthCellsTableBalanceSheetAccounts = new float[] { 50f, 100f, 50f };
+                        tableBalanceSheetAccounts.SetWidths(widthCellsTableBalanceSheetAccounts);
+                        tableBalanceSheetAccounts.WidthPercentage = 100;
+
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountTypeJournal_Equity.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                        // retrieve accounts journal Equity
+                        var accounts_JournalEquities = from d in db.TrnJournals
+                                                       where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                       && d.MstAccount.MstAccountType.AccountType == accountTypeJournal_Equity.AccountType
+                                                       && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory == "Equity"
+                                                       && d.MstBranch.CompanyId == CompanyId
+                                                       group d by new
+                                                       {
+                                                           AccountCode = d.MstAccount.AccountCode,
+                                                           Account = d.MstAccount.Account
+                                                       } into g
+                                                       select new Models.TrnJournal
+                                                       {
+                                                           AccountCode = g.Key.AccountCode,
+                                                           Account = g.Key.Account
+                                                       };
+
+                        foreach (var accounts_JournalEquity in accounts_JournalEquities)
+                        {
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalEquity.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalEquity.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        }
+
+                        document.Add(tableBalanceSheetAccounts);
+                    }
+
+                    // table Balance Sheet
+                    PdfPTable tableBalanceSheetFooterEquity = new PdfPTable(4);
+                    float[] widthCellsTableBalanceSheetFooterEquity = new float[] { 20f, 20f, 150f, 30f };
+                    tableBalanceSheetFooterEquity.SetWidths(widthCellsTableBalanceSheetFooterEquity);
+                    tableBalanceSheetFooterEquity.WidthPercentage = 100;
+
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("Total Current Liabilities", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("Total Equity", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                    document.Add(tableBalanceSheetFooterEquity);
+                    document.Add(Chunk.NEWLINE);
+                }
+            }
             // Document End
             document.Close();
 
