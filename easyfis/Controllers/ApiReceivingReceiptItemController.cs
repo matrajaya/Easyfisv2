@@ -319,7 +319,8 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.BranchId = POItems.BranchId;
                 newReceivingReceiptItem.BaseUnitId = POItems.BaseUnitId;
                 newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
-                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.VATIsInclusive);
+                //newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.VATIsInclusive);
+                newReceivingReceiptItem.BaseCost = POItems.Cost;
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }
@@ -453,7 +454,8 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.BranchId = POItems.BranchId;
                 newReceivingReceiptItem.BaseUnitId = POItems.BaseUnitId;
                 newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
-                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.VATIsInclusive);
+                //newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.VATIsInclusive);
+                newReceivingReceiptItem.BaseCost = POItems.Cost;
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }
