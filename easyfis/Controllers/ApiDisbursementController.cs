@@ -420,6 +420,8 @@ namespace easyfis.Controllers
                     updateDisbursement.UpdatedById = mstUserId;
                     updateDisbursement.UpdatedDateTime = date;
 
+                    db.SubmitChanges();
+
                     if (updateDisbursement.IsLocked == true)
                     {
                         journal.insertCVJournal(disbursement_Id);
@@ -432,9 +434,6 @@ namespace easyfis.Controllers
 
                         UpdateAPDisbursement(disbursement_Id);
                     }
-
-
-                    db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -479,6 +478,9 @@ namespace easyfis.Controllers
             }
         }
 
+        // =========================
+        // UPDATE AP in Disbursement
+        // =========================
         public void UpdateAPDisbursement(Int32 CVId)
         {
             // disbursement Header
@@ -549,7 +551,7 @@ namespace easyfis.Controllers
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
             }
@@ -664,8 +666,35 @@ namespace easyfis.Controllers
                             CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
                         }
 
-                        PaidAmount = disbursementLines.Sum(d => d.Amount);
-                        AdjustmentAmount = CreditAmount - DebitAmount;
+                        var disbursementLineCVIds = from d in db.TrnDisbursementLines
+                                                    where d.RRId == RRId
+                                                    group d by new
+                                                    {
+                                                        CVId = d.CVId,
+                                                    } into g
+                                                    select new Models.TrnDisbursementLine
+                                                    {
+                                                        CVId = g.Key.CVId,
+                                                    };
+
+                        Int32 CVId = 0;
+                        foreach (var disbursementLineCVId in disbursementLineCVIds)
+                        {
+                            CVId = disbursementLineCVId.CVId;
+                        }
+
+                        Boolean disbursementHeaderIsLocked = (from d in db.TrnDisbursements where d.Id == CVId select d.IsLocked).SingleOrDefault();
+
+                        if (disbursementHeaderIsLocked == true)
+                        {
+                            PaidAmount = disbursementLines.Sum(d => d.Amount);
+                            AdjustmentAmount = CreditAmount - DebitAmount;
+                        }
+                        else
+                        {
+                            PaidAmount = 0;
+                            AdjustmentAmount = 0;
+                        }
 
                         var updateRR = receivingReceiptsUpdate.FirstOrDefault();
                         updateRR.PaidAmount = PaidAmount;
@@ -692,5 +721,7 @@ namespace easyfis.Controllers
                 Debug.WriteLine(e);
             }
         }
+
+
     }
 }

@@ -367,10 +367,10 @@ namespace easyfis.Controllers
                 newReceivingReceipt.ManualRRNumber = receivingReceipt.ManualRRNumber;
                 newReceivingReceipt.Remarks = receivingReceipt.Remarks;
                 newReceivingReceipt.Amount = 0;
-                newReceivingReceipt.WTaxAmount = receivingReceipt.WTaxAmount;
-                newReceivingReceipt.PaidAmount = receivingReceipt.PaidAmount;
-                newReceivingReceipt.AdjustmentAmount = receivingReceipt.AdjustmentAmount;
-                newReceivingReceipt.BalanceAmount = receivingReceipt.BalanceAmount;
+                newReceivingReceipt.WTaxAmount = 0;
+                newReceivingReceipt.PaidAmount = 0;
+                newReceivingReceipt.AdjustmentAmount = 0;
+                newReceivingReceipt.BalanceAmount = 0;
                 newReceivingReceipt.ReceivedById = receivingReceipt.ReceivedById;
                 newReceivingReceipt.PreparedById = receivingReceipt.PreparedById;
                 newReceivingReceipt.CheckedById = receivingReceipt.CheckedById;
@@ -412,6 +412,63 @@ namespace easyfis.Controllers
 
                 if (receivingReceipts.Any())
                 {
+                    // get Disbursement Line for Paid Amount
+                    var disbursementLines = from d in db.TrnDisbursementLines
+                                            where d.RRId == receivingReceipt_Id
+                                            select new Models.TrnDisbursementLine
+                                            {
+                                                Id = d.Id,
+                                                CVId = d.CVId,
+                                                CV = d.TrnDisbursement.CVNumber,
+                                                BranchId = d.BranchId,
+                                                Branch = d.MstBranch.Branch,
+                                                AccountId = d.AccountId,
+                                                Account = d.MstAccount.Account,
+                                                ArticleId = d.ArticleId,
+                                                Article = d.MstArticle.Article,
+                                                RRId = d.RRId,
+                                                RR = d.TrnReceivingReceipt.RRNumber,
+                                                Particulars = d.Particulars,
+                                                Amount = d.Amount
+                                            };
+
+                    // get Disbursement Line for CVId
+                    var disbursementLineCVIds = from d in db.TrnDisbursementLines
+                                                where d.RRId == receivingReceipt_Id
+                                                group d by new
+                                                {
+                                                    CVId = d.CVId,
+                                                } into g
+                                                select new Models.TrnDisbursementLine
+                                                {
+                                                    CVId = g.Key.CVId,
+                                                };
+
+                    Int32 CVId = 0;
+                    foreach (var disbursementLineCVId in disbursementLineCVIds)
+                    {
+                        CVId = disbursementLineCVId.CVId;
+                    }
+
+                    Boolean disbursementHeaderIsLocked = (from d in db.TrnDisbursements where d.Id == CVId select d.IsLocked).SingleOrDefault();
+
+                    Decimal PaidAmount = 0;
+                    if (disbursementLines.Any())
+                    {
+                        if (disbursementHeaderIsLocked == true)
+                        {
+                            PaidAmount = disbursementLines.Sum(d => d.Amount);
+                        }
+                        else
+                        {
+                            PaidAmount = 0;
+                        }
+                    }
+                    else
+                    {
+                        PaidAmount = 0;
+                    }
+
                     var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
 
                     updatereceivingReceipt.BranchId = receivingReceipt.BranchId;
@@ -423,10 +480,10 @@ namespace easyfis.Controllers
                     updatereceivingReceipt.ManualRRNumber = receivingReceipt.ManualRRNumber;
                     updatereceivingReceipt.Remarks = receivingReceipt.Remarks;
                     updatereceivingReceipt.Amount = getAmount(receivingReceipt_Id);
-                    updatereceivingReceipt.WTaxAmount = receivingReceipt.WTaxAmount;
-                    updatereceivingReceipt.PaidAmount = receivingReceipt.PaidAmount;
-                    updatereceivingReceipt.AdjustmentAmount = receivingReceipt.AdjustmentAmount;
-                    updatereceivingReceipt.BalanceAmount = receivingReceipt.BalanceAmount;
+                    updatereceivingReceipt.WTaxAmount = 0;
+                    updatereceivingReceipt.PaidAmount = PaidAmount;
+                    updatereceivingReceipt.AdjustmentAmount = 0;
+                    updatereceivingReceipt.BalanceAmount = getAmount(receivingReceipt_Id) - PaidAmount;
                     updatereceivingReceipt.ReceivedById = receivingReceipt.ReceivedById;
                     updatereceivingReceipt.PreparedById = receivingReceipt.PreparedById;
                     updatereceivingReceipt.CheckedById = receivingReceipt.CheckedById;
@@ -455,9 +512,8 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
@@ -483,7 +539,7 @@ namespace easyfis.Controllers
                 if (receivingReceipts.Any())
                 {
                     var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
-                   
+
                     updatereceivingReceipt.IsLocked = receivingReceipt.IsLocked;
                     updatereceivingReceipt.UpdatedById = mstUserId;
                     updatereceivingReceipt.UpdatedDateTime = date;

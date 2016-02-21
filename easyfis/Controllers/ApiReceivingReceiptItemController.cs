@@ -528,7 +528,7 @@ namespace easyfis.Controllers
                 var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == receivingReceiptItem.RRId select d;
                 if (receivingReceipts.Any())
                 {
-                    var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                    var rrItems = from d in db.TrnReceivingReceiptItems
                                                 where d.RRId == receivingReceiptItem.RRId
                                                 select new Models.TrnReceivingReceiptItem
                                                 {
@@ -537,24 +537,83 @@ namespace easyfis.Controllers
                                                     Amount = d.Amount
                                                 };
 
+                    // get Disbursement Line for Paid Amount
+                    var disbursementLines = from d in db.TrnDisbursementLines
+                                            where d.RRId == receivingReceiptItem.RRId
+                                            select new Models.TrnDisbursementLine
+                                            {
+                                                Id = d.Id,
+                                                CVId = d.CVId,
+                                                CV = d.TrnDisbursement.CVNumber,
+                                                BranchId = d.BranchId,
+                                                Branch = d.MstBranch.Branch,
+                                                AccountId = d.AccountId,
+                                                Account = d.MstAccount.Account,
+                                                ArticleId = d.ArticleId,
+                                                Article = d.MstArticle.Article,
+                                                RRId = d.RRId,
+                                                RR = d.TrnReceivingReceipt.RRNumber,
+                                                Particulars = d.Particulars,
+                                                Amount = d.Amount
+                                            };
+
+                    // get Disbursement Line for CVId
+                    var disbursementLineCVIds = from d in db.TrnDisbursementLines
+                                                where d.RRId == receivingReceiptItem.RRId
+                                                group d by new
+                                                {
+                                                    CVId = d.CVId,
+                                                } into g
+                                                select new Models.TrnDisbursementLine
+                                                {
+                                                    CVId = g.Key.CVId,
+                                                };
+
+                    Int32 CVId = 0;
+                    foreach (var disbursementLineCVId in disbursementLineCVIds)
+                    {
+                        CVId = disbursementLineCVId.CVId;
+                    }
+
+                    Boolean disbursementHeaderIsLocked = (from d in db.TrnDisbursements where d.Id == CVId select d.IsLocked).SingleOrDefault();
+
+                    Decimal PaidAmount = 0;
+                    if (disbursementLines.Any())
+                    {
+                        if (disbursementHeaderIsLocked == true)
+                        {
+                            PaidAmount = disbursementLines.Sum(d => d.Amount);
+                        }
+                        else
+                        {
+                            PaidAmount = 0;
+                        }
+                    }
+                    else
+                    {
+                        PaidAmount = 0;
+                    }
+
+
                     Decimal amount;
-                    if (!receivingReceiptItems.Any())
+                    if (!rrItems.Any())
                     {
                         amount = 0;
                     }
                     else
                     {
-                        amount = receivingReceiptItems.Sum(d => d.Amount);
+                        amount = rrItems.Sum(d => d.Amount);
                     }
 
                     var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
 
                     updatereceivingReceipt.Amount = amount;
+                    updatereceivingReceipt.PaidAmount = PaidAmount;
+                    updatereceivingReceipt.BalanceAmount = amount - PaidAmount;
                     db.SubmitChanges();
                 }
 
                 return newReceivingReceiptItem.Id;
-
             }
             catch (Exception e)
             {
@@ -611,6 +670,64 @@ namespace easyfis.Controllers
                                           Amount = d.Amount
                                       };
 
+                        // get Disbursement Line for Paid Amount
+                        var disbursementLines = from d in db.TrnDisbursementLines
+                                                where d.RRId == receivingReceiptItem.RRId
+                                                select new Models.TrnDisbursementLine
+                                                {
+                                                    Id = d.Id,
+                                                    CVId = d.CVId,
+                                                    CV = d.TrnDisbursement.CVNumber,
+                                                    BranchId = d.BranchId,
+                                                    Branch = d.MstBranch.Branch,
+                                                    AccountId = d.AccountId,
+                                                    Account = d.MstAccount.Account,
+                                                    ArticleId = d.ArticleId,
+                                                    Article = d.MstArticle.Article,
+                                                    RRId = d.RRId,
+                                                    RR = d.TrnReceivingReceipt.RRNumber,
+                                                    Particulars = d.Particulars,
+                                                    Amount = d.Amount
+                                                };
+
+                        // get Disbursement Line for CVId
+                        var disbursementLineCVIds = from d in db.TrnDisbursementLines
+                                                    where d.RRId == receivingReceiptItem.RRId
+                                                    group d by new
+                                                    {
+                                                        CVId = d.CVId,
+                                                    } into g
+                                                    select new Models.TrnDisbursementLine
+                                                    {
+                                                        CVId = g.Key.CVId,
+                                                    };
+
+                        Int32 CVId = 0;
+                        foreach (var disbursementLineCVId in disbursementLineCVIds)
+                        {
+                            CVId = disbursementLineCVId.CVId;
+                        }
+
+                        Boolean disbursementHeaderIsLocked = (from d in db.TrnDisbursements where d.Id == CVId select d.IsLocked).SingleOrDefault();
+
+                        Decimal PaidAmount = 0;
+                        if (disbursementLines.Any())
+                        {
+                            if (disbursementHeaderIsLocked == true)
+                            {
+                                PaidAmount = disbursementLines.Sum(d => d.Amount);
+                            }
+                            else
+                            {
+                                PaidAmount = 0;
+                            }
+                        }
+                        else
+                        {
+                            PaidAmount = 0;
+                        }
+
+
                         Decimal amount;
                         if (!rrItems.Any())
                         {
@@ -624,9 +741,9 @@ namespace easyfis.Controllers
                         var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
 
                         updatereceivingReceipt.Amount = amount;
+                        updatereceivingReceipt.PaidAmount = PaidAmount;
+                        updatereceivingReceipt.BalanceAmount = amount - PaidAmount;
                         db.SubmitChanges();
-
-                        Debug.WriteLine("Lahos ka duha" + amount);
                     }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
