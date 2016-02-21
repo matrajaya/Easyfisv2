@@ -56,91 +56,83 @@ namespace easyfis.Controllers
         // compute VAT Amount
         public Decimal computeVATAmount(Decimal Amount, Decimal VATRate, Boolean IsInclusive)
         {
-            var VATAmount = Convert.ToDecimal(0);
-
+            Decimal VATAmount = Convert.ToDecimal(0);
             if (IsInclusive == true)
             {
-                VATAmount = Amount / (1 + VATRate) * (VATRate / 100);
+                VATAmount = (Amount / (1 + VATRate / 100)) * (VATRate / 100);
             }
             else
             {
-                VATAmount = Amount / (VATRate / 100);
+                VATAmount = Amount * (VATRate / 100);
             }
 
-            return VATAmount;
+            return Math.Round((VATAmount) * 100) / 100;
         }
 
         // cmmpte WTAX Amount
         public Decimal computeWTAXAmount(Decimal Amount, Decimal VATRate, Decimal WTAXRate, Boolean IsInclusive)
         {
-            var WTAXAmount = Convert.ToDecimal(0);
+            Decimal WTAXAmount = Convert.ToDecimal(0);
 
             if (IsInclusive == true)
             {
-                WTAXAmount = Amount / (1 + VATRate) * (WTAXRate / 100);
+                WTAXAmount = (Amount / (1 + VATRate / 100)) * (WTAXRate / 100);
             }
             else
             {
-                if (WTAXRate != 0)
-                {
-                    WTAXAmount = Amount / (WTAXRate / 100);
-                }
-                else
-                {
-                    WTAXAmount = Amount;
-                }
+                WTAXAmount = Amount * (WTAXRate / 100);
             }
 
-            return WTAXAmount;
+            return Math.Round((WTAXAmount) * 100) / 100;
         }
 
         // cmmpte Base Cost Amount
         public Decimal computeBaseCost(Decimal Amount, Decimal VATRate, Decimal VATAmount, Decimal WTAXRate, Decimal Quantity, Decimal multiplier, Boolean IsInclusive)
         {
-            var BaseCost = Convert.ToDecimal(0);
+            Decimal BaseCost = Convert.ToDecimal(0);
 
-            if (IsInclusive == true)
+            if (Quantity == 0)
             {
-                if ((Quantity != 0) && (multiplier != 0))
-                {
-                    BaseCost = (Amount - VATAmount) / (Quantity / multiplier);
-                }
-                else
-                {
-                    if (Quantity != 0)
-                    {
-                        BaseCost = (Amount - VATAmount) / Quantity;
-                    }
-                    else
-                    {
-                        BaseCost = Amount - VATAmount;
-                    }
-                }
+                BaseCost = 0;
             }
             else
             {
-                if ((Quantity != 0) && (multiplier != 0))
+                if (IsInclusive == true)
                 {
-                    BaseCost = Amount / (Quantity / multiplier);
+                    if (multiplier != 0)
+                    {
+                        BaseCost = (Amount - VATAmount) / (Quantity / multiplier);
+                    }
+                    else
+                    {
+                        BaseCost = (Amount - VATAmount) / Quantity;
+                    }
                 }
                 else
                 {
-                    BaseCost = Amount;
+                    if (multiplier != 0)
+                    {
+                        BaseCost = Amount / (Quantity / multiplier);
+                    }
+                    else
+                    {
+                        BaseCost = Amount / Quantity;
+                    }
                 }
             }
 
-            return BaseCost;
+            return Math.Round((BaseCost) * 100) / 100;
         }
 
         // cmmpte Base Cost Amount
         public Decimal computeQuantity(Decimal POQuantity, Decimal ReceivedQuantity)
         {
-            var quantity = POQuantity - ReceivedQuantity;
+            Decimal quantity = POQuantity - ReceivedQuantity;
             if (quantity <= 0)
             {
                 return quantity = 0;
             }
-            return quantity;
+            return Math.Round((quantity) * 100) / 100;
         }
         // ===================================
         // GET Receiving Receipt Item by RR Id
@@ -225,7 +217,7 @@ namespace easyfis.Controllers
                                             BaseCost = d.BaseCost
                                         };
 
-            var quantityReceived = receivingReceiptItems.Sum(d => (decimal?)d.Quantity);
+            var quantityReceived = receivingReceiptItems.Sum(d => (Decimal?)d.Quantity);
             var convertQuantityToDecimal = Convert.ToDecimal(quantityReceived);
 
             return convertQuantityToDecimal;
@@ -260,10 +252,10 @@ namespace easyfis.Controllers
                                          VATId = d.MstArticle.InputTaxId,
                                          VATPercentage = d.MstArticle.MstTaxType.TaxRate,
                                          IsInclusive = d.MstArticle.MstTaxType.IsInclusive,
-                                         VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType.TaxRate, d.MstArticle.MstTaxType.IsInclusive),
+                                         VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType1.TaxRate, d.MstArticle.MstTaxType1.IsInclusive),
                                          WTAXId = d.MstArticle.WTaxTypeId,
                                          WTAXPercentage = d.MstArticle.MstTaxType2.TaxRate,
-                                         WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType.IsInclusive),
+                                         WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.IsInclusive),
                                          BranchId = RRItem_BranchId,
                                          BaseUnitId = d.MstUnit.Id,
                                          BaseQuantity = d.Quantity,
@@ -290,10 +282,17 @@ namespace easyfis.Controllers
                                       IsCountUnit = d.IsCountUnit
                                   };
 
-                foreach (var m in mutlipliers)
+                if (!mutlipliers.Any())
                 {
-                    convertMultiplier = m.Multiplier;
-                    break;
+                    convertMultiplier = 0;
+                }
+                else
+                {
+                    foreach (var m in mutlipliers)
+                    {
+                        convertMultiplier = m.Multiplier;
+                        break;
+                    }
                 }
             }
 
@@ -309,7 +308,7 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.UnitId = POItems.UnitId;
                 newReceivingReceiptItem.Quantity = POItems.Quantity;
                 newReceivingReceiptItem.Cost = POItems.Cost;
-                newReceivingReceiptItem.Amount = POItems.Amount;
+                newReceivingReceiptItem.Amount = POItems.Quantity * POItems.Cost;
                 newReceivingReceiptItem.VATId = POItems.VATId;
                 newReceivingReceiptItem.VATPercentage = POItems.VATPercentage;
                 newReceivingReceiptItem.VATAmount = POItems.VATAmount;
@@ -319,7 +318,7 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.BranchId = POItems.BranchId;
                 newReceivingReceiptItem.BaseUnitId = POItems.BaseUnitId;
                 newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
-                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Amount, POItems.VATPercentage, POItems.IsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.IsInclusive);
+                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.IsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.IsInclusive);
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }
@@ -387,10 +386,10 @@ namespace easyfis.Controllers
                                          VATId = d.MstArticle.InputTaxId,
                                          VATPercentage = d.MstArticle.MstTaxType.TaxRate,
                                          IsInclusive = d.MstArticle.MstTaxType.IsInclusive,
-                                         VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType.TaxRate, d.MstArticle.MstTaxType.IsInclusive),
+                                         VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType1.TaxRate, d.MstArticle.MstTaxType1.IsInclusive),
                                          WTAXId = d.MstArticle.WTaxTypeId,
                                          WTAXPercentage = d.MstArticle.MstTaxType2.TaxRate,
-                                         WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType.IsInclusive),
+                                         WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.IsInclusive),
                                          BranchId = RRItem_BranchId,
                                          BaseUnitId = d.MstUnit.Id,
                                          BaseQuantity = d.Quantity,
@@ -417,11 +416,17 @@ namespace easyfis.Controllers
                                       IsCountUnit = d.IsCountUnit
                                   };
 
-                foreach (var m in mutlipliers)
+                if (!mutlipliers.Any())
                 {
-                    convertMultiplier = m.Multiplier;
-                    Debug.WriteLine("Multiplier");
-                    break;
+                    convertMultiplier = 0;
+                }
+                else
+                {
+                    foreach (var m in mutlipliers)
+                    {
+                        convertMultiplier = m.Multiplier;
+                        break;
+                    }
                 }
             }
 
@@ -437,7 +442,7 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.UnitId = POItems.UnitId;
                 newReceivingReceiptItem.Quantity = POItems.Quantity;
                 newReceivingReceiptItem.Cost = POItems.Cost;
-                newReceivingReceiptItem.Amount = POItems.Amount;
+                newReceivingReceiptItem.Amount = POItems.Quantity * POItems.Cost;
                 newReceivingReceiptItem.VATId = POItems.VATId;
                 newReceivingReceiptItem.VATPercentage = POItems.VATPercentage;
                 newReceivingReceiptItem.VATAmount = POItems.VATAmount;
@@ -447,7 +452,7 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.BranchId = POItems.BranchId;
                 newReceivingReceiptItem.BaseUnitId = POItems.BaseUnitId;
                 newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
-                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Amount, POItems.VATPercentage, POItems.IsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.IsInclusive);
+                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.IsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.IsInclusive);
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }
@@ -679,7 +684,7 @@ namespace easyfis.Controllers
                         updatereceivingReceipt.Amount = amount;
                         db.SubmitChanges();
                     }
-                    
+
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else
