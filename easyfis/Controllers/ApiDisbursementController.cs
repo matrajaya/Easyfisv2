@@ -243,7 +243,6 @@ namespace easyfis.Controllers
             return (Models.TrnDisbursement)disbursements.FirstOrDefault();
         }
 
-
         // ================
         // ADD Disbursement
         // ================
@@ -552,8 +551,12 @@ namespace easyfis.Controllers
             }
         }
 
+        // =========
+        // Update AP
+        // =========
         public void updateAP(Int32 RRId)
         {
+            Debug.WriteLine(RRId);
             var receivingReceipts = from d in db.TrnReceivingReceipts
                                     where d.Id == RRId
                                     select new Models.TrnReceivingReceipt
@@ -647,8 +650,16 @@ namespace easyfis.Controllers
 
                         Decimal DebitAmount;
                         Decimal CreditAmount;
-                        DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
-                        CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
+                        if (!journalVoucherLines.Any())
+                        {
+                            DebitAmount = 0;
+                            CreditAmount = 0;
+                        }
+                        else
+                        {
+                            DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
+                            CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
+                        }
 
                         PaidAmount = disbursementLines.Sum(d => d.Amount);
                         AdjustmentAmount = CreditAmount - DebitAmount;

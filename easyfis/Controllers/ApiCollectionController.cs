@@ -546,8 +546,17 @@ namespace easyfis.Controllers
 
                         Decimal DebitAmount;
                         Decimal CreditAmount;
-                        DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
-                        CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
+
+                        if (!journalVoucherLines.Any())
+                        {
+                            DebitAmount = 0;
+                            CreditAmount = 0;
+                        }
+                        else
+                        {
+                            DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
+                            CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
+                        }
 
                         PaidAmount = collectionLines.Sum(d => d.Amount);
                         AdjustmentAmount = DebitAmount - CreditAmount;
