@@ -1988,11 +1988,6 @@
                 });
             });
 
-            getDisbursementBranchesForComboBox();
-            getDisbursementLineAccountForComboBox();
-            getDisbursementArticlesForComboBox();
-            getReceivingReceiptForComboBoxInDisbursementLine();
-
             document.getElementById('disbursementLine_Id').value = 0;
             document.getElementById('disbursementLine_branch_data').value = '';
             document.getElementById('disbursementLine_branch_selectedValue').value = '';
@@ -2004,6 +1999,12 @@
             document.getElementById('disbursementLine_RRNo_data').value = '';
             document.getElementById('disbursementLine_RRNo_selectedValue').value = '';
             document.getElementById('disbursementLine_Amount').value = '';
+            
+            getDisbursementBranchesForComboBox();
+            getDisbursementLineAccountForComboBox();
+            getDisbursementArticlesForComboBox();
+            getReceivingReceiptForComboBoxInDisbursementLine();
+
         }
 
         // ======================
@@ -2025,11 +2026,6 @@
                 });
             });
 
-            getDisbursementBranchesForComboBox();
-            getDisbursementLineAccountForComboBox();
-            getDisbursementArticlesForComboBox();
-            getReceivingReceiptForComboBoxInDisbursementLine();
-
             var disbursementLine = disbursementLines.currentEditItem;
             document.getElementById('disbursementLine_Id').value = disbursementLine.Id;
             document.getElementById('disbursementLine_branch_data').value = disbursementLine.BranchId;
@@ -2042,6 +2038,12 @@
             document.getElementById('disbursementLine_RRNo_data').value = disbursementLine.RRId;
             document.getElementById('disbursementLine_RRNo_selectedValue').value = disbursementLine.RR;
             document.getElementById('disbursementLine_Amount').value = disbursementLine.Amount;
+            
+            getDisbursementBranchesForComboBox();
+            getDisbursementLineAccountForComboBox();
+            getDisbursementArticlesForComboBox();
+            getReceivingReceiptForComboBoxInDisbursementLine();
+
         }
 
         // ========================

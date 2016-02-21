@@ -423,10 +423,14 @@ namespace easyfis.Controllers
                     if (updateDisbursement.IsLocked == true)
                     {
                         journal.insertCVJournal(disbursement_Id);
+
+                        UpdateAPDisbursement(disbursement_Id);
                     }
                     else
                     {
                         journal.deleteCVJournal(disbursement_Id);
+
+                        UpdateAPDisbursement(disbursement_Id);
                     }
 
 
@@ -556,7 +560,6 @@ namespace easyfis.Controllers
         // =========
         public void updateAP(Int32 RRId)
         {
-            Debug.WriteLine(RRId);
             var receivingReceipts = from d in db.TrnReceivingReceipts
                                     where d.Id == RRId
                                     select new Models.TrnReceivingReceipt
