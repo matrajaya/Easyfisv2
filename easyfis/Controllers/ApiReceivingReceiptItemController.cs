@@ -250,11 +250,12 @@ namespace easyfis.Controllers
                                          Cost = d.Cost,
                                          Amount = d.Amount,
                                          VATId = d.MstArticle.InputTaxId,
-                                         VATPercentage = d.MstArticle.MstTaxType.TaxRate,
-                                         IsInclusive = d.MstArticle.MstTaxType.IsInclusive,
+                                         VATPercentage = d.MstArticle.MstTaxType1.TaxRate,
+                                         VATIsInclusive = d.MstArticle.MstTaxType1.IsInclusive,
                                          VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType1.TaxRate, d.MstArticle.MstTaxType1.IsInclusive),
                                          WTAXId = d.MstArticle.WTaxTypeId,
                                          WTAXPercentage = d.MstArticle.MstTaxType2.TaxRate,
+                                         WTAXIsInclusive = d.MstArticle.MstTaxType2.IsInclusive,
                                          WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.IsInclusive),
                                          BranchId = RRItem_BranchId,
                                          BaseUnitId = d.MstUnit.Id,
@@ -311,14 +312,14 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.Amount = POItems.Quantity * POItems.Cost;
                 newReceivingReceiptItem.VATId = POItems.VATId;
                 newReceivingReceiptItem.VATPercentage = POItems.VATPercentage;
-                newReceivingReceiptItem.VATAmount = POItems.VATAmount;
+                newReceivingReceiptItem.VATAmount = computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive);
                 newReceivingReceiptItem.WTAXId = POItems.WTAXId;
                 newReceivingReceiptItem.WTAXPercentage = POItems.WTAXPercentage;
-                newReceivingReceiptItem.WTAXAmount = POItems.WTAXAmount;
+                newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.WTAXPercentage, POItems.WTAXIsInclusive);
                 newReceivingReceiptItem.BranchId = POItems.BranchId;
                 newReceivingReceiptItem.BaseUnitId = POItems.BaseUnitId;
                 newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
-                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.IsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.IsInclusive);
+                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.VATIsInclusive);
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }
@@ -366,7 +367,6 @@ namespace easyfis.Controllers
             var RRItem_BranchId = Convert.ToInt32(BranchId);
             var RRItem_POId = Convert.ToInt32(POId);
             var RRItem_POStatusId = Convert.ToInt32(POStatusId);
-
             var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
                                      where d.Id == RRItem_POStatusId
                                      select new Models.TrnPurchaseOrderItem
@@ -384,11 +384,12 @@ namespace easyfis.Controllers
                                          Cost = d.Cost,
                                          Amount = d.Amount,
                                          VATId = d.MstArticle.InputTaxId,
-                                         VATPercentage = d.MstArticle.MstTaxType.TaxRate,
-                                         IsInclusive = d.MstArticle.MstTaxType.IsInclusive,
+                                         VATPercentage = d.MstArticle.MstTaxType1.TaxRate,
+                                         VATIsInclusive = d.MstArticle.MstTaxType1.IsInclusive,
                                          VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType1.TaxRate, d.MstArticle.MstTaxType1.IsInclusive),
                                          WTAXId = d.MstArticle.WTaxTypeId,
                                          WTAXPercentage = d.MstArticle.MstTaxType2.TaxRate,
+                                         WTAXIsInclusive = d.MstArticle.MstTaxType2.IsInclusive,
                                          WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.IsInclusive),
                                          BranchId = RRItem_BranchId,
                                          BaseUnitId = d.MstUnit.Id,
@@ -445,14 +446,14 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.Amount = POItems.Quantity * POItems.Cost;
                 newReceivingReceiptItem.VATId = POItems.VATId;
                 newReceivingReceiptItem.VATPercentage = POItems.VATPercentage;
-                newReceivingReceiptItem.VATAmount = POItems.VATAmount;
+                newReceivingReceiptItem.VATAmount = computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive);
                 newReceivingReceiptItem.WTAXId = POItems.WTAXId;
                 newReceivingReceiptItem.WTAXPercentage = POItems.WTAXPercentage;
-                newReceivingReceiptItem.WTAXAmount = POItems.WTAXAmount;
+                newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.WTAXPercentage, POItems.WTAXIsInclusive);
                 newReceivingReceiptItem.BranchId = POItems.BranchId;
                 newReceivingReceiptItem.BaseUnitId = POItems.BaseUnitId;
                 newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
-                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.IsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.IsInclusive);
+                newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.VATIsInclusive);
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }

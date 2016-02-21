@@ -28,10 +28,11 @@ namespace easyfis.Models
         public Int32 VATId { get; set; }
         public Decimal VATPercentage { get; set; }
         public Decimal VATAmount { get; set; }
-        public Boolean IsInclusive { get; set; }
+        public Boolean VATIsInclusive { get; set; }
         public Int32 WTAXId { get; set; }
         public Decimal WTAXPercentage { get; set; }
         public Decimal WTAXAmount { get; set; }
+        public Boolean WTAXIsInclusive { get; set; }
         public Int32 BranchId {get;set;}
         public Int32 BaseUnitId {get;set;}
         public Decimal BaseQuantity { get; set; }
