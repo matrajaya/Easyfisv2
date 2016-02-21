@@ -1106,17 +1106,14 @@ namespace easyfis.Business
                                       group d by new
                                       {
                                           BranchId = d.BranchId,
-                                          AccountId = d.MstArticle.AccountId,
+                                          AccountId = d.MstAccount.Id,
                                           ArticleId = d.ArticleId,
-                                          JVId = d.JVId,
-
                                       } into g
                                       select new Models.TrnJournalVoucherLine
                                       {
                                           BranchId = g.Key.BranchId,
                                           AccountId = g.Key.AccountId,
                                           ArticleId = g.Key.ArticleId,
-                                          JVId = g.Key.JVId,
                                           DebitAmount = g.Sum(d => d.DebitAmount),
                                           CreditAmount = g.Sum(d => d.CreditAmount),
                                       };

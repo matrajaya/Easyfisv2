@@ -1497,13 +1497,14 @@ namespace easyfis.Controllers
                                                  CreditAmount = g.Sum(d => d.CreditAmount)
                                              };
 
+            Decimal totalCurrentAsset = 0;
+            Decimal totalCurrentLiabilities = 0;
+            Decimal totalStockHoldersEquity = 0;
 
             if (accountTypeSubCategory_Journal_Assets.Any())
             {
                 if (accountType_Journal_Assets.Any())
                 {
-                    Decimal totalCurrentAsset = 0;
-
                     foreach (var accountTypeSubCategory_Journal_Asset in accountTypeSubCategory_Journal_Assets)
                     {
                         // table Balance Sheet header
@@ -1519,13 +1520,13 @@ namespace easyfis.Controllers
                         tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
 
                         document.Add(tableBalanceSheetHeader);
-
-                        totalCurrentAsset = accountTypeSubCategory_Journal_Asset.DebitAmount;
-                        Debug.WriteLine(totalCurrentAsset);
+                        //totalCurrentAsset = accountTypeSubCategory_Journal_Asset.DebitAmount;
                     }
 
                     foreach (var accountType_JournalAsset in accountType_Journal_Assets)
                     {
+                        Decimal balanceAssetAmount = accountType_JournalAsset.DebitAmount - accountType_JournalAsset.CreditAmount;
+
                         // table Balance Sheet
                         PdfPTable tableBalanceSheetAccounts = new PdfPTable(3);
                         float[] widthCellsTableBalanceSheetAccounts = new float[] { 50f, 100f, 50f };
@@ -1534,7 +1535,9 @@ namespace easyfis.Controllers
 
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountType_JournalAsset.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountType_JournalAsset.DebitAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(balanceAssetAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                        totalCurrentAsset = totalCurrentAsset + balanceAssetAmount;
 
                         // retrieve accounts journal Asset
                         var accounts_JournalAssets = from d in db.TrnJournals
@@ -1627,8 +1630,6 @@ namespace easyfis.Controllers
             {
                 if (accountTypeJournal_Liabilities.Any())
                 {
-                    Decimal totalCurrentLiabilities = 0;
-
                     foreach (var accountTypeSubCategory_JournalsLiability in accountTypeSubCategory_JournalLiabilities)
                     {
                         // table Balance Sheet account Type Sub Category liabilities
@@ -1644,11 +1645,13 @@ namespace easyfis.Controllers
                         tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
 
                         document.Add(tableBalanceSheetHeader);
-                        totalCurrentLiabilities = accountTypeSubCategory_JournalsLiability.CreditAmount;
+                        //totalCurrentLiabilities = accountTypeSubCategory_JournalsLiability.CreditAmount;
                     }
 
                     foreach (var accountTypeJournal_Liability in accountTypeJournal_Liabilities)
                     {
+                        Decimal balanceLiabilityAmount = accountTypeJournal_Liability.CreditAmount - accountTypeJournal_Liability.DebitAmount;
+
                         // table Balance Sheet liabilities
                         PdfPTable tableBalanceSheetAccounts = new PdfPTable(3);
                         float[] widthCellsTableBalanceSheetAccounts = new float[] { 50f, 100f, 50f };
@@ -1657,7 +1660,9 @@ namespace easyfis.Controllers
 
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountTypeJournal_Liability.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountTypeJournal_Liability.CreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(balanceLiabilityAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                        totalCurrentLiabilities = totalCurrentLiabilities + balanceLiabilityAmount;
 
                         // retrieve accounts journal Liabilities
                         var accounts_JournalsLiabilities = from d in db.TrnJournals
@@ -1724,7 +1729,9 @@ namespace easyfis.Controllers
                                                          select new Models.TrnJournal
                                                          {
                                                              AccountCategory = g.Key.AccountCategory,
-                                                             SubCategoryDescription = g.Key.SubCategoryDescription
+                                                             SubCategoryDescription = g.Key.SubCategoryDescription,
+                                                            DebitAmount = g.Sum(d => d.DebitAmount),
+                                                            CreditAmount = g.Sum(d => d.CreditAmount)
                                                          };
 
             // retrieve account type journal Equity
@@ -1762,10 +1769,13 @@ namespace easyfis.Controllers
                         tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
 
                         document.Add(tableBalanceSheetHeader);
+                        //totalStockHoldersEquity = accountTypeSubCategory_JournalEquity.CreditAmount;
                     }
 
                     foreach (var accountTypeJournal_Equity in accountTypeJournal_Equities)
                     {
+                        Decimal balanceEquityAmount = accountTypeJournal_Equity.CreditAmount - accountTypeJournal_Equity.DebitAmount;
+
                         // table Balance Sheet Equity
                         PdfPTable tableBalanceSheetAccounts = new PdfPTable(3);
                         float[] widthCellsTableBalanceSheetAccounts = new float[] { 50f, 100f, 50f };
@@ -1774,7 +1784,9 @@ namespace easyfis.Controllers
 
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accountTypeJournal_Equity.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
                         tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
-                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+                        tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(balanceEquityAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                        totalStockHoldersEquity = totalStockHoldersEquity + balanceEquityAmount;
 
                         // retrieve accounts journal Equity
                         var accounts_JournalEquities = from d in db.TrnJournals
@@ -1799,7 +1811,7 @@ namespace easyfis.Controllers
                         {
                             tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalEquity.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
                             tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalEquity.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalEquity.CreditAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         }
 
                         document.Add(tableBalanceSheetAccounts);
@@ -1815,13 +1827,13 @@ namespace easyfis.Controllers
 
                     tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
                     tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("Total Current Liabilities", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("Total Stockholders Equity", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase(totalStockHoldersEquity.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
                     tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("Total Equity", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableBalanceSheetFooterEquity.AddCell(new PdfPCell(new Phrase(totalStockHoldersEquity.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     document.Add(tableBalanceSheetFooterEquity);
                     document.Add(Chunk.NEWLINE);
@@ -1829,6 +1841,9 @@ namespace easyfis.Controllers
             }
 
             document.Add(line);
+
+            Decimal totalLiabilityAndEquity = totalCurrentLiabilities + totalStockHoldersEquity;
+            Decimal totalBalance = totalCurrentAsset - totalCurrentLiabilities - totalStockHoldersEquity;
 
             // table Balance Sheet
             PdfPTable tableBalanceSheetFooterTotalLiabilityAndEquity = new PdfPTable(4);
@@ -1839,12 +1854,12 @@ namespace easyfis.Controllers
             tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
             tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
             tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("Total Liability and Equity", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase(totalLiabilityAndEquity.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
             tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 25f });
             tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
             tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("Balance", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase("0.00", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+            tableBalanceSheetFooterTotalLiabilityAndEquity.AddCell(new PdfPCell(new Phrase(totalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
             document.Add(tableBalanceSheetFooterTotalLiabilityAndEquity);
             document.Add(Chunk.NEWLINE);
@@ -1967,20 +1982,18 @@ namespace easyfis.Controllers
             document.Add(tableHeader);
 
             document.Add(line);
-            PdfPTable tableHeaderDetail = new PdfPTable(5);
+            PdfPTable tableHeaderDetail = new PdfPTable(4);
             PdfPCell Cell = new PdfPCell();
-            float[] widthscellsheader2 = new float[] { 15f, 30f, 15f, 15f, 15f };
+            float[] widthscellsheader2 = new float[] { 15f, 30f, 15f, 15f };
             tableHeaderDetail.SetWidths(widthscellsheader2);
             tableHeaderDetail.WidthPercentage = 100;
             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
             Decimal totalDebitAmount = 0;
             Decimal totalCreditAmount = 0;
-            Decimal totalBalanceAmount = 0;
             if (journals.Any())
             {
                 foreach (var journal in journals)
@@ -2012,12 +2025,10 @@ namespace easyfis.Controllers
                         if (journalsForBalance.AccountCategoryId == 1)
                         {
                             balance = journal.DebitAmount - journal.CreditAmount;
-                            totalBalanceAmount = totalBalanceAmount + (journal.DebitAmount - journal.CreditAmount);
                         }
                         else
                         {
                             balance = journal.CreditAmount - journal.DebitAmount;
-                            totalBalanceAmount = totalBalanceAmount + (journal.CreditAmount - journal.DebitAmount);
                         }
                     }
 
@@ -2025,7 +2036,6 @@ namespace easyfis.Controllers
                     tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Account, cellFont)) { PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
                     tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
                     tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
                 }
             }
             document.Add(tableHeaderDetail);
@@ -2034,8 +2044,8 @@ namespace easyfis.Controllers
             document.Add(line);
 
             // table Balance Sheet footer in Asset CAtegory
-            PdfPTable tableTrialBalanceFooter = new PdfPTable(5);
-            float[] widthCellstableTrialBalanceFooter = new float[] { 15f, 30f, 15f, 15f, 15f };
+            PdfPTable tableTrialBalanceFooter = new PdfPTable(4);
+            float[] widthCellstableTrialBalanceFooter = new float[] { 15f, 30f, 15f, 15f };
             tableTrialBalanceFooter.SetWidths(widthCellstableTrialBalanceFooter);
             tableTrialBalanceFooter.WidthPercentage = 100;
 
@@ -2043,7 +2053,6 @@ namespace easyfis.Controllers
             tableTrialBalanceFooter.AddCell(new PdfPCell(new Phrase("Totals", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 3f, PaddingBottom = 5f });
             tableTrialBalanceFooter.AddCell(new PdfPCell(new Phrase(totalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
             tableTrialBalanceFooter.AddCell(new PdfPCell(new Phrase(totalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            tableTrialBalanceFooter.AddCell(new PdfPCell(new Phrase(totalBalanceAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
             document.Add(tableTrialBalanceFooter);
             document.Add(Chunk.NEWLINE);
