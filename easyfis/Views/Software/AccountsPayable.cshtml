@@ -42,16 +42,16 @@
                             <li class="active"><a data-toggle="pill" href="#AP">Accounts Payable</a></li>
                             <li><a data-toggle="pill" href="#APV">Accounts Payable Voucher</a></li>
                             @*<li><a data-toggle="pill" href="#IVSR">Input VAT Summary Report</a></li>
-                            <li><a data-toggle="pill" href="#WTDR">Withholding Tax Detail Report</a></li>
-                            <li><a data-toggle="pill" href="#WTSR">Withholding Tax Sumamry Report</a></li>
-                            <li><a data-toggle="pill" href="#COCTW">Certificate of Creditable Tax Withheld (Form 2307)</a></li>*@
+                                <li><a data-toggle="pill" href="#WTDR">Withholding Tax Detail Report</a></li>
+                                <li><a data-toggle="pill" href="#WTSR">Withholding Tax Sumamry Report</a></li>
+                                <li><a data-toggle="pill" href="#COCTW">Certificate of Creditable Tax Withheld (Form 2307)</a></li>*@
                         </ul>
                     </div>
                     <div class="col-md-8">
                         <div class="tab-content">
                             <div id="AP" class="tab-pane fade in active">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsPayablePDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="AccountsPayablePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -74,12 +74,12 @@
                                                         <input type="hidden" id="accountsPaybleReport_Comapny_selectedValue" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="filterAccountAndSupplier" />
                                                     </div>
-                                                </div>
+                                                </div>*@
                                             </div>
                                         </div>
                                     </form>
@@ -761,6 +761,21 @@
             });
         }
 
+        function AccountsPayablePDF_OnClick() {
+            var accountsPaybleReportDateAsOf = document.getElementById('accountsPaybleReport_DateAsOf_data').value;
+
+            var companyId;
+            if (document.getElementById('accountsPaybleReport_Comapny_data').value == "") {
+                companyId = 0;
+                document.getElementById('accountsPaybleReport_Comapny').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('accountsPaybleReport_Comapny_data').value;
+                document.getElementById('accountsPaybleReport_Comapny').style.border = " ";
+                window.location.href = '/Software/AccountsPayablePDF?DateAsOf=' + accountsPaybleReportDateAsOf + '&CompanyId=' + companyId;
+            }
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -831,7 +846,7 @@
 
             // filter accounts payable and supplier
             $('#filterTabs').hide();
-            document.getElementById('filterAccountAndSupplier').checked = false;
+            //document.getElementById('filterAccountAndSupplier').checked = false;
             $("#filterAccountAndSupplier").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabs').show();

@@ -44,5 +44,8 @@ namespace easyfis.Models
         public String UpdatedBy { get; set; }
         public String UpdatedDateTime { get; set; }
 
+        public Int32 AccountId { get; set; }
+        public String AccountCode { get; set; }
+        public String Account { get; set; }
     }
 }

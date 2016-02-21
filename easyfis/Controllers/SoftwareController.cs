@@ -142,8 +142,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult AccountsPayablePDF()
+        public ActionResult AccountsPayablePDF(String DateAsOf, Int32 CompanyId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -153,8 +158,179 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            document.Add(line);
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 9, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 9);
+            Font columnFontHeader = FontFactory.GetFont("Arial", 11, Font.BOLD);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Accounts Payable", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date as of " + DateAsOf, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
+            // RR for Accounts
+            var receivingReceiptsForAccounts = from d in db.TrnReceivingReceipts
+                                               where d.RRDate == Convert.ToDateTime(DateAsOf)
+                                               && d.MstBranch.CompanyId == CompanyId
+                                               && d.BalanceAmount > 0
+                                               group d by new
+                                               {
+                                                   AccountId = d.MstArticle.AccountId,
+                                                   AccountCode = d.MstArticle.MstAccount.AccountCode,
+                                                   Account = d.MstArticle.MstAccount.Account
+                                               } into g
+                                               select new Models.TrnReceivingReceipt
+                                               {
+                                                   AccountId = g.Key.AccountId,
+                                                   AccountCode = g.Key.AccountCode,
+                                                   Account = g.Key.Account
+                                               };
+
+            if (receivingReceiptsForAccounts.Any())
+            {
+                foreach (var receivingReceiptsForAccount in receivingReceiptsForAccounts)
+                {
+                    // table Balance Sheet header
+                    PdfPTable tableRRForAccountHeader = new PdfPTable(1);
+                    float[] widthCellsTableRRForAccountHeader = new float[] { 100f };
+                    tableRRForAccountHeader.SetWidths(widthCellsTableRRForAccountHeader);
+                    tableRRForAccountHeader.WidthPercentage = 100;
+
+                    tableRRForAccountHeader.AddCell(new PdfPCell(new Phrase(receivingReceiptsForAccount.AccountCode + " - " + receivingReceiptsForAccount.Account, columnFontHeader)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
+
+                    document.Add(tableRRForAccountHeader);
+
+                    // RR for Accounts
+                    var receivingReceiptsForArticleSuppliers = from d in db.TrnReceivingReceipts
+                                                               where d.RRDate == Convert.ToDateTime(DateAsOf)
+                                                               && d.MstBranch.CompanyId == CompanyId
+                                                               && d.BalanceAmount > 0
+                                                               && d.MstArticle.MstAccount.Id == receivingReceiptsForAccount.AccountId
+                                                               group d by new
+                                                               {
+                                                                   SupplierId = d.SupplierId,
+                                                                   Supplier = d.MstArticle.Article
+                                                               } into g
+                                                               select new Models.TrnReceivingReceipt
+                                                               {
+                                                                   SupplierId = g.Key.SupplierId,
+                                                                   Supplier = g.Key.Supplier
+                                                               };
+
+                    if (receivingReceiptsForArticleSuppliers.Any())
+                    {
+                        foreach (var receivingReceiptsForArticleSupplier in receivingReceiptsForArticleSuppliers)
+                        {
+                            // table Balance Sheet header
+                            PdfPTable tableRRForAccountHeaderForSupplier = new PdfPTable(1);
+                            float[] widthCellsTableRRForAccountHeaderForSupplier = new float[] { 100f };
+                            tableRRForAccountHeaderForSupplier.SetWidths(widthCellsTableRRForAccountHeaderForSupplier);
+                            tableRRForAccountHeaderForSupplier.WidthPercentage = 100;
+
+                            tableRRForAccountHeaderForSupplier.AddCell(new PdfPCell(new Phrase(receivingReceiptsForArticleSupplier.Supplier, columnFontHeader)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
+                            document.Add(tableRRForAccountHeaderForSupplier);
+
+                            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+                            document.Add(line);
+                            PdfPTable tableHeaderDetail = new PdfPTable(10);
+                            PdfPCell Cell = new PdfPCell();
+                            float[] widthscellsheader2 = new float[] { 15f, 15f, 20f, 15f, 15f, 15f, 15f, 15f, 15f, 15f };
+                            tableHeaderDetail.SetWidths(widthscellsheader2);
+                            tableHeaderDetail.WidthPercentage = 100;
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("RR Number", columnFont)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("RR Date", columnFont)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Document Ref.", columnFont)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Due Date", columnFont)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Current", columnFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("30 Days", columnFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("60 Days", columnFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("90 Days", columnFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Over 120 Days", columnFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                            document.Add(tableHeaderDetail);
+                            // RR 
+                            var receivingReceiptsHasBalances = from d in db.TrnReceivingReceipts
+                                                              where d.RRDate == Convert.ToDateTime(DateAsOf)
+                                                              && d.MstBranch.CompanyId == CompanyId
+                                                              && d.BalanceAmount > 0
+                                                              && d.SupplierId == receivingReceiptsForArticleSupplier.SupplierId
+                                                              select new Models.TrnReceivingReceipt
+                                                              {
+                                                                  Id = d.Id,
+                                                                  BranchId = d.BranchId,
+                                                                  Branch = d.MstBranch.Branch,
+                                                                  RRDate = d.RRDate.ToShortDateString(),
+                                                                  RRNumber = d.RRNumber,
+                                                                  SupplierId = d.SupplierId,
+                                                                  Supplier = d.MstArticle.Article,
+                                                                  TermId = d.TermId,
+                                                                  Term = d.MstTerm.Term,
+                                                                  DocumentReference = d.DocumentReference,
+                                                                  ManualRRNumber = d.ManualRRNumber,
+                                                                  Remarks = d.Remarks,
+                                                                  Amount = d.Amount,
+                                                                  WTaxAmount = d.WTaxAmount,
+                                                                  PaidAmount = d.PaidAmount,
+                                                                  AdjustmentAmount = d.AdjustmentAmount,
+                                                                  BalanceAmount = d.BalanceAmount,
+                                                                  ReceivedById = d.ReceivedById,
+                                                                  ReceivedBy = d.MstUser4.FullName,
+                                                                  PreparedById = d.PreparedById,
+                                                                  PreparedBy = d.MstUser3.FullName,
+                                                                  CheckedById = d.CheckedById,
+                                                                  CheckedBy = d.MstUser1.FullName,
+                                                                  ApprovedById = d.ApprovedById,
+                                                                  ApprovedBy = d.MstUser.FullName,
+                                                                  IsLocked = d.IsLocked,
+                                                                  CreatedById = d.CreatedById,
+                                                                  CreatedBy = d.MstUser2.FullName,
+                                                                  CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                                                  UpdatedById = d.UpdatedById,
+                                                                  UpdatedBy = d.MstUser5.FullName,
+                                                                  UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                                              };
+
+                            if (receivingReceiptsHasBalances.Any())
+                            {
+                                foreach (var receivingReceiptsHasBalance in receivingReceiptsHasBalances)
+                                {
+
+                                    PdfPTable tableHeaderDetailHasBalance = new PdfPTable(10);
+                                    float[] widthscellsheaderHasBalance = new float[] { 15f, 15f, 20f, 15f, 15f, 15f, 15f, 15f, 15f, 15f };
+                                    tableHeaderDetailHasBalance.SetWidths(widthscellsheaderHasBalance);
+                                    tableHeaderDetailHasBalance.WidthPercentage = 100;
+
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.RRNumber, columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.RRDate, columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.Amount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("Due Date", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("Current", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("30 Days", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("60 Days", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("90 Days", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("Over 120 Days", columnFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+
+                                    document.Add(tableHeaderDetailHasBalance);
+                                    document.Add(line);
+                                    document.Add(Chunk.NEWLINE);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             // Document End
             document.Close();
@@ -1734,8 +1910,8 @@ namespace easyfis.Controllers
                                                          {
                                                              AccountCategory = g.Key.AccountCategory,
                                                              SubCategoryDescription = g.Key.SubCategoryDescription,
-                                                            DebitAmount = g.Sum(d => d.DebitAmount),
-                                                            CreditAmount = g.Sum(d => d.CreditAmount)
+                                                             DebitAmount = g.Sum(d => d.DebitAmount),
+                                                             CreditAmount = g.Sum(d => d.CreditAmount)
                                                          };
 
             // retrieve account type journal Equity
@@ -1814,7 +1990,7 @@ namespace easyfis.Controllers
                         foreach (var accounts_JournalEquity in accounts_JournalEquities)
                         {
                             Decimal balanceEquityAmountForAccounts = accounts_JournalEquity.CreditAmount - accounts_JournalEquity.DebitAmount;
-                            
+
                             tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalEquity.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
                             tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(accounts_JournalEquity.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
                             tableBalanceSheetAccounts.AddCell(new PdfPCell(new Phrase(balanceEquityAmountForAccounts.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });

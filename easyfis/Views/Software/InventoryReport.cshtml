@@ -54,7 +54,7 @@
                         <div class="tab-content">
                             <div id="Inventory" class="tab-pane fade in active">
                                 <div align="right">
-                                    <button onclick="ÏnventoryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="InventoryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -2332,7 +2332,7 @@
         }
 
 
-        function ÏnventoryReportPDF_OnClick() {
+        function InventoryReportPDF_OnClick() {
             var inventoryReportStartDate = document.getElementById('inventory_StartDate_data').value;
             var inventoryReportEndDate = document.getElementById('inventory_EndDate_data').value;
 
@@ -2346,7 +2346,6 @@
                 document.getElementById('Inventory_Company').style.border = " ";
                 window.location.href = '/Software/InventoryReportPDF?StartDate=' + inventoryReportStartDate + '&EndDate=' + inventoryReportEndDate + '&CompanyId=' + companyId;
             }
-
         }
 
         // ===========
