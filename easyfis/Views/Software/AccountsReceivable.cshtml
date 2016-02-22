@@ -48,7 +48,7 @@
                         <div class="tab-content">
                             <div id="AR" class="tab-pane fade in active">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsReceivablePDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="AccountsReceivablePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -70,12 +70,12 @@
                                                         <input type="hidden" id="accountReceivableReport_Company_selectedValue" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="" />
                                                     </div>
-                                                </div>
+                                                </div>*@
                                             </div>
                                         </div>
                                     </form>
@@ -315,6 +315,21 @@
                     $("#StatementOfTheAccount_Customer_data").val(customerCollection.items[this.selectedIndex].CustomerId);
                 }
             });
+        }
+
+        function AccountsReceivablePDF_OnClick() {
+            var accountReceivableReportDateAsOf = document.getElementById('accountReceivableReport_DateAsOf_data').value;
+
+            var companyId;
+            if (document.getElementById('accountReceivableReport_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('accountReceivableReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('accountReceivableReport_Company_data').value;
+                document.getElementById('accountReceivableReport_Company').style.border = " ";
+                window.location.href = '/Software/AccountsReceivablePDF?DateAsOf=' + accountReceivableReportDateAsOf + '&CompanyId=' + companyId;
+            }
         }
 
         // ============

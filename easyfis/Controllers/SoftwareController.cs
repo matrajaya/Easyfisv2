@@ -345,17 +345,16 @@ namespace easyfis.Controllers
                             tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                             tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
-                            tableFooter.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
-                            tableFooter.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, });
-                            tableFooter.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
-                            tableFooter.AddCell(new PdfPCell(new Phrase("Book Balance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            tableFooter.AddCell(new PdfPCell(new Phrase("Variance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, });
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("Book Balance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("Variance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
                             document.Add(tableFooter);
                         }
@@ -378,16 +377,16 @@ namespace easyfis.Controllers
                     tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                     tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, });
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("Book Balance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("Variance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("Book Balance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("Variance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                     
                     document.Add(tableFooter2);
                     document.Add(Chunk.NEWLINE);
