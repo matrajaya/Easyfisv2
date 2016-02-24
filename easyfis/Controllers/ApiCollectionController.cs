@@ -270,6 +270,8 @@ namespace easyfis.Controllers
                     updateCollection.UpdatedById = mstUserId;
                     updateCollection.UpdatedDateTime = date;
 
+                    db.SubmitChanges();
+
                     if (updateCollection.IsLocked == true)
                     {
                         journal.insertORJournal(collection_Id);
@@ -280,8 +282,6 @@ namespace easyfis.Controllers
                     {
                         journal.deleteORJournal(collection_Id);
                     }
-
-                    db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -321,16 +321,20 @@ namespace easyfis.Controllers
                     updateCollection.UpdatedById = mstUserId;
                     updateCollection.UpdatedDateTime = date;
 
+                    db.SubmitChanges();
+
                     if (updateCollection.IsLocked == true)
                     {
                         journal.insertORJournal(collection_Id);
+
+                        UpdateARCollection(collection_Id);
                     }
                     else
                     {
                         journal.deleteORJournal(collection_Id);
-                    }
 
-                    db.SubmitChanges();
+                        UpdateARCollection(collection_Id);
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -406,7 +410,7 @@ namespace easyfis.Controllers
                                        UpdatedBy = d.MstUser4.FullName,
                                        UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                    };
-            
+
             // colelction lines
             var collectionLines = from d in db.TrnCollectionLines
                                   where d.ORId == ORId
@@ -421,9 +425,9 @@ namespace easyfis.Controllers
 
             try
             {
-                if(collectionHeader.Any())
+                if (collectionHeader.Any())
                 {
-                    if(collectionLines.Any())
+                    if (collectionLines.Any())
                     {
                         foreach (var siIdcollectionLines in collectionLines)
                         {
@@ -435,7 +439,7 @@ namespace easyfis.Controllers
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
             }
@@ -484,7 +488,7 @@ namespace easyfis.Controllers
 
             try
             {
-                if(salesInvoices.Any())
+                if (salesInvoices.Any())
                 {
                     var salesInvoceUpdate = from d in db.TrnSalesInvoices where d.Id == SIId select d;
                     Debug.WriteLine(SIId);
@@ -558,28 +562,60 @@ namespace easyfis.Controllers
                             CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
                         }
 
-                        PaidAmount = collectionLines.Sum(d => d.Amount);
-                        AdjustmentAmount = DebitAmount - CreditAmount;
+                        var collectionLinesORId = from d in db.TrnCollectionLines
+                                                  where d.SIId == SIId
+                                                  group d by new
+                                                  {
+                                                      ORId = d.ORId,
+                                                  } into g
+                                                  select new Models.TrnCollectionLine
+                                                  {
+                                                      ORId = g.Key.ORId,
+                                                  };
 
+                        Int32 ORId = 0;
+                        foreach (var salesInvoiceLinesCVId in collectionLinesORId)
+                        {
+                            ORId = salesInvoiceLinesCVId.ORId;
+                        }
+
+                        Boolean collectionHeaderLocked = (from d in db.TrnCollections where d.Id == ORId select d.IsLocked).SingleOrDefault();
+
+                        if (collectionHeaderLocked == true)
+                        {
+                            PaidAmount = collectionLines.Sum(d => d.Amount);
+                            AdjustmentAmount = DebitAmount - CreditAmount;
+                            Debug.WriteLine(PaidAmount);
+                        }
+                        else
+                        {
+                            PaidAmount = 0;
+                            AdjustmentAmount = 0;
+                            Debug.WriteLine(PaidAmount);
+                        }
+
+                        Debug.WriteLine("Update SI");
                         var updateSI = salesInvoceUpdate.FirstOrDefault();
+                        Debug.WriteLine("Update SI 2");
                         updateSI.PaidAmount = PaidAmount;
                         updateSI.AdjustmentAmount = AdjustmentAmount;
                         db.SubmitChanges();
+                        Debug.WriteLine("Update SI 3");
 
-                        Decimal RRamount = 0;
-                        Decimal RRPaidAmount = 0;
+                        Decimal SIAmount = 0;
+                        Decimal SIPaidAmount = 0;
                         foreach (var siForUpdate in salesInvoices)
                         {
-                            RRamount = siForUpdate.Amount;
-                            RRPaidAmount = siForUpdate.PaidAmount;
+                            SIAmount = siForUpdate.Amount;
+                            SIPaidAmount = siForUpdate.PaidAmount;
                         }
 
-                        updateSI.BalanceAmount = (RRamount - RRPaidAmount) + AdjustmentAmount;
+                        updateSI.BalanceAmount = (SIAmount - SIPaidAmount) + AdjustmentAmount;
                         db.SubmitChanges();
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
             }
