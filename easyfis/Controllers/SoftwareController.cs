@@ -47,8 +47,51 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 11);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(1);
+            float[] widthscellsheader = new float[] { 100f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase("Supplier Information Sheet", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("General Admin", headerDetailFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            document.Add(tableHeader);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             document.Add(line);
+
+            PdfPTable tableHeader2 = new PdfPTable(1);
+            float[] widthscellsheader2 = new float[] { 100f };
+            tableHeader2.SetWidths(widthscellsheader2);
+            tableHeader2.WidthPercentage = 100;
+            tableHeader2.AddCell(new PdfPCell(new Phrase("", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader2.AddCell(new PdfPCell(new Phrase("", headerDetailFont)) { Border = 0, HorizontalAlignment = 0 });
+            document.Add(tableHeader2);
+
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+
+            Paragraph line2 = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line2);
 
             // Document End
             document.Close();
@@ -84,8 +127,85 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 11);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(1);
+            float[] widthscellsheader = new float[] { 100f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase("Purchase Order", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed Tuesday, February 18, 2016, 1:24:32", headerDetailFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            document.Add(tableHeader);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             document.Add(line);
+
+            PdfPTable tableDetail = new PdfPTable(2);
+            float[] widthscellsDetail = new float[] { 75f, 25f };
+            tableDetail.SetWidths(widthscellsDetail);
+            tableDetail.WidthPercentage = 100;
+            tableDetail.AddCell(new PdfPCell(new Phrase("Supplier:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("PO No.:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Term:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("PO Date:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Date Needed:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Request No.:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Remarks:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            document.Add(tableDetail);
+
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableInfo = new PdfPTable(6);
+            float[] widthscellsInfo = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableInfo.SetWidths(widthscellsInfo);
+            tableInfo.WidthPercentage = 100;
+            tableInfo.AddCell(new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Item", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Particulars", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Price", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Amount", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            document.Add(tableInfo);
+
+            PdfPTable tableTotal = new PdfPTable(6);
+            float[] widthscellsTotal = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableTotal.SetWidths(widthscellsTotal);
+            tableTotal.WidthPercentage = 100;
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+            document.Add(tableTotal);
+
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableFooter = new PdfPTable(5);
+            tableFooter.WidthPercentage = 100;
+            float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
+            tableFooter.SetWidths(widthsCells2);
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            document.Add(tableFooter);
 
             // Document End
             document.Close();
@@ -122,8 +242,93 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 11);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(1);
+            float[] widthscellsheader = new float[] { 100f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase("Receiving Receipt", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed Tuesday, February 18, 2016, 1:24:32", headerDetailFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            document.Add(tableHeader);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             document.Add(line);
+
+            PdfPTable tableDetail = new PdfPTable(2);
+            float[] widthscellsDetail = new float[] { 75f, 25f };
+            tableDetail.SetWidths(widthscellsDetail);
+            tableDetail.WidthPercentage = 100;
+            tableDetail.AddCell(new PdfPCell(new Phrase("Supplier:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("RR No.:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Terms:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("RR Date:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Due Date:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Document Ref.:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Remarks:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            document.Add(tableDetail);
+
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableInfo = new PdfPTable(6);
+            float[] widthscellsInfo = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableInfo.SetWidths(widthscellsInfo);
+            tableInfo.WidthPercentage = 100;
+            tableInfo.AddCell(new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Item", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Branch", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Price", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Amount", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            document.Add(tableInfo);
+
+            PdfPTable tablePO = new PdfPTable(1);
+            float[] widthscellsPO = new float[] { 100f };
+            tablePO.SetWidths(widthscellsPO);
+            tablePO.WidthPercentage = 100;
+            tablePO.AddCell(new PdfPCell(new Phrase("PO No.:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            document.Add(tablePO);
+
+
+            PdfPTable tableTotal = new PdfPTable(6);
+            float[] widthscellsTotal = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableTotal.SetWidths(widthscellsTotal);
+            tableTotal.WidthPercentage = 100;
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+            document.Add(tableTotal);
+
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableFooter = new PdfPTable(5);
+            tableFooter.WidthPercentage = 100;
+            float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
+            tableFooter.SetWidths(widthsCells2);
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            document.Add(tableFooter);
 
             // Document End
             document.Close();
@@ -616,8 +821,51 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 11);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(1);
+            float[] widthscellsheader = new float[] { 100f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase("Customer Information Sheet", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("General Admin", headerDetailFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            document.Add(tableHeader);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             document.Add(line);
+
+            PdfPTable tableHeader2 = new PdfPTable(1);
+            float[] widthscellsheader2 = new float[] { 100f };
+            tableHeader2.SetWidths(widthscellsheader2);
+            tableHeader2.WidthPercentage = 100;
+            tableHeader2.AddCell(new PdfPCell(new Phrase("", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader2.AddCell(new PdfPCell(new Phrase("", headerDetailFont)) { Border = 0, HorizontalAlignment = 0 });
+            document.Add(tableHeader2);
+
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+
+            Paragraph line2 = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line2);
 
             // Document End
             document.Close();
@@ -653,8 +901,82 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 11);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(1);
+            float[] widthscellsheader = new float[] { 100f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase("Sales Invoice", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed Tuesday, February 18, 2016, 1:24:32", headerDetailFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            document.Add(tableHeader);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             document.Add(line);
+
+            PdfPTable tableDetail = new PdfPTable(2);
+            float[] widthscellsDetail = new float[] { 75f, 25f };
+            tableDetail.SetWidths(widthscellsDetail);
+            tableDetail.WidthPercentage = 100;
+            tableDetail.AddCell(new PdfPCell(new Phrase("Customer:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("SI No.:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Term:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("SI Date:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Remarks:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            document.Add(tableDetail);
+
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableInfo = new PdfPTable(6);
+            float[] widthscellsInfo = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableInfo.SetWidths(widthscellsInfo);
+            tableInfo.WidthPercentage = 100;
+            tableInfo.AddCell(new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Item", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Particulars", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Net Price", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Amount", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            document.Add(tableInfo);
+
+            PdfPTable tableTotal = new PdfPTable(6);
+            float[] widthscellsTotal = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableTotal.SetWidths(widthscellsTotal);
+            tableTotal.WidthPercentage = 100;
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+            document.Add(tableTotal);
+
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableFooter = new PdfPTable(5);
+            tableFooter.WidthPercentage = 100;
+            float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
+            tableFooter.SetWidths(widthsCells2);
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            document.Add(tableFooter);
 
             // Document End
             document.Close();
@@ -1048,8 +1370,105 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 11);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 50f, 50f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase("Item Information Sheet", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("General Admin", headerDetailFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed Tuesday, February 23, 2016, 1:25:25 PM", headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10 });
+            document.Add(tableHeader);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             document.Add(line);
+
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableDetail = new PdfPTable(4);
+            float[] widthscellheaderDetail = new float[] { 15f, 45f, 20f, 20f };
+            tableDetail.SetWidths(widthscellheaderDetail);
+            tableDetail.WidthPercentage = 100;
+            tableDetail.AddCell(new PdfPCell(new Phrase("Item Code:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("0000000002", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Base Unit:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Gallon(s)", cellFont)) { Border = 0, HorizontalAlignment = 0 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Item Manual Code:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("ACID01", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Base Price", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Gallon(s)", cellFont)) { Border = 0, HorizontalAlignment = 0 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Item:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Apollo Muriatic Acid", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Is Inventory:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("[Checkbox ni dire master]", cellFont)) { Border = 0, HorizontalAlignment = 0 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Particulars:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("NA", cellFont)) { Border = 0, HorizontalAlignment = 0 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Category:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("supplies", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Group:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Office and Toolroom Supplies", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Account:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Office and Toolroom Supplies", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35, PaddingTop = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Sales Account:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Office and Toolroom Supplies", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Cost Account:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Office and Toolroom Supplies", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Asset Account:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Office and Toolroom Supplies", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Exense Account:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Office and Toolroom Supplies", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("VAT Output:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("VAT OUTPUT", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35, PaddingTop = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Date Acquired:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("09/06/2011", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 35 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("VAT Input:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("VAT INPUT", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Useful Life(Years):", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 0 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Withholding Tax:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("WTAX ZERO RATE", cellFont)) { Border = 0, HorizontalAlignment = 0, PaddingLeft = 35 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Salvage Value:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 0 });
+            document.Add(tableDetail);
+
+            Paragraph line2 = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line2);
 
             // Document End
             document.Close();
@@ -1085,8 +1504,86 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 11);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(1);
+            float[] widthscellsheader = new float[] { 100f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase("Stock In", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed Tuesday, February 18, 2016, 1:24:32", headerDetailFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            document.Add(tableHeader);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             document.Add(line);
+
+            PdfPTable tableDetail = new PdfPTable(2);
+            float[] widthscellsDetail = new float[] { 75f, 25f };
+            tableDetail.SetWidths(widthscellsDetail);
+            tableDetail.WidthPercentage = 100;
+            tableDetail.AddCell(new PdfPCell(new Phrase("Account:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("IN No.:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Particulars:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("IN Date:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            document.Add(tableDetail);
+
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableInfo = new PdfPTable(6);
+            float[] widthscellsInfo = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableInfo.SetWidths(widthscellsInfo);
+            tableInfo.WidthPercentage = 100;
+            tableInfo.AddCell(new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Particulars", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Cost", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Amount", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            document.Add(tableInfo);
+
+            PdfPTable tableTotal = new PdfPTable(6);
+            float[] widthscellsTotal = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableTotal.SetWidths(widthscellsTotal);
+            tableTotal.WidthPercentage = 100;
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("Sub Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5 });
+            document.Add(tableTotal);
+
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableFooter = new PdfPTable(5);
+            tableFooter.WidthPercentage = 100;
+            float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
+            tableFooter.SetWidths(widthsCells2);
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            document.Add(tableFooter);
 
             // Document End
             document.Close();
@@ -1122,8 +1619,86 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 11);
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(1);
+            float[] widthscellsheader = new float[] { 100f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase("Stock In", headerFont)) { Border = 0, HorizontalAlignment = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed Tuesday, February 18, 2016, 1:24:32", headerDetailFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            document.Add(tableHeader);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             document.Add(line);
+
+            PdfPTable tableDetail = new PdfPTable(2);
+            float[] widthscellsDetail = new float[] { 75f, 25f };
+            tableDetail.SetWidths(widthscellsDetail);
+            tableDetail.WidthPercentage = 100;
+            tableDetail.AddCell(new PdfPCell(new Phrase("Account:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Out No.:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10 });
+
+            tableDetail.AddCell(new PdfPCell(new Phrase("Particulars:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            tableDetail.AddCell(new PdfPCell(new Phrase("Out Date:", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 5 });
+            document.Add(tableDetail);
+
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableInfo = new PdfPTable(6);
+            float[] widthscellsInfo = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableInfo.SetWidths(widthscellsInfo);
+            tableInfo.WidthPercentage = 100;
+            tableInfo.AddCell(new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Particulars", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Cost", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableInfo.AddCell(new PdfPCell(new Phrase("Amount", columnFont)) { HorizontalAlignment = 1, BackgroundColor = BaseColor.LIGHT_GRAY });
+            document.Add(tableInfo);
+
+            PdfPTable tableTotal = new PdfPTable(6);
+            float[] widthscellsTotal = new float[] { 15f, 10f, 30f, 20f, 10f, 15f };
+            tableTotal.SetWidths(widthscellsTotal);
+            tableTotal.WidthPercentage = 100;
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("Sub Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 25 });
+
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5 });
+            tableTotal.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5 });
+            document.Add(tableTotal);
+
+            document.Add(Chunk.NEWLINE);
+            document.Add(Chunk.NEWLINE);
+
+            PdfPTable tableFooter = new PdfPTable(5);
+            tableFooter.WidthPercentage = 100;
+            float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
+            tableFooter.SetWidths(widthsCells2);
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+            document.Add(tableFooter);
 
             // Document End
             document.Close();
