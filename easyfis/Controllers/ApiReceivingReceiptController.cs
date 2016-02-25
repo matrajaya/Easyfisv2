@@ -493,6 +493,8 @@ namespace easyfis.Controllers
                     updatereceivingReceipt.UpdatedById = mstUserId;
                     updatereceivingReceipt.UpdatedDateTime = date;
 
+                    db.SubmitChanges();
+
                     if (updatereceivingReceipt.IsLocked == true)
                     {
                         inventory.InsertRRInventory(receivingReceipt_Id);
@@ -503,8 +505,6 @@ namespace easyfis.Controllers
                         inventory.deleteRRInventory(receivingReceipt_Id);
                         journal.deleteRRJournal(receivingReceipt_Id);
                     }
-
-                    db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -544,6 +544,8 @@ namespace easyfis.Controllers
                     updatereceivingReceipt.UpdatedById = mstUserId;
                     updatereceivingReceipt.UpdatedDateTime = date;
 
+                    db.SubmitChanges();
+
                     if (updatereceivingReceipt.IsLocked == true)
                     {
                         inventory.InsertRRInventory(receivingReceipt_Id);
@@ -554,8 +556,6 @@ namespace easyfis.Controllers
                         inventory.deleteRRInventory(receivingReceipt_Id);
                         journal.deleteRRJournal(receivingReceipt_Id);
                     }
-
-                    db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

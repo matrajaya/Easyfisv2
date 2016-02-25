@@ -26,5 +26,8 @@ namespace easyfis.Models
         public Decimal QuantityOut { get; set; }
         public Decimal Amount { get; set; }
         public String Particulars { get; set; }
+        public String Code { get; set; }
+        public Int32 UnitId { get; set; }
+        public String Unit { get; set; }
     }
 }

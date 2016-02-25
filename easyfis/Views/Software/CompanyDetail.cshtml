@@ -761,77 +761,80 @@
                 data: {},
                 success: function (Results) {
                     // $('#loadingModal').modal('hide');
+                    var companies = new wijmo.collections.ObservableArray;
+                    var companyId
+                    for (i = 0; i < Results.length; i++) {
+                        companyId = @CompanyId;
+                    }
+
                     if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            var companies = new wijmo.collections.ObservableArray;
-                            var companyId = @CompanyId;
-                            $.ajax({
-                                url: '/api/company/' + companyId,
-                                cache: false,
-                                type: 'GET',
-                                contentType: 'application/json; charset=utf-8',
-                                data: {},
-                                success: function (CompanyResults) {
-                                    if (CompanyResults.length > 0) {
-                                        companies.push({
-                                            Id: CompanyResults.Id,
-                                            IsLocked: CompanyResults.IsLocked
+                        $.ajax({
+                            url: '/api/company/' + companyId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (CompanyResults) {
+                                if (CompanyResults.length > 0) {
+                                    companies.push({
+                                        Id: CompanyResults.Id,
+                                        IsLocked: CompanyResults.IsLocked
+                                    });
+                                }
+
+                                if(CompanyResults.IsLocked == true) {
+                                    for (i = 0; i < Results.length; i++) {
+                                        branches.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()' disabled><i class='fa fa-pencil'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            CompanyId: Results[i]["CompanyId"],
+                                            Company: Results[i]["Company"],
+                                            Branch: Results[i]["Branch"],
+                                            BranchCode: Results[i]["BranchCode"],
+                                            Address: Results[i]["Address"],
+                                            ContactNumber: Results[i]["ContactNumber"],
+                                            TaxNumber: Results[i]["TaxNumber"],
+                                            IsLocked: Results[i]["IsLocked"],
+                                            CreatedById: Results[i]["CreatedById"],
+                                            CreatedBy: Results[i]["CreatedBy"],
+                                            CreatedDateTime: Results[i]["CreatedDateTime"],
+                                            UpdatedById: Results[i]["UpdatedById"],
+                                            UpdatedBy: Results[i]["UpdatedBy"],
+                                            UpdatedDateTime: Results[i]["UpdatedDateTime"]
                                         });
                                     }
-
-                                    if(CompanyResults.IsLocked == true) {
-                                        for (i = 0; i < Results.length; i++) {
-                                            branches.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()' disabled><i class='fa fa-pencil'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                CompanyId: Results[i]["CompanyId"],
-                                                Company: Results[i]["Company"],
-                                                Branch: Results[i]["Branch"],
-                                                BranchCode: Results[i]["BranchCode"],
-                                                Address: Results[i]["Address"],
-                                                ContactNumber: Results[i]["ContactNumber"],
-                                                TaxNumber: Results[i]["TaxNumber"],
-                                                IsLocked: Results[i]["IsLocked"],
-                                                CreatedById: Results[i]["CreatedById"],
-                                                CreatedBy: Results[i]["CreatedBy"],
-                                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                                UpdatedById: Results[i]["UpdatedById"],
-                                                UpdatedBy: Results[i]["UpdatedBy"],
-                                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                            });
-                                        }
-                                    } else {
-                                        for (i = 0; i < Results.length; i++) {
-                                            branches.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                CompanyId: Results[i]["CompanyId"],
-                                                Company: Results[i]["Company"],
-                                                Branch: Results[i]["Branch"],
-                                                BranchCode: Results[i]["BranchCode"],
-                                                Address: Results[i]["Address"],
-                                                ContactNumber: Results[i]["ContactNumber"],
-                                                TaxNumber: Results[i]["TaxNumber"],
-                                                IsLocked: Results[i]["IsLocked"],
-                                                CreatedById: Results[i]["CreatedById"],
-                                                CreatedBy: Results[i]["CreatedBy"],
-                                                CreatedDateTime: Results[i]["CreatedDateTime"],
-                                                UpdatedById: Results[i]["UpdatedById"],
-                                                UpdatedBy: Results[i]["UpdatedBy"],
-                                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                            });
-                                        }
+                                } else {
+                                    for (i = 0; i < Results.length; i++) {
+                                        branches.push({
+                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
+                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                            Id: Results[i]["Id"],
+                                            CompanyId: Results[i]["CompanyId"],
+                                            Company: Results[i]["Company"],
+                                            Branch: Results[i]["Branch"],
+                                            BranchCode: Results[i]["BranchCode"],
+                                            Address: Results[i]["Address"],
+                                            ContactNumber: Results[i]["ContactNumber"],
+                                            TaxNumber: Results[i]["TaxNumber"],
+                                            IsLocked: Results[i]["IsLocked"],
+                                            CreatedById: Results[i]["CreatedById"],
+                                            CreatedBy: Results[i]["CreatedBy"],
+                                            CreatedDateTime: Results[i]["CreatedDateTime"],
+                                            UpdatedById: Results[i]["UpdatedById"],
+                                            UpdatedBy: Results[i]["UpdatedBy"],
+                                            UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                        });
                                     }
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             });
+
             return branches;
         }
 

@@ -170,7 +170,7 @@
                 <!-- Stock In line -->
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
-                    @*<li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>*@
+                    <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">inventory entries</a></li>
                 </ul>
                 <br />
                 <div class="tab-content">
@@ -2290,43 +2290,49 @@
         // ============================
         // GET Contact Information List
         // ============================
-        function getInventoryEntry() {
+        function getInventoryEntries() {
             var inventoryEntries = new wijmo.collections.ObservableArray;
-            //$('#loadingModal').modal('show');
-            //$.ajax({
-            //    url: '/api/listAccount',
-            //    cache: false,
-            //    type: 'GET',
-            //    contentType: 'application/json; charset=utf-8',
-            //    data: {},
-            //    success: function (Results) {
-            //        $('#loadingModal').modal('hide');
-            //        if (Results.length > 0) {
-            //            for (i = 0; i < Results.length; i++) {
-            //                journalLedger.push({
-            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-            //                    Id: Results[i]["Id"],
-            //                    AccountCode: Results[i]["AccountCode"],
-            //                    Account: Results[i]["Account"],
-            //                    AccountTypeId: Results[i]["AccountTypeId"],
-            //                    AccountType: Results[i]["AccountType"],
-            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
-            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
-            //                    IsLocked: Results[i]["IsLocked"],
-            //                    CreatedById: Results[i]["CreatedById"],
-            //                    CreatedBy: Results[i]["CreatedBy"],
-            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
-            //                    UpdatedById: Results[i]["UpdatedById"],
-            //                    UpdatedBy: Results[i]["UpdatedBy"],
-            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-            //                });
-            //            }
-            //        }
-            //    }
-            //}).fail(function (xhr, textStatus, err) {
-            //    alert(err);
-            //});
+            var INId = @stockInId;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listInventoryByINId/' + INId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            inventoryEntries.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                InventoryDate: Results[i]["InventoryDate"],
+                                ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
+                                ArticleInventoryId: Results[i]["ArticleInventoryId"],
+                                RRId: Results[i]["RRId"],
+                                SIId: Results[i]["SIId"],
+                                INId: Results[i]["INId"],
+                                OTId: Results[i]["OTId"],
+                                STId: Results[i]["STId"],
+                                QuantityIn: Results[i]["QuantityIn"],
+                                Quantity: Results[i]["Quantity"],
+                                QuantityOut: Results[i]["QuantityOut"],
+                                Amount: Results[i]["Amount"],
+                                Particulars: Results[i]["Particulars"],
+                                Code: Results[i]["Code"],
+                                Unit: Results[i]["Unit"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
             return inventoryEntries;
         }
 
@@ -2373,7 +2379,7 @@
         // On Page Load for Inventory Entries
         // ==================================
         function inventoryEntryTab() {
-            inventoryEntries = new wijmo.collections.CollectionView();
+            inventoryEntries = new wijmo.collections.CollectionView(getInventoryEntries());
             inventoryEntries.canFilter = true;
             inventoryEntries.pageSize = 15;
 
@@ -2397,32 +2403,58 @@
             inventoryEntryGrid.initialize({
                 columns: [
                             {
-                                "header": "Contact",
-                                "binding": "Contact",
-                                "width": 60,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Contact Number(s)",
-                                //"binding": "ContactNumbers",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Remarks",
-                                //"binding": "Remarks",
+                                "header": "Date",
+                                "binding": "InventoryDate",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": 100,
+                            },
+                            {
+                                "header": "Branch",
+                                "binding": "Branch",
+                                "allowSorting": true,
+                                "width": 250,
+                            },
+                            {
+                                "header": "Item",
+                                "binding": "Article",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": 300,
+                            },
+                            {
+                                "header": "Particulars",
+                                "binding": "Particulars",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": 400,
+                            },
+                            {
+                                "header": "Code",
+                                "binding": "Code",
+                                "allowSorting": true,
+                                "width": 200,
+                            },
+                            {
+                                "header": "Quantity",
+                                "binding": "Quantity",
+                                "allowSorting": true,
+                                "width": 150,
+                            },
+                            {
+                                "header": "Unit",
+                                "binding": "Unit",
+                                "allowSorting": true,
+                                "width": 100,
+                            },
+                            {
+                                "header": "Amount",
+                                "binding": "Amount",
+                                "allowSorting": true,
+                                "width": 150,
                             },
                 ],
                 autoGenerateColumns: false,
-                //itemsSource: inventoryEntries,
+                itemsSource: inventoryEntries,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,

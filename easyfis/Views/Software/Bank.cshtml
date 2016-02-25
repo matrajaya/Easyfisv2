@@ -532,7 +532,35 @@
             getBankAccountForComboBox();
 
             document.getElementById('bank_Id').value = 0;
-            document.getElementById('bank_code').value = '';
+            //document.getElementById('bank_code').value = '';
+            var banks = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/articleLastArticleCodeByArticleTypeId/5',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if(Results == null) {
+                        document.getElementById('bank_code').value = '0000000001';
+                    } else {
+                        var ArticleCode = parseInt(Results.ArticleCode);
+                        var ArticleCode_plusOne = 0000000001;
+                        var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
+
+                        document.getElementById('bank_code').value = zerofill(ArticleCode_Results, 10);
+                        console.log(zerofill(ArticleCode_Results, 10));
+
+                        //if (Results.length > 0) {
+                        //    banks.push({
+                        //        Id: Results.Id,
+                        //        BankArticleCode: Results.ArticleCode
+                        //    });
+                        //} 
+                    }
+                }
+            });
+
             document.getElementById('bank_bank').value = '';
             document.getElementById('bank_BankGroup_data').value = '';
             document.getElementById('bank_BankGroup_selectedValue').value = '';
@@ -554,38 +582,18 @@
                 document.getElementById('bank_Address').disabled = true;
                 document.getElementById('bank_ContactNumber').disabled = true;
                 document.getElementById('branch_ContactPerson').disabled = true;
-                getBankArticleGroupForComboBox();
+                //getBankArticleGroupForComboBox();
                 document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
             } else {
                 document.getElementById('bank_bank').disabled = false;
                 document.getElementById('bank_Address').disabled = false;
                 document.getElementById('bank_ContactNumber').disabled = false;
                 document.getElementById('branch_ContactPerson').disabled = false;
-                getBankArticleGroupForComboBox();
+                //getBankArticleGroupForComboBox();
                 document.getElementById('bankLockAndUnLock').innerHTML = "<i class='fa fa-unlock'></i>";
             }
 
-            var banks = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/articleLastArticleCodeByArticleTypeId/5',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        banks.push({
-                            Id: Results.Id,
-                            BankArticleCode: Results.ArticleCode
-                        });
-                    }
-                    var ArticleCode = parseInt(Results.ArticleCode);
-                    var ArticleCode_plusOne = 0000000001;
-                    var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
-
-                    document.getElementById('bank_code').value = zerofill(ArticleCode_Results, 10);
-                }
-            });
+            
         }
 
         // ================

@@ -11,6 +11,8 @@ namespace easyfis.Controllers
     public class ApiStockInController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+        private Business.Inventory inventory = new Business.Inventory();
+        private Business.PostJournal journal = new Business.PostJournal();
 
         // =============
         // LIST Stock In
@@ -289,6 +291,15 @@ namespace easyfis.Controllers
 
                     db.SubmitChanges();
 
+                    if (updateStockIn.IsLocked == true)
+                    {
+                        inventory.insertINInventory(stockIn_Id);
+                    }
+                    else
+                    {
+                        inventory.deleteINInventory(stockIn_Id);
+                    }
+
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else
@@ -328,6 +339,15 @@ namespace easyfis.Controllers
                     updateStockIn.UpdatedDateTime = date;
 
                     db.SubmitChanges();
+
+                    if (updateStockIn.IsLocked == true)
+                    {
+                        inventory.insertINInventory(stockIn_Id);
+                    }
+                    else
+                    {
+                        inventory.deleteINInventory(stockIn_Id);
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
