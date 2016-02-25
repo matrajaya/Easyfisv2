@@ -5591,17 +5591,15 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                    if (Results.length > 0) {
-                        articles.push({
-                            Id: Results.Id,
-                            OtherArticleCode: Results.ArticleCode
-                        });
-                    }
-                    var ArticleCode = parseInt(Results.ArticleCode);
-                    var ArticleCode_plusOne = 0000000001;
-                    var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
+                    if(Results == null) {
+                        document.getElementById('article_Code').value = '0000000001';
+                    } else {
+                        var ArticleCode = parseInt(Results.ArticleCode);
+                        var ArticleCode_plusOne = 0000000001;
+                        var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
 
-                    document.getElementById('article_Code').value = zerofillArticle(ArticleCode_Results, 10);
+                        document.getElementById('article_Code').value = zerofillArticle(ArticleCode_Results, 10);
+                    }
                 }
             });
 

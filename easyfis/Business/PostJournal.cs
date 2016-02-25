@@ -10,19 +10,172 @@ namespace easyfis.Business
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ===================
-        // Stock-OUT in journal
-        // ===================
-        // insert Stock-OUT in journal
-        public void insertOTJournal(Int32 OTId)
+        // =========================
+        // Stock-Transfer in journal
+        // =========================
+        public void insertSTJournal(Int32 STId)
         {
             String JournalDate = "";
             Int32 BranchId = 0;
             String BranchCode = "";
             Int32 AccountId = 0;
             Int32 ArticleId = 0;
-            String OTNumber = "";
+            Int32 ToBranchId = 0;
+            String STNumber = "";
             Decimal Amount = 0;
+
+            // stock transfer header
+            var stockTransferHeaders = from d in db.TrnStockTransfers
+                                       where d.Id == STId
+                                       select new Models.TrnStockTransfer
+                                       {
+                                           Id = d.Id,
+                                           BranchId = d.BranchId,
+                                           Branch = d.MstBranch.Branch,
+                                           BranchCode = d.MstBranch1.BranchCode,
+                                           STNumber = d.STNumber,
+                                           STDate = d.STDate.ToShortDateString(),
+                                           ToBranchId = d.ToBranchId,
+                                           ToBranch = d.MstBranch1.Branch,
+                                           Particulars = d.Particulars,
+                                           ManualSTNumber = d.ManualSTNumber,
+                                           PreparedById = d.PreparedById,
+                                           PreparedBy = d.MstUser3.FullName,
+                                           CheckedById = d.CheckedById,
+                                           CheckedBy = d.MstUser1.FullName,
+                                           ApprovedById = d.ApprovedById,
+                                           ApprovedBy = d.MstUser.FullName,
+                                           IsLocked = d.IsLocked,
+                                           CreatedById = d.CreatedById,
+                                           CreatedBy = d.MstUser2.FullName,
+                                           CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                           UpdatedById = d.UpdatedById,
+                                           UpdatedBy = d.MstUser4.FullName,
+                                           UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                       };
+
+            // stock transfer items
+            var stockTransferItems = from d in db.TrnStockTransferItems
+                                     where d.STId == STId
+                                     group d by new 
+                                     {
+                                        AccountId = d.MstArticle.AccountId,
+                                        STId = d.STId
+                                     } into g
+                                     select new Models.TrnStockTransferItem
+                                     {
+                                         AccountId = g.Key.AccountId,
+                                         STId = g.Key.STId,
+                                         Amount = g.Sum(d => d.Amount)
+                                     };
+
+            try
+            {
+                if (stockTransferHeaders.Any())
+                {
+                    foreach (var stockTransferHeader in stockTransferHeaders)
+                    {
+                        JournalDate = stockTransferHeader.STDate;
+                        BranchId = stockTransferHeader.BranchId;
+                        BranchCode = stockTransferHeader.BranchCode;
+                        ToBranchId = stockTransferHeader.ToBranchId;
+                        STNumber = stockTransferHeader.STNumber;
+                        ArticleId = (from d in db.MstArticles where d.ArticleTypeId == 6 select d.Id).FirstOrDefault();
+
+                        if (stockTransferItems.Any())
+                        {
+                            foreach (var stockTransferItem in stockTransferItems)
+                            {
+                                // debit
+                                Data.TrnJournal newSTJournalForDebit = new Data.TrnJournal();
+
+                                newSTJournalForDebit.JournalDate = Convert.ToDateTime(JournalDate);
+                                newSTJournalForDebit.BranchId = ToBranchId;
+                                newSTJournalForDebit.AccountId = stockTransferItem.AccountId;
+                                newSTJournalForDebit.ArticleId = ArticleId;
+                                newSTJournalForDebit.Particulars = "Item";
+                                newSTJournalForDebit.DebitAmount = stockTransferItem.Amount;
+                                newSTJournalForDebit.CreditAmount = 0;
+                                newSTJournalForDebit.ORId = null;
+                                newSTJournalForDebit.CVId = null;
+                                newSTJournalForDebit.JVId = null;
+                                newSTJournalForDebit.RRId = null;
+                                newSTJournalForDebit.SIId = null;
+                                newSTJournalForDebit.INId = null;
+                                newSTJournalForDebit.OTId = null;
+                                newSTJournalForDebit.STId = STId;
+                                newSTJournalForDebit.DocumentReference = "ST-" + BranchCode + "-" + STNumber;
+                                newSTJournalForDebit.APRRId = null;
+                                newSTJournalForDebit.ARSIId = null;
+
+                                db.TrnJournals.InsertOnSubmit(newSTJournalForDebit);
+
+                                // credit
+                                Data.TrnJournal newSTJournalForCredit = new Data.TrnJournal();
+
+                                newSTJournalForCredit.JournalDate = Convert.ToDateTime(JournalDate);
+                                newSTJournalForCredit.BranchId = BranchId;
+                                newSTJournalForCredit.AccountId = stockTransferItem.AccountId;
+                                newSTJournalForCredit.ArticleId = ArticleId;
+                                newSTJournalForCredit.Particulars = "Item";
+                                newSTJournalForCredit.DebitAmount = 0;
+                                newSTJournalForCredit.CreditAmount = stockTransferItem.Amount;
+                                newSTJournalForCredit.ORId = null;
+                                newSTJournalForCredit.CVId = null;
+                                newSTJournalForCredit.JVId = null;
+                                newSTJournalForCredit.RRId = null;
+                                newSTJournalForCredit.SIId = null;
+                                newSTJournalForCredit.INId = null;
+                                newSTJournalForCredit.OTId = null;
+                                newSTJournalForCredit.STId = STId;
+                                newSTJournalForCredit.DocumentReference = "ST-" + BranchCode + "-" + STNumber;
+                                newSTJournalForCredit.APRRId = null;
+                                newSTJournalForCredit.ARSIId = null;
+
+                                db.TrnJournals.InsertOnSubmit(newSTJournalForCredit);
+                            }
+                        }
+                    }
+
+                    db.SubmitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+        // delete Stock-Transfer in Journal
+        public void deleteSTJournal(Int32 STId)
+        {
+            try
+            {
+                var journals = db.TrnJournals.Where(d => d.STId == STId).ToList();
+                foreach (var j in journals)
+                {
+                    db.TrnJournals.DeleteOnSubmit(j);
+                    db.SubmitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
+
+        // ====================
+        // Stock-OUT in journal
+        // ====================
+        // insert Stock-OUT in journal
+        public void insertOTJournal(Int32 OTId)
+        {
+            String JournalDate = "";
+            Int32 BranchId = 0;
+            String BranchCode = "";
+            //Int32 AccountId = 0;
+            Int32 ArticleId = 0;
+            String OTNumber = "";
+            //Decimal Amount = 0;
 
             // stock out headers
             var stockOutHeaders = from d in db.TrnStockOuts

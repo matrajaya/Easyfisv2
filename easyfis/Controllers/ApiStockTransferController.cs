@@ -11,6 +11,8 @@ namespace easyfis.Controllers
     public class ApiStockTransferController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+        private Business.Inventory inventory = new Business.Inventory();
+        private Business.PostJournal journal = new Business.PostJournal();
 
         // ===================
         // LIST Stock Transfer
@@ -271,6 +273,19 @@ namespace easyfis.Controllers
 
                     db.SubmitChanges();
 
+                    if (updateStockTransfer.IsLocked == true)
+                    {
+                        inventory.InsertSTInventory(stockTransfer_Id);
+
+                        journal.insertSTJournal(stockTransfer_Id);
+                    }
+                    else
+                    {
+                        inventory.deleteSTInventory(stockTransfer_Id);
+
+                        journal.deleteSTJournal(stockTransfer_Id);
+                    }
+
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else
@@ -310,6 +325,19 @@ namespace easyfis.Controllers
                     updateStockTransfer.UpdatedDateTime = date;
 
                     db.SubmitChanges();
+
+                    if (updateStockTransfer.IsLocked == true)
+                    {
+                        inventory.InsertSTInventory(stockTransfer_Id);
+
+                        journal.insertSTJournal(stockTransfer_Id);
+                    }
+                    else
+                    {
+                        inventory.deleteSTInventory(stockTransfer_Id);
+
+                        journal.deleteSTJournal(stockTransfer_Id);
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

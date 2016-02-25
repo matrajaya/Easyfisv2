@@ -42,7 +42,7 @@
                         <h4 id="collectionDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="cmdStockTransferJournal"><i class="fa fa-book"></i> Journal</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockTransferJournal" onclick="stockTransferJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockTransferSaveLock" onclick="btnStockTransferSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockTransferSave" onclick="btnStockTransferSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockTransferEdit" onclick="btnStockTransferEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
@@ -155,7 +155,7 @@
                 <!-- Stock Transfer line -->
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
-                    @*<li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>*@
+                    <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>
                 </ul>
                 <br />
                 <div class="tab-content">
@@ -217,9 +217,6 @@
                                     <input type="text" class="form-control input-sm" id="InputFilterInventoryEntry" placeholder="Search">
                                 </div>
                             </div>
-                            <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
@@ -259,7 +256,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="stockTransferItemsModalLabel">Stock-In Item - Detail</h4>
+                        <h4 class="modal-title" id="stockTransferItemsModalLabel">Stock-Transfer Item - Detail</h4>
                     </div>
                     <div class="modal-body">
                         <form id="stockTransferItemsDetailForm">
@@ -330,6 +327,67 @@
                     <div class="modal-footer">
                         <button class="btn btn-primary btn-sm" id="cmdSaveStockTransferItemButton" onclick="cmdStockTransferItemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button id="cmdStockTransferItemDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journal Detail -->
+        <div class="modal fade" id="journalDetail" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row" align="left">
+                            <center>
+                                <h4>
+                                    <span id="loadingJournalGridList"></span>
+                                </h4>
+                            </center>
+                            <div class="col-lg-12">
+                                <div id="journalGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="row" id="footerModalJournalNavigationButtons">
+                            <div class="btn-group col-md-9" id="navigationPageGridJournal">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournal"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <table>
+                                    <tr>
+                                        <td align="right"> <b>Total Debit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalDebitInJournal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"> <b>Total Credit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalCreditInJournal"></span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @*<button class="btn btn-primary btn-sm" id="cmdSaveJournalButton" onclick="cmdJournalSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                        <button id="cmdJournalDetailCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
                     </div>
                 </div>
             </div>
@@ -661,7 +719,7 @@
                         $("#stockTransfer_ToBranch_data").val(branchCollections.items[this.selectedIndex].BranchId);
                     }
                 });
-            } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') { 
+            } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') {
                 cboToBranch.dispose();
                 cboToBranch = new wijmo.input.ComboBox('#stockTransfer_ToBranch', {
                     disabled: false,
@@ -795,7 +853,7 @@
                         $("#stockTransfer_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                     }
                 });
-            } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') { 
+            } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') {
                 cboCheckedBy.dispose();
                 cboCheckedBy = new wijmo.input.ComboBox('#stockTransfer_CheckedBy', {
                     disabled: false,
@@ -846,7 +904,7 @@
                         $("#stockTransfer_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                     }
                 });
-            } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') { 
+            } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') {
                 cboApprovedBy.dispose();
                 cboApprovedBy = new wijmo.input.ComboBox('#stockTransfer_ApprovedBy', {
                     disabled: false,
@@ -1447,30 +1505,95 @@
         // GET Item Id, Manual Code and Component
         // ======================================
         function getArticleItemForManualCodeAndComponent() {
-            articleItems = new wijmo.collections.ObservableArray();
+            var articleInventories = new wijmo.collections.ObservableArray();
+            var branchId =  document.getElementById('stockTransfer_Branch_data').value;
+
             $.ajax({
-                url: '/api/listArticleByArticleTypeId/1',
+                url: '/api/listArticleInventoryBybranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            articleItems.push({
-                                ItemId: results[i]["Id"],
-                                ItemCode: results[i]["ManualArticleCode"],
-                                ItemDescription: results[i]["Article"],
-                                UnitId: results[i]["UnitId"],
-                                Unit: results[i]["Unit"],
-                                Particulars: results[i]["Particulars"]
+                success: function (articleInventoryResults) {
+                    if (articleInventoryResults.length > 0) {
+                        for (i = 0; i < articleInventoryResults.length; i++) {
+                            articleInventories.push({
+                                Id: articleInventoryResults[i]["Id"],
+                                BranchId: articleInventoryResults[i]["BranchId"],
+                                ItemId: articleInventoryResults[i]["ArticleId"],
+                                ItemDescription: articleInventoryResults[i]["Article"],
+                                InventoryCode: articleInventoryResults[i]["InventoryCode"],
+                                Quantity: articleInventoryResults[i]["Quantity"],
+                                Cost: articleInventoryResults[i]["Cost"],
+                                Amount: articleInventoryResults[i]["Amount"],
+                                Particulars: articleInventoryResults[i]["Particulars"],
+                                ItemCode: articleInventoryResults[i]["ManualArticleCode"],
+                                Unit: articleInventoryResults[i]["Unit"],
+                                UnitId: articleInventoryResults[i]["UnitId"]
+
                             });
+
+                            //articleItems = new wijmo.collections.ObservableArray();
+                            //$.ajax({
+                            //    url: '/api/article/' + articleInventoryResults[i]["ArticleId"],
+                            //    cache: false,
+                            //    type: 'GET',
+                            //    contentType: 'application/json; charset=utf-8',
+                            //    data: {},
+                            //    success: function (results) {
+                            //        if (results.length > 0) {
+                            //            for (i = 0; i < results.length; i++) {
+                            //                articleItems.push({
+                            //                    ItemId: results[i]["Id"],
+                            //                    ItemCode: results[i]["ManualArticleCode"],
+                            //                    ItemDescription: results[i]["Article"],
+                            //                    UnitId: results[i]["UnitId"],
+                            //                    Unit: results[i]["Unit"],
+                            //                    Particulars: results[i]["Particulars"]
+                            //                });
+                            //            }
+                            //            createCboForManualCode(articleItems);
+                            //            createCboForItemDescription(articleItems);
+                            //        }
+                            //    }
+                            //});
+
                         }
-                        createCboForManualCode(articleItems);
-                        createCboForItemDescription(articleItems);
+
+                        createCboForManualCode(articleInventories);
+                        createCboForItemDescription(articleInventories);
+                        createCboForInventoryCode(articleInventories);
+                        //createCboForManualCode(articleInventories);
+                        //createCboForItemDescription(articleInventories);
+                        //createCboForInventoryCode(articleInventories);
                     }
                 }
             });
+
+            //articleItems = new wijmo.collections.ObservableArray();
+            //$.ajax({
+            //    url: '/api/listArticleByArticleTypeId/1',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (results) {
+            //        if (results.length > 0) {
+            //            for (i = 0; i < results.length; i++) {
+            //                articleItems.push({
+            //                    ItemId: results[i]["Id"],
+            //                    ItemCode: results[i]["ManualArticleCode"],
+            //                    ItemDescription: results[i]["Article"],
+            //                    UnitId: results[i]["UnitId"],
+            //                    Unit: results[i]["Unit"],
+            //                    Particulars: results[i]["Particulars"]
+            //                });
+            //            }
+            //            createCboForManualCode(articleItems);
+            //            createCboForItemDescription(articleItems);
+            //        }
+            //    }
+            //});
         }
 
         // ===============
@@ -1499,44 +1622,57 @@
                     $("#stockTransferItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
                     $("#stockTransferItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
                     $("#stockTransferItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
+                    $("#stockTransferItem_ItemInventoryCode_data").val(ManualCodeCollections.items[this.selectedIndex].Id);
+                    $("#stockTransferItem_ItemInventoryCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].InventoryCode);
+                    $("#stockTransferItem_Cost").val(ManualCodeCollections.items[this.selectedIndex].Cost);
 
                     createCboForItemDescription(articleItems);
 
-                    var articleId = ManualCodeCollections.items[this.selectedIndex].ItemId;
-                    var branchId = document.getElementById('stockTransfer_Branch_data').value;
-                    $.ajax({
-                        url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
-                        cache: false,
-                        type: 'GET',
-                        contentType: 'application/json; charset=utf-8',
-                        data: {},
-                        success: function (results) {
-                            //if (results.length > 0) {
-                            //    inventories.push({
-                            //        Id: results.Id,
-                            //        BranchId: results.BranchId,
-                            //        ArticleId: results.ArticleId,
-                            //        InventoryCode: results.InventoryCode,
-                            //        Quantity: results.Quantity,
-                            //        Cost: results.Cost,
-                            //        Amount: results.Amount,
-                            //        Particulars: results.Particulars
-                            //    });
-                            //}
+                    createCboForInventoryCode(articleItems);
+                    //var articleId = ManualCodeCollections.items[this.selectedIndex].ItemId;
+                    //var branchId = document.getElementById('stockTransfer_Branch_data').value;
+                    //$.ajax({
+                    //    url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
+                    //    cache: false,
+                    //    type: 'GET',
+                    //    contentType: 'application/json; charset=utf-8',
+                    //    data: {},
+                    //    success: function (results) {
+                    //        //if (results.length > 0) {
+                    //        //    inventories.push({
+                    //        //        Id: results.Id,
+                    //        //        BranchId: results.BranchId,
+                    //        //        ArticleId: results.ArticleId,
+                    //        //        InventoryCode: results.InventoryCode,
+                    //        //        Quantity: results.Quantity,
+                    //        //        Cost: results.Cost,
+                    //        //        Amount: results.Amount,
+                    //        //        Particulars: results.Particulars
+                    //        //    });
+                    //        //}
 
-                            if(results == null) {
-                                document.getElementById('stockTransferItem_ItemInventoryCode_data').value ="";
-                                document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = "";
-                            } else {
-                                document.getElementById('stockTransferItem_ItemInventoryCode_data').value = results.Id;
-                                document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
-                            }
+                    //        if(results == null) {
+                    //            document.getElementById('stockTransferItem_ItemInventoryCode_data').value ="";
+                    //            document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = "";
+                    //        } else {
+                    //            document.getElementById('stockTransferItem_ItemInventoryCode_data').value = results.Id;
+                    //            document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
+                    //        }
 
-                            getItemInventoryCodeForComboBox();
-                        }
-                    });
+                    //    }
+                    //});
 
                     getStockTransferItemUnitForComboBox();
+
+                    var stockTransfer_Quantity = document.getElementById('stockTransferItem_Quantity').value;
+                    var stockTransfer_Cost = document.getElementById('stockTransferItem_Cost').value;
+
+                    document.getElementById('stockTransferItem_Amount').value = Math.round(( stockTransfer_Quantity * stockTransfer_Cost ) * 100 ) / 100;
+                    if(this.value == 0) {
+                        document.getElementById('stockTransferItem_BUCCost').value = 0;
+                    } else {
+                        document.getElementById('stockTransferItem_BUCCost').value = stockTransfer_Cost;
+                    }
                 }
             });
         }
@@ -1567,83 +1703,59 @@
                     $("#stockTransferItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
                     $("#stockTransferItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
                     $("#stockTransferItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
+                    $("#stockTransferItem_ItemInventoryCode_data").val(ItemDescriptionCollections.items[this.selectedIndex].Id);
+                    $("#stockTransferItem_ItemInventoryCode_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].InventoryCode);
+                    $("#stockTransferItem_Cost").val(ItemDescriptionCollections.items[this.selectedIndex].Cost);
 
                     createCboForManualCode(articleItems);
 
-                    var articleId = ItemDescriptionCollections.items[this.selectedIndex].ItemId;
-                    var branchId = document.getElementById('stockTransfer_Branch_data').value;
-                    $.ajax({
-                        url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
-                        cache: false,
-                        type: 'GET',
-                        contentType: 'application/json; charset=utf-8',
-                        data: {},
-                        success: function (results) {
-                            //if (results.length > 0) {
-                            //    inventories.push({
-                            //        Id: results.Id,
-                            //        BranchId: results.BranchId,
-                            //        ArticleId: results.ArticleId,
-                            //        InventoryCode: results.InventoryCode,
-                            //        Quantity: results.Quantity,
-                            //        Cost: results.Cost,
-                            //        Amount: results.Amount,
-                            //        Particulars: results.Particulars
-                            //    });
-                            //}
+                    createCboForInventoryCode(articleItems);
+                    //var articleId = ItemDescriptionCollections.items[this.selectedIndex].ItemId;
+                    //var branchId = document.getElementById('stockTransfer_Branch_data').value;
+                    //$.ajax({
+                    //    url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
+                    //    cache: false,
+                    //    type: 'GET',
+                    //    contentType: 'application/json; charset=utf-8',
+                    //    data: {},
+                    //    success: function (results) {
+                    //        //if (results.length > 0) {
+                    //        //    inventories.push({
+                    //        //        Id: results.Id,
+                    //        //        BranchId: results.BranchId,
+                    //        //        ArticleId: results.ArticleId,
+                    //        //        InventoryCode: results.InventoryCode,
+                    //        //        Quantity: results.Quantity,
+                    //        //        Cost: results.Cost,
+                    //        //        Amount: results.Amount,
+                    //        //        Particulars: results.Particulars
+                    //        //    });
+                    //        //}
 
-                            if(results == null) {
-                                document.getElementById('stockTransferItem_ItemInventoryCode_data').value = "";
-                                document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = "";
-                            } else {
-                                document.getElementById('stockTransferItem_ItemInventoryCode_data').value = results.Id;
-                                document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
-                            }
+                    //        if(results == null) {
+                    //            document.getElementById('stockTransferItem_ItemInventoryCode_data').value = "";
+                    //            document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = "";
+                    //        } else {
+                    //            document.getElementById('stockTransferItem_ItemInventoryCode_data').value = results.Id;
+                    //            document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = results.InventoryCode;
+                    //        }
 
-                            getItemInventoryCodeForComboBox();
-                        }
-                    });
+                    //    }
+                    //});
 
                     getStockTransferItemUnitForComboBox();
+
+                    var stockTransfer_Quantity = document.getElementById('stockTransferItem_Quantity').value;
+                    var stockTransfer_Cost = document.getElementById('stockTransferItem_Cost').value;
+
+                    document.getElementById('stockTransferItem_Amount').value = Math.round(( stockTransfer_Quantity * stockTransfer_Cost ) * 100 ) / 100;
+                    if(this.value == 0) {
+                        document.getElementById('stockTransferItem_BUCCost').value = 0;
+                    } else {
+                        document.getElementById('stockTransferItem_BUCCost').value = stockTransfer_Cost;
+                    }
                 }
             });
-        }
-
-
-        // =======================
-        // Get Item Inventory Code
-        // =======================
-        function getItemInventoryCodeForComboBox() {
-            inventories = new wijmo.collections.ObservableArray();
-            setTimeout(function() {
-                var articleId = document.getElementById('stockTransferItem_ItemId_data').value;
-                var branchId = document.getElementById('stockTransfer_Branch_data').value;
-                $.ajax({
-                    url: '/api/listArticleInventoryByBranchIdAndArticleId/' + branchId + '/' + articleId,
-                    cache: false,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    data: {},
-                    success: function (results) {
-                        if (results.length > 0) {
-                            for (i = 0; i < results.length; i++) {
-                                inventories.push({
-                                    Id: results[i]["Id"],
-                                    BranchId: results[i]["BranchId"],
-                                    ArticleId: results[i]["ArticleId"],
-                                    InventoryCode: results[i]["InventoryCode"],
-                                    Quantity: results[i]["Quantity"],
-                                    Cost: results[i]["Cost"],
-                                    Amount: results[i]["Amount"],
-                                    Particulars: results[i]["Particulars"]
-                                });
-                            }
-
-                            createCboForInventoryCode(inventories);
-                        }
-                    }
-                });
-            },100);
         }
 
         // ===========================
@@ -1664,7 +1776,33 @@
                 required: false,
                 selectedValue: document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
+                    $("#stockTransferItem_ItemId_data").val(InventoryCodeCollection.items[this.selectedIndex].ItemId);
+                    $("#stockTransferItem_ItemCode_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].ItemCode);
+                    $("#stockTransferItem_ItemDescription_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].ItemDescription);
+                    $("#stockTransferItem_Unit_data").val(InventoryCodeCollection.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_Unit_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].Unit);
+                    $("#stockTransferItem_BUCUnit_data").val(InventoryCodeCollection.items[this.selectedIndex].UnitId);
+                    $("#stockTransferItem_BUCUnit_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].Unit);
+                    $("#stockTransferItem_Particulars").val(InventoryCodeCollection.items[this.selectedIndex].Particulars);
                     $("#stockTransferItem_ItemInventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
+                    $("#stockTransferItem_ItemInventoryCode_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].InventoryCode);
+                    $("#stockTransferItem_Cost").val(InventoryCodeCollection.items[this.selectedIndex].Cost);
+
+
+                    createCboForManualCode(inventories);
+                    createCboForItemDescription(inventories);
+
+                    getStockTransferItemUnitForComboBox();
+
+                    var stockTransfer_Quantity = document.getElementById('stockTransferItem_Quantity').value;
+                    var stockTransfer_Cost = document.getElementById('stockTransferItem_Cost').value;
+
+                    document.getElementById('stockTransferItem_Amount').value = Math.round(( stockTransfer_Quantity * stockTransfer_Cost ) * 100 ) / 100;
+                    if(this.value == 0) {
+                        document.getElementById('stockTransferItem_BUCCost').value = 0;
+                    } else {
+                        document.getElementById('stockTransferItem_BUCCost').value = stockTransfer_Cost;
+                    }
                 }
             });
         }
@@ -1766,39 +1904,6 @@
             });
 
             getArticleItemForManualCodeAndComponent();
-
-            inventories = new wijmo.collections.ObservableArray();
-            setTimeout(function() {
-                var articleId = document.getElementById('stockTransferItem_ItemId_data').value;
-                var branchId = document.getElementById('stockTransfer_Branch_data').value;
-                $.ajax({
-                    url: '/api/listArticleInventoryByBranchIdAndArticleId/' + branchId + '/' + 0,
-                    cache: false,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    data: {},
-                    success: function (results) {
-                        if (results.length > 0) {
-                            for (i = 0; i < results.length; i++) {
-                                inventories.push({
-                                    Id: results[i]["Id"],
-                                    BranchId: results[i]["BranchId"],
-                                    ArticleId: results[i]["ArticleId"],
-                                    InventoryCode: results[i]["InventoryCode"],
-                                    Quantity: results[i]["Quantity"],
-                                    Cost: results[i]["Cost"],
-                                    Amount: results[i]["Amount"],
-                                    Particulars: results[i]["Particulars"]
-                                });
-                                createCboForInventoryCode(inventories);
-                            }
-                        } else {
-                            createCboForInventoryCode(inventories);
-                        }
-                    }
-                });
-            },100);
-
             getStockTransferItemUnitForComboBox();
 
             $("#cmdSaveStockTransferItemButton").prop("disabled", false);
@@ -1817,15 +1922,15 @@
             document.getElementById('stockTransferItem_Particulars').value = '';
             document.getElementById('stockTransferItem_ItemInventoryCode_data').value = '';
             document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = '';
-            document.getElementById('stockTransferItem_Quantity').value = '';
+            document.getElementById('stockTransferItem_Quantity').value = 0;
             document.getElementById('stockTransferItem_Unit_data').value = '';
             document.getElementById('stockTransferItem_Unit_selectedValue').value = '';
-            document.getElementById('stockTransferItem_Cost').value = '';
-            document.getElementById('stockTransferItem_Amount').value = '';
+            document.getElementById('stockTransferItem_Cost').value = 0;
+            document.getElementById('stockTransferItem_Amount').value = 0;
             document.getElementById('stockTransferItem_BUCUnit_data').value = '';
             document.getElementById('stockTransferItem_BUCUnit_selectedValue').value = '';
-            document.getElementById('stockTransferItem_BUCQuantity').value = '';
-            document.getElementById('stockTransferItem_BUCCost').value = '';
+            document.getElementById('stockTransferItem_BUCQuantity').value = 0;
+            document.getElementById('stockTransferItem_BUCCost').value = 0;
         }
 
         // ========================
@@ -1839,7 +1944,6 @@
             });
 
             getArticleItemForManualCodeAndComponent();
-            getItemInventoryCodeForComboBox();
             getStockTransferItemUnitForComboBox();
 
             $("#cmdSaveStockTransferItemButton").prop("disabled", false);
@@ -2143,6 +2247,125 @@
         //  Items
         // ======
         function itemTab() {
+            $("#stockTransferItem_Quantity").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#stockTransferItem_Cost").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#stockTransferItem_Amount").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#stockTransferItem_BUCQuantity").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#stockTransferItem_BUCCost").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $('#stockTransferItem_Quantity').keyup(function() {
+                document.getElementById('stockTransferItem_BUCQuantity').value = this.value;
+
+                var stockTransfer_Quantity = document.getElementById('stockTransferItem_Quantity').value;
+                var stockTransfer_Cost = document.getElementById('stockTransferItem_Cost').value;
+
+                document.getElementById('stockTransferItem_Amount').value = Math.round(( stockTransfer_Quantity * stockTransfer_Cost ) * 100 ) / 100;
+                if(this.value == 0) {
+                    document.getElementById('stockTransferItem_BUCCost').value = 0;
+                } else {
+                    document.getElementById('stockTransferItem_BUCCost').value = stockTransfer_Cost;
+                }
+            });
+
+            document.getElementById('stockTransferItem_Cost').disabled = true;
+            document.getElementById('stockTransferItem_Amount').disabled = true;
+            document.getElementById('stockTransferItem_BUCQuantity').disabled = true;
+            document.getElementById('stockTransferItem_BUCCost').disabled = true;
+
             cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockTransferItem_ItemCode');
             cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockTransferItem_ItemDescription');
             cboInventoryCode = new wijmo.input.ComboBox('#stockTransferItem_ItemInventoryCode');
@@ -2352,43 +2575,49 @@
         // ============================
         // GET Contact Information List
         // ============================
-        function getInventoryEntry() {
+        function getInventoryEntries() {
             var inventoryEntries = new wijmo.collections.ObservableArray;
-            //$('#loadingModal').modal('show');
-            //$.ajax({
-            //    url: '/api/listAccount',
-            //    cache: false,
-            //    type: 'GET',
-            //    contentType: 'application/json; charset=utf-8',
-            //    data: {},
-            //    success: function (Results) {
-            //        $('#loadingModal').modal('hide');
-            //        if (Results.length > 0) {
-            //            for (i = 0; i < Results.length; i++) {
-            //                journalLedger.push({
-            //                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-            //                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-            //                    Id: Results[i]["Id"],
-            //                    AccountCode: Results[i]["AccountCode"],
-            //                    Account: Results[i]["Account"],
-            //                    AccountTypeId: Results[i]["AccountTypeId"],
-            //                    AccountType: Results[i]["AccountType"],
-            //                    AccountCashFlowId: Results[i]["AccountCashFlowId"],
-            //                    AccountCashFlow: Results[i]["AccountCashFlow"],
-            //                    IsLocked: Results[i]["IsLocked"],
-            //                    CreatedById: Results[i]["CreatedById"],
-            //                    CreatedBy: Results[i]["CreatedBy"],
-            //                    CreatedDateTime: Results[i]["CreatedDateTime"],
-            //                    UpdatedById: Results[i]["UpdatedById"],
-            //                    UpdatedBy: Results[i]["UpdatedBy"],
-            //                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-            //                });
-            //            }
-            //        }
-            //    }
-            //}).fail(function (xhr, textStatus, err) {
-            //    alert(err);
-            //});
+            var STId = @stockTransferId;
+            $('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listInventoryBySTId/' + STId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            inventoryEntries.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                InventoryDate: Results[i]["InventoryDate"],
+                                ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
+                                ArticleInventoryId: Results[i]["ArticleInventoryId"],
+                                RRId: Results[i]["RRId"],
+                                SIId: Results[i]["SIId"],
+                                INId: Results[i]["INId"],
+                                OTId: Results[i]["OTId"],
+                                STId: Results[i]["STId"],
+                                QuantityIn: Results[i]["QuantityIn"],
+                                Quantity: Results[i]["Quantity"],
+                                QuantityOut: Results[i]["QuantityOut"],
+                                Amount: Results[i]["Amount"],
+                                Particulars: Results[i]["Particulars"],
+                                Code: Results[i]["Code"],
+                                Unit: Results[i]["Unit"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
             return inventoryEntries;
         }
 
@@ -2435,7 +2664,7 @@
         // On Page Load for Inventory Entries
         // ==================================
         function inventoryEntryTab() {
-            inventoryEntries = new wijmo.collections.CollectionView();
+            inventoryEntries = new wijmo.collections.CollectionView(getInventoryEntries());
             inventoryEntries.canFilter = true;
             inventoryEntries.pageSize = 15;
 
@@ -2445,7 +2674,7 @@
                 inventoryEntries.refresh();
             });
             inventoryEntries.filter = function (item) {
-                return !filterTextInventoryEntry || (item.inventoryEntry.toLowerCase().indexOf(filterTextInventoryEntry) > -1);
+                return !filterTextInventoryEntry || (item.Article.toLowerCase().indexOf(filterTextInventoryEntry) > -1);
             }
             inventoryEntries.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsInventoryEntry();
@@ -2459,32 +2688,58 @@
             inventoryEntryGrid.initialize({
                 columns: [
                             {
-                                "header": "Contact",
-                                "binding": "Contact",
-                                "width": 60,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Contact Number(s)",
-                                //"binding": "ContactNumbers",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Remarks",
-                                //"binding": "Remarks",
+                                "header": "Date",
+                                "binding": "InventoryDate",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": 100,
+                            },
+                            {
+                                "header": "Branch",
+                                "binding": "Branch",
+                                "allowSorting": true,
+                                "width": 250,
+                            },
+                            {
+                                "header": "Item",
+                                "binding": "Article",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": 300,
+                            },
+                            {
+                                "header": "Particulars",
+                                "binding": "Particulars",
+                                "align": "left",
+                                "allowSorting": true,
+                                "width": 400,
+                            },
+                            {
+                                "header": "Code",
+                                "binding": "Code",
+                                "allowSorting": true,
+                                "width": 200,
+                            },
+                            {
+                                "header": "Quantity",
+                                "binding": "Quantity",
+                                "allowSorting": true,
+                                "width": 150,
+                            },
+                            {
+                                "header": "Unit",
+                                "binding": "Unit",
+                                "allowSorting": true,
+                                "width": 100,
+                            },
+                            {
+                                "header": "Amount",
+                                "binding": "Amount",
+                                "allowSorting": true,
+                                "width": 150,
                             },
                 ],
                 autoGenerateColumns: false,
-                //itemsSource: inventoryEntries,
+                itemsSource: inventoryEntries,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
@@ -2525,6 +2780,241 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
+        var journals;
+        var journalListGrid;
+
+        var btnFirstPageGridJournal;
+        var btnPreviousPageGridJournal;
+        var btnNextPageGridJournal;
+        var btnLastPageGridJournal;
+        var btnCurrentPageGridJournal;
+
+        // ===========
+        // Get Journal
+        // ===========
+        function getJournalListForStockTransfer() {
+            var journals = new wijmo.collections.ObservableArray;
+            var STId = @stockTransferId;
+            //$('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listJournalBySTId/' + STId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    //$('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            journals.push({
+                                //EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                //DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdJournalVoucherLineDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                JournalDate: Results[i]["JournalDate"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                AccountId: Results[i]["AccountId"],
+                                AccountCode: Results[i]["AccountCode"],
+                                Account: Results[i]["Account"],
+                                ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
+                                Particulars: Results[i]["Particulars"],
+                                DebitAmount: Results[i]["DebitAmount"],
+                                CreditAmount: Results[i]["CreditAmount"],
+                                ORId: Results[i]["ORId"],
+                                CVId: Results[i]["CVId"],
+                                JVId: Results[i]["JVId"],
+                                RRId: Results[i]["RRId"],
+                                SIId: Results[i]["SIId"],
+                                INId: Results[i]["INId"],
+                                OTId: Results[i]["OTId"],
+                                STId: Results[i]["STId"],
+                                DocumentReference: Results[i]["DocumentReference"],
+                                APRRId: Results[i]["APRRId"],
+                                ARSIId: Results[i]["ARSIId"]
+                            });
+
+                            var debitAmountTotal = 0;
+                            var creditAmountTotal = 0;
+
+                            var a = 0;
+                            while (a < Results.length) {
+                                debitAmountTotal += Results[a]["DebitAmount"];
+                                creditAmountTotal += Results[a]["CreditAmount"];
+                                a++;
+                            }
+                        }
+
+                        document.getElementById('totalDebitInJournal').innerHTML = debitAmountTotal.toLocaleString();
+                        document.getElementById('totalCreditInJournal').innerHTML = creditAmountTotal.toLocaleString();
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return journals;
+        }
+
+        // ==============================
+        // Navigation Buttons for Journal
+        // ==============================
+        function updateNavigateButtonsJournal() {
+            if (journals.pageSize <= 0) {
+                document.getElementById('navigationPageGridJournal').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridJournal').style.display = 'block';
+            if (journals.pageIndex === 0) {
+                btnFirstPageGridJournal.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            } else if (journals.pageIndex === (journals.pageCount - 1)) {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            }
+            btnCurrentPageGridJournal.innerHTML = (journals.pageIndex + 1) + ' / ' + journals.pageCount;
+        }
+
+        // ============
+        // Journal List
+        // ============
+        function stockTransferJournal_OnClick() {
+            journals = new wijmo.collections.CollectionView(getJournalListForStockTransfer());
+            journals.pageSize = 10;
+
+            document.getElementById("loadingJournalGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Journal...';
+
+            $("#loadingJournalGridList").show();
+            $("#footerModalJournalNavigationButtons").hide();
+            setTimeout(function() {
+                $("#loadingJournalGridList").hide();
+                $("#footerModalJournalNavigationButtons").show();
+                // Flex Grid
+                journalListGrid = new wijmo.grid.FlexGrid('#journalGrid');
+                journalListGrid.initialize({
+                    columns: [
+                                //{
+                                //    "header": "Edit",
+                                //    "binding": "EditId",
+                                //    "width": 60,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                //{
+                                //    "header": "Delete",
+                                //    "binding": "DeleteId",
+                                //    "width": 70,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                {
+                                    "header": "Date",
+                                    "binding": "JournalDate",
+                                    "allowSorting": true,
+                                    "width": 150,
+                                },
+                                {
+                                    "header": "Branch",
+                                    "binding": "Branch",
+                                    "allowSorting": true,
+                                    "width": 220
+                                },
+                                {
+                                    "header": "Code",
+                                    "binding": "AccountCode",
+                                    "allowSorting": true,
+                                    "width": 100
+                                },
+                                {
+                                    "header": "Account",
+                                    "binding": "Account",
+                                    "allowSorting": true,
+                                    "width": 250
+                                },
+                                {
+                                    "header": "Article",
+                                    "binding": "Article",
+                                    "allowSorting": true,
+                                    "width": 350
+                                },
+                                {
+                                    "header": "Debit Amount",
+                                    "binding": "DebitAmount",
+                                    "allowSorting": true,
+                                    "width": 130
+                                }
+                                ,
+                                {
+                                    "header": "Credit Amount",
+                                    "binding": "CreditAmount",
+                                    "allowSorting": true,
+                                    "width": 130
+                                }
+
+                    ],
+                    autoGenerateColumns: false,
+                    itemsSource: journals,
+                    isReadOnly: true,
+                    autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                    allowDragging: wijmo.grid.AllowDragging.None,
+                    selectionMode: wijmo.grid.SelectionMode.Row
+                });
+
+                journalListGrid.trackChanges = true;
+
+                //Navigation button
+                btnFirstPageGridJournal = document.getElementById('btnMoveToFirstPageGridJournal');
+                btnPreviousPageGridJournal = document.getElementById('btnMoveToPreviousPageGridJournal');
+                btnNextPageGridJournal = document.getElementById('btnMoveToNextPageGridJournal');
+                btnLastPageGridJournal = document.getElementById('btnMoveToLastPageGridJournal');
+                btnCurrentPageGridJournal = document.getElementById('btnCurrentPageGridJournal');
+
+                updateNavigateButtonsJournal();
+
+                btnFirstPageGridJournal.addEventListener('click', function () {
+                    journals.moveToFirstPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnPreviousPageGridJournal.addEventListener('click', function () {
+                    journals.moveToPreviousPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnNextPageGridJournal.addEventListener('click', function () {
+                    journals.moveToNextPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnLastPageGridJournal.addEventListener('click', function () {
+                    journals.moveToLastPage();
+                    updateNavigateButtonsJournal();
+                });
+
+            }, 1000);
+        }
+
+        // journal detail
+        $('#cmdStockTransferJournal').click(function () {
+            $('#journalDetail').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            window.stockTransferJournal_OnClick = function () {
+                return true;
+            };
+        });
+
         // ====
         // TABS
         // ====
