@@ -61,7 +61,7 @@ namespace easyfis.Controllers
             {
                 amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
             }
-            
+
             return amount;
         }
 
@@ -200,7 +200,7 @@ namespace easyfis.Controllers
                                 };
             return salesInvoices.ToList();
         }
-        
+
         // ===================================
         // GET Sales Invoice Filter by SI Date
         // ===================================
@@ -360,9 +360,9 @@ namespace easyfis.Controllers
                 newSales.ManualSINumber = sales.ManualSINumber;
                 newSales.Remarks = sales.Remarks;
                 newSales.Amount = 0;
-                newSales.PaidAmount = sales.PaidAmount;
-                newSales.AdjustmentAmount = sales.AdjustmentAmount;
-                newSales.BalanceAmount = sales.BalanceAmount;
+                newSales.PaidAmount = 0;
+                newSales.AdjustmentAmount = 0;
+                newSales.BalanceAmount = 0;
                 newSales.SoldById = sales.SoldById;
                 newSales.PreparedById = sales.PreparedById;
                 newSales.CheckedById = sales.CheckedById;
@@ -403,6 +403,69 @@ namespace easyfis.Controllers
 
                 if (salesInvoces.Any())
                 {
+                    var collectionLines = from d in db.TrnCollectionLines
+                                          where d.SIId == sales_Id
+                                          select new Models.TrnCollectionLine
+                                          {
+                                              Id = d.Id,
+                                              ORId = d.ORId,
+                                              OR = d.TrnCollection.ORNumber,
+                                              BranchId = d.BranchId,
+                                              Branch = d.MstBranch.Branch,
+                                              AccountId = d.AccountId,
+                                              Account = d.MstAccount.Account,
+                                              ArticleId = d.ArticleId,
+                                              Article = d.MstArticle.Article,
+                                              SIId = d.SIId,
+                                              SI = d.TrnSalesInvoice.SINumber,
+                                              Particulars = d.Particulars,
+                                              Amount = d.Amount,
+                                              PayTypeId = d.PayTypeId,
+                                              PayType = d.MstPayType.PayType,
+                                              CheckNumber = d.CheckNumber,
+                                              CheckDate = d.CheckDate.ToShortDateString(),
+                                              CheckBank = d.CheckBank,
+                                              DepositoryBankId = d.DepositoryBankId,
+                                              DepositoryBank = d.MstArticle1.Article,
+                                              IsClear = d.IsClear,
+                                          };
+
+                    var collectionLinesORIds = from d in db.TrnCollectionLines
+                                               where d.SIId == sales_Id
+                                               group d by new
+                                               {
+                                                   ORId = d.ORId
+                                               } into g
+                                               select new Models.TrnCollectionLine
+                                               {
+                                                   ORId = g.Key.ORId,
+                                               };
+
+                    Int32 ORId = 0;
+                    foreach (var collectionLinesORId in collectionLinesORIds)
+                    {
+                        ORId = collectionLinesORId.ORId;
+                    }
+
+                    Boolean collectionHeaderIsLocked = (from d in db.TrnCollections where d.Id == ORId select d.IsLocked).SingleOrDefault();
+
+                    Decimal PaidAmount = 0;
+                    if (collectionLines.Any())
+                    {
+                        if (collectionHeaderIsLocked == true)
+                        {
+                            PaidAmount = collectionLines.Sum(d => d.Amount);
+                        }
+                        else
+                        {
+                            PaidAmount = 0;
+                        }
+                    }
+                    else
+                    {
+                        PaidAmount = 0;
+                    }
+
                     var updateSales = salesInvoces.FirstOrDefault();
 
                     updateSales.BranchId = sales.BranchId;
@@ -414,9 +477,9 @@ namespace easyfis.Controllers
                     updateSales.ManualSINumber = sales.ManualSINumber;
                     updateSales.Remarks = sales.Remarks;
                     updateSales.Amount = getAmount(sales_Id);
-                    updateSales.PaidAmount = sales.PaidAmount;
-                    updateSales.AdjustmentAmount = sales.AdjustmentAmount;
-                    updateSales.BalanceAmount = sales.BalanceAmount;
+                    updateSales.PaidAmount = PaidAmount;
+                    updateSales.AdjustmentAmount = 0;
+                    updateSales.BalanceAmount = getAmount(sales_Id) - PaidAmount;
                     updateSales.SoldById = sales.SoldById;
                     updateSales.PreparedById = sales.PreparedById;
                     updateSales.CheckedById = sales.CheckedById;
@@ -425,6 +488,8 @@ namespace easyfis.Controllers
                     updateSales.IsLocked = sales.IsLocked;
                     updateSales.UpdatedById = mstUserId;
                     updateSales.UpdatedDateTime = date;
+
+                    db.SubmitChanges();
 
                     if (updateSales.IsLocked == true)
                     {
@@ -436,8 +501,6 @@ namespace easyfis.Controllers
                         inventory.deleteSIInventory(sales_Id);
                         journal.deleteSIJournal(sales_Id);
                     }
-
-                    db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -477,6 +540,8 @@ namespace easyfis.Controllers
                     updateSales.UpdatedById = mstUserId;
                     updateSales.UpdatedDateTime = date;
 
+                    db.SubmitChanges();
+
                     if (updateSales.IsLocked == true)
                     {
                         inventory.InsertSIInventory(sales_Id);
@@ -487,8 +552,6 @@ namespace easyfis.Controllers
                         inventory.deleteSIInventory(sales_Id);
                         journal.deleteSIJournal(sales_Id);
                     }
-
-                    db.SubmitChanges();
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

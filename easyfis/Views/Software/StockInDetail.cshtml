@@ -42,7 +42,7 @@
                         <h4 id="stockInDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="cmdStockInJournal"><i class="fa fa-book"></i> Journal</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockInJournal" onclick="stockInJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockInSaveLock" onclick="btnStockInSaveLock_OnClick()"><i class=" fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockInSave" onclick="btnStockInSave_OnClick()"><i class=" fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockInEdit" onclick="btnStockInEdit_OnClick()"><i class=" fa fa-edit"></i> Edit (Unlock)</button>
@@ -343,6 +343,68 @@
             </div>
         </div>
 
+        <!-- Journal Detail -->
+        <div class="modal fade" id="journalDetail" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row" align="left">
+                            <center>
+                                <h4>
+                                    <span id="loadingJournalGridList"></span>
+                                </h4>
+                            </center>
+                            <div class="col-lg-12">
+                                <div id="journalGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="row" id="footerModalJournalNavigationButtons">
+                            <div class="btn-group col-md-9" id="navigationPageGridJournal">
+                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournal"></button>
+                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournal">
+                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournal">
+                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <table>
+                                    <tr>
+                                        <td align="right"> <b>Total Debit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalDebitInJournal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"> <b>Total Credit:</b> </td>
+                                        <td style="padding-left: 15px"></td>
+                                        <td> <span id="totalCreditInJournal"></span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        @*<button class="btn btn-primary btn-sm" id="cmdSaveJournalButton" onclick="cmdJournalSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                        <button id="cmdJournalDetailCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- ======================================== -->
         <!-- Stock-In Items Delete Modal Confirmation -->
         <!-- ======================================== -->
@@ -522,7 +584,8 @@
                         $("#cmdStockInEdit").prop("disabled", false);
                         $("#cmdStockInPrint").prop("disabled", false);
                         $("#btnAddStockInItem").prop("disabled", true);
-                        
+
+                        document.getElementById('StockIn_Produce').disabled = true;
                     } else if(document.getElementById('StockIn_IsLocked').value == 'false') {
                         document.getElementById('StockIn_Particulars').disabled = false;
                         document.getElementById('StockIn_ManualINNumber').disabled = false;
@@ -545,11 +608,11 @@
                         $("#cmdStockInEdit").prop("disabled", true);
                         $("#cmdStockInPrint").prop("disabled", true);
                         $("#btnAddStockInItem").prop("disabled", false);
-
+                        
+                        document.getElementById('StockIn_Produce').disabled = false;
                     } else {
                         console.log("Invalid IsLocked");
                     }
-
 
                     getBranchesForComboBox();
                     getUsersForComboBox();
@@ -1463,173 +1526,233 @@
     <!-- Items Scripts -->
     <!-- ============= -->
     <script type="text/javascript">
-        // ==========================
-        // Global Variables for Items
-        // ==========================
-        var items;
-        var itemGrid;
+    // ==========================
+    // Global Variables for Items
+    // ==========================
+    var items;
+    var itemGrid;
 
-        var btnFirstPageGridItem;
-        var btnPreviousPageGridItem;
-        var btnNextPageGridItem;
-        var btnLastPageGridItem;
-        var btnCurrentPageGridItem;
+    var btnFirstPageGridItem;
+    var btnPreviousPageGridItem;
+    var btnNextPageGridItem;
+    var btnLastPageGridItem;
+    var btnCurrentPageGridItem;
 
-        var articleItems;
-        var cboManualCodeArticleItems;
-        var cboItemDescriptionArticleItems;
+    var articleItems;
+    var cboManualCodeArticleItems;
+    var cboItemDescriptionArticleItems;
 
-        var stockInUnits;
-        var cboStockInUnit;
-        var cboBaseUnit;
+    var stockInUnits;
+    var cboStockInUnit;
+    var cboBaseUnit;
 
-        // ======================
-        // GET Stock IN Item List
-        // ======================
-        function getItem() {
-            var items = new wijmo.collections.ObservableArray;
-            var INId = @stockInId;
-            $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listStockInItemByINId/' + INId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        stockIns = new wijmo.collections.ObservableArray;
-                        var stockInId = @stockInId;
-                        $.ajax({
-                            url: '/api/stockIn/' + stockInId,
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (StockInResults) {
-                                if (StockInResults.length > 0) {
-                                    stockIns.push({
-                                        Id: StockInResults.Id,
-                                        IsLocked: StockInResults.IsLocked
+    // ======================
+    // GET Stock IN Item List
+    // ======================
+    function getItem() {
+        var items = new wijmo.collections.ObservableArray;
+        var INId = @stockInId;
+        $('#loadingModal').modal('show');
+        $.ajax({
+            url: '/api/listStockInItemByINId/' + INId,
+            cache: false,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            data: {},
+            success: function (Results) {
+                $('#loadingModal').modal('hide');
+                if (Results.length > 0) {
+                    stockIns = new wijmo.collections.ObservableArray;
+                    var stockInId = @stockInId;
+                    $.ajax({
+                        url: '/api/stockIn/' + stockInId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (StockInResults) {
+                            if (StockInResults.length > 0) {
+                                stockIns.push({
+                                    Id: StockInResults.Id,
+                                    IsLocked: StockInResults.IsLocked
+                                });
+                            }
+
+                            if(StockInResults.IsLocked == true) {
+                                for (i = 0; i < Results.length; i++) {
+                                    items.push({
+                                        EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                        DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                        Id: Results[i]["Id"],
+                                        INId: Results[i]["INId"],
+                                        IN: Results[i]["IN"],
+                                        ItemId: Results[i]["ItemId"],
+                                        ItemCode: Results[i]["ItemCode"],
+                                        Item: Results[i]["Item"],
+                                        Particulars: Results[i]["Particulars"],
+                                        UnitId: Results[i]["UnitId"],
+                                        Unit: Results[i]["Unit"],
+                                        Quantity: Results[i]["Quantity"],
+                                        Cost: Results[i]["Cost"],
+                                        Amount: Results[i]["Amount"],
+                                        BaseUnitId: Results[i]["BaseUnitId"],
+                                        BaseUnit: Results[i]["BaseUnit"],
+                                        BaseQuantity: Results[i]["BaseQuantity"],
+                                        BaseCost: Results[i]["BaseCost"]
                                     });
                                 }
-
-                                if(StockInResults.IsLocked == true) {
-                                    for (i = 0; i < Results.length; i++) {
-                                        items.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()' disabled><i class='fa fa-edit'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            INId: Results[i]["INId"],
-                                            IN: Results[i]["IN"],
-                                            ItemId: Results[i]["ItemId"],
-                                            ItemCode: Results[i]["ItemCode"],
-                                            Item: Results[i]["Item"],
-                                            Particulars: Results[i]["Particulars"],
-                                            UnitId: Results[i]["UnitId"],
-                                            Unit: Results[i]["Unit"],
-                                            Quantity: Results[i]["Quantity"],
-                                            Cost: Results[i]["Cost"],
-                                            Amount: Results[i]["Amount"],
-                                            BaseUnitId: Results[i]["BaseUnitId"],
-                                            BaseUnit: Results[i]["BaseUnit"],
-                                            BaseQuantity: Results[i]["BaseQuantity"],
-                                            BaseCost: Results[i]["BaseCost"]
-                                        });
-                                    }
-                                } else {
-                                    for (i = 0; i < Results.length; i++) {
-                                        items.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()'><i class='fa fa-edit'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()'><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            INId: Results[i]["INId"],
-                                            IN: Results[i]["IN"],
-                                            ItemId: Results[i]["ItemId"],
-                                            ItemCode: Results[i]["ItemCode"],
-                                            Item: Results[i]["Item"],
-                                            Particulars: Results[i]["Particulars"],
-                                            UnitId: Results[i]["UnitId"],
-                                            Unit: Results[i]["Unit"],
-                                            Quantity: Results[i]["Quantity"],
-                                            Cost: Results[i]["Cost"],
-                                            Amount: Results[i]["Amount"],
-                                            BaseUnitId: Results[i]["BaseUnitId"],
-                                            BaseUnit: Results[i]["BaseUnit"],
-                                            BaseQuantity: Results[i]["BaseQuantity"],
-                                            BaseCost: Results[i]["BaseCost"]
-                                        });
-                                    }
+                            } else {
+                                for (i = 0; i < Results.length; i++) {
+                                    items.push({
+                                        EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()'><i class='fa fa-edit'></i> Edit</button>",
+                                        DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()'><i class='fa fa-trash'></i> Delete</button>",
+                                        Id: Results[i]["Id"],
+                                        INId: Results[i]["INId"],
+                                        IN: Results[i]["IN"],
+                                        ItemId: Results[i]["ItemId"],
+                                        ItemCode: Results[i]["ItemCode"],
+                                        Item: Results[i]["Item"],
+                                        Particulars: Results[i]["Particulars"],
+                                        UnitId: Results[i]["UnitId"],
+                                        Unit: Results[i]["Unit"],
+                                        Quantity: Results[i]["Quantity"],
+                                        Cost: Results[i]["Cost"],
+                                        Amount: Results[i]["Amount"],
+                                        BaseUnitId: Results[i]["BaseUnitId"],
+                                        BaseUnit: Results[i]["BaseUnit"],
+                                        BaseQuantity: Results[i]["BaseQuantity"],
+                                        BaseCost: Results[i]["BaseCost"]
+                                    });
                                 }
                             }
-                        });
-
-
-                    }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return items;
-        }
-
-        // ======================================
-        // GET Item Id, Manual Code and Component
-        // ======================================
-        function getArticleItemForManualCodeAndComponent() {
-            articleItems = new wijmo.collections.ObservableArray();
-            $.ajax({
-                url: '/api/listArticleByArticleTypeId/1',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            articleItems.push({
-                                ItemId: results[i]["Id"],
-                                ItemCode: results[i]["ManualArticleCode"],
-                                ItemDescription: results[i]["Article"],
-                                UnitId: results[i]["UnitId"],
-                                Unit: results[i]["Unit"],
-                                Particulars: results[i]["Particulars"]
-                            });
                         }
-                        createCboForManualCode(articleItems);
-                        createCboForItemDescription(articleItems);
-                    }
+                    });
+
+
                 }
-            });
+            }
+        }).fail(function (xhr, textStatus, err) {
+            alert(err);
+        });
+        return items;
+    }
+
+    // ======================================
+    // GET Item Id, Manual Code and Component
+    // ======================================
+    function getArticleItemForManualCodeAndComponent() {
+        articleItems = new wijmo.collections.ObservableArray();
+        $.ajax({
+            url: '/api/listArticleByArticleTypeId/1',
+            cache: false,
+            type: 'GET',
+            contentType: 'application/json; charset=utf-8',
+            data: {},
+            success: function (results) {
+                if (results.length > 0) {
+                    for (i = 0; i < results.length; i++) {
+                        articleItems.push({
+                            ItemId: results[i]["Id"],
+                            ItemCode: results[i]["ManualArticleCode"],
+                            ItemDescription: results[i]["Article"],
+                            UnitId: results[i]["UnitId"],
+                            Unit: results[i]["Unit"],
+                            Particulars: results[i]["Particulars"]
+                        });
+                    }
+                    createCboForManualCode(articleItems);
+                    createCboForItemDescription(articleItems);
+                }
+            }
+        });
+    }
+
+    // ===============
+    // CBO Manual Code
+    // ===============
+    function createCboForManualCode(articleItems) {
+        var ManualCodeCollections = new wijmo.collections.CollectionView(articleItems);
+        var ManualCodeList = new Array();
+        for (var i = 0; i < ManualCodeCollections.items.length; i++) {
+            ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
         }
 
-        // ===============
-        // CBO Manual Code
-        // ===============
-        function createCboForManualCode(articleItems) {
-            var ManualCodeCollections = new wijmo.collections.CollectionView(articleItems);
-            var ManualCodeList = new Array();
-            for (var i = 0; i < ManualCodeCollections.items.length; i++) {
-                ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
-            }
+        cboManualCodeArticleItems.dispose();
+        cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemCode', {
+            placeholder: "Select Manual Code",
+            itemsSource: ManualCodeList,
+            isEditable: false,
+            required: false,
+            selectedValue: document.getElementById('stockInItem_ItemCode_selectedValue').value.toString(),
+            onSelectedIndexChanged: function () {
+                $("#stockInItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
+                $("#stockInItem_ItemCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
+                $("#stockInItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
+                $("#stockInItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                $("#stockInItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                $("#stockInItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                $("#stockInItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                $("#stockInItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
 
-            cboManualCodeArticleItems.dispose();
-            cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemCode', {
-                placeholder: "Select Manual Code",
-                itemsSource: ManualCodeList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('stockInItem_ItemCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#stockInItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
-                    $("#stockInItem_ItemCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
-                    $("#stockInItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
-                    $("#stockInItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
-                    $("#stockInItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
-                    $("#stockInItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
-                    $("#stockInItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
-                    $("#stockInItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
+                stockIns = new wijmo.collections.ObservableArray;
+                var stockInId = @stockInId;
+                    $.ajax({
+                        url: '/api/stockIn/' + stockInId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (Results) {
+                            if (Results.length > 0) {
+                                stockIns.push({
+                                    Id: Results.Id,
+                                    IsProduced: Results.IsProduced,
+                                });
+                            }
+
+                            //document.getElementById('StockIn_Produce').checked = Results.IsProduced;
+
+                            if(Results.IsProduced == true)
+                            {
+                                var inventories = new wijmo.collections.ObservableArray();
+                                var articleId = document.getElementById('stockInItem_ItemId_data').value;
+                                var branchId = document.getElementById('StockIn_Branch_data').value;
+                                $.ajax({
+                                    url: '/api/listArticleInventoryByBranchIdAndArticleId/' + branchId + '/' + articleId,
+                                    cache: false,
+                                    type: 'GET',
+                                    contentType: 'application/json; charset=utf-8',
+                                    data: {},
+                                    success: function (results) {
+                                        if (results.length > 0) {
+                                            for (i = 0; i < results.length; i++) {
+                                                inventories.push({
+                                                    Id: results[i]["Id"],
+                                                    BranchId: results[i]["BranchId"],
+                                                    ArticleId: results[i]["ArticleId"],
+                                                    InventoryCode: results[i]["InventoryCode"],
+                                                    Quantity: results[i]["Quantity"],
+                                                    Cost: results[i]["Cost"],
+                                                    Amount: results[i]["Amount"],
+                                                    Particulars: results[i]["Particulars"]
+                                                });
+                                                //createCboForInventoryCode(inventories);
+                                                if(document.getElementById('StockIn_Produce').checked) {
+                                                    document.getElementById('stockInItem_Cost').value = Math.round(( results[i]["Cost"] ) * 100) / 100;
+                                                } else {
+                                                    document.getElementById('stockInItem_Cost').value = 0;
+                                                }
+                                            }
+                                        } else {
+                                            //createCboForInventoryCode(inventories);
+                                        }
+                                    }
+                                });
+                            } else {
+                                document.getElementById('stockInItem_Cost').value = 0;
+                            }
+                        }
+                    });
 
                     createCboForItemDescription(articleItems);
                     getStockInItemUnitForComboBox();
@@ -1663,6 +1786,65 @@
                     $("#stockInItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
                     $("#stockInItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
                     $("#stockInItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
+
+                    stockIns = new wijmo.collections.ObservableArray;
+                    var stockInId = @stockInId;
+                    $.ajax({
+                        url: '/api/stockIn/' + stockInId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (Results) {
+                            if (Results.length > 0) {
+                                stockIns.push({
+                                    Id: Results.Id,
+                                    IsProduced: Results.IsProduced,
+                                });
+                            }
+
+                            //document.getElementById('StockIn_Produce').checked = Results.IsProduced;
+                            if(Results.IsProduced == true)
+                            {
+                                var inventories = new wijmo.collections.ObservableArray();
+                                var articleId = document.getElementById('stockInItem_ItemId_data').value;
+                                var branchId = document.getElementById('StockIn_Branch_data').value;
+                                $.ajax({
+                                    url: '/api/listArticleInventoryByBranchIdAndArticleId/' + branchId + '/' + articleId,
+                                    cache: false,
+                                    type: 'GET',
+                                    contentType: 'application/json; charset=utf-8',
+                                    data: {},
+                                    success: function (results) {
+                                        if (results.length > 0) {
+                                            for (i = 0; i < results.length; i++) {
+                                                inventories.push({
+                                                    Id: results[i]["Id"],
+                                                    BranchId: results[i]["BranchId"],
+                                                    ArticleId: results[i]["ArticleId"],
+                                                    InventoryCode: results[i]["InventoryCode"],
+                                                    Quantity: results[i]["Quantity"],
+                                                    Cost: results[i]["Cost"],
+                                                    Amount: results[i]["Amount"],
+                                                    Particulars: results[i]["Particulars"]
+                                                });
+                                                //createCboForInventoryCode(inventories);
+                                                if(document.getElementById('StockIn_Produce').checked) {
+                                                    document.getElementById('stockInItem_Cost').value = Math.round(( results[i]["Cost"] ) * 100 ) /100;
+                                                } else {
+                                                    document.getElementById('stockInItem_Cost').value = 0;
+                                                }
+                                            }
+                                        } else {
+                                            //createCboForInventoryCode(inventories);
+                                        }
+                                    }
+                                });
+                            } else {
+                                document.getElementById('stockInItem_Cost').value = 0;
+                            }
+                        }
+                    });
 
                     createCboForManualCode(articleItems);
                     getStockInItemUnitForComboBox();
@@ -1779,15 +1961,15 @@
             document.getElementById('stockInItem_ItemCode_selectedValue').value = '';
             document.getElementById('stockInItem_ItemDescription_selectedValue').value = '';
             document.getElementById('stockInItem_Particulars').value = '';
-            document.getElementById('stockInItem_Quantity').value = '';
+            document.getElementById('stockInItem_Quantity').value = 0;
             document.getElementById('stockInItem_Unit_data').value = '';
             document.getElementById('stockInItem_Unit_selectedValue').value = '';
-            document.getElementById('stockInItem_Cost').value = '';
-            document.getElementById('stockInItem_Amount').value = '';
+            document.getElementById('stockInItem_Cost').value = 0;
+            document.getElementById('stockInItem_Amount').value = 0;
             document.getElementById('stockInItem_BUCUnit_data').value = '';
             document.getElementById('stockInItem_BUCUnit_selectedValue').value = '';
-            document.getElementById('stockInItem_BUCQuantity').value = '';
-            document.getElementById('stockInItem_BUCCost').value = '';
+            document.getElementById('stockInItem_BUCQuantity').value = 0;
+            document.getElementById('stockInItem_BUCCost').value = 0;
         }
 
         // ==================
@@ -1905,370 +2087,499 @@
             var stockInItmeObject = new Object();
             var INId = @stockInId;
 
-            var stockInItemId = document.getElementById('stockInItem_Id').value;
-            stockInItmeObject.INId = INId;
-            stockInItmeObject.ItemId = document.getElementById('stockInItem_ItemId_data').value;
-            stockInItmeObject.Particulars = document.getElementById('stockInItem_Particulars').value;
-            stockInItmeObject.UnitId = document.getElementById('stockInItem_Unit_data').value;
-            stockInItmeObject.Quantity = document.getElementById('stockInItem_Quantity').value;
-            stockInItmeObject.Cost = document.getElementById('stockInItem_Cost').value;
-            stockInItmeObject.Amount = document.getElementById('stockInItem_Amount').value;
-            stockInItmeObject.BaseUnitId = document.getElementById('stockInItem_BUCUnit_data').value;
-            stockInItmeObject.BaseCost = document.getElementById('stockInItem_BUCCost').value;
-            stockInItmeObject.BaseQuantity = document.getElementById('stockInItem_BUCQuantity').value;
-            var stockInItemData = JSON.stringify(stockInItmeObject);
+        var stockInItemId = document.getElementById('stockInItem_Id').value;
+        stockInItmeObject.INId = INId;
+        stockInItmeObject.ItemId = document.getElementById('stockInItem_ItemId_data').value;
+        stockInItmeObject.Particulars = document.getElementById('stockInItem_Particulars').value;
+        stockInItmeObject.UnitId = document.getElementById('stockInItem_Unit_data').value;
+        stockInItmeObject.Quantity = document.getElementById('stockInItem_Quantity').value;
+        stockInItmeObject.Cost = document.getElementById('stockInItem_Cost').value;
+        stockInItmeObject.Amount = document.getElementById('stockInItem_Amount').value;
+        stockInItmeObject.BaseUnitId = document.getElementById('stockInItem_BUCUnit_data').value;
+        stockInItmeObject.BaseCost = document.getElementById('stockInItem_BUCCost').value;
+        stockInItmeObject.BaseQuantity = document.getElementById('stockInItem_BUCQuantity').value;
+        var stockInItemData = JSON.stringify(stockInItmeObject);
 
-            if( document.getElementById('stockInItem_ItemId_data').value == '') {
-                document.getElementById("stockInItem_ItemCode").style.border = "1px solid red";
-                document.getElementById("stockInItem_ItemDescription").style.border = "1px solid red";
-            } else {
-                document.getElementById("stockInItem_ItemCode").style.border = "1px solid #C8C8C8";
-                document.getElementById("stockInItem_ItemDescription").style.border = "1px solid #C8C8C8";
-            }
+        if( document.getElementById('stockInItem_ItemId_data').value == '') {
+            document.getElementById("stockInItem_ItemCode").style.border = "1px solid red";
+            document.getElementById("stockInItem_ItemDescription").style.border = "1px solid red";
+        } else {
+            document.getElementById("stockInItem_ItemCode").style.border = "1px solid #C8C8C8";
+            document.getElementById("stockInItem_ItemDescription").style.border = "1px solid #C8C8C8";
+        }
 
-            if( document.getElementById('stockInItem_Unit_data').value == '') {
-                document.getElementById("stockInItem_Unit").style.border = "1px solid red";
-            } else {
-                document.getElementById("stockInItem_Unit").style.border = "1px solid #C8C8C8";
-            }
+        if( document.getElementById('stockInItem_Unit_data').value == '') {
+            document.getElementById("stockInItem_Unit").style.border = "1px solid red";
+        } else {
+            document.getElementById("stockInItem_Unit").style.border = "1px solid #C8C8C8";
+        }
 
-            if( document.getElementById('stockInItem_BUCUnit_data').value == '') {
-                document.getElementById("stockInItem_BUCUnit").style.border = "1px solid red";
-            } else {
-                document.getElementById("stockInItem_BUCUnit").style.border = "1px solid #C8C8C8";
-            }
+        if( document.getElementById('stockInItem_BUCUnit_data').value == '') {
+            document.getElementById("stockInItem_BUCUnit").style.border = "1px solid red";
+        } else {
+            document.getElementById("stockInItem_BUCUnit").style.border = "1px solid #C8C8C8";
+        }
 
-            var isValid = true;
-            $('.requiredStockInItem').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "1px solid red"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
+        var isValid = true;
+        $('.requiredStockInItem').each(function () {
+            if ($.trim($(this).val()) == '') {
+                isValid = false;
+                $(this).css({
+                    "border": "1px solid red"
+                });
             }
             else {
-                $("#cmdSaveStockInItemButton").prop("disabled", true);
-                $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
-                if (stockInItemId == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addStockInItem',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: stockInItemData,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdSaveStockInItemButton").prop("disabled", true);
-                                $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Saved");
+                $(this).css({
+                    "border": "",
+                });
+            }
+        });
+        if (isValid == false) {
+            toastr.error("Invalid Entry");
+        }
+        else {
+            $("#cmdSaveStockInItemButton").prop("disabled", true);
+            $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+            if (stockInItemId == 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addStockInItem',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: stockInItemData,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdSaveStockInItemButton").prop("disabled", true);
+                            $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Saved");
 
-                                $('#stockInItemsEdit').modal('hide');
+                            $('#stockInItemsEdit').modal('hide');
 
-                                items = new wijmo.collections.CollectionView(getItem());
-                                items.canFilter = true;
-                                items.pageSize = 15;
+                            items = new wijmo.collections.CollectionView(getItem());
+                            items.canFilter = true;
+                            items.pageSize = 15;
 
-                                var filterTextItem = '';
-                                $('#InputFilterItem').keyup(function () {
-                                    filterTextItem = this.value.toLowerCase();
-                                    items.refresh();
-                                });
-                                items.filter = function (item) {
-                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
-                                }
-                                items.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsItem();
-                                });
-
-                                // Flex Grid for Items
-                                itemGrid.itemsSource = items;
-                                itemGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $('#stockInItemsEdit').modal('hide');
-                                $("#cmdSaveStockInItemButton").prop("disabled", false);
-                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $('#stockInItemsEdit').modal('hide');
-                                $("#cmdSaveStockInItemButton").prop("disabled", false);
-                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                            var filterTextItem = '';
+                            $('#InputFilterItem').keyup(function () {
+                                filterTextItem = this.value.toLowerCase();
+                                items.refresh();
+                            });
+                            items.filter = function (item) {
+                                return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
                             }
+                            items.collectionChanged.addHandler(function (sender, args) {
+                                updateNavigateButtonsItem();
+                            });
+
+                            // Flex Grid for Items
+                            itemGrid.itemsSource = items;
+                            itemGrid.trackChanges = true;
+                        },
+                        404: function () {
+                            toastr.error("Can't Save");
+                            $('#stockInItemsEdit').modal('hide');
+                            $("#cmdSaveStockInItemButton").prop("disabled", false);
+                            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            $('#stockInItemsEdit').modal('hide');
+                            $("#cmdSaveStockInItemButton").prop("disabled", false);
+                            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
                         }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateStockInItem/' + stockInItemId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: stockInItemData,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdSaveStockInItemButton").prop("disabled", true);
-                                $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Updated");
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateStockInItem/' + stockInItemId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: stockInItemData,
+                    statusCode: {
+                        200: function () {
+                            $("#cmdSaveStockInItemButton").prop("disabled", true);
+                            $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+                            toastr.success("Successfully Updated");
 
-                                $('#stockInItemsEdit').modal('hide');
+                            $('#stockInItemsEdit').modal('hide');
 
-                                items = new wijmo.collections.CollectionView(getItem());
-                                items.canFilter = true;
-                                items.pageSize = 15;
+                            items = new wijmo.collections.CollectionView(getItem());
+                            items.canFilter = true;
+                            items.pageSize = 15;
 
-                                var filterTextItem = '';
-                                $('#InputFilterItem').keyup(function () {
-                                    filterTextItem = this.value.toLowerCase();
-                                    items.refresh();
-                                });
-                                items.filter = function (item) {
-                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
-                                }
-                                items.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsItem();
-                                });
-
-                                // Flex Grid for Items
-                                itemGrid.itemsSource = items;
-                                itemGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Can't Update");
-                                $('#stockInItemsEdit').modal('hide');
-                                $("#cmdSaveStockInItemButton").prop("disabled", false);
-                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $('#stockInItemsEdit').modal('hide');
-                                $("#cmdSaveStockInItemButton").prop("disabled", false);
-                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                            var filterTextItem = '';
+                            $('#InputFilterItem').keyup(function () {
+                                filterTextItem = this.value.toLowerCase();
+                                items.refresh();
+                            });
+                            items.filter = function (item) {
+                                return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
                             }
+                            items.collectionChanged.addHandler(function (sender, args) {
+                                updateNavigateButtonsItem();
+                            });
+
+                            // Flex Grid for Items
+                            itemGrid.itemsSource = items;
+                            itemGrid.trackChanges = true;
+                        },
+                        404: function () {
+                            toastr.error("Can't Update");
+                            $('#stockInItemsEdit').modal('hide');
+                            $("#cmdSaveStockInItemButton").prop("disabled", false);
+                            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            $('#stockInItemsEdit').modal('hide');
+                            $("#cmdSaveStockInItemButton").prop("disabled", false);
+                            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
                         }
-                    });
-                }
+                    }
+                });
             }
         }
+    }
 
-        // ============================
-        // Navigation Buttons for Items
-        // ============================
-        function updateNavigateButtonsItem() {
-            if (items.pageSize <= 0) {
-                document.getElementById('navigationPageGridItem').style.display = 'none';
+    // ============================
+    // Navigation Buttons for Items
+    // ============================
+    function updateNavigateButtonsItem() {
+        if (items.pageSize <= 0) {
+            document.getElementById('navigationPageGridItem').style.display = 'none';
+            return;
+        }
+        document.getElementById('navigationPageGridItem').style.display = 'block';
+        if (items.pageIndex === 0) {
+            btnFirstPageGridItem.setAttribute('disabled', 'disabled');
+            btnPreviousPageGridItem.setAttribute('disabled', 'disabled');
+            btnNextPageGridItem.removeAttribute('disabled');
+            btnLastPageGridItem.removeAttribute('disabled');
+        } else if (items.pageIndex === (items.pageCount - 1)) {
+            btnFirstPageGridItem.removeAttribute('disabled');
+            btnPreviousPageGridItem.removeAttribute('disabled');
+            btnLastPageGridItem.setAttribute('disabled', 'disabled');
+            btnNextPageGridItem.setAttribute('disabled', 'disabled');
+        } else {
+            btnFirstPageGridItem.removeAttribute('disabled');
+            btnPreviousPageGridItem.removeAttribute('disabled');
+            btnNextPageGridItem.removeAttribute('disabled');
+            btnLastPageGridItem.removeAttribute('disabled');
+        }
+        btnCurrentPageGridItem.innerHTML = (items.pageIndex + 1) + ' / ' + items.pageCount;
+    }
+
+    // ======
+    //  Items
+    // ======
+    function itemTab() {
+        $("#stockInItem_Quantity").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
                 return;
             }
-            document.getElementById('navigationPageGridItem').style.display = 'block';
-            if (items.pageIndex === 0) {
-                btnFirstPageGridItem.setAttribute('disabled', 'disabled');
-                btnPreviousPageGridItem.setAttribute('disabled', 'disabled');
-                btnNextPageGridItem.removeAttribute('disabled');
-                btnLastPageGridItem.removeAttribute('disabled');
-            } else if (items.pageIndex === (items.pageCount - 1)) {
-                btnFirstPageGridItem.removeAttribute('disabled');
-                btnPreviousPageGridItem.removeAttribute('disabled');
-                btnLastPageGridItem.setAttribute('disabled', 'disabled');
-                btnNextPageGridItem.setAttribute('disabled', 'disabled');
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $("#stockInItem_Cost").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $("#stockInItem_Amount").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $("#stockInItem_BUCQuantity").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $("#stockInItem_BUCCost").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        $('#stockInItem_Quantity').keyup(function() {
+            document.getElementById('stockInItem_BUCQuantity').value = this.value;
+
+            var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value;
+            var stockIn_Cost = document.getElementById('stockInItem_Cost').value;
+
+            document.getElementById('stockInItem_Amount').value = Math.round(( stockIn_Quantity * stockIn_Cost ) * 100 ) / 100;
+            if(this.value == 0) {
+                document.getElementById('stockInItem_BUCCost').value = 0;
             } else {
-                btnFirstPageGridItem.removeAttribute('disabled');
-                btnPreviousPageGridItem.removeAttribute('disabled');
-                btnNextPageGridItem.removeAttribute('disabled');
-                btnLastPageGridItem.removeAttribute('disabled');
+                document.getElementById('stockInItem_BUCCost').value = stockIn_Cost;
             }
-            btnCurrentPageGridItem.innerHTML = (items.pageIndex + 1) + ' / ' + items.pageCount;
+        });
+
+        $('#stockInItem_Cost').keyup(function() {
+            document.getElementById('stockInItem_BUCCost').value = this.value;;
+
+            var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value;
+            var stockIn_Cost = document.getElementById('stockInItem_Cost').value;
+
+            document.getElementById('stockInItem_Amount').value = Math.round(( stockIn_Quantity * stockIn_Cost ) * 100 ) / 100;
+        });
+
+
+        document.getElementById('stockInItem_BUCQuantity').disabled = true;
+        document.getElementById('stockInItem_BUCCost').disabled = true;
+        document.getElementById('stockInItem_Amount').disabled = true;
+        document.getElementById('stockInItem_Cost').disabled = true;
+
+        cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemCode');
+        cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemDescription');
+        cboStockInUnit = new wijmo.input.ComboBox('#stockInItem_Unit');
+        cboBaseUnit = new wijmo.input.ComboBox('#stockInItem_BUCUnit');
+
+        items = new wijmo.collections.CollectionView(getItem());
+        items.canFilter = true;
+        items.pageSize = 15;
+
+        var filterTextItem = '';
+        $('#InputFilterItem').keyup(function () {
+            filterTextItem = this.value.toLowerCase();
+            items.refresh();
+        });
+        items.filter = function (item) {
+            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
         }
-
-        // ======
-        //  Items
-        // ======
-        function itemTab() {
-            cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemCode');
-            cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemDescription');
-            cboStockInUnit = new wijmo.input.ComboBox('#stockInItem_Unit');
-            cboBaseUnit = new wijmo.input.ComboBox('#stockInItem_BUCUnit');
-
-            items = new wijmo.collections.CollectionView(getItem());
-            items.canFilter = true;
-            items.pageSize = 15;
-
-            var filterTextItem = '';
-            $('#InputFilterItem').keyup(function () {
-                filterTextItem = this.value.toLowerCase();
-                items.refresh();
-            });
-            items.filter = function (item) {
-                return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
-            }
-            items.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsItem();
-            });
-
-            // Flex Grid for Items
-            itemGrid = new wijmo.grid.FlexGrid('#ItemGrid');
-            itemGrid.initialize({
-                columns: [
-                            {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 60,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Item Code",
-                                "binding": "ItemCode",
-                                "allowSorting": true,
-                                "width": 150
-                            },
-                            {
-                                "header": "Item Description",
-                                "binding": "Item",
-                                "allowSorting": true,
-                                "width": 350
-                            },
-                            {
-                                "header": "Particulars",
-                                "binding": "Particulars",
-                                "allowSorting": true,
-                                "width": 300
-                            },
-                            {
-                                "header": "Quantity",
-                                "binding": "Quantity",
-                                "allowSorting": true,
-                                "width": 130
-                            },
-                            {
-                                "header": "Unit",
-                                "binding": "Unit",
-                                "allowSorting": true,
-                                "width": 200
-                            },
-                            {
-                                "header": "Cost",
-                                "binding": "Cost",
-                                "allowSorting": true,
-                                "width": 130
-                            },
-                             {
-                                 "header": "Amount",
-                                 "binding": "Amount",
-                                 "allowSorting": true,
-                                 "width": 130
-                             },
-                             {
-                                 "header": "Unit",
-                                 "binding": "BaseUnit",
-                                 "allowSorting": true,
-                                 "width": 200
-                             },
-                            {
-                                "header": "Quantity",
-                                "binding": "BaseQuantity",
-                                "allowSorting": true,
-                                "width": 130
-                            },
-                           {
-                               "header": "Cost",
-                               "binding": "BaseCost",
-                               "allowSorting": true,
-                               "width": 130
-                           },
-                ],
-                autoGenerateColumns: false,
-                itemsSource: items,
-                isReadOnly: true,
-                frozenColumns: 2,
-                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-                allowDragging: wijmo.grid.AllowDragging.None,
-                selectionMode: wijmo.grid.SelectionMode.Row
-            });
-
-            itemGrid.trackChanges = true;
-
-            var hr = new wijmo.grid.Row();
-            itemGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
-            itemGrid.columnHeaders.rows.push(hr);
-            itemGrid.columnHeaders.rows[0].allowMerging = true;
-
-            itemGrid.columnHeaders.columns[0].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 0, 'Edit');
-
-            itemGrid.columnHeaders.columns[1].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 1, 'Delete');
-
-            itemGrid.columnHeaders.columns[2].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 2, 'Item Code');
-
-            itemGrid.columnHeaders.columns[3].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 3, 'Item Description');
-
-            itemGrid.columnHeaders.columns[4].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 4, 'Particulars');
-
-            itemGrid.columnHeaders.columns[5].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 5, 'Quantity');
-
-            itemGrid.columnHeaders.columns[6].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 6, 'Unit');
-
-            itemGrid.columnHeaders.columns[7].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 7, 'Cost');
-
-            itemGrid.columnHeaders.columns[8].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 8, 'Amount');
-
-            for (var columnBasicUnitConversion = 9; columnBasicUnitConversion <= 11; columnBasicUnitConversion++) {
-                itemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
-            }
-
-            //Navigation button for Items
-            btnFirstPageGridItem = document.getElementById('btnMoveToFirstPageGridItem');
-            btnPreviousPageGridItem = document.getElementById('btnMoveToPreviousPageGridItem');
-            btnNextPageGridItem = document.getElementById('btnMoveToNextPageGridItem');
-            btnLastPageGridItem = document.getElementById('btnMoveToLastPageGridItem');
-            btnCurrentPageGridItem = document.getElementById('btnCurrentPageGridItem');
-
+        items.collectionChanged.addHandler(function (sender, args) {
             updateNavigateButtonsItem();
+        });
 
-            btnFirstPageGridItem.addEventListener('click', function () {
-                items.moveToFirstPage();
-                updateNavigateButtonsItem();
-            });
-            btnPreviousPageGridItem.addEventListener('click', function () {
-                items.moveToPreviousPage();
-                updateNavigateButtonsItem();
-            });
-            btnNextPageGridItem.addEventListener('click', function () {
-                items.moveToNextPage();
-                updateNavigateButtonsItem();
-            });
-            btnLastPageGridItem.addEventListener('click', function () {
-                items.moveToLastPage();
-                updateNavigateButtonsItem();
-            });
+        // Flex Grid for Items
+        itemGrid = new wijmo.grid.FlexGrid('#ItemGrid');
+        itemGrid.initialize({
+            columns: [
+                        {
+                            "header": "Edit",
+                            "binding": "EditId",
+                            "width": 60,
+                            "align": "center",
+                            "allowResizing": false,
+                            "allowSorting": false,
+                            "isContentHtml": true
+                        },
+                        {
+                            "header": "Delete",
+                            "binding": "DeleteId",
+                            "width": 70,
+                            "align": "center",
+                            "allowResizing": false,
+                            "allowSorting": false,
+                            "isContentHtml": true
+                        },
+                        {
+                            "header": "Item Code",
+                            "binding": "ItemCode",
+                            "allowSorting": true,
+                            "width": 150
+                        },
+                        {
+                            "header": "Item Description",
+                            "binding": "Item",
+                            "allowSorting": true,
+                            "width": 350
+                        },
+                        {
+                            "header": "Particulars",
+                            "binding": "Particulars",
+                            "allowSorting": true,
+                            "width": 300
+                        },
+                        {
+                            "header": "Quantity",
+                            "binding": "Quantity",
+                            "allowSorting": true,
+                            "width": 130
+                        },
+                        {
+                            "header": "Unit",
+                            "binding": "Unit",
+                            "allowSorting": true,
+                            "width": 200
+                        },
+                        {
+                            "header": "Cost",
+                            "binding": "Cost",
+                            "allowSorting": true,
+                            "width": 130
+                        },
+                         {
+                             "header": "Amount",
+                             "binding": "Amount",
+                             "allowSorting": true,
+                             "width": 130
+                         },
+                         {
+                             "header": "Unit",
+                             "binding": "BaseUnit",
+                             "allowSorting": true,
+                             "width": 200
+                         },
+                        {
+                            "header": "Quantity",
+                            "binding": "BaseQuantity",
+                            "allowSorting": true,
+                            "width": 130
+                        },
+                       {
+                           "header": "Cost",
+                           "binding": "BaseCost",
+                           "allowSorting": true,
+                           "width": 130
+                       },
+            ],
+            autoGenerateColumns: false,
+            itemsSource: items,
+            isReadOnly: true,
+            frozenColumns: 2,
+            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+            allowDragging: wijmo.grid.AllowDragging.None,
+            selectionMode: wijmo.grid.SelectionMode.Row
+        });
+
+        itemGrid.trackChanges = true;
+
+        var hr = new wijmo.grid.Row();
+        itemGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+        itemGrid.columnHeaders.rows.push(hr);
+        itemGrid.columnHeaders.rows[0].allowMerging = true;
+
+        itemGrid.columnHeaders.columns[0].allowMerging = true;
+        itemGrid.columnHeaders.setCellData(0, 0, 'Edit');
+
+        itemGrid.columnHeaders.columns[1].allowMerging = true;
+        itemGrid.columnHeaders.setCellData(0, 1, 'Delete');
+
+        itemGrid.columnHeaders.columns[2].allowMerging = true;
+        itemGrid.columnHeaders.setCellData(0, 2, 'Item Code');
+
+        itemGrid.columnHeaders.columns[3].allowMerging = true;
+        itemGrid.columnHeaders.setCellData(0, 3, 'Item Description');
+
+        itemGrid.columnHeaders.columns[4].allowMerging = true;
+        itemGrid.columnHeaders.setCellData(0, 4, 'Particulars');
+
+        itemGrid.columnHeaders.columns[5].allowMerging = true;
+        itemGrid.columnHeaders.setCellData(0, 5, 'Quantity');
+
+        itemGrid.columnHeaders.columns[6].allowMerging = true;
+        itemGrid.columnHeaders.setCellData(0, 6, 'Unit');
+
+        itemGrid.columnHeaders.columns[7].allowMerging = true;
+        itemGrid.columnHeaders.setCellData(0, 7, 'Cost');
+
+        itemGrid.columnHeaders.columns[8].allowMerging = true;
+        itemGrid.columnHeaders.setCellData(0, 8, 'Amount');
+
+        for (var columnBasicUnitConversion = 9; columnBasicUnitConversion <= 11; columnBasicUnitConversion++) {
+            itemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
         }
+
+        //Navigation button for Items
+        btnFirstPageGridItem = document.getElementById('btnMoveToFirstPageGridItem');
+        btnPreviousPageGridItem = document.getElementById('btnMoveToPreviousPageGridItem');
+        btnNextPageGridItem = document.getElementById('btnMoveToNextPageGridItem');
+        btnLastPageGridItem = document.getElementById('btnMoveToLastPageGridItem');
+        btnCurrentPageGridItem = document.getElementById('btnCurrentPageGridItem');
+
+        updateNavigateButtonsItem();
+
+        btnFirstPageGridItem.addEventListener('click', function () {
+            items.moveToFirstPage();
+            updateNavigateButtonsItem();
+        });
+        btnPreviousPageGridItem.addEventListener('click', function () {
+            items.moveToPreviousPage();
+            updateNavigateButtonsItem();
+        });
+        btnNextPageGridItem.addEventListener('click', function () {
+            items.moveToNextPage();
+            updateNavigateButtonsItem();
+        });
+        btnLastPageGridItem.addEventListener('click', function () {
+            items.moveToLastPage();
+            updateNavigateButtonsItem();
+        });
+    }
     </script>
 
     <!-- ========================= -->
@@ -2495,6 +2806,245 @@
     <!-- Tab Current Page on Load Scripts -->
     <!-- ================================ -->
     <script type="text/javascript">
+        var journals;
+        var journalListGrid;
+
+        var btnFirstPageGridJournal;
+        var btnPreviousPageGridJournal;
+        var btnNextPageGridJournal;
+        var btnLastPageGridJournal;
+        var btnCurrentPageGridJournal;
+
+        // ===========
+        // Get Journal
+        // ===========
+        function getJournalListForStockIn() {
+            var journals = new wijmo.collections.ObservableArray;
+            var INId = @stockInId;
+            //$('#loadingModal').modal('show');
+            $.ajax({
+                url: '/api/listJournalByINId/' + INId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    //$('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            journals.push({
+                                //EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                //DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdJournalVoucherLineDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                Id: Results[i]["Id"],
+                                JournalDate: Results[i]["JournalDate"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                AccountId: Results[i]["AccountId"],
+                                AccountCode: Results[i]["AccountCode"],
+                                Account: Results[i]["Account"],
+                                ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
+                                Particulars: Results[i]["Particulars"],
+                                DebitAmount: Results[i]["DebitAmount"],
+                                CreditAmount: Results[i]["CreditAmount"],
+                                ORId: Results[i]["ORId"],
+                                CVId: Results[i]["CVId"],
+                                JVId: Results[i]["JVId"],
+                                RRId: Results[i]["RRId"],
+                                SIId: Results[i]["SIId"],
+                                INId: Results[i]["INId"],
+                                OTId: Results[i]["OTId"],
+                                STId: Results[i]["STId"],
+                                DocumentReference: Results[i]["DocumentReference"],
+                                APRRId: Results[i]["APRRId"],
+                                ARSIId: Results[i]["ARSIId"]
+                            });
+
+                            var debitAmountTotal = 0;
+                            var creditAmountTotal = 0;
+
+                            var a = 0;
+                            while (a < Results.length) {
+                                debitAmountTotal += Results[a]["DebitAmount"];
+                                creditAmountTotal += Results[a]["CreditAmount"];
+                                a++;
+                            }
+                        }
+
+                        document.getElementById('totalDebitInJournal').innerHTML = debitAmountTotal.toLocaleString();
+                        document.getElementById('totalCreditInJournal').innerHTML = creditAmountTotal.toLocaleString();
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return journals;
+        }
+
+        // ==============================
+        // Navigation Buttons for Journal
+        // ==============================
+        function updateNavigateButtonsJournal() {
+            if (journals.pageSize <= 0) {
+                document.getElementById('navigationPageGridJournal').style.display = 'none';
+                return;
+            }
+            document.getElementById('navigationPageGridJournal').style.display = 'block';
+            if (journals.pageIndex === 0) {
+                btnFirstPageGridJournal.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            } else if (journals.pageIndex === (journals.pageCount - 1)) {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.setAttribute('disabled', 'disabled');
+                btnNextPageGridJournal.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridJournal.removeAttribute('disabled');
+                btnPreviousPageGridJournal.removeAttribute('disabled');
+                btnNextPageGridJournal.removeAttribute('disabled');
+                btnLastPageGridJournal.removeAttribute('disabled');
+            }
+            btnCurrentPageGridJournal.innerHTML = (journals.pageIndex + 1) + ' / ' + journals.pageCount;
+        }
+
+
+
+        // ============
+        // Journal List
+        // ============
+        function stockInJournal_OnClick() {
+            journals = new wijmo.collections.CollectionView(getJournalListForStockIn());
+            journals.pageSize = 10;
+
+            document.getElementById("loadingJournalGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Journal...';
+
+            $("#loadingJournalGridList").show();
+            $("#footerModalJournalNavigationButtons").hide();
+            setTimeout(function() {
+                $("#loadingJournalGridList").hide();
+                $("#footerModalJournalNavigationButtons").show();
+                // Flex Grid
+                journalListGrid = new wijmo.grid.FlexGrid('#journalGrid');
+                journalListGrid.initialize({
+                    columns: [
+                                //{
+                                //    "header": "Edit",
+                                //    "binding": "EditId",
+                                //    "width": 60,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                //{
+                                //    "header": "Delete",
+                                //    "binding": "DeleteId",
+                                //    "width": 70,
+                                //    "align": "center",
+                                //    "allowResizing": false,
+                                //    "allowSorting": false,
+                                //    "isContentHtml": true
+                                //},
+                                {
+                                    "header": "Date",
+                                    "binding": "JournalDate",
+                                    "allowSorting": true,
+                                    "width": 150,
+                                },
+                                {
+                                    "header": "Branch",
+                                    "binding": "Branch",
+                                    "allowSorting": true,
+                                    "width": 220
+                                },
+                                {
+                                    "header": "Code",
+                                    "binding": "AccountCode",
+                                    "allowSorting": true,
+                                    "width": 100
+                                },
+                                {
+                                    "header": "Account",
+                                    "binding": "Account",
+                                    "allowSorting": true,
+                                    "width": 250
+                                },
+                                {
+                                    "header": "Article",
+                                    "binding": "Article",
+                                    "allowSorting": true,
+                                    "width": 350
+                                },
+                                {
+                                    "header": "Debit Amount",
+                                    "binding": "DebitAmount",
+                                    "allowSorting": true,
+                                    "width": 130
+                                }
+                                ,
+                                {
+                                    "header": "Credit Amount",
+                                    "binding": "CreditAmount",
+                                    "allowSorting": true,
+                                    "width": 130
+                                }
+
+                    ],
+                    autoGenerateColumns: false,
+                    itemsSource: journals,
+                    isReadOnly: true,
+                    autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                    allowDragging: wijmo.grid.AllowDragging.None,
+                    selectionMode: wijmo.grid.SelectionMode.Row
+                });
+
+                journalListGrid.trackChanges = true;
+
+
+                //Navigation button
+                btnFirstPageGridJournal = document.getElementById('btnMoveToFirstPageGridJournal');
+                btnPreviousPageGridJournal = document.getElementById('btnMoveToPreviousPageGridJournal');
+                btnNextPageGridJournal = document.getElementById('btnMoveToNextPageGridJournal');
+                btnLastPageGridJournal = document.getElementById('btnMoveToLastPageGridJournal');
+                btnCurrentPageGridJournal = document.getElementById('btnCurrentPageGridJournal');
+
+                updateNavigateButtonsJournal();
+
+                btnFirstPageGridJournal.addEventListener('click', function () {
+                    journals.moveToFirstPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnPreviousPageGridJournal.addEventListener('click', function () {
+                    journals.moveToPreviousPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnNextPageGridJournal.addEventListener('click', function () {
+                    journals.moveToNextPage();
+                    updateNavigateButtonsJournal();
+                });
+                btnLastPageGridJournal.addEventListener('click', function () {
+                    journals.moveToLastPage();
+                    updateNavigateButtonsJournal();
+                });
+
+            }, 1000);
+        }
+
+        // journal detail
+        $('#cmdStockInJournal').click(function () {
+            $('#journalDetail').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            window.stockInJournal_OnClick = function () {
+                return true;
+            };
+        });
+
+
         // ====
         // TABS
         // ====
@@ -2515,6 +3065,7 @@
             };
         });
 
+        // On load page
         $(document).ready(function () {
             $('#Items').show();
             $('#InventoryEntries').hide();

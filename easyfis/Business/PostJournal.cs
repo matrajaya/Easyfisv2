@@ -10,6 +10,209 @@ namespace easyfis.Business
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // ===================
+        // Stock-IN in journal
+        // ===================
+        // insert Stock-IN in journal
+        public void insertINJournal(Int32 INId)
+        {
+            String JournalDate = "";
+            Int32 BranchId = 0;
+            String BranchCode = "";
+            //Int32 AccountId = 0;
+            Int32 ArticleId = 0;
+            String INNumber = "";
+            Decimal Amount = 0;
+            //Decimal Cost = 0;
+
+            // stock in header
+            var stockInHeaders = from d in db.TrnStockIns
+                                 where d.Id == INId
+                                 select new Models.TrnStockIn
+                                 {
+                                     Id = d.Id,
+                                     BranchId = d.BranchId,
+                                     Branch = d.MstBranch.Branch,
+                                     BranchCode = d.MstBranch.BranchCode,
+                                     INNumber = d.INNumber,
+                                     INDate = d.INDate.ToShortDateString(),
+                                     AccountId = d.AccountId,
+                                     Account = d.MstAccount.Account,
+                                     ArticleId = d.ArticleId,
+                                     Article = d.MstArticle.Article,
+                                     Particulars = d.Particulars,
+                                     ManualINNumber = d.ManualINNumber,
+                                     IsProduced = d.IsProduced,
+                                     PreparedById = d.PreparedById,
+                                     PreparedBy = d.MstUser3.FullName,
+                                     CheckedById = d.CheckedById,
+                                     CheckedBy = d.MstUser1.FullName,
+                                     ApprovedById = d.ApprovedById,
+                                     ApprovedBy = d.MstUser.FullName,
+                                     IsLocked = d.IsLocked,
+                                     CreatedById = d.CreatedById,
+                                     CreatedBy = d.MstUser2.FullName,
+                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                     UpdatedById = d.UpdatedById,
+                                     UpdatedBy = d.MstUser4.FullName,
+                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                 };
+
+            // stock in items
+            var stockInItems = from d in db.TrnStockInItems
+                               where d.INId == INId
+                               group d by new
+                               {
+                                   AccountId = d.MstArticle.AccountId,
+                                   INId = d.INId
+                               } into g
+                               select new Models.TrnStockInItem
+                               {
+                                   AccountId = g.Key.AccountId,
+                                   INId = g.Key.INId,
+                                   Amount = g.Sum(d => d.Amount)
+                               };
+
+            try
+            {
+                if (stockInHeaders.Any())
+                {
+                    if (stockInItems.Any())
+                    {
+                        foreach (var stockInHeader in stockInHeaders)
+                        {
+                            JournalDate = stockInHeader.INDate;
+                            BranchId = stockInHeader.BranchId;
+                            BranchCode = stockInHeader.BranchCode;
+                            INNumber = stockInHeader.INNumber;
+                            ArticleId = stockInHeader.ArticleId;
+
+
+                            // Inventory
+                            foreach (var stockInItem in stockInItems)
+                            {
+                                if (stockInItem.Amount > 0)
+                                {
+                                    Data.TrnJournal newORJournalForInventory = new Data.TrnJournal();
+
+                                    newORJournalForInventory.JournalDate = Convert.ToDateTime(JournalDate);
+                                    newORJournalForInventory.BranchId = BranchId;
+                                    newORJournalForInventory.AccountId = stockInItem.AccountId;
+                                    newORJournalForInventory.ArticleId = ArticleId;
+                                    newORJournalForInventory.Particulars = "Item";
+                                    newORJournalForInventory.DebitAmount = stockInItem.Amount;
+                                    newORJournalForInventory.CreditAmount = 0;
+                                    newORJournalForInventory.ORId = null;
+                                    newORJournalForInventory.CVId = null;
+                                    newORJournalForInventory.JVId = null;
+                                    newORJournalForInventory.RRId = null;
+                                    newORJournalForInventory.SIId = null;
+                                    newORJournalForInventory.INId = INId;
+                                    newORJournalForInventory.OTId = null;
+                                    newORJournalForInventory.STId = null;
+                                    newORJournalForInventory.DocumentReference = "IN-" + BranchCode + "-" + INNumber;
+                                    newORJournalForInventory.APRRId = null;
+                                    newORJournalForInventory.ARSIId = null;
+
+                                    db.TrnJournals.InsertOnSubmit(newORJournalForInventory);
+                                }
+                            }
+
+                            if (stockInHeader.IsProduced == true)
+                            {
+                                // Inventory
+                                foreach (var stockInItem in stockInItems)
+                                {
+                                    if (stockInItem.Amount > 0)
+                                    {
+                                        Data.TrnJournal newORJournalForInventory = new Data.TrnJournal();
+
+                                        newORJournalForInventory.JournalDate = Convert.ToDateTime(JournalDate);
+                                        newORJournalForInventory.BranchId = BranchId;
+                                        newORJournalForInventory.AccountId = stockInItem.AccountId;
+                                        newORJournalForInventory.ArticleId = ArticleId;
+                                        newORJournalForInventory.Particulars = "Components";
+                                        newORJournalForInventory.DebitAmount = 0;
+                                        newORJournalForInventory.CreditAmount = stockInItem.Amount;
+                                        newORJournalForInventory.ORId = null;
+                                        newORJournalForInventory.CVId = null;
+                                        newORJournalForInventory.JVId = null;
+                                        newORJournalForInventory.RRId = null;
+                                        newORJournalForInventory.SIId = null;
+                                        newORJournalForInventory.INId = INId;
+                                        newORJournalForInventory.OTId = null;
+                                        newORJournalForInventory.STId = null;
+                                        newORJournalForInventory.DocumentReference = "IN-" + BranchCode + "-" + INNumber;
+                                        newORJournalForInventory.APRRId = null;
+                                        newORJournalForInventory.ARSIId = null;
+
+                                        db.TrnJournals.InsertOnSubmit(newORJournalForInventory);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // Inventory
+                                foreach (var stockInItem in stockInItems)
+                                {
+                                    Amount = stockInItem.Amount;
+
+                                    if (stockInItem.Amount > 0)
+                                    {
+                                        Data.TrnJournal newORJournalForInventory = new Data.TrnJournal();
+
+                                        newORJournalForInventory.JournalDate = Convert.ToDateTime(JournalDate);
+                                        newORJournalForInventory.BranchId = BranchId;
+                                        newORJournalForInventory.AccountId = stockInHeader.AccountId;
+                                        newORJournalForInventory.ArticleId = ArticleId;
+                                        newORJournalForInventory.Particulars = "Stock In";
+                                        newORJournalForInventory.DebitAmount = 0;
+                                        newORJournalForInventory.CreditAmount = Amount;
+                                        newORJournalForInventory.ORId = null;
+                                        newORJournalForInventory.CVId = null;
+                                        newORJournalForInventory.JVId = null;
+                                        newORJournalForInventory.RRId = null;
+                                        newORJournalForInventory.SIId = null;
+                                        newORJournalForInventory.INId = INId;
+                                        newORJournalForInventory.OTId = null;
+                                        newORJournalForInventory.STId = null;
+                                        newORJournalForInventory.DocumentReference = "IN-" + BranchCode + "-" + INNumber;
+                                        newORJournalForInventory.APRRId = null;
+                                        newORJournalForInventory.ARSIId = null;
+
+                                        db.TrnJournals.InsertOnSubmit(newORJournalForInventory);
+                                    }
+                                }
+                            }
+                        }
+
+                        db.SubmitChanges();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
+        // delete Stock-IN in Journal
+        public void deleteINJournal(Int32 INId)
+        {
+            try
+            {
+                var journals = db.TrnJournals.Where(d => d.INId == INId).ToList();
+                foreach (var j in journals)
+                {
+                    db.TrnJournals.DeleteOnSubmit(j);
+                    db.SubmitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
+
         // =====================
         // Collection in journal
         // =====================
@@ -223,7 +426,7 @@ namespace easyfis.Business
                                 db.TrnJournals.InsertOnSubmit(newORJournalForAccountsReceivable);
                             }
                         }
-                        
+
                         db.SubmitChanges();
                     }
                 }

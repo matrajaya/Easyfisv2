@@ -294,10 +294,12 @@ namespace easyfis.Controllers
                     if (updateStockIn.IsLocked == true)
                     {
                         inventory.insertINInventory(stockIn_Id);
+                        journal.insertINJournal(stockIn_Id);
                     }
                     else
                     {
                         inventory.deleteINInventory(stockIn_Id);
+                        journal.deleteINJournal(stockIn_Id);
                     }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
@@ -343,10 +345,12 @@ namespace easyfis.Controllers
                     if (updateStockIn.IsLocked == true)
                     {
                         inventory.insertINInventory(stockIn_Id);
+                        journal.insertINJournal(stockIn_Id);
                     }
                     else
                     {
                         inventory.deleteINInventory(stockIn_Id);
+                        journal.deleteINJournal(stockIn_Id);
                     }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
