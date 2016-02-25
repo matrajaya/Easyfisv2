@@ -11,6 +11,190 @@ namespace easyfis.Business
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         // ===================
+        // Stock-OUT in journal
+        // ===================
+        // insert Stock-OUT in journal
+        public void insertOTJournal(Int32 OTId)
+        {
+            String JournalDate = "";
+            Int32 BranchId = 0;
+            String BranchCode = "";
+            Int32 AccountId = 0;
+            Int32 ArticleId = 0;
+            String OTNumber = "";
+            Decimal Amount = 0;
+
+            // stock out headers
+            var stockOutHeaders = from d in db.TrnStockOuts
+                                  where d.Id == OTId
+                                  select new Models.TrnStockOut
+                                  {
+                                      Id = d.Id,
+                                      BranchId = d.BranchId,
+                                      Branch = d.MstBranch.Branch,
+                                      BranchCode = d.MstBranch.BranchCode,
+                                      OTNumber = d.OTNumber,
+                                      OTDate = d.OTDate.ToShortDateString(),
+                                      AccountId = d.AccountId,
+                                      Account = d.MstAccount.Account,
+                                      ArticleId = d.ArticleId,
+                                      Article = d.MstArticle.Article,
+                                      Particulars = d.Particulars,
+                                      ManualOTNumber = d.ManualOTNumber,
+                                      PreparedById = d.PreparedById,
+                                      PreparedBy = d.MstUser3.FullName,
+                                      CheckedById = d.CheckedById,
+                                      CheckedBy = d.MstUser1.FullName,
+                                      ApprovedById = d.ApprovedById,
+                                      ApprovedBy = d.MstUser.FullName,
+                                      IsLocked = d.IsLocked,
+                                      CreatedById = d.CreatedById,
+                                      CreatedBy = d.MstUser2.FullName,
+                                      CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                      UpdatedById = d.UpdatedById,
+                                      UpdatedBy = d.MstUser4.FullName,
+                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                  };
+
+            // stockout items expense account id
+            var stockOutItemsForExpenseAccounts = from d in db.TrnStockOutItems
+                                                  where d.OTId == OTId
+                                                  group d by new
+                                                  {
+                                                      ExpenseAccountId = d.ExpenseAccountId,
+                                                      OTId = d.OTId
+                                                  } into g
+                                                  select new Models.TrnStockOutItem
+                                                  {
+                                                      ExpenseAccountId = g.Key.ExpenseAccountId,
+                                                      OTId = g.Key.OTId,
+                                                      Amount = g.Sum(d => d.Amount)
+                                                  };
+
+            // stockout items account id
+            var stockOutItemsForArticleAccounts = from d in db.TrnStockOutItems
+                                                  where d.OTId == OTId
+                                                  group d by new
+                                                  {
+                                                      AccountId = d.MstArticle.AccountId,
+                                                      OTId = d.OTId
+                                                  } into g
+                                                  select new Models.TrnStockOutItem
+                                                  {
+                                                      AccountId = g.Key.AccountId,
+                                                      OTId = g.Key.OTId,
+                                                      Amount = g.Sum(d => d.Amount)
+                                                  };
+
+
+            try
+            {
+                if (stockOutHeaders.Any())
+                {
+                    foreach (var stockOutHeader in stockOutHeaders)
+                    {
+                        JournalDate = stockOutHeader.OTDate;
+                        BranchId = stockOutHeader.BranchId;
+                        BranchCode = stockOutHeader.BranchCode;
+                        OTNumber = stockOutHeader.OTNumber;
+                        ArticleId = stockOutHeader.ArticleId;
+
+                        // cost sales and expenses
+                        if (stockOutItemsForExpenseAccounts.Any())
+                        {
+                            foreach (var stockOutItemsForExpenseAccount in stockOutItemsForExpenseAccounts)
+                            {
+                                if (stockOutItemsForExpenseAccount.Amount > 0)
+                                {
+                                    Data.TrnJournal newORJournalForCostSalesAndExprenses = new Data.TrnJournal();
+
+                                    newORJournalForCostSalesAndExprenses.JournalDate = Convert.ToDateTime(JournalDate);
+                                    newORJournalForCostSalesAndExprenses.BranchId = BranchId;
+                                    newORJournalForCostSalesAndExprenses.AccountId = stockOutItemsForExpenseAccount.ExpenseAccountId;
+                                    newORJournalForCostSalesAndExprenses.ArticleId = ArticleId;
+                                    newORJournalForCostSalesAndExprenses.Particulars = "Item";
+                                    newORJournalForCostSalesAndExprenses.DebitAmount = stockOutItemsForExpenseAccount.Amount;
+                                    newORJournalForCostSalesAndExprenses.CreditAmount = 0;
+                                    newORJournalForCostSalesAndExprenses.ORId = null;
+                                    newORJournalForCostSalesAndExprenses.CVId = null;
+                                    newORJournalForCostSalesAndExprenses.JVId = null;
+                                    newORJournalForCostSalesAndExprenses.RRId = null;
+                                    newORJournalForCostSalesAndExprenses.SIId = null;
+                                    newORJournalForCostSalesAndExprenses.INId = null;
+                                    newORJournalForCostSalesAndExprenses.OTId = OTId;
+                                    newORJournalForCostSalesAndExprenses.STId = null;
+                                    newORJournalForCostSalesAndExprenses.DocumentReference = "OT-" + BranchCode + "-" + OTNumber;
+                                    newORJournalForCostSalesAndExprenses.APRRId = null;
+                                    newORJournalForCostSalesAndExprenses.ARSIId = null;
+
+                                    db.TrnJournals.InsertOnSubmit(newORJournalForCostSalesAndExprenses);
+                                }
+
+                            }
+                        }
+
+                        if (stockOutItemsForArticleAccounts.Any())
+                        {
+                            foreach (var stockOutItemsForArticleAccount in stockOutItemsForArticleAccounts)
+                            {
+                                if (stockOutItemsForArticleAccount.Amount > 0)
+                                {
+                                    Data.TrnJournal newORJournalForCostSalesAndExprenses = new Data.TrnJournal();
+
+                                    newORJournalForCostSalesAndExprenses.JournalDate = Convert.ToDateTime(JournalDate);
+                                    newORJournalForCostSalesAndExprenses.BranchId = BranchId;
+                                    newORJournalForCostSalesAndExprenses.AccountId = stockOutItemsForArticleAccount.AccountId;
+                                    newORJournalForCostSalesAndExprenses.ArticleId = ArticleId;
+                                    newORJournalForCostSalesAndExprenses.Particulars = "Item";
+                                    newORJournalForCostSalesAndExprenses.DebitAmount = 0;
+                                    newORJournalForCostSalesAndExprenses.CreditAmount = stockOutItemsForArticleAccount.Amount;
+                                    newORJournalForCostSalesAndExprenses.ORId = null;
+                                    newORJournalForCostSalesAndExprenses.CVId = null;
+                                    newORJournalForCostSalesAndExprenses.JVId = null;
+                                    newORJournalForCostSalesAndExprenses.RRId = null;
+                                    newORJournalForCostSalesAndExprenses.SIId = null;
+                                    newORJournalForCostSalesAndExprenses.INId = null;
+                                    newORJournalForCostSalesAndExprenses.OTId = OTId;
+                                    newORJournalForCostSalesAndExprenses.STId = null;
+                                    newORJournalForCostSalesAndExprenses.DocumentReference = "OT-" + BranchCode + "-" + OTNumber;
+                                    newORJournalForCostSalesAndExprenses.APRRId = null;
+                                    newORJournalForCostSalesAndExprenses.ARSIId = null;
+
+                                    db.TrnJournals.InsertOnSubmit(newORJournalForCostSalesAndExprenses);
+                                }
+
+                            }
+                        }
+                    }
+
+                    db.SubmitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+        }
+        // delete Stock-OUT in Journal
+        public void deleteOTJournal(Int32 OTId)
+        {
+            try
+            {
+                var journals = db.TrnJournals.Where(d => d.OTId == OTId).ToList();
+                foreach (var j in journals)
+                {
+                    db.TrnJournals.DeleteOnSubmit(j);
+                    db.SubmitChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
+
+        // ===================
         // Stock-IN in journal
         // ===================
         // insert Stock-IN in journal

@@ -232,9 +232,6 @@
                                     <input type="text" class="form-control input-sm" id="InputFilterInventoryEntry" placeholder="Search">
                                 </div>
                             </div>
-                            <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            </div>
                         </div>
                         <br />
                         <div class="row" align="left">
@@ -403,7 +400,6 @@
                 </div>
             </div>
         </div>
-
 
         <!-- ======================================== -->
         <!-- Stock-In Items Delete Modal Confirmation -->
@@ -2700,7 +2696,7 @@
                 inventoryEntries.refresh();
             });
             inventoryEntries.filter = function (item) {
-                return !filterTextInventoryEntry || (item.inventoryEntry.toLowerCase().indexOf(filterTextInventoryEntry) > -1);
+                return !filterTextInventoryEntry || (item.Article.toLowerCase().indexOf(filterTextInventoryEntry) > -1);
             }
             inventoryEntries.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsInventoryEntry();
@@ -2908,8 +2904,6 @@
             }
             btnCurrentPageGridJournal.innerHTML = (journals.pageIndex + 1) + ' / ' + journals.pageCount;
         }
-
-
 
         // ============
         // Journal List

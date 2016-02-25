@@ -11,6 +11,8 @@ namespace easyfis.Controllers
     public class ApiStockOutController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+        private Business.Inventory inventory = new Business.Inventory();
+        private Business.PostJournal journal = new Business.PostJournal();
 
         // ==============
         // LIST Stock Out
@@ -280,6 +282,17 @@ namespace easyfis.Controllers
 
                     db.SubmitChanges();
 
+                    if (updateStockOut.IsLocked == true)
+                    {
+                        inventory.InsertOTInventory(stockOut_Id);
+                        journal.insertOTJournal(stockOut_Id);
+                    }
+                    else
+                    {
+                        inventory.deleteOTInventory(stockOut_Id);
+                        journal.deleteOTJournal(stockOut_Id);
+                    }
+
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else
@@ -319,6 +332,17 @@ namespace easyfis.Controllers
                     updateStockOut.UpdatedDateTime = date;
 
                     db.SubmitChanges();
+
+                    if (updateStockOut.IsLocked == true)
+                    {
+                        inventory.InsertOTInventory(stockOut_Id);
+                        journal.insertOTJournal(stockOut_Id);
+                    }
+                    else
+                    {
+                        inventory.deleteOTInventory(stockOut_Id);
+                        journal.deleteOTJournal(stockOut_Id);
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

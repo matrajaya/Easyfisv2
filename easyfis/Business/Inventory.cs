@@ -110,7 +110,200 @@ namespace easyfis.Business
             }
         }
 
+        // ===================
+        // Stock Out Inventory
+        // ===================
+        public void InsertOTInventory(Int32 OTId)
+        {
+            // stock headers
+            var stockOutHeaders = from d in db.TrnStockOuts
+                                  where d.Id == OTId
+                                  select new Models.TrnStockOut
+                                  {
+                                      Id = d.Id,
+                                      BranchId = d.BranchId,
+                                      Branch = d.MstBranch.Branch,
+                                      OTNumber = d.OTNumber,
+                                      OTDate = d.OTDate.ToShortDateString(),
+                                      AccountId = d.AccountId,
+                                      Account = d.MstAccount.Account,
+                                      ArticleId = d.ArticleId,
+                                      Article = d.MstArticle.Article,
+                                      Particulars = d.Particulars,
+                                      ManualOTNumber = d.ManualOTNumber,
+                                      PreparedById = d.PreparedById,
+                                      PreparedBy = d.MstUser3.FullName,
+                                      CheckedById = d.CheckedById,
+                                      CheckedBy = d.MstUser1.FullName,
+                                      ApprovedById = d.ApprovedById,
+                                      ApprovedBy = d.MstUser.FullName,
+                                      IsLocked = d.IsLocked,
+                                      CreatedById = d.CreatedById,
+                                      CreatedBy = d.MstUser2.FullName,
+                                      CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                      UpdatedById = d.UpdatedById,
+                                      UpdatedBy = d.MstUser4.FullName,
+                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                  };
 
+            // stock out items
+            var stockOutItems = from d in db.TrnStockOutItems
+                                where d.OTId == OTId
+                                select new Models.TrnStockOutItem
+                                {
+                                    Id = d.Id,
+                                    OTId = d.OTId,
+                                    OT = d.TrnStockOut.OTNumber,
+                                    ExpenseAccountId = d.ExpenseAccountId,
+                                    ExpenseAccount = d.MstAccount.Account,
+                                    ItemId = d.ItemId,
+                                    ItemCode = d.MstArticle.ManualArticleCode,
+                                    Item = d.MstArticle.Article,
+                                    ItemInventoryId = d.ItemInventoryId,
+                                    ItemInventory = d.MstArticleInventory.InventoryCode,
+                                    Particulars = d.Particulars,
+                                    UnitId = d.UnitId,
+                                    Unit = d.MstUnit.Unit,
+                                    Quantity = d.Quantity,
+                                    Cost = d.Cost,
+                                    Amount = d.Amount,
+                                    BaseUnitId = d.BaseUnitId,
+                                    BaseUnit = d.MstUnit1.Unit,
+                                    BaseQuantity = d.BaseQuantity,
+                                    BaseCost = d.BaseCost
+                                };
+
+            try
+            {
+                if (stockOutHeaders.Any())
+                {
+                    foreach (var stockOutHeader in stockOutHeaders)
+                    {
+                        if (stockOutItems.Any())
+                        {
+                            foreach (var stockOutItem in stockOutItems)
+                            {
+                                Data.TrnInventory newInventoryForStockOut = new Data.TrnInventory();
+
+                                newInventoryForStockOut.BranchId = stockOutHeader.BranchId;
+                                newInventoryForStockOut.InventoryDate = Convert.ToDateTime(stockOutHeader.OTDate);
+                                newInventoryForStockOut.ArticleId = stockOutItem.ItemId;
+                                newInventoryForStockOut.ArticleInventoryId = stockOutItem.ItemInventoryId;
+                                newInventoryForStockOut.RRId = null;
+                                newInventoryForStockOut.SIId = null;
+                                newInventoryForStockOut.INId = null;
+                                newInventoryForStockOut.OTId = OTId;
+                                newInventoryForStockOut.STId = null;
+                                newInventoryForStockOut.QuantityIn = 0;
+                                newInventoryForStockOut.QuantityOut = stockOutItem.BaseQuantity;
+                                newInventoryForStockOut.Quantity = stockOutItem.BaseQuantity * -1;
+                                newInventoryForStockOut.Amount = stockOutItem.Amount * -1;
+                                newInventoryForStockOut.Particulars = "Stock Out";
+
+                                db.TrnInventories.InsertOnSubmit(newInventoryForStockOut);
+                                db.SubmitChanges();
+
+                                UpdateArticleInventory(stockOutItem.ItemInventoryId);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+
+        }
+        // Delete Stock Out Inventory
+        public void deleteOTInventory(Int32 OTId)
+        {
+            // stock headers
+            var stockOutHeaders = from d in db.TrnStockOuts
+                                  where d.Id == OTId
+                                  select new Models.TrnStockOut
+                                  {
+                                      Id = d.Id,
+                                      BranchId = d.BranchId,
+                                      Branch = d.MstBranch.Branch,
+                                      OTNumber = d.OTNumber,
+                                      OTDate = d.OTDate.ToShortDateString(),
+                                      AccountId = d.AccountId,
+                                      Account = d.MstAccount.Account,
+                                      ArticleId = d.ArticleId,
+                                      Article = d.MstArticle.Article,
+                                      Particulars = d.Particulars,
+                                      ManualOTNumber = d.ManualOTNumber,
+                                      PreparedById = d.PreparedById,
+                                      PreparedBy = d.MstUser3.FullName,
+                                      CheckedById = d.CheckedById,
+                                      CheckedBy = d.MstUser1.FullName,
+                                      ApprovedById = d.ApprovedById,
+                                      ApprovedBy = d.MstUser.FullName,
+                                      IsLocked = d.IsLocked,
+                                      CreatedById = d.CreatedById,
+                                      CreatedBy = d.MstUser2.FullName,
+                                      CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                      UpdatedById = d.UpdatedById,
+                                      UpdatedBy = d.MstUser4.FullName,
+                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                  };
+
+            // stock out items
+            var stockOutItems = from d in db.TrnStockOutItems
+                                where d.OTId == OTId
+                                select new Models.TrnStockOutItem
+                                {
+                                    Id = d.Id,
+                                    OTId = d.OTId,
+                                    OT = d.TrnStockOut.OTNumber,
+                                    ExpenseAccountId = d.ExpenseAccountId,
+                                    ExpenseAccount = d.MstAccount.Account,
+                                    ItemId = d.ItemId,
+                                    ItemCode = d.MstArticle.ManualArticleCode,
+                                    Item = d.MstArticle.Article,
+                                    ItemInventoryId = d.ItemInventoryId,
+                                    ItemInventory = d.MstArticleInventory.InventoryCode,
+                                    Particulars = d.Particulars,
+                                    UnitId = d.UnitId,
+                                    Unit = d.MstUnit.Unit,
+                                    Quantity = d.Quantity,
+                                    Cost = d.Cost,
+                                    Amount = d.Amount,
+                                    BaseUnitId = d.BaseUnitId,
+                                    BaseUnit = d.MstUnit1.Unit,
+                                    BaseQuantity = d.BaseQuantity,
+                                    BaseCost = d.BaseCost
+                                };
+
+            try
+            {
+                var OTInventories = db.TrnInventories.Where(d => d.OTId == OTId).ToList();
+                foreach (var OTInventory in OTInventories)
+                {
+                    db.TrnInventories.DeleteOnSubmit(OTInventory);
+                    db.SubmitChanges();
+                }
+
+                if (stockOutHeaders.Any())
+                {
+                    foreach (var stockOutHeader in stockOutHeaders)
+                    {
+                        if (stockOutItems.Any())
+                        {
+                            foreach (var stockOutItem in stockOutItems)
+                            {
+                                UpdateArticleInventory(stockOutItem.ItemInventoryId);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+        }
 
         // ==================
         // Stock in Inventory
@@ -250,7 +443,7 @@ namespace easyfis.Business
 
                                         // retrieve Artticle Inventory - Id
                                         var newArticleInventoryId = (from d in db.MstArticleInventories
-                                                                     where d.BranchId == stockInHeader.BranchId 
+                                                                     where d.BranchId == stockInHeader.BranchId
                                                                      && d.ArticleId == stockInItem.ItemId
                                                                      && d.InventoryCode == "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber
                                                                      select d.Id).SingleOrDefault();
@@ -294,35 +487,35 @@ namespace easyfis.Business
         {
             // Stock in header
             var stockInHeaders = from d in db.TrnStockIns
-                                where d.Id == INId
-                                select new Models.TrnStockIn
-                                {
-                                    Id = d.Id,
-                                    BranchId = d.BranchId,
-                                    Branch = d.MstBranch.Branch,
-                                    INNumber = d.INNumber,
-                                    INDate = d.INDate.ToShortDateString(),
-                                    AccountId = d.AccountId,
-                                    Account = d.MstAccount.Account,
-                                    ArticleId = d.ArticleId,
-                                    Article = d.MstArticle.Article,
-                                    Particulars = d.Particulars,
-                                    ManualINNumber = d.ManualINNumber,
-                                    IsProduced = d.IsProduced,
-                                    PreparedById = d.PreparedById,
-                                    PreparedBy = d.MstUser3.FullName,
-                                    CheckedById = d.CheckedById,
-                                    CheckedBy = d.MstUser1.FullName,
-                                    ApprovedById = d.ApprovedById,
-                                    ApprovedBy = d.MstUser.FullName,
-                                    IsLocked = d.IsLocked,
-                                    CreatedById = d.CreatedById,
-                                    CreatedBy = d.MstUser2.FullName,
-                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                    UpdatedById = d.UpdatedById,
-                                    UpdatedBy = d.MstUser4.FullName,
-                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                };
+                                 where d.Id == INId
+                                 select new Models.TrnStockIn
+                                 {
+                                     Id = d.Id,
+                                     BranchId = d.BranchId,
+                                     Branch = d.MstBranch.Branch,
+                                     INNumber = d.INNumber,
+                                     INDate = d.INDate.ToShortDateString(),
+                                     AccountId = d.AccountId,
+                                     Account = d.MstAccount.Account,
+                                     ArticleId = d.ArticleId,
+                                     Article = d.MstArticle.Article,
+                                     Particulars = d.Particulars,
+                                     ManualINNumber = d.ManualINNumber,
+                                     IsProduced = d.IsProduced,
+                                     PreparedById = d.PreparedById,
+                                     PreparedBy = d.MstUser3.FullName,
+                                     CheckedById = d.CheckedById,
+                                     CheckedBy = d.MstUser1.FullName,
+                                     ApprovedById = d.ApprovedById,
+                                     ApprovedBy = d.MstUser.FullName,
+                                     IsLocked = d.IsLocked,
+                                     CreatedById = d.CreatedById,
+                                     CreatedBy = d.MstUser2.FullName,
+                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                     UpdatedById = d.UpdatedById,
+                                     UpdatedBy = d.MstUser4.FullName,
+                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                 };
 
             // Stock in items
             var stockInItems = from d in db.TrnStockInItems
@@ -384,7 +577,7 @@ namespace easyfis.Business
                                 {
                                     UpdateArticleInventory(articleInventory.Id);
                                 }
-                               
+
                             }
                         }
                     }
@@ -681,7 +874,7 @@ namespace easyfis.Business
                     {
                         // retrieve Artticle Inventory
                         var articleInventories = from d in db.MstArticleInventories
-                                                 where d.BranchId == RRItems.BranchId 
+                                                 where d.BranchId == RRItems.BranchId
                                                  && d.ArticleId == RRItems.ItemId
                                                  //&& d.InventoryCode == "RR-" + RRItems.BranchCode + "-" + RRItems.RR
                                                  select new Models.MstArticleInventory
@@ -746,8 +939,8 @@ namespace easyfis.Business
 
                                 // retrieve Artticle Inventory - Id
                                 var newArticleInventoryId = (from d in db.MstArticleInventories
-                                                             where d.BranchId == RRItems.BranchId 
-                                                             && d.ArticleId == RRItems.ItemId 
+                                                             where d.BranchId == RRItems.BranchId
+                                                             && d.ArticleId == RRItems.ItemId
                                                              && d.InventoryCode == "RR-" + RRItems.BranchCode + "-" + RRItems.RR
                                                              select d.Id).SingleOrDefault();
 
@@ -834,8 +1027,8 @@ namespace easyfis.Business
                     {
                         // retrieve Artticle Inventory
                         var articleInventories = from d in db.MstArticleInventories
-                                                 where d.BranchId == RRItems.BranchId 
-                                                 && d.ArticleId == RRItems.ItemId 
+                                                 where d.BranchId == RRItems.BranchId
+                                                 && d.ArticleId == RRItems.ItemId
                                                  //&& d.InventoryCode == "RR-" + RRItems.BranchCode + "-" + RRItems.RR
                                                  select new Models.MstArticleInventory
                                                  {

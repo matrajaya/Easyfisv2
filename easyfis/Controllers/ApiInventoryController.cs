@@ -141,5 +141,40 @@ namespace easyfis.Controllers
                               };
             return inventories.ToList();
         }
+
+        // ======================
+        // LIST Inventory by OTId
+        // ======================
+        [Route("api/listInventoryByOTId/{OTId}")]
+        public List<Models.TrnInventory> GetInventoryByOTId(String OTId)
+        {
+            var inventories_OTId = Convert.ToUInt32(OTId);
+            var inventories = from d in db.TrnInventories
+                              where d.OTId == inventories_OTId
+                              select new Models.TrnInventory
+                              {
+                                  Id = d.Id,
+                                  BranchId = d.BranchId,
+                                  Branch = d.MstBranch.Branch,
+                                  InventoryDate = d.InventoryDate.ToShortDateString(),
+                                  ArticleId = d.ArticleId,
+                                  Article = d.MstArticle.Article,
+                                  ArticleInventoryId = d.ArticleInventoryId,
+                                  RRId = d.RRId,
+                                  SIId = d.SIId,
+                                  INId = d.INId,
+                                  OTId = d.OTId,
+                                  STId = d.STId,
+                                  QuantityIn = d.QuantityIn,
+                                  Quantity = d.Quantity,
+                                  QuantityOut = d.QuantityOut,
+                                  Amount = d.Amount,
+                                  Particulars = d.Particulars,
+                                  Code = d.MstArticleInventory.InventoryCode,
+                                  Unit = d.MstArticle.MstUnit.Unit
+                              };
+            return inventories.ToList();
+        }
+
     }
 }
