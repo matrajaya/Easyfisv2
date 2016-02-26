@@ -1479,6 +1479,9 @@
                 selectedValue: document.getElementById('JVL_Account_Id_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#JVL_Account_Id_Data").val(accountCollections.items[this.selectedIndex].AccountId);
+
+                    getArticlesForComboBoxInJournalVoucherLine();
+
                 }
             });
         }
@@ -1487,9 +1490,17 @@
         // GET Articles for Combo Box in Journal Voucher Line
         // ==================================================
         function getArticlesForComboBoxInJournalVoucherLine() {
+
+            var accountId;
+            if(document.getElementById('JVL_Account_Id_Data').value == "") {
+                accountId = 0;
+            } else {
+                accountId = document.getElementById('JVL_Account_Id_Data').value;
+            }
+
             articles = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticle',
+                url: '/api/articleByAccountId/' + accountId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1502,6 +1513,8 @@
                                 ArticleArticle: results[i]["Article"]
                             });
                         }
+                        createCboArticlesForJournalVoucherLine(articles);
+                    } else {
                         createCboArticlesForJournalVoucherLine(articles);
                     }
                 }
@@ -1521,8 +1534,15 @@
                 articleList.push(articleCollections.items[i].ArticleArticle);
             }
 
+            if(articles == 0) {
+                disabled = true;
+            } else {
+                disabled = false;
+            }
+
             cboArticleJVL.dispose();
             cboArticleJVL = new wijmo.input.ComboBox('#JVL_Aritcle_Id', {
+                disabled: disabled,
                 placeholder: "Select Article",
                 itemsSource: articleList,
                 isEditable: false,
@@ -1555,6 +1575,8 @@
                             });
                         }
                         createCboSalesForJournalVoucherLine(sales);
+                    } else {
+                        createCboSalesForJournalVoucherLine(sales);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1573,8 +1595,16 @@
                 salesList.push(salesCollections.items[i].SINumber + " - " + salesCollections.items[i].Branch);
             }
 
+            var disabled;
+            if(sales == 0) {
+                disabled = true;
+            } else {
+                disabled = false;
+            }
+
             cboSalesJVL.dispose();
             cboSalesJVL = new wijmo.input.ComboBox('#JVL_ARSIId', {
+                disabled: disabled,
                 placeholder: "Select SI Number",
                 itemsSource: salesList,
                 isEditable: false,
@@ -1607,6 +1637,8 @@
                             });
                         }
                         createCboReceivingReceiptForJournalVoucherLine(receivingReceipts);
+                    } else {
+                        createCboReceivingReceiptForJournalVoucherLine(receivingReceipts);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1625,8 +1657,16 @@
                 RRList.push(RRCollections.items[i].RRNumber + " - " + RRCollections.items[i].Branch);
             }
 
+            var disabled;
+            if(receivingReceipts == 0) {
+                disabled = true;
+            } else {
+                disabled = false;
+            }
+
             cboRRJVL.dispose();
             cboRRJVL = new wijmo.input.ComboBox('#JVL_APRRId', {
+                disabled: disabled,
                 placeholder: "Select RR Number",
                 itemsSource: RRList,
                 isEditable: false,
@@ -1637,8 +1677,6 @@
                 }
             });
         }
-
-
 
         // =============================================
         // Journal Voucher Line ADD-Journal Voucher Line
