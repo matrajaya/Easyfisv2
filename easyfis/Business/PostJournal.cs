@@ -18,11 +18,11 @@ namespace easyfis.Business
             String JournalDate = "";
             Int32 BranchId = 0;
             String BranchCode = "";
-            Int32 AccountId = 0;
+            //Int32 AccountId = 0;
             Int32 ArticleId = 0;
             Int32 ToBranchId = 0;
             String STNumber = "";
-            Decimal Amount = 0;
+            //Decimal Amount = 0;
 
             // stock transfer header
             var stockTransferHeaders = from d in db.TrnStockTransfers
