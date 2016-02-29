@@ -231,25 +231,25 @@
                         <form id="AccountDetailForm">
                             <input type="hidden" id="account_id" />
                             <dl class="dl-horizontal">
-                                <dt>Account Code:</dt>
+                                <dt>Account Code</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccount" id="account_code" /></dd>
-                                <dt>Account:</dt>
+                                <dt>Account</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccount" id="account_account" /></dd>
-                                <dt>Account Type:</dt>
+                                <dt>Account Type</dt>
                                 <dd>
                                     <div id="account_type_id" class="comboBox-wide"></div>
 
                                     <input type="hidden" class="requiredAccount" id="account_type_id_data" required />
                                     <input type="hidden" id="account_type_selectedValue" />
                                 </dd>
-                                <dt>Cash Flow:</dt>
+                                <dt>Cash Flow</dt>
                                 <dd>
                                     <div id="account_cash_flow_id" class="comboBox-wide"></div>
 
                                     <input type="hidden" class="requiredAccount" id="account_cash_flow_id_data" required />
                                     <input type="hidden" id="account_cash_flow_selectedValue" />
                                 </dd>
-                                <dt>Lock (Edit):</dt>
+                                <dt>Lock (Edit)</dt>
                                 <dd>
                                     <input type="checkbox" id="accountEdit_IsLocked" />
                                 </dd>
@@ -320,7 +320,7 @@
                         <input type="hidden" id="accountArticleType_id" />
                         <form id="AccountTypeDetailForm">
                             <dl class="dl-horizontal">
-                                <dt>Article Type:</dt>
+                                <dt>Article Type</dt>
                                 <dd>
                                     <div id="accountArticleType_articleType" class="comboBox-wide"></div>
 
@@ -398,20 +398,20 @@
                         <input type="hidden" id="accountType_id" />
                         <form id="AccountTypeDetailForm">
                             <dl class="dl-horizontal">
-                                <dt>Account Type Code:</dt>
+                                <dt>Account Type Code</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_code" /></dd>
-                                <dt>Account Type:</dt>
+                                <dt>Account Type</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_accountType" /></dd>
-                                <dt>Category:</dt>
+                                <dt>Category</dt>
                                 <dd>
                                     <div id="accountType_CategoryId" class="comboBox-wide"></div>
 
                                     <input type="hidden" class="requiredAccountType" id="accountType_CategoryId_Data" required />
                                     <input type="hidden" id="accountType_Category_selectedValue" />
                                 </dd>
-                                <dt>Category Description:</dt>
+                                <dt>Category Description</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_SubCategoryDescription" /></dd>
-                                <dt>Lock (Edit):</dt>
+                                <dt>Lock (Edit)</dt>
                                 <dd><input type="checkbox" id="accountTypeEdit_IsLocked" /></dd>
                             </dl>
                         </form>
@@ -461,11 +461,11 @@
                         <form id="AccountCashFlowDetailForm">
                             <input type="hidden" id="accountCashFlow_Id" />
                             <dl class="dl-horizontal">
-                                <dt>Cash Flow Code:</dt>
+                                <dt>Cash Flow Code</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccountCashFlow" id="accountCashFlow_Code" /></dd>
-                                <dt>Cash Flow:</dt>
+                                <dt>Cash Flow</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccountCashFlow" id="accountCashFlow_CashFlow" /></dd>
-                                <dt>Lock (Edit):</dt>
+                                <dt>Lock (Edit)</dt>
                                 <dd><input type="checkbox" id="accountCashFlowEdit_IsLocked" /></dd>
                             </dl>
                         </form>
@@ -515,11 +515,11 @@
                         <form id="AccountCategoryDetailForm">
                             <input type="hidden" id="accountCategory_Id" />
                             <dl class="dl-horizontal">
-                                <dt>Category Code:</dt>
+                                <dt>Category Code</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccountCategory" id="accountCategory_Code" /></dd>
-                                <dt>Category:</dt>
+                                <dt>Category</dt>
                                 <dd><input type="text" class="form-control input-sm requiredAccountCategory" id="accountCategory_Category" /></dd>
-                                <dt>Lock (Edit):</dt>
+                                <dt>Lock (Edit)</dt>
                                 <dd><input type="checkbox" id="accountCategoryEdit_IsLocked" /></dd>
                             </dl>
                         </form>
@@ -975,7 +975,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveAccountButton").prop("disabled", true);
@@ -2149,7 +2148,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveAccountTypeButton").prop("disabled", true);
@@ -2677,7 +2675,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
@@ -3188,7 +3185,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveAccountCategoryButton").prop("disabled", true);

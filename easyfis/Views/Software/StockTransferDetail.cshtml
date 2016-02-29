@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Branch:</label>
+                                    <label class="control-label col-sm-4">Branch</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_Branch"></div>
 
@@ -65,21 +65,21 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">ST Number:</label>
+                                    <label class="control-label col-sm-4">ST Number</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_STNumber_Display" />
                                         <input type="hidden" id="stockTransfer_STNumber" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">ST Date:</label>
+                                    <label class="control-label col-sm-4">ST Date</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_STDate"></div>
                                         <input type="hidden" id="stockTransfer_STDate_data" class="requiredStockTransfer" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">To branch:</label>
+                                    <label class="control-label col-sm-4">To branch</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_ToBranch"></div>
 
@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Particulars:</label>
+                                    <label class="control-label col-sm-4">Particulars</label>
                                     <div class="col-sm-8">
                                         <textarea class="form-control textarea-custom requiredStockTransfer" id="stockTransfer_Particulars"></textarea>
                                     </div>
@@ -96,13 +96,13 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Manual ST Number:</label>
+                                    <label class="control-label col-sm-4">Manual ST Number</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_ManualSTNumber">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Prepared by:</label>
+                                    <label class="control-label col-sm-4">Prepared by</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_PreparedBy"></div>
 
@@ -112,7 +112,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Checked by:</label>
+                                    <label class="control-label col-sm-4">Checked by</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_CheckedBy"></div>
 
@@ -121,7 +121,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Approved by:</label>
+                                    <label class="control-label col-sm-4">Approved by</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="stockTransfer_ApprovedBy"></div>
 
@@ -130,7 +130,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Lock:</label>
+                                    <label class="control-label col-sm-4">Lock</label>
                                     <div class="col-sm-8">
                                         <input type="checkbox" id="StockTransfer_Lock">
                                     </div>
@@ -256,7 +256,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="stockTransferItemsModalLabel">Stock-Transfer Item - Detail</h4>
+                        <h4 class="modal-title" id="stockTransferItemsModalLabel">Stock-Transfer Line Item Detail</h4>
                     </div>
                     <div class="modal-body">
                         <form id="stockTransferItemsDetailForm">
@@ -264,40 +264,40 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <dl class="dl-horizontal">
-                                        <dt>Item Code:</dt>
+                                        <dt>Item Code</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_ItemCode"></div>
 
                                             <input type="hidden" id="stockTransferItem_ItemId_data" class="requiredStockTransferItem">
                                             <input type="hidden" id="stockTransferItem_ItemCode_selectedValue" />
                                         </dd>
-                                        <dt>Item Description:</dt>
+                                        <dt>Item Description</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_ItemDescription"></div>
 
                                             <input type="hidden" id="stockTransferItem_ItemDescription_selectedValue" />
                                         </dd>
-                                        <dt>Particulars:</dt>
+                                        <dt>Particulars</dt>
                                         <dd><textarea class="form-control textarea-custom requiredStockTransferItem" id="stockTransferItem_Particulars"></textarea></dd>
-                                        <dt>Item Inventory Code:</dt>
+                                        <dt>Item Inventory Code</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_ItemInventoryCode"></div>
 
                                             <input type="hidden" id="stockTransferItem_ItemInventoryCode_data" class="requiredStockTransferItem">
                                             <input type="hidden" id="stockTransferItem_ItemInventoryCode_selectedValue" />
                                         </dd>
-                                        <dt>Quantity:</dt>
+                                        <dt>Quantity</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Quantity" /></dd>
-                                        <dt>Unit:</dt>
+                                        <dt>Unit</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_Unit"></div>
 
                                             <input type="hidden" id="stockTransferItem_Unit_data" class="requiredStockTransferItem">
                                             <input type="hidden" id="stockTransferItem_Unit_selectedValue" />
                                         </dd>
-                                        <dt>Cost:</dt>
+                                        <dt>Cost</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Cost" /></dd>
-                                        <dt>Amount:</dt>
+                                        <dt>Amount</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Amount" /></dd>
                                     </dl>
                                 </div>
@@ -308,16 +308,16 @@
                                             <center><label>Basic Unit Conversion</label></center>
                                             <br />
                                         </dd>
-                                        <dt>Unit:</dt>
+                                        <dt>Unit</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="stockTransferItem_BUCUnit"></div>
 
                                             <input type="hidden" id="stockTransferItem_BUCUnit_data" class="requiredStockTransferItem">
                                             <input type="hidden" id="stockTransferItem_BUCUnit_selectedValue" />
                                         </dd>
-                                        <dt>Quantity:</dt>
+                                        <dt>Quantity</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_BUCQuantity" /></dd>
-                                        <dt>Cost:</dt>
+                                        <dt>Cost</dt>
                                         <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_BUCCost" /></dd>
                                     </dl>
                                 </div>
@@ -447,9 +447,7 @@
         // ================
         var stockTransfers;
         var branches;
-
         var STDate;
-
         var cboBranch;
         var cboToBranch;
         var cboPreparedBy;

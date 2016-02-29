@@ -53,20 +53,20 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Code:</label>
+                                    <label class="control-label col-sm-4">Code</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_code" />
                                         <input type="hidden" id="artcileSupplier_code_data" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Supplier:</label>
+                                    <label class="control-label col-sm-4">Supplier</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_Supplier" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Supplier Group:</label>
+                                    <label class="control-label col-sm-4">Supplier Group</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_SupplierGroup"></div>
                                         <input type="hidden" id="artcileSupplier_SupplierGroup_Data" />
@@ -74,7 +74,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Account:</label>
+                                    <label class="control-label col-sm-4">Account</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_Account"></div>
                                         <input type="hidden" id="artcileSupplier_Account_Data" class="requiredSupplier" />
@@ -86,7 +86,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Term:</label>
+                                    <label class="control-label col-sm-4">Term</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_Term"></div>
                                         <input type="hidden" id="artcileSupplier_Term_Data" class="requiredSupplier" />
@@ -94,7 +94,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Address:</label>
+                                    <label class="control-label col-sm-4">Address</label>
                                     <div class="col-sm-8">
                                         <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Address"></textarea>
                                     </div>
@@ -102,31 +102,31 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Contact Number:</label>
+                                    <label class="control-label col-sm-4">Contact Number</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_ContactNo">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Contact Person:</label>
+                                    <label class="control-label col-sm-4">Contact Person</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_ContactPerson">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">TIN:</label>
+                                    <label class="control-label col-sm-4">TIN</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_TIN">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Particulars:</label>
+                                    <label class="control-label col-sm-4">Particulars</label>
                                     <div class="col-sm-8">
                                         <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Particulars"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Lock:</label>
+                                    <label class="control-label col-sm-4">Lock</label>
                                     <div class="col-sm-8">
                                         <input type="checkbox" class="checkbox_custom requiredSupplier" id="isLocked_Status" />
                                     </div>
@@ -249,17 +249,17 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="contactModalLabel">Contact Information - Detail</h4>
+                        <h4 class="modal-title" id="contactModalLabel">Contact Information Detail</h4>
                     </div>
                     <div class="modal-body">
                         <form id="contactDetailForm">
                             <input type="hidden" id="contact_Id" />
                             <dl class="dl-horizontal">
-                                <dt>Contact Person:</dt>
+                                <dt>Contact Person</dt>
                                 <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" /></dd>
-                                <dt>Contact Number:</dt>
+                                <dt>Contact Number</dt>
                                 <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactNumber" /></dd>
-                                <dt>Remarks:</dt>
+                                <dt>Remarks</dt>
                                 <dd><textarea class="form-control textarea-custom requiredContact" id="contact_Remarks"></textarea></dd>
                             </dl>
                         </form>
@@ -864,7 +864,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 if(supplierId == 0) {
@@ -1012,7 +1011,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 if(supplierId == 0) {
@@ -1545,7 +1543,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveContactButton").prop("disabled", true);

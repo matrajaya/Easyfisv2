@@ -53,20 +53,20 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Code:</label>
+                                    <label class="control-label col-sm-4">Code</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_code" />
                                         <input type="hidden" id="artcileCustomer_code_data" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Customer:</label>
+                                    <label class="control-label col-sm-4">Customer</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_customer" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Customer Group:</label>
+                                    <label class="control-label col-sm-4">Customer Group</label>
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="artcileCustomer_customerGroup"></div>
 
@@ -75,7 +75,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Account:</label>
+                                    <label class="control-label col-sm-4">Account</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileCustomer_account"></div>
                                         <input type="hidden" id="artcileCustomer_account_data" class="requiredCustomer" />
@@ -87,7 +87,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Term:</label>
+                                    <label class="control-label col-sm-4">Term</label>
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="artcileCustomer_term"></div>
 
@@ -96,13 +96,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Credit Limit:</label>
+                                    <label class="control-label col-sm-4">Credit Limit</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_creditLimit"> <!-- Drop down list ni-->
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Address:</label>
+                                    <label class="control-label col-sm-4">Address</label>
                                     <div class="col-sm-8">
                                         <textarea class="form-control textarea-custom requiredCustomer" id="artcileCustomer_address"></textarea>
                                     </div>
@@ -110,31 +110,31 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Contact Number:</label>
+                                    <label class="control-label col-sm-4">Contact Number</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_contactNo">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Contact Person:</label>
+                                    <label class="control-label col-sm-4">Contact Person</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_contactPerson">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">TIN:</label>
+                                    <label class="control-label col-sm-4">TIN</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_TIN">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Particulars:</label>
+                                    <label class="control-label col-sm-4">Particulars</label>
                                     <div class="col-sm-8">
                                         <textarea class="form-control textarea-custom requiredCustomer" id="artcileCustomer_particulars"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="control-label col-sm-4">Lock:</label>
+                                    <label class="control-label col-sm-4">Lock</label>
                                     <div class="col-sm-8">
                                         <input type="checkbox" class="checkbox_custom" id="isLocked_Status" />
                                     </div>
@@ -257,17 +257,17 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="contactModalLabel">Contact Information - Detail</h4>
+                        <h4 class="modal-title" id="contactModalLabel">Contact Information Detail</h4>
                     </div>
                     <div class="modal-body">
                         <form id="contactDetailForm">
                             <input type="hidden" id="contact_Id" />
                             <dl class="dl-horizontal">
-                                <dt>Contact Person:</dt>
+                                <dt>Contact Person</dt>
                                 <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" /></dd>
-                                <dt>Contact Number:</dt>
+                                <dt>Contact Number</dt>
                                 <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactNumber" /></dd>
-                                <dt>Remarks:</dt>
+                                <dt>Remarks</dt>
                                 <dd><textarea class="form-control textarea-custom requiredContact" id="contact_Remarks"></textarea></dd>
                             </dl>
                         </form>
@@ -829,7 +829,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 if(customerId == 0) {
@@ -1024,7 +1023,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 if(customerId == 0) {
@@ -1561,7 +1559,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveContactButton").prop("disabled", true);
