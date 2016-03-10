@@ -667,6 +667,8 @@
                             });
                         }
                         createCbosupplier(suppliers);
+                    } else {
+                        createCbosupplier(suppliers);
                     }
                 }
             });
@@ -683,46 +685,29 @@
                 supplierList.push(supplierCollection.items[i].Supplier);
             }
 
-            if(document.getElementById('PO_IsLocked').value == 'true') {
-                cboSupplier.dispose();
-                cboSupplier = new wijmo.input.ComboBox('#PO_Supplier', {
-                    disabled: true,
-                    placeholder: "Select Supplier",
-                    itemsSource: supplierList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('PO_Supplier_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#PO_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
-                    }
-                });
-            } else if(document.getElementById('PO_IsLocked').value == 'false') {
-                cboSupplier.dispose();
-                cboSupplier = new wijmo.input.ComboBox('#PO_Supplier', {
-                    disabled: false,
-                    placeholder: "Select Supplier",
-                    itemsSource: supplierList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('PO_Supplier_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#PO_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
-                    }
-                });
+            var disabled;
+            if(suppliers == 0) {
+                disabled = true;
             } else {
-                cboSupplier.dispose();
-                cboSupplier = new wijmo.input.ComboBox('#PO_Supplier', {
-                    placeholder: "Select Supplier",
-                    itemsSource: supplierList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('PO_Supplier_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#PO_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
-                    }
-                });
+                if(document.getElementById('PO_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
 
+            cboSupplier.dispose();
+            cboSupplier = new wijmo.input.ComboBox('#PO_Supplier', {
+                disabled: disabled,
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('PO_Supplier_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#PO_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                }
+            });
         }
 
         // =======================

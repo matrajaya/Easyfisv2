@@ -651,6 +651,8 @@
                             });
                         }
                         createCboAccountType(accountTypes);
+                    } else {
+                        createCboAccountType(accountTypes);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -669,45 +671,30 @@
                 accountTypeList.push(accountTypeCollections.items[i].AccountType);
             }
 
-            if(document.getElementById('accountEdit_IsLocked').checked == true) {
-                cboAccountType.dispose();
-                cboAccountType = new wijmo.input.ComboBox('#account_type_id', {
-                    disabled: true,
-                    placeholder: "Select a Account Type",
-                    itemsSource: accountTypeList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('account_type_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#account_type_id_data").val(accountTypeCollections.items[this.selectedIndex].AccountTypeId);
-                    }
-                });
-            } else if(document.getElementById('accountEdit_IsLocked').checked == false) {
-                cboAccountType.dispose();
-                cboAccountType = new wijmo.input.ComboBox('#account_type_id', {
-                    disabled: false,
-                    placeholder: "Select a Account Type",
-                    itemsSource: accountTypeList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('account_type_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#account_type_id_data").val(accountTypeCollections.items[this.selectedIndex].AccountTypeId);
-                    }
-                });
+            var disabled;
+            if(accountTypes == 0) {
+                disabled = true;
             } else {
-                cboAccountType.dispose();
-                cboAccountType = new wijmo.input.ComboBox('#account_type_id', {
-                    placeholder: "Select a Account Type",
-                    itemsSource: accountTypeList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('account_type_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#account_type_id_data").val(accountTypeCollections.items[this.selectedIndex].AccountTypeId);
-                    }
-                });
+                if(document.getElementById('accountEdit_IsLocked').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
+
+            cboAccountType.dispose();
+            cboAccountType = new wijmo.input.ComboBox('#account_type_id', {
+                disabled: disabled,
+                placeholder: "Select a Account Type",
+                itemsSource: accountTypeList,
+                isEditable: false,
+                selectedValue: document.getElementById('account_type_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#account_type_id_data").val(accountTypeCollections.items[this.selectedIndex].AccountTypeId);
+                }
+            });
+
+            document.getElementById('account_type_id_data').value = accountTypeCollections.items[cboAccountType.selectedIndex].AccountTypeId;
         }
 
         // ===================================
@@ -731,6 +718,8 @@
                             });
                         }
                         createCboAccountCashFlow(accountCashFlows);
+                    } else {
+                        createCboAccountCashFlow(accountCashFlows);
                     }
                 }
             });
@@ -747,45 +736,30 @@
                 accountCashFlowList.push(accountCashFlowCollections.items[i].AccountCashFlow);
             }
 
-            if(document.getElementById('accountEdit_IsLocked').checked == true) {
-                cboAccountCashFlow.dispose();
-                cboAccountCashFlow = new wijmo.input.ComboBox('#account_cash_flow_id', {
-                    disabled: true,
-                    placeholder: "Select a Account Cash Flow",
-                    itemsSource: accountCashFlowList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('account_cash_flow_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#account_cash_flow_id_data").val(accountCashFlowCollections.items[this.selectedIndex].AccountCashFlowId);
-                    }
-                });
-            } else if(document.getElementById('accountEdit_IsLocked').checked == false) {
-                cboAccountCashFlow.dispose();
-                cboAccountCashFlow = new wijmo.input.ComboBox('#account_cash_flow_id', {
-                    disabled: false,
-                    placeholder: "Select a Account Cash Flow",
-                    itemsSource: accountCashFlowList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('account_cash_flow_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#account_cash_flow_id_data").val(accountCashFlowCollections.items[this.selectedIndex].AccountCashFlowId);
-                    }
-                });
+            var disabled;
+            if(accountCashFlows == 0) {
+                disabled = true;
             } else {
-                cboAccountCashFlow.dispose();
-                cboAccountCashFlow = new wijmo.input.ComboBox('#account_cash_flow_id', {
-                    placeholder: "Select a Account Cash Flow",
-                    itemsSource: accountCashFlowList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('account_cash_flow_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#account_cash_flow_id_data").val(accountCashFlowCollections.items[this.selectedIndex].AccountCashFlowId);
-                    }
-                });
+                if(document.getElementById('accountEdit_IsLocked').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
+
+            cboAccountCashFlow.dispose();
+            cboAccountCashFlow = new wijmo.input.ComboBox('#account_cash_flow_id', {
+                disabled: disabled,
+                placeholder: "Select a Account Cash Flow",
+                itemsSource: accountCashFlowList,
+                isEditable: false,
+                selectedValue: document.getElementById('account_cash_flow_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#account_cash_flow_id_data").val(accountCashFlowCollections.items[this.selectedIndex].AccountCashFlowId);
+                }
+            });
+
+            document.getElementById('account_cash_flow_id_data').value = accountCashFlowCollections.items[cboAccountCashFlow.selectedIndex].AccountCashFlowId;
         }
 
         // ================
@@ -1405,12 +1379,13 @@
                 placeholder: "Select Article Type",
                 itemsSource: articleTypeList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('accountArticleType_articleType_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#accountArticleType_articleType_Data").val(articleTypeCollection.items[this.selectedIndex].Id);
                 }
             });
+
+            document.getElementById('accountArticleType_articleType_Data').value = articleTypeCollection.items[cboForArticleType.selectedIndex].Id;
         }
 
         // ========================
@@ -1938,6 +1913,8 @@
                             });
                         }
                         createCboAccountCategory(accountCategories);
+                    } else {
+                        createCboAccountCategory(accountCategories);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1956,45 +1933,30 @@
                 accountCategoryList.push(accountCategoryCollection.items[i].AccountCategory);
             }
 
-            if(document.getElementById('accountTypeEdit_IsLocked').checked == true) {
-                cboAccountCategory.dispose();
-                cboAccountCategory = new wijmo.input.ComboBox('#accountType_CategoryId', {
-                    disabled: true,
-                    placeholder: "Select a Account Category",
-                    itemsSource: accountCategoryList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('accountType_Category_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#accountType_CategoryId_Data").val(accountCategoryCollection.items[this.selectedIndex].AccountCategoryId);
-                    }
-                });
-            } else if(document.getElementById('accountTypeEdit_IsLocked').checked == false) {
-                cboAccountCategory.dispose();
-                cboAccountCategory = new wijmo.input.ComboBox('#accountType_CategoryId', {
-                    disabled: false,
-                    placeholder: "Select a Account Category",
-                    itemsSource: accountCategoryList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('accountType_Category_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#accountType_CategoryId_Data").val(accountCategoryCollection.items[this.selectedIndex].AccountCategoryId);
-                    }
-                });
+            var disabled;
+            if(accountCategories == 0) {
+                disabled = true;
             } else {
-                cboAccountCategory.dispose();
-                cboAccountCategory = new wijmo.input.ComboBox('#accountType_CategoryId', {
-                    placeholder: "Select a Account Category",
-                    itemsSource: accountCategoryList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('accountType_Category_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#accountType_CategoryId_Data").val(accountCategoryCollection.items[this.selectedIndex].AccountCategoryId);
-                    }
-                });
+                if(document.getElementById('accountTypeEdit_IsLocked').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
+
+            cboAccountCategory.dispose();
+            cboAccountCategory = new wijmo.input.ComboBox('#accountType_CategoryId', {
+                disabled: disabled,
+                placeholder: "Select a Account Category",
+                itemsSource: accountCategoryList,
+                isEditable: false,
+                selectedValue: document.getElementById('accountType_Category_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#accountType_CategoryId_Data").val(accountCategoryCollection.items[this.selectedIndex].AccountCategoryId);
+                }
+            });
+
+            document.getElementById('accountType_CategoryId_Data').value = accountCategoryCollection.items[cboAccountCategory.selectedIndex].AccountCategoryId;
         }
 
         // =====================

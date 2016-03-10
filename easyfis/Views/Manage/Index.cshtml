@@ -204,13 +204,14 @@
                 placeholder: "Select branch",
                 itemsSource: branchList,
                 isEditable: false,
-                required: false,
                 selectedValue: "",
                 onSelectedIndexChanged: function () {
                     $("#branch_Id_Data").val(branchCollections.items[this.selectedIndex].BranchId);
                     $('#LaunchSoftware').prop('disabled', false);
                 }
             });
+
+            document.getElementById('branch_Id_Data').value = branchCollections.items[cboBranch.selectedIndex].BranchId;
         }
 
         // ===============
@@ -247,7 +248,10 @@
             }
 
             getBranchesForComboBox();
-            $('#LaunchSoftware').prop('disabled', true);
+            if (branch_Id_Data == '') {
+                document.getElementById('LaunchSoftware').disabled = true;
+            }
+
         });
     </script>
 </body>
