@@ -2565,9 +2565,11 @@
                         }
                         createCboPO(POs);
                         getPOItemForComboBox();
+                        getTaxTypeForComboBox();
                     } else {
                         createCboPO(POs);
                         getPOItemForComboBox();
+                        getTaxTypeForComboBox();
                     }
                 }
             });
@@ -2645,6 +2647,8 @@
         // GET PO Items for PO for Combo Box
         // =================================
         function getPOItemForComboBox() {
+            computeTAX();
+
             POItems = new wijmo.collections.ObservableArray();
             var RRLinePOId = document.getElementById('RRLine_PONo_data').value;
             if(RRLinePOId == 0) {
@@ -2845,15 +2849,17 @@
                 }
             });
 
-            //document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemCode.selectedIndex].ItemId;
-            //document.getElementById('RRLine_ItemDescription_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].ItemDescription;
-            //document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemCode.selectedIndex].UnitId;
-            //document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].Unit;
-            //document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemCode.selectedIndex].Particulars;
-            //document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
-            //document.getElementById('RRLine_Cost').value = POItemCollection.items[cboItemCode.selectedIndex].Cost;
-            //document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemCode.selectedIndex].Amount;
-            //document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
+            document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemCode.selectedIndex].ItemId;
+            document.getElementById('RRLine_ItemDescription_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].ItemDescription;
+            document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemCode.selectedIndex].UnitId;
+            document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].Unit;
+            document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemCode.selectedIndex].Particulars;
+            document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
+            document.getElementById('RRLine_Cost').value = POItemCollection.items[cboItemCode.selectedIndex].Cost;
+            document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemCode.selectedIndex].Amount;
+            document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
+            
+            computeTAX();
         }
 
         // =================================
@@ -2986,15 +2992,17 @@
                 }
             });
 
-            //document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemId;
-            //document.getElementById('RRLine_ItemCode_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemCode;
-            //document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemDescription.selectedIndex].UnitId;
-            //document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].Unit;
-            //document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemDescription.selectedIndex].Particulars;
-            //document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
-            //document.getElementById('RRLine_Cost').value = POItemCollection.items[cboItemDescription.selectedIndex].Cost;
-            //document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemDescription.selectedIndex].Amount;
-            //document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
+            document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemId;
+            document.getElementById('RRLine_ItemCode_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemCode;
+            document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemDescription.selectedIndex].UnitId;
+            document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].Unit;
+            document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemDescription.selectedIndex].Particulars;
+            document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
+            document.getElementById('RRLine_Cost').value = POItemCollection.items[cboItemDescription.selectedIndex].Cost;
+            document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemDescription.selectedIndex].Amount;
+            document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
+
+            computeTAX();
         }
 
         // =============
@@ -3487,7 +3495,7 @@
             //getPOItemForComboBox();
             getUnitForComboBox();
             getBranchesPOItemForComboBox();
-            getTaxTypeForComboBox();
+            //getTaxTypeForComboBox();
             getBUCUnitForComboBox();
 
             $('.requiredRRLine').each(function () {
@@ -3573,8 +3581,11 @@
                         }
                         createCboPO(POs);
                         getPOItemForComboBox();
+                        getTaxTypeForComboBox();
                     } else {
-
+                        createCboPO(POs);
+                        getPOItemForComboBox();
+                        getTaxTypeForComboBox();
                     }
                 }
             });
@@ -3582,7 +3593,7 @@
             //getPOItemForComboBox();
             getUnitForComboBox();
             getBranchesPOItemForComboBox();
-            getTaxTypeForComboBox();
+            //getTaxTypeForComboBox();
             getBUCUnitForComboBox();
         }
 
