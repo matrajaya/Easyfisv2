@@ -15,6 +15,7 @@ namespace easyfis.Business
         // =========================
         public void UpdateArticleInventory(Int32 ArticleInventoryId)
         {
+
             // retrieve inventories
             var inventories = from d in db.TrnInventories
                               where d.ArticleInventoryId == ArticleInventoryId
