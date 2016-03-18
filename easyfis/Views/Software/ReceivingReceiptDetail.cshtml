@@ -446,13 +446,13 @@
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_ItemCode"></div>
 
-                                            <input type="text" id="RRLine_ItemId_data" class="requiredRRLine">
-                                            <input type="text" id="RRLine_ItemCode_selectedValue" />
+                                            <input type="hidden" id="RRLine_ItemId_data" class="requiredRRLine">
+                                            <input type="hidden" id="RRLine_ItemCode_selectedValue" />
                                         </dd>
                                         <dt>Item Description</dt>
                                         <dd>
                                             <div class="comboBox-wide" id="RRLine_ItemDescription"></div>
-                                            <input type="text" id="RRLine_ItemDescription_selectedValue" />
+                                            <input type="hidden" id="RRLine_ItemDescription_selectedValue" />
                                         </dd>
                                         <dt>Particulars</dt>
                                         <dd><textarea class="form-control textarea-custom requiredRRLine" id="RRLine_Particulars"></textarea></dd>
@@ -2647,7 +2647,6 @@
         // GET PO Items for PO for Combo Box
         // =================================
         function getPOItemForComboBox() {
-            computeTAX();
 
             POItems = new wijmo.collections.ObservableArray();
             var RRLinePOId = document.getElementById('RRLine_PONo_data').value;
@@ -2859,7 +2858,6 @@
             document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemCode.selectedIndex].Amount;
             document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
             
-            computeTAX();
         }
 
         // =================================
@@ -3002,7 +3000,6 @@
             document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemDescription.selectedIndex].Amount;
             document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
 
-            computeTAX();
         }
 
         // =============
@@ -3293,10 +3290,11 @@
             var replacedAmount = inputedAmount.replace(/\,/g,'');
             var replacedVATRate = inputedVATRate.replace(/\,/g,'');
             var replacedWTAXRate = inputedWTAXRate.replace(/\,/g,'');
-
+            
             if(document.getElementById('RRLine_TAXInclusive').value == 'true') {
                 document.getElementById('RRLine_VATAmount').value = Math.round(((replacedAmount / (1 + replacedVATRate/100)) * (replacedVATRate/100)) * 100) / 100;
                 document.getElementById('RRLine_WTAXAmount').value = Math.round(((replacedAmount / (1 + replacedVATRate/100)) * (replacedWTAXRate/100)) * 100) / 100;
+               
             } else {
                 document.getElementById('RRLine_VATAmount').value = Math.round((replacedAmount * (replacedVATRate/100)) * 100) / 100;
                 document.getElementById('RRLine_WTAXAmount').value = Math.round((replacedAmount * (replacedWTAXRate/100)) * 100) / 100;
@@ -3497,7 +3495,12 @@
             getBranchesPOItemForComboBox();
             //getTaxTypeForComboBox();
             getBUCUnitForComboBox();
+               
+            setTimeout(function () {
+                computeTAX();
+            }, 200);
 
+            
             $('.requiredRRLine').each(function () {
                 $(this).css({
                     "border": "",
@@ -3595,6 +3598,10 @@
             getBranchesPOItemForComboBox();
             //getTaxTypeForComboBox();
             getBUCUnitForComboBox();
+
+            setTimeout(function () {
+                computeTAX();
+            }, 200);
         }
 
         // =============
