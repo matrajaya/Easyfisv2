@@ -40,11 +40,11 @@
                     <div class="col-md-4">
                         <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
                             <li class="active"><a data-toggle="pill" href="#AP">Accounts Payable</a></li>
-                            @*<li><a data-toggle="pill" href="#APV">Accounts Payable Voucher</a></li>*@
-                            @*<li><a data-toggle="pill" href="#IVSR">Input VAT Summary Report</a></li>
-                                <li><a data-toggle="pill" href="#WTDR">Withholding Tax Detail Report</a></li>
-                                <li><a data-toggle="pill" href="#WTSR">Withholding Tax Sumamry Report</a></li>
-                                <li><a data-toggle="pill" href="#COCTW">Certificate of Creditable Tax Withheld (Form 2307)</a></li>*@
+                            <li><a data-toggle="pill" href="#APV">Accounts Payable Voucher</a></li>
+                            <li><a data-toggle="pill" href="#IVSR">Input VAT Summary Report</a></li>
+                            <li><a data-toggle="pill" href="#WTDR">Withholding Tax Detail Report</a></li>
+                            <li><a data-toggle="pill" href="#WTSR">Withholding Tax Sumamry Report</a></li>
+                            <li><a data-toggle="pill" href="#COCTW">Certificate of Creditable Tax Withheld (Form 2307)</a></li>
                         </ul>
                     </div>
                     <div class="col-md-8">
@@ -74,12 +74,12 @@
                                                         <input type="hidden" id="accountsPaybleReport_Comapny_selectedValue" />
                                                     </div>
                                                 </div>
-                                                @*<div class="form-group">
+                                                <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="filterAccountAndSupplier" />
                                                     </div>
-                                                </div>*@
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -839,7 +839,7 @@
 
             // filter accounts payable and supplier
             $('#filterTabs').hide();
-            //document.getElementById('filterAccountAndSupplier').checked = false;
+            document.getElementById('filterAccountAndSupplier').checked = false;
             $("#filterAccountAndSupplier").click(function () {
                 if ($(this).is(':checked')) {
                     $('#filterTabs').show();
