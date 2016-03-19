@@ -123,11 +123,11 @@
                                 </div>
                                 <br />
                                 @*<div class="form-group">
-                                    <div class="col-sm-4"></div>
-                                    <div class="col-sm-8">
-                                        <button type="button" class="btn btn-primary btn-sm">Depreciation</button>
-                                    </div>
-                                </div>*@
+                                        <div class="col-sm-4"></div>
+                                        <div class="col-sm-8">
+                                            <button type="button" class="btn btn-primary btn-sm">Depreciation</button>
+                                        </div>
+                                    </div>*@
                                 <div class="form-group">
                                     <div class="col-sm-8">
                                         <input type="hidden" id="JV_IsLocked">
@@ -240,7 +240,7 @@
                                 <dd>
                                     <div id="JVL_APRRId" class="comboBox-wide"></div>
 
-                                    <input type="hidden" id="JVL_APRRId_data"/>
+                                    <input type="hidden" id="JVL_APRRId_data" />
                                     <input type="hidden" id="JVL_APRRId_selectedValue" />
                                 </dd>
                                 <dt>SI No.</dt>
@@ -467,113 +467,115 @@
                 data: {},
                 success: function (Results) {
                     $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        journalVouchers.push({
-                            Id: Results.Id,
-                            BranchId: Results.BranchId,
-                            Branch: Results.Branch,
-                            JVNumber: Results.JVNumber,
-                            ManualJVNumber: Results.ManualJVNumber,
-                            JVDate: Results.JVDate,
-                            Particulars: Results.Particulars,
-                            PreparedById: Results.PreparedById,
-                            PreparedBy: Results.PreparedBy,
-                            CheckedById: Results.CheckedById,
-                            CheckedBy: Results.CheckedBy,
-                            ApprovedById: Results.ApprovedById,
-                            ApprovedBy: Results.ApprovedBy,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
-                        });
+                    //if (Results.length > 0) {
+                    //    journalVouchers.push({
+                    //        Id: Results.Id,
+                    //        BranchId: Results.BranchId,
+                    //        Branch: Results.Branch,
+                    //        JVNumber: Results.JVNumber,
+                    //        ManualJVNumber: Results.ManualJVNumber,
+                    //        JVDate: Results.JVDate,
+                    //        Particulars: Results.Particulars,
+                    //        PreparedById: Results.PreparedById,
+                    //        PreparedBy: Results.PreparedBy,
+                    //        CheckedById: Results.CheckedById,
+                    //        CheckedBy: Results.CheckedBy,
+                    //        ApprovedById: Results.ApprovedById,
+                    //        ApprovedBy: Results.ApprovedBy,
+                    //        IsLocked: Results.IsLocked,
+                    //        CreatedById: Results.CreatedById,
+                    //        CreatedBy: Results.CreatedBy,
+                    //        CreatedDateTime: Results.CreatedDateTime,
+                    //        UpdatedById: Results.UpdatedById,
+                    //        UpdatedBy: Results.UpdatedBy,
+                    //        UpdatedDateTime: Results.UpdatedDateTime
+                    //    });
+                    //}
+
+                    if(Results != null) {
+                        document.getElementById('branch_Id_data').value = Results.BranchId;
+                        document.getElementById('branch_selectedValue').value = Results.Branch;
+                        document.getElementById('journalVoucher_No').value = Results.JVNumber;
+
+                        var JV_Number = Results.JVNumber;
+                        //var JV_Number_Display = JV_Number.replace(/(\d{3})(\d+)/, '$1-$2');
+                        document.getElementById('journalVoucher_No_Display').value = JV_Number;
+
+                        document.getElementById('manual_JournalVoucher_No').value = Results.ManualJVNumber;
+                        document.getElementById('journalVoucher_date_Data').value = Results.JVDate;
+                        document.getElementById('journalVoucher_Particulars').value = Results.Particulars;
+
+                        document.getElementById('preparedByUserId_Data').value = Results.PreparedById;
+                        document.getElementById('preparedByUserId_selectedValue').value = Results.PreparedBy;
+                        document.getElementById('checkedByUserId_Data').value = Results.CheckedById;
+                        document.getElementById('checkedByUserId_selectedValue').value = Results.CheckedBy;
+                        document.getElementById('approvedByUserId_Data').value = Results.ApprovedById;
+                        document.getElementById('approvedByUserId_selectedValue').value = Results.ApprovedBy;
+
+                        document.getElementById('JV_IsLocked').value = Results.IsLocked;
+
+
+                        if(document.getElementById('JV_IsLocked').value == 'true') {
+                            $("#cmdJournalJournalVoucher").prop("disabled", false);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", false);
+                            $('#cmdSaveAndLockJournalVoucher').prop('disabled', true);
+
+                            $("#cmdSaveJournalVoucher").prop("disabled", true);
+                            $("#cmdEditJournalVoucher").prop("disabled", false);
+
+                            //document.getElementById('journalVoucher_No').disabled = true;
+                            document.getElementById('manual_JournalVoucher_No').disabled = true;
+                            document.getElementById('journalVoucher_Particulars').disabled = true;
+
+                            document.getElementById('isLocked_Status').checked = true;
+
+                            $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", true);
+
+                        } else if(document.getElementById('JV_IsLocked').value == 'false') {
+                            $("#cmdJournalJournalVoucher").prop("disabled", true);
+                            $("#cmdPreviewJournalVoucher").prop("disabled", true);
+                            $('#cmdSaveAndLockJournalVoucher').prop('disabled', false);
+                            $("#cmdEditJournalVoucher").prop("disabled", true);
+                            $("#cmdSaveJournalVoucher").prop("disabled", false);
+
+                            document.getElementById('isLocked_Status').checked = false;
+                            //document.getElementById('journalVoucher_No').disabled = false;
+                            document.getElementById('manual_JournalVoucher_No').disabled = false;
+                            document.getElementById('journalVoucher_Particulars').disabled = false;
+                            $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", false);
+                        }
+
+                        document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                        document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                        document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                        document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                        var journalVoucherDate = Results.JVDate;
+                        if(document.getElementById('JV_IsLocked').value == 'true') {
+                            journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
+                                disabled: true,
+                                format: 'MM/dd/yyyy',
+                                value: new Date(journalVoucherDate),
+                                mask: '99/99/9999',
+                                onValueChanged: function () {
+                                    document.getElementById('journalVoucher_date_Data').value = this.value.toLocaleDateString();
+                                }
+                            });
+                        } else if(document.getElementById('JV_IsLocked').value == 'false') {
+                            journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
+                                disabled: false,
+                                format: 'MM/dd/yyyy',
+                                value: new Date(journalVoucherDate),
+                                mask: '99/99/9999',
+                                onValueChanged: function () {
+                                    document.getElementById('journalVoucher_date_Data').value = this.value.toLocaleDateString();
+                                }
+                            });
+                        }
+
+                        getBranchesForComboBox();
+                        getUsersForComboBox();
                     }
-
-                    document.getElementById('branch_Id_data').value = Results.BranchId;
-                    document.getElementById('branch_selectedValue').value = Results.Branch;
-                    document.getElementById('journalVoucher_No').value = Results.JVNumber;
-
-                    var JV_Number = Results.JVNumber;
-                    //var JV_Number_Display = JV_Number.replace(/(\d{3})(\d+)/, '$1-$2');
-                    document.getElementById('journalVoucher_No_Display').value = JV_Number;
-
-                    document.getElementById('manual_JournalVoucher_No').value = Results.ManualJVNumber;
-                    document.getElementById('journalVoucher_date_Data').value = Results.JVDate;
-                    document.getElementById('journalVoucher_Particulars').value = Results.Particulars;
-
-                    document.getElementById('preparedByUserId_Data').value = Results.PreparedById;
-                    document.getElementById('preparedByUserId_selectedValue').value = Results.PreparedBy;
-                    document.getElementById('checkedByUserId_Data').value = Results.CheckedById;
-                    document.getElementById('checkedByUserId_selectedValue').value = Results.CheckedBy;
-                    document.getElementById('approvedByUserId_Data').value = Results.ApprovedById;
-                    document.getElementById('approvedByUserId_selectedValue').value = Results.ApprovedBy;
-
-                    document.getElementById('JV_IsLocked').value = Results.IsLocked;
-
-
-                    if(document.getElementById('JV_IsLocked').value == 'true') {
-                        $("#cmdJournalJournalVoucher").prop("disabled", false);
-                        $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                        $('#cmdSaveAndLockJournalVoucher').prop('disabled', true);
-
-                        $("#cmdSaveJournalVoucher").prop("disabled", true);
-                        $("#cmdEditJournalVoucher").prop("disabled", false);
-
-                        //document.getElementById('journalVoucher_No').disabled = true;
-                        document.getElementById('manual_JournalVoucher_No').disabled = true;
-                        document.getElementById('journalVoucher_Particulars').disabled = true;
-
-                        document.getElementById('isLocked_Status').checked = true;
-
-                        $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", true);
-
-                    } else if(document.getElementById('JV_IsLocked').value == 'false') {
-                        $("#cmdJournalJournalVoucher").prop("disabled", true);
-                        $("#cmdPreviewJournalVoucher").prop("disabled", true);
-                        $('#cmdSaveAndLockJournalVoucher').prop('disabled', false);
-                        $("#cmdEditJournalVoucher").prop("disabled", true);
-                        $("#cmdSaveJournalVoucher").prop("disabled", false);
-
-                        document.getElementById('isLocked_Status').checked = false;
-                        //document.getElementById('journalVoucher_No').disabled = false;
-                        document.getElementById('manual_JournalVoucher_No').disabled = false;
-                        document.getElementById('journalVoucher_Particulars').disabled = false;
-                        $("#cmdJournalVoucherLineAddJournalVoucherLineButton").prop("disabled", false);
-                    }
-
-                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
-
-                    var journalVoucherDate = Results.JVDate;
-                    if(document.getElementById('JV_IsLocked').value == 'true') {
-                        journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
-                            disabled: true,
-                            format: 'MM/dd/yyyy',
-                            value: new Date(journalVoucherDate),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('journalVoucher_date_Data').value = this.value.toLocaleDateString();
-                            }
-                        });
-                    } else if(document.getElementById('JV_IsLocked').value == 'false') {
-                        journalVoucherDate = new wijmo.input.InputDate('#journalVoucher_Date', {
-                            disabled: false,
-                            format: 'MM/dd/yyyy',
-                            value: new Date(journalVoucherDate),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('journalVoucher_date_Data').value = this.value.toLocaleDateString();
-                            }
-                        });
-                    }
-
-                    getBranchesForComboBox();
-                    getUsersForComboBox();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -609,21 +611,28 @@
                                 type: 'GET',
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
-                                success: function (results) {
-                                    if (results.length > 0) {
-                                        branches.push({
-                                            BranchId: results.Id,
-                                            BranchBranch: results.Branch
-                                        });
+                                success: function (branchResults) {
+                                    //if (branchResults.length > 0) {
+                                    //    branches.push({
+                                    //        BranchId: results.Id,
+                                    //        BranchBranch: results.Branch
+                                    //    });
+                                    //}
+
+                                    if(branchResults != null) {
+                                        document.getElementById('branch_Id_data').value = @branchId;
+                                        document.getElementById('branch_selectedValue').value = branchResults.Branch;
+
+                                        createCboBranch(branches);
                                     }
-                                    document.getElementById('branch_Id_data').value = @branchId;
-                                    document.getElementById('branch_selectedValue').value = results.Branch;
-                                    createCboBranch(branches);
+
                                 }
                             });
                         } else {
                             createCboBranch(branches);
                         }
+                    } else {
+                        createCboBranch(branches);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -643,6 +652,17 @@
             for (var i = 0; i < branchCollections.items.length; i++) {
                 branchList.push(branchCollections.items[i].BranchBranch);
             }
+            
+            var disabled;
+            if(branches == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
 
             cboBranch.dispose();
             cboBranch = new wijmo.input.ComboBox('#branch_Id', {
@@ -650,12 +670,17 @@
                 placeholder: "Select Branch",
                 itemsSource: branchList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#branch_Id_data").val(branchCollections.items[this.selectedIndex].BranchId);
                 }
             });
+            
+            if(branches == 0) {
+                document.getElementById('branch_Id_data').value = "";
+            } else {
+                document.getElementById('branch_Id_data').value = branchCollections.items[cboBranch.selectedIndex].BranchId;
+            }
         }
 
         // =======================
@@ -709,6 +734,10 @@
                             createCboUserCheckedBy(users);
                             createCboUserApprovedBy(users);
                         }
+                    } else {
+                        createCboUserPreparedBy(users)
+                        createCboUserCheckedBy(users);
+                        createCboUserApprovedBy(users);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -728,6 +757,17 @@
             for (var i = 0; i < usersCollection.items.length; i++) {
                 userList.push(usersCollection.items[i].UserFullName);
             }
+            
+            var disabled;
+            if(users == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
 
             cboUserPreparedBy.dispose();
             cboUserPreparedBy = new wijmo.input.ComboBox('#preparedByUserId', {
@@ -735,12 +775,17 @@
                 placeholder: "Select User",
                 itemsSource: userList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('preparedByUserId_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#preparedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
                 }
             });
+            
+            if(users == 0) {
+                document.getElementById('preparedByUserId_Data').value = "";
+            } else {
+                document.getElementById('preparedByUserId_Data').value = usersCollection.items[cboUserPreparedBy.selectedIndex].UserId;
+            }
         }
 
         // ================================
@@ -752,45 +797,34 @@
             for (var i = 0; i < usersCollection.items.length; i++) {
                 userList.push(usersCollection.items[i].UserFullName);
             }
-
-            if(document.getElementById('JV_IsLocked').value == 'true') {
-                cboUserCheckedBy.dispose();
-                cboUserCheckedBy = new wijmo.input.ComboBox('#checkedByUserId', {
-                    disabled: true,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('checkedByUserId_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#checkedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            } else if(document.getElementById('JV_IsLocked').value == 'false') {
-                cboUserCheckedBy.dispose();
-                cboUserCheckedBy = new wijmo.input.ComboBox('#checkedByUserId', {
-                    disabled: false,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('checkedByUserId_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#checkedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+            
+            var disabled;
+            if(users == 0) {
+                disabled = true;
             } else {
-                cboUserCheckedBy.dispose();
-                cboUserCheckedBy = new wijmo.input.ComboBox('#checkedByUserId', {
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('checkedByUserId_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#checkedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+                if(document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboUserCheckedBy.dispose();
+            cboUserCheckedBy = new wijmo.input.ComboBox('#checkedByUserId', {
+                disabled: disabled,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                selectedValue: document.getElementById('checkedByUserId_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#checkedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+           
+            if(users == 0) {
+                document.getElementById('checkedByUserId_Data').value = "";
+            } else {
+                document.getElementById('checkedByUserId_Data').value = usersCollection.items[cboUserCheckedBy.selectedIndex].UserId;
             }
         }
 
@@ -803,45 +837,34 @@
             for (var i = 0; i < usersCollection.items.length; i++) {
                 userList.push(usersCollection.items[i].UserFullName);
             }
+            
+            var disabled;
+            if(users == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
 
-            if(document.getElementById('JV_IsLocked').value == 'true') {
-                cboUserApprovedBy.dispose();
-                cboUserApprovedBy = new wijmo.input.ComboBox('#approvedByUserId', {
-                    disabled: true,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('approvedByUserId_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#approvedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            }  else if(document.getElementById('JV_IsLocked').value == 'false') {
-                cboUserApprovedBy.dispose();
-                cboUserApprovedBy = new wijmo.input.ComboBox('#approvedByUserId', {
-                    disabled: false,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('approvedByUserId_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#approvedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            }  else {
-                cboUserApprovedBy.dispose();
-                cboUserApprovedBy = new wijmo.input.ComboBox('#approvedByUserId', {
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('approvedByUserId_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#approvedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+            cboUserApprovedBy.dispose();
+            cboUserApprovedBy = new wijmo.input.ComboBox('#approvedByUserId', {
+                disabled: disabled,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                selectedValue: document.getElementById('approvedByUserId_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#approvedByUserId_Data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+            
+            if(users == 0) {
+                document.getElementById('approvedByUserId_Data').value = "";
+            } else {
+                document.getElementById('approvedByUserId_Data').value = usersCollection.items[cboUserApprovedBy.selectedIndex].UserId;
             }
         }
 
@@ -1306,7 +1329,7 @@
                                     document.getElementById('journalVoucherLineNameLabel').innerHTML = 'Journal Voucher Line List';
                                     $('#cmdSaveJournalVoucher').hide();
                                 } else {
-                                
+
                                     for (i = 0; i < Results.length; i++) {
                                         journalVoucherLines.push({
                                             EditId: "<button class='btn btn-primary btn-xs btn-block' id='cmdJournalVoucherLineEditButton' onclick='cmdJournalVoucherLineEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
@@ -1392,18 +1415,21 @@
                                         BranchId: results.Id,
                                         BranchBranch: results.Branch
                                     });
+
+                                    createCboBranchForJournalVoucherLine(branches);
+                                } else {
+                                    createCboBranchForJournalVoucherLine(branches);
                                 }
                                 //document.getElementById('JVL_Branch_Id_Data').value = @branchId;
                                 //document.getElementById('JVL_Branch_Id_selectedValue').value = results.Branch;
-                                createCboBranchForJournalVoucherLine(branches);
+                               
                             }
                         });
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
-            }
-            );
+            });
 
             return branches;
         }
@@ -1417,6 +1443,17 @@
             for (var i = 0; i < branchCollections.items.length; i++) {
                 branchList.push(branchCollections.items[i].BranchBranch);
             }
+            
+            var disabled;
+            if(branches == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
 
             cboBranchJVL.dispose();
             cboBranchJVL = new wijmo.input.ComboBox('#JVL_Branch_Id', {
@@ -1424,12 +1461,17 @@
                 placeholder: "Select Branch",
                 itemsSource: branchList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('JVL_Branch_Id_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#JVL_Branch_Id_Data").val(branchCollections.items[this.selectedIndex].BranchId);
                 }
             });
+
+            if(branches == 0) {
+                document.getElementById('JVL_Branch_Id_Data').value = "";
+            } else {
+                document.getElementById('JVL_Branch_Id_Data').value = branchCollections.items[cboBranchJVL.selectedIndex].BranchId;
+            }
         }
 
         // ==================================================
@@ -1452,6 +1494,8 @@
                             });
                         }
                         createCboAccountsForJournalVoucherLine(accounts);
+                    } else {
+                        createCboAccountsForJournalVoucherLine(accounts);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1469,28 +1513,43 @@
             for (var i = 0; i < accountCollections.items.length; i++) {
                 accountList.push(accountCollections.items[i].AccountAccount);
             }
+            
+            var disabled;
+            if(accounts == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
 
             cboAccountJVL.dispose();
             cboAccountJVL = new wijmo.input.ComboBox('#JVL_Account_Id', {
+                disabled: disabled,
                 placeholder: "Select Account",
                 itemsSource: accountList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('JVL_Account_Id_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#JVL_Account_Id_Data").val(accountCollections.items[this.selectedIndex].AccountId);
-
                     getArticlesForComboBoxInJournalVoucherLine();
-
                 }
             });
+
+            if(accounts == 0) {
+                document.getElementById('JVL_Account_Id_Data').value = "";
+            } else {
+                document.getElementById('JVL_Account_Id_Data').value = accountCollections.items[cboAccountJVL.selectedIndex].AccountId;
+                getArticlesForComboBoxInJournalVoucherLine();
+            }
         }
 
         // ==================================================
         // GET Articles for Combo Box in Journal Voucher Line
         // ==================================================
         function getArticlesForComboBoxInJournalVoucherLine() {
-
             var accountId;
             if(document.getElementById('JVL_Account_Id_Data').value == "") {
                 accountId = 0;
@@ -1520,8 +1579,7 @@
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
-            }
-            );
+            });
         }
 
         // ==============================================
@@ -1534,10 +1592,15 @@
                 articleList.push(articleCollections.items[i].ArticleArticle);
             }
 
+            var disabled;
             if(articles == 0) {
                 disabled = true;
             } else {
-                disabled = false;
+                if(document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
 
             cboArticleJVL.dispose();
@@ -1546,12 +1609,17 @@
                 placeholder: "Select Article",
                 itemsSource: articleList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('JVL_Aritcle_Id_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#JVL_Aritcle_Id_Data").val(articleCollections.items[this.selectedIndex].ArticleId);
                 }
             });
+
+            if(articles == 0) {
+                document.getElementById('JVL_Aritcle_Id_Data').value = "";
+            } else {
+                document.getElementById('JVL_Aritcle_Id_Data').value = articleCollections.items[cboArticleJVL.selectedIndex].ArticleId;
+            }
         }
 
         // ===================================================
@@ -1581,8 +1649,7 @@
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
-            }
-            );
+            });
         }
 
         // ===============================================
@@ -1594,12 +1661,16 @@
             for (var i = 0; i < salesCollections.items.length; i++) {
                 salesList.push(salesCollections.items[i].SINumber + " - " + salesCollections.items[i].Branch);
             }
-
+           
             var disabled;
             if(sales == 0) {
                 disabled = true;
             } else {
-                disabled = false;
+                if(document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
 
             cboSalesJVL.dispose();
@@ -1608,12 +1679,17 @@
                 placeholder: "Select SI Number",
                 itemsSource: salesList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('JVL_ARSIId_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#JVL_ARSIId_data").val(salesCollections.items[this.selectedIndex].SalesId);
                 }
             });
+
+            if(sales == 0) {
+                document.getElementById('JVL_ARSIId_data').value = "";
+            } else {
+                document.getElementById('JVL_ARSIId_data').value = salesCollections.items[cboSalesJVL.selectedIndex].SalesId;
+            }
         }
 
         // ===================================================
@@ -1656,12 +1732,16 @@
             for (var i = 0; i < RRCollections.items.length; i++) {
                 RRList.push(RRCollections.items[i].RRNumber + " - " + RRCollections.items[i].Branch);
             }
-
+            
             var disabled;
             if(receivingReceipts == 0) {
                 disabled = true;
             } else {
-                disabled = false;
+                if(document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
 
             cboRRJVL.dispose();
@@ -1670,12 +1750,17 @@
                 placeholder: "Select RR Number",
                 itemsSource: RRList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('JVL_APRRId_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#JVL_APRRId_data").val(RRCollections.items[this.selectedIndex].RRId);
                 }
             });
+
+            if(receivingReceipts == 0) {
+                document.getElementById('JVL_APRRId_data').value = "";
+            } else {
+                document.getElementById('JVL_APRRId_data').value = RRCollections.items[cboRRJVL.selectedIndex].RRId;
+            }
         }
 
         // =============================================
@@ -1686,7 +1771,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredJournalVoucherLine').each(function () {
                 $(this).css({
                     "border": "",
@@ -1837,7 +1922,7 @@
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
-                                
+
                                 $('#journalVoucherLineEdit').modal('hide');
 
                                 journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLineByJVId());
@@ -1886,7 +1971,7 @@
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Updated");
-                               
+
                                 $('#journalVoucherLineEdit').modal('hide');
 
                                 journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLineByJVId());
@@ -1956,7 +2041,7 @@
                         $("#cmdConfirmDeleteJournalVoucherLine").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButtonJournalVoucherLine").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        
+
                         $('#deleteJournalVoucherConfirm').modal('hide');
 
                         journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLineByJVId());
@@ -2327,19 +2412,22 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        if (Results.length > 0) {
-                            journalVouchers.push({
-                                Id: Results.Id,
-                                JVNumber: Results.JVNumber
-                            });
-                        }
-                        var JV_Number = parseInt(Results.JVNumber);
-                        var JV_Number_PlusOne = 0000000001;
-                        var JV_Num_Results = JV_Number + JV_Number_PlusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+                        //if (Results.length > 0) {
+                        //    journalVouchers.push({
+                        //        Id: Results.Id,
+                        //        JVNumber: Results.JVNumber
+                        //    });
+                        //}
 
-                        document.getElementById('journalVoucher_No').value = zerofill(JV_Num_Results, 10);
-                        document.getElementById('journalVoucher_No_Display').value = zerofill(JV_Num_Results, 10);
+                        if(Results != null) {
+                            var JV_Number = parseInt(Results.JVNumber);
+                            var JV_Number_PlusOne = 0000000001;
+                            var JV_Num_Results = JV_Number + JV_Number_PlusOne;
+                            //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+
+                            document.getElementById('journalVoucher_No').value = zerofill(JV_Num_Results, 10);
+                            document.getElementById('journalVoucher_No_Display').value = zerofill(JV_Num_Results, 10);
+                        }
                     }
                 });
 

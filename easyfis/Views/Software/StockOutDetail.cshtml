@@ -500,126 +500,128 @@
                 data: {},
                 success: function (Results) {
                     $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        stockOuts.push({
-                            Id: Results.Id,
-                            BranchId: Results.BranchId,
-                            Branch: Results.Branch,
-                            OTNumber: Results.OTNumber,
-                            OTDate: Results.OTDate,
-                            AccountId: Results.AccountId,
-                            Account: Results.Account,
-                            ArticleId: Results.ArticleId,
-                            Article: Results.Article,
-                            Particulars: Results.Particulars,
-                            ManualOTNumber: Results.ManualOTNumber,
-                            PreparedById: Results.PreparedById,
-                            PreparedBy: Results.PreparedBy,
-                            CheckedById: Results.CheckedById,
-                            CheckedBy: Results.CheckedBy,
-                            ApprovedById: Results.ApprovedById,
-                            ApprovedBy: Results.ApprovedBy,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
+                    //if (Results.length > 0) {
+                    //    stockOuts.push({
+                    //        Id: Results.Id,
+                    //        BranchId: Results.BranchId,
+                    //        Branch: Results.Branch,
+                    //        OTNumber: Results.OTNumber,
+                    //        OTDate: Results.OTDate,
+                    //        AccountId: Results.AccountId,
+                    //        Account: Results.Account,
+                    //        ArticleId: Results.ArticleId,
+                    //        Article: Results.Article,
+                    //        Particulars: Results.Particulars,
+                    //        ManualOTNumber: Results.ManualOTNumber,
+                    //        PreparedById: Results.PreparedById,
+                    //        PreparedBy: Results.PreparedBy,
+                    //        CheckedById: Results.CheckedById,
+                    //        CheckedBy: Results.CheckedBy,
+                    //        ApprovedById: Results.ApprovedById,
+                    //        ApprovedBy: Results.ApprovedBy,
+                    //        IsLocked: Results.IsLocked,
+                    //        CreatedById: Results.CreatedById,
+                    //        CreatedBy: Results.CreatedBy,
+                    //        CreatedDateTime: Results.CreatedDateTime,
+                    //        UpdatedById: Results.UpdatedById,
+                    //        UpdatedBy: Results.UpdatedBy,
+                    //        UpdatedDateTime: Results.UpdatedDateTime
+                    //    });
+                    //}
+
+                    if(Results != null) {
+                        document.getElementById('StockOut_Branch_data').value = Results.BranchId;
+                        document.getElementById('StockOut_Branch_selectedValue').value = Results.Branch;
+                        document.getElementById('StockOut_OTNumber').value = Results.OTNumber;
+                        document.getElementById('StockOut_OTNumber_Display').value = Results.OTNumber;
+                        document.getElementById('StockOut_OTDate_data').value = Results.OTDate;
+
+                        var OTDate_date = Results.OTDate;
+                        OTDate.dispose();
+                        OTDate = new wijmo.input.InputDate('#StockOut_OTDate', {
+                            format: 'MM/dd/yyyy',
+                            value: new Date(OTDate_date),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('StockOut_OTDate_data').value = this.value.toLocaleDateString();
+                            }
                         });
-                    }
 
-                    document.getElementById('StockOut_Branch_data').value = Results.BranchId;
-                    document.getElementById('StockOut_Branch_selectedValue').value = Results.Branch;
-                    document.getElementById('StockOut_OTNumber').value = Results.OTNumber;
-                    document.getElementById('StockOut_OTNumber_Display').value = Results.OTNumber;
-                    document.getElementById('StockOut_OTDate_data').value = Results.OTDate;
+                        document.getElementById('StockOut_Account_data').value = Results.AccountId;
+                        document.getElementById('StockOut_Account_selectedValue').value = Results.Account;
+                        document.getElementById('StockOut_Article_data').value = Results.ArticleId;
+                        document.getElementById('StockOut_Article_selectedValue').value = Results.Article;
+                        document.getElementById('StockOut_Particulars').value = Results.Particulars;
+                        document.getElementById('StockOUt_ManualOTNumber').value = Results.ManualOTNumber;
+                        document.getElementById('StockOut_PreparedBy_data').value = Results.PreparedById;
+                        document.getElementById('StockOut_PreparedBy_selectedValue').value = Results.PreparedBy;
+                        document.getElementById('StockOut_CheckedBy_data').value = Results.CheckedById;
+                        document.getElementById('StockOut_CheckedBy_selectedValue').value = Results.CheckedBy;
+                        document.getElementById('StockOut_ApprovedBy_data').value = Results.ApprovedById;
+                        document.getElementById('StockOut_ApprovedBy_selectedValue').value = Results.ApprovedBy;
+                        document.getElementById('StockOut_Lock').checked = Results.IsLocked;
 
-                    var OTDate_date = Results.OTDate;
-                    OTDate.dispose();
-                    OTDate = new wijmo.input.InputDate('#StockOut_OTDate', {
-                        format: 'MM/dd/yyyy',
-                        value: new Date(OTDate_date),
-                        mask: '99/99/9999',
-                        onValueChanged: function () {
-                            document.getElementById('StockOut_OTDate_data').value = this.value.toLocaleDateString();
+                        document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                        document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                        document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                        document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                        document.getElementById('StockOut_IsLocked').value = Results.IsLocked;
+
+                        if(document.getElementById('StockOut_IsLocked').value  == 'true') {
+                            document.getElementById('StockOut_Particulars').disabled = true;
+                            document.getElementById('StockOUt_ManualOTNumber').disabled = true;
+
+                            var OTDate_date = Results.OTDate;
+                            OTDate.dispose();
+                            OTDate = new wijmo.input.InputDate('#StockOut_OTDate', {
+                                disabled: true,
+                                format: 'MM/dd/yyyy',
+                                value: new Date(OTDate_date),
+                                mask: '99/99/9999',
+                                onValueChanged: function () {
+                                    document.getElementById('StockOut_OTDate_data').value = this.value.toLocaleDateString();
+                                }
+                            });
+
+                            $("#cmdStockOutJournal").prop("disabled", false);
+                            $("#cmdStockOutSaveLock").prop("disabled", true);
+                            $("#cmdStockOutSave").prop("disabled", true);
+                            $("#cmdStockOutEdit").prop("disabled", false);
+                            $("#cmdStockOutPrint").prop("disabled", false);
+                            $('#btnStockOutAddItem').prop("disabled", true);
+
+                        } else if(document.getElementById('StockOut_IsLocked').value  == 'false') {
+                            document.getElementById('StockOut_Particulars').disabled = false;
+                            document.getElementById('StockOUt_ManualOTNumber').disabled = false;
+
+                            var OTDate_date = Results.OTDate;
+                            OTDate.dispose();
+                            OTDate = new wijmo.input.InputDate('#StockOut_OTDate', {
+                                disabled: false,
+                                format: 'MM/dd/yyyy',
+                                value: new Date(OTDate_date),
+                                mask: '99/99/9999',
+                                onValueChanged: function () {
+                                    document.getElementById('StockOut_OTDate_data').value = this.value.toLocaleDateString();
+                                }
+                            });
+
+                            $("#cmdStockOutJournal").prop("disabled", true);
+                            $("#cmdStockOutSaveLock").prop("disabled", false);
+                            $("#cmdStockOutSave").prop("disabled", true);
+                            $("#cmdStockOutEdit").prop("disabled", true);
+                            $("#cmdStockOutPrint").prop("disabled", true);
+                            $('#btnStockOutAddItem').prop("disabled", false);
+                        } else {
+                            console.log("Invalid IsLocked");
                         }
-                    });
 
-                    document.getElementById('StockOut_Account_data').value = Results.AccountId;
-                    document.getElementById('StockOut_Account_selectedValue').value = Results.Account;
-                    document.getElementById('StockOut_Article_data').value = Results.ArticleId;
-                    document.getElementById('StockOut_Article_selectedValue').value = Results.Article;
-                    document.getElementById('StockOut_Particulars').value = Results.Particulars;
-                    document.getElementById('StockOUt_ManualOTNumber').value = Results.ManualOTNumber;
-                    document.getElementById('StockOut_PreparedBy_data').value = Results.PreparedById;
-                    document.getElementById('StockOut_PreparedBy_selectedValue').value = Results.PreparedBy;
-                    document.getElementById('StockOut_CheckedBy_data').value = Results.CheckedById;
-                    document.getElementById('StockOut_CheckedBy_selectedValue').value = Results.CheckedBy;
-                    document.getElementById('StockOut_ApprovedBy_data').value = Results.ApprovedById;
-                    document.getElementById('StockOut_ApprovedBy_selectedValue').value = Results.ApprovedBy;
-                    document.getElementById('StockOut_Lock').checked = Results.IsLocked;
-
-                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
-
-                    document.getElementById('StockOut_IsLocked').value = Results.IsLocked;
-
-                    if(document.getElementById('StockOut_IsLocked').value  == 'true') {
-                        document.getElementById('StockOut_Particulars').disabled = true;
-                        document.getElementById('StockOUt_ManualOTNumber').disabled = true;
-
-                        var OTDate_date = Results.OTDate;
-                        OTDate.dispose();
-                        OTDate = new wijmo.input.InputDate('#StockOut_OTDate', {
-                            disabled: true,
-                            format: 'MM/dd/yyyy',
-                            value: new Date(OTDate_date),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('StockOut_OTDate_data').value = this.value.toLocaleDateString();
-                            }
-                        });
-
-                        $("#cmdStockOutJournal").prop("disabled", false);
-                        $("#cmdStockOutSaveLock").prop("disabled", true);
-                        $("#cmdStockOutSave").prop("disabled", true);
-                        $("#cmdStockOutEdit").prop("disabled", false);
-                        $("#cmdStockOutPrint").prop("disabled", false);
-                        $('#btnStockOutAddItem').prop("disabled", true);
-
-                    } else if(document.getElementById('StockOut_IsLocked').value  == 'false') {
-                        document.getElementById('StockOut_Particulars').disabled = false;
-                        document.getElementById('StockOUt_ManualOTNumber').disabled = false;
-
-                        var OTDate_date = Results.OTDate;
-                        OTDate.dispose();
-                        OTDate = new wijmo.input.InputDate('#StockOut_OTDate', {
-                            disabled: false,
-                            format: 'MM/dd/yyyy',
-                            value: new Date(OTDate_date),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('StockOut_OTDate_data').value = this.value.toLocaleDateString();
-                            }
-                        });
-
-                        $("#cmdStockOutJournal").prop("disabled", true);
-                        $("#cmdStockOutSaveLock").prop("disabled", false);
-                        $("#cmdStockOutSave").prop("disabled", true);
-                        $("#cmdStockOutEdit").prop("disabled", true);
-                        $("#cmdStockOutPrint").prop("disabled", true);
-                        $('#btnStockOutAddItem').prop("disabled", false);
-                    } else {
-                        console.log("Invalid IsLocked");
+                        getBranchesForComboBox();
+                        getAccountForComboBox();
+                        getArticlesForComboBox();
+                        getUsersForComboBox();
                     }
-
-                    getBranchesForComboBox();
-                    getAccountForComboBox();
-                    getArticlesForComboBox();
-                    getUsersForComboBox();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -680,22 +682,27 @@
                                 type: 'GET',
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
-                                success: function (results) {
-                                    if (results.length > 0) {
-                                        branches.push({
-                                            BranchId: results.Id,
-                                            Branch: results.Branch
-                                        });
-                                    }
-                                    document.getElementById('StockOut_Branch_data').value = results.Id;
-                                    document.getElementById('StockOut_Branch_selectedValue').value = results.Branch;
+                                success: function (branchResults) {
+                                    //if (branchResults.length > 0) {
+                                    //    branches.push({
+                                    //        BranchId: results.Id,
+                                    //        Branch: results.Branch
+                                    //    });
+                                    //}
 
-                                    createCboBranch(branches);
+                                    if(branchResults != null) {
+                                        document.getElementById('StockOut_Branch_data').value = branchResults.Id;
+                                        document.getElementById('StockOut_Branch_selectedValue').value = branchResults.Branch;
+
+                                        createCboBranch(branches);
+                                    }
                                 }
                             });
                         } else {
                             createCboBranch(branches);
                         }
+                    } else {
+                        createCboBranch(branches);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -715,6 +722,17 @@
                 branchList.push(branchCollections.items[i].BranchBranch);
             }
 
+            var disabled;
+            if(branches == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
             cboBranch.dispose();
             cboBranch = new wijmo.input.ComboBox('#StockOut_Branch', {
                 disabled: true,
@@ -727,6 +745,12 @@
                     $("#StockOut_Branch_data").val(branchCollections.items[this.selectedIndex].BranchId);
                 }
             });
+
+            if(branches == 0) {
+                document.getElementById('StockOut_Branch_data').value = "";
+            } else {
+                document.getElementById('StockOut_Branch_data').value = branchCollections.items[cboBranch.selectedIndex].BranchId;
+            }
         }
 
         // =====================
@@ -749,6 +773,8 @@
                             });
                         }
                         createCboForAccount(accounts);
+                    } else {
+                        createCboForAccount(accounts);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -767,50 +793,38 @@
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
 
-            if(document.getElementById('StockOut_IsLocked').value  == 'true') {
-                cboForAccount.dispose();
-                cboForAccount = new wijmo.input.ComboBox('#StockOut_Account', {
-                    disabled: true,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                        $("#StockOut_Account_selectedValue").val(accountCollection.items[this.selectedIndex].AccountAccount);
-                        getArticlesForComboBox();
-                    }
-                });
-            } else if(document.getElementById('StockOut_IsLocked').value  == 'false') {
-                cboForAccount.dispose();
-                cboForAccount = new wijmo.input.ComboBox('#StockOut_Account', {
-                    disabled: false,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                        $("#StockOut_Account_selectedValue").val(accountCollection.items[this.selectedIndex].AccountAccount);
-                        getArticlesForComboBox();
-                    }
-                });
+            var disabled;
+            if(accounts == 0) {
+                disabled = true;
             } else {
-                cboForAccount.dispose();
-                cboForAccount = new wijmo.input.ComboBox('#StockOut_Account', {
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                        $("#StockOut_Account_selectedValue").val(accountCollection.items[this.selectedIndex].AccountAccount);
-                        getArticlesForComboBox();
-                    }
-                });
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboForAccount.dispose();
+            cboForAccount = new wijmo.input.ComboBox('#StockOut_Account', {
+                disabled: disabled,
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                selectedValue: document.getElementById('StockOut_Account_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockOut_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    $("#StockOut_Account_selectedValue").val(accountCollection.items[this.selectedIndex].AccountAccount);
+                    getArticlesForComboBox();
+                }
+            });
+
+            if(accounts == 0) {
+                document.getElementById('StockOut_Account_data').value = "";
+                document.getElementById('StockOut_Account_selectedValue').value = "";
+            } else {
+                document.getElementById('StockOut_Account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
+                document.getElementById('StockOut_Account_selectedValue').value = accountCollection.items[cboForAccount.selectedIndex].AccountAccount;
+                getArticlesForComboBox();
             }
         }
 
@@ -826,7 +840,7 @@
             } else {
                 accountId = document.getElementById('StockOut_Account_data').value;
             }
-            
+
             articlesArticleTypes = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listAccountArticleTypeByAccountId/' + accountId,
@@ -906,34 +920,37 @@
                 articleList.push(articleCollections.items[i].ArticleArticle);
             }
 
+
+            var disabled;
+            if(articles == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                    if(document.getElementById('StockOut_Article_data').value == "") {
+                        disabled = true;
+                    }
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboArticle.dispose();
+            cboArticle = new wijmo.input.ComboBox('#StockOut_Article', {
+                disabled: disabled,
+                placeholder: "Select Article",
+                itemsSource: articleList,
+                isEditable: false,
+                selectedValue: document.getElementById('StockOut_Article_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockOut_Article_data").val(articleCollections.items[this.selectedIndex].ArticleId);
+                }
+            });
+
             if(articles == 0) {
                 document.getElementById('StockOut_Article_data').value = "";
-
-                cboArticle.dispose();
-                cboArticle = new wijmo.input.ComboBox('#StockOut_Article', {
-                    disabled: true,
-                    placeholder: "Select Article",
-                    itemsSource: articleList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_Article_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_Article_data").val(articleCollections.items[this.selectedIndex].ArticleId);
-                    }
-                });
-
             } else {
-                cboArticle.dispose();
-                cboArticle = new wijmo.input.ComboBox('#StockOut_Article', {
-                    placeholder: "Select Article",
-                    itemsSource: articleList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_Article_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_Article_data").val(articleCollections.items[this.selectedIndex].ArticleId);
-                    }
-                });
+                document.getElementById('StockOut_Article_data').value = articleCollections.items[cboArticle.selectedIndex].ArticleId;
             }
         }
 
@@ -988,6 +1005,10 @@
                             createCboUserApprovedBy(users);
 
                         }
+                    } else {
+                        createCboUserPreparedBy(users);
+                        createCboUserCheckedBy(users);
+                        createCboUserApprovedBy(users);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1006,18 +1027,34 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
+            var disabled;
+            if(users == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
             cboPreparedBy.dispose();
             cboPreparedBy = new wijmo.input.ComboBox('#StockOut_PreparedBy', {
                 disabled: true,
                 placeholder: "Select User",
                 itemsSource: userList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('StockOut_PreparedBy_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#StockOut_PreparedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                 }
             });
+
+            if(users == 0) {
+                document.getElementById('StockOut_PreparedBy_data').value = "";
+            } else {
+                document.getElementById('StockOut_PreparedBy_data').value = usersCollection.items[cboPreparedBy.selectedIndex].UserId;
+            }
         }
 
         // ==================================
@@ -1030,44 +1067,33 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            if(document.getElementById('StockOut_IsLocked').value  == 'true') {
-                cboCheckedBy.dispose();
-                cboCheckedBy = new wijmo.input.ComboBox('#StockOut_CheckedBy', {
-                    disabled: true,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_CheckedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            } else if(document.getElementById('StockOut_IsLocked').value  == 'false') {
-                cboCheckedBy.dispose();
-                cboCheckedBy = new wijmo.input.ComboBox('#StockOut_CheckedBy', {
-                    disabled: false,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_CheckedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+            var disabled;
+            if(users == 0) {
+                disabled = true;
             } else {
-                cboCheckedBy.dispose();
-                cboCheckedBy = new wijmo.input.ComboBox('#StockOut_CheckedBy', {
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_CheckedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboCheckedBy.dispose();
+            cboCheckedBy = new wijmo.input.ComboBox('#StockOut_CheckedBy', {
+                disabled: disabled,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                selectedValue: document.getElementById('StockOut_CheckedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockOut_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+
+            if(users == 0) {
+                document.getElementById('StockOut_CheckedBy_data').value = "";
+            } else {
+                document.getElementById('StockOut_CheckedBy_data').value = usersCollection.items[cboCheckedBy.selectedIndex].UserId;
             }
         }
 
@@ -1081,46 +1107,34 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            if(document.getElementById('StockOut_IsLocked').value  == 'true') {
-                cboApprovedBy.dispose();
-                cboApprovedBy = new wijmo.input.ComboBox('#StockOut_ApprovedBy', {
-                    disabled: true,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_ApprovedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            } else if(document.getElementById('StockOut_IsLocked').value  == 'false') {
-                cboApprovedBy.dispose();
-                cboApprovedBy = new wijmo.input.ComboBox('#StockOut_ApprovedBy', {
-                    disabled: false,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_ApprovedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+            var disabled;
+            if(users == 0) {
+                disabled = true;
             } else {
-                cboApprovedBy.dispose();
-                cboApprovedBy = new wijmo.input.ComboBox('#StockOut_ApprovedBy', {
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockOut_ApprovedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockOut_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
 
+            cboApprovedBy.dispose();
+            cboApprovedBy = new wijmo.input.ComboBox('#StockOut_ApprovedBy', {
+                disabled: disabled,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                selectedValue: document.getElementById('StockOut_ApprovedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockOut_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+
+            if(users == 0) {
+                document.getElementById('StockOut_ApprovedBy_data').value = "";
+            } else {
+                document.getElementById('StockOut_ApprovedBy_data').value = usersCollection.items[cboApprovedBy.selectedIndex].UserId;
+            }
         }
 
         // =====================================================
@@ -1772,6 +1786,10 @@
                         createCboForManualCode(articleInventories);
                         createCboForItemDescription(articleInventories);
                         createCboForInventoryCode(articleInventories);
+                    } else {
+                        createCboForManualCode(articleInventories);
+                        createCboForItemDescription(articleInventories);
+                        createCboForInventoryCode(articleInventories);
                     }
                 }
             });
@@ -1787,12 +1805,23 @@
                 ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
             }
 
+            var disabled;
+            if(articleItems == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
             cboManualCodeArticleItems.dispose();
             cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockOutItem_ItemCode', {
+                disabled: disabled,
                 placeholder: "Select Manual Code",
                 itemsSource: ManualCodeList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockOutItem_ItemCode_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockOutItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
@@ -1823,6 +1852,34 @@
                     }
                 }
             });
+
+            if(articleItems == 0) {
+                document.getElementById('stockOutItem_ItemId_data').value = "";
+                document.getElementById('stockOutItem_ItemCode_selectedValue').value = "";
+                document.getElementById('stockOutItem_ItemDescription_selectedValue').value = "";
+                document.getElementById('stockOutItem_Unit_data').value = "";
+                document.getElementById('stockOutItem_Unit_selectedValue').value = "";
+                document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+                document.getElementById('stockOutItem_Particulars').value = "";
+                document.getElementById('stockOutItem_ItemInventoryCode_data').value = "";
+                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
+                document.getElementById('stockOutItem_Cost').value = "";
+            } else {
+                document.getElementById('stockOutItem_ItemId_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId;
+                document.getElementById('stockOutItem_ItemCode_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemCode;
+                document.getElementById('stockOutItem_ItemDescription_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemDescription;
+                document.getElementById('stockOutItem_Unit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_Unit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
+                document.getElementById('stockOutItem_BUCUnit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
+                document.getElementById('stockOutItem_Particulars').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Particulars;
+                document.getElementById('stockOutItem_ItemInventoryCode_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Id;
+                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].InventoryCode;
+                document.getElementById('stockOutItem_Cost').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Cost;
+
+                getStockOutItemUnitForComboBox();
+            }
         }
 
         // ====================
@@ -1834,13 +1891,24 @@
             for (var i = 0; i < ItemDescriptionCollections.items.length; i++) {
                 ItemDescriptionList.push(ItemDescriptionCollections.items[i].ItemDescription);
             }
+            
+            var disabled;
+            if(articleItems == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
 
             cboItemDescriptionArticleItems.dispose();
             cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockOutItem_ItemDescription', {
+                disabled: disabled,
                 placeholder: "Select Item Description",
                 itemsSource: ItemDescriptionList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockOutItem_ItemDescription_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockOutItem_ItemId_data").val(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
@@ -1871,6 +1939,32 @@
                     }
                 }
             });
+
+            if(articleItems == 0) {
+                document.getElementById('stockOutItem_ItemId_data').value = "";
+                document.getElementById('stockOutItem_ItemCode_selectedValue').value = "";
+                document.getElementById('stockOutItem_ItemDescription_selectedValue').value = "";
+                document.getElementById('stockOutItem_Unit_data').value = "";
+                document.getElementById('stockOutItem_Unit_selectedValue').value = "";
+                document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+                document.getElementById('stockOutItem_Particulars').value = "";
+                document.getElementById('stockOutItem_ItemInventoryCode_data').value = "";
+                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
+                document.getElementById('stockOutItem_Cost').value = "";
+            } else {
+                document.getElementById('stockOutItem_ItemId_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId;
+                document.getElementById('stockOutItem_ItemCode_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemCode;
+                document.getElementById('stockOutItem_ItemDescription_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemDescription;
+                document.getElementById('stockOutItem_Unit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_Unit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
+                document.getElementById('stockOutItem_BUCUnit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
+                document.getElementById('stockOutItem_Particulars').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Particulars;
+                document.getElementById('stockOutItem_ItemInventoryCode_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Id;
+                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].InventoryCode;
+                document.getElementById('stockOutItem_Cost').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Cost;
+            }
         }
 
         // ===========================
@@ -1882,13 +1976,24 @@
             for (var i = 0; i < InventoryCodeCollection.items.length; i++) {
                 InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
             }
+            
+            var disabled;
+            if(articleInventories == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
 
             cboInventoryCode.dispose();
             cboInventoryCode = new wijmo.input.ComboBox('#stockOutItem_ItemInventoryCode', {
+                disabled: disabled,
                 placeholder: "Select Inventory Code",
                 itemsSource: InventoryCodeList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockOutItem_ItemId_data").val(InventoryCodeCollection.items[this.selectedIndex].ItemId);
@@ -1902,7 +2007,6 @@
                     $("#stockOutItem_ItemInventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
                     $("#stockOutItem_ItemInventoryCode_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].InventoryCode);
                     $("#stockOutItem_Cost").val(InventoryCodeCollection.items[this.selectedIndex].Cost);
-
 
                     createCboForManualCode(articleInventories);
                     createCboForItemDescription(articleInventories);
@@ -1920,6 +2024,32 @@
                     }
                 }
             });
+
+            if(articleInventories == 0) {
+                document.getElementById('stockOutItem_ItemId_data').value = "";
+                document.getElementById('stockOutItem_ItemCode_selectedValue').value = "";
+                document.getElementById('stockOutItem_ItemDescription_selectedValue').value = "";
+                document.getElementById('stockOutItem_Unit_data').value = "";
+                document.getElementById('stockOutItem_Unit_selectedValue').value = "";
+                document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+                document.getElementById('stockOutItem_Particulars').value = "";
+                document.getElementById('stockOutItem_ItemInventoryCode_data').value = "";
+                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
+                document.getElementById('stockOutItem_Cost').value = "";
+            } else {
+                document.getElementById('stockOutItem_ItemId_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemId;
+                document.getElementById('stockOutItem_ItemCode_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemCode;
+                document.getElementById('stockOutItem_ItemDescription_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemDescription;
+                document.getElementById('stockOutItem_Unit_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_Unit_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Unit;
+                document.getElementById('stockOutItem_BUCUnit_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Unit;
+                document.getElementById('stockOutItem_Particulars').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Particulars;
+                document.getElementById('stockOutItem_ItemInventoryCode_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Id;
+                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].InventoryCode;
+                document.getElementById('stockOutItem_Cost').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Cost;
+            }
         }
 
         // =============
@@ -1943,6 +2073,9 @@
                         }
                         createCboForStockOutUnit(stockOutUnits);
                         createCboForStockOutBaseUnit(stockOutUnits);
+                    } else {
+                        createCboForStockOutUnit(stockOutUnits);
+                        createCboForStockOutBaseUnit(stockOutUnits);
                     }
                 }
             });
@@ -1957,13 +2090,24 @@
             for (var i = 0; i < StockOutUnitCollection.items.length; i++) {
                 StockOutUnitList.push(StockOutUnitCollection.items[i].Unit);
             }
+            
+            var disabled;
+            if(stockOutUnits == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
 
             cboStockOutUnit.dispose();
             cboStockOutUnit = new wijmo.input.ComboBox('#stockOutItem_Unit', {
+                disabled: disabled,
                 placeholder: "Select Unit",
                 itemsSource: StockOutUnitList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockOutItem_Unit_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockOutItem_Unit_data").val(StockOutUnitCollection.items[this.selectedIndex].UnitId);
@@ -1974,6 +2118,18 @@
                     createCboForStockOutBaseUnit(stockOutUnits);
                 }
             });
+
+            if(stockOutUnits == 0) {
+                document.getElementById('stockOutItem_Unit_data').value = "";
+                document.getElementById('stockOutItem_Unit_selectedValue').value = "";
+                document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+            } else {
+                document.getElementById('stockOutItem_Unit_data').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_Unit_selectedValue').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].Unit;
+                document.getElementById('stockOutItem_BUCUnit_data').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].Unit;
+            }
         }
 
         // ===========================
@@ -1984,6 +2140,17 @@
             var StockOutBaseUnitList = new Array();
             for (var i = 0; i < StockOutBaseUnitCollection.items.length; i++) {
                 StockOutBaseUnitList.push(StockOutBaseUnitCollection.items[i].Unit);
+            }
+            
+            var disabled;
+            if(stockOutUnits == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
 
             cboBaseUnit.dispose();
@@ -2003,6 +2170,18 @@
                     createCboForStockOutUnit(stockOutUnits);
                 }
             });
+            
+            if(stockOutUnits == 0) {
+                document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+                document.getElementById('stockOutItem_Unit_data').value = "";
+                document.getElementById('stockOutItem_Unit_selectedValue').value = "";
+            } else {
+                document.getElementById('stockOutItem_BUCUnit_data').value = StockOutBaseUnitCollection.items[cboStockOutUnit.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = StockOutBaseUnitCollection.items[cboStockOutUnit.selectedIndex].Unit;
+                document.getElementById('stockOutItem_Unit_data').value = StockOutBaseUnitCollection.items[cboStockOutUnit.selectedIndex].UnitId;
+                document.getElementById('stockOutItem_Unit_selectedValue').value = StockOutBaseUnitCollection.items[cboStockOutUnit.selectedIndex].Unit;
+            }
         }
 
         // =====================
@@ -2025,12 +2204,13 @@
                             });
                         }
                         createStockOutCboForAccount(stockOutItemAccounts);
+                    } else {
+                        createStockOutCboForAccount(stockOutItemAccounts);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
-            }
-            );
+            });
         }
 
         // ===============
@@ -2042,19 +2222,35 @@
             for (var i = 0; i < stockOutAccountCollection.items.length; i++) {
                 stockOutAccountList.push(stockOutAccountCollection.items[i].AccountAccount);
             }
+            
+            var disabled;
+            if(stockOutItemAccounts == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
 
             cboStockOutAccount.dispose();
             cboStockOutAccount = new wijmo.input.ComboBox('#stockOutItem_ExpenseAccount', {
-                disabled: false,
+                disabled: disabled,
                 placeholder: "Select Expense Account",
                 itemsSource: stockOutAccountList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockOutItem_ExpenseAccount_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockOutItem_ExpenseAccount_data").val(stockOutAccountCollection.items[this.selectedIndex].AccountId);
                 }
             });
+
+            if(stockOutItemAccounts == 0) {
+                document.getElementById('stockOutItem_ExpenseAccount_data').value = "";
+            } else {
+                document.getElementById('stockOutItem_ExpenseAccount_data').value = stockOutAccountCollection.items[cboStockOutAccount.selectedIndex].AccountId;
+            }
         }
 
         // ==================
@@ -2109,7 +2305,7 @@
             //    });
             //},100);
 
-            getStockOutItemUnitForComboBox();
+            //getStockOutItemUnitForComboBox();
             getStockOutItemAccountForComboBox();
 
             document.getElementById('stockOutItem_Id').value = 0;
@@ -2156,7 +2352,7 @@
             $("#cmdStockOutItemDetailCloseButton").prop("disabled", false);
 
             getArticleItemForManualCodeAndComponent();
-            getStockOutItemUnitForComboBox();
+            //getStockOutItemUnitForComboBox();
             getStockOutItemAccountForComboBox();
 
             var item = items.currentEditItem;

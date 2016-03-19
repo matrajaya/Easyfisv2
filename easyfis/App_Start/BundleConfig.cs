@@ -66,7 +66,7 @@ namespace easyfis
             bundles.Add(new StyleBundle("~/Content/Software-css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap.min.css",
-                      "~/Content/dashboard.css",
+                      "~/Content/software.css",
                       "~/Content/toastr.css"));
 
             // ==================================
