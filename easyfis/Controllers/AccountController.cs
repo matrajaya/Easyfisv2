@@ -88,7 +88,7 @@ namespace easyfis.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("LoginError", "Username or Password is incorrect. Please Try again.");
+                    ModelState.AddModelError("LoginError", "Username or Password is incorrect! Please try again.");
                     return View(model);
             }
         }
@@ -173,12 +173,13 @@ namespace easyfis.Controllers
                     Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
                     Data.MstUser newUser = new Data.MstUser();
 
-                    var users = from d in db.AspNetUsers where d.UserName == user.UserName select d;
+                    var users = from d in db.IdentityUsers where d.UserName == user.UserName select d;
+
+                    Debug.WriteLine(users.First().Id);
                     //var mstUserId = (from d in db.MstUsers where d.UserId == users.First().Id select d.Id).SingleOrDefault();
                     var isLocked = true;
-                   
-                    //int mstUserId = Convert.ToInt32(mstUserIdLastValue) + 1;
 
+                    //int mstUserId = Convert.ToInt32(mstUserIdLastValue) + 1;
 
                     var date = DateTime.Now;
 
@@ -186,16 +187,15 @@ namespace easyfis.Controllers
 
                     if (users.Any())
                     {
-                        newUser.UserId = users.First().Id;
                         newUser.UserName = model.UserName;
                         newUser.Password = model.Password;
                         newUser.FullName = model.FullName;
-
                         newUser.IsLocked = isLocked;
                         newUser.CreatedById = mstUserIdLastValueId;
                         newUser.CreatedDateTime = date;
                         newUser.UpdatedById = mstUserIdLastValueId;
                         newUser.UpdatedDateTime = date;
+                        newUser.UserId = users.First().Id;
 
                         db.MstUsers.InsertOnSubmit(newUser);
                         db.SubmitChanges();
@@ -216,7 +216,7 @@ namespace easyfis.Controllers
                         }
                         //db.SubmitChanges();
                     }
-            
+
                     return RedirectToAction("Register", "Account");
                 }
                 //AddErrors(result);
