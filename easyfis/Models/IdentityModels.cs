@@ -19,7 +19,7 @@ namespace easyfis.Models
             return userIdentity;
         }
 
-        public string FullName { get; set; }
+        //public string FullName { get; set; }
     }
  
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

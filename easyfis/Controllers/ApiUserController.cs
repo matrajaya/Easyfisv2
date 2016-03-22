@@ -22,7 +22,7 @@ namespace easyfis.Controllers
                         select new Models.ApplicationUser
                             {
                                 Id = d.Id,
-                                FullName = d.FullName,
+                                //FullName = d.FullName,
                                 UserName = d.UserName
                             };
             return users.ToList();
@@ -86,7 +86,7 @@ namespace easyfis.Controllers
                 {
                     var updateAspUsers = aspUsers.FirstOrDefault();
 
-                    updateAspUsers.FullName = aspUser.FullName;
+                    //updateAspUsers.FullName = aspUser.FullName;
 
                     db.SubmitChanges();
 
