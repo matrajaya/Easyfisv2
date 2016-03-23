@@ -108,33 +108,6 @@
             else {
                 $.ajax({
                     type: "PUT",
-                    url: '/api/updateAspUser/' + id,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdSaveUserButton").prop("disabled", true);
-                            $("#cmdUserDetailCloseButton").prop("disabled", true);
-                            toastr.success("Successfully Updated Profile");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                        },
-                        500: function () {
-                            toastr.error("Server Error");
-                        }
-                    }
-                });
-
-                $.ajax({
-                    type: "PUT",
                     url: '/api/updateMstUser/' + id,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -146,6 +119,8 @@
                             window.setTimeout(function () {
                                 location.reload()
                             }, 1000);
+
+                            toastr.success("Successfully Updated");
                         },
                         404: function () {
                             toastr.error("Can't Update");
