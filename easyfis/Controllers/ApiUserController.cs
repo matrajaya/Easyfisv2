@@ -20,23 +20,9 @@ namespace easyfis.Controllers
         {
             var users = from d in db.AspNetUsers
                         select new Models.ApplicationUser
-                            {
-                                Id = d.Id,
-                                UserName = d.UserName
-                            };
-            return users.ToList();
-        }
-
-        // ==================
-        // LIST Identity User
-        // ==================
-        [Route("api/listIdentityUser")]
-        public List<Models.ApplicationUser> GetIdentityUsers()
-        {
-            var users = from d in db.IdentityUsers
-                        select new Models.ApplicationUser
                         {
                             Id = d.Id,
+                            FullName = d.FullName,
                             UserName = d.UserName
                         };
             return users.ToList();
@@ -50,19 +36,19 @@ namespace easyfis.Controllers
         {
             var users = from d in db.MstUsers
                         select new Models.MstUser
-                            {
-                                Id = d.Id,
-                                FullName = d.FullName,
-                                UserName = d.UserName,
-                                IsLocked = d.IsLocked,
-                                UserId = d.UserId,
-                                //CreatedById = d.CreatedById,
-                                //CreatedBy = d.MstUser1.FullName,
-                                //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                //UpdatedById = d.UpdatedById,
-                                //UpdatedBy = d.MstUser2.FullName,
-                                //UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                            };
+                        {
+                            Id = d.Id,
+                            FullName = d.FullName,
+                            UserName = d.UserName,
+                            IsLocked = d.IsLocked,
+                            UserId = d.UserId,
+                            //CreatedById = d.CreatedById,
+                            //CreatedBy = d.MstUser1.FullName,
+                            //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                            //UpdatedById = d.UpdatedById,
+                            //UpdatedBy = d.MstUser2.FullName,
+                            //UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                        };
             return users.ToList();
         }
 
@@ -78,12 +64,12 @@ namespace easyfis.Controllers
             var users = from d in db.MstUsers
                         where d.Id == mstUserId
                         select new Models.MstUser
-                                  {
-                                      Id = d.Id,
-                                      FullName = d.FullName,
-                                      UserName = d.UserName,
-                                      IsLocked = d.IsLocked
-                                  };
+                        {
+                            Id = d.Id,
+                            FullName = d.FullName,
+                            UserName = d.UserName,
+                            IsLocked = d.IsLocked
+                        };
             return (Models.MstUser)users.FirstOrDefault();
         }
 
@@ -91,7 +77,7 @@ namespace easyfis.Controllers
         // UPDATE ASP User
         // ===============
         [Route("api/updateAspUser/{id}")]
-        public HttpResponseMessage PutAspUser(String id, Models.ApplicationUser aspUser)
+        public HttpResponseMessage Put(String id, Models.ApplicationUser aspUser)
         {
             try
             {
@@ -100,7 +86,7 @@ namespace easyfis.Controllers
                 {
                     var updateAspUsers = aspUsers.FirstOrDefault();
 
-                    //updateAspUsers.FullName = aspUser.FullName;
+                    updateAspUsers.FullName = aspUser.FullName;
 
                     db.SubmitChanges();
 
@@ -110,36 +96,7 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-            }
-            catch
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
 
-        // ====================
-        // UPDATE Identity User
-        // ====================
-        [Route("api/updateIdentitypUser/{id}")]
-        public HttpResponseMessage PutIdentityUser(String id, Models.ApplicationUser identityUser)
-        {
-            try
-            {
-                var aspUsers = from d in db.IdentityUsers where d.Id == id select d;
-                if (aspUsers.Any())
-                {
-                    var updateAspUsers = aspUsers.FirstOrDefault();
-
-                    //updateAspUsers.FullName = aspUser.FullName;
-
-                    db.SubmitChanges();
-
-                    return Request.CreateResponse(HttpStatusCode.OK);
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
             }
             catch
             {
@@ -173,6 +130,7 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
+
             }
             catch
             {
