@@ -413,16 +413,18 @@
                             <input type="hidden" id="discount_id" />
                             <dl class="dl-horizontal">
                                 <dt>Discount</dt>
-                                <dd><input type="text" class="form-control input-sm requiredDiscount" id="discount_Discount" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredDiscount" id="discount_Discount" placeholder="Discount" /></dd>
                                 <dt>Discount Rate (%)</dt>
-                                <dd><input type="text" class="form-control input-sm requiredDiscount" id="discount_DiscountRate" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredDiscount input-30" id="discount_DiscountRate" placeholder="Rate (%)" /></dd>
                                 <dt>VAT Inclusive</dt>
                                 <dd><input type="checkbox" id="discount_VATInclusive" /></dd>
                                 <dt>Account</dt>
                                 <dd>
-                                    <div id="discount_Account" class="comboBox-wide"></div>
+                                    <div id="discount_AccountCode" class="input-30"></div>
+                                    <div id="discount_Account" class="input-68"></div>
 
                                     <input type="hidden" class="requiredDiscount" id="discount_Account_data" />
+                                    <input type="hidden" id="discount_AccountCode_selectedValue" />
                                     <input type="hidden" id="discount_Account_selectedValue" />
                                 </dd>
                                 <dt>Lock (Edit)</dt>
@@ -476,12 +478,14 @@
                             <input type="hidden" id="payType_id" />
                             <dl class="dl-horizontal">
                                 <dt>Pay Type</dt>
-                                <dd><input type="text" class="form-control input-sm requiredPayType" id="payType_PayType" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredPayType" id="payType_PayType" placeholder="Pay type" /></dd>
                                 <dt>Account</dt>
                                 <dd>
-                                    <div id="payType_Account" class="comboBox-wide"></div>
+                                    <div id="payType_AccountCode" class="input-30"></div>
+                                    <div id="payType_Account" class="input-68"></div>
 
                                     <input type="hidden" class="requiredPayType" id="payType_Account_data" />
+                                    <input type="hidden" id="payType_AccountCode_selectedValue" />
                                     <input type="hidden" id="payType_Account_selectedValue" />
                                 </dd>
                                 <dt>Lock (Edit)</dt>
@@ -535,16 +539,18 @@
                             <input type="hidden" id="taxType_id" />
                             <dl class="dl-horizontal">
                                 <dt>Tax Type</dt>
-                                <dd><input type="text" class="form-control input-sm requiredTaxType" id="taxType_TaxType" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredTaxType" id="taxType_TaxType" placeholder="Tax type"/></dd>
                                 <dt>Tax Rate (%)</dt>
-                                <dd><input type="text" class="form-control input-sm requiredTaxType" id="taxType_TaxRate" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredTaxType input-30" id="taxType_TaxRate" placeholder="Rate (%)"/></dd>
                                 <dt>VAT Inclusive</dt>
                                 <dd><input type="checkbox" id="taxType_TaxVATInclusive" class="requiredTaxType" /></dd>
                                 <dt>Account</dt>
                                 <dd>
-                                    <div id="taxType_Account" class="comboBox-wide"></div>
+                                    <div id="taxType_AccountCode" class="input-30"></div>
+                                    <div id="taxType_Account" class="input-68"></div>
 
                                     <input type="hidden" class="requiredTaxType" id="taxType_Account_data" />
+                                    <input type="hidden" id="taxType_AccountCode_selectedValue" />
                                     <input type="hidden" id="taxType_Account_selectedValue" />
                                 </dd>
                                 <dt>Lock (Edit)</dt>
@@ -598,7 +604,7 @@
                             <input type="hidden" id="unit_id" />
                             <dl class="dl-horizontal">
                                 <dt>Unit</dt>
-                                <dd><input type="text" class="form-control input-sm requiredUnit" id="unit_Unit" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredUnit" id="unit_Unit" placeholder="Unit"/></dd>
                                 <dt>Lock (Edit)</dt>
                                 <dd><input type="checkbox" id="unit_Lock" /></dd>
                             </dl>
@@ -650,9 +656,9 @@
                             <input type="hidden" id="term_id" />
                             <dl class="dl-horizontal">
                                 <dt>Term</dt>
-                                <dd><input type="text" class="form-control input-sm requiredTerm" id="term_Term" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredTerm" id="term_Term" placeholder="Term"/></dd>
                                 <dt>No. of Days</dt>
-                                <dd><input type="text" class="form-control input-sm requiredTerm" id="term_NoOfDays" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredTerm input-30" id="term_NoOfDays" placeholder="No. of days"/></dd>
                                 <dt>Lock (Edit)</dt>
                                 <dd><input type="checkbox" id="term_Lock" /></dd>
                             </dl>
@@ -704,20 +710,22 @@
                             <input type="hidden" id="employee_id" />
                             <dl class="dl-horizontal">
                                 <dt>Code</dt>
-                                <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_Code" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_Code" placeholder="Code"/></dd>
                                 <dt>Employee</dt>
-                                <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_Employee" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_Employee" placeholder="Employee"/></dd>
                                 <dt>Account</dt>
                                 <dd>
-                                    <div id="employee_Account" class="comboBox-wide"></div>
+                                    <div id="employee_AccountCode" class="input-30"></div>
+                                    <div id="employee_Account" class="input-68"></div>
 
                                     <input type="hidden" class="requiredEmployee" id="employee_Account_data" />
+                                    <input type="hidden" id="employee_AccountCode_selectedValue" />
                                     <input type="hidden" id="employee_Account_selectedValue" />
                                 </dd>
                                 <dt>Address</dt>
-                                <dd><textarea class="form-control input-sm textarea-custom requiredEmployee" id="employee_Address"></textarea></dd>
+                                <dd><textarea class="form-control input-sm textarea-custom requiredEmployee" id="employee_Address" placeholder="Address"></textarea></dd>
                                 <dt>Contact Number</dt>
-                                <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_ContactNumber" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredEmployee" id="employee_ContactNumber" placeholder="Contact Number"/></dd>
                                 <dt>Lock (Edit)</dt>
                                 <dd><input type="checkbox" id="employee_Lock" /></dd>
                             </dl>
@@ -967,6 +975,7 @@
         var discounts;
         var discountAccounts;
         var discountGrid;
+        var cboDiscountForAccountCode;
         var cboDiscountForAccount;
         var btnFirstPageGridDiscount;
         var btnPreviousPageGridDiscount;
@@ -999,6 +1008,7 @@
                                     DiscountRate: Results[i]["DiscountRate"],
                                     IsInclusive: Results[i]["IsInclusive"],
                                     AccountId: Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account: Results[i]["Account"],
                                     IsLocked: Results[i]["IsLocked"],
                                     CreatedById: Results[i]["CreatedById"],
@@ -1017,6 +1027,7 @@
                                     DiscountRate: Results[i]["DiscountRate"],
                                     IsInclusive: Results[i]["IsInclusive"],
                                     AccountId: Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account: Results[i]["Account"],
                                     IsLocked: Results[i]["IsLocked"],
                                     CreatedById: Results[i]["CreatedById"],
@@ -1101,13 +1112,58 @@
                         for (i = 0; i < results.length; i++) {
                             discountAccounts.push({
                                 AccountId: results[i]["Id"],
-                                AccountAccount: results[i]["Account"]
+                                AccountCode: results[i]["AccountCode"],
+                                Account: results[i]["Account"]
                             });
                         }
+                        createCboForDiscountAccountCode(discountAccounts);
+                        createCboForDiscountAccount(discountAccounts);
+                    } else {
+                        createCboForDiscountAccountCode(discountAccounts);
                         createCboForDiscountAccount(discountAccounts);
                     }
                 }
             });
+        }
+
+        // ====================
+        // CBO for Account Code
+        // ====================
+        function  createCboForDiscountAccountCode(discountAccounts) {
+            var accountCodeCollection = new wijmo.collections.CollectionView(discountAccounts);
+            var accountCodeList = new Array();
+            for (var i = 0; i < accountCodeCollection.items.length; i++) {
+                accountCodeList.push(accountCodeCollection.items[i].AccountCode);
+            }
+
+            var disabled;
+            if(discountAccounts == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('discount_Lock').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboDiscountForAccountCode.dispose();
+            cboDiscountForAccountCode = new wijmo.input.ComboBox('#discount_AccountCode', {
+                disabled: disabled,
+                placeholder: "Code",
+                itemsSource: accountCodeList,
+                isEditable: false,
+                selectedValue: document.getElementById('discount_AccountCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#discount_Account_data").val(accountCodeCollection.items[this.selectedIndex].AccountId);
+                    $("#discount_Account_selectedValue").val(accountCodeCollection.items[this.selectedIndex].Account);
+
+                    createCboForDiscountAccount(discountAccounts);
+                }
+            });
+
+            document.getElementById('discount_Account_data').value = accountCodeCollection.items[cboDiscountForAccountCode.selectedIndex].AccountId;
+            document.getElementById('discount_Account_selectedValue').value = accountCodeCollection.items[cboDiscountForAccountCode.selectedIndex].Account;
         }
 
         // ===============
@@ -1117,36 +1173,37 @@
             var accountCollection = new wijmo.collections.CollectionView(discountAccounts);
             var accountList = new Array();
             for (var i = 0; i < accountCollection.items.length; i++) {
-                accountList.push(accountCollection.items[i].AccountAccount);
+                accountList.push(accountCollection.items[i].Account);
             }
 
-            if(document.getElementById('discount_Lock').checked == true) {
-                cboDiscountForAccount.dispose();
-                cboDiscountForAccount = new wijmo.input.ComboBox('#discount_Account', {
-                    disabled: true,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('discount_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#discount_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+            var disabled;
+            if(discountAccounts == 0) {
+                disabled = true;
             } else {
-                cboDiscountForAccount.dispose();
-                cboDiscountForAccount = new wijmo.input.ComboBox('#discount_Account', {
-                    disabled: false,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('discount_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#discount_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+                if(document.getElementById('discount_Lock').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
+
+            cboDiscountForAccount.dispose();
+            cboDiscountForAccount = new wijmo.input.ComboBox('#discount_Account', {
+                disabled: disabled,
+                placeholder: "Account",
+                itemsSource: accountList,
+                isEditable: false,
+                selectedValue: document.getElementById('discount_Account_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#discount_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    $("#discount_AccountCode_selectedValue").val(accountCollection.items[this.selectedIndex].AccountCode);
+
+                    createCboForDiscountAccountCode(discountAccounts);
+                }
+            });
+
+            document.getElementById('discount_Account_data').value = accountCollection.items[cboDiscountForAccount.selectedIndex].AccountId;
+            document.getElementById('discount_AccountCode_selectedValue').value = accountCollection.items[cboDiscountForAccount.selectedIndex].AccountCode;
         }
 
         // ============
@@ -1174,7 +1231,9 @@
             document.getElementById('discount_DiscountRate').value = "";
             document.getElementById('discount_VATInclusive').checked = "";
             document.getElementById('discount_Account_data').value = "";
+            document.getElementById('discount_AccountCode_selectedValue').value = "";
             document.getElementById('discount_Account_selectedValue').value = "";
+
             document.getElementById('discount_Lock').checked = false;
 
             if(document.getElementById('discount_Lock').checked == true) {
@@ -1219,7 +1278,9 @@
             document.getElementById('discount_DiscountRate').value = discount.DiscountRate;
             document.getElementById('discount_VATInclusive').checked = discount.IsInclusive ? discount.IsInclusive : '';
             document.getElementById('discount_Account_data').value = discount.AccountId ? discount.AccountId : '';
+            document.getElementById('discount_AccountCode_selectedValue').value = discount.AccountCode ? discount.AccountCode : '';
             document.getElementById('discount_Account_selectedValue').value = discount.Account ? discount.Account : '';
+
             document.getElementById('discount_Lock').checked = discount.IsLocked;
 
             if(document.getElementById('discount_Lock').checked == true) {
@@ -1344,7 +1405,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveDiscountButton").prop("disabled", true);
@@ -1457,7 +1517,7 @@
         // ========
         function discountTab() {
             cboDiscountForAccount = new wijmo.input.ComboBox('#discount_Account');
-
+            cboDiscountForAccountCode = new wijmo.input.ComboBox('#discount_AccountCode');
             discounts = new wijmo.collections.CollectionView(getDiscount());
             discounts.canFilter = true;
             discounts.pageSize = 15;
@@ -1578,6 +1638,7 @@
         var paytypes;
         var payTypeGrid;
         var payTypeAccounts;
+        var cboPayTypeForAccountCode;
         var cboPayTypeForAccount;
         var btnFirstPageGridPayType;
         var btnPreviousPageGridPayType;
@@ -1608,6 +1669,7 @@
                                     Id: Results[i]["Id"],
                                     PayType: Results[i]["PayType"],
                                     AccountId: Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account: Results[i]["Account"],
                                     IsLocked: Results[i]["IsLocked"],
                                     CreatedById: Results[i]["CreatedById"],
@@ -1624,6 +1686,7 @@
                                     Id: Results[i]["Id"],
                                     PayType: Results[i]["PayType"],
                                     AccountId: Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account: Results[i]["Account"],
                                     IsLocked: Results[i]["IsLocked"],
                                     CreatedById: Results[i]["CreatedById"],
@@ -1708,52 +1771,98 @@
                         for (i = 0; i < results.length; i++) {
                             payTypeAccounts.push({
                                 AccountId: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
                                 AccountAccount: results[i]["Account"]
                             });
                         }
+                        createCboForPayTypeAccountCode(payTypeAccounts);
+                        createCboForPayTypeAccount(payTypeAccounts);
+                    } else {
+                        createCboForPayTypeAccountCode(payTypeAccounts);
                         createCboForPayTypeAccount(payTypeAccounts);
                     }
                 }
             });
         }
 
+        // ====================
+        // CBO for Account Code
+        // ====================
+        function createCboForPayTypeAccountCode(payTypeAccounts) {
+            var accountCodeCollection = new wijmo.collections.CollectionView(payTypeAccounts);
+            var accountCodeList = new Array();
+            for (var i = 0; i < accountCodeCollection.items.length; i++) {
+                accountCodeList.push(accountCodeCollection.items[i].AccountCode);
+            }
+
+            var disabled;
+            if(payTypeAccounts == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('payType_Lock').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboPayTypeForAccountCode.dispose();
+            cboPayTypeForAccountCode = new wijmo.input.ComboBox('#payType_AccountCode', {
+                disabled: disabled,
+                placeholder: "Code",
+                itemsSource: accountCodeList,
+                isEditable: false,
+                selectedValue: document.getElementById('payType_AccountCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#payType_Account_data").val(accountCodeCollection.items[this.selectedIndex].AccountId);
+                    $("#payType_Account_selectedValue").val(accountCodeCollection.items[this.selectedIndex].AccountAccount);
+
+                    createCboForPayTypeAccount(payTypeAccounts);
+                }
+            });
+            
+            document.getElementById('payType_Account_data').value = accountCodeCollection.items[cboPayTypeForAccountCode.selectedIndex].AccountId;
+            document.getElementById('payType_Account_selectedValue').value = accountCodeCollection.items[cboPayTypeForAccountCode.selectedIndex].AccountAccount;
+        }
+
         // ===============
         // CBO for Account
         // ===============
-        function  createCboForPayTypeAccount(payTypeAccounts) {
+        function createCboForPayTypeAccount(payTypeAccounts) {
             var accountCollection = new wijmo.collections.CollectionView(payTypeAccounts);
             var accountList = new Array();
             for (var i = 0; i < accountCollection.items.length; i++) {
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
-
-            if(document.getElementById('payType_Lock').checked == true) {
-                cboPayTypeForAccount.dispose();
-                cboPayTypeForAccount = new wijmo.input.ComboBox('#payType_Account', {
-                    disabled: true,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('payType_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#payType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+            
+            var disabled;
+            if(payTypeAccounts == 0) {
+                disabled = true;
             } else {
-                cboPayTypeForAccount.dispose();
-                cboPayTypeForAccount = new wijmo.input.ComboBox('#payType_Account', {
-                    disabled: false,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('payType_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#payType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+                if(document.getElementById('payType_Lock').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
+
+            cboPayTypeForAccount.dispose();
+            cboPayTypeForAccount = new wijmo.input.ComboBox('#payType_Account', {
+                disabled: disabled,
+                placeholder: "Account",
+                itemsSource: accountList,
+                isEditable: false,
+                selectedValue: document.getElementById('payType_Account_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#payType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    $("#payType_AccountCode_selectedValue").val(accountCollection.items[this.selectedIndex].AccountCode);
+
+                    createCboForPayTypeAccountCode(payTypeAccounts);
+                }
+            });
+          
+            document.getElementById('payType_Account_data').value = accountCollection.items[cboPayTypeForAccount.selectedIndex].AccountId;
+            document.getElementById('payType_AccountCode_selectedValue').value = accountCollection.items[cboPayTypeForAccount.selectedIndex].AccountCode;
         }
 
         // ============
@@ -1779,6 +1888,7 @@
             document.getElementById('payType_id').value = 0;
             document.getElementById('payType_PayType').value = "";
             document.getElementById('payType_Account_data').value = "";
+            document.getElementById('payType_AccountCode_selectedValue').value = "";
             document.getElementById('payType_Account_selectedValue').value = "";
             document.getElementById('payType_Lock').checked = false;
 
@@ -1818,6 +1928,7 @@
             document.getElementById('payType_id').value = paytype.Id ? paytype.Id : '';
             document.getElementById('payType_PayType').value = paytype.PayType ? paytype.PayType : '';
             document.getElementById('payType_Account_data').value = paytype.AccountId ? paytype.AccountId : '';
+            document.getElementById('payType_AccountCode_selectedValue').value = paytype.AccountCode ? paytype.AccountCode : '';
             document.getElementById('payType_Account_selectedValue').value = paytype.Account ? paytype.Account : '';
             document.getElementById('payType_Lock').checked = paytype.IsLocked;
 
@@ -1936,7 +2047,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSavePayTypeButton").prop("disabled", true);
@@ -2049,6 +2159,7 @@
         // ========
         function payTypeTab() {
             cboPayTypeForAccount = new wijmo.input.ComboBox('#payType_Account');
+            cboPayTypeForAccountCode = new wijmo.input.ComboBox('#payType_AccountCode');
 
             paytypes = new wijmo.collections.CollectionView(getPayType());
             paytypes.canFilter = true;
@@ -2158,6 +2269,7 @@
         var taxes;
         var taxGrid;
         var taxAccounts;
+        var cboTaxForAccountCode;
         var cboTaxForAccount;
         var btnFirstPageGridTax;
         var btnPreviousPageGridTax;
@@ -2190,6 +2302,7 @@
                                     TaxRate: Results[i]["TaxRate"],
                                     IsInclusive: Results[i]["IsInclusive"],
                                     AccountId: Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account: Results[i]["Account"],
                                     IsLocked: Results[i]["IsLocked"],
                                     CreatedById: Results[i]["CreatedById"],
@@ -2208,6 +2321,7 @@
                                     TaxRate: Results[i]["TaxRate"],
                                     IsInclusive: Results[i]["IsInclusive"],
                                     AccountId: Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account: Results[i]["Account"],
                                     IsLocked: Results[i]["IsLocked"],
                                     CreatedById: Results[i]["CreatedById"],
@@ -2292,52 +2406,98 @@
                         for (i = 0; i < results.length; i++) {
                             taxAccounts.push({
                                 AccountId: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
                                 AccountAccount: results[i]["Account"]
                             });
                         }
+                        createCboForTaxAccountCode(taxAccounts);
+                        createCboForTaxAccount(taxAccounts);
+                    } else {
+                        createCboForTaxAccountCode(taxAccounts);
                         createCboForTaxAccount(taxAccounts);
                     }
                 }
             });
         }
 
+        // ====================
+        // CBO for Account Code
+        // ====================
+        function createCboForTaxAccountCode(taxAccounts) {
+            var accountCodeCollection = new wijmo.collections.CollectionView(taxAccounts);
+            var accountCodeList = new Array();
+            for (var i = 0; i < accountCodeCollection.items.length; i++) {
+                accountCodeList.push(accountCodeCollection.items[i].AccountCode);
+            }
+            
+            var disabled;
+            if(taxAccounts == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('taxType_Lock').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboTaxForAccountCode.dispose();
+            cboTaxForAccountCode = new wijmo.input.ComboBox('#taxType_AccountCode', {
+                disabled: disabled,
+                placeholder: "Select Account",
+                itemsSource: accountCodeList,
+                isEditable: false,
+                selectedValue: document.getElementById('taxType_AccountCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#taxType_Account_data").val(accountCodeCollection.items[this.selectedIndex].AccountId);
+                    $("#taxType_Account_selectedValue").val(accountCodeCollection.items[this.selectedIndex].AccountAccount);
+
+                    createCboForTaxAccount(taxAccounts);
+                }
+            });
+           
+            document.getElementById('taxType_Account_data').value = accountCodeCollection.items[cboTaxForAccountCode.selectedIndex].AccountId;
+            document.getElementById('taxType_Account_selectedValue').value = accountCodeCollection.items[cboTaxForAccountCode.selectedIndex].AccountAccount;
+        }
+
         // ===============
         // CBO for Account
         // ===============
-        function  createCboForTaxAccount(taxAccounts) {
+        function createCboForTaxAccount(taxAccounts) {
             var accountCollection = new wijmo.collections.CollectionView(taxAccounts);
             var accountList = new Array();
             for (var i = 0; i < accountCollection.items.length; i++) {
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
-
-            if(document.getElementById('taxType_Lock').checked == true) {
-                cboTaxForAccount.dispose();
-                cboTaxForAccount = new wijmo.input.ComboBox('#taxType_Account', {
-                    disabled: true,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('taxType_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#taxType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+            
+            var disabled;
+            if(taxAccounts == 0) {
+                disabled = true;
             } else {
-                cboTaxForAccount.dispose();
-                cboTaxForAccount = new wijmo.input.ComboBox('#taxType_Account', {
-                    disabled: false,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('taxType_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#taxType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+                if(document.getElementById('taxType_Lock').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
+
+            cboTaxForAccount.dispose();
+            cboTaxForAccount = new wijmo.input.ComboBox('#taxType_Account', {
+                disabled: disabled,
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                selectedValue: document.getElementById('taxType_Account_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#taxType_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    $("#taxType_AccountCode_selectedValue").val(accountCollection.items[this.selectedIndex].AccountCode);
+
+                    createCboForTaxAccountCode(taxAccounts);
+                }
+            });
+
+            document.getElementById('taxType_Account_data').value = accountCollection.items[cboTaxForAccount.selectedIndex].AccountId;
+            document.getElementById('taxType_AccountCode_selectedValue').value = accountCollection.items[cboTaxForAccount.selectedIndex].AccountCode;
         }
 
         // =======
@@ -2348,7 +2508,7 @@
                 show: true,
                 backdrop: 'static'
             });
-        
+
             $('.requiredTaxType').each(function () {
                 $(this).css({
                     "border": "",
@@ -2365,6 +2525,7 @@
             document.getElementById('taxType_TaxRate').value = "";
             document.getElementById('taxType_TaxVATInclusive').checked = "";
             document.getElementById('taxType_Account_data').value = "";
+            document.getElementById('taxType_AccountCode_selectedValue').value = "";
             document.getElementById('taxType_Account_selectedValue').value = "";
             document.getElementById('taxType_Lock').checked = false;
 
@@ -2392,7 +2553,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredTaxType').each(function () {
                 $(this).css({
                     "border": "",
@@ -2410,6 +2571,7 @@
             document.getElementById('taxType_TaxRate').value = tax.TaxRate;
             document.getElementById('taxType_TaxVATInclusive').checked = tax.IsInclusive ? tax.IsInclusive : '';
             document.getElementById('taxType_Account_data').value = tax.AccountId ? tax.AccountId : '';
+            document.getElementById('taxType_AccountCode_selectedValue').value = tax.AccountCode ? tax.AccountCode : '';
             document.getElementById('taxType_Account_selectedValue').value = tax.Account ? tax.Account : '';
             document.getElementById('taxType_Lock').checked = tax.IsLocked;
 
@@ -2463,7 +2625,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveTaxTypeButton").prop("disabled", true);
@@ -2646,6 +2807,7 @@
         // Tax
         // ===
         function taxTab() {
+            cboTaxForAccountCode =  new wijmo.input.ComboBox('#taxType_AccountCode');
             cboTaxForAccount = new wijmo.input.ComboBox('#taxType_Account');
 
             taxes = new wijmo.collections.CollectionView(getTax());
@@ -2884,7 +3046,7 @@
                 show: true,
                 backdrop: 'static'
             });
-        
+
             $('.requiredUnit').each(function () {
                 $(this).css({
                     "border": "",
@@ -2914,7 +3076,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredUnit').each(function () {
                 $(this).css({
                     "border": "",
@@ -2962,7 +3124,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveUnitButton").prop("disabled", true);
@@ -3365,7 +3526,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredTerm').each(function () {
                 $(this).css({
                     "border": "",
@@ -3402,7 +3563,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredTerm').each(function () {
                 $(this).css({
                     "border": "",
@@ -3529,7 +3690,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveTermButton").prop("disabled", true);
@@ -3749,6 +3909,7 @@
         var employees;
         var employeeGrid;
         var employeeAccounts;
+        var cboEmployeeForAccountCode;
         var cboEmployeeForAccount;
         var btnFirstPageEmployee;
         var btnPreviousPageGridEmployee;
@@ -3786,6 +3947,7 @@
                                     ArticleGroupId : Results[i]["ArticleGroupId"],
                                     ArticleGroup : Results[i]["ArticleGroup"],
                                     AccountId : Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account : Results[i]["Account"],
                                     SalesAccountId : Results[i]["SalesAccountId"],
                                     CostAccountId : Results[i]["CostAccountId"],
@@ -3832,6 +3994,7 @@
                                     ArticleGroupId : Results[i]["ArticleGroupId"],
                                     ArticleGroup : Results[i]["ArticleGroup"],
                                     AccountId : Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account : Results[i]["Account"],
                                     SalesAccountId : Results[i]["SalesAccountId"],
                                     CostAccountId : Results[i]["CostAccountId"],
@@ -3939,52 +4102,98 @@
                         for (i = 0; i < results.length; i++) {
                             employeeAccounts.push({
                                 AccountId: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
                                 AccountAccount: results[i]["Account"]
                             });
                         }
+                        createCboForEmployeeAccountCode(employeeAccounts);
+                        createCboForEmployeeAccount(employeeAccounts);
+                    } else {
+                        createCboForEmployeeAccountCode(employeeAccounts);
                         createCboForEmployeeAccount(employeeAccounts);
                     }
                 }
             });
         }
+        
+        // ===================
+        // CBO for Account Code
+        // ====================
+        function createCboForEmployeeAccountCode(employeeAccounts) {
+            var accountCodeCollection = new wijmo.collections.CollectionView(employeeAccounts);
+            var accountCodeList = new Array();
+            for (var i = 0; i < accountCodeCollection.items.length; i++) {
+                accountCodeList.push(accountCodeCollection.items[i].AccountCode);
+            }
+            
+            var disabled;
+            if(employeeAccounts == 0) {
+                disabled = true;
+            } else {
+                if(document.getElementById('employee_Lock').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboEmployeeForAccountCode.dispose();
+            cboEmployeeForAccountCode = new wijmo.input.ComboBox('#employee_AccountCode', {
+                disabled: disabled,
+                placeholder: "Code",
+                itemsSource: accountCodeList,
+                isEditable: false,
+                selectedValue: document.getElementById('employee_AccountCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#employee_Account_data").val(accountCodeCollection.items[this.selectedIndex].AccountId);
+                    $("#employee_Account_selectedValue").val(accountCodeCollection.items[this.selectedIndex].AccountAccount);
+
+                    createCboForEmployeeAccount(employeeAccounts);
+                }
+            });
+           
+            document.getElementById('employee_Account_data').value = accountCodeCollection.items[cboEmployeeForAccountCode.selectedIndex].AccountId;
+            document.getElementById('employee_Account_selectedValue').value = accountCodeCollection.items[cboEmployeeForAccountCode.selectedIndex].AccountAccount;
+        }
 
         // ===============
         // CBO for Account
         // ===============
-        function  createCboForEmployeeAccount(employeeAccounts) {
+        function createCboForEmployeeAccount(employeeAccounts) {
             var accountCollection = new wijmo.collections.CollectionView(employeeAccounts);
             var accountList = new Array();
             for (var i = 0; i < accountCollection.items.length; i++) {
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
-
-            if(document.getElementById('employee_Lock').checked == true) {
-                cboEmployeeForAccount.dispose();
-                cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account', {
-                    disabled: true,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('employee_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#employee_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+            
+            var disabled;
+            if(employeeAccounts == 0) {
+                disabled = true;
             } else {
-                cboEmployeeForAccount.dispose();
-                cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account', {
-                    disabled: false,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('employee_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#employee_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+                if(document.getElementById('employee_Lock').checked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
+
+            cboEmployeeForAccount.dispose();
+            cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account', {
+                disabled: disabled,
+                placeholder: "Account",
+                itemsSource: accountList,
+                isEditable: false,
+                selectedValue: document.getElementById('employee_Account_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#employee_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    $("#employee_AccountCode_selectedValue").val(accountCollection.items[this.selectedIndex].AccountCode);
+
+                    createCboForEmployeeAccountCode(employeeAccounts);
+                }
+            });
+           
+            document.getElementById('employee_Account_data').value = accountCollection.items[cboEmployeeForAccount.selectedIndex].AccountId;
+            document.getElementById('employee_AccountCode_selectedValue').value = accountCollection.items[cboEmployeeForAccount.selectedIndex].AccountCode;
         }
 
         // ============
@@ -3995,7 +4204,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredEmployee').each(function () {
                 $(this).css({
                     "border": "",
@@ -4011,7 +4220,9 @@
             document.getElementById('employee_Code').value = "";
             document.getElementById('employee_Employee').value = "";
             document.getElementById('employee_Account_data').value = "";
+            document.getElementById('employee_AccountCode_selectedValue').value = "";
             document.getElementById('employee_Account_selectedValue').value = "";
+            
             document.getElementById('employee_Address').value = "";
             document.getElementById('employee_ContactNumber').value = "";
             document.getElementById('employee_Lock').checked = false;
@@ -4038,17 +4249,21 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                    if (Results.length > 0) {
-                        employees.push({
-                            Id: Results.Id,
-                            EmployeeArticleCode: Results.ArticleCode
-                        });
-                    }
-                    var ArticleCode = parseInt(Results.ArticleCode);
-                    var ArticleCode_plusOne = 0000000001;
-                    var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
+                    //if (Results.length > 0) {
+                    //    employees.push({
+                    //        Id: Results.Id,
+                    //        EmployeeArticleCode: Results.ArticleCode
+                    //    });
+                    //}
+                    if(Results != null) {
+                        var ArticleCode = parseInt(Results.ArticleCode);
+                        var ArticleCode_plusOne = 0000000001;
+                        var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
 
-                    document.getElementById('employee_Code').value = zerofill(ArticleCode_Results, 10);
+                        document.getElementById('employee_Code').value = zerofill(ArticleCode_Results, 10);
+                    } else {
+                        document.getElementById('employee_Code').value = '0000000001';
+                    }
                 }
             });
         }
@@ -4062,7 +4277,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredEmployee').each(function () {
                 $(this).css({
                     "border": "",
@@ -4079,6 +4294,7 @@
             document.getElementById('employee_Code').value = employee.ArticleCode ? employee.ArticleCode : '';
             document.getElementById('employee_Employee').value = employee.Article ? employee.Article : '';
             document.getElementById('employee_Account_data').value = employee.AccountId ? employee.AccountId : '';
+            document.getElementById('employee_AccountCode_selectedValue').value = employee.AccountCode ? employee.AccountCode : '';
             document.getElementById('employee_Account_selectedValue').value = employee.Account ? employee.Account : '';
             document.getElementById('employee_Address').value = employee.Address ? employee.Address : '';
             document.getElementById('employee_ContactNumber').value = employee.ContactNumber ? employee.ContactNumber : '';
@@ -4206,7 +4422,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveEmployeeButton").prop("disabled", true);
@@ -4331,6 +4546,7 @@
         // Employee
         // ========
         function employeeTab() {
+            cboEmployeeForAccountCode = new wijmo.input.ComboBox('#employee_AccountCode');
             cboEmployeeForAccount = new wijmo.input.ComboBox('#employee_Account');
             document.getElementById('employee_Code').disabled = true;
 
@@ -4829,7 +5045,7 @@
                 show: true,
                 backdrop: 'static'
             });
-        
+
             $('.requiredArticleGroup').each(function () {
                 $(this).css({
                     "border": "",
@@ -4880,7 +5096,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredArticleGroup').each(function () {
                 $(this).css({
                     "border": "",
@@ -5062,7 +5278,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveArticleGroupButton").prop("disabled", true);
@@ -5548,7 +5763,7 @@
                 show: true,
                 backdrop: 'static'
             });
-        
+
             $('.requiredArticle').each(function () {
                 $(this).css({
                     "border": "",
@@ -5614,7 +5829,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $('.requiredArticle').each(function () {
                 $(this).css({
                     "border": "",
@@ -5759,7 +5974,6 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
             }
             else {
                 $("#cmdSaveArticleButton").prop("disabled", true);

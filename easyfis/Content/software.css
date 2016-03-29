@@ -1,25 +1,24 @@
 ﻿html {
-	position: relative;
-	min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
     /*background: #ffffff;
     font-family: Tahoma;*/
     font-family: Tahoma;
-
-	margin: 0 0 120px;
+    margin: 0 0 220px;
 }
 
 .dashboard-footer {
     background-color: #003366;
     padding-top: 15px;
     color: #FFFFFF;
-    height: 70px;
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
+    height: 150px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 
 /* ========================= */
@@ -29,22 +28,26 @@ body {
     background-color: #003366;
     transition: background-color 1s ease 0s;
 }
-.navbar-inverse .navbar-brand {
-    color: #FFFFFF;
-}
-.navbar-inverse .navbar-nav > li > a {
-    color: #FFFFFF;
-    /*transition: color 1s ease 0s;*/
-}
-.navbar-inverse .navbar-nav > li > a:hover {
-    color: #FFFFFF;
-    background-color: #194775;
-    /*transition: background-color 1s ease 0s;*/
-}
-.navbar-inverse .navbar-nav > .active {
-    color: #FFFFFF;
-    background-color: #194775;
-}
+
+    .navbar-inverse .navbar-brand {
+        color: #FFFFFF;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: #FFFFFF;
+        /*transition: color 1s ease 0s;*/
+    }
+
+        .navbar-inverse .navbar-nav > li > a:hover {
+            color: #FFFFFF;
+            background-color: #194775;
+            /*transition: background-color 1s ease 0s;*/
+        }
+
+    .navbar-inverse .navbar-nav > .active {
+        color: #FFFFFF;
+        background-color: #194775;
+    }
 
 /* ================================= */
 /* SIDE BAR MENUS AND WITH BOOTSTRAP */
@@ -139,7 +142,7 @@ a.menu-orange:focus {
 .c-menu {
     position: fixed;
     z-index: 200;
-    background-color: #194775;
+    background-color: #FFF;
     transition: background-color 1s ease 0s;
     -webkit-transition: -webkit-transform 0.3s;
     /*transition: transform 0.3s;*/
@@ -261,7 +264,7 @@ a.menu-orange:focus {
     .c-mask.is-active {
         width: 100%;
         height: 100%;
-        opacity: 0.7;
+        opacity: 0.5;
         -webkit-transition: opacity 0.3s;
         transition: opacity 0.3s;
     }
@@ -297,12 +300,11 @@ dd {
     padding-bottom: 5px;
     background-color: #003366;
     margin-top: 25px;
-    height: 90px;
     color: #FFFFFF;
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 
 a.profile-name {
@@ -651,42 +653,67 @@ input.checkbox_custom {
     background-color: #f5f2f2;
     border-bottom-color: #337ab7;
     border-bottom-style: solid;
-    border-width:1px;	
+    border-width: 1px;
     border-radius: 0;
 }
-.nav-tabs > li > a:hover {
-    border-bottom-color: #337ab7;
-    border-bottom-style: solid;
-    border-top-style: solid;
-    border-left-style: solid;
-    border-right-style: solid;
-    border-top-color: #337ab7;
-    border-left-color: #337ab7;
-    border-right-color: #337ab7;
-    color: #75a7d2;
-}
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:focus,
-.nav-tabs > li.active > a:hover {
-    background-color: #337ab7 !important;
-    border-color: #2e6da4;
-    color: #fff;
-    box-shadow: none;
-}
-.nav-tabs > li.active > a:focus {
-    color: #fff;
-}
-.nav-tabs > li > a {
-    border-top-style: solid;
-    border-left-style: solid;
-    border-right-style: solid;
-    border-top-color: #337ab7;
-    border-left-color: #337ab7;
-    border-right-color: #337ab7;
-    color: #25669f;
-}
+
+    .nav-tabs > li > a:hover {
+        border-bottom-color: #337ab7;
+        border-bottom-style: solid;
+        border-top-style: solid;
+        border-left-style: solid;
+        border-right-style: solid;
+        border-top-color: #337ab7;
+        border-left-color: #337ab7;
+        border-right-color: #337ab7;
+        color: #75a7d2;
+    }
+
+    .nav-tabs > li.active > a,
+    .nav-tabs > li.active > a:focus,
+    .nav-tabs > li.active > a:hover {
+        background-color: #337ab7 !important;
+        border-color: #2e6da4;
+        color: #fff;
+        box-shadow: none;
+    }
+
+        .nav-tabs > li.active > a:focus {
+            color: #fff;
+        }
+
+    .nav-tabs > li > a {
+        border-top-style: solid;
+        border-left-style: solid;
+        border-right-style: solid;
+        border-top-color: #337ab7;
+        border-left-color: #337ab7;
+        border-right-color: #337ab7;
+        color: #25669f;
+    }
 
 .wj-header.wj-cell {
-   text-align: center;
+    text-align: center;
 }
 
+@media screen and (min-width: 768px) {
+    .account-col-custom-padding {
+        padding-right: 0 !important;
+    }
+}
+
+.input-30 {
+    width: 30%;
+}
+
+.input-50 {
+    width: 50%;
+}
+
+.input-68 {
+    width: 68.5%;
+}
+
+.input-70 {
+    width: 70%;
+}

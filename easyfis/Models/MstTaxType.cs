@@ -15,6 +15,7 @@ namespace easyfis.Models
         public Boolean IsInclusive { get; set; }
         public Int32 AccountId { get; set; }
         public String Account { get; set; }
+        public String AccountCode { get; set; }
         public Boolean IsLocked { get; set; }
         public Int32 CreatedById { get; set; }
         public String CreatedBy { get; set; }

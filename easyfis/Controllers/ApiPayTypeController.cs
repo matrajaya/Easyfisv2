@@ -24,6 +24,7 @@ namespace easyfis.Controllers
                                     Id = d.Id,
                                     PayType = d.PayType,
                                     AccountId = d.AccountId,
+                                    AccountCode = d.MstAccount.AccountCode,
                                     Account = d.MstAccount.Account,
                                     IsLocked = d.IsLocked,
                                     CreatedById = d.CreatedById,
