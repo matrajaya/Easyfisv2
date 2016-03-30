@@ -1453,11 +1453,13 @@ namespace easyfis.Data
 		
 		private int _Id;
 		
-		private string _UserId;
+		private string _User_Id;
 		
 		private string _ClaimType;
 		
 		private string _ClaimValue;
+		
+		private string _UserId;
 		
 		private EntityRef<AspNetUser> _AspNetUser;
 		
@@ -1467,12 +1469,14 @@ namespace easyfis.Data
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnUserIdChanging(string value);
-    partial void OnUserIdChanged();
+    partial void OnUser_IdChanging(string value);
+    partial void OnUser_IdChanged();
     partial void OnClaimTypeChanging(string value);
     partial void OnClaimTypeChanged();
     partial void OnClaimValueChanging(string value);
     partial void OnClaimValueChanged();
+    partial void OnUserIdChanging(string value);
+    partial void OnUserIdChanged();
     #endregion
 		
 		public AspNetUserClaim()
@@ -1501,26 +1505,26 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string UserId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_User_Id", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string User_Id
 		{
 			get
 			{
-				return this._UserId;
+				return this._User_Id;
 			}
 			set
 			{
-				if ((this._UserId != value))
+				if ((this._User_Id != value))
 				{
 					if (this._AspNetUser.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.OnUserIdChanging(value);
+					this.OnUser_IdChanging(value);
 					this.SendPropertyChanging();
-					this._UserId = value;
-					this.SendPropertyChanged("UserId");
-					this.OnUserIdChanged();
+					this._User_Id = value;
+					this.SendPropertyChanged("User_Id");
+					this.OnUser_IdChanged();
 				}
 			}
 		}
@@ -1565,7 +1569,27 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserClaim", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128)")]
+		public string UserId
+		{
+			get
+			{
+				return this._UserId;
+			}
+			set
+			{
+				if ((this._UserId != value))
+				{
+					this.OnUserIdChanging(value);
+					this.SendPropertyChanging();
+					this._UserId = value;
+					this.SendPropertyChanged("UserId");
+					this.OnUserIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserClaim", Storage="_AspNetUser", ThisKey="User_Id", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public AspNetUser AspNetUser
 		{
 			get
@@ -1588,11 +1612,11 @@ namespace easyfis.Data
 					if ((value != null))
 					{
 						value.AspNetUserClaims.Add(this);
-						this._UserId = value.Id;
+						this._User_Id = value.Id;
 					}
 					else
 					{
-						this._UserId = default(string);
+						this._User_Id = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser");
 				}
@@ -1630,6 +1654,8 @@ namespace easyfis.Data
 		
 		private string _ProviderKey;
 		
+		private string _User_Id;
+		
 		private string _UserId;
 		
 		private EntityRef<AspNetUser> _AspNetUser;
@@ -1642,6 +1668,8 @@ namespace easyfis.Data
     partial void OnLoginProviderChanged();
     partial void OnProviderKeyChanging(string value);
     partial void OnProviderKeyChanged();
+    partial void OnUser_IdChanging(string value);
+    partial void OnUser_IdChanged();
     partial void OnUserIdChanging(string value);
     partial void OnUserIdChanged();
     #endregion
@@ -1692,7 +1720,31 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_User_Id", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string User_Id
+		{
+			get
+			{
+				return this._User_Id;
+			}
+			set
+			{
+				if ((this._User_Id != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUser_IdChanging(value);
+					this.SendPropertyChanging();
+					this._User_Id = value;
+					this.SendPropertyChanged("User_Id");
+					this.OnUser_IdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserId", DbType="NVarChar(128)")]
 		public string UserId
 		{
 			get
@@ -1703,10 +1755,6 @@ namespace easyfis.Data
 			{
 				if ((this._UserId != value))
 				{
-					if (this._AspNetUser.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnUserIdChanging(value);
 					this.SendPropertyChanging();
 					this._UserId = value;
@@ -1716,7 +1764,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserLogin", Storage="_AspNetUser", ThisKey="UserId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserLogin", Storage="_AspNetUser", ThisKey="User_Id", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public AspNetUser AspNetUser
 		{
 			get
@@ -1739,11 +1787,11 @@ namespace easyfis.Data
 					if ((value != null))
 					{
 						value.AspNetUserLogins.Add(this);
-						this._UserId = value.Id;
+						this._User_Id = value.Id;
 					}
 					else
 					{
-						this._UserId = default(string);
+						this._User_Id = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser");
 				}
@@ -2304,7 +2352,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserClaim", Storage="_AspNetUserClaims", ThisKey="Id", OtherKey="UserId")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserClaim", Storage="_AspNetUserClaims", ThisKey="Id", OtherKey="User_Id")]
 		public EntitySet<AspNetUserClaim> AspNetUserClaims
 		{
 			get
@@ -2317,7 +2365,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserLogin", Storage="_AspNetUserLogins", ThisKey="Id", OtherKey="UserId")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_AspNetUserLogin", Storage="_AspNetUserLogins", ThisKey="Id", OtherKey="User_Id")]
 		public EntitySet<AspNetUserLogin> AspNetUserLogins
 		{
 			get

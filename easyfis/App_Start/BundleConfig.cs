@@ -21,8 +21,8 @@ namespace easyfis
             // Library Cascading Style Sheets for Fontawesome - CSS
             // ====================================================
             bundles.Add(new StyleBundle("~/Font-Awesome/css").Include(
-                      "~/font-awesome/css/font-awesome.css",
-                      "~/font-awesome/css/font-awesome.min.css"));
+                      "~/Content/font-awesome/css/font-awesome.css",
+                      "~/Content/font-awesome/css/font-awesome.min.css"));
 
             // ===================================
             // Custom Cascading Style Sheets - CSS
@@ -86,7 +86,7 @@ namespace easyfis
                      "~/Scripts/sidebar-menu.js",
                      "~/Scripts/push-left-menu.js",
                      "~/Scripts/toastr.js",
-                    "~/Scripts/style2.js"));
+                    "~/Scripts/style.js"));
 
             // =============
             // WIJMO Scripts
