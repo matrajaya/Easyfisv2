@@ -12,23 +12,28 @@ namespace easyfis
             // ====================================
             // Library Cascading Style Sheets - CSS
             // ====================================
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/bootstrap.min.css",
-                      "~/Content/toastr.css"));
+            //bundles.Add(new StyleBundle("~/Content/css").Include(
+            //          "~/Content/bootstrap.css",
+            //          "~/Content/bootstrap.min.css",
+            //          "~/Content/toastr.css"));
 
-            // ====================================================
-            // Library Cascading Style Sheets for Fontawesome - CSS
-            // ====================================================
-            bundles.Add(new StyleBundle("~/Font-Awesome/css").Include(
-                      "~/Content/font-awesome/css/font-awesome.css",
-                      "~/Content/font-awesome/css/font-awesome.min.css"));
+            //// ====================================================
+            //// Library Cascading Style Sheets for Fontawesome - CSS
+            //// ====================================================
+            //bundles.Add(new StyleBundle("~/Font-Awesome/css").Include(
+            //          "~/Content/font-awesome/css/font-awesome.css",
+            //          "~/Content/font-awesome/css/font-awesome.min.css"));
 
             // ===================================
             // Custom Cascading Style Sheets - CSS
             // ===================================
             bundles.Add(new StyleBundle("~/Content/custom-css").Include(
-                      "~/Content/style.css"));
+                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap.min.css",
+                      "~/Content/toastr.css",
+                      "~/Content/style.css",
+                      "~/fonts/font-awesome/css/font-awesome.css",
+                      "~/fonts/font-awesome/css/font-awesome.min.css"));
 
             // ========================
             // Library Javascripts - JS
@@ -66,8 +71,10 @@ namespace easyfis
             bundles.Add(new StyleBundle("~/Content/Software-css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap.min.css",
+                      "~/Content/toastr.css",
                       "~/Content/software.css",
-                      "~/Content/toastr.css"));
+                      "~/fonts/font-awesome/css/font-awesome.css",
+                      "~/fonts/font-awesome/css/font-awesome.min.css"));
 
             // ==================================
             // Custom JavaScripts - JS (Software)
