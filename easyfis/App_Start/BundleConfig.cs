@@ -35,33 +35,49 @@ namespace easyfis
                       "~/fonts/font-awesome/css/font-awesome.css",
                       "~/fonts/font-awesome/css/font-awesome.min.css"));
 
-            // ========================
-            // Library Javascripts - JS
-            // ========================
-            bundles.Add(new ScriptBundle("~/Scripts/js").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/bootstrap.min.js",
-                      //"~/Scripts/jquery.min.js",
-                      "~/Scripts/jquery-1.10.2.js",
-                      "~/Scripts/jquery-1.10.2.min.js",
-                      "~/Scripts/collapse.js",
-                      "~/Scripts/tooltip.js",
-                      "~/Scripts/custom-tooltip.js",
-                      "~/Scripts/dropdown.js",
-                      "~/Scripts/transition.js",
-                      "~/Scripts/scrollspy.js",
-                      "~/Scripts/modal.js",
-                      "~/Scripts/alert.js",
-                      "~/Scripts/tab.js",
-                      "~/Scripts/respond.js",
-                      "~/Scripts/toastr.js"
-                      ));
+            //// ========================
+            //// Library Javascripts - JS
+            //// ========================
+            //bundles.Add(new ScriptBundle("~/Scripts/js").Include(
+            //          "~/Scripts/bootstrap.js",
+            //          "~/Scripts/bootstrap.min.js",
+            //          //"~/Scripts/jquery.min.js",
+            //          "~/Scripts/jquery-1.10.2.js",
+            //          "~/Scripts/jquery-1.10.2.min.js",
+            //          "~/Scripts/collapse.js",
+            //          "~/Scripts/tooltip.js",
+            //          "~/Scripts/custom-tooltip.js",
+            //          "~/Scripts/dropdown.js",
+            //          "~/Scripts/transition.js",
+            //          "~/Scripts/scrollspy.js",
+            //          "~/Scripts/modal.js",
+            //          "~/Scripts/alert.js",
+            //          "~/Scripts/tab.js",
+            //          "~/Scripts/respond.js",
+            //          "~/Scripts/toastr.js"
+            //          ));
 
             // =======================
             // Custom JavaScripts - JS
             // =======================
             bundles.Add(new ScriptBundle("~/Scripts/custom-js").Include(
-                     "~/Scripts/style.js"));
+                    "~/Scripts/bootstrap.js",
+                    "~/Scripts/bootstrap.min.js",
+                    //"~/Scripts/jquery.min.js",
+                    "~/Scripts/jquery-1.10.2.js",
+                    "~/Scripts/jquery-1.10.2.min.js",
+                    "~/Scripts/collapse.js",
+                    "~/Scripts/tooltip.js",
+                    "~/Scripts/custom-tooltip.js",
+                    "~/Scripts/dropdown.js",
+                    "~/Scripts/transition.js",
+                    "~/Scripts/scrollspy.js",
+                    "~/Scripts/modal.js",
+                    "~/Scripts/alert.js",
+                    "~/Scripts/tab.js",
+                    "~/Scripts/respond.js",
+                    "~/Scripts/toastr.js",
+                    "~/Scripts/style.js"));
 
 
             // Software Dashboard Page Over here ...
