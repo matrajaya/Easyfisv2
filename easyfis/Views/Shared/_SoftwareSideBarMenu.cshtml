@@ -4,81 +4,81 @@
 <!-- SideBar Menu -->
 <nav id="c-menu--slide-left" class="c-menu c-menu--slide-left">
     <div class="panel-group" id="accordion">
-        <div class="panel panel-menu">
+        <div class="panel panel-menu panel-link-menu ">
             <button style="margin-top: 4px;" class="pull-right btn btn-sm btn-danger c-menu__close">
-                Close
+                <i class="fa fa-times"></i> Close
             </button>
             <h4><b> Menu</b></h4>
         </div>
         <div class="panel panel-menu">
             <b>
-                <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="">Dashboard</a>
+                <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="panel-link-dashboard"><i class="fa fa-home"></i> Dashboard</a>
             </b>
         </div>
         <div class="panel panel-menu">
             <b>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="">
-                    Setup <i class="fa-drop1 fa fa-chevron-down pull-right"></i>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="panel-link-setup">
+                    <i class="fa fa-wrench"></i> Setup <i class="fa-drop1 fa fa-chevron-down pull-right"></i>
                 </a>
             </b>
             <div id="collapse1" class="panel-collapse collapse">
-                <ul class="">
-                    <li class=""><a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="">Supplier</a></li>
-                    <li class=""><a href="@Url.Action("Customer", "Software", new { BranchId = branchId })" class="">Customer</a></li>
-                    <li class=""><a href="@Url.Action("Items", "Software", new { BranchId = branchId })" class="">Items</a></li>
-                    <li class=""><a href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })" class="">Chart of Accounts</a></li>
-                    <li class=""><a href="@Url.Action("Bank", "Software", new { BranchId = branchId })" class="">Bank</a></li>
+                <ul class="panel-collapse-links">
+                    <li class="collapse-link-list"><a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="collapse-link">Supplier</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Customer", "Software", new { BranchId = branchId })" class="collapse-link">Customer</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Items", "Software", new { BranchId = branchId })" class="collapse-link">Items</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })" class="collapse-link">Chart of Accounts</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Bank", "Software", new { BranchId = branchId })" class="collapse-link">Bank</a></li>
                 </ul>
             </div>
         </div>
         <div class="panel panel-menu">
             <b>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="">
-                    System <i class="fa-drop2 fa fa-chevron-down pull-right"></i>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="panel-link-system">
+                    <i class="fa fa-desktop"></i> System <i class="fa-drop2 fa fa-chevron-down pull-right"></i>
                 </a>
             </b>
             <div id="collapse2" class="panel-collapse collapse">
-                <ul class="menu-items">
-                    <li class=""><a href="@Url.Action("Company", "Software", new { BranchId = branchId })" class="">Company</a></li>
-                    <li class=""><a href="@Url.Action("Users", "Software", new { BranchId = branchId })" class="">Users</a></li>
-                    <li class=""><a href="@Url.Action("Settings", "Software", new { BranchId = branchId })" class="">Settings</a></li>
-                    <li class=""><a href="@Url.Action("SystemTables", "Software", new { BranchId = branchId })" class="">System Tables</a></li>
+                <ul class="panel-collapse-links">
+                    <li class="collapse-link-list"><a href="@Url.Action("Company", "Software", new { BranchId = branchId })" class="collapse-link">Company</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Users", "Software", new { BranchId = branchId })" class="collapse-link">Users</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Settings", "Software", new { BranchId = branchId })" class="collapse-link">Settings</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("SystemTables", "Software", new { BranchId = branchId })" class="collapse-link">System Tables</a></li>
                 </ul>
             </div>
         </div>
         <div class="panel panel-menu">
             <b>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="">
-                    Activity <i class="fa-drop3 fa fa-chevron-down pull-right"></i>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="panel-link-activity">
+                    <i class="fa fa-line-chart"></i> Activity <i class="fa-drop3 fa fa-chevron-down pull-right"></i>
                 </a>
             </b>
             <div id="collapse3" class="panel-collapse collapse">
-                <ul class="">
-                    <li class=""><a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="">Purchase Order</a></li>
-                    <li class=""><a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="">Receiving Receipt</a></li>
-                    <li class=""><a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })" class="">Disbursement</a></li>
-                    <li class=""><a href="@Url.Action("Sales", "Software", new { BranchId = branchId })" class="">Sales</a></li>
-                    <li class=""><a href="@Url.Action("Collection", "Software", new { BranchId = branchId })" class="">Collection</a></li>
-                    <li class=""><a href="@Url.Action("StockIn", "Software", new { BranchId = branchId })" class="">Stock In</a></li>
-                    <li class=""><a href="@Url.Action("StockOut", "Software", new { BranchId = branchId })" class="">Stock Out</a></li>
-                    <li class=""><a href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })" class="">Stock Transfer</a></li>
-                    <li class=""><a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="">Journal Voucher</a></li>
+                <ul class="panel-collapse-links">
+                    <li class="collapse-link-list"><a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="collapse-link">Purchase Order</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="collapse-link">Receiving Receipt</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })" class="collapse-link">Disbursement</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Sales", "Software", new { BranchId = branchId })" class="collapse-link">Sales</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Collection", "Software", new { BranchId = branchId })" class="collapse-link">Collection</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("StockIn", "Software", new { BranchId = branchId })" class="collapse-link">Stock In</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("StockOut", "Software", new { BranchId = branchId })" class="collapse-link">Stock Out</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })" class="collapse-link">Stock Transfer</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="collapse-link">Journal Voucher</a></li>
                 </ul>
             </div>
         </div>
         <div class="panel panel-menu">
             <b>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="">
-                    Reports <i class="fa-drop4 fa fa-chevron-down pull-right"></i>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="panel-link-reports">
+                    <i class="fa fa-print"></i>  Reports <i class="fa-drop4 fa fa-chevron-down pull-right"></i>
                 </a>
             </b>
             <div id="collapse4" class="panel-collapse collapse">
-                <ul class="">
-                    <li class=""><a href="@Url.Action("AccountsPayable", "Software", new { BranchId = branchId })" class="">Accounts Payable</a></li>
-                    <li class=""><a href="@Url.Action("AccountsReceivable", "Software", new { BranchId = branchId })" class="">Accounts Receivable</a></li>
-                    <li class=""><a href="@Url.Action("InventoryReport", "Software", new { BranchId = branchId })" class="">Inventory Report</a></li>
-                    <li class=""><a href="@Url.Action("FinancialStatements", "Software", new { BranchId = branchId })" class="">Financial Statements</a></li>
-                    <li class=""><a href="@Url.Action("BankReconciliation", "Software", new { BranchId = branchId })" class="">Bank Reconciliation</a></li>
+                <ul class="panel-collapse-links">
+                    <li class="collapse-link-list"><a href="@Url.Action("AccountsPayable", "Software", new { BranchId = branchId })" class="collapse-link">Accounts Payable</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("AccountsReceivable", "Software", new { BranchId = branchId })" class="collapse-link">Accounts Receivable</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("InventoryReport", "Software", new { BranchId = branchId })" class="collapse-link">Inventory Report</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("FinancialStatements", "Software", new { BranchId = branchId })" class="collapse-link">Financial Statements</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("BankReconciliation", "Software", new { BranchId = branchId })" class="collapse-link">Bank Reconciliation</a></li>
                 </ul>
             </div>
         </div>

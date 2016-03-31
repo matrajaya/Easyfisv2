@@ -6,15 +6,14 @@ html {
 body {
     /*background: #ffffff;
     font-family: Tahoma;*/
-    font-family: Tahoma;
+    font-family: MS Reference Sans Serif;
     margin: 0 0 150px;
 }
 
 /* Navbar with opaque class which will be attached on scroll */
 .navbar-inverse {
-    /*background-color: #003366;*/
+    background-color: #00183c;
     color: #FFFFFF;
-    transition: background-color 1s ease 0s;
     border: 0 !important;
 }
 
@@ -57,25 +56,27 @@ body {
 
 .navbar-inverse .navbar-nav > li > a:hover {
     color: #FFFFFF;
-    background-color: #2e2e2f;
+    background-color: #06214a;
     /*transition: background-color 1s ease 0s;*/
+     transition: background-color 0.5s ease 0s;
 }
 
 .navbar-inverse .navbar-nav > .active {
     color: #FFFFFF;
-    background-color: #2e2e2f;
+    background-color: #06214a;
 }
 
     .navbar-inverse .navbar-nav > .active > a:hover {
         color: #FFFFFF;
-        background: #2e2e2f;
+        background: #06214a;
+         transition: background-color 0.5s ease 0s;
     }
 
     .navbar-inverse .navbar-nav > .active > a,
     .navbar-inverse .navbar-nav > .active > a:hover,
     .navbar-inverse .navbar-nav > .active > a:focus {
         color: #FFFFFF;
-        background-color: #2e2e2f;
+        background-color: #06214a;
     }
 
 
@@ -265,12 +266,12 @@ body {
 /* COVER PHOTO IN THE HEADER PAGE */
 /* ============================== */
 .cover-photo-custom {
-    padding-top: 320px;
-    padding-bottom: 300px;
+    padding-top: 260px;
+    padding-bottom: 380px;
     width: 100%;
     text-align: center;
     color: #f8f8f8;
-    background: url(../images/coverImages/cover7.jpg) no-repeat center center;
+    background: url(../images/coverImages/cover7.jpg  ) no-repeat center center;
     background-size: cover;
     background-position: center;
 }
@@ -290,8 +291,8 @@ body {
 /* COVER PHOTO IN THE SUPPORT PAGE */
 /* =============================== */
 .cover-photo-support-custom {
-    padding-top: 30px;
-    padding-bottom: 50px;
+    padding-top: 45px;
+    padding-bottom: 65px;
     color: #f8f8f8;
     width: 100%;
     background: url(../images/coverImages/cover4.jpg) no-repeat center center;
@@ -303,9 +304,9 @@ body {
 /* COVER PHOTO IN THE FOOTER PAGE */
 /* ============================== */
 .cover-photo-footer-custom {
-    padding-top: 20px;
-    background-color: rgba(0, 0, 0, 0.2);
-    color: black;
+    padding-top: 25px;
+    background-color: #192823;
+    color: #ebebeb;
     position: absolute;
     left: 0;
     bottom: 0;
@@ -334,6 +335,18 @@ icon-custom {
     background-position: center;
 }
 
+/* ================================ */
+/* COVER PHOTO IN THE REGISTER PAGE */
+/* ================================ */
+.cover-register-photo-custom {
+    padding-top: 120px;
+    padding-bottom: 5px;
+    width: 100%;
+    /*background: url(../images/coverImages/cover3.jpg) no-repeat center center;*/
+    background-size: cover;
+    background-position: center;
+}
+
 @media screen and ( max-width: 768px ) {
     .cover-login-photo-custom {
         padding-top: 85px;
@@ -343,19 +356,17 @@ icon-custom {
         background-size: cover;
         background-position: center;
     }
+
+    .cover-register-photo-custom {
+        padding-top: 85px;
+        padding-bottom: 5px;
+        width: 100%;
+        /*background: url(../images/coverImages/cover3.jpg) no-repeat center center;*/
+        background-size: cover;
+        background-position: center;
+    }
 }
 
-/* ================================ */
-/* COVER PHOTO IN THE REGISTER PAGE */
-/* ================================ */
-.cover-register-photo-custom {
-    padding-top: 65px;
-    padding-bottom: 5px;
-    width: 100%;
-    /*background: url(../images/coverImages/cover3.jpg) no-repeat center center;*/
-    background-size: cover;
-    background-position: center;
-}
 
 
 /* =================== */
@@ -474,18 +485,10 @@ dd {
     font-size: 14px;
 }
 
-input {
-    border-radius: 0 !important;
-}
-
-textarea {
-    border-radius: 0 !important;
-}
-
-.btn {
-    border-radius: 0 !important;
-}
-
-.modal-content {
+input,
+textarea,
+.btn,
+.modal-content,
+.panel {
     border-radius: 0 !important;
 }
