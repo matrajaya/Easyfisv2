@@ -498,10 +498,10 @@ namespace easyfis.Controllers
                     newArticle.AssetAccountId = article.AccountId;
                     newArticle.ExpenseAccountId = article.AccountId;
 
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 5;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
 
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
@@ -539,10 +539,10 @@ namespace easyfis.Controllers
                     newArticle.AssetAccountId = article.AccountId;
                     newArticle.ExpenseAccountId = article.AccountId;
 
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 6;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
 
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
@@ -580,10 +580,10 @@ namespace easyfis.Controllers
                     newArticle.AssetAccountId = article.AccountId;
                     newArticle.ExpenseAccountId = article.AccountId;
 
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 5;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
 
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
@@ -621,10 +621,10 @@ namespace easyfis.Controllers
                     newArticle.AssetAccountId = article.AssetAccountId;
                     newArticle.ExpenseAccountId = article.ExpenseAccountId;
 
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 5;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
 
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
@@ -662,10 +662,10 @@ namespace easyfis.Controllers
                     newArticle.AssetAccountId = article.AssetAccountId;
                     newArticle.ExpenseAccountId = article.ExpenseAccountId;
 
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 5;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
 
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
@@ -823,10 +823,10 @@ namespace easyfis.Controllers
                         updateArticle.AssetAccountId = article.AssetAccountId;
                         updateArticle.ExpenseAccountId = article.ExpenseAccountId;
 
-                        updateArticle.UnitId = 1;
-                        updateArticle.OutputTaxId = 5;
-                        updateArticle.InputTaxId = 5;
-                        updateArticle.WTaxTypeId = 5;
+                        updateArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                        updateArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                        updateArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                        updateArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
 
                         updateArticle.Price = 0;
                         updateArticle.Cost = 0;
@@ -862,10 +862,10 @@ namespace easyfis.Controllers
                         updateArticle.AssetAccountId = article.AssetAccountId;
                         updateArticle.ExpenseAccountId = article.ExpenseAccountId;
 
-                        updateArticle.UnitId = 1;
-                        updateArticle.OutputTaxId = 5;
-                        updateArticle.InputTaxId = 5;
-                        updateArticle.WTaxTypeId = 5;
+                        updateArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                        updateArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                        updateArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                        updateArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
 
                         updateArticle.Price = 0;
                         updateArticle.Cost = 0;
