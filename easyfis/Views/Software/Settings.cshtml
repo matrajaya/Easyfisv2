@@ -10,7 +10,6 @@
     <title>Software Dashboard</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
 </head>
 <body>
@@ -20,12 +19,15 @@
 
         <!-- Section -->
         <section>
-            <br /><br /><br />
-            <div class="container">
-                <button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>
-                <br /><br />
-                <h2>Setting</h2>
+            <div class="sub-nav">
+                <div class="container">
+                    <h4><i class="fa fa-gears fa-2x"></i> Settings</h4>
+                </div>
+                <div class="div_Current_Page">
+                    <div class="container">
+                        <span id="currentPage"></span>
+                    </div>
+                </div>
             </div>
         </section>
     </div>

@@ -1,50 +1,18 @@
 html {
-	position: relative;
-	min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
     /*background: #ffffff;
     font-family: Tahoma;*/
     font-family: Tahoma;
-
-	margin: 0 0 150px;
+    margin: 0 0 150px;
 }
-
-/* ============================================= */
-/* CUSTOMIZE BOOTSTRAP NAVBAR AND DROPDOWN MENUS */
-/* ============================================= */
-/*.navbar-transparent .navbar-brand {
-    color: #FFFFFF;
-}
-
-.navbar-header {
-    text-align: center;
-}
-
-.navbar-transparent .navbar-nav > li > a {
-    color: #FFFFFF;
-}
-
-    .navbar-transparent .navbar-nav > li > a:hover {
-        color: #0099CC;
-        background-color: transparent;
-        /*transition: color 1s ease 0s;*/
-    /*}
-
-    .navbar-transparent .navbar-nav > li > a:focus {
-        background-color: transparent;*/
-        /*transition: color 1s ease 0s;*/
-    /*}
-
-.navbar-transparent .navbar-nav > .active {
-    color: #FFFFFF;
-    background-color: transparent;
-}*/
 
 /* Navbar with opaque class which will be attached on scroll */
 .navbar-inverse {
-    background-color: #003366;
+    /*background-color: #003366;*/
     color: #FFFFFF;
     transition: background-color 1s ease 0s;
     border: 0 !important;
@@ -52,23 +20,64 @@ body {
 
     .navbar-inverse .navbar-brand {
         color: #FFFFFF;
+        padding-top: 30px;
+        padding-bottom: 30px;
     }
 
     .navbar-inverse .navbar-nav > li > a {
         color: #FFFFFF;
+        padding-top: 30px;
+        padding-bottom: 30px;
         /*transition: color 1s ease 0s;*/
     }
 
-        .navbar-inverse .navbar-nav > li > a:hover {
-            color: #FFFFFF;
-            background-color: #194775;
-            /*transition: background-color 1s ease 0s;*/
-        }
-
-    .navbar-inverse .navbar-nav > .active {
+@media screen and ( max-width: 768px ) {
+    .navbar-inverse .navbar-brand {
         color: #FFFFFF;
-        background-color: #194775;
+        padding-top: 15px;
+        padding-bottom: 15px;
     }
+
+    .navbar-inverse .navbar-nav > li > a {
+        color: #FFFFFF;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        /*transition: color 1s ease 0s;*/
+    }
+
+    .cover-login-photo-custom {
+        padding-top: 50px;
+        padding-bottom: 5px;
+        width: 100%;
+        /*background: url(../images/coverImages/cover3.jpg) no-repeat center center;*/
+        background-size: cover;
+        background-position: center;
+    }
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: #FFFFFF;
+    background-color: #2e2e2f;
+    /*transition: background-color 1s ease 0s;*/
+}
+
+.navbar-inverse .navbar-nav > .active {
+    color: #FFFFFF;
+    background-color: #2e2e2f;
+}
+
+    .navbar-inverse .navbar-nav > .active > a:hover {
+        color: #FFFFFF;
+        background: #2e2e2f;
+    }
+
+    .navbar-inverse .navbar-nav > .active > a,
+    .navbar-inverse .navbar-nav > .active > a:hover,
+    .navbar-inverse .navbar-nav > .active > a:focus {
+        color: #FFFFFF;
+        background-color: #2e2e2f;
+    }
+
 
 /* Navbar and Dropdown */
 .navbar .nav li.dropdown.open > .dropdown-toggle,
@@ -81,12 +90,22 @@ body {
     padding: 7px 20px;
 }
 
-/*.navbar-toggle {
-    border: 0;
-}*/
+.navbar-inverse .navbar-toggle {
+    border-color: transparent;
+}
 
-    .navbar-toggle .icon-bar {
-        background-color: #FFFFFF;
+    .navbar-inverse .navbar-toggle:focus,
+    .navbar-inverse .navbar-toggle:hover {
+        border-color: transparent;
+        background-color: transparent;
+    }
+
+    .navbar-inverse .navbar-toggle .icon-bar {
+        background-color: #ffffff;
+    }
+
+    .navbar-inverse .navbar-toggle:hover .icon-bar {
+        background-color: #ffffff;
     }
 
 @media (min-width: 768px) {
@@ -246,12 +265,12 @@ body {
 /* COVER PHOTO IN THE HEADER PAGE */
 /* ============================== */
 .cover-photo-custom {
-    padding-top: 300px;
+    padding-top: 320px;
     padding-bottom: 300px;
     width: 100%;
     text-align: center;
     color: #f8f8f8;
-    background: url(../images/coverImages/menu.jpg) no-repeat center center;
+    background: url(../images/coverImages/cover7.jpg) no-repeat center center;
     background-size: cover;
     background-position: center;
 }
@@ -287,11 +306,11 @@ body {
     padding-top: 20px;
     background-color: rgba(0, 0, 0, 0.2);
     color: black;
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	height: 120px;
-	width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 150px;
+    width: 100%;
 }
 
 /* =========== */
@@ -307,12 +326,23 @@ icon-custom {
 /* COVER PHOTO IN THE LOGIN PAGE */
 /* ============================= */
 .cover-login-photo-custom {
-    padding-top: 65px;
+    padding-top: 120px;
     padding-bottom: 5px;
     width: 100%;
     /*background: url(../images/coverImages/cover3.jpg) no-repeat center center;*/
     background-size: cover;
     background-position: center;
+}
+
+@media screen and ( max-width: 768px ) {
+    .cover-login-photo-custom {
+        padding-top: 85px;
+        padding-bottom: 5px;
+        width: 100%;
+        /*background: url(../images/coverImages/cover3.jpg) no-repeat center center;*/
+        background-size: cover;
+        background-position: center;
+    }
 }
 
 /* ================================ */
@@ -442,4 +472,20 @@ dd {
 
 .input-sm {
     font-size: 14px;
+}
+
+input {
+    border-radius: 0 !important;
+}
+
+textarea {
+    border-radius: 0 !important;
+}
+
+.btn {
+    border-radius: 0 !important;
+}
+
+.modal-content {
+    border-radius: 0 !important;
 }

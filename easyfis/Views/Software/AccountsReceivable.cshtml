@@ -13,9 +13,7 @@
     <title>Accounts Receivable</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
-    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
     <div id="wrapper" class="wrapper">
@@ -24,14 +22,17 @@
 
         <!-- Section -->
         <section>
-            <br /><br /><br />
-            <div class="container">
-                <h4><span class="accountReportsDetail">AR</span> Accounts Receivable</h4>
-                <br />
-                <div class="div_Current_Page">
-                    @*<label id="currentBranchName"></label>*@
-                    <span id="currentPage"></span>
+            <div class="sub-nav">
+                <div class="container">
+                    <h4><span class="accountReportsDetail">AR</span> Accounts Receivable</h4>
                 </div>
+                <div class="div_Current_Page">
+                    <div class="container">
+                        <span id="currentPage"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
                 @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
                     <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>*@
                 @*<br /><br />*@
@@ -174,7 +175,6 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
-    @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
         // ================
         // Global Variables

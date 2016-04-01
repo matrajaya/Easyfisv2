@@ -13,7 +13,6 @@
     <title>EasyFIS - Main Menu</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
 </head>
 <body>
@@ -23,12 +22,17 @@
 
         <!-- Section -->
         <section>
-            <br /><br /><br />
-            <div class="container">
-                <h2>Main Menu</h2>
-                <div class="div_Current_Page">
-                    <label id="currentCompanyName"></label> <label> :\ </label> <span id="currentBranchName"></span>
+            <div class="sub-nav">
+                <div class="container">
+                    <h2>Main Menu</h2>
                 </div>
+                <div class="div_Current_Page">
+                    <div class="container">
+                        <span id="currentCompanyName"></span> <span> :\ </span> <span id="currentBranchName"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
                 @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button><br /><br />*@
                 @*<h3>Software Dashboard</h3>*@
                 @*<div class="well">

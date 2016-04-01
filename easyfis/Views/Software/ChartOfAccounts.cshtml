@@ -13,9 +13,7 @@
     <title>Chart of Accounts</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
-    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
     <div id="wrapper" class="wrapper">
@@ -24,13 +22,17 @@
 
         <!-- Section -->
         <section>
-            <br /><br /><br />
-            <div class="container">
-                <h4><i class="fa fa-list fa-2x"></i> Chart of Accounts</h4>
-                <br />
-                <div class="div_Current_Page">
-                    <span id="currentPage"></span>
+            <div class="sub-nav">
+                <div class="container">
+                    <h4><i class="fa fa-list fa-2x"></i> Chart of Accounts</h4>
                 </div>
+                <div class="div_Current_Page">
+                    <div class="container">
+                        <span id="currentPage"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
                 <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
                     <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
@@ -600,8 +602,6 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
-    @Scripts.Render("~/WijmoScripts/Wijmo-js")
-
     <!-- =============== -->
     <!-- Account Scripts -->
     <!-- =============== -->

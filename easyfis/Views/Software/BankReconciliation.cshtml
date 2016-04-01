@@ -10,7 +10,6 @@
     <title>Software Dashboard</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
 </head>
 <body>
@@ -18,16 +17,16 @@
         <!-- Header -->
         @Html.Partial("_SoftwareHeader")
 
-        <!-- Section -->
-        <section>
-            <br /><br /><br />
+        <div class="sub-nav">
             <div class="container">
-                <button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>
-                <br /><br />
-                <h2>Back Reconciliation</h2>
+                <h4><i class="fa fa-check fa-2x"></i> Bank Reconciliation</h4>
             </div>
-        </section>
+            <div class="div_Current_Page">
+                <div class="container">
+                    <span id="currentPage"></span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- SideBar Menu -->
