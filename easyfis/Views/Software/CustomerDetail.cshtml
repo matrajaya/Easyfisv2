@@ -1,8 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-    var customerId = Request.QueryString["CustomerId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -29,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("Customer", "Software")" class="currentPageLinkCustom">Customer</a> > Customer Detail
                     </div>
                 </div>
             </div>
@@ -39,11 +35,10 @@
                         <h4 id="customerDetailLabel"></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="customer_saveSaveCustomer" onclick="customerSaveCustomerButton_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
-                        <button class="btn btn-primary btn-sm" id="customer_saveCustomer" onclick="customerSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id="customer_editCustomer" onclick="customerEditButton_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="customer_printCustomer" onclick="window.location.href ='@Url.Action("CustomerPDF", "Software", new { CustomerId = customerId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("Customer", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="customer_CloseCustomer"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="customer_SaveButton" onclick="customerSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id="customer_LockButton" onclick="customerLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                        <button class="btn btn-primary btn-sm" id="customer_UnlockButton" onclick="customerUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                        <button class="btn btn-danger btn-sm" id="customer_CloseButton" onclick="customerCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 <div class="well">
@@ -53,56 +48,43 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Code</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_code" />
-                                        <input type="hidden" id="artcileCustomer_code_data" />
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_code" placeholder="Code" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Customer</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_customer" />
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_customer" placeholder="Customer" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Customer Group</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileCustomer_customerGroup"></div>
-
-                                        <input type="hidden" id="artcileCustomer_customerGroup_data" class="requiredCustomer" />
-                                        <input type="hidden" id="artcileCustomer_customerGroup_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Account</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileCustomer_account"></div>
-                                        <input type="hidden" id="artcileCustomer_account_data" class="requiredCustomer" />
-                                        <input type="hidden" id="artcileCustomer_account_SelectedValue" />
-                                        <input type="hidden" id="artcileCustomer_SalesAccountId" />
-                                        <input type="hidden" id="artcileCustomer_CostAccountId" />
-                                        <input type="hidden" id="artcileCustomer_AssetAccountId" />
-                                        <input type="hidden" id="artcileCustomer_ExpenseAccountId" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Term</label>
                                     <div class="col-sm-8">
                                         <div type="text" class="comboBox-wide" id="artcileCustomer_term"></div>
-
-                                        <input type="hidden" id="artcileCustomer_term_data" class="requiredCustomer" />
-                                        <input type="hidden" id="artcileCustomer_term_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Credit Limit</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_creditLimit"> <!-- Drop down list ni-->
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_creditLimit" placeholder="Credit Limit">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Address</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom requiredCustomer" id="artcileCustomer_address"></textarea>
+                                        <textarea class="form-control textarea-custom requiredCustomer" id="artcileCustomer_address" placeholder="Address"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -110,39 +92,25 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Contact Number</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_contactNo">
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_contactNo" placeholder="Contact No.">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Contact Person</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_contactPerson">
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_contactPerson" placeholder="Contact Person">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">TIN</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_TIN">
+                                        <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_TIN" placeholder="TIN Number">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom requiredCustomer" id="artcileCustomer_particulars"></textarea>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Lock</label>
-                                    <div class="col-sm-8">
-                                        <input type="checkbox" class="checkbox_custom" id="isLocked_Status" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-4"></div>
-                                    <div class="col-sm-8">
-                                        <input type="hidden" id="Customer_IsLocked">
-                                        <input type="hidden" id="Customer_IsLocked_defaultTrue">
-                                        <input type="hidden" id="Customer_IsLocked_defaultFalse">
+                                        <textarea class="form-control textarea-custom requiredCustomer" id="artcileCustomer_particulars" placeholder="Particulars"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -152,95 +120,31 @@
 
                 <!-- Customer Lines -->
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
-                    @*<li role="presentation" class="active"><a data-toggle="tab" href="#JournalLedger" id="journalLedgerTabId">Journal Ledger</a></li>*@
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#ContactInformation" id="contactInformationTabId">More Contact Information</a></li>
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#JournalLedger" id="journalLedgerTabId">Journal Ledger</a></li>
+                    <li role="presentation"><a data-toggle="tab" href="#ContactInformation" id="contactInformationTabId">More Contact Information</a></li>
                 </ul>
                 <br />
                 <div class="tab-content">
                     <!-- Journal Ledger List -->
-                    <div id="JournalLedger" class="tab-pane fade in">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h4>Journal Ledger</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterJournalLedger" placeholder="Search">
-                                </div>
-                            </div>
-                            <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdaddnewaccount_onclick()"><i class="fa fa-plus"></i> add</button>
-                            </div>
-                        </div>
-                        <br />
+                    <div id="JournalLedger" class="tab-pane fade in active">
                         <div class="row" align="left">
                             <div class="col-lg-12">
                                 <div id="JournalLedgerGrid" class="grid" align="left"></div>
                             </div>
                         </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="navigationPageGridJournalLedger">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournalLedger">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournalLedger">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournalLedger"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournalLedger">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournalLedger">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- More Contact Information List -->
-                    <div id="ContactInformation" class="tab-pane fade in active">
+                    <div id="ContactInformation" class="tab-pane fade in">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <h4>More Contact Information</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterContactInformation" placeholder="Search">
-                                </div>
-                            </div>
-                            <div class="col-lg-8" align="right">
+                            <div class="col-lg-12" align="right">
                                 <button class="btn btn-primary btn-sm" id="btnAddContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="ContactInformationGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br />
                         <div class="row">
-                            <div class="btn-group col-md-7" id="navigationPageGridContactInformation">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridContactInformation">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridContactInformation">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridContactInformation"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridContactInformation">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridContactInformation">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
+                            <div class="col-lg-12">
+                                <div id="ContactInformationGrid" class="grid"></div>
                             </div>
                         </div>
                     </div>
@@ -262,11 +166,11 @@
                             <input type="hidden" id="contact_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Contact Person</dt>
-                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" placeholder="Contact Person"/></dd>
                                 <dt>Contact Number</dt>
-                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactNumber" /></dd>
+                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactNumber" placeholder="Contact Number"/></dd>
                                 <dt>Remarks</dt>
-                                <dd><textarea class="form-control textarea-custom requiredContact" id="contact_Remarks"></textarea></dd>
+                                <dd><textarea class="form-control textarea-custom requiredContact" id="contact_Remarks" placeholder="Remarks"></textarea></dd>
                             </dl>
                         </form>
                     </div>
@@ -334,146 +238,152 @@
         var cboForAccount;
         var cboForTerm;
 
+        var customerGroupSelectedValue = "";
+        var accountSelectedValue = "";
+        var termSelectedValue = "";
+        var IsLocked;
+
+        // =============
+        // Create Cookie
+        // =============
+        function createCookie(name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            } else {
+                var expires = "";
+            }
+
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
+        // =============
+        // Delete Cookie
+        // =============
+        function eraseCookie(name) {
+            createCookie(name, "", -1);
+        }
+
         // ==================================
         // Get Article for Customer by its ID
         // ==================================
         function getArticleCustomerById() {
             $('#loadingModal').modal('show');
-            var customers = new wijmo.collections.ObservableArray;
-            var customerId = @customerId;
-            $.ajax({
-                url: '/api/article/' +  customerId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    //if (Results.length > 0) {
-                    //    customers.push ({
-                    //        Id: Results.Id,
-                    //        ArticleCode : Results.ArticleCode,
-                    //        ManualArticleCode : Result.ManualArticleCode,
-                    //        Article : Results.Article,
-                    //        Category : Results.Category,
-                    //        ArticleTypeId : Results.ArticleTypeId,
-                    //        ArticleType : Results.ArticleType,
-                    //        ArticleGroupId : Results.ArticleGroupId,
-                    //        ArticleGroup : Results.ArticleGroup,
-                    //        AccountId : Results.AccountId,
-                    //        Account : Results.Account,
-                    //        SalesAccountId : Results.SalesAccountId,
-                    //        CostAccountId : Results.CostAccountId,
-                    //        AssetAccountId : Results.AssetAccountId,
-                    //        ExpenseAccountId : Results.ExpenseAccountId,
-                    //        UnitId : Results.UnitId,
-                    //        OutputTaxId : Results.OutputTaxId,
-                    //        OutputTax : Results.OutputTax,
-                    //        InputTaxId : Results.InputTaxId,
-                    //        InputTax : Results.InputTax,
-                    //        WTaxTypeId : Results.WTaxTypeId,
-                    //        WTaxType : Results.WTaxType,
-                    //        Price : Results.Price,
-                    //        Cost : Results.Cost,
-                    //        IsInventory : Results.IsInventory,
-                    //        Particulars : Results.Particulars,
-                    //        Address : Results.Address,
-                    //        TermId : Results.TermId,
-                    //        Term : Results.Term,
-                    //        ContactNumber : Results.ContactNumber,
-                    //        ContactPerson : Results.ContactPerson,
-                    //        TaxNumber : Results.TaxNumber,
-                    //        CreditLimit : Results.CreditLimit,
-                    //        DateAcquired : Results.DateAcquired,
-                    //        UsefulLife : Results.UsefulLife,
-                    //        SalvageValue : Results.SalvageValue,
-                    //        ManualArticleOldCode : Results.ManualArticleOldCode,
-                    //        IsLocked: Results.IsLocked,
-                    //        CreatedById: Results.CreatedById,
-                    //        CreatedBy: Results.CreatedBy,
-                    //        CreatedDateTime: Results.CreatedDateTime,
-                    //        UpdatedById: Results.UpdatedById,
-                    //        UpdatedBy: Results.UpdatedBy,
-                    //        UpdatedDateTime: Results.UpdatedDateTime
-                    //    });
-                    //}
+            var customerId = readCookie("customerId");
+            if (customerId == null) {
+                window.location = '/Software/Customer';
+            } else {
+                $.ajax({
+                    url: '/api/article/' + customerId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (customerResults) {
+                        $('#loadingModal').modal('hide');
+                        if (customerResults != null) {
+                            document.getElementById('artcileCustomer_code').value = customerResults.ArticleCode;
+                            document.getElementById('artcileCustomer_customer').value = customerResults.Article;
+                            document.getElementById('artcileCustomer_creditLimit').value = customerResults.CreditLimit.toLocaleString();
 
-                    if(Results != null) {
-                        document.getElementById('artcileCustomer_SalesAccountId').value = Results.SalesAccountId;
-                        document.getElementById('artcileCustomer_CostAccountId').value = Results.CostAccountId;
-                        document.getElementById('artcileCustomer_AssetAccountId').value = Results.AssetAccountId;
-                        document.getElementById('artcileCustomer_ExpenseAccountId').value = Results.ExpenseAccountId;
-                        document.getElementById('artcileCustomer_code').value = Results.ArticleCode;
-                        document.getElementById('artcileCustomer_code_data').value = Results.ArticleCode;
-                        document.getElementById('artcileCustomer_customer').value = Results.Article;
-                        document.getElementById('artcileCustomer_creditLimit').value = Results.CreditLimit.toLocaleString();
-                        document.getElementById('artcileCustomer_customerGroup_data').value = Results.ArticleGroupId;
-                        document.getElementById('artcileCustomer_customerGroup_SelectedValue').value = Results.ArticleGroup;
-                        document.getElementById('artcileCustomer_account_data').value = Results.AccountId;
-                        document.getElementById('artcileCustomer_account_SelectedValue').value = Results.Account;
-                        document.getElementById('artcileCustomer_term_data').value = Results.TermId;
-                        document.getElementById('artcileCustomer_term_SelectedValue').value = Results.Term;
-                        document.getElementById('artcileCustomer_address').value = Results.Address;
-                        document.getElementById('artcileCustomer_particulars').value = Results.Particulars;
-                        document.getElementById('artcileCustomer_TIN').value = Results.TaxNumber;
-                        document.getElementById('artcileCustomer_contactNo').value = Results.ContactNumber;
-                        document.getElementById('artcileCustomer_contactPerson').value = Results.ContactPerson;
-                        document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                        document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                        document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                        document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
-                        document.getElementById('Customer_IsLocked').value = Results.IsLocked;
+                            customerGroupSelectedValue = customerResults.ArticleGroup;
+                            accountSelectedValue = customerResults.Account;
+                            termSelectedValue = customerResults.Term;
 
-                        if(document.getElementById('Customer_IsLocked').value == 'true') {
-                            document.getElementById('artcileCustomer_customer').disabled = true;
-                            document.getElementById('artcileCustomer_address').disabled = true;
-                            document.getElementById('artcileCustomer_creditLimit').disabled = true;
-                            document.getElementById('artcileCustomer_particulars').disabled = true;
-                            document.getElementById('artcileCustomer_TIN').disabled = true;
-                            document.getElementById('artcileCustomer_contactNo').disabled = true;
-                            document.getElementById('artcileCustomer_contactPerson').disabled = true;
-                            $("#customer_saveSaveCustomer").prop("disabled", true);
-                            $("#customer_saveCustomer").prop("disabled", true);
-                            $("#customer_editCustomer").prop("disabled", false);
-                            $("#customer_printCustomer").prop("disabled", false);
-                            document.getElementById('isLocked_Status').checked = true;
-                            $('#btnAddContactInformation').prop('disabled', true);
+                            document.getElementById('artcileCustomer_address').value = customerResults.Address;
+                            document.getElementById('artcileCustomer_particulars').value = customerResults.Particulars;
+                            document.getElementById('artcileCustomer_TIN').value = customerResults.TaxNumber;
+                            document.getElementById('artcileCustomer_contactNo').value = customerResults.ContactNumber;
+                            document.getElementById('artcileCustomer_contactPerson').value = customerResults.ContactPerson;
+                            document.getElementById('createdBy').innerHTML = customerResults.CreatedBy;
+                            document.getElementById('createdDate').innerHTML = customerResults.CreatedDateTime;
+                            document.getElementById('updatedBy').innerHTML = customerResults.UpdatedBy;
+                            document.getElementById('updatedDate').innerHTML = customerResults.UpdatedDateTime;
 
-                        } else if(document.getElementById('Customer_IsLocked').value == 'false') {
-                            document.getElementById('artcileCustomer_customer').disabled = false;
-                            document.getElementById('artcileCustomer_address').disabled = false;
-                            document.getElementById('artcileCustomer_creditLimit').disabled = false;
-                            document.getElementById('artcileCustomer_particulars').disabled = false;
-                            document.getElementById('artcileCustomer_TIN').disabled = false;
-                            document.getElementById('artcileCustomer_contactNo').disabled = false;
-                            document.getElementById('artcileCustomer_contactPerson').disabled = false;
-                            $("#customer_saveSaveCustomer").prop("disabled", false);
-                            $("#customer_saveCustomer").prop("disabled", false);
-                            $("#customer_editCustomer").prop("disabled", true);
-                            $("#customer_printCustomer").prop("disabled", true);
-                            document.getElementById('isLocked_Status').checked = false;
-                            $('#btnAddContactInformation').prop('disabled', false);
+                            if (customerResults.IsLocked == true) {
+                                document.getElementById('artcileCustomer_customer').disabled = true;
+                                document.getElementById('artcileCustomer_address').disabled = true;
+                                document.getElementById('artcileCustomer_creditLimit').disabled = true;
+                                document.getElementById('artcileCustomer_particulars').disabled = true;
+                                document.getElementById('artcileCustomer_TIN').disabled = true;
+                                document.getElementById('artcileCustomer_contactNo').disabled = true;
+                                document.getElementById('artcileCustomer_contactPerson').disabled = true;
 
-                        } else {
-                            console.log("Invalid Lock");
+                                $('#customer_SaveButton').prop('disabled', true);
+                                $('#customer_LockButton').prop('disabled', true);
+                                $('#customer_UnlockButton').prop('disabled', false);
+                                $('#btnAddContactInformation').prop('disabled', true);
+
+                                IsLocked = true;
+                            } else {
+                                document.getElementById('artcileCustomer_customer').disabled = false;
+                                document.getElementById('artcileCustomer_address').disabled = false;
+                                document.getElementById('artcileCustomer_creditLimit').disabled = false;
+                                document.getElementById('artcileCustomer_particulars').disabled = false;
+                                document.getElementById('artcileCustomer_TIN').disabled = false;
+                                document.getElementById('artcileCustomer_contactNo').disabled = false;
+                                document.getElementById('artcileCustomer_contactPerson').disabled = false;
+
+                                $('#customer_SaveButton').prop('disabled', false);
+                                $('#customer_LockButton').prop('disabled', false);
+                                $('#customer_UnlockButton').prop('disabled', true);
+                                $('#btnAddContactInformation').prop('disabled', false);
+
+                                IsLocked = false;
+                            }
+
+                            getArticleCustomerGroupForComboBox();
+                            getArticleTermForComboBox();
                         }
-
-                        // comboboxes
-                        getArticleCustomerGroupForComboBox();
-                        //getArticleAccountForComboBox();
-                        getArticleTermForComboBox();
                     }
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }
+        }
+
+        // =================
+        // IsLocked Disabled
+        // =================
+        function isLockedDisabledDropdown(items) {
+            var disabled;
+            if (items == 0) {
+                disabled = true;
+            } else {
+                if (IsLocked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return customers;
+            }
+
+            return disabled;
         }
 
         // ==================================
         // Get Last Id for Customer by its ID
         // ==================================
         function getLastInsertedIdCustomerByArticleTypeId() {
+            eraseCookie("customerId");
             var customers = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/articleLastIdByArticleTypeId/2',
@@ -481,15 +391,11 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        customers.push ({
-                            Id: Results.Id,
-                            Article : Results.Article
-                        });
+                success: function (lastCustomerResults) {
+                    if (lastCustomerResults != null) {
+                        createCookie("customerId", lastCustomerResults.Id, 365);
+                        window.setTimeout(function () { location.reload() }, 1000);
                     }
-                    window.location = '/Software/CustomerDetail?CustomerId=' + Results.Id + '&BranchId=' + @branchId;
-                    window.setTimeout(function () { location.reload() }, 1000);
                 }
             });
         }
@@ -505,22 +411,22 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
+                success: function (articleCustomerGroupResults) {
+                    if (articleCustomerGroupResults.length > 0) {
+                        for (i = 0; i < articleCustomerGroupResults.length; i++) {
                             articleCustomerGroups.push({
-                                ArticleGroupId: results[i]["Id"],
-                                ArticleGroupArticleGroup: results[i]["ArticleGroup"],
-                                ArticleGroupAccountId: results[i]["AccountId"],
-                                ArticleGroupAccount: results[i]["Account"],
-                                ArticleGroupSalesAccountId: results[i]["SalesAccountId"],
-                                ArticleGroupSalesAccount: results[i]["SalesAccount"],
-                                ArticleGroupCostAccountId: results[i]["CostAccountId"],
-                                ArticleGroupCostAccount: results[i]["CostAccount"],
-                                ArticleGroupAssetAccountId: results[i]["AssetAccountId"],
-                                ArticleGroupAssetAccount: results[i]["AssetAccount"],
-                                ArticleGroupExpenseAccountId: results[i]["ExpenseAccountId"],
-                                ArticleGroupExpenseAccount: results[i]["ExpenseAccount"]
+                                ArticleGroupId: articleCustomerGroupResults[i]["Id"],
+                                ArticleGroup: articleCustomerGroupResults[i]["ArticleGroup"],
+                                AccountId: articleCustomerGroupResults[i]["AccountId"],
+                                Account: articleCustomerGroupResults[i]["Account"],
+                                SalesAccountId: articleCustomerGroupResults[i]["SalesAccountId"],
+                                SalesAccount: articleCustomerGroupResults[i]["SalesAccount"],
+                                CostAccountId: articleCustomerGroupResults[i]["CostAccountId"],
+                                CostAccount: articleCustomerGroupResults[i]["CostAccount"],
+                                AssetAccountId: articleCustomerGroupResults[i]["AssetAccountId"],
+                                AssetAccount: articleCustomerGroupResults[i]["AssetAccount"],
+                                ExpenseAccountId: articleCustomerGroupResults[i]["ExpenseAccountId"],
+                                ExpenseAccount: articleCustomerGroupResults[i]["ExpenseAccount"]
                             });
                         }
                         createCboForArticleCustomerGroup(articleCustomerGroups);
@@ -537,50 +443,19 @@
         // CBO for Customer Group
         // ======================
         function createCboForArticleCustomerGroup(articleCustomerGroups) {
-            var articleCustomerGroupCollection = new wijmo.collections.CollectionView(articleCustomerGroups);
-            var articleGroupList = new Array();
-            for (var i = 0; i < articleCustomerGroupCollection.items.length; i++) {
-                articleGroupList.push(articleCustomerGroupCollection.items[i].ArticleGroupArticleGroup);
-            }
-
-            var disabled;
-            if(articleCustomerGroups == 0) {
-                disabled = true;
-            } else {
-                if(document.getElementById('Customer_IsLocked').value == 'true') {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
             cboArticleGroupForCustomer.dispose();
             cboArticleGroupForCustomer = new wijmo.input.ComboBox('#artcileCustomer_customerGroup', {
-                disabled: disabled,
-                placeholder: "Select Customer Group",
-                itemsSource: articleGroupList,
+                disabled: isLockedDisabledDropdown(articleCustomerGroups),
+                placeholder: "Customer Group",
+                itemsSource: articleCustomerGroups,
+                displayMemberPath: "ArticleGroup",
                 isEditable: false,
-                selectedValue: document.getElementById('artcileCustomer_customerGroup_SelectedValue').value.toString(),
+                selectedValuePath: "ArticleGroup",
+                selectedValue: customerGroupSelectedValue.toString(),
                 onSelectedIndexChanged: function () {
-                    $("#artcileCustomer_customerGroup_data").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupId);
-                    $("#artcileCustomer_account_data").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupAccountId);
-                    $("#artcileCustomer_account_SelectedValue").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupAccount);
-                    $("#artcileCustomer_SalesAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupSalesAccountId);
-                    $("#artcileCustomer_CostAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupCostAccountId);
-                    $("#artcileCustomer_AssetAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
-                    $("#artcileCustomer_ExpenseAccountId").val(articleCustomerGroupCollection.items[this.selectedIndex].ArticleGroupExpenseAccountId);
-
                     getArticleAccountForComboBox();
                 }
             });
-
-            document.getElementById('artcileCustomer_customerGroup_data').value = articleCustomerGroupCollection.items[cboArticleGroupForCustomer.selectedIndex].ArticleGroupId;
-            document.getElementById('artcileCustomer_account_data').value = articleCustomerGroupCollection.items[cboArticleGroupForCustomer.selectedIndex].ArticleGroupAccountId;
-            document.getElementById('artcileCustomer_account_SelectedValue').value = articleCustomerGroupCollection.items[cboArticleGroupForCustomer.selectedIndex].ArticleGroupAccount;
-            document.getElementById('artcileCustomer_SalesAccountId').value = articleCustomerGroupCollection.items[cboArticleGroupForCustomer.selectedIndex].ArticleGroupSalesAccountId;
-            document.getElementById('artcileCustomer_CostAccountId').value = articleCustomerGroupCollection.items[cboArticleGroupForCustomer.selectedIndex].ArticleGroupCostAccountId;
-            document.getElementById('artcileCustomer_AssetAccountId').value = articleCustomerGroupCollection.items[cboArticleGroupForCustomer.selectedIndex].ArticleGroupAssetAccountId;
-            document.getElementById('artcileCustomer_ExpenseAccountId').value = articleCustomerGroupCollection.items[cboArticleGroupForCustomer.selectedIndex].ArticleGroupExpenseAccountId;
         }
 
         // ==================
@@ -599,7 +474,7 @@
                         for (i = 0; i < results.length; i++) {
                             accounts.push({
                                 AccountId: results[i]["Id"],
-                                AccountAccount: results[i]["Account"]
+                                Account: results[i]["Account"]
                             });
                         }
                         createCboForAccount(accounts);
@@ -613,35 +488,16 @@
         // ===============
         // CBO for Account
         // ===============
-        function  createCboForAccount(accounts) {
-            var accountCollection = new wijmo.collections.CollectionView(accounts);
-            var accountList = new Array();
-            for (var i = 0; i < accountCollection.items.length; i++) {
-                accountList.push(accountCollection.items[i].AccountAccount);
-            }
-
-            var disabled;
-            if(accounts == 0) {
-                disabled = true;
-            } else {
-                if(document.getElementById('Customer_IsLocked').value == 'true') {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
+        function createCboForAccount(accounts) {
             cboForAccount.dispose();
             cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account', {
                 disabled: true,
-                placeholder: "Select Account",
-                itemsSource: accountList,
+                placeholder: "Account",
+                itemsSource: accounts,
+                displayMemberPath: "Account",
                 isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('artcileCustomer_account_SelectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#artcileCustomer_account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                }
+                selectedValuePath: "Account",
+                selectedValue: cboArticleGroupForCustomer.selectedItem["Account"].toString()
             });
         }
 
@@ -661,7 +517,7 @@
                         for (i = 0; i < results.length; i++) {
                             terms.push({
                                 TermId: results[i]["Id"],
-                                TermTerm: results[i]["Term"]
+                                Term: results[i]["Term"]
                             });
                         }
                         createCboForTerm(terms);
@@ -676,36 +532,16 @@
         // CBO for Term
         // ============
         function createCboForTerm(terms) {
-            var termCollection = new wijmo.collections.CollectionView(terms);
-            var termList = new Array();
-            for (var i = 0; i < termCollection.items.length; i++) {
-                termList.push(termCollection.items[i].TermTerm);
-            }
-
-            var disabled;
-            if(terms == 0) {
-                disabled = true;
-            } else {
-                if(document.getElementById('Customer_IsLocked').value == 'true') {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
             cboForTerm.dispose();
             cboForTerm = new wijmo.input.ComboBox('#artcileCustomer_term', {
-                disabled: disabled,
+                disabled: isLockedDisabledDropdown(terms),
                 placeholder: "Select Term",
-                itemsSource: termList,
+                itemsSource: terms,
+                displayMemberPath: "Term",
                 isEditable: false,
-                selectedValue: document.getElementById('artcileCustomer_term_SelectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#artcileCustomer_term_data").val(termCollection.items[this.selectedIndex].TermId);
-                }
+                selectedValuePath: "Term",
+                selectedValue: termSelectedValue.toString(),
             });
-
-            document.getElementById('artcileCustomer_term_data').value = termCollection.items[cboForTerm.selectedIndex].TermId;
         }
 
         // ========================================================
@@ -714,55 +550,17 @@
         function zerofill(number, length) {
             var result = number.toString();
             var pad = length - result.length;
-            while(pad > 0) {
+            while (pad > 0) {
                 result = '0' + result;
                 pad--;
             }
             return result;
         }
 
-        // =============================
-        // SAVE Customer Customer Button
-        // =============================
-        function customerSaveCustomerButton_OnClick() {
-            var customerObject = new Object();
-            var customerId = @customerId;
-            customerObject.ArticleCode = document.getElementById('artcileCustomer_code').value;
-            customerObject.Article = document.getElementById('artcileCustomer_customer').value;
-            customerObject.ArticleGroupId = document.getElementById('artcileCustomer_customerGroup_data').value;
-            customerObject.AccountId = document.getElementById('artcileCustomer_account_data').value;
-            customerObject.SalesAccountId = document.getElementById('artcileCustomer_SalesAccountId').value;
-            customerObject.CostAccountId = document.getElementById('artcileCustomer_CostAccountId').value;
-            customerObject.AssetAccountId = document.getElementById('artcileCustomer_AssetAccountId').value;
-            customerObject.ExpenseAccountId = document.getElementById('artcileCustomer_ExpenseAccountId').value;
-            customerObject.Particulars = document.getElementById('artcileCustomer_particulars').value;
-            customerObject.Address = document.getElementById('artcileCustomer_address').value;
-            customerObject.TermId = document.getElementById('artcileCustomer_term_data').value;
-            customerObject.CreditLimit = document.getElementById('artcileCustomer_creditLimit').value;
-            customerObject.ContactNumber = document.getElementById('artcileCustomer_contactNo').value;
-            customerObject.ContactPerson = document.getElementById('artcileCustomer_contactPerson').value;
-            customerObject.TaxNumber = document.getElementById('artcileCustomer_TIN').value;
-            customerObject.IsLocked = true;
-            var data = JSON.stringify(customerObject);
-
-            if( document.getElementById('artcileCustomer_customerGroup_data').value == '') {
-                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid red";
-            } else {
-                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid #C8C8C8   ";
-            }
-
-            if( document.getElementById('artcileCustomer_account_data').value == '') {
-                document.getElementById("artcileCustomer_account").style.border = "1px solid red";
-            } else {
-                document.getElementById("artcileCustomer_account").style.border = "1px solid #C8C8C8   ";
-            }
-
-            if( document.getElementById('artcileCustomer_term_data').value == '') {
-                document.getElementById("artcileCustomer_term").style.border = "1px solid red";
-            } else {
-                document.getElementById("artcileCustomer_term").style.border = "1px solid #C8C8C8   ";
-            }
-
+        // =========================
+        // Customer Entry Validation
+        // =========================
+        function customerEntryValidation() {
             var isValid = true;
             $('.requiredCustomer').each(function () {
                 if ($.trim($(this).val()) == '') {
@@ -777,324 +575,240 @@
                     });
                 }
             });
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
+
+            return isValid;
+        }
+
+        // ===================================
+        // Customer drop down field validation
+        // ===================================
+        function dropdownValidation() {
+            if (cboArticleGroupForCustomer.selectedItem["ArticleGroupId"].toString() == '') {
+                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid red";
+            } else {
+                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid #C8C8C8   ";
             }
-            else {
-                if(customerId == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addArticle/2',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getLastInsertedIdCustomerByArticleTypeId, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateArticle/' + customerId + '/2',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                            }
-                        }
-                    });
-                }
+
+            if (cboForAccount.selectedItem["AccountId"].toString() == '') {
+                document.getElementById("artcileCustomer_account").style.border = "1px solid red";
+            } else {
+                document.getElementById("artcileCustomer_account").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if (cboForTerm.selectedItem["TermId"].toString() == '') {
+                document.getElementById("artcileCustomer_term").style.border = "1px solid red";
+            } else {
+                document.getElementById("artcileCustomer_term").style.border = "1px solid #C8C8C8   ";
             }
         }
 
-        // ====================
-        // EDIT Customer Button
-        // ====================
-        function customerEditButton_OnClick() {
-            $("#customer_saveSaveCustomer").prop("disabled", true);
-            $("#customer_saveCustomer").prop("disabled", true);
-            $("#customer_editCustomer").prop("disabled", true);
-            $("#customer_printCustomer").prop("disabled", true);
-            $("#customer_CloseCustomer").prop("disabled", true);
-
+        // =====================
+        // Data Customer Objects
+        // =====================
+        function dataCustomerObject() {
             var customerObject = new Object();
-            var customerId = @customerId;
+            var customerId = readCookie("customerId");
+            customerObject.ArticleCode = document.getElementById('artcileCustomer_code').value;
+            customerObject.Article = document.getElementById('artcileCustomer_customer').value;
+            customerObject.ArticleGroupId =  cboArticleGroupForCustomer.selectedItem["ArticleGroupId"];
+            customerObject.AccountId = cboForAccount.selectedItem["AccountId"];
+            customerObject.SalesAccountId = cboArticleGroupForCustomer.selectedItem["SalesAccountId"];
+            customerObject.CostAccountId = cboArticleGroupForCustomer.selectedItem["CostAccountId"];
+            customerObject.AssetAccountId = cboArticleGroupForCustomer.selectedItem["AssetAccountId"];
+            customerObject.ExpenseAccountId = cboArticleGroupForCustomer.selectedItem["ExpenseAccountId"];
+            customerObject.Particulars = document.getElementById('artcileCustomer_particulars').value;
+            customerObject.Address = document.getElementById('artcileCustomer_address').value;
+            customerObject.TermId = cboForTerm.selectedItem["TermId"];
+            customerObject.CreditLimit = document.getElementById('artcileCustomer_creditLimit').value;
+            customerObject.ContactNumber = document.getElementById('artcileCustomer_contactNo').value;
+            customerObject.ContactPerson = document.getElementById('artcileCustomer_contactPerson').value;
+            customerObject.TaxNumber = document.getElementById('artcileCustomer_TIN').value;
+            var data = JSON.stringify(customerObject);
+            return data;
+        }
 
-            if(customerId > 0) {
-                customerObject.IsLocked = document.getElementById('Customer_IsLocked_defaultFalse').value;
+        // =============
+        // Save Customer
+        // =============
+        function customerSaveButton_OnClick() {
+            dropdownValidation();
+            if (customerEntryValidation() == false) {
+                toastr.error("Invalid Entry");
             } else {
-                customerObject.IsLocked = document.getElementById('Customer_IsLocked_defaultTrue').value;
-            }
+                document.getElementById('customer_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                $('#customer_SaveButton').prop('disabled', true);
+                $('#customer_LockButton').prop('disabled', true);
+                $('#customer_UnlockButton').prop('disabled', true);
+                $('#customer_CloseButton').prop('disabled', true);
 
-            var dataUpdate = JSON.stringify(customerObject);
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addArticle/2',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: dataCustomerObject(),
+                    statusCode: {
+                        200: function () {
+                            document.getElementById('customer_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                            $('#customer_SaveButton').prop('disabled', true);
+                            $('#customer_LockButton').prop('disabled', true);
+                            $('#customer_UnlockButton').prop('disabled', true);
+                            $('#customer_CloseButton').prop('disabled', true);
+                            toastr.success("Successfully saved");
+                            setTimeout(getLastInsertedIdCustomerByArticleTypeId, 1000);
+                        },
+                        404: function () {
+                            document.getElementById('customer_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                            $('#customer_SaveButton').prop('disabled', false);
+                            $('#customer_LockButton').prop('disabled', true);
+                            $('#customer_UnlockButton').prop('disabled', true);
+                            $('#customer_CloseButton').prop('disabled', false);
+                            toastr.error("Save request not found");
+                        },
+                        400: function () {
+                            document.getElementById('customer_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                            $('#customer_SaveButton').prop('disabled', false);
+                            $('#customer_LockButton').prop('disabled', true);
+                            $('#customer_UnlockButton').prop('disabled', true);
+                            $('#customer_CloseButton').prop('disabled', false);
+                            toastr.error("Cannot save new record");
+                        }
+                    }
+                });
+            }
+        }
+
+        // =============================
+        // Lock Customer Customer Button
+        // =============================
+        function customerLockButton_OnClick() {
+            dropdownValidation();
+            if (customerEntryValidation() == false) {
+                toastr.error("Invalid Entry");
+            } else {
+                document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking...";
+                $('#customer_SaveButton').prop('disabled', true);
+                $('#customer_LockButton').prop('disabled', true);
+                $('#customer_UnlockButton').prop('disabled', true);
+                $('#customer_CloseButton').prop('disabled', true);
+
+                var customerId = readCookie("customerId");
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateArticle/' + customerId + '/2',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: dataCustomerObject(),
+                    statusCode: {
+                        200: function () {
+                            document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking...";
+                            $('#customer_SaveButton').prop('disabled', true);
+                            $('#customer_LockButton').prop('disabled', true);
+                            $('#customer_UnlockButton').prop('disabled', true);
+                            $('#customer_CloseButton').prop('disabled', true);
+                            toastr.success("Locked");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#customer_SaveButton').prop('disabled', true);
+                            $('#customer_LockButton').prop('disabled', false);
+                            $('#customer_UnlockButton').prop('disabled', true);
+                            $('#customer_CloseButton').prop('disabled', false);
+                            toastr.error("Lock request not found");
+                        },
+                        400: function () {
+                            document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            $('#customer_SaveButton').prop('disabled', true);
+                            $('#customer_LockButton').prop('disabled', false);
+                            $('#customer_UnlockButton').prop('disabled', true);
+                            $('#customer_CloseButton').prop('disabled', false);
+                            toastr.error("Cannot lock record");
+                        }
+                    }
+                });
+            }
+        }
+
+        // ======================
+        // Unlock Customer Button
+        // ======================
+        function customerUnlockButton_OnClick() {
+            document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking...";
+            $('#customer_SaveButton').prop('disabled', true);
+            $('#customer_LockButton').prop('disabled', true);
+            $('#customer_UnlockButton').prop('disabled', true);
+            $('#customer_CloseButton').prop('disabled', true);
+
+            var customerId = readCookie("customerId");
             $.ajax({
                 type: "PUT",
-                url: '/api/updateArticleIsLock/' + customerId,
+                url: '/api/unlockArticle/' + customerId,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                data: dataUpdate,
+                data: {},
                 statusCode: {
                     200: function () {
+                        document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking...";
+                        $('#customer_SaveButton').prop('disabled', true);
+                        $('#customer_LockButton').prop('disabled', true);
+                        $('#customer_UnlockButton').prop('disabled', true);
+                        $('#customer_CloseButton').prop('disabled', true);
                         toastr.success("Unlocked");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
-                        $("#customer_saveSaveCustomer").prop("disabled", true);
-                        $("#customer_saveCustomer").prop("disabled", true);
-                        $("#customer_editCustomer").prop("disabled", true);
-                        $("#customer_printCustomer").prop("disabled", true);
-                        $("#customer_CloseCustomer").prop("disabled", true);
                     },
                     404: function () {
-                        toastr.error("Can't Update");
-                        $("#customer_saveSaveCustomer").prop("disabled", false);
-                        $("#customer_saveCustomer").prop("disabled", false);
-                        $("#customer_editCustomer").prop("disabled", false);
-                        $("#customer_printCustomer").prop("disabled", false);
-                        $("#customer_CloseCustomer").prop("disabled", false);
+                        document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#customer_SaveButton').prop('disabled', true);
+                        $('#customer_LockButton').prop('disabled', false);
+                        $('#customer_UnlockButton').prop('disabled', true);
+                        $('#customer_CloseButton').prop('disabled', false);
+                        toastr.error("Unlock request not found");
 
                     },
                     400: function () {
-                        toastr.error("Bad Request");
-                        $("#customer_saveSaveCustomer").prop("disabled", false);
-                        $("#customer_saveCustomer").prop("disabled", false);
-                        $("#customer_editCustomer").prop("disabled", false);
-                        $("#customer_printCustomer").prop("disabled", false);
-                        $("#customer_CloseCustomer").prop("disabled", false);
+                        document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        $('#customer_SaveButton').prop('disabled', true);
+                        $('#customer_LockButton').prop('disabled', false);
+                        $('#customer_UnlockButton').prop('disabled', true);
+                        $('#customer_CloseButton').prop('disabled', false);
+                        toastr.error("Cannot unlock record");
                     }
                 }
             });
         }
 
-        // ============
-        // ADD Customer
-        // ============
-        function customerSaveButton_OnClick() {
-            var customerObject = new Object();
-            var customerId = @customerId;
-            customerObject.ArticleCode = document.getElementById('artcileCustomer_code').value;
-            customerObject.Article = document.getElementById('artcileCustomer_customer').value;
-            customerObject.ArticleGroupId = document.getElementById('artcileCustomer_customerGroup_data').value;
-            customerObject.AccountId = document.getElementById('artcileCustomer_account_data').value;
-            customerObject.SalesAccountId = document.getElementById('artcileCustomer_SalesAccountId').value;
-            customerObject.CostAccountId = document.getElementById('artcileCustomer_CostAccountId').value;
-            customerObject.AssetAccountId = document.getElementById('artcileCustomer_AssetAccountId').value;
-            customerObject.ExpenseAccountId = document.getElementById('artcileCustomer_ExpenseAccountId').value;
-            customerObject.Particulars = document.getElementById('artcileCustomer_particulars').value;
-            customerObject.Address = document.getElementById('artcileCustomer_address').value;
-            customerObject.TermId = document.getElementById('artcileCustomer_term_data').value;
-            customerObject.CreditLimit = document.getElementById('artcileCustomer_creditLimit').value;
-            customerObject.ContactNumber = document.getElementById('artcileCustomer_contactNo').value;
-            customerObject.ContactPerson = document.getElementById('artcileCustomer_contactPerson').value;
-            customerObject.TaxNumber = document.getElementById('artcileCustomer_TIN').value;
-            var data = JSON.stringify(customerObject);
-
-            if( document.getElementById('artcileCustomer_customerGroup_data').value == '') {
-                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid red";
-            } else {
-                document.getElementById("artcileCustomer_customerGroup").style.border = "1px solid #C8C8C8   ";
-            }
-
-            if( document.getElementById('artcileCustomer_account_data').value == '') {
-                document.getElementById("artcileCustomer_account").style.border = "1px solid red";
-            } else {
-                document.getElementById("artcileCustomer_account").style.border = "1px solid #C8C8C8   ";
-            }
-
-            if( document.getElementById('artcileCustomer_term_data').value == '') {
-                document.getElementById("artcileCustomer_term").style.border = "1px solid red";
-            } else {
-                document.getElementById("artcileCustomer_term").style.border = "1px solid #C8C8C8   ";
-            }
-
-            var isValid = true;
-            $('.requiredCustomer').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "1px solid red"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-            }
-            else {
-                if(customerId == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addArticle/2',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getLastInsertedIdCustomerByArticleTypeId, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateArticle/' + customerId + '/2',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#customer_saveSaveCustomer").prop("disabled", true);
-                                $("#customer_saveCustomer").prop("disabled", true);
-                                $("#customer_editCustomer").prop("disabled", true);
-                                $("#customer_printCustomer").prop("disabled", true);
-                                $("#customer_CloseCustomer").prop("disabled", true);
-                            }
-                        }
-                    });
-                }
-            }
+        // =====================
+        // Close Customer Button
+        // =====================
+        function customerCloseButton_OnClick() {
+            eraseCookie("customerId");
+            window.location = '/Software/Customer';
         }
 
         // ===========
         // Onload Page
         // ===========
         $(document).ready(function () {
-            document.getElementById('Customer_IsLocked_defaultTrue').value = 'true';
-            document.getElementById('Customer_IsLocked_defaultFalse').value = 'false';
-            document.getElementById('isLocked_Status').disabled = true;
-
             getArticleCustomerById();
 
-            var customerId = @customerId;
-            if(customerId == 0) {
-                // comboboxes
-                getArticleCustomerGroupForComboBox();
-                //getArticleAccountForComboBox();
-                getArticleTermForComboBox();
-
-                if(document.getElementById('artcileCustomer_code_data').value == 0) {
-                    document.getElementById('artcileCustomer_code').value = "0000000001";
-                }
-
-                document.getElementById('artcileCustomer_code_data').value = 0;
-
-                var customers = new wijmo.collections.ObservableArray;
+            var customerId = readCookie("customerId");
+            if (customerId == 0) {
                 $.ajax({
                     url: '/api/articleLastArticleCodeByArticleTypeId/2',
                     cache: false,
                     type: 'GET',
                     contentType: 'application/json; charset=utf-8',
                     data: {},
-                    success: function (Results) {
-                        //if (Results.length > 0) {
-                        //    customers.push({
-                        //        Id: Results.Id,
-                        //        CustomerArticleCode: Results.ArticleCode
-                        //    });
-                        //}
-
-                        if(Results != null) {
-                            var ArticleCode = parseInt(Results.ArticleCode);
-                            var ArticleCode_plusOne = 0000000001;
-                            var ArticleCode_Results = ArticleCode + ArticleCode_plusOne;
-                            document.getElementById('artcileCustomer_code_data').value = zerofill(ArticleCode_Results, 10);
-                            document.getElementById('artcileCustomer_code').value = zerofill(ArticleCode_Results, 10);
+                    success: function (lastArticleCodeResults) {
+                        if (lastArticleCodeResults != null) {
+                            var articleCode = parseInt(lastArticleCodeResults.ArticleCode);
+                            var articleCodeResults = articleCode + 0000000001;
+                            document.getElementById('artcileCustomer_code').value = zerofill(articleCodeResults, 10);
                         }
                     }
                 });
@@ -1105,13 +819,16 @@
                 $("#customer_printCustomer").prop("disabled", true);
             }
 
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Customer", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Customer</a> ' + ' > Customer Detail';
             document.getElementById('artcileCustomer_code').disabled = true;
 
             // combo box
-            cboArticleGroupForCustomer  = new wijmo.input.ComboBox('#artcileCustomer_customerGroup');
-            cboForAccount  = new wijmo.input.ComboBox('#artcileCustomer_account');
-            cboForTerm  = new wijmo.input.ComboBox('#artcileCustomer_term');
+            cboArticleGroupForCustomer = new wijmo.input.ComboBox('#artcileCustomer_customerGroup');
+            cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account');
+            cboForTerm = new wijmo.input.ComboBox('#artcileCustomer_term');
+
+            getArticleCustomerGroupForComboBox();
+            getArticleTermForComboBox();
+
         });
     </script>
 
@@ -1124,12 +841,6 @@
         // ===================================
         var journalLedgers;
         var journalLedgerGrid;
-
-        var btnFirstPageGridJournalLedger;
-        var btnPreviousPageGridJournalLedger;
-        var btnNextPageGridJournalLedger;
-        var btnLastPageGridJournalLedger;
-        var btnCurrentPageGridJournalLedger;
 
         // =======================
         // GET Journal Ledger List
@@ -1173,44 +884,6 @@
             //});
             //return journalLedgers;
         }
-        // =====================================
-        // FlexGrid Selection for Journal Ledger
-        // =====================================
-        function updateDetailsJournalLedger() {
-            var item = journalLedgers.currentItem;
-            document.getElementById('createdBy').innerHTML = item.CreatedBy;
-            document.getElementById('createdDate').innerHTML = item.CreatedDateTime;
-            document.getElementById('updatedBy').innerHTML = item.UpdatedBy;
-            document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
-        }
-
-        // =====================================
-        // Navigation Buttons for Journal Ledger
-        // =====================================
-        function updateNavigateButtonsJournalLedger() {
-            if (journalLedgers.pageSize <= 0) {
-                document.getElementById('navigationPageGridJournalLedger').style.display = 'none';
-                return;
-            }
-            document.getElementById('navigationPageGridJournalLedger').style.display = 'block';
-            if (journalLedgers.pageIndex === 0) {
-                btnFirstPageGridJournalLedger.setAttribute('disabled', 'disabled');
-                btnPreviousPageGridJournalLedger.setAttribute('disabled', 'disabled');
-                btnNextPageGridJournalLedger.removeAttribute('disabled');
-                btnLastPageGridJournalLedger.removeAttribute('disabled');
-            } else if (journalLedgers.pageIndex === (journalLedgers.pageCount - 1)) {
-                btnFirstPageGridJournalLedger.removeAttribute('disabled');
-                btnPreviousPageGridJournalLedger.removeAttribute('disabled');
-                btnLastPageGridJournalLedger.setAttribute('disabled', 'disabled');
-                btnNextPageGridJournalLedger.setAttribute('disabled', 'disabled');
-            } else {
-                btnFirstPageGridJournalLedger.removeAttribute('disabled');
-                btnPreviousPageGridJournalLedger.removeAttribute('disabled');
-                btnNextPageGridJournalLedger.removeAttribute('disabled');
-                btnLastPageGridJournalLedger.removeAttribute('disabled');
-            }
-            btnCurrentPageGridJournalLedger.innerHTML = (journalLedgers.pageIndex + 1) + ' / ' + journalLedgers.pageCount;
-        }
 
         // ===============
         //  Journal Ledger
@@ -1220,92 +893,58 @@
             journalLedgers.canFilter = true;
             journalLedgers.pageSize = 15;
 
-            var filterTextJournalLedger = '';
-            $('#InputFilterJournalLedger').keyup(function () {
-                filterTextJournalLedger = this.value.toLowerCase();
-                journalLedgers.refresh();
-            });
-            journalLedgers.filter = function (item) {
-                return !filterTextJournalLedger || (item.journalLedger.toLowerCase().indexOf(filterTextJournalLedger) > -1);
-            }
-            journalLedgers.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsJournalLedger();
-            });
-            journalLedgers.currentChanged.addHandler(function (sender, args) {
-                updateDetailsJournalLedger();
-            });
-
             // Flex Grid for Journal Ledger
             journalLedgerGrid = new wijmo.grid.FlexGrid('#JournalLedgerGrid');
             journalLedgerGrid.initialize({
                 columns: [
                             {
-                                "header": "Edit",
-                                "binding": "EditId",
-                                "width": 60,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Delete",
-                                "binding": "DeleteId",
-                                "width": 70,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
-                                "header": "Date",
-                                //"binding": "Date",
+                                "header": "date",
+                                //"binding": "Remarks",
                                 "allowSorting": true,
-                                "width": "1*",
+                                "width": "4*",
                             },
                             {
                                 "header": "Doc Ref.",
-                                // "binding": "Doc Ref.",
+                                //"binding": "Remarks",
                                 "allowSorting": true,
-                                "width": "3*"
+                                "width": "4*",
                             },
                             {
                                 "header": "Branch",
-                                // "binding": "Branch",
+                                //"binding": "Remarks",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": "4*",
                             },
                             {
                                 "header": "Account",
-                                // "binding": "Account",
-                                "align": "left",
+                                //"binding": "Remarks",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": "4*",
                             },
                             {
                                 "header": "Debit",
-                                // "binding": "Debit",
+                                //"binding": "Remarks",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": "4*",
                             },
                             {
                                 "header": "Credit",
-                                // "binding": "Credit",
+                                //"binding": "Remarks",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "width": "4*",
                             },
-                             {
-                                 "header": "Balance",
-                                 //    "binding": "Balance",
-                                 "allowSorting": true,
-                                 "width": "2*"
-                             },
-                             {
-                                 "header": "Particulars",
-                                 //  "binding": "Particulars",
-                                 "allowSorting": true,
-                                 "width": "2*"
-                             },
+                            {
+                                "header": "Balance",
+                                //"binding": "Remarks",
+                                "allowSorting": true,
+                                "width": "4*",
+                            },
+                            {
+                                "header": "Particulars",
+                                //"binding": "Remarks",
+                                "allowSorting": true,
+                                "width": "8*",
+                            }
                 ],
                 autoGenerateColumns: false,
                 //itemsSource: journalLedgers,
@@ -1316,32 +955,6 @@
             });
 
             journalLedgerGrid.trackChanges = true;
-
-            //Navigation button for Journal Ledger
-            btnFirstPageGridJournalLedger = document.getElementById('btnMoveToFirstPageGridJournalLedger');
-            btnPreviousPageGridJournalLedger = document.getElementById('btnMoveToPreviousPageGridJournalLedger');
-            btnNextPageGridJournalLedger = document.getElementById('btnMoveToNextPageGridJournalLedger');
-            btnLastPageGridJournalLedger = document.getElementById('btnMoveToLastPageGridJournalLedger');
-            btnCurrentPageGridJournalLedger = document.getElementById('btnCurrentPageGridJournalLedger');
-
-            updateNavigateButtonsJournalLedger();
-
-            btnFirstPageGridJournalLedger.addEventListener('click', function () {
-                journalLedgers.moveToFirstPage();
-                updateNavigateButtonsJournalLedger();
-            });
-            btnPreviousPageGridJournalLedger.addEventListener('click', function () {
-                journalLedgers.moveToPreviousPage();
-                updateNavigateButtonsJournalLedger();
-            });
-            btnNextPageGridJournalLedger.addEventListener('click', function () {
-                journalLedgers.moveToNextPage();
-                updateNavigateButtonsJournalLedger();
-            });
-            btnLastPageGridJournalLedger.addEventListener('click', function () {
-                journalLedgers.moveToLastPage();
-                updateNavigateButtonsJournalLedger();
-            });
         }
     </script>
 
@@ -1355,18 +968,12 @@
         var contactInformations;
         var contactInformationGrid;
 
-        var btnFirstPageGridContactInformation;
-        var btnPreviousPageGridContactInformation;
-        var btnNextPageGridContactInformation;
-        var btnLastPageGridContactInformation;
-        var btnCurrentPageGridContactInformation;
-
         // ============================
         // GET Contact Information List
         // ============================
         function getContactInformation() {
             var contactInformations = new wijmo.collections.ObservableArray;
-            var articleId = @customerId;
+            var articleId = readCookie("customerId");
             $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/listArticleContactByArticleId/' + articleId,
@@ -1374,14 +981,14 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (Results) {
+                success: function (contactInformationResults) {
                     $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
+                    if (contactInformationResults.length > 0) {
 
                         var customers = new wijmo.collections.ObservableArray;
-                        var customerId = @customerId;
+                        var customerId = readCookie("customerId");
                         $.ajax({
-                            url: '/api/article/' +  customerId,
+                            url: '/api/article/' + customerId,
                             cache: false,
                             type: 'GET',
                             contentType: 'application/json; charset=utf-8',
@@ -1389,38 +996,33 @@
                             success: function (CustomerResults) {
                                 $('#loadingModal').modal('hide');
                                 if (CustomerResults.length > 0) {
-                                    customers.push ({
+                                    customers.push({
                                         Id: CustomerResults.Id,
                                         IsLocked: CustomerResults.IsLocked
                                     });
                                 }
 
-                                if(CustomerResults.IsLocked == true) {
-                                    for (i = 0; i < Results.length; i++) {
-                                        contactInformations.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            ArticleId: Results[i]["ArticleId"],
-                                            Article: Results[i]["Article"],
-                                            ContactPerson: Results[i]["ContactPerson"],
-                                            ContactNumber: Results[i]["ContactNumber"],
-                                            Remarks: Results[i]["Remarks"]
-                                        });
-                                    }
+                                var btnEditId;
+                                var btnDeleteId;
+                                if (CustomerResults.IsLocked == true) {
+                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                                 } else {
-                                    for (i = 0; i < Results.length; i++) {
-                                        contactInformations.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            ArticleId: Results[i]["ArticleId"],
-                                            Article: Results[i]["Article"],
-                                            ContactPerson: Results[i]["ContactPerson"],
-                                            ContactNumber: Results[i]["ContactNumber"],
-                                            Remarks: Results[i]["Remarks"]
-                                        });
-                                    }
+                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
+                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                }
+
+                                for (i = 0; i < contactInformationResults.length; i++) {
+                                    contactInformations.push({
+                                        EditId: btnEditId,
+                                        DeleteId: btnDeleteId,
+                                        Id: contactInformationResults[i]["Id"],
+                                        ArticleId: contactInformationResults[i]["ArticleId"],
+                                        Article: contactInformationResults[i]["Article"],
+                                        ContactPerson: contactInformationResults[i]["ContactPerson"],
+                                        ContactNumber: contactInformationResults[i]["ContactNumber"],
+                                        Remarks: contactInformationResults[i]["Remarks"]
+                                    });
                                 }
                             }
                         });
@@ -1447,8 +1049,8 @@
                 });
             });
 
-            $("#cmdSaveContactButton").prop("disabled", false);
-            $("#cmdContactDetailCloseButton").prop("disabled", false);
+            $('#cmdSaveContactButton').prop('disabled', false);
+            $('#cmdContactDetailCloseButton').prop('disabled', false);
 
             document.getElementById('contact_Id').value = 0;
             document.getElementById('contact_contactPerson').value = '';
@@ -1472,30 +1074,20 @@
                 });
             });
 
-            $("#cmdSaveContactButton").prop("disabled", false);
-            $("#cmdContactDetailCloseButton").prop("disabled", false);
+            $('#cmdSaveContactButton').prop('disabled', false);
+            $('#cmdContactDetailCloseButton').prop('disabled', false);
 
             var contactInformation = contactInformations.currentEditItem;
-
             document.getElementById('contact_Id').value = contactInformation.Id;
             document.getElementById('contact_contactPerson').value = contactInformation.ContactPerson;
             document.getElementById('contact_contactNumber').value = contactInformation.ContactNumber;
             document.getElementById('contact_Remarks').value = contactInformation.Remarks;
         }
 
-        // ============
-        // SAVE Contact
-        // ============
-        function cmdContactSaveButton_OnClick() {
-            var contactObject = new Object();
-            var articleId = @customerId;
-            var contactId = document.getElementById('contact_Id').value;
-
-            contactObject.ContactPerson = document.getElementById('contact_contactPerson').value;
-            contactObject.ContactNumber = document.getElementById('contact_contactNumber').value;
-            contactObject.Remarks = document.getElementById('contact_Remarks').value;
-            var contactData = JSON.stringify(contactObject);
-
+        // ====================================
+        // Contact Information Entry Validation
+        // ====================================
+        function contactInformationEntryValidation() {
             var isValid = true;
             $('.requiredContact').each(function () {
                 if ($.trim($(this).val()) == '') {
@@ -1510,12 +1102,42 @@
                     });
                 }
             });
-            if (isValid == false) {
+
+            return isValid;
+        }
+
+        // =========================================
+        // Refresh more contact information flexgrid
+        // =========================================
+        function refreshMoreContactInformation() {
+            contactInformations = new wijmo.collections.CollectionView(getContactInformation());
+            contactInformations.canFilter = true;
+            contactInformations.pageSize = 15;
+
+            // Flex Grid for Contact Information
+            contactInformationGrid.trackChanges = true;
+            contactInformationGrid.itemsSource = contactInformations;
+        }
+
+        // ============
+        // SAVE Contact
+        // ============
+        function cmdContactSaveButton_OnClick() {
+            var contactObject = new Object();
+            var articleId = readCookie("customerId");
+            var contactId = document.getElementById('contact_Id').value;
+
+            contactObject.ContactPerson = document.getElementById('contact_contactPerson').value;
+            contactObject.ContactNumber = document.getElementById('contact_contactNumber').value;
+            contactObject.Remarks = document.getElementById('contact_Remarks').value;
+            var contactData = JSON.stringify(contactObject);
+
+            if (contactInformationEntryValidation() == false) {
                 toastr.error("Invalid Entry");
-            }
-            else {
-                $("#cmdSaveContactButton").prop("disabled", true);
-                $("#cmdContactDetailCloseButton").prop("disabled", true);
+            } else {
+                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                $('#cmdSaveContactButton').prop('disabled', true);
+                $('#cmdContactDetailCloseButton').prop('disabled', true);
 
                 if (contactId == 0) {
                     $.ajax({
@@ -1526,41 +1148,23 @@
                         data: contactData,
                         statusCode: {
                             200: function () {
-                                $("#cmdSaveContactButton").prop("disabled", true);
-                                $("#cmdContactDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Saved");
+                                $('#cmdSaveContactButton').prop('disabled', true);
+                                $('#cmdContactDetailCloseButton').prop('disabled', true);
+                                toastr.success("Successfully saved");
 
                                 $('#contactEdit').modal('hide');
 
-                                contactInformations = new wijmo.collections.CollectionView(getContactInformation());
-                                contactInformations.canFilter = true;
-                                contactInformations.pageSize = 15;
-
-                                var filterTextContactInformation = '';
-                                $('#InputFilterContactInformation').keyup(function () {
-                                    filterTextContactInformation = this.value.toLowerCase();
-                                    contactInformations.refresh();
-                                });
-                                contactInformations.filter = function (item) {
-                                    return !filterTextContactInformation || (item.ContactPerson.toLowerCase().indexOf(filterTextContactInformation) > -1);
-                                }
-                                contactInformations.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsContactInformation();
-                                });
-
-                                // Flex Grid for Contact Information
-                                contactInformationGrid.trackChanges = true;
-                                contactInformationGrid.itemsSource = contactInformations;
+                                refreshMoreContactInformation();
                             },
                             404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdSaveContactButton").prop("disabled", false);
-                                $("#cmdContactDetailCloseButton").prop("disabled", false);
+                                $('#cmdSaveContactButton').prop('disabled', false);
+                                $('#cmdContactDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save request not found");
                             },
                             400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdSaveContactButton").prop("disabled", false);
-                                $("#cmdContactDetailCloseButton").prop("disabled", false);
+                                $('#cmdSaveContactButton').prop('disabled', false);
+                                $('#cmdContactDetailCloseButton').prop('disabled', false);
+                                toastr.error("Cannot save new record");
                             }
                         }
                     });
@@ -1573,41 +1177,23 @@
                         data: contactData,
                         statusCode: {
                             200: function () {
-                                $("#cmdSaveContactButton").prop("disabled", true);
-                                $("#cmdContactDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Updated");
+                                $('#cmdSaveContactButton').prop('disabled', true);
+                                $('#cmdContactDetailCloseButton').prop('disabled', true);
+                                toastr.success("Successfully updated");
 
                                 $('#contactEdit').modal('hide');
 
-                                contactInformations = new wijmo.collections.CollectionView(getContactInformation());
-                                contactInformations.canFilter = true;
-                                contactInformations.pageSize = 15;
-
-                                var filterTextContactInformation = '';
-                                $('#InputFilterContactInformation').keyup(function () {
-                                    filterTextContactInformation = this.value.toLowerCase();
-                                    contactInformations.refresh();
-                                });
-                                contactInformations.filter = function (item) {
-                                    return !filterTextContactInformation || (item.ContactPerson.toLowerCase().indexOf(filterTextContactInformation) > -1);
-                                }
-                                contactInformations.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsContactInformation();
-                                });
-
-                                // Flex Grid for Contact Information
-                                contactInformationGrid.trackChanges = true;
-                                contactInformationGrid.itemsSource = contactInformations;
+                                refreshMoreContactInformation();
                             },
                             404: function () {
-                                toastr.error("Can't Update");
-                                $("#cmdSaveContactButton").prop("disabled", false);
-                                $("#cmdContactDetailCloseButton").prop("disabled", false);
+                                $('#cmdSaveContactButton').prop('disabled', false);
+                                $('#cmdContactDetailCloseButton').prop('disabled', false);
+                                toastr.error("Update request not found");
                             },
                             400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdSaveContactButton").prop("disabled", false);
-                                $("#cmdContactDetailCloseButton").prop("disabled", false);
+                                $('#cmdSaveContactButton').prop('disabled', false);
+                                $('#cmdContactDetailCloseButton').prop('disabled', false);
+                                toastr.error("Cannot update record");
                             }
                         }
                     });
@@ -1624,8 +1210,9 @@
                 backdrop: 'static'
             });
 
-            $("#cmdConfirmDeleteContact").prop("disabled", false);
-            $("#cmdConfirmDeleteContactCloseButton").prop("disabled", false);
+            document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $('#cmdConfirmDeleteContact').prop('disabled', false);
+            $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
         }
         // Contact Confirm Delete
         function cmdContactConfirmDeleteButton_OnClick() {
@@ -1641,74 +1228,31 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteContact").prop("disabled", true);
-                        $("#cmdConfirmDeleteContactCloseButton").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
+                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        $('#cmdConfirmDeleteContact').prop('disabled', true);
+                        $('#cmdConfirmDeleteContactCloseButton').prop('disabled', true);
+                        toastr.success("Successfully deleted");
 
                         $('#deleteContactConfirm').modal('hide');
 
-                        contactInformations = new wijmo.collections.CollectionView(getContactInformation());
-                        contactInformations.canFilter = true;
-                        contactInformations.pageSize = 15;
-
-                        var filterTextContactInformation = '';
-                        $('#InputFilterContactInformation').keyup(function () {
-                            filterTextContactInformation = this.value.toLowerCase();
-                            contactInformations.refresh();
-                        });
-                        contactInformations.filter = function (item) {
-                            return !filterTextContactInformation || (item.ContactPerson.toLowerCase().indexOf(filterTextContactInformation) > -1);
-                        }
-                        contactInformations.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsContactInformation();
-                        });
-
-                        // Flex Grid for Contact Information
-                        contactInformationGrid.trackChanges = true;
-                        contactInformationGrid.itemsSource = contactInformations;
+                        refreshMoreContactInformation();
                     },
                     404: function () {
-                        toastr.error("Request Not Found");
+                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteContact').prop('disabled', false);
+                        $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
+                        toastr.error("Delete request not found");
                         $('#deleteContactConfirm').modal('hide');
-                        $("#cmdConfirmDeleteContact").prop("disabled", false);
-                        $("#cmdConfirmDeleteContactCloseButton").prop("disabled", false);
                     },
                     400: function () {
-                        toastr.error("Bad Request");
+                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteContact').prop('disabled', false);
+                        $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
+                        toastr.error("Cannot delete record");
                         $('#deleteContactConfirm').modal('hide');
-                        $("#cmdConfirmDeleteContact").prop("disabled", false);
-                        $("#cmdConfirmDeleteContactCloseButton").prop("disabled", false);
                     }
                 }
             });
-        }
-
-        // ==========================================
-        // Navigation Buttons for Contact Information
-        // ==========================================
-        function updateNavigateButtonsContactInformation() {
-            if (contactInformations.pageSize <= 0) {
-                document.getElementById('navigationPageGridContactInformation').style.display = 'none';
-                return;
-            }
-            document.getElementById('navigationPageGridContactInformation').style.display = 'block';
-            if (contactInformations.pageIndex === 0) {
-                btnFirstPageGridContactInformation.setAttribute('disabled', 'disabled');
-                btnPreviousPageGridContactInformation.setAttribute('disabled', 'disabled');
-                btnNextPageGridContactInformation.removeAttribute('disabled');
-                btnLastPageGridContactInformation.removeAttribute('disabled');
-            } else if (contactInformations.pageIndex === (contactInformations.pageCount - 1)) {
-                btnFirstPageGridContactInformation.removeAttribute('disabled');
-                btnPreviousPageGridContactInformation.removeAttribute('disabled');
-                btnLastPageGridContactInformation.setAttribute('disabled', 'disabled');
-                btnNextPageGridContactInformation.setAttribute('disabled', 'disabled');
-            } else {
-                btnFirstPageGridContactInformation.removeAttribute('disabled');
-                btnPreviousPageGridContactInformation.removeAttribute('disabled');
-                btnNextPageGridContactInformation.removeAttribute('disabled');
-                btnLastPageGridContactInformation.removeAttribute('disabled');
-            }
-            btnCurrentPageGridContactInformation.innerHTML = (contactInformations.pageIndex + 1) + ' / ' + contactInformations.pageCount;
         }
 
         // ====================================
@@ -1718,18 +1262,6 @@
             contactInformations = new wijmo.collections.CollectionView(getContactInformation());
             contactInformations.canFilter = true;
             contactInformations.pageSize = 15;
-
-            var filterTextContactInformation = '';
-            $('#InputFilterContactInformation').keyup(function () {
-                filterTextContactInformation = this.value.toLowerCase();
-                contactInformations.refresh();
-            });
-            contactInformations.filter = function (item) {
-                return !filterTextContactInformation || (item.ContactPerson.toLowerCase().indexOf(filterTextContactInformation) > -1);
-            }
-            contactInformations.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsContactInformation();
-            });
 
             // Flex Grid for Contact Information
             contactInformationGrid = new wijmo.grid.FlexGrid('#ContactInformationGrid');
@@ -1785,32 +1317,6 @@
             });
 
             contactInformationGrid.trackChanges = true;
-
-            //Navigation button for Journal Ledger
-            btnFirstPageGridContactInformation = document.getElementById('btnMoveToFirstPageGridContactInformation');
-            btnPreviousPageGridContactInformation = document.getElementById('btnMoveToPreviousPageGridContactInformation');
-            btnNextPageGridContactInformation = document.getElementById('btnMoveToNextPageGridContactInformation');
-            btnLastPageGridContactInformation = document.getElementById('btnMoveToLastPageGridContactInformation');
-            btnCurrentPageGridContactInformation = document.getElementById('btnCurrentPageGridContactInformation');
-
-            updateNavigateButtonsContactInformation();
-
-            btnFirstPageGridContactInformation.addEventListener('click', function () {
-                contactInformations.moveToFirstPage();
-                updateNavigateButtonsContactInformation();
-            });
-            btnPreviousPageGridContactInformation.addEventListener('click', function () {
-                contactInformations.moveToPreviousPage();
-                updateNavigateButtonsContactInformation();
-            });
-            btnNextPageGridContactInformation.addEventListener('click', function () {
-                contactInformations.moveToNextPage();
-                updateNavigateButtonsContactInformation();
-            });
-            btnLastPageGridContactInformation.addEventListener('click', function () {
-                contactInformations.moveToLastPage();
-                updateNavigateButtonsContactInformation();
-            });
         }
     </script>
 
@@ -1832,32 +1338,29 @@
         $('#contactInformationTabId').click(function () {
             $('#JournalLedger').hide();
             $('#ContactInformation').show();
-            //contactInformationTab();
+            contactInformationTab();
             window.contactInformationTab = function () {
                 return true;
             };
         });
 
         $(document).ready(function () {
-            //$('#JournalLedger').show();
-            //$('#ContactInformation').hide();
-            //journalLedgerTab();
+            var customerId = readCookie("customerId");
+            if (customerId == 0) {
+                $('#customer_SaveButton').show();
+                $('#customer_LockButton').hide();
+                $('#customer_UnlockButton').hide();
 
-            var CustomerId = @customerId;
-            if(CustomerId == 0) {
-                $('#customer_saveSaveCustomer').hide();
-                $('#customer_saveCustomer').show();
-                $('#customer_editCustomer').hide();
                 $('#btnAddContactInformation').prop('disabled', true);
             } else {
-                $('#customer_saveSaveCustomer').show();
-                $('#customer_saveCustomer').hide();
-                $('#customer_editCustomer').show();
+                $('#customer_SaveButton').hide();
+                $('#customer_LockButton').show();
+                $('#customer_UnlockButton').show();
             }
 
-            $('#JournalLedger').hide();
-            $('#ContactInformation').show();
-            contactInformationTab();
+            $('#JournalLedger').show();
+            $('#ContactInformation').hide();
+            journalLedgerTab();
         });
     </script>
 </body>

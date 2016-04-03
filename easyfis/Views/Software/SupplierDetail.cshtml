@@ -1,8 +1,4 @@
-﻿@{
-    var supplierId = Request.QueryString["SupplierId"];
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -29,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("Supplier", "Software")" class="currentPageLinkCustom">Supplier</a> > Supplier Detail
                     </div>
                 </div>
             </div>
@@ -42,7 +38,7 @@
                         <button class="btn btn-primary btn-sm" id="supplier_SaveButton" onclick="supplierSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="supplier_LockButton" onclick="supplierLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
                         <button class="btn btn-primary btn-sm" id="supplier_UnlockButton" onclick="supplierUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                        <button onclick="window.location.href = '@Url.Action("Supplier", "Software" , new { branchid=branchId })'" class="btn btn-danger btn-sm" id="supplier_CloseButton"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-danger btn-sm" id="supplier_CloseButton" onclick="supplierCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 <div class="well">
@@ -65,28 +61,18 @@
                                     <label class="control-label col-sm-4">Supplier Group</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_SupplierGroup"></div>
-                                        <input type="hidden" id="artcileSupplier_SupplierGroup_Data" />
-                                        <input type="hidden" id="artcileSupplier_SupplierGroup_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Account</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_Account"></div>
-                                        <input type="hidden" id="artcileSupplier_Account_Data" class="requiredSupplier" />
-                                        <input type="hidden" id="artcileSupplier_Account_SelectedValue" />
-                                        <input type="hidden" id="artcileSupplier_SalesAccountId" />
-                                        <input type="hidden" id="artcileSupplier_CostAccountId" />
-                                        <input type="hidden" id="artcileSupplier_AssetAccountId" />
-                                        <input type="hidden" id="artcileSupplier_ExpenseAccountId" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Term</label>
                                     <div class="col-sm-8">
                                         <div class="comboBox-wide" id="artcileSupplier_Term"></div>
-                                        <input type="hidden" id="artcileSupplier_Term_Data" class="requiredSupplier" />
-                                        <input type="hidden" id="artcileSupplier_Term_SelectedValue" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -121,12 +107,6 @@
                                         <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Particulars" placeholder="Particulars"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-sm-4"></div>
-                                    <div class="col-sm-8">
-                                        <input type="hidden" id="Supplier_IsLocked">
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </form>
@@ -158,7 +138,7 @@
                         <br />
                         <div class="row">
                             <div class="col-lg-12">
-                                <div id="ContactInformationGrid" class="grid" align="left"></div>
+                                <div id="ContactInformationGrid" class="grid"></div>
                             </div>
                         </div>
                     </div>
@@ -180,9 +160,9 @@
                             <input type="hidden" id="contact_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Contact Person</dt>
-                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" placeholder="Contact Person"/></dd>
+                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" placeholder="Contact Person" /></dd>
                                 <dt>Contact Number</dt>
-                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactNumber" placeholder="Contact Number"/></dd>
+                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactNumber" placeholder="Contact Number" /></dd>
                                 <dt>Remarks</dt>
                                 <dd><textarea class="form-control textarea-custom requiredContact" id="contact_Remarks" placeholder="Remarks"></textarea></dd>
                             </dl>
@@ -252,80 +232,139 @@
         var cboForAccount;
         var cboForTerm;
 
+        var supplierGroupSelectedValue = "";
+        var accountSelectedValue = "";
+        var termSelectedValue = "";
+        var Islocked;
+
+        // =============
+        // Create Cookie
+        // =============
+        function createCookie(name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            } else {
+                var expires = "";
+            }
+
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
+        // =============
+        // Delete Cookie
+        // =============
+        function eraseCookie(name) {
+            createCookie(name, "", -1);
+        }
+
         // ==================================
         // Get Article for supplier by its ID
         // ==================================
         function getArticleSupplierById() {
-            var suppliers = new wijmo.collections.ObservableArray;
-            var supplierId = @supplierId;
-
+            var supplierId = readCookie("supplierId");
             $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/article/' +  supplierId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (supplierResults) {
-                    $('#loadingModal').modal('hide');
-                    if(supplierResults != null) {
-                        document.getElementById('artcileSupplier_SalesAccountId').value = supplierResults.SalesAccountId;
-                        document.getElementById('artcileSupplier_CostAccountId').value = supplierResults.CostAccountId;
-                        document.getElementById('artcileSupplier_AssetAccountId').value = supplierResults.AssetAccountId;
-                        document.getElementById('artcileSupplier_ExpenseAccountId').value = supplierResults.ExpenseAccountId;
-                        document.getElementById('artcileSupplier_code').value = supplierResults.ArticleCode;
-                        document.getElementById('artcileSupplier_Supplier').value = supplierResults.Article;
-                        document.getElementById('artcileSupplier_SupplierGroup_Data').value = supplierResults.ArticleGroupId;
-                        document.getElementById('artcileSupplier_SupplierGroup_SelectedValue').value = supplierResults.ArticleGroup;
-                        document.getElementById('artcileSupplier_Account_Data').value = supplierResults.AccountId;
-                        document.getElementById('artcileSupplier_Account_SelectedValue').value = supplierResults.Account;
-                        document.getElementById('artcileSupplier_Term_Data').value = supplierResults.TermId;
-                        document.getElementById('artcileSupplier_Term_SelectedValue').value = supplierResults.Term;
-                        document.getElementById('artcileSupplier_Address').value = supplierResults.Address;
-                        document.getElementById('artcileSupplier_Particulars').value = supplierResults.Particulars;
-                        document.getElementById('artcileSupplier_TIN').value = supplierResults.TaxNumber;
-                        document.getElementById('artcileSupplier_ContactNo').value = supplierResults.ContactNumber;
-                        document.getElementById('artcileSupplier_ContactPerson').value = supplierResults.ContactPerson;
-                        document.getElementById('createdBy').innerHTML = supplierResults.CreatedBy;
-                        document.getElementById('createdDate').innerHTML = supplierResults.CreatedDateTime;
-                        document.getElementById('updatedBy').innerHTML = supplierResults.UpdatedBy;
-                        document.getElementById('updatedDate').innerHTML = supplierResults.UpdatedDateTime;
-                        document.getElementById('Supplier_IsLocked').value = supplierResults.IsLocked;
+            if (supplierId == null) {
+                window.location = '/Software/Supplier';
+            } else {
+                $.ajax({
+                    url: '/api/article/' + supplierId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (supplierResults) {
+                        $('#loadingModal').modal('hide');
+                        if (supplierResults != null) {
+                            document.getElementById('artcileSupplier_code').value = supplierResults.ArticleCode;
+                            document.getElementById('artcileSupplier_Supplier').value = supplierResults.Article;
+                            document.getElementById('artcileSupplier_Address').value = supplierResults.Address;
+                            document.getElementById('artcileSupplier_Particulars').value = supplierResults.Particulars;
+                            document.getElementById('artcileSupplier_TIN').value = supplierResults.TaxNumber;
+                            document.getElementById('artcileSupplier_ContactNo').value = supplierResults.ContactNumber;
+                            document.getElementById('artcileSupplier_ContactPerson').value = supplierResults.ContactPerson;
+                            document.getElementById('createdBy').innerHTML = supplierResults.CreatedBy;
+                            document.getElementById('createdDate').innerHTML = supplierResults.CreatedDateTime;
+                            document.getElementById('updatedBy').innerHTML = supplierResults.UpdatedBy;
+                            document.getElementById('updatedDate').innerHTML = supplierResults.UpdatedDateTime;
 
-                        if(supplierResults.IsLocked == true) {
-                            document.getElementById('artcileSupplier_Supplier').disabled = true;
-                            document.getElementById('artcileSupplier_Address').disabled = true;
-                            document.getElementById('artcileSupplier_Particulars').disabled = true;
-                            document.getElementById('artcileSupplier_TIN').disabled = true;
-                            document.getElementById('artcileSupplier_ContactNo').disabled = true;
-                            document.getElementById('artcileSupplier_ContactPerson').disabled = true;
+                            supplierGroupSelectedValue = supplierResults.ArticleGroup;
+                            accountSelectedValue = supplierResults.Account;
+                            termSelectedValue = supplierResults.Term;
 
-                            $('#supplier_SaveButton').prop('disabled', true);
-                            $('#supplier_LockButton').prop('disabled', true);
-                            $('#supplier_UnlockButton').prop('disabled', false);
-                            $('#btnAddMoreContactInformation').prop('disabled', true);
-                        } else  {
-                            document.getElementById('artcileSupplier_Supplier').disabled = false;
-                            document.getElementById('artcileSupplier_Address').disabled = false;
-                            document.getElementById('artcileSupplier_Particulars').disabled = false;
-                            document.getElementById('artcileSupplier_TIN').disabled = false;
-                            document.getElementById('artcileSupplier_ContactNo').disabled = false;
-                            document.getElementById('artcileSupplier_ContactPerson').disabled = false;
+                            if (supplierResults.IsLocked == true) {
+                                document.getElementById('artcileSupplier_Supplier').disabled = true;
+                                document.getElementById('artcileSupplier_Address').disabled = true;
+                                document.getElementById('artcileSupplier_Particulars').disabled = true;
+                                document.getElementById('artcileSupplier_TIN').disabled = true;
+                                document.getElementById('artcileSupplier_ContactNo').disabled = true;
+                                document.getElementById('artcileSupplier_ContactPerson').disabled = true;
+                                Islocked = true;
 
-                            $('#supplier_SaveButton').prop('disabled', false);
-                            $('#supplier_LockButton').prop('disabled', false);
-                            $('#supplier_UnlockButton').prop('disabled', true);
-                            $('#btnAddMoreContactInformation').prop('disabled', false);
+                                $('#supplier_SaveButton').prop('disabled', true);
+                                $('#supplier_LockButton').prop('disabled', true);
+                                $('#supplier_UnlockButton').prop('disabled', false);
+                                $('#btnAddMoreContactInformation').prop('disabled', true);
+                            } else {
+                                document.getElementById('artcileSupplier_Supplier').disabled = false;
+                                document.getElementById('artcileSupplier_Address').disabled = false;
+                                document.getElementById('artcileSupplier_Particulars').disabled = false;
+                                document.getElementById('artcileSupplier_TIN').disabled = false;
+                                document.getElementById('artcileSupplier_ContactNo').disabled = false;
+                                document.getElementById('artcileSupplier_ContactPerson').disabled = false;
+                                Islocked = false;
+
+                                $('#supplier_SaveButton').prop('disabled', false);
+                                $('#supplier_LockButton').prop('disabled', false);
+                                $('#supplier_UnlockButton').prop('disabled', true);
+                                $('#btnAddMoreContactInformation').prop('disabled', false);
+                            }
+
+                            getArticleSupplierGroupForComboBox();
+                            getArticleTermForComboBox();
                         }
-
-                        getArticleSupplierGroupForComboBox();
-                        getArticleTermForComboBox();
                     }
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }
+        }
+
+        // =================
+        // IsLocked Disabled
+        // =================
+        function isLockedDisabledDropdown(items) {
+            var disabled;
+            if (items == 0) {
+                disabled = true;
+            } else {
+                if (Islocked == true) {
+                    disabled = true;
+                } else {
+                    disabled = false;
                 }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return suppliers;
+            }
+
+            return disabled;
         }
 
         // =========================
@@ -371,52 +410,19 @@
         // CBO for Supplier Group
         // ======================
         function createCboForArticleSupplierGroup(articleSupplierGroups) {
-            var articleSupplierGroupCollection = new wijmo.collections.CollectionView(articleSupplierGroups);
-            var articleGroupList = new Array();
-            for (var i = 0; i < articleSupplierGroupCollection.items.length; i++) {
-                articleGroupList.push(articleSupplierGroupCollection.items[i].ArticleGroup);
-            }
-
-            var disabled;
-            if(articleSupplierGroups == 0) {
-                disabled = true;
-            } else {
-                if(document.getElementById('Supplier_IsLocked').value == 'true') {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
             cboArticleGroup.dispose();
             cboArticleGroup = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup', {
-                disabled: disabled,
+                disabled: isLockedDisabledDropdown(articleSupplierGroups),
                 placeholder: "Supplier Group",
-                itemsSource: articleGroupList,
+                itemsSource: articleSupplierGroups,
+                displayMemberPath: "ArticleGroup",
                 isEditable: false,
-                selectedValue: document.getElementById('artcileSupplier_SupplierGroup_SelectedValue').value.toString(),
+                selectedValuePath: "ArticleGroup",
+                selectedValue: supplierGroupSelectedValue.toString(),
                 onSelectedIndexChanged: function () {
-                    $('#artcileSupplier_SupplierGroup_Data').val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroupId);
-                    $('#artcileSupplier_Account_Data').val(articleSupplierGroupCollection.items[this.selectedIndex].AccountId);
-                    $('#artcileSupplier_Account_SelectedValue').val(articleSupplierGroupCollection.items[this.selectedIndex].Account);
-                    $('#artcileSupplier_SalesAccountId').val(articleSupplierGroupCollection.items[this.selectedIndex].SalesAccountId);
-                    $('#artcileSupplier_CostAccountId').val(articleSupplierGroupCollection.items[this.selectedIndex].CostAccountId);
-                    $('#artcileSupplier_AssetAccountId').val(articleSupplierGroupCollection.items[this.selectedIndex].AssetAccountId);
-                    $('#artcileSupplier_ExpenseAccountId').val(articleSupplierGroupCollection.items[this.selectedIndex].ExpenseAccountId);
-                    $('#artcileSupplier_SupplierGroup_SelectedValue').val(articleSupplierGroupCollection.items[this.selectedIndex].ArticleGroup);
-
                     getArticleAccountForComboBox();
                 }
             });
-
-            document.getElementById('artcileSupplier_SupplierGroup_Data').value = articleSupplierGroupCollection.items[cboArticleGroup.selectedIndex].ArticleGroupId;
-            document.getElementById('artcileSupplier_Account_Data').value = articleSupplierGroupCollection.items[cboArticleGroup.selectedIndex].AccountId;
-            document.getElementById('artcileSupplier_Account_SelectedValue').value = articleSupplierGroupCollection.items[cboArticleGroup.selectedIndex].Account;
-            document.getElementById('artcileSupplier_SalesAccountId').value = articleSupplierGroupCollection.items[cboArticleGroup.selectedIndex].SalesAccountId;
-            document.getElementById('artcileSupplier_CostAccountId').value = articleSupplierGroupCollection.items[cboArticleGroup.selectedIndex].CostAccountId;
-            document.getElementById('artcileSupplier_AssetAccountId').value = articleSupplierGroupCollection.items[cboArticleGroup.selectedIndex].AssetAccountId;
-            document.getElementById('artcileSupplier_ExpenseAccountId').value = articleSupplierGroupCollection.items[cboArticleGroup.selectedIndex].ExpenseAccountId;
-            document.getElementById('artcileSupplier_SupplierGroup_SelectedValue').value = articleSupplierGroupCollection.items[cboArticleGroup.selectedIndex].ArticleGroup;
         }
 
         // ==================
@@ -449,35 +455,16 @@
         // ===============
         // CBO for Account
         // ===============
-        function  createCboForAccount(accounts) {
-            var accountCollection = new wijmo.collections.CollectionView(accounts);
-            var accountList = new Array();
-            for (var i = 0; i < accountCollection.items.length; i++) {
-                accountList.push(accountCollection.items[i].Account);
-            }
-
-            var disabled;
-            if(accounts == 0) {
-                disabled = true;
-            } else {
-                if(document.getElementById('Supplier_IsLocked').value == 'true') {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
+        function createCboForAccount(accounts) {
             cboForAccount.dispose();
             cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account', {
                 disabled: true,
                 placeholder: "Account",
-                itemsSource: accountList,
+                itemsSource: accounts,
+                displayMemberPath: "Account",
                 isEditable: false,
-                selectedValue: document.getElementById('artcileSupplier_Account_SelectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#artcileSupplier_Account_Data').val(accountCollection.items[this.selectedIndex].AccountId);
-                    $('#artcileSupplier_Account_SelectedValue').val(accountCollection.items[this.selectedIndex].Account);
-                }
+                selectedValuePath: "Account",
+                selectedValue: cboArticleGroup.selectedItem["Account"].toString()
             });
         }
 
@@ -512,44 +499,23 @@
         // CBO for Term
         // ============
         function createCboForTerm(terms) {
-            var termCollection = new wijmo.collections.CollectionView(terms);
-            var termList = new Array();
-            for (var i = 0; i < termCollection.items.length; i++) {
-                termList.push(termCollection.items[i].Term);
-            }
-
-            var disabled;
-            if(terms == 0) {
-                disabled = true;
-            } else {
-                if(document.getElementById('Supplier_IsLocked').value == 'true') {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
-
             cboForTerm.dispose();
             cboForTerm = new wijmo.input.ComboBox('#artcileSupplier_Term', {
-                disabled: disabled,
+                disabled: isLockedDisabledDropdown(terms),
                 placeholder: "Term",
-                itemsSource: termList,
+                itemsSource: terms,
+                displayMemberPath: "Term",
                 isEditable: false,
-                selectedValue: document.getElementById('artcileSupplier_Term_SelectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $('#artcileSupplier_Term_Data').val(termCollection.items[this.selectedIndex].TermId);
-                    $('#artcileSupplier_Term_SelectedValue').val(termCollection.items[this.selectedIndex].Term);
-                }
+                selectedValuePath: "Term",
+                selectedValue: termSelectedValue.toString(),
             });
-
-            document.getElementById('artcileSupplier_Term_Data').value = termCollection.items[cboForTerm.selectedIndex].TermId;
-            document.getElementById('artcileSupplier_Term_SelectedValue').value = termCollection.items[cboForTerm.selectedIndex].Term;
         }
 
         // ==================================
         // Get Last Id for supplier by its ID
         // ==================================
         function getLastInsertedIdSupplierByArticleTypeId() {
+            eraseCookie("supplierId");
             var supplierByArticleId = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/articleLastIdByArticleTypeId/3',
@@ -558,8 +524,8 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (supplierByArticleIdResults) {
-                    if(supplierByArticleIdResults != null) {
-                        window.location = '/Software/SupplierDetail?SupplierId=' + supplierByArticleIdResults.Id + '&BranchId=' + @branchId;
+                    if (supplierByArticleIdResults != null) {
+                        createCookie("supplierId", supplierByArticleIdResults.Id, 365);
                         window.setTimeout(function () { location.reload() }, 1000);
                     }
                 }
@@ -577,14 +543,12 @@
                     $(this).css({
                         "border": "1px solid red"
                     });
-                }
-                else {
+                } else {
                     $(this).css({
                         "border": "",
                     });
                 }
             });
-
             return isValid;
         }
 
@@ -592,19 +556,19 @@
         // Supplier drop down field validation
         // ===================================
         function dropdownValidation() {
-            if( document.getElementById('artcileSupplier_Account_Data').value == '') {
-                document.getElementById("artcileSupplier_Account").style.border = "1px solid red";
-            } else {
-                document.getElementById("artcileSupplier_Account").style.border = "1px solid #C8C8C8   ";
-            }
-
-            if( document.getElementById('artcileSupplier_SupplierGroup_Data').value == '') {
+            if (cboArticleGroup.selectedItem["ArticleGroup"].toString() == '') {
                 document.getElementById("artcileSupplier_SupplierGroup").style.border = "1px solid red";
             } else {
                 document.getElementById("artcileSupplier_SupplierGroup").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('artcileSupplier_Term_Data').value == '') {
+            if (cboArticleGroup.selectedItem["Account"].toString() == '') {
+                document.getElementById("artcileSupplier_Account").style.border = "1px solid red";
+            } else {
+                document.getElementById("artcileSupplier_Account").style.border = "1px solid #C8C8C8   ";
+            }
+
+            if (cboForTerm.selectedItem["Term"].toString() == '') {
                 document.getElementById("artcileSupplier_Term").style.border = "1px solid red";
             } else {
                 document.getElementById("artcileSupplier_Term").style.border = "1px solid #C8C8C8   ";
@@ -617,7 +581,7 @@
         function zerofill(number, length) {
             var result = number.toString();
             var pad = length - result.length;
-            while(pad > 0) {
+            while (pad > 0) {
                 result = '0' + result;
                 pad--;
             }
@@ -629,21 +593,21 @@
         // ====================
         function dataSupplierObject() {
             var supplierObject = new Object();
-            var supplierId = @supplierId;
+            var supplierId = readCookie("supplierId");
             supplierObject.ArticleCode = document.getElementById('artcileSupplier_code').value;
             supplierObject.Article = document.getElementById('artcileSupplier_Supplier').value;
-            supplierObject.ArticleGroupId = document.getElementById('artcileSupplier_SupplierGroup_Data').value;
-            supplierObject.AccountId = document.getElementById('artcileSupplier_Account_Data').value;
-            supplierObject.SalesAccountId = document.getElementById('artcileSupplier_SalesAccountId').value;
-            supplierObject.CostAccountId = document.getElementById('artcileSupplier_CostAccountId').value;
-            supplierObject.AssetAccountId = document.getElementById('artcileSupplier_AssetAccountId').value;
-            supplierObject.ExpenseAccountId = document.getElementById('artcileSupplier_ExpenseAccountId').value;
-            supplierObject.Particulars = document.getElementById('artcileSupplier_Particulars').value;
+            supplierObject.ArticleGroupId = cboArticleGroup.selectedItem["ArticleGroupId"];
+            supplierObject.AccountId = cboForAccount.selectedItem["AccountId"];
+            supplierObject.SalesAccountId = cboArticleGroup.selectedItem["SalesAccountId"];
+            supplierObject.CostAccountId = cboArticleGroup.selectedItem["CostAccountId"];
+            supplierObject.AssetAccountId = cboArticleGroup.selectedItem["AssetAccountId"];
+            supplierObject.ExpenseAccountId = cboArticleGroup.selectedItem["ExpenseAccountId"];
+            supplierObject.TermId = cboForTerm.selectedItem["TermId"];
             supplierObject.Address = document.getElementById('artcileSupplier_Address').value;
-            supplierObject.TermId = document.getElementById('artcileSupplier_Term_Data').value;
             supplierObject.ContactNumber = document.getElementById('artcileSupplier_ContactNo').value;
             supplierObject.ContactPerson = document.getElementById('artcileSupplier_ContactPerson').value;
             supplierObject.TaxNumber = document.getElementById('artcileSupplier_TIN').value;
+            supplierObject.Particulars = document.getElementById('artcileSupplier_Particulars').value;
             var supplierData = JSON.stringify(supplierObject);
             return supplierData;
         }
@@ -656,12 +620,12 @@
             if (supplierEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
+                document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
                 $('#supplier_SaveButton').prop('disabled', true);
                 $('#supplier_LockButton').prop('disabled', true);
                 $('#supplier_UnlockButton').prop('disabled', true);
                 $('#supplier_CloseButton').prop('disabled', true);
 
-                var supplierId = @supplierId;
                 $.ajax({
                     type: "POST",
                     url: '/api/addArticle/3',
@@ -670,6 +634,7 @@
                     data: dataSupplierObject(),
                     statusCode: {
                         200: function () {
+                            document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
                             $('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', true);
                             $('#supplier_UnlockButton').prop('disabled', true);
@@ -678,6 +643,7 @@
                             setTimeout(getLastInsertedIdSupplierByArticleTypeId, 1000);
                         },
                         404: function () {
+                            document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
                             $('#supplier_SaveButton').prop('disabled', false);
                             $('#supplier_LockButton').prop('disabled', true);
                             $('#supplier_UnlockButton').prop('disabled', true);
@@ -685,6 +651,7 @@
                             toastr.error("Save request not found");
                         },
                         400: function () {
+                            document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
                             $('#supplier_SaveButton').prop('disabled', false);
                             $('#supplier_LockButton').prop('disabled', true);
                             $('#supplier_UnlockButton').prop('disabled', true);
@@ -704,12 +671,13 @@
             if (supplierEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
+                document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking...";
                 $('#supplier_SaveButton').prop('disabled', true);
                 $('#supplier_LockButton').prop('disabled', true);
                 $('#supplier_UnlockButton').prop('disabled', true);
                 $('#supplier_CloseButton').prop('disabled', true);
 
-                var supplierId = @supplierId;
+                var supplierId = readCookie("supplierId");
                 $.ajax({
                     type: "PUT",
                     url: '/api/updateArticle/' + supplierId + '/3',
@@ -718,6 +686,7 @@
                     data: dataSupplierObject(),
                     statusCode: {
                         200: function () {
+                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking...";
                             $('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', true);
                             $('#supplier_UnlockButton').prop('disabled', true);
@@ -728,6 +697,7 @@
                             }, 1000);
                         },
                         404: function () {
+                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', false);
                             $('#supplier_UnlockButton').prop('disabled', true);
@@ -735,6 +705,7 @@
                             toastr.error("Lock request not found");
                         },
                         400: function () {
+                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
                             $('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', false);
                             $('#supplier_UnlockButton').prop('disabled', true);
@@ -750,12 +721,13 @@
         // Unlock Supplier Button
         // ======================
         function supplierUnlockButton_OnClick() {
+            document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking...";
             $('#supplier_SaveButton').prop('disabled', true);
             $('#supplier_LockButton').prop('disabled', true);
             $('#supplier_UnlockButton').prop('disabled', true);
             $('#supplier_CloseButton').prop('disabled', true);
 
-            var supplierId = @supplierId;
+            var supplierId = readCookie("supplierId");
             $.ajax({
                 type: "PUT",
                 url: '/api/unlockArticle/' + supplierId,
@@ -764,6 +736,7 @@
                 data: {},
                 statusCode: {
                     200: function () {
+                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking...";
                         $('#supplier_SaveButton').prop('disabled', true);
                         $('#supplier_LockButton').prop('disabled', true);
                         $('#supplier_UnlockButton').prop('disabled', true);
@@ -774,6 +747,7 @@
                         }, 1000);
                     },
                     404: function () {
+                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
                         $('#supplier_SaveButton').prop('disabled', true);
                         $('#supplier_LockButton').prop('disabled', true);
                         $('#supplier_UnlockButton').prop('disabled', false);
@@ -781,6 +755,7 @@
                         toastr.error("Unlock request not found");
                     },
                     400: function () {
+                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
                         $('#supplier_SaveButton').prop('disabled', true);
                         $('#supplier_LockButton').prop('disabled', true);
                         $('#supplier_UnlockButton').prop('disabled', false);
@@ -791,17 +766,24 @@
             });
         }
 
+        // =====================
+        // Close Supplier Button
+        // =====================
+        function supplierCloseButton_OnClick() {
+            eraseCookie("supplierId");
+            window.location = '/Software/Supplier';
+        }
+
         // ============
         // On Page Load
         // ============
         $(document).ready(function () {
             getArticleSupplierById();
 
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Supplier</a> ' + ' > Supplier Detail';
             document.getElementById('artcileSupplier_code').disabled = true;
 
-            var supplierId = @supplierId;
-            if(supplierId == 0) {
+            var supplierId = readCookie("supplierId");
+            if (supplierId == 0) {
                 var suppliers = new wijmo.collections.ObservableArray;
                 $.ajax({
                     url: '/api/articleLastArticleCodeByArticleTypeId/3',
@@ -810,7 +792,7 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (lastArticleCodeResults) {
-                        if(lastArticleCodeResults != null) {
+                        if (lastArticleCodeResults != null) {
                             var articleCode = parseInt(lastArticleCodeResults.ArticleCode);
                             var articleCodeResults = articleCode + 0000000001;
                             document.getElementById('artcileSupplier_code').value = zerofill(articleCodeResults, 10);
@@ -825,9 +807,9 @@
             }
 
             // combo box wijmo
-            cboArticleGroup  = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup');
-            cboForAccount  = new wijmo.input.ComboBox('#artcileSupplier_Account');
-            cboForTerm  = new wijmo.input.ComboBox('#artcileSupplier_Term');
+            cboArticleGroup = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup');
+            cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account');
+            cboForTerm = new wijmo.input.ComboBox('#artcileSupplier_Term');
 
             getArticleSupplierGroupForComboBox();
             getArticleTermForComboBox();
@@ -976,7 +958,7 @@
         // ============================
         function getContactInformation() {
             var contactInformations = new wijmo.collections.ObservableArray;
-            var articleId = @supplierId;
+            var articleId = readCookie("supplierId");
             $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/listArticleContactByArticleId/' + articleId,
@@ -989,16 +971,16 @@
 
                     if (contactInformationResults.length > 0) {
                         var suppliers = new wijmo.collections.ObservableArray;
-                        var supplierId = @supplierId;
+                        var supplierId = readCookie("supplierId");
                         $.ajax({
-                            url: '/api/article/' +  supplierId,
+                            url: '/api/article/' + supplierId,
                             cache: false,
                             type: 'GET',
                             contentType: 'application/json; charset=utf-8',
                             data: {},
                             success: function (supplierResults) {
                                 if (supplierResults.length > 0) {
-                                    suppliers.push ({
+                                    suppliers.push({
                                         Id: supplierResults.Id,
                                         IsLocked: supplierResults.IsLocked
                                     });
@@ -1006,7 +988,7 @@
 
                                 var btnEditId;
                                 var btnDeleteId;
-                                if(supplierResults.IsLocked == true) {
+                                if (supplierResults.IsLocked == true) {
                                     btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                     btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                                 } else {
@@ -1051,6 +1033,7 @@
                 });
             });
 
+            document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $('#cmdSaveContactButton').prop('disabled', false);
             $('#cmdContactDetailCloseButton').prop('disabled', false);
 
@@ -1075,6 +1058,7 @@
                 });
             });
 
+            document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $('#cmdSaveContactButton').prop('disabled', false);
             $('#cmdContactDetailCloseButton').prop('disabled', false);
 
@@ -1126,7 +1110,7 @@
         // ============
         function cmdContactSaveButton_OnClick() {
             var contactObject = new Object();
-            var articleId = @supplierId;
+            var articleId = readCookie("supplierId");
             var contactId = document.getElementById('contact_Id').value;
 
             contactObject.ContactPerson = document.getElementById('contact_contactPerson').value;
@@ -1137,6 +1121,7 @@
             if (contactInformationEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
+                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
                 $('#cmdSaveContactButton').prop('disabled', true);
                 $('#cmdContactDetailCloseButton').prop('disabled', true);
 
@@ -1149,6 +1134,7 @@
                         data: contactData,
                         statusCode: {
                             200: function () {
+                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
                                 $('#cmdSaveContactButton').prop('disabled', true);
                                 $('#cmdContactDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -1158,11 +1144,13 @@
                                 refreshMoreContactInformation();
                             },
                             404: function () {
+                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#cmdSaveContactButton').prop('disabled', false);
                                 $('#cmdContactDetailCloseButton').prop('disabled', false);
                                 toastr.error("Save request not found");
                             },
                             400: function () {
+                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#cmdSaveContactButton').prop('disabled', false);
                                 $('#cmdContactDetailCloseButton').prop('disabled', false);
                                 toastr.error("Cannot save new record");
@@ -1178,6 +1166,7 @@
                         data: contactData,
                         statusCode: {
                             200: function () {
+                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating...";
                                 $('#cmdSaveContactButton').prop('disabled', true);
                                 $('#cmdContactDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully updated");
@@ -1187,11 +1176,13 @@
                                 refreshMoreContactInformation();
                             },
                             404: function () {
+                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Update";
                                 t$('#cmdSaveContactButton').prop('disabled', false);
                                 $('#cmdContactDetailCloseButton').prop('disabled', false);
                                 toastr.error("Update request not found");
                             },
                             400: function () {
+                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Update";
                                 $('#cmdSaveContactButton').prop('disabled', false);
                                 $('#cmdContactDetailCloseButton').prop('disabled', false);
                                 toastr.error("Cannot update record");
@@ -1211,11 +1202,13 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $('#cmdConfirmDeleteContact').prop('disabled', false);
             $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
         }
         // Contact Confirm Delete
         function cmdContactConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
             $('#cmdConfirmDeleteContact').prop('disabled', true);
             $('#cmdConfirmDeleteContactCloseButton').prop('disabled', true);
 
@@ -1228,6 +1221,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
+                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
                         $('#cmdConfirmDeleteContact').prop('disabled', true);
                         $('#cmdConfirmDeleteContactCloseButton').prop('disabled', true);
                         toastr.success("Successfully deleted");
@@ -1237,12 +1231,14 @@
                         refreshMoreContactInformation();
                     },
                     404: function () {
+                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteContact').prop('disabled', false);
                         $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
                         toastr.error("Delete request not found");
                         $('#deleteContactConfirm').modal('hide');
                     },
                     400: function () {
+                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteContact').prop('disabled', false);
                         $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
                         toastr.error("Cannot delete record");
@@ -1342,8 +1338,8 @@
         });
 
         $(document).ready(function () {
-            var SupplierId = @supplierId;
-            if(SupplierId == 0) {
+            var supplierId = readCookie("supplierId");
+            if (supplierId == 0) {
                 $('#supplier_SaveButton').show();
                 $('#supplier_LockButton').hide();
                 $('#supplier_UnlockButton').hide();

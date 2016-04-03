@@ -14,25 +14,50 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        public ActionResult CheckCookie()
+        {
+            HttpCookieCollection cookieCollection = Request.Cookies;
+            HttpCookie branchIdCookie = cookieCollection.Get("branchId");
+
+            if (branchIdCookie != null)
+            {
+                var branchId = Convert.ToInt32(Request.Cookies["branchId"].Value);
+                var branches = from d in db.MstBranches where d.Id == branchId select d;
+
+                if (branches.Any())
+                {
+                    return View();
+                } 
+                else
+                {
+                    return RedirectToAction("Index", "Manage");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "Manage");
+            }
+        }
+
         // =============
         // GET: SOFTWARE
         // =============
         [Authorize]
         public ActionResult Index()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult Supplier()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult SupplierDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -106,13 +131,13 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult PurchaseOrder()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult PurchaseOrderDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -221,13 +246,13 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult ReceivingReceipt()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult ReceivingReceiptDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -343,7 +368,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult AccountsPayable()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -757,13 +782,13 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Disbursement()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult DisbursementDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -794,19 +819,19 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Bank()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult Customer()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult CustomerDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -880,13 +905,13 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Sales()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult SalesDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -991,7 +1016,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult AccountsReceivable()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -1306,13 +1331,13 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Collection()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult CollectionDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -1343,19 +1368,19 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult BankReconciliation()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult Items()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult ItemDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -1483,13 +1508,13 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockIn()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult StockInDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -1598,13 +1623,13 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockOut()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult StockOutDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -1713,7 +1738,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult InventoryReport()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -2072,13 +2097,13 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult StockTransfer()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult StockTransferDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -2109,25 +2134,25 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult SystemTables()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult ChartOfAccounts()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult JournalVoucher()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult JournalVoucherDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -2341,13 +2366,13 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Company()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult CompanyDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -2462,7 +2487,7 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult FinancialStatements()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
@@ -3702,19 +3727,19 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult Users()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult UsersDetail()
         {
-            return View();
+            return CheckCookie();
         }
 
         [Authorize]
         public ActionResult Settings()
         {
-            return View();
+            return CheckCookie();
         }
 
         public BaseColor ColorGrey { get; set; }

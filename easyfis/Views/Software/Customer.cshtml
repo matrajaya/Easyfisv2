@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -28,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Customer
                     </div>
                 </div>
             </div>
@@ -43,8 +40,9 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="@Url.Action("CustomerDetail", "Software", new { CustomerId = 0, BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+
+                            <button class="btn btn-primary btn-sm" onclick="btnAddCustomer_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-danger btn-sm" onclick="btnCloseCustomer_OnClick()"><i class=" fa fa-times"></i> Close</button>
                         </div>
                     </div>
                     <br />
@@ -151,6 +149,46 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
+        // =============
+        // Create Cookie
+        // =============
+        function createCookie(name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            } else {
+                var expires = "";
+            }
+
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
+        // =============
+        // Delete Cookie
+        // =============
+        function eraseCookie(name) {
+            createCookie(name, "", -1);
+        }
+
         // ==============================
         // Get Data from MstArtcile Table
         // ==============================
@@ -163,101 +201,63 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (Results) {
+                success: function (customerResults) {
                     $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            if(Results[i]["IsLocked"] == true) {
-                                customers.push ({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdCustomerEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='cmdCustomerLockDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    ArticleCode : Results[i]["ArticleCode"],
-                                    ManualArticleCode : Results[i]["ManualArticleCode"],
-                                    Article : Results[i]["Article"],
-                                    Category : Results[i]["Category"],
-                                    ArticleTypeId : Results[i]["ArticleTypeId"],
-                                    ArticleType : Results[i]["ArticleType"],
-                                    ArticleGroupId : Results[i]["ArticleGroupId"],
-                                    ArticleGroup : Results[i]["ArticleGroup"],
-                                    AccountId : Results[i]["AccountId"],
-                                    Account : Results[i]["Account"],
-                                    SalesAccountId : Results[i]["SalesAccountId"],
-                                    CostAccountId : Results[i]["CostAccountId"],
-                                    AssetAccountId : Results[i]["AssetAccountId"],
-                                    ExpenseAccountId : Results[i]["ExpenseAccountId"],
-                                    UnitId : Results[i]["UnitId"],
-                                    OutputTaxId : Results[i]["OutputTaxId"],
-                                    InputTaxId : Results[i]["InputTaxId"],
-                                    WTaxTypeId : Results[i]["WTaxTypeId"],
-                                    Price : Results[i]["Price"],
-                                    Cost : Results[i]["Cost"],
-                                    IsInventory : Results[i]["IsInventory"],
-                                    Particulars : Results[i]["Particulars"],
-                                    Address : Results[i]["Address"],
-                                    TermId : Results[i]["TermId"],
-                                    ContactNumber : Results[i]["ContactNumber"],
-                                    ContactPerson : Results[i]["ContactPerson"],
-                                    TaxNumber : Results[i]["TaxNumber"],
-                                    CreditLimit : Results[i]["CreditLimit"],
-                                    DateAcquired : Results[i]["DateAcquired"],
-                                    UsefulLife : Results[i]["UsefulLife"],
-                                    SalvageValue : Results[i]["SalvageValue"],
-                                    ManualArticleOldCode : Results[i]["ManualArticleOldCode"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+                    if (customerResults.length > 0) {
+                        for (i = 0; i < customerResults.length; i++) {
+
+                            var btnDeleteId;
+                            if(customerResults[i]["IsLocked"] == true) {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdCustomerLockDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                customers.push ({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdCustomerEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='cmdCustomerDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    ArticleCode : Results[i]["ArticleCode"],
-                                    ManualArticleCode : Results[i]["ManualArticleCode"],
-                                    Article : Results[i]["Article"],
-                                    Category : Results[i]["Category"],
-                                    ArticleTypeId : Results[i]["ArticleTypeId"],
-                                    ArticleType : Results[i]["ArticleType"],
-                                    ArticleGroupId : Results[i]["ArticleGroupId"],
-                                    ArticleGroup : Results[i]["ArticleGroup"],
-                                    AccountId : Results[i]["AccountId"],
-                                    Account : Results[i]["Account"],
-                                    SalesAccountId : Results[i]["SalesAccountId"],
-                                    CostAccountId : Results[i]["CostAccountId"],
-                                    AssetAccountId : Results[i]["AssetAccountId"],
-                                    ExpenseAccountId : Results[i]["ExpenseAccountId"],
-                                    UnitId : Results[i]["UnitId"],
-                                    OutputTaxId : Results[i]["OutputTaxId"],
-                                    InputTaxId : Results[i]["InputTaxId"],
-                                    WTaxTypeId : Results[i]["WTaxTypeId"],
-                                    Price : Results[i]["Price"],
-                                    Cost : Results[i]["Cost"],
-                                    IsInventory : Results[i]["IsInventory"],
-                                    Particulars : Results[i]["Particulars"],
-                                    Address : Results[i]["Address"],
-                                    TermId : Results[i]["TermId"],
-                                    ContactNumber : Results[i]["ContactNumber"],
-                                    ContactPerson : Results[i]["ContactPerson"],
-                                    TaxNumber : Results[i]["TaxNumber"],
-                                    CreditLimit : Results[i]["CreditLimit"],
-                                    DateAcquired : Results[i]["DateAcquired"],
-                                    UsefulLife : Results[i]["UsefulLife"],
-                                    SalvageValue : Results[i]["SalvageValue"],
-                                    ManualArticleOldCode : Results[i]["ManualArticleOldCode"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdCustomerDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             }
+
+                            customers.push ({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdCustomerEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: btnDeleteId,
+                                Id: customerResults[i]["Id"],
+                                ArticleCode : customerResults[i]["ArticleCode"],
+                                ManualArticleCode : customerResults[i]["ManualArticleCode"],
+                                Article : customerResults[i]["Article"],
+                                Category : customerResults[i]["Category"],
+                                ArticleTypeId : customerResults[i]["ArticleTypeId"],
+                                ArticleType : customerResults[i]["ArticleType"],
+                                ArticleGroupId : customerResults[i]["ArticleGroupId"],
+                                ArticleGroup : customerResults[i]["ArticleGroup"],
+                                AccountId : customerResults[i]["AccountId"],
+                                Account : customerResults[i]["Account"],
+                                SalesAccountId : customerResults[i]["SalesAccountId"],
+                                CostAccountId : customerResults[i]["CostAccountId"],
+                                AssetAccountId : customerResults[i]["AssetAccountId"],
+                                ExpenseAccountId : customerResults[i]["ExpenseAccountId"],
+                                UnitId : customerResults[i]["UnitId"],
+                                OutputTaxId : customerResults[i]["OutputTaxId"],
+                                InputTaxId : customerResults[i]["InputTaxId"],
+                                WTaxTypeId : customerResults[i]["WTaxTypeId"],
+                                Price : customerResults[i]["Price"],
+                                Cost : customerResults[i]["Cost"],
+                                IsInventory : customerResults[i]["IsInventory"],
+                                Particulars : customerResults[i]["Particulars"],
+                                Address : customerResults[i]["Address"],
+                                TermId : customerResults[i]["TermId"],
+                                ContactNumber : customerResults[i]["ContactNumber"],
+                                ContactPerson : customerResults[i]["ContactPerson"],
+                                TaxNumber : customerResults[i]["TaxNumber"],
+                                CreditLimit : customerResults[i]["CreditLimit"],
+                                DateAcquired : customerResults[i]["DateAcquired"],
+                                UsefulLife : customerResults[i]["UsefulLife"],
+                                SalvageValue : customerResults[i]["SalvageValue"],
+                                ManualArticleOldCode : customerResults[i]["ManualArticleOldCode"],
+                                IsLocked: customerResults[i]["IsLocked"],
+                                CreatedById: customerResults[i]["CreatedById"],
+                                CreatedBy: customerResults[i]["CreatedBy"],
+                                CreatedDateTime: customerResults[i]["CreatedDateTime"],
+                                UpdatedById: customerResults[i]["UpdatedById"],
+                                UpdatedBy: customerResults[i]["UpdatedBy"],
+                                UpdatedDateTime: customerResults[i]["UpdatedDateTime"]
+                            });
+
                         }
                     }
                 }
@@ -266,7 +266,7 @@
             });
             return customers;
         }
-        
+
         // ===========================
         // Customer Delete Lock Button
         // ===========================
@@ -276,6 +276,13 @@
                 backdrop: 'static'
             });
         }
+        // ===================
+        // Customer Add Button
+        // ===================
+        function btnAddCustomer_OnClick() {
+            createCookie("customerId", 0, 365);
+            window.location = '/Software/CustomerDetail';
+        }
 
         // ====================
         // Customer Edit Button
@@ -283,8 +290,44 @@
         function cmdCustomerEditButton_OnClick() {
             customers.editItem(customers.currentItem);
             var customer = customers.currentEditItem;
-            var id = customer.Id;
-            window.location = '/Software/CustomerDetail?CustomerId=' + id + '&BranchId=' + @branchId;
+            var customerId = customer.Id;
+            createCookie("customerId", customerId, 365);
+            window.location = '/Software/CustomerDetail';
+        }
+
+        // =====================
+        // Customer Close Button
+        // =====================
+        function btnCloseCustomer_OnClick() {
+            eraseCookie("customerId");
+            window.location = '/Software';
+        }
+
+        // =========================
+        // Refresh Customer Flexgrid
+        // =========================
+        function refreshCustomerFlexgrid() {
+            customers = new wijmo.collections.CollectionView(getArtcileForCustomers());
+            customers.canFilter = true;
+            customers.pageSize = 15;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                customers.refresh();
+            });
+            customers.filter = function (item) {
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+            }
+            customers.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsCustomer();
+            });
+            customers.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
+
+            customerGrid.itemsSource = customers;
+            customerGrid.trackChanges = true;
         }
 
         // =====================
@@ -296,13 +339,15 @@
                 backdrop: 'static'
             });
             
-            $("#cmdConfirmDeleteCustomer").prop("disabled", false);
-            $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+            document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $('#cmdConfirmDeleteCustomer').prop('disabled', false);
+            $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
         }
         // Customer Confirm Delete Button
         function cmdCustomerConfirmDeleteButton_OnClick() {
-            $("#cmdConfirmDeleteCustomer").prop("disabled", true);
-            $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+            document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            $('#cmdConfirmDeleteCustomer').prop('disabled', true);
+            $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
 
             customers.editItem(customers.currentItem);
             var id = customers.currentEditItem.Id;
@@ -313,46 +358,28 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteCustomer").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
+                        document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        $('#cmdConfirmDeleteCustomer').prop('disabled', true);
+                        $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
+                        toastr.success("Successfully deleted");
 
                         $('#deleteCustomerConfirm').modal('hide');
 
-                        customers = new wijmo.collections.CollectionView(getArtcileForCustomers());
-                        customers.canFilter = true;
-                        customers.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            customers.refresh();
-                        });
-                        customers.filter = function (item) {
-                            return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        customers.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsCustomer();
-                        });
-                        customers.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        customerGrid.itemsSource = customers;
-                        customerGrid.trackChanges = true;
-
+                        refreshCustomerFlexgrid();
                     },
                     404: function () {
-                        toastr.error("Request Not Found");
-                        $('#deleteCustomerConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteCustomer").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                        toastr.error("Delete request not found");
+                        $('#deleteCustomerConfirm').modal('hide');
                     },
                     400: function () {
-                        toastr.error("Can't be deleted");
-                        $('#deleteCustomerConfirm').modal('hide');
+                        document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $("#cmdConfirmDeleteCustomer").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+                        toastr.error("Cannot delete record");
+                        $('#deleteCustomerConfirm').modal('hide');
                     }
                 }
             });
@@ -401,43 +428,6 @@
         // On Load Page
         // ============
         $(document).ready(function () {
-            $.ajax({
-                url: '/api/listBranchById/' + @branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        branches.push({
-                            BranchId: results.Id,
-                            BranchBranch: results.Branch
-                        });
-                    }
-                    //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
-                }
-            });
-
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Customer';
-
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             customers = new wijmo.collections.CollectionView(getArtcileForCustomers());
             customers.canFilter = true;
             customers.pageSize = 15;
@@ -513,7 +503,7 @@
                 autoGenerateColumns: false,
                 itemsSource: customers,
                 isReadOnly: true,
-                //frozenColumns: 2,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -547,7 +537,6 @@
                 updateNavigateButtonsCustomer();
             });
         });
-
     </script>
 </body>
 </html>

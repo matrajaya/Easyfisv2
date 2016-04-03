@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -10,7 +7,7 @@
     <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
-    <title>EasyFIS - Main Menu</title>
+    <title>EasyFIS - Dashboard</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
@@ -33,47 +30,9 @@
                 </div>
             </div>
             <div class="container">
-                @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button><br /><br />*@
-                @*<h3>Software Dashboard</h3>*@
-                @*<div class="well">
-                    <div class="row">*@
-                @*<div class="col-md-3">
-                        <a class="btn-masterlist btn-dashboard button--masterlist" href="@Url.Action("Supplier","Software", new { BranchId = branchId })"><img src='~/images/Icons/iSupplier.png'><br /> Supplier</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iPurchase.png'><br /> Purchase Order</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iReceipt.png'><br /> Receiving Receipt</a>
-                        <a class="btn-reports btn-dashboard button--reports" href="@Url.Action("AccountsPayable", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iPayable.png'><br /> Accounts Payable</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iDisburse.png'><br /> Disbursement</a>
-                        <a class="btn-masterlist btn-dashboard  button--masterlist" href="@Url.Action("Bank", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iBank.png'><br /> Bank</a>
-                    </div>*@
-                @*<div class="col-md-3 ">
-                        <a class="btn-masterlist btn-dashboard button--masterlist" href="@Url.Action("Customer", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iUsers.png'><br /> Customer</a>
-                        <a class="btn-submenu btn-sale button--submenu" href="@Url.Action("Sales", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iSales.png'><br /> Sales</a>
-                        <a class="btn-reports btn-dashboard button--reports" href="@Url.Action("AccountsReceivable", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iReceive.png'><br /> Accounts Receivable</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("Collection", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iCollect.png'><br /> Collection</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("BankReconciliation", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iRecon.png'><br /> Bank Reconciliation</a>
-                    </div>*@
-                @*<div class="col-md-3">
-                        <a class="btn-masterlist btn-dashboard button--masterlist" href="@Url.Action("Items", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iItems.png'><br /> Items</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("StockIn", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iStockIn.png'><br /> Stock In</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("StockOut", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iStockOut.png'><br /> Stock Out</a>
-                        <a class="btn-reports btn-dashboard button--reports" href="@Url.Action("InventoryReport", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iReport.png'><br /> Inventory Report</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iStock.png'><br /> Stock Transfer</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("SystemTables", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iTables.png'><br /> System Tables</a>
-                    </div>*@
-                @*<div class="col-md-3">
-                        <a class="btn-masterlist btn-dashboard button--masterlist" href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iChart.png'><br /> Chart of Accounts</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iJournal.png'><br /> Journal Voucher</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("Company", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iCompany.png'><br /> Comapany</a>
-                        <a class="btn-reports btn-dashboard button--reports" href="@Url.Action("FinancialStatements", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iStatement.png'><br /> Financial Statements</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("Users", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iUsers.png'><br /> Users</a>
-                        <a class="btn-submenu btn-dashboard button--submenu" href="@Url.Action("Settings", "Software", new { BranchId = branchId })"><img src='~/images/Icons/iSettings.png'><br /> Settings</a>
-                    </div>*@
-                @*</div>
-                    </div>*@
-
                 <div class="row">
                     <div class="col-md-3">
-                        <a href="@Url.Action("Supplier","Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Supplier", "Software")">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -94,7 +53,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("PurchaseOrder", "Software")">
                             <div class="panel panel-blue">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -115,7 +74,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("ReceivingReceipt", "Software")">
                             <div class="panel panel-blue">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -136,7 +95,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("AccountsPayable", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("AccountsPayable", "Software")">
                             <div class="panel panel-orange">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -158,7 +117,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Disbursement", "Software")">
                             <div class="panel panel-blue">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -179,7 +138,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("Bank", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Bank", "Software")">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -202,7 +161,7 @@
                     </div>
 
                     <div class="col-md-3">
-                        <a href="@Url.Action("Customer", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Customer", "Software")">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -223,7 +182,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("Sales", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Sales", "Software")">
                             <div class="panel panel-blue">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -244,7 +203,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("AccountsReceivable", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("AccountsReceivable", "Software")">
                             <div class="panel panel-orange">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -266,7 +225,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("Collection", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Collection", "Software")">
                             <div class="panel panel-blue">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -287,7 +246,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("BankReconciliation", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("BankReconciliation", "Software")">
                             <div class="panel panel-orange">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -310,7 +269,7 @@
                     </div>
 
                     <div class="col-md-3">
-                        <a href="@Url.Action("Items", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Items", "Software")">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -331,7 +290,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("StockIn", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("StockIn", "Software")">
                             <div class="panel panel-blue">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -352,7 +311,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("StockOut", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("StockOut", "Software")">
                             <div class="panel panel-blue">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -373,7 +332,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("InventoryReport", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("InventoryReport", "Software")">
                             <div class=" panel panel-orange">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -394,7 +353,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("StockTransfer", "Software")">
                             <div class="panel panel-blue">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -415,7 +374,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("SystemTables", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("SystemTables", "Software")">
                             <div class="panel panel-lavander">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -438,7 +397,7 @@
                     </div>
 
                     <div class="col-md-3">
-                        <a href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("ChartOfAccounts", "Software")">
                             <div class="panel panel-green">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -459,7 +418,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("JournalVoucher", "Software")">
                             <div class="panel panel-blue">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -480,7 +439,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("Company", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Company", "Software")">
                             <div class="panel panel-lavander">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -501,7 +460,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("FinancialStatements", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("FinancialStatements", "Software")">
                             <div class="panel panel-orange">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -523,7 +482,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("Users", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Users", "Software")">
                             <div class="panel panel-lavander">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -544,7 +503,7 @@
                             </div>
                         </a>
 
-                        <a href="@Url.Action("Settings", "Software", new { BranchId = branchId })">
+                        <a href="@Url.Action("Settings", "Software")">
                             <div class="panel panel-lavander">
                                 <div class="panel-heading">
                                     <div class="row">
@@ -597,29 +556,55 @@
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
-        $(document).ready(function () {
-            var branchID = @branchId;
+        // =============
+        // Create Cookie
+        // =============
+        function createCookie(name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            } else {
+                var expires = "";
+            }
 
-            $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listBranchById/' + branchID,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    $('#loadingModal').modal('hide');
-                    if (results.length > 0) {
-                        branches.push({
-                            BranchId: results.Id,
-                            BranchCompany : results.Company,
-                            BranchBranch: results.Branch
-                        });
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
                     }
-                    document.getElementById('currentCompanyName').innerHTML = results.Company;
-                    document.getElementById('currentBranchName').innerHTML = results.Branch;
                 }
-            });
+            }
+            return null;
+        }
+
+        // =============
+        // Delete Cookie
+        // =============
+        function eraseCookie(name) {
+            createCookie(name, "", -1);
+        }
+
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            document.getElementById('currentCompanyName').innerHTML = readCookie("company");
+            document.getElementById('currentBranchName').innerHTML = readCookie("branch");
+
+            console.log(readCookie("company"));
+            console.log(readCookie("branch"));
         });
     </script>
 </body>

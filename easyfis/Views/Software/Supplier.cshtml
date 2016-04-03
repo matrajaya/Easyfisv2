@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -28,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Supplier
                     </div>
                 </div>
             </div>
@@ -43,8 +40,8 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="@Url.Action("SupplierDetail", "Software", new { SupplierId = 0 , BranchId = branchId })" class=" btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</a>
+                            <button class="btn btn-primary btn-sm" onclick="btnAddSupplier_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-danger btn-sm" onclick="btnCloseSupplier_OnClick()"><i class=" fa fa-times"></i> Close</button>
                         </div>
                     </div>
                     <br />
@@ -149,6 +146,46 @@
         var btnNextPageGrid;
         var btnLastPageGrid;
         var btnCurrentPageGrid;
+
+        // =============
+        // Create Cookie
+        // =============
+        function createCookie(name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            } else {
+                var expires = "";
+            }
+
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
+        // =============
+        // Delete Cookie
+        // =============
+        function eraseCookie(name) {
+            createCookie(name, "", -1);
+        }
 
         // ==============================
         // Get Data from MstArtcile Table
@@ -266,14 +303,31 @@
 
         }
 
+        // ===================
+        // Supplier Add Button
+        // ===================
+        function btnAddSupplier_OnClick() {
+            createCookie("supplierId", 0, 365);
+            window.location = '/Software/SupplierDetail';
+        }
+
         // ====================
         // Supplier Edit Button
         // ====================
         function cmdSupplierEditButton_OnClick() {
             suppliers.editItem(suppliers.currentItem);
             var supplier = suppliers.currentEditItem;
-            var id = supplier.Id;
-            window.location = '/Software/SupplierDetail?SupplierId=' + id + '&BranchId=' + @branchId;
+            var supplierId = supplier.Id;
+            createCookie("supplierId", supplierId, 365);
+            window.location = '/Software/SupplierDetail';
+        }
+
+        // =====================
+        // Supplier Close Button
+        // =====================
+        function btnCloseSupplier_OnClick() {
+            eraseCookie("supplierId");
+            window.location = '/Software';
         }
 
         // =====================
@@ -284,12 +338,14 @@
                 show: true,
                 backdrop: 'static'
             });
-
+        
+            document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $('#cmdConfirmDeleteSupplier').prop('disabled', false);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
         }
         // Supplier Confirm Delete Button
         function cmdSupplierConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
             $('#cmdConfirmDeleteSupplier').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
 
@@ -302,6 +358,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
+                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
                         $('#cmdConfirmDeleteSupplier').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
                         toastr.success("Successfully deleted");
@@ -311,12 +368,14 @@
                         refreshSupplierFlexgrid();
                     },
                     404: function () {
+                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteSupplier').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
                         toastr.error("Delete request not found");
                         $('#deleteSupplierConfirm').modal('hide');
                     },
                     400: function () {
+                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
                         $('#cmdConfirmDeleteSupplier').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
                         toastr.error("Cannot delete record");
@@ -369,8 +428,6 @@
         // On Page Load
         // ============
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Supplier';
-
             suppliers = new wijmo.collections.CollectionView(getArtcileForSuppliers());
             suppliers.canFilter = true;
             suppliers.pageSize = 15;

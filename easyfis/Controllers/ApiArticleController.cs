@@ -797,7 +797,7 @@ namespace easyfis.Controllers
                         updateArticle.ContactPerson = article.ContactPerson;
                         updateArticle.TaxNumber = article.TaxNumber;
                         updateArticle.ManualArticleOldCode = " ";
-                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.IsLocked = true;
                         updateArticle.UpdatedById = mstUserId;
                         updateArticle.UpdatedDateTime = date;
                     } else if (articleType_Id == 1) {

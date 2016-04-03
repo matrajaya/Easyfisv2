@@ -446,6 +446,18 @@ namespace easyfis.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            HttpCookie branchIdCookie = new HttpCookie("branchId");
+            HttpCookie branchCookie = new HttpCookie("branch");
+            HttpCookie companyCookie = new HttpCookie("company");
+
+            branchIdCookie.Expires = DateTime.Now.AddDays(-1d);
+            branchCookie.Expires = DateTime.Now.AddDays(-1d);
+            companyCookie.Expires = DateTime.Now.AddDays(-1d);
+
+            Response.Cookies.Add(branchIdCookie);
+            Response.Cookies.Add(branchCookie);
+            Response.Cookies.Add(companyCookie);
+
             return RedirectToAction("Index", "Home");
         }
 
