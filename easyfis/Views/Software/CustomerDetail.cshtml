@@ -166,9 +166,9 @@
                             <input type="hidden" id="contact_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Contact Person</dt>
-                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" placeholder="Contact Person"/></dd>
+                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactPerson" placeholder="Contact Person" /></dd>
                                 <dt>Contact Number</dt>
-                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactNumber" placeholder="Contact Number"/></dd>
+                                <dd><input type="text" class="form-control input-sm requiredContact" id="contact_contactNumber" placeholder="Contact Number" /></dd>
                                 <dt>Remarks</dt>
                                 <dd><textarea class="form-control textarea-custom requiredContact" id="contact_Remarks" placeholder="Remarks"></textarea></dd>
                             </dl>
@@ -237,50 +237,23 @@
         var cboArticleGroupForCustomer;
         var cboForAccount;
         var cboForTerm;
-
         var customerGroupSelectedValue = "";
         var accountSelectedValue = "";
         var termSelectedValue = "";
         var IsLocked;
 
-        // =============
-        // Create Cookie
-        // =============
-        function createCookie(name, value, days) {
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                var expires = "; expires=" + date.toGMTString();
-            } else {
-                var expires = "";
-            }
-
-            document.cookie = name + "=" + value + expires + "; path=/";
-        }
-
-        // ===========
-        // read Cookie
-        // ===========
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
-                }
-            }
-            return null;
-        }
-
-        // =============
-        // Delete Cookie
-        // =============
-        function eraseCookie(name) {
-            createCookie(name, "", -1);
+        // =======================
+        // Get URL Parameter Value
+        // =======================
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
         }
 
         // ==================================
@@ -288,9 +261,9 @@
         // ==================================
         function getArticleCustomerById() {
             $('#loadingModal').modal('show');
-            var customerId = readCookie("customerId");
-            if (customerId == null) {
-                window.location = '/Software/Customer';
+            var customerId = getParam('CustomerId');
+            if (document.location.search.length == 0) {
+                $('#loadingModal').modal('hide');
             } else {
                 $.ajax({
                     url: '/api/article/' + customerId,
@@ -299,8 +272,8 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (customerResults) {
-                        $('#loadingModal').modal('hide');
                         if (customerResults != null) {
+                            $('#loadingModal').modal('hide');
                             document.getElementById('artcileCustomer_code').value = customerResults.ArticleCode;
                             document.getElementById('artcileCustomer_customer').value = customerResults.Article;
                             document.getElementById('artcileCustomer_creditLimit').value = customerResults.CreditLimit.toLocaleString();
@@ -353,10 +326,14 @@
 
                             getArticleCustomerGroupForComboBox();
                             getArticleTermForComboBox();
+                        } else {
+                            confirm("No Data");
+                            window.location = '/Software/Customer';
                         }
                     }
-                }).fail(function (xhr, textStatus, err) {
-                    alert(err);
+                }).fail(function () {
+                    confirm("URL Not Found");
+                    window.location = '/Software/Customer';
                 });
             }
         }
@@ -383,7 +360,6 @@
         // Get Last Id for Customer by its ID
         // ==================================
         function getLastInsertedIdCustomerByArticleTypeId() {
-            eraseCookie("customerId");
             var customers = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/articleLastIdByArticleTypeId/2',
@@ -393,8 +369,10 @@
                 data: {},
                 success: function (lastCustomerResults) {
                     if (lastCustomerResults != null) {
-                        createCookie("customerId", lastCustomerResults.Id, 365);
-                        window.setTimeout(function () { location.reload() }, 1000);
+                        var lastCustomerId = lastCustomerResults.Id
+                        window.setTimeout(function () {
+                            window.location = '/Software/CustomerDetail?CustomerId=' + lastCustomerId;
+                        }, 1000);
                     }
                 }
             });
@@ -535,7 +513,7 @@
             cboForTerm.dispose();
             cboForTerm = new wijmo.input.ComboBox('#artcileCustomer_term', {
                 disabled: isLockedDisabledDropdown(terms),
-                placeholder: "Select Term",
+                placeholder: "Term",
                 itemsSource: terms,
                 displayMemberPath: "Term",
                 isEditable: false,
@@ -607,10 +585,10 @@
         // =====================
         function dataCustomerObject() {
             var customerObject = new Object();
-            var customerId = readCookie("customerId");
+            var customerId = getParam('CustomerId');
             customerObject.ArticleCode = document.getElementById('artcileCustomer_code').value;
             customerObject.Article = document.getElementById('artcileCustomer_customer').value;
-            customerObject.ArticleGroupId =  cboArticleGroupForCustomer.selectedItem["ArticleGroupId"];
+            customerObject.ArticleGroupId = cboArticleGroupForCustomer.selectedItem["ArticleGroupId"];
             customerObject.AccountId = cboForAccount.selectedItem["AccountId"];
             customerObject.SalesAccountId = cboArticleGroupForCustomer.selectedItem["SalesAccountId"];
             customerObject.CostAccountId = cboArticleGroupForCustomer.selectedItem["CostAccountId"];
@@ -692,7 +670,7 @@
                 $('#customer_UnlockButton').prop('disabled', true);
                 $('#customer_CloseButton').prop('disabled', true);
 
-                var customerId = readCookie("customerId");
+                var customerId = getParam('CustomerId');
                 $.ajax({
                     type: "PUT",
                     url: '/api/updateArticle/' + customerId + '/2',
@@ -708,7 +686,7 @@
                             $('#customer_CloseButton').prop('disabled', true);
                             toastr.success("Locked");
                             window.setTimeout(function () {
-                                location.reload()
+                                location.reload();
                             }, 1000);
                         },
                         404: function () {
@@ -742,7 +720,7 @@
             $('#customer_UnlockButton').prop('disabled', true);
             $('#customer_CloseButton').prop('disabled', true);
 
-            var customerId = readCookie("customerId");
+            var customerId = getParam('CustomerId');
             $.ajax({
                 type: "PUT",
                 url: '/api/unlockArticle/' + customerId,
@@ -758,7 +736,7 @@
                         $('#customer_CloseButton').prop('disabled', true);
                         toastr.success("Unlocked");
                         window.setTimeout(function () {
-                            location.reload()
+                            location.reload();
                         }, 1000);
                     },
                     404: function () {
@@ -786,7 +764,6 @@
         // Close Customer Button
         // =====================
         function customerCloseButton_OnClick() {
-            eraseCookie("customerId");
             window.location = '/Software/Customer';
         }
 
@@ -796,7 +773,7 @@
         $(document).ready(function () {
             getArticleCustomerById();
 
-            var customerId = readCookie("customerId");
+            var customerId = getParam('CustomerId');
             if (customerId == 0) {
                 $.ajax({
                     url: '/api/articleLastArticleCodeByArticleTypeId/2',
@@ -973,7 +950,7 @@
         // ============================
         function getContactInformation() {
             var contactInformations = new wijmo.collections.ObservableArray;
-            var articleId = readCookie("customerId");
+            var articleId = getParam('CustomerId');
             $('#loadingModal').modal('show');
             $.ajax({
                 url: '/api/listArticleContactByArticleId/' + articleId,
@@ -986,7 +963,7 @@
                     if (contactInformationResults.length > 0) {
 
                         var customers = new wijmo.collections.ObservableArray;
-                        var customerId = readCookie("customerId");
+                        var customerId = getParam('CustomerId');
                         $.ajax({
                             url: '/api/article/' + customerId,
                             cache: false,
@@ -1124,7 +1101,7 @@
         // ============
         function cmdContactSaveButton_OnClick() {
             var contactObject = new Object();
-            var articleId = readCookie("customerId");
+            var customerId = getParam('CustomerId');
             var contactId = document.getElementById('contact_Id').value;
 
             contactObject.ContactPerson = document.getElementById('contact_contactPerson').value;
@@ -1344,8 +1321,11 @@
             };
         });
 
+        // ======================
+        // On Load Ready Function
+        // ======================
         $(document).ready(function () {
-            var customerId = readCookie("customerId");
+            var customerId = getParam('CustomerId');
             if (customerId == 0) {
                 $('#customer_SaveButton').show();
                 $('#customer_LockButton').hide();

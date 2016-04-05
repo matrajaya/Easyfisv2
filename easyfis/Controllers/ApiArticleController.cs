@@ -826,7 +826,7 @@ namespace easyfis.Controllers
                         updateArticle.UsefulLife = 0;
                         updateArticle.SalvageValue = 0;
                         updateArticle.ManualArticleOldCode = article.ManualArticleOldCode;
-                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.IsLocked = true;
                         updateArticle.UpdatedById = mstUserId;
                         updateArticle.UpdatedDateTime = date;
                     } else {

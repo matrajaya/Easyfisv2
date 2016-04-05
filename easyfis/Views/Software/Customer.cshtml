@@ -40,7 +40,6 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-
                             <button class="btn btn-primary btn-sm" onclick="btnAddCustomer_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             <button class="btn btn-danger btn-sm" onclick="btnCloseCustomer_OnClick()"><i class=" fa fa-times"></i> Close</button>
                         </div>
@@ -149,46 +148,6 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // =============
-        // Create Cookie
-        // =============
-        function createCookie(name, value, days) {
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                var expires = "; expires=" + date.toGMTString();
-            } else {
-                var expires = "";
-            }
-
-            document.cookie = name + "=" + value + expires + "; path=/";
-        }
-
-        // ===========
-        // read Cookie
-        // ===========
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
-                }
-            }
-            return null;
-        }
-
-        // =============
-        // Delete Cookie
-        // =============
-        function eraseCookie(name) {
-            createCookie(name, "", -1);
-        }
-
         // ==============================
         // Get Data from MstArtcile Table
         // ==============================
@@ -276,11 +235,11 @@
                 backdrop: 'static'
             });
         }
+
         // ===================
         // Customer Add Button
         // ===================
         function btnAddCustomer_OnClick() {
-            createCookie("customerId", 0, 365);
             window.location = '/Software/CustomerDetail';
         }
 
@@ -291,15 +250,13 @@
             customers.editItem(customers.currentItem);
             var customer = customers.currentEditItem;
             var customerId = customer.Id;
-            createCookie("customerId", customerId, 365);
-            window.location = '/Software/CustomerDetail';
+            window.location = '/Software/CustomerDetail?CustomerId=' + customerId;
         }
 
         // =====================
         // Customer Close Button
         // =====================
         function btnCloseCustomer_OnClick() {
-            eraseCookie("customerId");
             window.location = '/Software';
         }
 

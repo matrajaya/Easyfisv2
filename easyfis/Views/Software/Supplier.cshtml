@@ -147,46 +147,6 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
-        // =============
-        // Create Cookie
-        // =============
-        function createCookie(name, value, days) {
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                var expires = "; expires=" + date.toGMTString();
-            } else {
-                var expires = "";
-            }
-
-            document.cookie = name + "=" + value + expires + "; path=/";
-        }
-
-        // ===========
-        // read Cookie
-        // ===========
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
-                }
-            }
-            return null;
-        }
-
-        // =============
-        // Delete Cookie
-        // =============
-        function eraseCookie(name) {
-            createCookie(name, "", -1);
-        }
-
         // ==============================
         // Get Data from MstArtcile Table
         // ==============================
@@ -307,7 +267,6 @@
         // Supplier Add Button
         // ===================
         function btnAddSupplier_OnClick() {
-            createCookie("supplierId", 0, 365);
             window.location = '/Software/SupplierDetail';
         }
 
@@ -318,15 +277,13 @@
             suppliers.editItem(suppliers.currentItem);
             var supplier = suppliers.currentEditItem;
             var supplierId = supplier.Id;
-            createCookie("supplierId", supplierId, 365);
-            window.location = '/Software/SupplierDetail';
+            window.location = '/Software/SupplierDetail?SupplierId=' + supplierId;
         }
 
         // =====================
         // Supplier Close Button
         // =====================
         function btnCloseSupplier_OnClick() {
-            eraseCookie("supplierId");
             window.location = '/Software';
         }
 
