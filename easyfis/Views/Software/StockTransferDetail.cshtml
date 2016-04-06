@@ -1,6 +1,4 @@
 ﻿@{
-    var branchId = Request.QueryString["BranchId"];
-    var stockTransferId = Request.QueryString["StockTransferId"];
     var userId = ViewData["UserId"];
 }
 <!DOCTYPE html>
@@ -30,7 +28,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("StockTransfer", "Software")" class="currentPageLinkCustom">Stock Transfer</a> > Stock Transfer Detail
                     </div>
                 </div>
             </div>
@@ -44,8 +42,8 @@
                         <button class="btn btn-primary btn-sm" id="cmdStockTransferSaveLock" onclick="btnStockTransferSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockTransferSave" onclick="btnStockTransferSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockTransferEdit" onclick="btnStockTransferEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockTransferPrint" onclick="window.location.href ='@Url.Action("StockTransferPDF", "Software", new { StockTransferId = stockTransferId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("StockTransfer", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdStockTransferClose"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockTransferPrint" onclick="window.location.href ='@Url.Action("StockTransferPDF", "Software")'"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("StockTransfer", "Software")'" class="btn btn-danger btn-sm" id="cmdStockTransferClose"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -145,11 +143,6 @@
                         </div>
                     </form>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h4>Stock Transfer Line</h4>
-                    </div>
-                </div>
                 <!-- Stock Transfer line -->
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
@@ -158,86 +151,25 @@
                 <br />
                 <div class="tab-content">
                     <div id="Items" class="tab-pane fade in active">
-                        <!-- Item  List -->
                         <div class="row">
-                            <div class="col-lg-12">
-                                <h4>Items</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterItem" placeholder="Search">
-                                </div>
-                            </div>
-                            <div class="col-lg-8" align="right">
+                            <div class="col-lg-12" align="right">
                                 <button class="btn btn-primary btn-sm" id="btnAddStockTransferItem" onclick="cmdAddStockTransferItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <div id="ItemGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="navigationPageGridItem">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridItem">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridItem">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridItem"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridItem">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridItem">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
+                                <div id="ItemGrid" class="grid"></div>
                             </div>
                         </div>
                     </div>
 
                     <div id="InventoryEntries" class="tab-pane fade in active">
                         <!-- Inventory Entries List -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h4>Inventory Entries</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterInventoryEntry" placeholder="Search">
-                                </div>
-                            </div>
-                        </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
                                 <div id="InventoryEntryGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="navigationPageGridInventoryEntry">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridInventoryEntry">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridInventoryEntry">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridInventoryEntry"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridInventoryEntry">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridInventoryEntry">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -452,137 +384,146 @@
         var cboApprovedBy;
 
         // =======================
+        // Get URL Parameter Value
+        // =======================
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
+        // =======================
         // GET Stock Transfer by Id
         // =======================
         function getStockTransferById() {
             stockTransfers = new wijmo.collections.ObservableArray;
-            var stockTransferId = @stockTransferId;
+            var stockTransferId = getParam("StockTransferId");
             $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/stockTransfer/' + stockTransferId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        stockTransfers.push({
-                            Id: Results.Id,
-                            BranchId: Results.BranchId,
-                            Branch: Results.Branch,
-                            STNumber: Results.STNumber,
-                            STDate: Results.STDate,
-                            ToBranchId: Results.ToBranchId,
-                            ToBranch: Results.ToBranch,
-                            Particulars: Results.Particulars,
-                            ManualSTNumber: Results.ManualSTNumber,
-                            PreparedById: Results.PreparedById,
-                            PreparedBy: Results.PreparedBy,
-                            CheckedById: Results.CheckedById,
-                            CheckedBy: Results.CheckedBy,
-                            ApprovedById: Results.ApprovedById,
-                            ApprovedBy: Results.ApprovedBy,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
+            if (document.location.search.length == 0) {
+                $('#loadingModal').modal('hide');
+            } else {
+                $.ajax({
+                    url: '/api/stockTransfer/' + stockTransferId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        $('#loadingModal').modal('hide');
+                        document.getElementById('stockTransfer_Branch_data').value = Results.BranchId;
+                        document.getElementById('stockTransfer_Branch_selectedValue').value = Results.Branch;
+                        document.getElementById('stockTransfer_STNumber').value = Results.STNumber;
+                        document.getElementById('stockTransfer_STNumber_Display').value = Results.STNumber;
+                        document.getElementById('stockTransfer_STDate_data').value = Results.STDate;
+                        var STDate_date = Results.STDate;
+                        STDate.dispose();
+                        STDate = new wijmo.input.InputDate('#stockTransfer_STDate', {
+                            format: 'MM/dd/yyyy',
+                            value: new Date(STDate_date),
+                            mask: '99/99/9999',
+                            onValueChanged: function () {
+                                document.getElementById('stockTransfer_STDate_data').value = this.value.toLocaleDateString();
+                            }
                         });
-                    }
+                        document.getElementById('stockTransfer_ToBranch_data').value = Results.ToBranchId;
+                        document.getElementById('stockTransfer_ToBranch_selectedValue').value = Results.ToBranch;
+                        document.getElementById('stockTransfer_Particulars').value = Results.Particulars;
+                        document.getElementById('stockTransfer_ManualSTNumber').value = Results.ManualSTNumber;
+                        document.getElementById('stockTransfer_PreparedBy_data').value = Results.PreparedById;
+                        document.getElementById('stockTransfer_PreparedBy_selectedValue').value = Results.PreparedBy
+                        document.getElementById('stockTransfer_CheckedBy_data').value = Results.CheckedById;
+                        document.getElementById('stockTransfer_CheckedBy_selectedValue').value = Results.CheckedBy;
+                        document.getElementById('stockTransfer_ApprovedBy_data').value = Results.ApprovedById;
+                        document.getElementById('stockTransfer_ApprovedBy_selectedValue').value = Results.ApprovedBy;
+                        document.getElementById('StockTransfer_Lock').checked = Results.IsLocked;
+                        document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                        document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                        document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                        document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
-                    document.getElementById('stockTransfer_Branch_data').value = Results.BranchId;
-                    document.getElementById('stockTransfer_Branch_selectedValue').value = Results.Branch;
-                    document.getElementById('stockTransfer_STNumber').value = Results.STNumber;
-                    document.getElementById('stockTransfer_STNumber_Display').value = Results.STNumber;
-                    document.getElementById('stockTransfer_STDate_data').value = Results.STDate;
-                    var STDate_date = Results.STDate;
-                    STDate.dispose();
-                    STDate = new wijmo.input.InputDate('#stockTransfer_STDate', {
-                        format: 'MM/dd/yyyy',
-                        value: new Date(STDate_date),
-                        mask: '99/99/9999',
-                        onValueChanged: function () {
-                            document.getElementById('stockTransfer_STDate_data').value = this.value.toLocaleDateString();
+                        document.getElementById('StockTransfer_IsLocked').value = Results.IsLocked;
+
+                        if (document.getElementById('StockTransfer_IsLocked').value == 'true') {
+                            document.getElementById('stockTransfer_Particulars').disabled = true;
+                            document.getElementById('stockTransfer_ManualSTNumber').disabled = true;
+
+                            var STDate_date = Results.STDate;
+                            STDate.dispose();
+                            STDate = new wijmo.input.InputDate('#stockTransfer_STDate', {
+                                disabled: true,
+                                format: 'MM/dd/yyyy',
+                                value: new Date(STDate_date),
+                                mask: '99/99/9999',
+                                onValueChanged: function () {
+                                    document.getElementById('stockTransfer_STDate_data').value = this.value.toLocaleDateString();
+                                }
+                            });
+
+                            $("#cmdStockTransferJournal").prop("disabled", false);
+                            $("#cmdStockTransferSaveLock").prop("disabled", true);
+                            $("#cmdStockTransferSave").prop("disabled", true);
+                            $("#cmdStockTransferEdit").prop("disabled", false);
+                            $("#cmdStockTransferPrint").prop("disabled", false);
+                            $('#btnAddStockTransferItem').prop('disabled', true);
+
+
+                        } else if (document.getElementById('StockTransfer_IsLocked').value == 'false') {
+                            document.getElementById('stockTransfer_Particulars').disabled = false;
+                            document.getElementById('stockTransfer_ManualSTNumber').disabled = false;
+
+                            var STDate_date = Results.STDate;
+                            STDate.dispose();
+                            STDate = new wijmo.input.InputDate('#stockTransfer_STDate', {
+                                disabled: false,
+                                format: 'MM/dd/yyyy',
+                                value: new Date(STDate_date),
+                                mask: '99/99/9999',
+                                onValueChanged: function () {
+                                    document.getElementById('stockTransfer_STDate_data').value = this.value.toLocaleDateString();
+                                }
+                            });
+
+                            $("#cmdStockTransferJournal").prop("disabled", true);
+                            $("#cmdStockTransferSaveLock").prop("disabled", false);
+                            $("#cmdStockTransferSave").prop("disabled", true);
+                            $("#cmdStockTransferEdit").prop("disabled", true);
+                            $("#cmdStockTransferPrint").prop("disabled", true);
+                            $('#btnAddStockTransferItem').prop('disabled', false);
+
+                        } else {
+                            console.log("Invalid IsLocked");
                         }
-                    });
-                    document.getElementById('stockTransfer_ToBranch_data').value = Results.ToBranchId;
-                    document.getElementById('stockTransfer_ToBranch_selectedValue').value = Results.ToBranch;
-                    document.getElementById('stockTransfer_Particulars').value = Results.Particulars;
-                    document.getElementById('stockTransfer_ManualSTNumber').value = Results.ManualSTNumber;
-                    document.getElementById('stockTransfer_PreparedBy_data').value = Results.PreparedById;
-                    document.getElementById('stockTransfer_PreparedBy_selectedValue').value = Results.PreparedBy
-                    document.getElementById('stockTransfer_CheckedBy_data').value = Results.CheckedById;
-                    document.getElementById('stockTransfer_CheckedBy_selectedValue').value = Results.CheckedBy;
-                    document.getElementById('stockTransfer_ApprovedBy_data').value = Results.ApprovedById;
-                    document.getElementById('stockTransfer_ApprovedBy_selectedValue').value = Results.ApprovedBy;
-                    document.getElementById('StockTransfer_Lock').checked = Results.IsLocked;
-                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
-                    document.getElementById('StockTransfer_IsLocked').value = Results.IsLocked;
-
-                    if(document.getElementById('StockTransfer_IsLocked').value == 'true') {
-                        document.getElementById('stockTransfer_Particulars').disabled = true;
-                        document.getElementById('stockTransfer_ManualSTNumber').disabled = true;
-
-                        var STDate_date = Results.STDate;
-                        STDate.dispose();
-                        STDate = new wijmo.input.InputDate('#stockTransfer_STDate', {
-                            disabled: true,
-                            format: 'MM/dd/yyyy',
-                            value: new Date(STDate_date),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('stockTransfer_STDate_data').value = this.value.toLocaleDateString();
-                            }
-                        });
-
-                        $("#cmdStockTransferJournal").prop("disabled", false);
-                        $("#cmdStockTransferSaveLock").prop("disabled", true);
-                        $("#cmdStockTransferSave").prop("disabled", true);
-                        $("#cmdStockTransferEdit").prop("disabled", false);
-                        $("#cmdStockTransferPrint").prop("disabled", false);
-                        $('#btnAddStockTransferItem').prop('disabled', true);
-
-
-                    } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') {
-                        document.getElementById('stockTransfer_Particulars').disabled = false;
-                        document.getElementById('stockTransfer_ManualSTNumber').disabled = false;
-
-                        var STDate_date = Results.STDate;
-                        STDate.dispose();
-                        STDate = new wijmo.input.InputDate('#stockTransfer_STDate', {
-                            disabled: false,
-                            format: 'MM/dd/yyyy',
-                            value: new Date(STDate_date),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('stockTransfer_STDate_data').value = this.value.toLocaleDateString();
-                            }
-                        });
-
-                        $("#cmdStockTransferJournal").prop("disabled", true);
-                        $("#cmdStockTransferSaveLock").prop("disabled", false);
-                        $("#cmdStockTransferSave").prop("disabled", true);
-                        $("#cmdStockTransferEdit").prop("disabled", true);
-                        $("#cmdStockTransferPrint").prop("disabled", true);
-                        $('#btnAddStockTransferItem').prop('disabled', false);
-
-                    } else {
-                        console.log("Invalid IsLocked");
+                        getBranchesForComboBox();
+                        getUsersForComboBox();
                     }
-
-                    getBranchesForComboBox();
-                    getUsersForComboBox();
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }
             return stockTransfers;
         }
 
@@ -598,13 +539,7 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                    if (Results.length > 0) {
-                        stockTransfers.push({
-                            Id: Results.Id,
-                            STNumber: Results.STNumber
-                        });
-                    }
-                    window.location = '/Software/StockTransferDetail?StockTransferId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.location = '/Software/StockTransferDetail?StockTransferId=' + Results.Id;
                     window.setTimeout(function () { location.reload() }, 1000);
                 }
             });
@@ -631,24 +566,18 @@
                             });
                         }
 
-                        var stockTransferId = @stockTransferId;
-                        if(stockTransferId == 0) {
+                        var stockTransferId = getParam("StockTransferId");
+                        var branchId = readCookie("branchId");
+                        if (document.location.search.length == 0) {
                             $.ajax({
-                                url: '/api/listBranchById/' + @branchId,
+                                url: '/api/listBranchById/' + branchId,
                                 cache: false,
                                 type: 'GET',
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
                                 success: function (results) {
-                                    if (results.length > 0) {
-                                        branches.push({
-                                            BranchId: results.Id,
-                                            Branch: results.Branch
-                                        });
-                                    }
                                     document.getElementById('stockTransfer_Branch_data').value = results.Id;
                                     document.getElementById('stockTransfer_Branch_selectedValue').value = results.Branch;
-
                                     createCboBranch(branches);
                                     createCboToBranch(branches);
                                 }
@@ -701,7 +630,7 @@
                 branchList.push(branchCollections.items[i].BranchBranch);
             }
 
-            if(document.getElementById('StockTransfer_IsLocked').value == 'true') {
+            if (document.getElementById('StockTransfer_IsLocked').value == 'true') {
                 cboToBranch.dispose();
                 cboToBranch = new wijmo.input.ComboBox('#stockTransfer_ToBranch', {
                     disabled: true,
@@ -714,7 +643,7 @@
                         $("#stockTransfer_ToBranch_data").val(branchCollections.items[this.selectedIndex].BranchId);
                     }
                 });
-            } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') {
+            } else if (document.getElementById('StockTransfer_IsLocked').value == 'false') {
                 cboToBranch.dispose();
                 cboToBranch = new wijmo.input.ComboBox('#stockTransfer_ToBranch', {
                     disabled: false,
@@ -762,8 +691,9 @@
                             });
                         }
 
-                        var stockTransferId = @stockTransferId;
-                        if(stockTransferId == 0) {
+                        var stockTransferId = getParam("StockTransferId");
+                        var branchId = readCookie("branchId");
+                        if (document.location.search.length == 0) {
                             var userId = document.getElementById('userId_data').value;
                             $.ajax({
                                 url: '/api/listByMstUserId/' + userId,
@@ -780,7 +710,7 @@
                                     }
 
                                     document.getElementById('stockTransfer_PreparedBy_data').value = results.Id;
-                                    document.getElementById('stockTransfer_PreparedBy_selectedValue').value =  results.FullName;
+                                    document.getElementById('stockTransfer_PreparedBy_selectedValue').value = results.FullName;
 
                                     createCboUserPreparedBy(users);
                                     createCboUserCheckedBy(users);
@@ -835,7 +765,7 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            if(document.getElementById('StockTransfer_IsLocked').value == 'true') {
+            if (document.getElementById('StockTransfer_IsLocked').value == 'true') {
                 cboCheckedBy.dispose();
                 cboCheckedBy = new wijmo.input.ComboBox('#stockTransfer_CheckedBy', {
                     disabled: true,
@@ -848,7 +778,7 @@
                         $("#stockTransfer_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                     }
                 });
-            } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') {
+            } else if (document.getElementById('StockTransfer_IsLocked').value == 'false') {
                 cboCheckedBy.dispose();
                 cboCheckedBy = new wijmo.input.ComboBox('#stockTransfer_CheckedBy', {
                     disabled: false,
@@ -886,7 +816,7 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            if(document.getElementById('StockTransfer_IsLocked').value == 'true') {
+            if (document.getElementById('StockTransfer_IsLocked').value == 'true') {
                 cboApprovedBy.dispose();
                 cboApprovedBy = new wijmo.input.ComboBox('#stockTransfer_ApprovedBy', {
                     disabled: true,
@@ -899,7 +829,7 @@
                         $("#stockTransfer_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                     }
                 });
-            } else if(document.getElementById('StockTransfer_IsLocked').value == 'false') {
+            } else if (document.getElementById('StockTransfer_IsLocked').value == 'false') {
                 cboApprovedBy.dispose();
                 cboApprovedBy = new wijmo.input.ComboBox('#stockTransfer_ApprovedBy', {
                     disabled: false,
@@ -933,7 +863,7 @@
         function zerofill(number, length) {
             var result = number.toString();
             var pad = length - result.length;
-            while(pad > 0) {
+            while (pad > 0) {
                 result = '0' + result;
                 pad--;
             }
@@ -945,7 +875,7 @@
         // ==================
         function btnStockTransferSave_OnClick() {
             var stockTransferObject = new Object();
-            var stockTransferId = @stockTransferId;
+            var stockTransferId = getParam("StockTransferId");
             stockTransferObject.BranchId = document.getElementById('stockTransfer_Branch_data').value;
             stockTransferObject.STNumber = document.getElementById('stockTransfer_STNumber_Display').value;
             stockTransferObject.STDate = document.getElementById('stockTransfer_STDate_data').value;
@@ -957,37 +887,37 @@
             stockTransferObject.ApprovedById = document.getElementById('stockTransfer_ApprovedBy_data').value;
             var data = JSON.stringify(stockTransferObject);
 
-            if( document.getElementById('stockTransfer_Branch_data').value == '') {
+            if (document.getElementById('stockTransfer_Branch_data').value == '') {
                 document.getElementById("stockTransfer_Branch").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_Branch").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_STDate_data').value == '') {
+            if (document.getElementById('stockTransfer_STDate_data').value == '') {
                 document.getElementById("stockTransfer_STDate").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_STDate").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_ToBranch_data').value == '') {
+            if (document.getElementById('stockTransfer_ToBranch_data').value == '') {
                 document.getElementById("stockTransfer_ToBranch").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_ToBranch").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_PreparedBy_data').value == '') {
+            if (document.getElementById('stockTransfer_PreparedBy_data').value == '') {
                 document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_CheckedBy_data').value == '') {
+            if (document.getElementById('stockTransfer_CheckedBy_data').value == '') {
                 document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_ApprovedBy_data').value == '') {
+            if (document.getElementById('stockTransfer_ApprovedBy_data').value == '') {
                 document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid #C8C8C8";
@@ -1013,7 +943,7 @@
                 e.preventDefault();
             }
             else {
-                if (stockTransferId == 0) {
+                if (document.location.search.length == 0) {
                     $.ajax({
                         type: "POST",
                         url: '/api/addStockTransfer',
@@ -1100,7 +1030,7 @@
         // ==========================
         function btnStockTransferSaveLock_OnClick() {
             var stockTransferObject = new Object();
-            var stockTransferId = @stockTransferId;
+            var stockTransferId = getParam("StockTransferId");
             stockTransferObject.BranchId = document.getElementById('stockTransfer_Branch_data').value;
             stockTransferObject.STNumber = document.getElementById('stockTransfer_STNumber_Display').value;
             stockTransferObject.STDate = document.getElementById('stockTransfer_STDate_data').value;
@@ -1113,37 +1043,37 @@
             stockTransferObject.IsLocked = true;
             var data = JSON.stringify(stockTransferObject);
 
-            if( document.getElementById('stockTransfer_Branch_data').value == '') {
+            if (document.getElementById('stockTransfer_Branch_data').value == '') {
                 document.getElementById("stockTransfer_Branch").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_Branch").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_STDate_data').value == '') {
+            if (document.getElementById('stockTransfer_STDate_data').value == '') {
                 document.getElementById("stockTransfer_STDate").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_STDate").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_ToBranch_data').value == '') {
+            if (document.getElementById('stockTransfer_ToBranch_data').value == '') {
                 document.getElementById("stockTransfer_ToBranch").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_ToBranch").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_PreparedBy_data').value == '') {
+            if (document.getElementById('stockTransfer_PreparedBy_data').value == '') {
                 document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_CheckedBy_data').value == '') {
+            if (document.getElementById('stockTransfer_CheckedBy_data').value == '') {
                 document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransfer_ApprovedBy_data').value == '') {
+            if (document.getElementById('stockTransfer_ApprovedBy_data').value == '') {
                 document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid #C8C8C8";
@@ -1169,7 +1099,7 @@
                 e.preventDefault();
             }
             else {
-                if (stockTransferId == 0) {
+                if (document.location.search.length == 0) {
                     $.ajax({
                         type: "POST",
                         url: '/api/addStockTransfer',
@@ -1256,7 +1186,7 @@
         // ============================
         function btnStockTransferEdit_OnClick() {
             var stockTransferObject = new Object();
-            var stockTransferId = @stockTransferId;
+            var stockTransferId = getParam("StockTransferId");
             stockTransferObject.IsLocked = false;
             var data = JSON.stringify(stockTransferObject);
             $.ajax({
@@ -1304,8 +1234,8 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            var stockTransferId = @stockTransferId;
-            if(stockTransferId == 0) {
+            var stockTransferId = getParam("StockTransferId");
+            if (document.location.search.length == 0) {
                 $('#cmdStockTransferJournal').hide();
                 $('#cmdStockTransferSaveLock').hide();
                 $('#cmdStockTransferSave').show();
@@ -1319,14 +1249,13 @@
                 $('#cmdStockTransferEdit').show();
             }
 
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Stock Transfer</a> ' + ' > Stock Transfer Detail';
             document.getElementById('stockTransfer_STNumber_Display').disabled = true;
             document.getElementById('StockTransfer_Lock').disabled = true;
 
             getStockTransferById();
 
             var d = new Date();
-            document.getElementById("stockTransfer_STDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            document.getElementById("stockTransfer_STDate_data").value = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join('/');
             STDate = new wijmo.input.InputDate('#stockTransfer_STDate', {
                 format: 'MM/dd/yyyy',
                 value: new Date(),
@@ -1342,12 +1271,12 @@
             cboApprovedBy = new wijmo.input.ComboBox('#stockTransfer_ApprovedBy');
             cboToBranch = new wijmo.input.ComboBox('#stockTransfer_ToBranch');
 
-            var stockTransferId = @stockTransferId;
-            if(stockTransferId == 0) {
+            var stockTransferId = getParam("StockTransferId");
+            if (document.location.search.length == 0) {
                 getBranchesForComboBox();
                 getUsersForComboBox();
 
-                if(document.getElementById('stockTransfer_STNumber').value == 0) {
+                if (document.getElementById('stockTransfer_STNumber').value == 0) {
                     document.getElementById('stockTransfer_STNumber_Display').value = "0000000001";
                 }
 
@@ -1361,19 +1290,15 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        if (Results.length > 0) {
-                            stockTransfers.push({
-                                Id: Results.Id,
-                                STNumber: Results.STNumber
-                            });
-                        }
-                        var ST_Number = parseInt(Results.STNumber);
-                        var ST_Number_PlusOne = 0000000001;
-                        var ST_Num_Results = ST_Number + ST_Number_PlusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+                        if (Results != null) {
+                            var ST_Number = parseInt(Results.STNumber);
+                            var ST_Number_PlusOne = 0000000001;
+                            var ST_Num_Results = ST_Number + ST_Number_PlusOne;
+                            //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
 
-                        document.getElementById('stockTransfer_STNumber').value = zerofill(ST_Num_Results, 10);
-                        document.getElementById('stockTransfer_STNumber_Display').value = zerofill(ST_Num_Results, 10);
+                            document.getElementById('stockTransfer_STNumber').value = zerofill(ST_Num_Results, 10);
+                            document.getElementById('stockTransfer_STNumber_Display').value = zerofill(ST_Num_Results, 10);
+                        }
                     }
                 });
             }
@@ -1408,91 +1333,92 @@
         // ============================
         function getItem() {
             var items = new wijmo.collections.ObservableArray;
-            var STId = @stockTransferId;
-            $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listStockTransferItemBySTId/' + STId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        var stockTransfers = new wijmo.collections.ObservableArray;
-                        var stockTransferId = @stockTransferId;
-                        $.ajax({
-                            url: '/api/stockTransfer/' + stockTransferId,
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (StockTransferResults) {
-                                if (StockTransferResults.length > 0) {
-                                    stockTransfers.push({
-                                        Id: StockTransferResults.Id,
-                                        IsLocked: StockTransferResults.IsLocked
-                                    });
-                                }
+            var stockTransferId = getParam("StockTransferId");
+            if (document.location.search.length > 0) {
+                $.ajax({
+                    url: '/api/listStockTransferItemBySTId/' + stockTransferId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        $('#loadingModal').modal('hide');
+                        if (Results.length > 0) {
+                            var stockTransfers = new wijmo.collections.ObservableArray;
+                            var stockTransferId = getParam("StockTransferId");
+                            $.ajax({
+                                url: '/api/stockTransfer/' + stockTransferId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (StockTransferResults) {
+                                    if (StockTransferResults.length > 0) {
+                                        stockTransfers.push({
+                                            Id: StockTransferResults.Id,
+                                            IsLocked: StockTransferResults.IsLocked
+                                        });
+                                    }
 
-                                if(StockTransferResults.IsLocked == true) {
-                                    for (i = 0; i < Results.length; i++) {
-                                        items.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockTransferItem_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockTransferItem_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            STId: Results[i]["STId"],
-                                            ST: Results[i]["ST"],
-                                            ItemId: Results[i]["ItemId"],
-                                            ItemCode: Results[i]["ItemCode"],
-                                            Item: Results[i]["Item"],
-                                            ItemInventoryId: Results[i]["ItemInventoryId"],
-                                            ItemInventory: Results[i]["ItemInventory"],
-                                            Particulars: Results[i]["Particulars"],
-                                            UnitId: Results[i]["UnitId"],
-                                            Unit: Results[i]["Unit"],
-                                            Quantity: Results[i]["Quantity"],
-                                            Cost: Results[i]["Cost"],
-                                            Amount: Results[i]["Amount"],
-                                            BaseUnitId: Results[i]["BaseUnitId"],
-                                            BaseUnit: Results[i]["BaseUnit"],
-                                            BaseQuantity: Results[i]["BaseQuantity"],
-                                            BaseCost: Results[i]["BaseCost"],
-                                        });
-                                    }
-                                } else {
-                                    for (i = 0; i < Results.length; i++) {
-                                        items.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockTransferItem_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockTransferItem_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            STId: Results[i]["STId"],
-                                            ST: Results[i]["ST"],
-                                            ItemId: Results[i]["ItemId"],
-                                            ItemCode: Results[i]["ItemCode"],
-                                            Item: Results[i]["Item"],
-                                            ItemInventoryId: Results[i]["ItemInventoryId"],
-                                            ItemInventory: Results[i]["ItemInventory"],
-                                            Particulars: Results[i]["Particulars"],
-                                            UnitId: Results[i]["UnitId"],
-                                            Unit: Results[i]["Unit"],
-                                            Quantity: Results[i]["Quantity"],
-                                            Cost: Results[i]["Cost"],
-                                            Amount: Results[i]["Amount"],
-                                            BaseUnitId: Results[i]["BaseUnitId"],
-                                            BaseUnit: Results[i]["BaseUnit"],
-                                            BaseQuantity: Results[i]["BaseQuantity"],
-                                            BaseCost: Results[i]["BaseCost"],
-                                        });
+                                    if (StockTransferResults.IsLocked == true) {
+                                        for (i = 0; i < Results.length; i++) {
+                                            items.push({
+                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockTransferItem_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockTransferItem_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                                Id: Results[i]["Id"],
+                                                STId: Results[i]["STId"],
+                                                ST: Results[i]["ST"],
+                                                ItemId: Results[i]["ItemId"],
+                                                ItemCode: Results[i]["ItemCode"],
+                                                Item: Results[i]["Item"],
+                                                ItemInventoryId: Results[i]["ItemInventoryId"],
+                                                ItemInventory: Results[i]["ItemInventory"],
+                                                Particulars: Results[i]["Particulars"],
+                                                UnitId: Results[i]["UnitId"],
+                                                Unit: Results[i]["Unit"],
+                                                Quantity: Results[i]["Quantity"],
+                                                Cost: Results[i]["Cost"],
+                                                Amount: Results[i]["Amount"],
+                                                BaseUnitId: Results[i]["BaseUnitId"],
+                                                BaseUnit: Results[i]["BaseUnit"],
+                                                BaseQuantity: Results[i]["BaseQuantity"],
+                                                BaseCost: Results[i]["BaseCost"],
+                                            });
+                                        }
+                                    } else {
+                                        for (i = 0; i < Results.length; i++) {
+                                            items.push({
+                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockTransferItem_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockTransferItem_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                                Id: Results[i]["Id"],
+                                                STId: Results[i]["STId"],
+                                                ST: Results[i]["ST"],
+                                                ItemId: Results[i]["ItemId"],
+                                                ItemCode: Results[i]["ItemCode"],
+                                                Item: Results[i]["Item"],
+                                                ItemInventoryId: Results[i]["ItemInventoryId"],
+                                                ItemInventory: Results[i]["ItemInventory"],
+                                                Particulars: Results[i]["Particulars"],
+                                                UnitId: Results[i]["UnitId"],
+                                                Unit: Results[i]["Unit"],
+                                                Quantity: Results[i]["Quantity"],
+                                                Cost: Results[i]["Cost"],
+                                                Amount: Results[i]["Amount"],
+                                                BaseUnitId: Results[i]["BaseUnitId"],
+                                                BaseUnit: Results[i]["BaseUnit"],
+                                                BaseQuantity: Results[i]["BaseQuantity"],
+                                                BaseCost: Results[i]["BaseCost"],
+                                            });
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }
             return items;
         }
 
@@ -1501,7 +1427,7 @@
         // ======================================
         function getArticleItemForManualCodeAndComponent() {
             var articleInventories = new wijmo.collections.ObservableArray();
-            var branchId =  document.getElementById('stockTransfer_Branch_data').value;
+            var branchId = document.getElementById('stockTransfer_Branch_data').value;
 
             $.ajax({
                 url: '/api/listArticleInventoryBybranchId/' + branchId,
@@ -1662,8 +1588,8 @@
                     var stockTransfer_Quantity = document.getElementById('stockTransferItem_Quantity').value;
                     var stockTransfer_Cost = document.getElementById('stockTransferItem_Cost').value;
 
-                    document.getElementById('stockTransferItem_Amount').value = Math.round(( stockTransfer_Quantity * stockTransfer_Cost ) * 100 ) / 100;
-                    if(this.value == 0) {
+                    document.getElementById('stockTransferItem_Amount').value = Math.round((stockTransfer_Quantity * stockTransfer_Cost) * 100) / 100;
+                    if (this.value == 0) {
                         document.getElementById('stockTransferItem_BUCCost').value = 0;
                     } else {
                         document.getElementById('stockTransferItem_BUCCost').value = stockTransfer_Cost;
@@ -1743,8 +1669,8 @@
                     var stockTransfer_Quantity = document.getElementById('stockTransferItem_Quantity').value;
                     var stockTransfer_Cost = document.getElementById('stockTransferItem_Cost').value;
 
-                    document.getElementById('stockTransferItem_Amount').value = Math.round(( stockTransfer_Quantity * stockTransfer_Cost ) * 100 ) / 100;
-                    if(this.value == 0) {
+                    document.getElementById('stockTransferItem_Amount').value = Math.round((stockTransfer_Quantity * stockTransfer_Cost) * 100) / 100;
+                    if (this.value == 0) {
                         document.getElementById('stockTransferItem_BUCCost').value = 0;
                     } else {
                         document.getElementById('stockTransferItem_BUCCost').value = stockTransfer_Cost;
@@ -1792,8 +1718,8 @@
                     var stockTransfer_Quantity = document.getElementById('stockTransferItem_Quantity').value;
                     var stockTransfer_Cost = document.getElementById('stockTransferItem_Cost').value;
 
-                    document.getElementById('stockTransferItem_Amount').value = Math.round(( stockTransfer_Quantity * stockTransfer_Cost ) * 100 ) / 100;
-                    if(this.value == 0) {
+                    document.getElementById('stockTransferItem_Amount').value = Math.round((stockTransfer_Quantity * stockTransfer_Cost) * 100) / 100;
+                    if (this.value == 0) {
                         document.getElementById('stockTransferItem_BUCCost').value = 0;
                     } else {
                         document.getElementById('stockTransferItem_BUCCost').value = stockTransfer_Cost;
@@ -2002,21 +1928,6 @@
                         $('#deleteStockTransferItemsConfirm').modal('hide');
 
                         items = new wijmo.collections.CollectionView(getItem());
-                        items.canFilter = true;
-                        items.pageSize = 15;
-
-                        var filterTextItem = '';
-                        $('#InputFilterItem').keyup(function () {
-                            filterTextItem = this.value.toLowerCase();
-                            items.refresh();
-                        });
-                        items.filter = function (item) {
-                            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
-                        }
-                        items.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsItem();
-                        });
-
                         // Flex Grid for Items
                         itemGrid.itemsSource = items;
                         itemGrid.trackChanges = true;
@@ -2043,10 +1954,10 @@
         // ========================
         function cmdStockTransferItemSaveButton_OnClick() {
             var stockTransferItemObject = new Object();
-            var STId = @stockTransferId;
+            var stockTransferId = getParam("StockTransferId");
 
             var stockTransferItemId = document.getElementById('stockTransferItem_Id').value;
-            stockTransferItemObject.STId = STId;
+            stockTransferItemObject.STId = stockTransferId;
             stockTransferItemObject.ItemId = document.getElementById('stockTransferItem_ItemId_data').value;
             stockTransferItemObject.ItemInventoryId = document.getElementById('stockTransferItem_ItemInventoryCode_data').value;
             stockTransferItemObject.Particulars = document.getElementById('stockTransferItem_Particulars').value;
@@ -2059,7 +1970,7 @@
             stockTransferItemObject.BaseCost = document.getElementById('stockTransferItem_BUCCost').value;
             var stockTransferItemData = JSON.stringify(stockTransferItemObject);
 
-            if( document.getElementById('stockTransferItem_ItemId_data').value == '') {
+            if (document.getElementById('stockTransferItem_ItemId_data').value == '') {
                 document.getElementById("stockTransferItem_ItemCode").style.border = "1px solid red";
                 document.getElementById("stockTransferItem_ItemDescription").style.border = "1px solid red";
             } else {
@@ -2067,19 +1978,19 @@
                 document.getElementById("stockTransferItem_ItemDescription").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransferItem_ItemInventoryCode_data').value == '') {
+            if (document.getElementById('stockTransferItem_ItemInventoryCode_data').value == '') {
                 document.getElementById("stockTransferItem_ItemInventoryCode").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransferItem_ItemInventoryCode").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransferItem_Unit_data').value == '') {
+            if (document.getElementById('stockTransferItem_Unit_data').value == '') {
                 document.getElementById("stockTransferItem_Unit").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransferItem_Unit").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('stockTransferItem_BUCUnit_data').value == '') {
+            if (document.getElementById('stockTransferItem_BUCUnit_data').value == '') {
                 document.getElementById("stockTransferItem_BUCUnit").style.border = "1px solid red";
             } else {
                 document.getElementById("stockTransferItem_BUCUnit").style.border = "1px solid #C8C8C8";
@@ -2122,20 +2033,6 @@
                                 $('#stockTransferItemsEdit').modal('hide');
 
                                 items = new wijmo.collections.CollectionView(getItem());
-                                items.canFilter = true;
-                                items.pageSize = 15;
-
-                                var filterTextItem = '';
-                                $('#InputFilterItem').keyup(function () {
-                                    filterTextItem = this.value.toLowerCase();
-                                    items.refresh();
-                                });
-                                items.filter = function (item) {
-                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
-                                }
-                                items.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsItem();
-                                });
 
                                 // Flex Grid for Items
                                 itemGrid.itemsSource = items;
@@ -2171,20 +2068,6 @@
                                 $('#stockTransferItemsEdit').modal('hide');
 
                                 items = new wijmo.collections.CollectionView(getItem());
-                                items.canFilter = true;
-                                items.pageSize = 15;
-
-                                var filterTextItem = '';
-                                $('#InputFilterItem').keyup(function () {
-                                    filterTextItem = this.value.toLowerCase();
-                                    items.refresh();
-                                });
-                                items.filter = function (item) {
-                                    return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
-                                }
-                                items.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsItem();
-                                });
 
                                 // Flex Grid for Items
                                 itemGrid.itemsSource = items;
@@ -2206,36 +2089,6 @@
                     });
                 }
             }
-        }
-
-
-
-        // ============================
-        // Navigation Buttons for Items
-        // ============================
-        function updateNavigateButtonsItem() {
-            if (items.pageSize <= 0) {
-                document.getElementById('navigationPageGridItem').style.display = 'none';
-                return;
-            }
-            document.getElementById('navigationPageGridItem').style.display = 'block';
-            if (items.pageIndex === 0) {
-                btnFirstPageGridItem.setAttribute('disabled', 'disabled');
-                btnPreviousPageGridItem.setAttribute('disabled', 'disabled');
-                btnNextPageGridItem.removeAttribute('disabled');
-                btnLastPageGridItem.removeAttribute('disabled');
-            } else if (items.pageIndex === (items.pageCount - 1)) {
-                btnFirstPageGridItem.removeAttribute('disabled');
-                btnPreviousPageGridItem.removeAttribute('disabled');
-                btnLastPageGridItem.setAttribute('disabled', 'disabled');
-                btnNextPageGridItem.setAttribute('disabled', 'disabled');
-            } else {
-                btnFirstPageGridItem.removeAttribute('disabled');
-                btnPreviousPageGridItem.removeAttribute('disabled');
-                btnNextPageGridItem.removeAttribute('disabled');
-                btnLastPageGridItem.removeAttribute('disabled');
-            }
-            btnCurrentPageGridItem.innerHTML = (items.pageIndex + 1) + ' / ' + items.pageCount;
         }
 
         // ======
@@ -2342,14 +2195,14 @@
                 }
             });
 
-            $('#stockTransferItem_Quantity').keyup(function() {
+            $('#stockTransferItem_Quantity').keyup(function () {
                 document.getElementById('stockTransferItem_BUCQuantity').value = this.value;
 
                 var stockTransfer_Quantity = document.getElementById('stockTransferItem_Quantity').value;
                 var stockTransfer_Cost = document.getElementById('stockTransferItem_Cost').value;
 
-                document.getElementById('stockTransferItem_Amount').value = Math.round(( stockTransfer_Quantity * stockTransfer_Cost ) * 100 ) / 100;
-                if(this.value == 0) {
+                document.getElementById('stockTransferItem_Amount').value = Math.round((stockTransfer_Quantity * stockTransfer_Cost) * 100) / 100;
+                if (this.value == 0) {
                     document.getElementById('stockTransferItem_BUCCost').value = 0;
                 } else {
                     document.getElementById('stockTransferItem_BUCCost').value = stockTransfer_Cost;
@@ -2368,20 +2221,6 @@
             cboStockTransferBaseUnit = new wijmo.input.ComboBox('#stockTransferItem_BUCUnit');
 
             items = new wijmo.collections.CollectionView(getItem());
-            items.canFilter = true;
-            items.pageSize = 15;
-
-            var filterTextItem = '';
-            $('#InputFilterItem').keyup(function () {
-                filterTextItem = this.value.toLowerCase();
-                items.refresh();
-            });
-            items.filter = function (item) {
-                return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
-            }
-            items.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsItem();
-            });
 
             // Flex Grid for Items
             itemGrid = new wijmo.grid.FlexGrid('#ItemGrid');
@@ -2406,71 +2245,71 @@
                                 "isContentHtml": true
                             },
                             {
-                                "header": "Item Code",
+                                "header": "Code",
                                 "binding": "ItemCode",
                                 "allowSorting": true,
-                                "width": 150
+                                "width": 60
                             },
                             {
-                                "header": "Item Description",
+                                "header": "Item",
                                 "binding": "Item",
                                 "allowSorting": true,
-                                "width": 350
+                                "width": 140
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": 300
+                                "width": 150
                             },
                             {
-                                "header": "Item Inventory Code",
+                                "header": "Inventory Code",
                                 "binding": "ItemInventory",
                                 "allowSorting": true,
-                                "width": 200
+                                "width": 160
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "Quantity",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 90
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 100
                             },
                             {
                                 "header": "Cost",
                                 "binding": "Cost",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 100
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 100
                             },
                             {
                                 "header": "Unit",
                                 "binding": "BaseUnit",
                                 "allowSorting": true,
-                                "width": 200
+                                "width": 100
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "BaseQuantity",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 90
                             },
                             {
                                 "header": "Cost",
                                 "binding": "BaseCost",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 100
                             },
                 ],
                 autoGenerateColumns: false,
@@ -2496,16 +2335,16 @@
             itemGrid.columnHeaders.setCellData(0, 1, 'Delete');
 
             itemGrid.columnHeaders.columns[2].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 2, 'Item Code');
+            itemGrid.columnHeaders.setCellData(0, 2, 'Code');
 
             itemGrid.columnHeaders.columns[3].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 3, 'Item Description');
+            itemGrid.columnHeaders.setCellData(0, 3, 'Item');
 
             itemGrid.columnHeaders.columns[4].allowMerging = true;
             itemGrid.columnHeaders.setCellData(0, 4, 'Particulars');
 
             itemGrid.columnHeaders.columns[5].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 5, 'Item Inventory Code');
+            itemGrid.columnHeaders.setCellData(0, 5, 'Inventory Code');
 
             itemGrid.columnHeaders.columns[6].allowMerging = true;
             itemGrid.columnHeaders.setCellData(0, 6, 'Quantity');
@@ -2523,31 +2362,6 @@
                 itemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
             }
 
-            //Navigation button for Items
-            btnFirstPageGridItem = document.getElementById('btnMoveToFirstPageGridItem');
-            btnPreviousPageGridItem = document.getElementById('btnMoveToPreviousPageGridItem');
-            btnNextPageGridItem = document.getElementById('btnMoveToNextPageGridItem');
-            btnLastPageGridItem = document.getElementById('btnMoveToLastPageGridItem');
-            btnCurrentPageGridItem = document.getElementById('btnCurrentPageGridItem');
-
-            updateNavigateButtonsItem();
-
-            btnFirstPageGridItem.addEventListener('click', function () {
-                items.moveToFirstPage();
-                updateNavigateButtonsItem();
-            });
-            btnPreviousPageGridItem.addEventListener('click', function () {
-                items.moveToPreviousPage();
-                updateNavigateButtonsItem();
-            });
-            btnNextPageGridItem.addEventListener('click', function () {
-                items.moveToNextPage();
-                updateNavigateButtonsItem();
-            });
-            btnLastPageGridItem.addEventListener('click', function () {
-                items.moveToLastPage();
-                updateNavigateButtonsItem();
-            });
         }
     </script>
 
@@ -2567,52 +2381,56 @@
         var btnLastPageGridInventoryEntry;
         var btnCurrentPageGridInventoryEntry;
 
-        // ============================
-        // GET Contact Information List
-        // ============================
+        // ==================
+        // GET Inventory List
+        // ==================
         function getInventoryEntries() {
             var inventoryEntries = new wijmo.collections.ObservableArray;
-            var STId = @stockTransferId;
+            var stockTransferId = getParam("StockTransferId");
             $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listInventoryBySTId/' + STId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            inventoryEntries.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                InventoryDate: Results[i]["InventoryDate"],
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                ArticleInventoryId: Results[i]["ArticleInventoryId"],
-                                RRId: Results[i]["RRId"],
-                                SIId: Results[i]["SIId"],
-                                INId: Results[i]["INId"],
-                                OTId: Results[i]["OTId"],
-                                STId: Results[i]["STId"],
-                                QuantityIn: Results[i]["QuantityIn"],
-                                Quantity: Results[i]["Quantity"],
-                                QuantityOut: Results[i]["QuantityOut"],
-                                Amount: Results[i]["Amount"],
-                                Particulars: Results[i]["Particulars"],
-                                Code: Results[i]["Code"],
-                                Unit: Results[i]["Unit"]
-                            });
+            if(document.location.search.length > 0) {
+                $.ajax({
+                    url: '/api/listInventoryBySTId/' + stockTransferId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        $('#loadingModal').modal('hide');
+                        if (Results.length > 0) {
+                            for (i = 0; i < Results.length; i++) {
+                                inventoryEntries.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    BranchId: Results[i]["BranchId"],
+                                    Branch: Results[i]["Branch"],
+                                    InventoryDate: Results[i]["InventoryDate"],
+                                    ArticleId: Results[i]["ArticleId"],
+                                    Article: Results[i]["Article"],
+                                    ArticleInventoryId: Results[i]["ArticleInventoryId"],
+                                    RRId: Results[i]["RRId"],
+                                    SIId: Results[i]["SIId"],
+                                    INId: Results[i]["INId"],
+                                    OTId: Results[i]["OTId"],
+                                    STId: Results[i]["STId"],
+                                    QuantityIn: Results[i]["QuantityIn"],
+                                    Quantity: Results[i]["Quantity"],
+                                    QuantityOut: Results[i]["QuantityOut"],
+                                    Amount: Results[i]["Amount"],
+                                    Particulars: Results[i]["Particulars"],
+                                    Code: Results[i]["Code"],
+                                    Unit: Results[i]["Unit"]
+                                });
+                            }
                         }
                     }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            } else {
+                $('#loadingModal').modal('hide');
+            }
             return inventoryEntries;
         }
 
@@ -2627,56 +2445,11 @@
             document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
         }
 
-        // ========================================
-        // Navigation Buttons for Inventory Entries
-        // ========================================
-        function updateNavigateButtonsInventoryEntry() {
-            if (inventoryEntries.pageSize <= 0) {
-                document.getElementById('navigationPageGridInventoryEntry').style.display = 'none';
-                return;
-            }
-            document.getElementById('navigationPageGridInventoryEntry').style.display = 'block';
-            if (inventoryEntries.pageIndex === 0) {
-                btnFirstPageGridInventoryEntry.setAttribute('disabled', 'disabled');
-                btnPreviousPageGridInventoryEntry.setAttribute('disabled', 'disabled');
-                btnNextPageGridInventoryEntry.removeAttribute('disabled');
-                btnLastPageGridInventoryEntry.removeAttribute('disabled');
-            } else if (inventoryEntries.pageIndex === (inventoryEntries.pageCount - 1)) {
-                btnFirstPageGridInventoryEntry.removeAttribute('disabled');
-                btnPreviousPageGridInventoryEntry.removeAttribute('disabled');
-                btnLastPageGridInventoryEntry.setAttribute('disabled', 'disabled');
-                btnNextPageGridInventoryEntry.setAttribute('disabled', 'disabled');
-            } else {
-                btnFirstPageGridInventoryEntry.removeAttribute('disabled');
-                btnPreviousPageGridInventoryEntry.removeAttribute('disabled');
-                btnNextPageGridInventoryEntry.removeAttribute('disabled');
-                btnLastPageGridInventoryEntry.removeAttribute('disabled');
-            }
-            btnCurrentPageGridInventoryEntry.innerHTML = (inventoryEntries.pageIndex + 1) + ' / ' + inventoryEntries.pageCount;
-        }
-
         // ==================================
         // On Page Load for Inventory Entries
         // ==================================
         function inventoryEntryTab() {
             inventoryEntries = new wijmo.collections.CollectionView(getInventoryEntries());
-            inventoryEntries.canFilter = true;
-            inventoryEntries.pageSize = 15;
-
-            var filterTextInventoryEntry = '';
-            $('#InputFilterInventoryEntry').keyup(function () {
-                filterTextInventoryEntry = this.value.toLowerCase();
-                inventoryEntries.refresh();
-            });
-            inventoryEntries.filter = function (item) {
-                return !filterTextInventoryEntry || (item.Article.toLowerCase().indexOf(filterTextInventoryEntry) > -1);
-            }
-            inventoryEntries.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsInventoryEntry();
-            });
-            inventoryEntries.currentChanged.addHandler(function (sender, args) {
-                updateDetailsInventoryEntry();
-            });
 
             // Flex Grid for Inventory Entries
             inventoryEntryGrid = new wijmo.grid.FlexGrid('#InventoryEntryGrid');
@@ -2686,45 +2459,45 @@
                                 "header": "Date",
                                 "binding": "InventoryDate",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": 80,
                             },
                             {
                                 "header": "Branch",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": 250,
+                                "width": 150,
                             },
                             {
                                 "header": "Item",
                                 "binding": "Article",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": 300,
+                                "width": 165,
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": 400,
+                                "width": 170,
                             },
                             {
-                                "header": "Code",
+                                "header": "Inventory Code",
                                 "binding": "Code",
                                 "allowSorting": true,
-                                "width": 200,
+                                "width": 160,
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "Quantity",
                                 "allowSorting": true,
-                                "width": 150,
+                                "width": 110,
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": 118,
                             },
                             {
                                 "header": "Amount",
@@ -2742,32 +2515,6 @@
             });
 
             inventoryEntryGrid.trackChanges = true;
-
-            //Navigation button for Inventory Entries
-            btnFirstPageGridInventoryEntry = document.getElementById('btnMoveToFirstPageGridInventoryEntry');
-            btnPreviousPageGridInventoryEntry = document.getElementById('btnMoveToPreviousPageGridInventoryEntry');
-            btnNextPageGridInventoryEntry = document.getElementById('btnMoveToNextPageGridInventoryEntry');
-            btnLastPageGridInventoryEntry = document.getElementById('btnMoveToLastPageGridInventoryEntry');
-            btnCurrentPageGridInventoryEntry = document.getElementById('btnCurrentPageGridInventoryEntry');
-
-            updateNavigateButtonsInventoryEntry();
-
-            btnFirstPageGridInventoryEntry.addEventListener('click', function () {
-                inventoryEntries.moveToFirstPage();
-                updateNavigateButtonsInventoryEntry();
-            });
-            btnPreviousPageGridInventoryEntry.addEventListener('click', function () {
-                inventoryEntries.moveToPreviousPage();
-                updateNavigateButtonsInventoryEntry();
-            });
-            btnNextPageGridInventoryEntry.addEventListener('click', function () {
-                inventoryEntries.moveToNextPage();
-                updateNavigateButtonsInventoryEntry();
-            });
-            btnLastPageGridInventoryEntry.addEventListener('click', function () {
-                inventoryEntries.moveToLastPage();
-                updateNavigateButtonsInventoryEntry();
-            });
         }
     </script>
 
@@ -2789,10 +2536,10 @@
         // ===========
         function getJournalListForStockTransfer() {
             var journals = new wijmo.collections.ObservableArray;
-            var STId = @stockTransferId;
+            var stockTransferId = getParam("StockTransferId");
             //$('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listJournalBySTId/' + STId,
+                url: '/api/listJournalBySTId/' + stockTransferId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -2889,7 +2636,7 @@
 
             $("#loadingJournalGridList").show();
             $("#footerModalJournalNavigationButtons").hide();
-            setTimeout(function() {
+            setTimeout(function () {
                 $("#loadingJournalGridList").hide();
                 $("#footerModalJournalNavigationButtons").show();
                 // Flex Grid
