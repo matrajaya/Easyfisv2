@@ -198,15 +198,23 @@
                         </div>
                     </form>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12" align="right">
-                        <button type="submit" class="btn btn-primary btn-sm" id="btnAddDisbursementLine" onclick="cmdAddDisbursementLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                    </div>
-                </div>
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#DisbursementLine" id="itemTabId">Disbursement Line</a></li>
+                </ul>
                 <br />
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div id="DisbursementLineGrid" class="grid"></div>
+                <div class="tab-content">
+                    <div id="DisbursementLine" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-lg-12" align="right">
+                                <button type="submit" class="btn btn-primary btn-sm" id="btnAddDisbursementLine" onclick="cmdAddDisbursementLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="DisbursementLineGrid" class="grid"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

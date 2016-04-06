@@ -147,15 +147,23 @@
                         </div>
                     </form>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                    </div>
-                </div>
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#CollectionLine" id="itemTabId">Collection Line</a></li>
+                </ul>
                 <br />
-                <div class="row" align="left">
-                    <div class="col-lg-12">
-                        <div id="CollectionLineGrid" class="grid" align="left"></div>
+                <div class="tab-content">
+                    <div id="CollectionLine" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <button type="submit" class="btn btn-primary pull-right btn-sm" id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="CollectionLineGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

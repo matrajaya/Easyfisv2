@@ -133,21 +133,36 @@
                         </div>
                     </form>
                 </div>
-                <!--  List -->
-                <div id="JournalVoucherLineList">
-                    <div class="row">
-                        <div class="col-lg-12" align="right">
-                            <button class="btn btn-primary btn-sm pull-right" id="cmdJournalVoucherLineAddJournalVoucherLineButton" onclick="cmdJournalVoucherLineAddJournalVoucherLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#JournalVoucherLineList" id="branchList">Journal Voucher Line</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <div id="JournalVoucherLineList" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-lg-12" align="right">
+                                <button class="btn btn-primary btn-sm pull-right" id="cmdJournalVoucherLineAddJournalVoucherLineButton" onclick="cmdJournalVoucherLineAddJournalVoucherLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
                         </div>
-                    </div>
-                    <br />
-                    <div class="row" align="left">
-                        <div class="col-lg-12">
-                            <div id="JournalVoucherLineGrid" class="grid" align="left"></div>
-                            <br /><br />
-                            <label>Total Debit: </label> <span id="totalDebit">0</span>
-                            <br />
-                            <label>Total Credit: </label> <span id="totalCredit">0</span>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="JournalVoucherLineGrid" class="grid" align="left"></div>
+                                <br />
+                                <br />
+                                <div align="right">
+                                    <table>
+                                        <tr>
+                                            <td><b>Total Debit: </b></td>
+                                            <td style="padding-left: 15px;"><span id="totalDebit">0</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Total Credit: </b></td>
+                                            <td style ="padding-left: 15px;"><span id="totalCredit">0</span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2298,49 +2313,49 @@
                                 "header": "Branch",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": 220
+                                "width": 130
                             },
                             {
                                 "header": "Account",
                                 "binding": "Account",
                                 "allowSorting": true,
-                                "width": 250
+                                "width": 145
                             },
                             {
                                 "header": "Article",
                                 "binding": "Article",
                                 "allowSorting": true,
-                                "width": 350
+                                "width": 125
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": 300
+                                "width": 155
                             },
                             {
                                 "header": "Debit",
                                 "binding": "DebitAmount",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 100
                             },
                             {
                                 "header": "Credit",
                                 "binding": "CreditAmount",
                                 "allowSorting": true,
-                                "width": 130
+                                "width": 100
                             },
                             {
                                 "header": "RR No.",
                                 "binding": "APRR",
                                 "allowSorting": true,
-                                "width": 200
+                                "width": 110
                             },
                             {
                                 "header": "SI No.",
                                 "binding": "ARSI",
                                 "allowSorting": true,
-                                "width": 200
+                                "width": 110
                             },
                             {
                                 "header": "Clear",
