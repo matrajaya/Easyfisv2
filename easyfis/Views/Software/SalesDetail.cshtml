@@ -1838,6 +1838,33 @@
 
                 getTaxTyoeValues(ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
             }
+
+            var articleId =  document.getElementById('saleItem_ItemId_data').value;
+            var branchId = document.getElementById('SI_Branch_data').value;
+            $.ajax({
+                url: '/api/getArticleInventoryByArticleId/' + branchId + '/' + articleId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results == null) {
+                        document.getElementById('saleItem_InventoryCode_data').value = "";
+                        document.getElementById('saleItem_InventoryCode_selectedValue').value = "";
+
+
+                    } else {
+                        document.getElementById('saleItem_InventoryCode_data').value = results.Id;
+                        document.getElementById('saleItem_InventoryCode_selectedValue').value = results.InventoryCode;
+                        
+                        console.log(results.Id);
+                        console.log(results.InventoryCode);
+                    }
+
+                    getItemInventoryCodeForComboBox();
+                }
+            });
+
         }
 
         // ====================

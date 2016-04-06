@@ -239,24 +239,26 @@
                             <div class="col-md-4"></div>
                         </div>
                         <hr />
-                        <div class="row" id="seacrhIdinPOStatus">
-                            <div class="col-lg-6">
-                                <label id="POItem_Title">Purchase Order Items</label>
+                        <div class="POStatusContent">
+                            <div class="row" id="seacrhIdinPOStatus">
+                                <div class="col-lg-6">
+                                    <label id="POItem_Title">Purchase Order Items</label>
+                                </div>
+                                <div class="col-lg-6" align="right">
+                                    <button class="btn btn-primary btn-sm" id="cmdApplyPOStatusButton" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply all</button>
+                                </div>
                             </div>
-                            <div class="col-lg-6" align="right">
-                                <button class="btn btn-primary btn-sm" id="cmdApplyPOStatusButton" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply all</button>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="POStatusGrid" class="grid" align="left"></div>
-                                <center>
-                                    <h4>
-                                        <span id="loadingPOStatusGridList"></span>
-                                        <span id="loadingPOItemsGridList"></span>
-                                    </h4>
-                                </center>
+                            <br />
+                            <div class="row" align="left">
+                                <div class="col-lg-12">
+                                    <div id="POStatusGrid" class="grid" align="left"></div>
+                                    <center>
+                                        <h4>
+                                            <span id="loadingPOStatusGridList"></span>
+                                            <span id="loadingPOItemsGridList"></span>
+                                        </h4>
+                                    </center>
+                                </div>
                             </div>
                         </div>
                         <br />
@@ -1744,7 +1746,6 @@
                     $('#seacrhIdinPOStatus').hide();
 
                     $('#loadingPOItemsGridList').show();
-                    document.getElementById('InputFilterPOItemsPOStatus').value = "";
 
                     setTimeout(function () {
                         POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
@@ -1834,7 +1835,7 @@
                                 "header": "Item",
                                 "binding": "Item",
                                 "allowSorting": true,
-                                "width": 156
+                                "width": "2*"
                             },
                             {
                                 "header": "Unit",
