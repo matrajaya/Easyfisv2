@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -28,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Purchase Order
                     </div>
                 </div>
             </div>
@@ -52,8 +49,8 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="@Url.Action("PurchaseOrderDetail", "Software", new { POId = 0, BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</a>
+                            <button class="btn btn-primary btn-sm" onclick="btnAddPurchaseOrder_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-danger btn-sm" onclick="btnClosePurchaseOrder_OnClick()"><i class=" fa fa-times"></i> Close</button>
                         </div>
                     </div>
                     <br />
@@ -269,14 +266,46 @@
             });
         }
 
+        // =========================
+        // Purchase Order Add Button
+        // =========================
+        function btnAddPurchaseOrder_OnClick() {
+            window.location = '/Software/PurchaseOrderDetail';
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
         // ==============
         // PO Edit Button
         // ==============
         function POEditButton_OnClick() {
             POs.editItem(POs.currentItem);
             var PO = POs.currentEditItem;
-            var id = PO.Id;
-            window.location = '/Software/PurchaseOrderDetail?POId=' + id + '&BranchId=' + @branchId;
+            var PurchaseOrderId = PO.Id;
+            window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + PurchaseOrderId;
+        }
+
+        // ===========================
+        // Purchase Order Close Button
+        // ===========================
+        function btnClosePurchaseOrder_OnClick() {
+            window.location = '/Software';
         }
 
         // ================
@@ -394,43 +423,6 @@
         // On Load Page
         // ============
         $(document).ready(function () {
-            $.ajax({
-                url: '/api/listBranchById/' + @branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        branches.push({
-                            BranchId: results.Id,
-                            BranchBranch: results.Branch
-                        });
-                    }
-                    //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
-                }
-            });
-
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Purchase Order';
-
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             var PODateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [ PODateFilter_Date.getMonth()+1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
 

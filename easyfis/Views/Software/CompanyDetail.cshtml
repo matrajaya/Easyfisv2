@@ -1,8 +1,4 @@
-﻿@{
-    var CompanyId = Request.QueryString["CompanyId"];
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -29,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("Company", "Software")" class="currentPageLinkCustom">Company</a> > Company Detail
                     </div>
                 </div>
             </div>
@@ -39,8 +35,8 @@
                         <button class="btn btn-primary btn-sm" id="cmdSaveCompany" onclick="cmdCompanySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdSaveUpdateCompany" onclick="cmdCompanySaveUpdateButton_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditCompany" onclick="cmdCompanyEditButton_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
-                        <button onclick="window.location.href ='@Url.Action("CompanyPDF", "Software", new { CompanyId = CompanyId, BranchId = branchId })'" cla class="btn btn-primary btn-sm" id="cmdPrintCompany"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("Company", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</button>
+                        <button onclick="window.location.href ='@Url.Action("CompanyPDF", "Software")'" cla class="btn btn-primary btn-sm" id="cmdPrintCompany"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("Company", "Software")'" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -94,47 +90,17 @@
                     </form>
                 </div>
 
-                <br />
                 <!-- Branch List -->
                 <div id="branchList">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h4>Branch List</h4>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search Branch">
-                            </div>
-                        </div>
-                        <div class="col-lg-8">
                             <button type="submit" class="btn btn-primary pull-right btn-sm" id="cmdBranchAddBranchButton" onclick="cmdbranchAddBranchButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                         </div>
                     </div>
                     <br />
                     <div class="row" align="left">
                         <div class="col-lg-12">
-                            <div id="BranchGrid" class="grid" align="left"></div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
-                                <span class="glyphicon glyphicon-fast-backward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
-                                <span class="glyphicon glyphicon-step-backward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
-                                <span class="glyphicon glyphicon-step-forward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
-                                <span class="glyphicon glyphicon-fast-forward"></span>
-                            </button>
+                            <div id="BranchGrid" class="grid"></div>
                         </div>
                     </div>
                 </div>
@@ -241,6 +207,38 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
+        // =======================
+        // Get URL Parameter Value
+        // =======================
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
         // ================
         // GET Company List
         // ================
@@ -269,7 +267,7 @@
                             UpdatedDateTime: Results.UpdatedDateTime
                         });
                     }
-                    window.location = '/Software/CompanyDetail?CompanyId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.location = '/Software/CompanyDetail?CompanyId=' + Results.Id;
                     window.setTimeout(function () { location.reload() }, 1000);
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -283,78 +281,64 @@
         // =================
         function getCompanyById() {
             $('#loadingModal').modal('show');
-            var companies = new wijmo.collections.ObservableArray;
-            var companyId = @CompanyId;
-            $.ajax({
-                url: '/api/company/' + companyId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        companies.push({
-                            Id: Results.Id,
-                            Company: Results.Company,
-                            Address: Results.Address,
-                            ContactNumber: Results.ContactNumber,
-                            TaxNumber: Results.TaxNumber,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
-                        });
+            var companyId = getParam("CompanyId");
+            if (document.location.search.length == 0) {
+                $('#loadingModal').modal('hide');
+            } else {
+                $.ajax({
+                    url: '/api/company/' + companyId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        $('#loadingModal').modal('hide');
+                        //document.getElementById('companyDetailLabel').innerHTML = Results.Company;
+                        //document.getElementById('companyNameLabel').innerHTML = Results.Company + " Branch List";
+                        document.getElementById('companyNameModalLabel').innerHTML = Results.Company + " Branch Detail";
+                        document.getElementById('branch_company').value = Results.Company;
+                        document.getElementById('company_Company').value = Results.Company;
+                        document.getElementById('company_Address').value = Results.Address;
+                        document.getElementById('company_ContactNumber').value = Results.ContactNumber;
+                        document.getElementById('company_TaxNumber').value = Results.TaxNumber;
+
+                        document.getElementById('Company_IsLocked').value = Results.IsLocked;
+                        document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                        document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                        document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                        document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                        if (document.getElementById('Company_IsLocked').value == 'true') {
+                            //$("#cmdSaveCompany").prop("disabled", false);
+                            $("#cmdEditCompany").prop("disabled", false);
+                            $("#cmdPrintCompany").prop("disabled", false);
+                            $("#cmdSaveUpdateCompany").prop("disabled", true);
+                            $("#cmdBranchAddBranchButton").prop("disabled", true);
+                            document.getElementById('company_Company').disabled = true;
+                            document.getElementById('company_Address').disabled = true;
+                            document.getElementById('company_ContactNumber').disabled = true;
+                            document.getElementById('company_TaxNumber').disabled = true;
+
+                            document.getElementById('isLocked_Status').checked = true;
+
+                        } else if (document.getElementById('Company_IsLocked').value == 'false') {
+                            //$("#cmdSaveCompany").prop("disabled", true);
+                            $("#cmdEditCompany").prop("disabled", true);
+                            $("#cmdPrintCompany").prop("disabled", true);
+                            $("#cmdSaveUpdateCompany").prop("disabled", false);
+
+                            document.getElementById('isLocked_Status').checked = false;
+
+                            document.getElementById('company_Company').disabled = false;
+                            document.getElementById('company_Address').disabled = false;
+                            document.getElementById('company_ContactNumber').disabled = false;
+                            document.getElementById('company_TaxNumber').disabled = false;
+                        }
                     }
-                    //document.getElementById('companyDetailLabel').innerHTML = Results.Company;
-                    //document.getElementById('companyNameLabel').innerHTML = Results.Company + " Branch List";
-                    document.getElementById('companyNameModalLabel').innerHTML = Results.Company + " Branch Detail";
-                    document.getElementById('branch_company').value = Results.Company;
-                    document.getElementById('company_Company').value = Results.Company;
-                    document.getElementById('company_Address').value = Results.Address;
-                    document.getElementById('company_ContactNumber').value = Results.ContactNumber;
-                    document.getElementById('company_TaxNumber').value = Results.TaxNumber;
-
-                    document.getElementById('Company_IsLocked').value = Results.IsLocked;
-                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
-
-                    if(document.getElementById('Company_IsLocked').value == 'true') {
-                        //$("#cmdSaveCompany").prop("disabled", false);
-                        $("#cmdEditCompany").prop("disabled", false);
-                        $("#cmdPrintCompany").prop("disabled", false);
-                        $("#cmdSaveUpdateCompany").prop("disabled", true);
-                        $("#cmdBranchAddBranchButton").prop("disabled", true);
-                        document.getElementById('company_Company').disabled = true;
-                        document.getElementById('company_Address').disabled = true;
-                        document.getElementById('company_ContactNumber').disabled = true;
-                        document.getElementById('company_TaxNumber').disabled = true;
-
-                        document.getElementById('isLocked_Status').checked = true;
-
-                    } else if(document.getElementById('Company_IsLocked').value == 'false')  {
-                        //$("#cmdSaveCompany").prop("disabled", true);
-                        $("#cmdEditCompany").prop("disabled", true);
-                        $("#cmdPrintCompany").prop("disabled", true);
-                        $("#cmdSaveUpdateCompany").prop("disabled", false);
-
-                        document.getElementById('isLocked_Status').checked = false;
-
-                        document.getElementById('company_Company').disabled = false;
-                        document.getElementById('company_Address').disabled = false;
-                        document.getElementById('company_ContactNumber').disabled = false;
-                        document.getElementById('company_TaxNumber').disabled = false;
-                    }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return companies;
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }
         }
 
         // ===================
@@ -362,7 +346,7 @@
         // ===================
         function cmdCompanySaveButton_OnClick() {
             var companyObject = new Object();
-            var companyId = @CompanyId;
+            var companyId = getParam("CompanyId");
             companyObject.Company = document.getElementById('company_Company').value;
             companyObject.Address = document.getElementById('company_Address').value;
             companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
@@ -395,7 +379,7 @@
                 $("#cmdCloseButtonCompany").prop("disabled", true);
                 $("#cmdSaveBranchButton").prop("disabled", true);
                 $("#cmdBranchDetailCloseButton").prop("disabled", true);
-                if (companyId == 0) {
+                if (document.location.search.length == 0) {
                     $.ajax({
                         type: "POST",
                         url: '/api/addCompany',
@@ -438,12 +422,12 @@
                     });
                 } else {
                     var companyObject = new Object();
-                    var companyId = @CompanyId
+                    var companyId = getParam("CompanyId");
                     companyObject.Company = document.getElementById('company_Company').value;
                     companyObject.Address = document.getElementById('company_Address').value;
                     companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
                     companyObject.TaxNumber = document.getElementById('company_TaxNumber').value;
-                    if(companyId > 0) {
+                    if (companyId > 0) {
                         companyObject.IsLocked = document.getElementById('Company_IsLocked_defaultFalse').value;
                     } else {
                         companyObject.IsLocked = document.getElementById('Company_IsLocked_defaultTrue').value;
@@ -509,13 +493,13 @@
             $("#cmdBranchDetailCloseButton").prop("disabled", true);
 
             var companyObject = new Object();
-            var companyId = @CompanyId;
+            var companyId = getParam("CompanyId");
 
             companyObject.Company = document.getElementById('company_Company').value;
             companyObject.Address = document.getElementById('company_Address').value;
             companyObject.ContactNumber = document.getElementById('company_ContactNumber').value;
             companyObject.TaxNumber = document.getElementById('company_TaxNumber').value;
-            if(companyId > 0) {
+            if (companyId > 0) {
                 companyObject.IsLocked = document.getElementById('Company_IsLocked_defaultTrue').value;
             } else {
                 companyObject.IsLocked = document.getElementById('Company_IsLocked_defaultFalse').value;
@@ -591,7 +575,7 @@
         // ===========
         function cmdCompanyEditButton_OnClick() {
             var companyObject = new Object();
-            var companyId = @CompanyId;
+            var companyId = getParam("CompanyId");
 
             $("#cmdSaveCompany").prop("disabled", true);
             $("#cmdSaveUpdateCompany").prop("disabled", true);
@@ -601,7 +585,7 @@
             $("#cmdSaveBranchButton").prop("disabled", true);
             $("#cmdBranchDetailCloseButton").prop("disabled", true);
 
-            if(companyId > 0) {
+            if (companyId > 0) {
                 companyObject.IsLocked = document.getElementById('Company_IsLocked_defaultFalse').value;
             } else {
                 companyObject.IsLocked = document.getElementById('Company_IsLocked_defaultTrue').value;
@@ -673,7 +657,7 @@
                     //$('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         var companies = new wijmo.collections.ObservableArray;
-                        var companyId = @CompanyId;
+                        var companyId = getParam("CompanyId");
                         $.ajax({
                             url: '/api/company/' + companyId,
                             cache: false,
@@ -688,7 +672,7 @@
                                     });
                                 }
 
-                                if(CompanyResults.IsLocked == true) {
+                                if (CompanyResults.IsLocked == true) {
                                     for (i = 0; i < Results.length; i++) {
                                         branches.push({
                                             EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()' disabled><i class='fa fa-pencil'></i> Edit</button>",
@@ -749,89 +733,90 @@
         function getBranchByCompanyId() {
             // $('#loadingModal').modal('show');
             var branches = new wijmo.collections.ObservableArray;
-            var companyId = @CompanyId;
-            $.ajax({
-                url: '/api/listBranchByCompanyId/' + companyId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    // $('#loadingModal').modal('hide');
-                    var companies = new wijmo.collections.ObservableArray;
-                    var companyId
-                    for (i = 0; i < Results.length; i++) {
-                        companyId = @CompanyId;
-                    }
+            var companyId = getParam("CompanyId");
+            if (document.location.search.length > 0) {
+                $.ajax({
+                    url: '/api/listBranchByCompanyId/' + companyId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        // $('#loadingModal').modal('hide');
+                        var companies = new wijmo.collections.ObservableArray;
+                        var companyId
+                        for (i = 0; i < Results.length; i++) {
+                            companyId = getParam("CompanyId");
+                        }
 
-                    if (Results.length > 0) {
-                        $.ajax({
-                            url: '/api/company/' + companyId,
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (CompanyResults) {
-                                if (CompanyResults.length > 0) {
-                                    companies.push({
-                                        Id: CompanyResults.Id,
-                                        IsLocked: CompanyResults.IsLocked
-                                    });
-                                }
-
-                                if(CompanyResults.IsLocked == true) {
-                                    for (i = 0; i < Results.length; i++) {
-                                        branches.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()' disabled><i class='fa fa-pencil'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            CompanyId: Results[i]["CompanyId"],
-                                            Company: Results[i]["Company"],
-                                            Branch: Results[i]["Branch"],
-                                            BranchCode: Results[i]["BranchCode"],
-                                            Address: Results[i]["Address"],
-                                            ContactNumber: Results[i]["ContactNumber"],
-                                            TaxNumber: Results[i]["TaxNumber"],
-                                            IsLocked: Results[i]["IsLocked"],
-                                            CreatedById: Results[i]["CreatedById"],
-                                            CreatedBy: Results[i]["CreatedBy"],
-                                            CreatedDateTime: Results[i]["CreatedDateTime"],
-                                            UpdatedById: Results[i]["UpdatedById"],
-                                            UpdatedBy: Results[i]["UpdatedBy"],
-                                            UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                        if (Results.length > 0) {
+                            $.ajax({
+                                url: '/api/company/' + companyId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (CompanyResults) {
+                                    if (CompanyResults.length > 0) {
+                                        companies.push({
+                                            Id: CompanyResults.Id,
+                                            IsLocked: CompanyResults.IsLocked
                                         });
                                     }
-                                } else {
-                                    for (i = 0; i < Results.length; i++) {
-                                        branches.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            CompanyId: Results[i]["CompanyId"],
-                                            Company: Results[i]["Company"],
-                                            Branch: Results[i]["Branch"],
-                                            BranchCode: Results[i]["BranchCode"],
-                                            Address: Results[i]["Address"],
-                                            ContactNumber: Results[i]["ContactNumber"],
-                                            TaxNumber: Results[i]["TaxNumber"],
-                                            IsLocked: Results[i]["IsLocked"],
-                                            CreatedById: Results[i]["CreatedById"],
-                                            CreatedBy: Results[i]["CreatedBy"],
-                                            CreatedDateTime: Results[i]["CreatedDateTime"],
-                                            UpdatedById: Results[i]["UpdatedById"],
-                                            UpdatedBy: Results[i]["UpdatedBy"],
-                                            UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                        });
+
+                                    if (CompanyResults.IsLocked == true) {
+                                        for (i = 0; i < Results.length; i++) {
+                                            branches.push({
+                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()' disabled><i class='fa fa-pencil'></i> Edit</button>",
+                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                                Id: Results[i]["Id"],
+                                                CompanyId: Results[i]["CompanyId"],
+                                                Company: Results[i]["Company"],
+                                                Branch: Results[i]["Branch"],
+                                                BranchCode: Results[i]["BranchCode"],
+                                                Address: Results[i]["Address"],
+                                                ContactNumber: Results[i]["ContactNumber"],
+                                                TaxNumber: Results[i]["TaxNumber"],
+                                                IsLocked: Results[i]["IsLocked"],
+                                                CreatedById: Results[i]["CreatedById"],
+                                                CreatedBy: Results[i]["CreatedBy"],
+                                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                                UpdatedById: Results[i]["UpdatedById"],
+                                                UpdatedBy: Results[i]["UpdatedBy"],
+                                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                            });
+                                        }
+                                    } else {
+                                        for (i = 0; i < Results.length; i++) {
+                                            branches.push({
+                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
+                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                                Id: Results[i]["Id"],
+                                                CompanyId: Results[i]["CompanyId"],
+                                                Company: Results[i]["Company"],
+                                                Branch: Results[i]["Branch"],
+                                                BranchCode: Results[i]["BranchCode"],
+                                                Address: Results[i]["Address"],
+                                                ContactNumber: Results[i]["ContactNumber"],
+                                                TaxNumber: Results[i]["TaxNumber"],
+                                                IsLocked: Results[i]["IsLocked"],
+                                                CreatedById: Results[i]["CreatedById"],
+                                                CreatedBy: Results[i]["CreatedBy"],
+                                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                                UpdatedById: Results[i]["UpdatedById"],
+                                                UpdatedBy: Results[i]["UpdatedBy"],
+                                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                                            });
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }
             return branches;
         }
 
@@ -884,7 +869,7 @@
                 }
             });
             //document.getElementById('branch_Code').value = 0;
-            if(document.getElementById('branch_Code').value == 0) {
+            if (document.getElementById('branch_Code').value == 0) {
                 document.getElementById('branch_Code_Display').value = "001";
             }
         }
@@ -896,7 +881,8 @@
             var branchObject = new Object();
             var branchId = document.getElementById('branch_Id').value;
 
-            branchObject.CompanyId = @CompanyId;
+            var companyId = getParam("CompanyId");
+            branchObject.CompanyId = companyId;
             branchObject.Branch = document.getElementById('branch_branch').value;
             //branchObject.BranchCode = document.getElementById('branch_Code').value;
             branchObject.BranchCode = document.getElementById('branch_Code_Display').value;
@@ -943,20 +929,6 @@
                                 $('#branchEdit').modal('hide');
 
                                 branches = new wijmo.collections.CollectionView(getBranchByCompanyId());
-                                branches.canFilter = true;
-                                branches.pageSize = 15;
-
-                                var filterText = '';
-                                $('#InputFilter').keyup(function () {
-                                    filterText = this.value.toLowerCase();
-                                    branches.refresh();
-                                });
-                                branches.filter = function (item) {
-                                    return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1);
-                                }
-                                branches.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsBranch();
-                                });
                                 //branches.currentChanged.addHandler(function (sender, args) {
                                 //    updateDetails();
                                 //});
@@ -995,20 +967,6 @@
                                 $('#branchEdit').modal('hide');
 
                                 branches = new wijmo.collections.CollectionView(getBranchByCompanyId());
-                                branches.canFilter = true;
-                                branches.pageSize = 15;
-
-                                var filterText = '';
-                                $('#InputFilter').keyup(function () {
-                                    filterText = this.value.toLowerCase();
-                                    branches.refresh();
-                                });
-                                branches.filter = function (item) {
-                                    return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1);
-                                }
-                                branches.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsBranch();
-                                });
                                 //branches.currentChanged.addHandler(function (sender, args) {
                                 //    updateDetails();
                                 //});
@@ -1099,20 +1057,6 @@
                         $('#deleteBranchConfirm').modal('hide');
 
                         branches = new wijmo.collections.CollectionView(getBranchByCompanyId());
-                        branches.canFilter = true;
-                        branches.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            branches.refresh();
-                        });
-                        branches.filter = function (item) {
-                            return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        branches.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsBranch();
-                        });
                         //branches.currentChanged.addHandler(function (sender, args) {
                         //    updateDetails();
                         //});
@@ -1137,41 +1081,13 @@
             });
         }
 
-        // =============================
-        // Navigation Buttons for Branch
-        // =============================
-        function updateNavigateButtonsBranch() {
-            if (branches.pageSize <= 0) {
-                document.getElementById('naviagtionPageGrid').style.display = 'none';
-                return;
-            }
-            document.getElementById('naviagtionPageGrid').style.display = 'block';
-            if (branches.pageIndex === 0) {
-                btnFirstPageGrid.setAttribute('disabled', 'disabled');
-                btnPreviousPageGrid.setAttribute('disabled', 'disabled');
-                btnNextPageGrid.removeAttribute('disabled');
-                btnLastPageGrid.removeAttribute('disabled');
-            } else if (branches.pageIndex === (branches.pageCount - 1)) {
-                btnFirstPageGrid.removeAttribute('disabled');
-                btnPreviousPageGrid.removeAttribute('disabled');
-                btnLastPageGrid.setAttribute('disabled', 'disabled');
-                btnNextPageGrid.setAttribute('disabled', 'disabled');
-            } else {
-                btnFirstPageGrid.removeAttribute('disabled');
-                btnPreviousPageGrid.removeAttribute('disabled');
-                btnNextPageGrid.removeAttribute('disabled');
-                btnLastPageGrid.removeAttribute('disabled');
-            }
-            btnCurrentPageGrid.innerHTML = (branches.pageIndex + 1) + ' / ' + branches.pageCount;
-        }
-
         // =======================================================
         // Function with leading zeroes to display the branch Code
         // =======================================================
         function zerofill(number, length) {
             var result = number.toString();
             var pad = length - result.length;
-            while(pad > 0) {
+            while (pad > 0) {
                 result = '0' + result;
                 pad--;
             }
@@ -1182,8 +1098,8 @@
         // On Page Load
         // ============
         $(document).ready(function () {
-            var CompanyId = @CompanyId;
-            if(CompanyId == 0) {
+            var companyId = getParam("CompanyId");
+            if (document.location.search.length == 0) {
                 $('#cmdSaveUpdateCompany').hide();
                 $('#cmdSaveCompany').show();
                 $('#cmdEditCompany').hide();
@@ -1199,28 +1115,9 @@
             document.getElementById('Company_IsLocked_defaultTrue').value = 'true';
             document.getElementById('Company_IsLocked_defaultFalse').value = 'false';
 
-            $.ajax({
-                url: '/api/listBranchById/' + @branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        branches.push({
-                            BranchId: results.Id,
-                            BranchBranch: results.Branch
-                        });
-                    }
-                    //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
-                }
-            });
-
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("Company", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Company</a> ' + ' > Company Detail';
-
             document.getElementById('isLocked_Status').disabled = true;
 
-            if(@CompanyId == 0) {
+            if (document.location.search.length == 0) {
                 $("#cmdBranchAddBranchButton").prop("disabled", true);
                 $("#cmdSaveCompany").prop("disabled", false);
                 $("#cmdSaveUpdateCompany").prop("disabled", true);
@@ -1255,20 +1152,6 @@
             getCompanyById();
 
             branches = new wijmo.collections.CollectionView(getBranchByCompanyId());
-            branches.canFilter = true;
-            branches.pageSize = 15;
-
-            var filterText = '';
-            $('#InputFilter').keyup(function () {
-                filterText = this.value.toLowerCase();
-                branches.refresh();
-            });
-            branches.filter = function (item) {
-                return !filterText || (item.Branch.toLowerCase().indexOf(filterText) > -1);
-            }
-            branches.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsBranch();
-            });
             //branches.currentChanged.addHandler(function (sender, args) {
             //    updateDetails();
             //});
@@ -1336,32 +1219,6 @@
             });
 
             branchGrid.trackChanges = true;
-
-            //Navigation button
-            btnFirstPageGrid = document.getElementById('btnMoveToFirstPageGrid');
-            btnPreviousPageGrid = document.getElementById('btnMoveToPreviousPageGrid');
-            btnNextPageGrid = document.getElementById('btnMoveToNextPageGrid');
-            btnLastPageGrid = document.getElementById('btnMoveToLastPageGrid');
-            btnCurrentPageGrid = document.getElementById('btnCurrentPageGrid');
-
-            updateNavigateButtonsBranch();
-
-            btnFirstPageGrid.addEventListener('click', function () {
-                branches.moveToFirstPage();
-                updateNavigateButtonsBranch();
-            });
-            btnPreviousPageGrid.addEventListener('click', function () {
-                branches.moveToPreviousPage();
-                updateNavigateButtonsBranch();
-            });
-            btnNextPageGrid.addEventListener('click', function () {
-                branches.moveToNextPage();
-                updateNavigateButtonsBranch();
-            });
-            btnLastPageGrid.addEventListener('click', function () {
-                branches.moveToLastPage();
-                updateNavigateButtonsBranch();
-            });
         });
     </script>
 </body>

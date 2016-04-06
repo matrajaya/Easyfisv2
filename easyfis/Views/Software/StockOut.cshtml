@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -28,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Stock In
                     </div>
                 </div>
             </div>
@@ -52,8 +49,8 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="@Url.Action("StockOutDetail", "Software", new { StockOutId = 0, BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                            <button class="btn btn-primary btn-sm" onclick="btnAddStockOut_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-danger btn-sm" onclick="btnCloseStockOut_OnClick()"><i class=" fa fa-times"></i> Close</button>
                         </div>
                     </div>
                     <br />
@@ -253,15 +250,30 @@
             });
         }
 
+        // ====================
+        // Stock Out Add Button
+        // ====================
+        function btnAddStockOut_OnClick() {
+            window.location = '/Software/StockOutDetail';
+        }
+        
+        // =====================
+        // Stock In Close Button
+        // =====================
+        function btnCloseStockOut_OnClick() {
+            window.location = '/Software';
+        }
+
         // =====================
         // Stock out Edit Button
         // =====================
         function cmdStockOutEditButton_OnClick() {
             stockOuts.editItem(stockOuts.currentItem);
             var stockOut = stockOuts.currentEditItem;
-            var id = stockOut.Id;
-            window.location = '/Software/StockOutDetail?StockOutId=' + id + '&BranchId=' + @branchId;
+            var stockOutId = stockOut.Id;
+            window.location = '/Software/StockOutDetail?StockOutId=' + stockOutId;
         }
+
         // =======================
         // Stock out delete Button
         // =======================
@@ -375,43 +387,6 @@
         // Onload Page
         // ===========
         $(document).ready(function () {
-            $.ajax({
-                url: '/api/listBranchById/' + @branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        branches.push({
-                            BranchId: results.Id,
-                            BranchBranch: results.Branch
-                        });
-                    }
-                    //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
-                }
-            });
-
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Stock In';
-
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             var OUTDateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [ OUTDateFilter_Date.getMonth()+1, OUTDateFilter_Date.getDate(), OUTDateFilter_Date.getFullYear()].join('-');
 

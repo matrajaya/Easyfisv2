@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -28,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Journal Voucher
                     </div>
                 </div>
             </div>
@@ -53,8 +50,8 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="@Url.Action("JournalVoucherDetail", "Software", new { JournalVoucherId = 0, BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                            <button class="btn btn-primary btn-sm" onclick="btnAddJournalVoucher_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-danger btn-sm" onclick="btnCloseJournalVoucher_OnClick()"><i class=" fa fa-times"></i> Close</button>
                         </div>
                     </div>
                     <br />
@@ -164,6 +161,24 @@
         var btnNextPageGridJournalVoucher;
         var btnLastPageGridJournalVoucher;
         var btnCurrentPageGridJournalVoucher;
+        
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
 
         // ========================
         // Get Journal Voucher LIST
@@ -175,8 +190,9 @@
             //var JV_Number_Display = JV_Number.replace(/(\d{3})(\d+)/, '$1-$2');
             //document.getElementById('journalVoucher_No_Display').value = JV_Number_Display;
 
+            var branchId = readCookie("branchId");
             $.ajax({
-                url: '/api/listJournalVoucherByBranchId/' + @branchId,
+                url: '/api/listJournalVoucherByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -254,6 +270,20 @@
                 backdrop: 'static'
             });
         }
+        
+        // ==========================
+        // Journal Voucher Add Button
+        // ==========================
+        function btnAddJournalVoucher_OnClick() {
+            window.location = '/Software/JournalVoucherDetail';
+        }
+        
+        // ============================
+        // Journal Voucher Close Button
+        // ============================
+        function btnCloseJournalVoucher_OnClick() {
+            window.location = '/Software';
+        }
 
         // ===========================
         // Journal Voucher Edit Button
@@ -261,8 +291,8 @@
         function cmdJournalVoucherEditButton_OnClick() {
             journalVouchers.editItem(journalVouchers.currentItem);
             var journalVoucher = journalVouchers.currentEditItem;
-            var id = journalVoucher.Id;
-            window.location = '/Software/JournalVoucherDetail?JournalVoucherId=' + id + '&BranchId=' + @branchId;
+            var journalVoucherId = journalVoucher.Id;
+            window.location = '/Software/JournalVoucherDetail?JournalVoucherId=' + journalVoucherId;
         }
 
         // =============================
@@ -355,9 +385,10 @@
                                 BranchBranch: results[i]["Branch"]
                             });
                         }
-
+                        
+                        var branchId = readCookie("branchId");
                         $.ajax({
-                            url: '/api/listBranchById/' + @branchId,
+                            url: '/api/listBranchById/' + branchId,
                             cache: false,
                             type: 'GET',
                             contentType: 'application/json; charset=utf-8',
@@ -369,7 +400,6 @@
                                         BranchBranch: results.Branch
                                     });
                                 }
-                                //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
                                 document.getElementById('currentBranchName').value = results.Branch;
                             }
                         });
@@ -530,8 +560,6 @@
         // On Load Page
         // ============
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Journal Voucher';
-
             $('#cmdGoGetBranch').prop('disabled', true);
 
             getBranchesForComboBox();

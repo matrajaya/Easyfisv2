@@ -1507,6 +1507,7 @@
                 autoGenerateColumns: false,
                 itemsSource: accountArticleTypes,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -1591,6 +1592,7 @@
                 autoGenerateColumns: false,
                 itemsSource: accounts,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -2184,6 +2186,7 @@
                 autoGenerateColumns: false,
                 itemsSource: accountTypes,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -2668,6 +2671,7 @@
                 autoGenerateColumns: false,
                 itemsSource: accountCashFlows,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -2830,7 +2834,7 @@
             if (document.getElementById('accountCategoryEdit_IsLocked').checked == true) {
                 document.getElementById('accountCategory_Code').disabled = true;
                 document.getElementById('accountCategory_Category').disabled = true;
-                document.getElementById('accountCategoryLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>"; s
+                document.getElementById('accountCategoryLockAndUnLock').innerHTML = "<i class='fa fa-lock'></i>";
 
             } else {
                 document.getElementById('accountCategory_Code').disabled = false;
@@ -3146,6 +3150,7 @@
                 autoGenerateColumns: false,
                 itemsSource: accountCategories,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row

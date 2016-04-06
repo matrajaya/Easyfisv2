@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -28,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Accounts Receivable
                     </div>
                 </div>
             </div>
@@ -50,7 +47,7 @@
                             <div id="AR" class="tab-pane fade in active">
                                 <div align="right">
                                     <button onclick="AccountsReceivablePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -85,7 +82,7 @@
                             <div id="ARS" class="tab-pane fade">
                                 <div align="right">
                                     <button onclick="window.location.href ='@Url.Action("AccountsReceivableSummaryPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -120,7 +117,7 @@
                             <div id="SOA" class="tab-pane fade">
                                 <div align="right">
                                     <button onclick="window.location.href ='@Url.Action("AccountsReceivableStatementOfAccountPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -334,8 +331,6 @@
         // On Load Page
         // ============
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Accounts Receivable';
-
             accountReceivableCboCompany = new wijmo.input.ComboBox('#accountReceivableReport_Company');
             accountReceivableSummaryCboCompany = new wijmo.input.ComboBox('#accountReceivableSummaryReport_Company');
             StatementOfTheAccountCboCompany = new wijmo.input.ComboBox('#StatementOfTheAccount_Company');

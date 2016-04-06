@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -28,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Inventory Report
                     </div>
                 </div>
             </div>
@@ -52,7 +49,7 @@
                             <div id="Inventory" class="tab-pane fade in active">
                                 <div align="right">
                                     <button onclick="InventoryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -140,7 +137,7 @@
                             <div id="SC" class="tab-pane fade">
                                 <div align="right">
                                     <button onclick="window.location.href ='@Url.Action("InventoryReportStockCardPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -236,7 +233,7 @@
                             <div id="SIDR" class="tab-pane fade">
                                 <div align="right">
                                     <button onclick="window.location.href ='@Url.Action("InventoryReportStockInDetailPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -324,7 +321,7 @@
                             <div id="SODR" class="tab-pane fade">
                                 <div align="right">
                                     <button onclick="window.location.href ='@Url.Action("InventoryReportStockOutDetailPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -412,7 +409,7 @@
                             <div id="STDR" class="tab-pane fade">
                                 <div align="right">
                                     <button onclick="window.location.href ='@Url.Action("InventoryReportStockTransferDetailPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -500,7 +497,7 @@
                             <div id="IL" class="tab-pane fade">
                                 <div align="right">
                                     <button onclick="window.location.href ='@Url.Action("InventoryReportItemListPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -523,7 +520,7 @@
                             <div id="ICL" class="tab-pane fade">
                                 <div align="right">
                                     <button onclick="window.location.href ='@Url.Action("InventoryReportItemComponentListPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -546,7 +543,7 @@
                             <div id="PCS" class="tab-pane fade">
                                 <div align="right">
                                     <button onclick="window.location.href ='@Url.Action("InventoryReportPhysicalCountSheetPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -570,7 +567,7 @@
                                 <div align="right">
 
                                     <button onclick="window.location.href ='@Url.Action("InventoryReportFixedAssetsPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -2318,8 +2315,6 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Inventory Report';
-
             // Inventory Dates
             document.getElementById('inventory_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('inventory_EndDate_data').value = new Date().toLocaleDateString();

@@ -205,6 +205,7 @@
                             branches.push({
                                 BranchId: results[i]["Id"],
                                 Branch: results[i]["Branch"],
+                                CompanyId: results[i]["CompanyId"],
                                 Company: results[i]["Company"]
                             });
                         }
@@ -248,9 +249,10 @@
             document.getElementById('LaunchSoftware').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Launching Software..."
             document.getElementById('LaunchSoftware').disabled = true;
 
+            createCookie("null", "null", -1);
+            createCookie("company", cboBranch.selectedItem["Company"], 365);
             createCookie("branchId", cboBranch.selectedItem["BranchId"], 365);
             createCookie("branch", cboBranch.selectedItem["Branch"], 365);
-            createCookie("company", cboBranch.selectedItem["Company"], 365);
             window.location = '/Software';
         }
 
@@ -258,8 +260,6 @@
         // On Load
         // =======
         $(document).ready(function () {
-            console.log(readCookie("company"));
-            console.log(readCookie("branch"));
             getBranchesForComboBox();
         });
     </script>

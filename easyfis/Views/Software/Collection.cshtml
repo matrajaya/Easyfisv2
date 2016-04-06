@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -28,7 +25,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Collection
                     </div>
                 </div>
             </div>
@@ -52,8 +49,8 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="@Url.Action("CollectionDetail", "Software", new { CollectonId = 0, BranchId = branchId })" class=" btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                            <button class="btn btn-primary btn-sm" onclick="btnAddCollection_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-danger btn-sm" onclick="btnCloseCollection_OnClick()"><i class=" fa fa-times"></i> Close</button>
                         </div>
                     </div>
                     <br />
@@ -249,6 +246,20 @@
                 backdrop: 'static'
             });
         }
+        
+        // =====================
+        // Collection Add Button
+        // =====================
+        function btnAddCollection_OnClick() {
+            window.location = '/Software/CollectionDetail';
+        }
+        
+        // =======================
+        // Collection Close Button
+        // =======================
+        function btnCloseCollection_OnClick() {
+            window.location = '/Software';
+        }
 
         // ======================
         // Collection Edit Button
@@ -256,8 +267,8 @@
         function cmdCollectionEditButton_OnClick() {
             collections.editItem(collections.currentItem);
             var collection = collections.currentEditItem;
-            var id = collection.Id;
-            window.location = '/Software/CollectionDetail?CollectonId=' + id + '&BranchId=' + @branchId;
+            var collectionId = collection.Id;
+            window.location = '/Software/CollectionDetail?CollectonId=' + collectionId;
         }
 
         // ========================
@@ -376,43 +387,6 @@
         // Onload Page
         // ===========
         $(document).ready(function () {
-            $.ajax({
-                url: '/api/listBranchById/' + @branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        branches.push({
-                            BranchId: results.Id,
-                            BranchBranch: results.Branch
-                        });
-                    }
-                    //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
-                }
-            });
-
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Collection';
-
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             var ORDateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [ ORDateFilter_Date.getMonth()+1, ORDateFilter_Date.getDate(), ORDateFilter_Date.getFullYear()].join('-');
 

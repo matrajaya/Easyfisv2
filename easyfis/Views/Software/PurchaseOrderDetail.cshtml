@@ -1,6 +1,4 @@
 ﻿@{
-    var branchId = Request.QueryString["BranchId"];
-    var POId = Request.QueryString["POId"];
     var userId = ViewData["UserId"];
 }
 <!DOCTYPE html>
@@ -30,7 +28,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentPage"></span>
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("PurchaseOrder", "Software")" class="currentPageLinkCustom">Purchase Order</a> > Purchase Order Detail
                     </div>
                 </div>
             </div>
@@ -43,8 +41,8 @@
                         <button class="btn btn-primary btn-sm" id="cmdSaveLockPO" onclick="btnSaveLockPO_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdSavePO" onclick="btnSavePO_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditPO" onclick="btnEditPO_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdPrintPO" onclick="window.location.href ='@Url.Action("PurchaseOrderPDF", "Software", new { POId = POId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdClosePO"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdPrintPO" onclick="window.location.href ='@Url.Action("PurchaseOrderPDF", "Software")'"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("PurchaseOrder", "Software")'" class="btn btn-danger btn-sm" id="cmdClosePO"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -182,46 +180,17 @@
                     </form>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12">
-                        <h4>Purchase Order Line</h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                            <input type="text" class="form-control input-sm" id="InputFilterPOLine" placeholder="Search Branch">
-                        </div>
-                    </div>
-                    <div class="col-lg-8">
-                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="cmdPOLineAddButton" onclick="cmdPOLineAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                    <div class="col-lg-12" align="right">
+                        <button type="submit" class="btn btn-primary btn-sm" id="cmdPOLineAddButton" onclick="cmdPOLineAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
                     </div>
                 </div>
                 <br />
                 <div class="row" align="left">
                     <div class="col-lg-12">
-                        <div id="POGrid" class="grid" align="left"></div>
+                        <div id="POGrid" class="grid"></div>
                     </div>
                 </div>
                 <br />
-                <div class="row">
-                    <div class="btn-group col-md-7" id="navigationPageGridPOLine">
-                        <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridPOLine">
-                            <span class="glyphicon glyphicon-fast-backward"></span>
-                        </button>
-                        <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridPOLine">
-                            <span class="glyphicon glyphicon-step-backward"></span>
-                        </button>
-                        <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridPOLine"></button>
-                        <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridPOLine">
-                            <span class="glyphicon glyphicon-step-forward"></span>
-                        </button>
-                        <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridPOLine">
-                            <span class="glyphicon glyphicon-fast-forward"></span>
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Modal for POLines -->
                 <div class="modal fade" id="POLinesEdit" role="dialog">
                     <div class="modal-dialog">
@@ -355,122 +324,65 @@
         var cboItemDescription;
         var cboUnit;
 
+        // =======================
+        // Get URL Parameter Value
+        // =======================
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
         // ==================
         // GET Purchase by Id
         // ==================
         function getPOById() {
-            POs = new wijmo.collections.ObservableArray;
-            var POId = @POId;
             $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/purchaseOrder/' + POId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    //if (Results.length > 0) {
-                    //    POs.push({
-                    //        Id: Results.Id,
-                    //        BranchId: Results.BranchId,
-                    //        Branch: Results.Branch,
-                    //        PONumber: Results.PONumber,
-                    //        PODate: Results.PODate,
-                    //        SupplierId: Results.SupplierId,
-                    //        Supplier: Results.Supplier,
-                    //        TermId: Results.TermId,
-                    //        Term: Results.Term,
-                    //        ManualRequestNumber: Results.ManualRequestNumber,
-                    //        ManualPONumber: Results.ManualPONumber,
-                    //        DateNeeded: Results.DateNeeded,
-                    //        Remarks: Results.Remarks,
-                    //        IsClose: Results.IsClose,
-                    //        RequestedById: Results.RequestedById,
-                    //        RequestedBy: Results.RequestedBy,
-                    //        PreparedById: Results.PreparedById,
-                    //        PreparedBy: Results.PreparedBy,
-                    //        CheckedById: Results.CheckedById,
-                    //        CheckedBy: Results.CheckedBy,
-                    //        ApprovedById: Results.ApprovedById,
-                    //        ApprovedBy: Results.ApprovedBy,
-                    //        IsLocked: Results.IsLocked,
-                    //        CreatedById: Results.CreatedById,
-                    //        CreatedBy: Results.CreatedBy,
-                    //        CreatedDateTime: Results.CreatedDateTime,
-                    //        UpdatedById: Results.UpdatedById,
-                    //        UpdatedBy: Results.UpdatedBy,
-                    //        UpdatedDateTime: Results.UpdatedDateTime
-                    //    });
-                    //}
-
-                    if(Results != null) {
-                        document.getElementById('PO_Branch_data').value = Results.BranchId;
-                        document.getElementById('PO_Branch_selectedValue').value = Results.Branch;
-                        document.getElementById('PO_PONumber').value = Results.PONumber;
-                        document.getElementById('PO_PONumber_Display').value = Results.PONumber;
-                        document.getElementById('PO_Date_data').value = Results.PODate;
-
-                        var PODate_Result = Results.PODate
-                        PODate.dispose();
-                        PODate = new wijmo.input.InputDate('#PO_Date', {
-                            format: 'MM/dd/yyyy',
-                            value: new Date(PODate_Result),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('PO_Date_data').value = this.value.toLocaleDateString();
-                            }
-                        });
-
-                        document.getElementById('PO_ManualPONumber').value = Results.ManualPONumber;
-                        document.getElementById('PO_Supplier_data').value = Results.SupplierId;
-                        document.getElementById('PO_Supplier_selectedValue').value = Results.Supplier;
-                        document.getElementById('PO_Term_data').value = Results.TermId;
-                        document.getElementById('PO_Term_selectedValue').value = Results.Term;
-                        document.getElementById('PO_Remarks').value = Results.Remarks;
-                        document.getElementById('PO_RequestNumber').value = Results.ManualRequestNumber;
-                        document.getElementById('PO_DateNeeded_data').value = Results.DateNeeded;
-
-                        var PODateNeeded_Result = Results.DateNeeded
-                        PODateNeeded.dispose();
-                        PODateNeeded = new wijmo.input.InputDate('#PO_DateNeeded', {
-                            format: 'MM/dd/yyyy',
-                            value: new Date(PODateNeeded_Result),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('PO_DateNeeded_data').value = this.value.toLocaleDateString();
-                            }
-                        });
-
-                        document.getElementById('PO_ClosePO').checked = Results.IsClose;
-                        document.getElementById('RequestedBy_data').value = Results.RequestedById;
-                        document.getElementById('RequestedBy_selectedValue').value = Results.RequestedBy;
-                        document.getElementById('PreparedBy_data').value = Results.PreparedById;
-                        document.getElementById('PreparedBy_selectedValue').value = Results.PreparedBy;
-                        document.getElementById('CheckedBy_data').value = Results.CheckedById;
-                        document.getElementById('CheckedBy_selectedValue').value = Results.CheckedBy;
-                        document.getElementById('ApprovedBy_data').value = Results.ApprovedById;
-                        document.getElementById('ApprovedBy_selectedValue').value = Results.ApprovedBy;
-                        document.getElementById('PO_Lock').checked = Results.IsLocked;
-
-                        document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                        document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                        document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                        document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
-
-                        document.getElementById('PO_IsLocked').value = Results.IsLocked;
-
-                        if(document.getElementById('PO_IsLocked').value == 'true') {
-                            document.getElementById('PO_PONumber_Display').disabled = true;
-                            document.getElementById('PO_ManualPONumber').disabled = true;
-                            document.getElementById('PO_Remarks').disabled = true;
-                            document.getElementById('PO_RequestNumber').disabled = true;
-                            document.getElementById('PO_ClosePO').disabled = true;
+            var PurchaseOrderId = getParam('PurchaseOrderId');
+            if (document.location.search.length == 0) {
+                $('#loadingModal').modal('hide');
+            } else {
+                $.ajax({
+                    url: '/api/purchaseOrder/' + PurchaseOrderId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        $('#loadingModal').modal('hide');
+                        if (Results != null) {
+                            document.getElementById('PO_Branch_data').value = Results.BranchId;
+                            document.getElementById('PO_Branch_selectedValue').value = Results.Branch;
+                            document.getElementById('PO_PONumber').value = Results.PONumber;
+                            document.getElementById('PO_PONumber_Display').value = Results.PONumber;
+                            document.getElementById('PO_Date_data').value = Results.PODate;
 
                             var PODate_Result = Results.PODate
                             PODate.dispose();
                             PODate = new wijmo.input.InputDate('#PO_Date', {
-                                disabled: true,
                                 format: 'MM/dd/yyyy',
                                 value: new Date(PODate_Result),
                                 mask: '99/99/9999',
@@ -479,10 +391,18 @@
                                 }
                             });
 
+                            document.getElementById('PO_ManualPONumber').value = Results.ManualPONumber;
+                            document.getElementById('PO_Supplier_data').value = Results.SupplierId;
+                            document.getElementById('PO_Supplier_selectedValue').value = Results.Supplier;
+                            document.getElementById('PO_Term_data').value = Results.TermId;
+                            document.getElementById('PO_Term_selectedValue').value = Results.Term;
+                            document.getElementById('PO_Remarks').value = Results.Remarks;
+                            document.getElementById('PO_RequestNumber').value = Results.ManualRequestNumber;
+                            document.getElementById('PO_DateNeeded_data').value = Results.DateNeeded;
+
                             var PODateNeeded_Result = Results.DateNeeded
                             PODateNeeded.dispose();
                             PODateNeeded = new wijmo.input.InputDate('#PO_DateNeeded', {
-                                disabled: true,
                                 format: 'MM/dd/yyyy',
                                 value: new Date(PODateNeeded_Result),
                                 mask: '99/99/9999',
@@ -491,60 +411,109 @@
                                 }
                             });
 
-                            $("#cmdSaveLockPO").prop("disabled", true);
-                            $("#cmdEditPO").prop("disabled", false);
-                            $("#cmdPrintPO").prop("disabled", false);
-                            $("#cmdPOLineAddButton").prop("disabled", true);
+                            document.getElementById('PO_ClosePO').checked = Results.IsClose;
+                            document.getElementById('RequestedBy_data').value = Results.RequestedById;
+                            document.getElementById('RequestedBy_selectedValue').value = Results.RequestedBy;
+                            document.getElementById('PreparedBy_data').value = Results.PreparedById;
+                            document.getElementById('PreparedBy_selectedValue').value = Results.PreparedBy;
+                            document.getElementById('CheckedBy_data').value = Results.CheckedById;
+                            document.getElementById('CheckedBy_selectedValue').value = Results.CheckedBy;
+                            document.getElementById('ApprovedBy_data').value = Results.ApprovedById;
+                            document.getElementById('ApprovedBy_selectedValue').value = Results.ApprovedBy;
+                            document.getElementById('PO_Lock').checked = Results.IsLocked;
 
-                        } else if(document.getElementById('PO_IsLocked').value == 'false')  {
-                            document.getElementById('PO_ManualPONumber').disabled = false;
-                            document.getElementById('PO_Remarks').disabled = false;
-                            document.getElementById('PO_RequestNumber').disabled = false;
-                            document.getElementById('PO_ClosePO').disabled = false;
+                            document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                            document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                            document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                            document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
-                            var PODate_Result = Results.PODate
-                            PODate.dispose();
-                            PODate = new wijmo.input.InputDate('#PO_Date', {
-                                disabled: false,
-                                format: 'MM/dd/yyyy',
-                                value: new Date(PODate_Result),
-                                mask: '99/99/9999',
-                                onValueChanged: function () {
-                                    document.getElementById('PO_Date_data').value = this.value.toLocaleDateString();
-                                }
-                            });
+                            document.getElementById('PO_IsLocked').value = Results.IsLocked;
 
-                            var PODateNeeded_Result = Results.DateNeeded
-                            PODateNeeded.dispose();
-                            PODateNeeded = new wijmo.input.InputDate('#PO_DateNeeded', {
-                                disabled: false,
-                                format: 'MM/dd/yyyy',
-                                value: new Date(PODateNeeded_Result),
-                                mask: '99/99/9999',
-                                onValueChanged: function () {
-                                    document.getElementById('PO_DateNeeded_data').value = this.value.toLocaleDateString();
-                                }
-                            });
+                            if (document.getElementById('PO_IsLocked').value == 'true') {
+                                document.getElementById('PO_PONumber_Display').disabled = true;
+                                document.getElementById('PO_ManualPONumber').disabled = true;
+                                document.getElementById('PO_Remarks').disabled = true;
+                                document.getElementById('PO_RequestNumber').disabled = true;
+                                document.getElementById('PO_ClosePO').disabled = true;
 
-                            $("#cmdSaveLockPO").prop("disabled", false);
-                            $("#cmdEditPO").prop("disabled", true);
-                            $("#cmdPrintPO").prop("disabled", true);
-                            $("#cmdPOLineAddButton").prop("disabled", false);
+                                var PODate_Result = Results.PODate
+                                PODate.dispose();
+                                PODate = new wijmo.input.InputDate('#PO_Date', {
+                                    disabled: true,
+                                    format: 'MM/dd/yyyy',
+                                    value: new Date(PODate_Result),
+                                    mask: '99/99/9999',
+                                    onValueChanged: function () {
+                                        document.getElementById('PO_Date_data').value = this.value.toLocaleDateString();
+                                    }
+                                });
 
-                        } else {
-                            console.log("Invalid Lock");
+                                var PODateNeeded_Result = Results.DateNeeded
+                                PODateNeeded.dispose();
+                                PODateNeeded = new wijmo.input.InputDate('#PO_DateNeeded', {
+                                    disabled: true,
+                                    format: 'MM/dd/yyyy',
+                                    value: new Date(PODateNeeded_Result),
+                                    mask: '99/99/9999',
+                                    onValueChanged: function () {
+                                        document.getElementById('PO_DateNeeded_data').value = this.value.toLocaleDateString();
+                                    }
+                                });
+
+                                $("#cmdSaveLockPO").prop("disabled", true);
+                                $("#cmdEditPO").prop("disabled", false);
+                                $("#cmdPrintPO").prop("disabled", false);
+                                $("#cmdPOLineAddButton").prop("disabled", true);
+
+                            } else if (document.getElementById('PO_IsLocked').value == 'false') {
+                                document.getElementById('PO_ManualPONumber').disabled = false;
+                                document.getElementById('PO_Remarks').disabled = false;
+                                document.getElementById('PO_RequestNumber').disabled = false;
+                                document.getElementById('PO_ClosePO').disabled = false;
+
+                                var PODate_Result = Results.PODate
+                                PODate.dispose();
+                                PODate = new wijmo.input.InputDate('#PO_Date', {
+                                    disabled: false,
+                                    format: 'MM/dd/yyyy',
+                                    value: new Date(PODate_Result),
+                                    mask: '99/99/9999',
+                                    onValueChanged: function () {
+                                        document.getElementById('PO_Date_data').value = this.value.toLocaleDateString();
+                                    }
+                                });
+
+                                var PODateNeeded_Result = Results.DateNeeded
+                                PODateNeeded.dispose();
+                                PODateNeeded = new wijmo.input.InputDate('#PO_DateNeeded', {
+                                    disabled: false,
+                                    format: 'MM/dd/yyyy',
+                                    value: new Date(PODateNeeded_Result),
+                                    mask: '99/99/9999',
+                                    onValueChanged: function () {
+                                        document.getElementById('PO_DateNeeded_data').value = this.value.toLocaleDateString();
+                                    }
+                                });
+
+                                $("#cmdSaveLockPO").prop("disabled", false);
+                                $("#cmdEditPO").prop("disabled", true);
+                                $("#cmdPrintPO").prop("disabled", true);
+                                $("#cmdPOLineAddButton").prop("disabled", false);
+
+                            } else {
+                                console.log("Invalid Lock");
+                            }
+
+                            getBranchesForComboBox();
+                            getSupplierForComboBox();
+                            getTermForComboBox();
+                            getUsersForComboBox();
                         }
-
-                        getBranchesForComboBox();
-                        getSupplierForComboBox();
-                        getTermForComboBox();
-                        getUsersForComboBox();
                     }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return POs;
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }
         }
 
         // ==========================
@@ -565,7 +534,7 @@
                             PONumber: Results.PONumber
                         });
                     }
-                    window.location = '/Software/PurchaseOrderDetail?POId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + Results.Id;
                     window.setTimeout(function () { location.reload() }, 1000);
                 }
             });
@@ -592,22 +561,17 @@
                             });
                         }
 
-                        var POId = @POId;
-                        if(POId == 0) {
+                        var PurchaseOrderId = getParam('PurchaseOrderId');
+                        var branchId = readCookie("branchId")
+                        if (document.location.search.length == 0) {
                             $.ajax({
-                                url: '/api/listBranchById/' + @branchId,
+                                url: '/api/listBranchById/' + branchId,
                                 cache: false,
                                 type: 'GET',
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
                                 success: function (branchResults) {
-                                    //if (results.length > 0) {
-                                    //    branches.push({
-                                    //        BranchId: results.Id,
-                                    //        Branch: results.Branch
-                                    //    });
-                                    //}
-                                    if(branchResults != null) {
+                                    if (branchResults != null) {
                                         document.getElementById('PO_Branch_data').value = branchResults.Id;
                                         document.getElementById('PO_Branch_selectedValue').value = branchResults.Branch;
 
@@ -637,10 +601,10 @@
             }
 
             var disabled;
-            if(branches == 0) {
+            if (branches == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
@@ -701,10 +665,10 @@
             }
 
             var disabled;
-            if(suppliers == 0) {
+            if (suppliers == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
@@ -765,10 +729,10 @@
             }
 
             var disabled;
-            if(terms == 0) {
+            if (terms == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
@@ -810,8 +774,8 @@
                             });
                         }
 
-                        var POId = @POId;
-                        if(POId == 0) {
+                        var PurchaseOrderId = getParam('PurchaseOrderId');
+                        if (document.location.search.length == 0) {
                             var userId = document.getElementById('userId_data').value;
                             $.ajax({
                                 url: '/api/listByMstUserId/' + userId,
@@ -820,16 +784,9 @@
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
                                 success: function (mstUserResults) {
-                                    //if (mstUserresults.length > 0) {
-                                    //    users.push({
-                                    //        UserId: mstUserResults.Id,
-                                    //        UserFullName: mstUserResults.FullName
-                                    //    });
-                                    //}
-
-                                    if(mstUserResults != null) {
+                                    if (mstUserResults != null) {
                                         document.getElementById('PreparedBy_data').value = mstUserResults.Id;
-                                        document.getElementById('PreparedBy_selectedValue').value =  mstUserResults.FullName;
+                                        document.getElementById('PreparedBy_selectedValue').value = mstUserResults.FullName;
 
                                         createCboUserRequestedBy(users);
                                         createCboUserPreparedBy(users);
@@ -868,10 +825,10 @@
             }
 
             var disabled;
-            if(users == 0) {
+            if (users == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
@@ -904,10 +861,10 @@
             }
 
             var disabled;
-            if(users == 0) {
+            if (users == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
@@ -939,16 +896,16 @@
             }
 
             var disabled;
-            if(users == 0) {
+            if (users == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
                 }
             }
-            
+
             cboCheckedBy.dispose();
             cboCheckedBy = new wijmo.input.ComboBox('#CheckedBy', {
                 disabled: disabled,
@@ -960,7 +917,7 @@
                     $("#CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                 }
             });
-            
+
             document.getElementById('CheckedBy_data').value = usersCollection.items[cboCheckedBy.selectedIndex].UserId;
         }
 
@@ -973,12 +930,12 @@
             for (var i = 0; i < usersCollection.items.length; i++) {
                 userList.push(usersCollection.items[i].UserFullName);
             }
-            
+
             var disabled;
-            if(users == 0) {
+            if (users == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
@@ -996,7 +953,7 @@
                     $("#ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                 }
             });
-            
+
             document.getElementById('ApprovedBy_data').value = usersCollection.items[cboApprovedBy.selectedIndex].UserId;
         }
 
@@ -1006,7 +963,7 @@
         function zerofill(number, length) {
             var result = number.toString();
             var pad = length - result.length;
-            while(pad > 0) {
+            while (pad > 0) {
                 result = '0' + result;
                 pad--;
             }
@@ -1018,7 +975,7 @@
         // ======
         function btnSavePO_OnClick() {
             var POObject = new Object();
-            var POId = @POId;
+            var PurchaseOrderId = getParam('PurchaseOrderId');
             POObject.BranchId = document.getElementById('PO_Branch_data').value;
             POObject.PONumber = document.getElementById('PO_PONumber_Display').value;
             POObject.PODate = document.getElementById('PO_Date_data').value;
@@ -1035,37 +992,37 @@
             POObject.ApprovedById = document.getElementById('ApprovedBy_data').value;
             var data = JSON.stringify(POObject);
 
-            if( document.getElementById('PO_Branch_data').value == '') {
+            if (document.getElementById('PO_Branch_data').value == '') {
                 document.getElementById("PO_Branch").style.border = "1px solid red";
             } else {
                 document.getElementById("PO_Branch").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('PO_Supplier_data').value == '') {
+            if (document.getElementById('PO_Supplier_data').value == '') {
                 document.getElementById("PO_Supplier").style.border = "1px solid red";
             } else {
                 document.getElementById("PO_Supplier").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('PO_Term_data').value == '') {
+            if (document.getElementById('PO_Term_data').value == '') {
                 document.getElementById("PO_Term").style.border = "1px solid red";
             } else {
                 document.getElementById("PO_Term").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('RequestedBy_data').value == '') {
+            if (document.getElementById('RequestedBy_data').value == '') {
                 document.getElementById("RequestedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("RequestedBy").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('CheckedBy_data').value == '') {
+            if (document.getElementById('CheckedBy_data').value == '') {
                 document.getElementById("CheckedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("CheckedBy").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('ApprovedBy_data').value == '') {
+            if (document.getElementById('ApprovedBy_data').value == '') {
                 document.getElementById("ApprovedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("ApprovedBy").style.border = "1px solid #C8C8C8";
@@ -1090,7 +1047,7 @@
                 toastr.error("Invalid Entry");
             }
             else {
-                if (POId == 0) {
+                if (document.location.search.length == 0) {
                     $.ajax({
                         type: "POST",
                         url: '/api/addPurchaseOrder',
@@ -1128,7 +1085,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updatePurchaseOrder/' + POId,
+                        url: '/api/updatePurchaseOrder/' + PurchaseOrderId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -1171,7 +1128,7 @@
         // ==================
         function btnSaveLockPO_OnClick() {
             var POObject = new Object();
-            var POId = @POId;
+            var PurchaseOrderId = getParam('PurchaseOrderId');
             POObject.BranchId = document.getElementById('PO_Branch_data').value;
             POObject.PONumber = document.getElementById('PO_PONumber_Display').value;
             POObject.PODate = document.getElementById('PO_Date_data').value;
@@ -1189,37 +1146,37 @@
             POObject.IsLocked = true;
             var data = JSON.stringify(POObject);
 
-            if( document.getElementById('PO_Branch_data').value == '') {
+            if (document.getElementById('PO_Branch_data').value == '') {
                 document.getElementById("PO_Branch").style.border = "1px solid red";
             } else {
                 document.getElementById("PO_Branch").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('PO_Supplier_data').value == '') {
+            if (document.getElementById('PO_Supplier_data').value == '') {
                 document.getElementById("PO_Supplier").style.border = "1px solid red";
             } else {
                 document.getElementById("PO_Supplier").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('PO_Term_data').value == '') {
+            if (document.getElementById('PO_Term_data').value == '') {
                 document.getElementById("PO_Term").style.border = "1px solid red";
             } else {
                 document.getElementById("PO_Term").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('RequestedBy_data').value == '') {
+            if (document.getElementById('RequestedBy_data').value == '') {
                 document.getElementById("RequestedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("RequestedBy").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('CheckedBy_data').value == '') {
+            if (document.getElementById('CheckedBy_data').value == '') {
                 document.getElementById("CheckedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("CheckedBy").style.border = "1px solid #C8C8C8";
             }
 
-            if( document.getElementById('ApprovedBy_data').value == '') {
+            if (document.getElementById('ApprovedBy_data').value == '') {
                 document.getElementById("ApprovedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("ApprovedBy").style.border = "1px solid #C8C8C8";
@@ -1244,7 +1201,7 @@
                 toastr.error("Invalid Entry");
             }
             else {
-                if (POId == 0) {
+                if (document.location.search.length == 0) {
                     $.ajax({
                         type: "POST",
                         url: '/api/addPurchaseOrder',
@@ -1282,7 +1239,7 @@
                 } else {
                     $.ajax({
                         type: "PUT",
-                        url: '/api/updatePurchaseOrder/' + POId,
+                        url: '/api/updatePurchaseOrder/' + PurchaseOrderId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
@@ -1325,12 +1282,12 @@
         // ==================
         function btnEditPO_OnClick() {
             var POObject = new Object();
-            var POId = @POId;
+            var PurchaseOrderId = getParam('PurchaseOrderId');
             POObject.IsLocked = false;
             var data = JSON.stringify(POObject);
             $.ajax({
                 type: "PUT",
-                url: '/api/updatePurchaseOrderIsLocked/' + POId,
+                url: '/api/updatePurchaseOrderIsLocked/' + PurchaseOrderId,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 data: data,
@@ -1366,109 +1323,83 @@
             });
         }
 
-        // ==========================================
-        // Navigation Buttons for Purchase Order Line
-        // ==========================================
-        function updateNavigateButtonsPOLine() {
-            if (POLines.pageSize <= 0) {
-                document.getElementById('navigationPageGridPOLine').style.display = 'none';
-                return;
-            }
-            document.getElementById('navigationPageGridPOLine').style.display = 'block';
-            if (POLines.pageIndex === 0) {
-                btnFirstPageGridPOLine.setAttribute('disabled', 'disabled');
-                btnPreviousPageGridPOLine.setAttribute('disabled', 'disabled');
-                btnNextPageGridPOLine.removeAttribute('disabled');
-                btnLastPageGridPOLine.removeAttribute('disabled');
-            } else if (POLines.pageIndex === (POLines.pageCount - 1)) {
-                btnFirstPageGridPOLine.removeAttribute('disabled');
-                btnPreviousPageGridPOLine.removeAttribute('disabled');
-                btnLastPageGridPOLine.setAttribute('disabled', 'disabled');
-                btnNextPageGridPOLine.setAttribute('disabled', 'disabled');
-            } else {
-                btnFirstPageGridPOLine.removeAttribute('disabled');
-                btnPreviousPageGridPOLine.removeAttribute('disabled');
-                btnNextPageGridPOLine.removeAttribute('disabled');
-                btnLastPageGridPOLine.removeAttribute('disabled');
-            }
-            btnCurrentPageGridPOLine.innerHTML = (POLines.pageIndex + 1) + ' / ' + POLines.pageCount;
-        }
-
         // ==========================
         // Purchase Order Line / Item
         // ==========================
         function getPurchaseOrderItem() {
             var POLines = new wijmo.collections.ObservableArray;
-            var POId = @POId;
-            //$('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listPurchaseOrderItemByPOId/' + POId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    //$('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        var POs = new wijmo.collections.ObservableArray;
-                        var POId = @POId;
-                        $.ajax({
-                            url: '/api/purchaseOrder/' + POId,
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (POResults) {
-                                if (POResults.length > 0) {
-                                    POs.push({
-                                        IsLocked: POResults.IsLocked,
-                                    });
-                                }
+            if (document.location.search.length > 0) {
+                var PurchaseOrderId = getParam('PurchaseOrderId');
+                //$('#loadingModal').modal('show');
+                $.ajax({
+                    url: '/api/listPurchaseOrderItemByPOId/' + PurchaseOrderId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        //$('#loadingModal').modal('hide');
+                        if (Results.length > 0) {
+                            var POs = new wijmo.collections.ObservableArray;
+                            var PurchaseOrderId = getParam('PurchaseOrderId');
+                            $.ajax({
+                                url: '/api/purchaseOrder/' + PurchaseOrderId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (POResults) {
+                                    if (POResults.length > 0) {
+                                        POs.push({
+                                            IsLocked: POResults.IsLocked,
+                                        });
+                                    }
 
-                                if (POResults.IsLocked == true) {
-                                    for (i = 0; i < Results.length; i++) {
-                                        POLines.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditPOLines_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeletePOLines_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            ItemId: Results[i]["ItemId"],
-                                            Item: Results[i]["Item"],
-                                            ItemCode: Results[i]["ItemCode"],
-                                            POId: Results[i]["POId"],
-                                            Quantity: Results[i]["Quantity"],
-                                            UnitId: Results[i]["UnitId"],
-                                            Unit: Results[i]["Unit"],
-                                            Particulars: Results[i]["Particulars"],
-                                            Cost: Results[i]["Cost"],
-                                            Amount: Results[i]["Amount"]
-                                        });
-                                    }
-                                } else {
-                                    for (i = 0; i < Results.length; i++) {
-                                        POLines.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditPOLines_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeletePOLines_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            ItemId: Results[i]["ItemId"],
-                                            Item: Results[i]["Item"],
-                                            ItemCode: Results[i]["ItemCode"],
-                                            POId: Results[i]["POId"],
-                                            Quantity: Results[i]["Quantity"],
-                                            UnitId: Results[i]["UnitId"],
-                                            Unit: Results[i]["Unit"],
-                                            Particulars: Results[i]["Particulars"],
-                                            Cost: Results[i]["Cost"],
-                                            Amount: Results[i]["Amount"]
-                                        });
+                                    if (POResults.IsLocked == true) {
+                                        for (i = 0; i < Results.length; i++) {
+                                            POLines.push({
+                                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditPOLines_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeletePOLines_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                                Id: Results[i]["Id"],
+                                                ItemId: Results[i]["ItemId"],
+                                                Item: Results[i]["Item"],
+                                                ItemCode: Results[i]["ItemCode"],
+                                                POId: Results[i]["POId"],
+                                                Quantity: Results[i]["Quantity"],
+                                                UnitId: Results[i]["UnitId"],
+                                                Unit: Results[i]["Unit"],
+                                                Particulars: Results[i]["Particulars"],
+                                                Cost: Results[i]["Cost"],
+                                                Amount: Results[i]["Amount"]
+                                            });
+                                        }
+                                    } else {
+                                        for (i = 0; i < Results.length; i++) {
+                                            POLines.push({
+                                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditPOLines_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeletePOLines_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                                Id: Results[i]["Id"],
+                                                ItemId: Results[i]["ItemId"],
+                                                Item: Results[i]["Item"],
+                                                ItemCode: Results[i]["ItemCode"],
+                                                POId: Results[i]["POId"],
+                                                Quantity: Results[i]["Quantity"],
+                                                UnitId: Results[i]["UnitId"],
+                                                Unit: Results[i]["Unit"],
+                                                Particulars: Results[i]["Particulars"],
+                                                Cost: Results[i]["Cost"],
+                                                Amount: Results[i]["Amount"]
+                                            });
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }
             return POLines;
         }
 
@@ -1514,10 +1445,10 @@
             }
 
             var disabled;
-            if(itemCodes == 0) {
+            if (itemCodes == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
@@ -1592,10 +1523,10 @@
             }
 
             var disabled;
-            if(itemDescriptions == 0) {
+            if (itemDescriptions == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
@@ -1666,10 +1597,10 @@
             }
 
             var disabled;
-            if(units == 0) {
+            if (units == 0) {
                 disabled = true;
             } else {
-                if(document.getElementById('PO_IsLocked').value == 'true') {
+                if (document.getElementById('PO_IsLocked').value == 'true') {
                     disabled = true;
                 } else {
                     disabled = false;
@@ -1784,20 +1715,6 @@
                         $('#deletePOLinesConfirm').modal('hide');
 
                         POLines = new wijmo.collections.CollectionView(getPurchaseOrderItem());
-                        POLines.canFilter = true;
-                        POLines.pageSize = 15;
-
-                        var filterTextPOLine = '';
-                        $('#InputFilterPOLine').keyup(function () {
-                            filterTextPOLine = this.value.toLowerCase();
-                            POLines.refresh();
-                        });
-                        POLines.filter = function (item) {
-                            return !filterTextPOLine || (item.ItemCode.toLowerCase().indexOf(filterTextPOLine) > -1);
-                        }
-                        POLines.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsPOLine();
-                        });
 
                         // Flex Grid for Purchase Order Line
                         POLineGrid.itemsSource = POLines;
@@ -1825,8 +1742,8 @@
         function cmdPOLinesSaveButton_OnClick() {
             var POItemObject = new Object();
             var POItemId = document.getElementById('POLine_Id').value;
-            var POId = @POId;
-            POItemObject.POId = POId;
+            var PurchaseOrderId = getParam('PurchaseOrderId');
+            POItemObject.POId = PurchaseOrderId;
             POItemObject.ItemId = document.getElementById('POLine_ItemCode_data').value;
             POItemObject.Particulars = document.getElementById('POLine_Particulars').value;
             POItemObject.UnitId = document.getElementById('POLine_Unit_data').value;
@@ -1835,19 +1752,19 @@
             POItemObject.Amount = document.getElementById('POLine_Amount').value;
             var POItemData = JSON.stringify(POItemObject);
 
-            if( document.getElementById('POLine_ItemCode_data').value == '') {
+            if (document.getElementById('POLine_ItemCode_data').value == '') {
                 document.getElementById("POLine_ItemCode").style.border = "1px solid red";
             } else {
                 document.getElementById("POLine_ItemCode").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('POLine_ItemDescription_data').value == '') {
+            if (document.getElementById('POLine_ItemDescription_data').value == '') {
                 document.getElementById("POLine_ItemDescription").style.border = "1px solid red";
             } else {
                 document.getElementById("POLine_ItemDescription").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('POLine_Unit_data').value == '') {
+            if (document.getElementById('POLine_Unit_data').value == '') {
                 document.getElementById("POLine_Unit").style.border = "1px solid red";
             } else {
                 document.getElementById("POLine_Unit").style.border = "1px solid #C8C8C8   ";
@@ -1889,20 +1806,6 @@
                                 $('#POLinesEdit').modal('hide');
 
                                 POLines = new wijmo.collections.CollectionView(getPurchaseOrderItem());
-                                POLines.canFilter = true;
-                                POLines.pageSize = 15;
-
-                                var filterTextPOLine = '';
-                                $('#InputFilterPOLine').keyup(function () {
-                                    filterTextPOLine = this.value.toLowerCase();
-                                    POLines.refresh();
-                                });
-                                POLines.filter = function (item) {
-                                    return !filterTextPOLine || (item.ItemCode.toLowerCase().indexOf(filterTextPOLine) > -1);
-                                }
-                                POLines.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsPOLine();
-                                });
 
                                 // Flex Grid for Purchase Order Line
                                 POLineGrid.itemsSource = POLines;
@@ -1935,21 +1838,6 @@
                                 $('#POLinesEdit').modal('hide');
 
                                 POLines = new wijmo.collections.CollectionView(getPurchaseOrderItem());
-                                POLines.canFilter = true;
-                                POLines.pageSize = 15;
-
-                                var filterTextPOLine = '';
-                                $('#InputFilterPOLine').keyup(function () {
-                                    filterTextPOLine = this.value.toLowerCase();
-                                    POLines.refresh();
-                                });
-                                POLines.filter = function (item) {
-                                    return !filterTextPOLine || (item.ItemCode.toLowerCase().indexOf(filterTextPOLine) > -1);
-                                }
-                                POLines.collectionChanged.addHandler(function (sender, args) {
-                                    updateNavigateButtonsPOLine();
-                                });
-
                                 // Flex Grid for Purchase Order Line
                                 POLineGrid.itemsSource = POLines;
                                 POLineGrid.trackChanges = true;
@@ -1974,8 +1862,8 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            var POId = @POId;
-            if(POId == 0) {
+            var PurchaseOrderId = getParam('PurchaseOrderId');
+            if (document.location.search.length == 0) {
                 $('#cmdSaveLockPO').hide();
                 $('#cmdSavePO').show();
                 $('#cmdEditPO').hide();
@@ -1988,23 +1876,23 @@
                 $('#cmdEditPO').prop('disabled', true);
             }
 
-            $('#POLine_Quantity').keyup(function() {
+            $('#POLine_Quantity').keyup(function () {
                 var inputQuantity = this.value;
                 var inputCost = document.getElementById('POLine_Cost').value;
 
-                var replacedCost = inputCost.replace(/\,/g,'');
-                var replacedQuantity = inputQuantity.replace(/\,/g,'');
+                var replacedCost = inputCost.replace(/\,/g, '');
+                var replacedQuantity = inputQuantity.replace(/\,/g, '');
                 var amount = replacedCost * replacedQuantity;
 
                 document.getElementById('POLine_Amount').value = amount.toLocaleString();
             });
 
-            $('#POLine_Cost').keyup(function() {
+            $('#POLine_Cost').keyup(function () {
                 var inputQuantity = document.getElementById('POLine_Quantity').value;
                 var inputCost = this.value;
 
-                var replacedCost = inputCost.replace(/\,/g,'');
-                var replacedQuantity = inputQuantity.replace(/\,/g,'');
+                var replacedCost = inputCost.replace(/\,/g, '');
+                var replacedQuantity = inputQuantity.replace(/\,/g, '');
                 var amount = replacedCost * replacedQuantity;
 
                 document.getElementById('POLine_Amount').value = amount.toLocaleString();
@@ -2075,12 +1963,11 @@
             document.getElementById('PO_Branch').disabled = true;
             document.getElementById('PO_PONumber_Display').disabled = true;
             document.getElementById('PO_Lock').disabled = true;
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Purchase Order</a> ' + ' > Purchase Order Detail';
 
             cboBranch = new wijmo.input.ComboBox('#PO_Branch');
 
             var d = new Date();
-            document.getElementById("PO_Date_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            document.getElementById("PO_Date_data").value = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join('/');
             PODate = new wijmo.input.InputDate('#PO_Date', {
                 format: 'MM/dd/yyyy',
                 value: new Date(),
@@ -2089,7 +1976,7 @@
                     document.getElementById('PO_Date_data').value = this.value.toLocaleDateString();
                 }
             });
-            document.getElementById("PO_DateNeeded_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            document.getElementById("PO_DateNeeded_data").value = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join('/');
             PODateNeeded = new wijmo.input.InputDate('#PO_DateNeeded', {
                 format: 'MM/dd/yyyy',
                 value: new Date(),
@@ -2101,10 +1988,10 @@
 
             cboSupplier = new wijmo.input.ComboBox('#PO_Supplier');
             cboTerm = new wijmo.input.ComboBox('#PO_Term');
-            cboRequestedBy  = new wijmo.input.ComboBox('#RequestedBy');
-            cboPreparedBy  = new wijmo.input.ComboBox('#PreparedBy');
-            cboCheckedBy  = new wijmo.input.ComboBox('#CheckedBy');
-            cboApprovedBy  = new wijmo.input.ComboBox('#ApprovedBy');
+            cboRequestedBy = new wijmo.input.ComboBox('#RequestedBy');
+            cboPreparedBy = new wijmo.input.ComboBox('#PreparedBy');
+            cboCheckedBy = new wijmo.input.ComboBox('#CheckedBy');
+            cboApprovedBy = new wijmo.input.ComboBox('#ApprovedBy');
 
             getPOById();
 
@@ -2112,14 +1999,14 @@
             cboItemDescription = new wijmo.input.ComboBox('#POLine_ItemDescription');
             cboUnit = new wijmo.input.ComboBox('#POLine_Unit');
 
-            var POId = @POId;
-            if(POId == 0) {
+            var PurchaseOrderId = getParam('PurchaseOrderId');
+            if (document.location.search.length == 0) {
                 getBranchesForComboBox();
                 getSupplierForComboBox();
                 getTermForComboBox();
                 getUsersForComboBox();
 
-                if(document.getElementById('PO_PONumber').value == 0) {
+                if (document.getElementById('PO_PONumber').value == 0) {
                     document.getElementById('PO_PONumber_Display').value = "0000000001";
                 }
 
@@ -2139,7 +2026,7 @@
                         //        PONumber: Results.PONumber
                         //    });
                         //}
-                        if(Results != null) {
+                        if (Results != null) {
                             var PO_Number = parseInt(Results.PONumber);
                             var PO_Number_PlusOne = 0000000001;
                             var PO_Num_Results = PO_Number + PO_Number_PlusOne;
@@ -2152,23 +2039,6 @@
             }
 
             POLines = new wijmo.collections.CollectionView(getPurchaseOrderItem());
-            POLines.canFilter = true;
-            POLines.pageSize = 15;
-
-            var filterTextPOLine = '';
-            $('#InputFilterPOLine').keyup(function () {
-                filterTextPOLine = this.value.toLowerCase();
-                POLines.refresh();
-            });
-            POLines.filter = function (item) {
-                return !filterTextPOLine || (item.ItemCode.toLowerCase().indexOf(filterTextPOLine) > -1);
-            }
-            POLines.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsPOLine();
-            });
-            //POLines.currentChanged.addHandler(function (sender, args) {
-            //    updateDetailsPOLine();
-            //});
 
             // Flex Grid for Purchase Order Line
             POLineGrid = new wijmo.grid.FlexGrid('#POGrid');
@@ -2238,39 +2108,13 @@
                 autoGenerateColumns: false,
                 itemsSource: POLines,
                 isReadOnly: true,
-                //frozenColumns: 2,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
 
             POLineGrid.trackChanges = true;
-
-            //Navigation button for Purchase Order Line
-            btnFirstPageGridPOLine = document.getElementById('btnMoveToFirstPageGridPOLine');
-            btnPreviousPageGridPOLine = document.getElementById('btnMoveToPreviousPageGridPOLine');
-            btnNextPageGridPOLine = document.getElementById('btnMoveToNextPageGridPOLine');
-            btnLastPageGridPOLine = document.getElementById('btnMoveToLastPageGridPOLine');
-            btnCurrentPageGridPOLine = document.getElementById('btnCurrentPageGridPOLine');
-
-            updateNavigateButtonsPOLine();
-
-            btnFirstPageGridPOLine.addEventListener('click', function () {
-                POLines.moveToFirstPage();
-                updateNavigateButtonsPOLine();
-            });
-            btnPreviousPageGridPOLine.addEventListener('click', function () {
-                POLines.moveToPreviousPage();
-                updateNavigateButtonsPOLine();
-            });
-            btnNextPageGridPOLine.addEventListener('click', function () {
-                POLines.moveToNextPage();
-                updateNavigateButtonsPOLine();
-            });
-            btnLastPageGridPOLine.addEventListener('click', function () {
-                POLines.moveToLastPage();
-                updateNavigateButtonsPOLine();
-            });
         });
     </script>
 </body>
