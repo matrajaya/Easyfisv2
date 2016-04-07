@@ -27,7 +27,7 @@ namespace easyfis.Controllers
                 if (branches.Any())
                 {
                     return View();
-                } 
+                }
                 else
                 {
                     return RedirectToAction("Index", "Manage");
@@ -1744,28 +1744,24 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult InventoryReportPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
-            // article Inventories
-            var articleInventories = from d in db.MstArticleInventories
-                                     where d.TrnInventories.Any(i => i.InventoryDate >= Convert.ToDateTime(StartDate))
-                                     && d.TrnInventories.Any(i => i.InventoryDate <= Convert.ToDateTime(EndDate))
-                                     && d.MstBranch.CompanyId == CompanyId
-                                     && d.MstArticle.IsInventory == true
-                                     && d.Quantity >= 0
-                                     select new Models.MstArticleInventory
-                                     {
-                                         Id = d.Id,
-                                         BranchId = d.BranchId,
-                                         ArticleId = d.ArticleId,
-                                         Article = d.MstArticle.Article,
-                                         InventoryCode = d.InventoryCode,
-                                         Quantity = d.Quantity,
-                                         Cost = d.Cost,
-                                         Amount = d.Amount,
-                                         Particulars = d.Particulars,
-                                         ManualArticleCode = d.MstArticle.ManualArticleCode,
-                                         UnitId = d.MstArticle.MstUnit.Id,
-                                         Unit = d.MstArticle.MstUnit.Unit
-                                     };
+
+            var articleInventoriesByBranchId = from d in db.MstArticleInventories
+                                               where d.TrnInventories.Any(i => i.InventoryDate >= Convert.ToDateTime(StartDate))
+                                               && d.TrnInventories.Any(i => i.InventoryDate <= Convert.ToDateTime(EndDate))
+                                               && d.MstBranch.CompanyId == CompanyId
+                                               && d.MstArticle.IsInventory == true
+                                               && d.Quantity >= 0
+                                               group d by new
+                                               {
+                                                   BranchId = d.MstBranch.Id,
+                                                   Branch = d.MstBranch.Branch
+                                               } into g
+                                               select new Models.MstArticleInventory
+                                               {
+                                                   BranchId = g.Key.BranchId,
+                                                   Branch = g.Key.Branch
+                                               };
+
 
             // Company Detail
             var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
@@ -1786,6 +1782,8 @@ namespace easyfis.Controllers
             Font headerDetailFont = FontFactory.GetFont("Arial", 11);
             Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
             Font cellFont = FontFactory.GetFont("Arial", 9);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
 
             // table main header
             PdfPTable tableHeader = new PdfPTable(2);
@@ -1801,87 +1799,156 @@ namespace easyfis.Controllers
 
             document.Add(tableHeader);
 
-            PdfPTable tableHeaderDetail = new PdfPTable(12);
-            PdfPCell Cell = new PdfPCell();
-            float[] widthscellsheader2 = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f };
-            tableHeaderDetail.SetWidths(widthscellsheader2);
-            tableHeaderDetail.WidthPercentage = 100;
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Item", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Cost", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            PdfPCell header = (new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            header.Colspan = 4;
-            tableHeaderDetail.AddCell(header);
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Total Amount", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-            PdfPCell headerColspan = (new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            headerColspan.Colspan = 2;
-            tableHeaderDetail.AddCell(headerColspan);
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Variance Amount", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Beg", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("In", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Out", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("End", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Count", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Variance", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-
-            Decimal totalAmount = 0;
-            Decimal count = 0;
-            Decimal quantityVariance = 0;
-            Decimal varianceAmount = 0;
-
-            Decimal totalTotalAmount = 0;
-            Decimal totalVarianceAmount = 0;
-
-            foreach (var articleInventory in articleInventories)
-            {
-                totalTotalAmount = totalTotalAmount + (articleInventory.Cost * articleInventory.Quantity);
-                quantityVariance = articleInventory.Quantity - count;
-                totalVarianceAmount = totalVarianceAmount + (articleInventory.Cost * quantityVariance);
-            }
-
-            foreach (var articleInventory in articleInventories)
-            {
-                totalAmount = articleInventory.Cost * articleInventory.Quantity;
-                count = 0;
-                quantityVariance = articleInventory.Quantity - count;
-                varianceAmount = articleInventory.Cost * quantityVariance;
-
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.ManualArticleCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Cost.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(quantityVariance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(varianceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-            }
-
-            document.Add(tableHeaderDetail);
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
 
             document.Add(Chunk.NEWLINE);
+            Decimal totalAmountForFooter = 0;
+            Decimal totalVarianceForFooter = 0;
 
-            PdfPTable tableFooter = new PdfPTable(12);
-            float[] widthscellsfooter = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f };
-            tableFooter.SetWidths(widthscellsfooter);
-            tableFooter.WidthPercentage = 100;
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase("Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
-            tableFooter.AddCell(new PdfPCell(new Phrase(totalTotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 11f });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooter.AddCell(new PdfPCell(new Phrase(totalVarianceAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 11f });
-            document.Add(tableFooter);
+            foreach (var articleInventoryByBranchId in articleInventoriesByBranchId)
+            {
+                Debug.WriteLine(articleInventoryByBranchId.Branch);
+
+                // table Balance Sheet header
+                PdfPTable tableBranchHeader = new PdfPTable(1);
+                float[] widthCellsTableBranchHeader = new float[] { 100f };
+                tableBranchHeader.SetWidths(widthCellsTableBranchHeader);
+                tableBranchHeader.WidthPercentage = 100;
+
+                PdfPCell branchHeaderColspan = (new PdfPCell(new Phrase(articleInventoryByBranchId.Branch, cellBoldFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, PaddingLeft = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                branchHeaderColspan.Colspan = 1;
+                tableBranchHeader.AddCell(branchHeaderColspan);
+                document.Add(tableBranchHeader);
+
+
+                PdfPTable tableHeaderDetail = new PdfPTable(12);
+                PdfPCell Cell = new PdfPCell();
+                float[] widthscellsheader2 = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f };
+                tableHeaderDetail.SetWidths(widthscellsheader2);
+                tableHeaderDetail.WidthPercentage = 100;
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Item", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Unit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Cost", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                PdfPCell header = (new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                header.Colspan = 4;
+                tableHeaderDetail.AddCell(header);
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Total Amount", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
+                PdfPCell headerColspan = (new PdfPCell(new Phrase("Quantity", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                headerColspan.Colspan = 2;
+                tableHeaderDetail.AddCell(headerColspan);
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Variance Amount", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Beg", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("In", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Out", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("End", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Count", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Variance", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                Decimal totalAmount = 0;
+                Decimal count = 0;
+                Decimal quantityVariance = 0;
+                Decimal varianceAmount = 0;
+
+                Decimal totalTotalAmount = 0;
+                Decimal totalVarianceAmount = 0;
+
+                // article Inventories
+                var articleInventories = from d in db.MstArticleInventories.OrderBy(d => d.MstArticle.Article)
+                                         where d.TrnInventories.Any(i => i.InventoryDate >= Convert.ToDateTime(StartDate))
+                                         && d.TrnInventories.Any(i => i.InventoryDate <= Convert.ToDateTime(EndDate))
+                                         && d.MstBranch.Id == articleInventoryByBranchId.BranchId
+                                         && d.MstBranch.CompanyId == CompanyId
+                                         && d.MstArticle.IsInventory == true
+                                         && d.Quantity >= 0
+                                         select new Models.MstArticleInventory
+                                         {
+                                             Id = d.Id,
+                                             ArticleId = d.ArticleId,
+                                             ManualArticleCode = d.MstArticle.ManualArticleCode,
+                                             Article = d.MstArticle.Article,
+                                             Quantity = d.Quantity,
+                                             Cost = d.Cost,
+                                             Amount = d.Amount,
+                                             UnitId = d.MstArticle.MstUnit.Id,
+                                             Unit = d.MstArticle.MstUnit.Unit,
+                                             InventoryCode = d.InventoryCode,
+                                         };
+
+
+
+                foreach (var articleInventory in articleInventories)
+                {
+                    totalTotalAmount = totalTotalAmount + (articleInventory.Cost * articleInventory.Quantity);
+                    quantityVariance = articleInventory.Quantity - count;
+                    totalVarianceAmount = totalVarianceAmount + (articleInventory.Cost * quantityVariance);
+                }
+
+                totalAmountForFooter = totalAmountForFooter + totalTotalAmount;
+                totalVarianceForFooter = totalVarianceForFooter + totalVarianceAmount;
+
+                foreach (var articleInventory in articleInventories)
+                {
+                    totalAmount = articleInventory.Cost * articleInventory.Quantity;
+                    count = 0;
+                    quantityVariance = articleInventory.Quantity - count;
+                    varianceAmount = articleInventory.Cost * quantityVariance;
+
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.InventoryCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Cost.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(quantityVariance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(varianceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                }
+
+                document.Add(tableHeaderDetail);
+
+                PdfPTable tableFooter = new PdfPTable(12);
+                float[] widthscellsfooter = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 12f, 20f, 16f, 16f, 16f, 16f };
+                tableFooter.SetWidths(widthscellsfooter);
+                tableFooter.WidthPercentage = 100;
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase("Sub Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
+                tableFooter.AddCell(new PdfPCell(new Phrase(totalTotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 11f });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase(totalVarianceAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 11f });
+                document.Add(tableFooter);
+
+                document.Add(Chunk.NEWLINE);
+            }
+
+            PdfPTable tableFooterForTotal = new PdfPTable(12);
+            float[] widthscellsfooterForTotal = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f };
+            tableFooterForTotal.SetWidths(widthscellsfooterForTotal);
+            tableFooterForTotal.WidthPercentage = 100;
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase("Total:", columnFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(totalAmountForFooter.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 11f });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(totalVarianceForFooter.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 11f });
+            document.Add(tableFooterForTotal);
 
             // Document End
             document.Close();
@@ -2495,7 +2562,7 @@ namespace easyfis.Controllers
         {
             // retrieve account category journal
             var journals = from d in db.TrnJournals
-                           where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                           where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                            && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory != "Income"
                            && d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory != "Expenses"
                            && d.MstBranch.CompanyId == CompanyId
@@ -2557,7 +2624,7 @@ namespace easyfis.Controllers
 
             // retrieve account sub category journal for Asset
             var accountTypeSubCategory_Journal_Assets = from d in db.TrnJournals
-                                                        where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                        where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                                         && d.MstAccount.MstAccountType.MstAccountCategory.Id == 1
                                                         && d.MstBranch.CompanyId == CompanyId
                                                         group d by new
@@ -2575,7 +2642,7 @@ namespace easyfis.Controllers
 
             // retrieve account type journal for Asset
             var accountType_Journal_Assets = from d in db.TrnJournals
-                                             where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                             where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                              && d.MstAccount.MstAccountType.MstAccountCategory.Id == 1
                                              && d.MstBranch.CompanyId == CompanyId
                                              group d by new
@@ -2633,7 +2700,7 @@ namespace easyfis.Controllers
 
                         // retrieve accounts journal Asset
                         var accounts_JournalAssets = from d in db.TrnJournals
-                                                     where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                     where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                                      && d.MstAccount.MstAccountType.AccountType == accountType_JournalAsset.AccountType
                                                      && d.MstAccount.MstAccountType.MstAccountCategory.Id == 1
                                                      && d.MstBranch.CompanyId == CompanyId
@@ -2689,7 +2756,7 @@ namespace easyfis.Controllers
 
             // retrieve account sub category journal Liabilities
             var accountTypeSubCategory_JournalLiabilities = from d in db.TrnJournals
-                                                            where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                            where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                                             && d.MstAccount.MstAccountType.MstAccountCategory.Id == 2
                                                             && d.MstBranch.CompanyId == CompanyId
                                                             group d by new
@@ -2707,7 +2774,7 @@ namespace easyfis.Controllers
 
             // retrieve account type journal Liabilities
             var accountTypeJournal_Liabilities = from d in db.TrnJournals
-                                                 where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                 where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                                  && d.MstAccount.MstAccountType.MstAccountCategory.Id == 2
                                                  && d.MstBranch.CompanyId == CompanyId
                                                  group d by new
@@ -2761,7 +2828,7 @@ namespace easyfis.Controllers
 
                         // retrieve accounts journal Liabilities
                         var accounts_JournalsLiabilities = from d in db.TrnJournals
-                                                           where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                           where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                                            && d.MstAccount.MstAccountType.AccountType == accountTypeJournal_Liability.AccountType
                                                            && d.MstAccount.MstAccountType.MstAccountCategory.Id == 2
                                                            && d.MstBranch.CompanyId == CompanyId
@@ -2818,7 +2885,7 @@ namespace easyfis.Controllers
 
             // retrieve account sub category journal Equity
             var accountTypeSubCategory_JournalEquities = from d in db.TrnJournals
-                                                         where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                         where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                                          && d.MstAccount.MstAccountType.MstAccountCategory.Id == 4
                                                          && d.MstBranch.CompanyId == CompanyId
                                                          group d by new
@@ -2836,7 +2903,7 @@ namespace easyfis.Controllers
 
             // retrieve account type journal Equity
             var accountTypeJournal_Equities = from d in db.TrnJournals
-                                              where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                              where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                               && d.MstAccount.MstAccountType.MstAccountCategory.Id == 4
                                               && d.MstBranch.CompanyId == CompanyId
                                               group d by new
@@ -2890,7 +2957,7 @@ namespace easyfis.Controllers
 
                         // retrieve accounts journal Equity
                         var accounts_JournalEquities = from d in db.TrnJournals
-                                                       where d.JournalDate == Convert.ToDateTime(DateAsOf)
+                                                       where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                                                        && d.MstAccount.MstAccountType.AccountType == accountTypeJournal_Equity.AccountType
                                                        && d.MstAccount.MstAccountType.MstAccountCategory.Id == 4
                                                        && d.MstBranch.CompanyId == CompanyId
@@ -3048,35 +3115,35 @@ namespace easyfis.Controllers
                                                          && d.JournalDate <= Convert.ToDateTime(EndDate)
                                                          && d.MstAccount.MstAccountType.MstAccountCategory.Id == 5
                                                          && d.MstBranch.CompanyId == CompanyId
-                                                        group d by new
-                                                        {
-                                                            AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
-                                                            SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription
-                                                        } into g
-                                                        select new Models.TrnJournal
-                                                        {
-                                                            AccountCategory = g.Key.AccountCategory,
-                                                            SubCategoryDescription = g.Key.SubCategoryDescription,
-                                                            DebitAmount = g.Sum(d => d.DebitAmount),
-                                                            CreditAmount = g.Sum(d => d.CreditAmount)
-                                                        };
+                                                         group d by new
+                                                         {
+                                                             AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
+                                                             SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription
+                                                         } into g
+                                                         select new Models.TrnJournal
+                                                         {
+                                                             AccountCategory = g.Key.AccountCategory,
+                                                             SubCategoryDescription = g.Key.SubCategoryDescription,
+                                                             DebitAmount = g.Sum(d => d.DebitAmount),
+                                                             CreditAmount = g.Sum(d => d.CreditAmount)
+                                                         };
 
             // retrieve account type journal for income
             var accountType_Journal_Incomes = from d in db.TrnJournals
-                                             where d.JournalDate >= Convert.ToDateTime(StartDate)
-                                             && d.JournalDate <= Convert.ToDateTime(EndDate)
-                                             && d.MstAccount.MstAccountType.MstAccountCategory.Id == 5
-                                             && d.MstBranch.CompanyId == CompanyId
-                                             group d by new
-                                             {
-                                                 AccountType = d.MstAccount.MstAccountType.AccountType
-                                             } into g
-                                             select new Models.TrnJournal
-                                             {
-                                                 AccountType = g.Key.AccountType,
-                                                 DebitAmount = g.Sum(d => d.DebitAmount),
-                                                 CreditAmount = g.Sum(d => d.CreditAmount)
-                                             };
+                                              where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                              && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                              && d.MstAccount.MstAccountType.MstAccountCategory.Id == 5
+                                              && d.MstBranch.CompanyId == CompanyId
+                                              group d by new
+                                              {
+                                                  AccountType = d.MstAccount.MstAccountType.AccountType
+                                              } into g
+                                              select new Models.TrnJournal
+                                              {
+                                                  AccountType = g.Key.AccountType,
+                                                  DebitAmount = g.Sum(d => d.DebitAmount),
+                                                  CreditAmount = g.Sum(d => d.CreditAmount)
+                                              };
 
             Decimal totalRevenue = 0;
             //Decimal totalCurrentLiabilities = 0;
@@ -3122,23 +3189,23 @@ namespace easyfis.Controllers
 
                         // table income statement
                         var accounts_JournalIncomes = from d in db.TrnJournals
-                                                     where d.JournalDate >= Convert.ToDateTime(StartDate)
-                                                     && d.JournalDate <= Convert.ToDateTime(EndDate)
-                                                     && d.MstAccount.MstAccountType.AccountType == accountType_Journal_Income.AccountType
-                                                     && d.MstAccount.MstAccountType.MstAccountCategory.Id == 5
-                                                     && d.MstBranch.CompanyId == CompanyId
-                                                     group d by new
-                                                     {
-                                                         AccountCode = d.MstAccount.AccountCode,
-                                                         Account = d.MstAccount.Account
-                                                     } into g
-                                                     select new Models.TrnJournal
-                                                     {
-                                                         AccountCode = g.Key.AccountCode,
-                                                         Account = g.Key.Account,
-                                                         DebitAmount = g.Sum(d => d.DebitAmount),
-                                                         CreditAmount = g.Sum(d => d.CreditAmount)
-                                                     };
+                                                      where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                                      && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                                      && d.MstAccount.MstAccountType.AccountType == accountType_Journal_Income.AccountType
+                                                      && d.MstAccount.MstAccountType.MstAccountCategory.Id == 5
+                                                      && d.MstBranch.CompanyId == CompanyId
+                                                      group d by new
+                                                      {
+                                                          AccountCode = d.MstAccount.AccountCode,
+                                                          Account = d.MstAccount.Account
+                                                      } into g
+                                                      select new Models.TrnJournal
+                                                      {
+                                                          AccountCode = g.Key.AccountCode,
+                                                          Account = g.Key.Account,
+                                                          DebitAmount = g.Sum(d => d.DebitAmount),
+                                                          CreditAmount = g.Sum(d => d.CreditAmount)
+                                                      };
 
                         foreach (var accounts_JournalIncome in accounts_JournalIncomes)
                         {
@@ -3174,39 +3241,39 @@ namespace easyfis.Controllers
 
             // retrieve account sub category journal for Expenses
             var accountTypeSubCategory_Journal_Expenses = from d in db.TrnJournals
-                                                         where d.JournalDate >= Convert.ToDateTime(StartDate)
-                                                         && d.JournalDate <= Convert.ToDateTime(EndDate)
-                                                         && d.MstAccount.MstAccountType.MstAccountCategory.Id == 6
-                                                         && d.MstBranch.CompanyId == CompanyId
-                                                         group d by new
-                                                         {
-                                                             AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
-                                                             SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription
-                                                         } into g
-                                                         select new Models.TrnJournal
-                                                         {
-                                                             AccountCategory = g.Key.AccountCategory,
-                                                             SubCategoryDescription = g.Key.SubCategoryDescription,
-                                                             DebitAmount = g.Sum(d => d.DebitAmount),
-                                                             CreditAmount = g.Sum(d => d.CreditAmount)
-                                                         };
+                                                          where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                                          && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                                          && d.MstAccount.MstAccountType.MstAccountCategory.Id == 6
+                                                          && d.MstBranch.CompanyId == CompanyId
+                                                          group d by new
+                                                          {
+                                                              AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
+                                                              SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription
+                                                          } into g
+                                                          select new Models.TrnJournal
+                                                          {
+                                                              AccountCategory = g.Key.AccountCategory,
+                                                              SubCategoryDescription = g.Key.SubCategoryDescription,
+                                                              DebitAmount = g.Sum(d => d.DebitAmount),
+                                                              CreditAmount = g.Sum(d => d.CreditAmount)
+                                                          };
 
             // retrieve account type journal for Expenses
             var accountType_Journal_Expenses = from d in db.TrnJournals
-                                              where d.JournalDate >= Convert.ToDateTime(StartDate)
-                                              && d.JournalDate <= Convert.ToDateTime(EndDate)
-                                              && d.MstAccount.MstAccountType.MstAccountCategory.Id == 6
-                                              && d.MstBranch.CompanyId == CompanyId
-                                              group d by new
-                                              {
-                                                  AccountType = d.MstAccount.MstAccountType.AccountType
-                                              } into g
-                                              select new Models.TrnJournal
-                                              {
-                                                  AccountType = g.Key.AccountType,
-                                                  DebitAmount = g.Sum(d => d.DebitAmount),
-                                                  CreditAmount = g.Sum(d => d.CreditAmount)
-                                              };
+                                               where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                               && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                               && d.MstAccount.MstAccountType.MstAccountCategory.Id == 6
+                                               && d.MstBranch.CompanyId == CompanyId
+                                               group d by new
+                                               {
+                                                   AccountType = d.MstAccount.MstAccountType.AccountType
+                                               } into g
+                                               select new Models.TrnJournal
+                                               {
+                                                   AccountType = g.Key.AccountType,
+                                                   DebitAmount = g.Sum(d => d.DebitAmount),
+                                                   CreditAmount = g.Sum(d => d.CreditAmount)
+                                               };
 
             Decimal totalCostOfSales = 0;
             //Decimal totalCurrentLiabilities = 0;
@@ -3252,23 +3319,23 @@ namespace easyfis.Controllers
 
                         // retrieve accounts journal income
                         var accounts_JournalExpenses = from d in db.TrnJournals
-                                                      where d.JournalDate >= Convert.ToDateTime(StartDate)
-                                                      && d.JournalDate <= Convert.ToDateTime(EndDate)
-                                                      && d.MstAccount.MstAccountType.AccountType == accountType_Journal_Expense.AccountType
-                                                      && d.MstAccount.MstAccountType.MstAccountCategory.Id == 6
-                                                      && d.MstBranch.CompanyId == CompanyId
-                                                      group d by new
-                                                      {
-                                                          AccountCode = d.MstAccount.AccountCode,
-                                                          Account = d.MstAccount.Account
-                                                      } into g
-                                                      select new Models.TrnJournal
-                                                      {
-                                                          AccountCode = g.Key.AccountCode,
-                                                          Account = g.Key.Account,
-                                                          DebitAmount = g.Sum(d => d.DebitAmount),
-                                                          CreditAmount = g.Sum(d => d.CreditAmount)
-                                                      };
+                                                       where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                                       && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                                       && d.MstAccount.MstAccountType.AccountType == accountType_Journal_Expense.AccountType
+                                                       && d.MstAccount.MstAccountType.MstAccountCategory.Id == 6
+                                                       && d.MstBranch.CompanyId == CompanyId
+                                                       group d by new
+                                                       {
+                                                           AccountCode = d.MstAccount.AccountCode,
+                                                           Account = d.MstAccount.Account
+                                                       } into g
+                                                       select new Models.TrnJournal
+                                                       {
+                                                           AccountCode = g.Key.AccountCode,
+                                                           Account = g.Key.Account,
+                                                           DebitAmount = g.Sum(d => d.DebitAmount),
+                                                           CreditAmount = g.Sum(d => d.CreditAmount)
+                                                       };
 
                         foreach (var accounts_JournalExpense in accounts_JournalExpenses)
                         {

@@ -59,7 +59,7 @@ namespace easyfis.Controllers
             }
             else
             {
-                amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                amount = salesInvoiceItems.Sum(d => d.Amount);
             }
 
             return amount;

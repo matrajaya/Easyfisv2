@@ -250,7 +250,7 @@
                                             <input type="hidden" id="saleItem_Unit_data" class="requiredSaleItem">
                                             <input type="hidden" id="saleItem_Unit_selectedValue" />
                                         </dd>
-                                        <dt>Price Ex-VAT</dt>
+                                        <dt>Price</dt>
                                         <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_PriceExVAT" /></dd>
                                         <dt>Discount</dt>
                                         <dd>
@@ -2891,43 +2891,43 @@
                                 "header": "Item",
                                 "binding": "Item",
                                 "allowSorting": true,
-                                "width": 140,
+                                "width": 120,
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "allowSorting": true,
-                                "width": 150,
+                                "width": 130,
                             },
                             {
-                                "header": "Inventory Code",
+                                "header": "Inventory",
                                 "binding": "ItemInventory",
                                 "allowSorting": true,
-                                "width": 160,
+                                "width": 83,
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "Quantity",
                                 "allowSorting": true,
-                                "width": 90,
+                                "width": 80,
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": 80,
                             },
                             {
                                 "header": "Price",
                                 "binding": "Price",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": 80,
                             },
                             {
-                                "header": "Discount Rate",
+                                "header": "Rate",
                                 "binding": "DiscountRate",
                                 "allowSorting": true,
-                                "width": 110,
+                                "width": 80,
                                 "align": "right",
                                 "isContentHtml": true
                             },
@@ -2935,13 +2935,13 @@
                                 "header": "Discount Amount",
                                 "binding": "DiscountAmount",
                                 "allowSorting": true,
-                                "width": 140,
+                                "width": 80,
                             },
                             {
                                 "header": "Net Price",
                                 "binding": "NetPrice",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": 80,
                             },
                             {
                                 "header": "Amount",
@@ -2953,7 +2953,7 @@
                                 "header": "VAT Rate",
                                 "binding": "VATPercentage",
                                 "allowSorting": true,
-                                "width": 110,
+                                "width": 80,
                                 "align": "right",
                                 "isContentHtml": true
                             },
@@ -2961,7 +2961,7 @@
                                 "header": "VAT Amount",
                                 "binding": "VATAmount",
                                 "allowSorting": true,
-                                "width": 120,
+                                "width": 80,
                             },
                             {
                                 "header": "Unit",
@@ -2973,13 +2973,13 @@
                                 "header": "Quantity",
                                 "binding": "BaseQuantity",
                                 "allowSorting": true,
-                                "width": 90
+                                "width": 80
                             },
                             {
                                 "header": "Price",
                                 "binding": "BasePrice",
                                 "allowSorting": true,
-                                "width": 100
+                                "width": 80
                             },
                 ],
                 autoGenerateColumns: false,
@@ -3014,7 +3014,7 @@
             itemGrid.columnHeaders.setCellData(0, 4, 'Particulars');
 
             itemGrid.columnHeaders.columns[5].allowMerging = true;
-            itemGrid.columnHeaders.setCellData(0, 5, 'Inventory Code');
+            itemGrid.columnHeaders.setCellData(0, 5, 'Inventory');
 
             itemGrid.columnHeaders.columns[6].allowMerging = true;
             itemGrid.columnHeaders.setCellData(0, 6, 'Quantity');

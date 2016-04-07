@@ -28,7 +28,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("ReceivingReceipt", "Software")" class="currentPageLinkCustom">Receiving Receipt</a> > Receiving Receipt Detail';
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("ReceivingReceipt", "Software")" class="currentPageLinkCustom">Receiving Receipt</a> > Receiving Receipt Detail
                     </div>
                 </div>
             </div>
@@ -2546,7 +2546,6 @@
                                     document.getElementById('RRLine_TAXInclusive').value = results.IsInclusive;
 
                                     computeTAX();
-                                    //computeBaseUnit();
                                 }
                             });
 
@@ -2575,9 +2574,6 @@
                             getTaxTypeForComboBox();
                         }
                     });
-
-                    //var RRLine_cost = document.getElementById('RRLine_Cost').value;
-                    //document.getElementById('RRLine_BUCCost').value = RRLine_cost;
                 }
             });
 
@@ -2590,6 +2586,86 @@
             //document.getElementById('RRLine_Cost').value = POItemCollection.items[cboItemCode.selectedIndex].Cost;
             document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemCode.selectedIndex].Amount;
             document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
+
+
+
+            var items = new wijmo.collections.ObservableArray;
+            var articleId = document.getElementById('RRLine_ItemId_data').value;
+            $.ajax({
+                url: '/api/article/' + articleId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    $('#loadingModal').modal('hide');
+                    if (Results.length > 0) {
+                        items.push({
+                            Id: Results.Id,
+                            OutputTaxId: Results.OutputTaxId,
+                            OutputTax: Results.OutputTax,
+                            InputTaxId: Results.InputTaxId,
+                            InputTax: Results.InputTax,
+                            WTaxTypeId: Results.WTaxTypeId,
+                            WTaxType: Results.WTaxType
+                        });
+                    }
+
+                    document.getElementById('RRLine_VAT_data').value = Results.InputTaxId;
+                    document.getElementById('RRLine_VAT_selectedValue').value = Results.InputTax;
+                    document.getElementById('RRLine_WTAX_data').value = Results.WTaxTypeId;
+                    document.getElementById('RRLine_WTAX_selectedValue').value = Results.WTaxType;
+
+                    var taxTypesVAT = new wijmo.collections.ObservableArray();
+                    var taxTypeVATId = Results.InputTaxId;
+                    $.ajax({
+                        url: '/api/taxType/' + taxTypeVATId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            if (results.length > 0) {
+                                taxTypesVAT.push({
+                                    TaxTypeId: results.Id,
+                                    TaxType: results.TaxType,
+                                    TaxRate: results.TaxRate,
+                                    IsInclusive: results.IsInclusive
+                                });
+                            }
+
+                            document.getElementById('RRLine_VATRate').value = results.TaxRate;
+                            document.getElementById('RRLine_TAXInclusive').value = results.IsInclusive;
+
+                            computeTAX();
+                        }
+                    });
+
+                    var taxTypesWTAX = new wijmo.collections.ObservableArray();
+                    var taxTypeWTAXId = Results.WTaxTypeId;
+                    $.ajax({
+                        url: '/api/taxType/' + taxTypeWTAXId,
+                        cache: false,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        data: {},
+                        success: function (results) {
+                            if (results.length > 0) {
+                                taxTypesWTAX.push({
+                                    TaxTypeId: results.Id,
+                                    TaxType: results.TaxType,
+                                    TaxRate: results.TaxRate,
+                                    IsInclusive: results.IsInclusive
+                                });
+                            }
+
+                            document.getElementById('RRLine_WTAXRate').value = results.TaxRate;
+                        }
+                    });
+
+                    getTaxTypeForComboBox();
+                }
+            });
 
         }
 
@@ -3602,6 +3678,8 @@
             $('#RRLine_Cost').keyup(function () {
                 var inputQuantity = document.getElementById('RRLine_Quantity').value;
                 var inputCost = this.value;
+
+                document.getElementById('RRLine_BUCCost').value = this.value;
 
                 var replacedCost = inputCost.replace(/\,/g, '');
                 var replacedQuantity = inputQuantity.replace(/\,/g, '');
