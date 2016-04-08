@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Supplier</title>
@@ -165,48 +164,48 @@
                         for (i = 0; i < supplierResults.length; i++) {
 
                             var btnDeleteId;
-                            if(supplierResults[i]["IsLocked"] == true) {
+                            if (supplierResults[i]["IsLocked"] == true) {
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSupplierDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             } else {
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdSupplierDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             }
 
-                            suppliers.push ({
+                            suppliers.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdSupplierEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: supplierResults[i]["Id"],
-                                ArticleCode : supplierResults[i]["ArticleCode"],
-                                ManualArticleCode : supplierResults[i]["ManualArticleCode"],
-                                Article : supplierResults[i]["Article"],
-                                Category : supplierResults[i]["Category"],
-                                ArticleTypeId : supplierResults[i]["ArticleTypeId"],
-                                ArticleType : supplierResults[i]["ArticleType"],
-                                ArticleGroupId : supplierResults[i]["ArticleGroupId"],
-                                ArticleGroup : supplierResults[i]["ArticleGroup"],
-                                AccountId : supplierResults[i]["AccountId"],
-                                Account : supplierResults[i]["Account"],
-                                SalesAccountId : supplierResults[i]["SalesAccountId"],
-                                CostAccountId : supplierResults[i]["CostAccountId"],
-                                AssetAccountId : supplierResults[i]["AssetAccountId"],
-                                ExpenseAccountId : supplierResults[i]["ExpenseAccountId"],
-                                UnitId : supplierResults[i]["UnitId"],
-                                OutputTaxId : supplierResults[i]["OutputTaxId"],
-                                InputTaxId : supplierResults[i]["InputTaxId"],
-                                WTaxTypeId : supplierResults[i]["WTaxTypeId"],
-                                Price : supplierResults[i]["Price"],
-                                Cost : supplierResults[i]["Cost"],
-                                IsInventory : supplierResults[i]["IsInventory"],
-                                Particulars : supplierResults[i]["Particulars"],
-                                Address : supplierResults[i]["Address"],
-                                TermId : supplierResults[i]["TermId"],
-                                ContactNumber : supplierResults[i]["ContactNumber"],
-                                ContactPerson : supplierResults[i]["ContactPerson"],
-                                TaxNumber : supplierResults[i]["TaxNumber"],
-                                CreditLimit : supplierResults[i]["CreditLimit"],
-                                DateAcquired : supplierResults[i]["DateAcquired"],
-                                UsefulLife : supplierResults[i]["UsefulLife"],
-                                SalvageValue : supplierResults[i]["SalvageValue"],
-                                ManualArticleOldCode : supplierResults[i]["ManualArticleOldCode"],
+                                ArticleCode: supplierResults[i]["ArticleCode"],
+                                ManualArticleCode: supplierResults[i]["ManualArticleCode"],
+                                Article: supplierResults[i]["Article"],
+                                Category: supplierResults[i]["Category"],
+                                ArticleTypeId: supplierResults[i]["ArticleTypeId"],
+                                ArticleType: supplierResults[i]["ArticleType"],
+                                ArticleGroupId: supplierResults[i]["ArticleGroupId"],
+                                ArticleGroup: supplierResults[i]["ArticleGroup"],
+                                AccountId: supplierResults[i]["AccountId"],
+                                Account: supplierResults[i]["Account"],
+                                SalesAccountId: supplierResults[i]["SalesAccountId"],
+                                CostAccountId: supplierResults[i]["CostAccountId"],
+                                AssetAccountId: supplierResults[i]["AssetAccountId"],
+                                ExpenseAccountId: supplierResults[i]["ExpenseAccountId"],
+                                UnitId: supplierResults[i]["UnitId"],
+                                OutputTaxId: supplierResults[i]["OutputTaxId"],
+                                InputTaxId: supplierResults[i]["InputTaxId"],
+                                WTaxTypeId: supplierResults[i]["WTaxTypeId"],
+                                Price: supplierResults[i]["Price"],
+                                Cost: supplierResults[i]["Cost"],
+                                IsInventory: supplierResults[i]["IsInventory"],
+                                Particulars: supplierResults[i]["Particulars"],
+                                Address: supplierResults[i]["Address"],
+                                TermId: supplierResults[i]["TermId"],
+                                ContactNumber: supplierResults[i]["ContactNumber"],
+                                ContactPerson: supplierResults[i]["ContactPerson"],
+                                TaxNumber: supplierResults[i]["TaxNumber"],
+                                CreditLimit: supplierResults[i]["CreditLimit"],
+                                DateAcquired: supplierResults[i]["DateAcquired"],
+                                UsefulLife: supplierResults[i]["UsefulLife"],
+                                SalvageValue: supplierResults[i]["SalvageValue"],
+                                ManualArticleOldCode: supplierResults[i]["ManualArticleOldCode"],
                                 IsLocked: supplierResults[i]["IsLocked"],
                                 CreatedById: supplierResults[i]["CreatedById"],
                                 CreatedBy: supplierResults[i]["CreatedBy"],
@@ -260,7 +259,6 @@
             // Flex Grid
             supplierGrid.itemsSource = suppliers;
             supplierGrid.trackChanges = true;
-
         }
 
         // ===================
@@ -268,6 +266,13 @@
         // ===================
         function btnAddSupplier_OnClick() {
             window.location = '/Software/SupplierDetail';
+        }
+
+        // =====================
+        // Supplier Close Button
+        // =====================
+        function btnCloseSupplier_OnClick() {
+            window.location = '/Software';
         }
 
         // ====================
@@ -281,13 +286,6 @@
         }
 
         // =====================
-        // Supplier Close Button
-        // =====================
-        function btnCloseSupplier_OnClick() {
-            window.location = '/Software';
-        }
-
-        // =====================
         // Supplier delete Button
         // =====================
         function cmdSupplierDeleteButton_OnClick() {
@@ -295,7 +293,7 @@
                 show: true,
                 backdrop: 'static'
             });
-        
+
             document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $('#cmdConfirmDeleteSupplier').prop('disabled', false);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
@@ -319,9 +317,7 @@
                         $('#cmdConfirmDeleteSupplier').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
                         toastr.success("Successfully deleted");
-
                         $('#deleteSupplierConfirm').modal('hide');
-
                         refreshSupplierFlexgrid();
                     },
                     404: function () {
@@ -465,7 +461,6 @@
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-
             supplierGrid.trackChanges = true;
 
             //Navigation button

@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Customer Detail</title>
@@ -241,6 +240,7 @@
         var accountSelectedValue = "";
         var termSelectedValue = "";
         var IsLocked;
+        var customerId = getParam('CustomerId');
 
         // =======================
         // Get URL Parameter Value
@@ -250,10 +250,11 @@
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
             var results = regex.exec(window.location.href);
-            if (results == null)
+            if (results == null) {
                 return "";
-            else
+            } else {
                 return results[1];
+            }
         }
 
         // ==================================
@@ -261,10 +262,7 @@
         // ==================================
         function getArticleCustomerById() {
             $('#loadingModal').modal('show');
-            var customerId = getParam('CustomerId');
-            if (document.location.search.length == 0) {
-                $('#loadingModal').modal('hide');
-            } else {
+            if (document.location.search.length > 0) {
                 $.ajax({
                     url: '/api/article/' + customerId,
                     cache: false,
@@ -277,11 +275,6 @@
                             document.getElementById('artcileCustomer_code').value = customerResults.ArticleCode;
                             document.getElementById('artcileCustomer_customer').value = customerResults.Article;
                             document.getElementById('artcileCustomer_creditLimit').value = customerResults.CreditLimit.toLocaleString();
-
-                            customerGroupSelectedValue = customerResults.ArticleGroup;
-                            accountSelectedValue = customerResults.Account;
-                            termSelectedValue = customerResults.Term;
-
                             document.getElementById('artcileCustomer_address').value = customerResults.Address;
                             document.getElementById('artcileCustomer_particulars').value = customerResults.Particulars;
                             document.getElementById('artcileCustomer_TIN').value = customerResults.TaxNumber;
@@ -291,6 +284,9 @@
                             document.getElementById('createdDate').innerHTML = customerResults.CreatedDateTime;
                             document.getElementById('updatedBy').innerHTML = customerResults.UpdatedBy;
                             document.getElementById('updatedDate').innerHTML = customerResults.UpdatedDateTime;
+                            customerGroupSelectedValue = customerResults.ArticleGroup;
+                            accountSelectedValue = customerResults.Account;
+                            termSelectedValue = customerResults.Term;
 
                             if (customerResults.IsLocked == true) {
                                 document.getElementById('artcileCustomer_customer').disabled = true;
@@ -300,12 +296,10 @@
                                 document.getElementById('artcileCustomer_TIN').disabled = true;
                                 document.getElementById('artcileCustomer_contactNo').disabled = true;
                                 document.getElementById('artcileCustomer_contactPerson').disabled = true;
-
                                 $('#customer_SaveButton').prop('disabled', true);
                                 $('#customer_LockButton').prop('disabled', true);
                                 $('#customer_UnlockButton').prop('disabled', false);
                                 $('#btnAddContactInformation').prop('disabled', true);
-
                                 IsLocked = true;
                             } else {
                                 document.getElementById('artcileCustomer_customer').disabled = false;
@@ -315,15 +309,14 @@
                                 document.getElementById('artcileCustomer_TIN').disabled = false;
                                 document.getElementById('artcileCustomer_contactNo').disabled = false;
                                 document.getElementById('artcileCustomer_contactPerson').disabled = false;
-
                                 $('#customer_SaveButton').prop('disabled', false);
                                 $('#customer_LockButton').prop('disabled', false);
                                 $('#customer_UnlockButton').prop('disabled', true);
                                 $('#btnAddContactInformation').prop('disabled', false);
-
                                 IsLocked = false;
                             }
 
+                            getLastArticleCode();
                             getArticleCustomerGroupForComboBox();
                             getArticleTermForComboBox();
                         } else {
@@ -335,6 +328,12 @@
                     confirm("URL Not Found");
                     window.location = '/Software/Customer';
                 });
+            } else {
+                getLastArticleCode();
+                getArticleCustomerGroupForComboBox();
+                getArticleTermForComboBox();
+
+                $('#loadingModal').modal('hide');
             }
         }
 
@@ -352,7 +351,6 @@
                     disabled = false;
                 }
             }
-
             return disabled;
         }
 
@@ -360,7 +358,6 @@
         // Get Last Id for Customer by its ID
         // ==================================
         function getLastInsertedIdCustomerByArticleTypeId() {
-            var customers = new wijmo.collections.ObservableArray;
             $.ajax({
                 url: '/api/articleLastIdByArticleTypeId/2',
                 cache: false,
@@ -447,12 +444,12 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
+                success: function (accountResults) {
+                    if (accountResults.length > 0) {
+                        for (i = 0; i < accountResults.length; i++) {
                             accounts.push({
-                                AccountId: results[i]["Id"],
-                                Account: results[i]["Account"]
+                                AccountId: accountResults[i]["Id"],
+                                Account: accountResults[i]["Account"]
                             });
                         }
                         createCboForAccount(accounts);
@@ -490,12 +487,12 @@
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
+                success: function (termResults) {
+                    if (termResults.length > 0) {
+                        for (i = 0; i < termResults.length; i++) {
                             terms.push({
-                                TermId: results[i]["Id"],
-                                Term: results[i]["Term"]
+                                TermId: termResults[i]["Id"],
+                                Term: termResults[i]["Term"]
                             });
                         }
                         createCboForTerm(terms);
@@ -522,19 +519,6 @@
             });
         }
 
-        // ========================================================
-        // Function with leading zeroes to display the article code
-        // ========================================================
-        function zerofill(number, length) {
-            var result = number.toString();
-            var pad = length - result.length;
-            while (pad > 0) {
-                result = '0' + result;
-                pad--;
-            }
-            return result;
-        }
-
         // =========================
         // Customer Entry Validation
         // =========================
@@ -546,14 +530,12 @@
                     $(this).css({
                         "border": "1px solid red"
                     });
-                }
-                else {
+                } else {
                     $(this).css({
                         "border": "",
                     });
                 }
             });
-
             return isValid;
         }
 
@@ -585,7 +567,6 @@
         // =====================
         function dataCustomerObject() {
             var customerObject = new Object();
-            var customerId = getParam('CustomerId');
             customerObject.ArticleCode = document.getElementById('artcileCustomer_code').value;
             customerObject.Article = document.getElementById('artcileCustomer_customer').value;
             customerObject.ArticleGroupId = cboArticleGroupForCustomer.selectedItem["ArticleGroupId"];
@@ -670,7 +651,6 @@
                 $('#customer_UnlockButton').prop('disabled', true);
                 $('#customer_CloseButton').prop('disabled', true);
 
-                var customerId = getParam('CustomerId');
                 $.ajax({
                     type: "PUT",
                     url: '/api/updateArticle/' + customerId + '/2',
@@ -720,7 +700,6 @@
             $('#customer_UnlockButton').prop('disabled', true);
             $('#customer_CloseButton').prop('disabled', true);
 
-            var customerId = getParam('CustomerId');
             $.ajax({
                 type: "PUT",
                 url: '/api/unlockArticle/' + customerId,
@@ -767,14 +746,25 @@
             window.location = '/Software/Customer';
         }
 
-        // ===========
-        // Onload Page
-        // ===========
-        $(document).ready(function () {
-            getArticleCustomerById();
+        // ========================================================
+        // Function with leading zeroes to display the article code
+        // ========================================================
+        function zerofill(number, length) {
+            var result = number.toString();
+            var pad = length - result.length;
+            while (pad > 0) {
+                result = '0' + result;
+                pad--;
+            }
+            return result;
+        }
 
-            var customerId = getParam('CustomerId');
-            if (customerId == 0) {
+        // =========================
+        // Get the last Article Code
+        // =========================
+        function getLastArticleCode() {
+            document.getElementById('artcileCustomer_code').disabled = true;
+            if (document.location.search.length == 0) {
                 $.ajax({
                     url: '/api/articleLastArticleCodeByArticleTypeId/2',
                     cache: false,
@@ -795,17 +785,35 @@
                 $("#customer_editCustomer").prop("disabled", true);
                 $("#customer_printCustomer").prop("disabled", true);
             }
+        }
 
-            document.getElementById('artcileCustomer_code').disabled = true;
-
+        // ===========
+        // Onload Page
+        // ===========
+        $(document).ready(function () {
             // combo box
             cboArticleGroupForCustomer = new wijmo.input.ComboBox('#artcileCustomer_customerGroup');
             cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account');
             cboForTerm = new wijmo.input.ComboBox('#artcileCustomer_term');
 
-            getArticleCustomerGroupForComboBox();
-            getArticleTermForComboBox();
+            // function
+            getArticleCustomerById();
 
+            if (document.location.search.length == 0) {
+                $('#customer_SaveButton').show();
+                $('#customer_LockButton').hide();
+                $('#customer_UnlockButton').hide();
+
+                $('#btnAddContactInformation').prop('disabled', true);
+            } else {
+                $('#customer_SaveButton').hide();
+                $('#customer_LockButton').show();
+                $('#customer_UnlockButton').show();
+            }
+
+            $('#JournalLedger').show();
+            $('#ContactInformation').hide();
+            journalLedgerTab();
         });
     </script>
 
@@ -823,7 +831,7 @@
         // GET Journal Ledger List
         // =======================
         function getJournalLedger() {
-            var journalLedgers = new wijmo.collections.ObservableArray;
+            //var journalLedgers = new wijmo.collections.ObservableArray;
             //$('#loadingModal').modal('show');
             //$.ajax({
             //    url: '/api/listAccount',
@@ -867,8 +875,6 @@
         // ===============
         function journalLedgerTab() {
             journalLedgers = new wijmo.collections.CollectionView();
-            journalLedgers.canFilter = true;
-            journalLedgers.pageSize = 15;
 
             // Flex Grid for Journal Ledger
             journalLedgerGrid = new wijmo.grid.FlexGrid('#JournalLedgerGrid');
@@ -950,10 +956,9 @@
         // ============================
         function getContactInformation() {
             var contactInformations = new wijmo.collections.ObservableArray;
-            var articleId = getParam('CustomerId');
             $('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listArticleContactByArticleId/' + articleId,
+                url: '/api/listArticleContactByArticleId/' + customerId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -963,7 +968,6 @@
                     if (contactInformationResults.length > 0) {
 
                         var customers = new wijmo.collections.ObservableArray;
-                        var customerId = getParam('CustomerId');
                         $.ajax({
                             url: '/api/article/' + customerId,
                             cache: false,
@@ -1079,7 +1083,6 @@
                     });
                 }
             });
-
             return isValid;
         }
 
@@ -1088,8 +1091,6 @@
         // =========================================
         function refreshMoreContactInformation() {
             contactInformations = new wijmo.collections.CollectionView(getContactInformation());
-            contactInformations.canFilter = true;
-            contactInformations.pageSize = 15;
 
             // Flex Grid for Contact Information
             contactInformationGrid.trackChanges = true;
@@ -1101,7 +1102,6 @@
         // ============
         function cmdContactSaveButton_OnClick() {
             var contactObject = new Object();
-            var customerId = getParam('CustomerId');
             var contactId = document.getElementById('contact_Id').value;
 
             contactObject.ContactPerson = document.getElementById('contact_contactPerson').value;
@@ -1128,9 +1128,7 @@
                                 $('#cmdSaveContactButton').prop('disabled', true);
                                 $('#cmdContactDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
-
                                 $('#contactEdit').modal('hide');
-
                                 refreshMoreContactInformation();
                             },
                             404: function () {
@@ -1157,9 +1155,7 @@
                                 $('#cmdSaveContactButton').prop('disabled', true);
                                 $('#cmdContactDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully updated");
-
                                 $('#contactEdit').modal('hide');
-
                                 refreshMoreContactInformation();
                             },
                             404: function () {
@@ -1209,9 +1205,7 @@
                         $('#cmdConfirmDeleteContact').prop('disabled', true);
                         $('#cmdConfirmDeleteContactCloseButton').prop('disabled', true);
                         toastr.success("Successfully deleted");
-
                         $('#deleteContactConfirm').modal('hide');
-
                         refreshMoreContactInformation();
                     },
                     404: function () {
@@ -1237,8 +1231,6 @@
         // ====================================
         function contactInformationTab() {
             contactInformations = new wijmo.collections.CollectionView(getContactInformation());
-            contactInformations.canFilter = true;
-            contactInformations.pageSize = 15;
 
             // Flex Grid for Contact Information
             contactInformationGrid = new wijmo.grid.FlexGrid('#ContactInformationGrid');
@@ -1292,7 +1284,6 @@
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-
             contactInformationGrid.trackChanges = true;
         }
     </script>
@@ -1319,28 +1310,6 @@
             window.contactInformationTab = function () {
                 return true;
             };
-        });
-
-        // ======================
-        // On Load Ready Function
-        // ======================
-        $(document).ready(function () {
-            var customerId = getParam('CustomerId');
-            if (customerId == 0) {
-                $('#customer_SaveButton').show();
-                $('#customer_LockButton').hide();
-                $('#customer_UnlockButton').hide();
-
-                $('#btnAddContactInformation').prop('disabled', true);
-            } else {
-                $('#customer_SaveButton').hide();
-                $('#customer_LockButton').show();
-                $('#customer_UnlockButton').show();
-            }
-
-            $('#JournalLedger').show();
-            $('#ContactInformation').hide();
-            journalLedgerTab();
         });
     </script>
 </body>

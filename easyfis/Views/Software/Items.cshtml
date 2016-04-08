@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Items</title>
@@ -141,7 +140,6 @@
         // ================
         var items;
         var itemGrid;
-
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
         var btnNextPageGrid;
@@ -243,6 +241,13 @@
             window.location = '/Software/ItemDetail';
         }
 
+        // =================
+        // Item Close Button
+        // =================
+        function btnCloseItem_OnClick() {
+            window.location = '/Software';
+        }
+
         // ================
         // Item Edit Button
         // ================
@@ -253,13 +258,6 @@
             window.location = '/Software/ItemDetail?ItemId=' + itemId;
         }
 
-        // =================
-        // Item Close Button
-        // =================
-        function btnCloseItem_OnClick() {
-            window.location = '/Software';
-        }
-        
         // =====================
         // Refresh Item Flexgrid
         // =====================
@@ -320,7 +318,6 @@
                         $('#cmdConfirmDeleteItem').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
                         toastr.success("Successfully Deleted");
-
                         $('#deleteItemConfirm').modal('hide');
                         refreshItemFlexgrid();
                     },
@@ -482,7 +479,6 @@
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-
             itemGrid.trackChanges = true;
 
             //Navigation button

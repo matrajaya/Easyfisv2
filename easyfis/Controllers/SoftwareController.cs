@@ -780,6 +780,156 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult AccountsPayablePurchaseSummaryReportPDF()
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult AccountsPayablePurchaseDetailReportPDF()
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult AccountsPayableReceivingReceiptSummaryReportPDF()
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult AccountsPayableReceivingReceiptDetailReportPDF()
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult AccountsPayableDisbursementSummaryReportPDF()
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult AccountsPayableDisbursementDetailReportPDF()
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
         public ActionResult Disbursement()
         {
             return CheckCookie();
@@ -1305,6 +1455,106 @@ namespace easyfis.Controllers
 
         [Authorize]
         public ActionResult AccountsReceivableStatementOfAccountPDF()
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult AccountsReceivableSalesSummaryReportPDF(String StartDate, String EndDate)
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult AccountsReceivableSalesDetailReportPDF(String StartDate, String EndDate)
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult AccountsReceivableCollectionSummaryReportPDF(String StartDate, String EndDate)
+        {
+            // Start of the PDF
+            MemoryStream workStream = new MemoryStream();
+            Rectangle rec = new Rectangle(PageSize.A3);
+            Document document = new Document(rec, 72, 72, 72, 72);
+            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+            // Document Starts
+            document.Open();
+
+            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+            document.Add(line);
+
+            // Document End
+            document.Close();
+
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+
+            return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult AccountsReceivableCollectionDetailReportPDF(String StartDate, String EndDate)
         {
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();

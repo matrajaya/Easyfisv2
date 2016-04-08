@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Customer</title>
@@ -72,7 +71,7 @@
             </div>
         </section>
 
-        <!-- Supplier Delete -->
+        <!-- Customer Delete -->
         <div class="modal fade" id="deleteCustomerConfirm" role="dialog">
             <div class="modal-dialog modal-sm">
                 <!-- Modal content-->
@@ -141,7 +140,6 @@
         // ================
         var customers;
         var customerGrid;
-
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
         var btnNextPageGrid;
@@ -166,48 +164,48 @@
                         for (i = 0; i < customerResults.length; i++) {
 
                             var btnDeleteId;
-                            if(customerResults[i]["IsLocked"] == true) {
+                            if (customerResults[i]["IsLocked"] == true) {
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdCustomerLockDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             } else {
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdCustomerDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             }
 
-                            customers.push ({
+                            customers.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdCustomerEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: customerResults[i]["Id"],
-                                ArticleCode : customerResults[i]["ArticleCode"],
-                                ManualArticleCode : customerResults[i]["ManualArticleCode"],
-                                Article : customerResults[i]["Article"],
-                                Category : customerResults[i]["Category"],
-                                ArticleTypeId : customerResults[i]["ArticleTypeId"],
-                                ArticleType : customerResults[i]["ArticleType"],
-                                ArticleGroupId : customerResults[i]["ArticleGroupId"],
-                                ArticleGroup : customerResults[i]["ArticleGroup"],
-                                AccountId : customerResults[i]["AccountId"],
-                                Account : customerResults[i]["Account"],
-                                SalesAccountId : customerResults[i]["SalesAccountId"],
-                                CostAccountId : customerResults[i]["CostAccountId"],
-                                AssetAccountId : customerResults[i]["AssetAccountId"],
-                                ExpenseAccountId : customerResults[i]["ExpenseAccountId"],
-                                UnitId : customerResults[i]["UnitId"],
-                                OutputTaxId : customerResults[i]["OutputTaxId"],
-                                InputTaxId : customerResults[i]["InputTaxId"],
-                                WTaxTypeId : customerResults[i]["WTaxTypeId"],
-                                Price : customerResults[i]["Price"],
-                                Cost : customerResults[i]["Cost"],
-                                IsInventory : customerResults[i]["IsInventory"],
-                                Particulars : customerResults[i]["Particulars"],
-                                Address : customerResults[i]["Address"],
-                                TermId : customerResults[i]["TermId"],
-                                ContactNumber : customerResults[i]["ContactNumber"],
-                                ContactPerson : customerResults[i]["ContactPerson"],
-                                TaxNumber : customerResults[i]["TaxNumber"],
-                                CreditLimit : customerResults[i]["CreditLimit"],
-                                DateAcquired : customerResults[i]["DateAcquired"],
-                                UsefulLife : customerResults[i]["UsefulLife"],
-                                SalvageValue : customerResults[i]["SalvageValue"],
-                                ManualArticleOldCode : customerResults[i]["ManualArticleOldCode"],
+                                ArticleCode: customerResults[i]["ArticleCode"],
+                                ManualArticleCode: customerResults[i]["ManualArticleCode"],
+                                Article: customerResults[i]["Article"],
+                                Category: customerResults[i]["Category"],
+                                ArticleTypeId: customerResults[i]["ArticleTypeId"],
+                                ArticleType: customerResults[i]["ArticleType"],
+                                ArticleGroupId: customerResults[i]["ArticleGroupId"],
+                                ArticleGroup: customerResults[i]["ArticleGroup"],
+                                AccountId: customerResults[i]["AccountId"],
+                                Account: customerResults[i]["Account"],
+                                SalesAccountId: customerResults[i]["SalesAccountId"],
+                                CostAccountId: customerResults[i]["CostAccountId"],
+                                AssetAccountId: customerResults[i]["AssetAccountId"],
+                                ExpenseAccountId: customerResults[i]["ExpenseAccountId"],
+                                UnitId: customerResults[i]["UnitId"],
+                                OutputTaxId: customerResults[i]["OutputTaxId"],
+                                InputTaxId: customerResults[i]["InputTaxId"],
+                                WTaxTypeId: customerResults[i]["WTaxTypeId"],
+                                Price: customerResults[i]["Price"],
+                                Cost: customerResults[i]["Cost"],
+                                IsInventory: customerResults[i]["IsInventory"],
+                                Particulars: customerResults[i]["Particulars"],
+                                Address: customerResults[i]["Address"],
+                                TermId: customerResults[i]["TermId"],
+                                ContactNumber: customerResults[i]["ContactNumber"],
+                                ContactPerson: customerResults[i]["ContactPerson"],
+                                TaxNumber: customerResults[i]["TaxNumber"],
+                                CreditLimit: customerResults[i]["CreditLimit"],
+                                DateAcquired: customerResults[i]["DateAcquired"],
+                                UsefulLife: customerResults[i]["UsefulLife"],
+                                SalvageValue: customerResults[i]["SalvageValue"],
+                                ManualArticleOldCode: customerResults[i]["ManualArticleOldCode"],
                                 IsLocked: customerResults[i]["IsLocked"],
                                 CreatedById: customerResults[i]["CreatedById"],
                                 CreatedBy: customerResults[i]["CreatedBy"],
@@ -243,6 +241,13 @@
             window.location = '/Software/CustomerDetail';
         }
 
+        // =====================
+        // Customer Close Button
+        // =====================
+        function btnCloseCustomer_OnClick() {
+            window.location = '/Software';
+        }
+
         // ====================
         // Customer Edit Button
         // ====================
@@ -251,13 +256,6 @@
             var customer = customers.currentEditItem;
             var customerId = customer.Id;
             window.location = '/Software/CustomerDetail?CustomerId=' + customerId;
-        }
-
-        // =====================
-        // Customer Close Button
-        // =====================
-        function btnCloseCustomer_OnClick() {
-            window.location = '/Software';
         }
 
         // =========================
@@ -295,7 +293,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $('#cmdConfirmDeleteCustomer').prop('disabled', false);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
@@ -319,9 +317,7 @@
                         $('#cmdConfirmDeleteCustomer').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
                         toastr.success("Successfully deleted");
-
                         $('#deleteCustomerConfirm').modal('hide');
-
                         refreshCustomerFlexgrid();
                     },
                     404: function () {
@@ -465,7 +461,6 @@
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-
             customerGrid.trackChanges = true;
 
             //Navigation button

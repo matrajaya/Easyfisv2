@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Accounts Payable</title>
@@ -30,10 +29,6 @@
                 </div>
             </div>
             <div class="container">
-                @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                    <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>*@
-                @*<br /><br />*@
-                @*<h2>Accounts Payable</h2>*@
                 <div class="row">
                     <div class="col-md-4">
                         <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
@@ -43,6 +38,12 @@
                             <li><a data-toggle="pill" href="#WTDR">Withholding Tax Detail Report</a></li>
                             <li><a data-toggle="pill" href="#WTSR">Withholding Tax Sumamry Report</a></li>
                             <li><a data-toggle="pill" href="#COCTW">Certificate of Creditable Tax Withheld (Form 2307)</a></li>
+                            <li><a data-toggle="pill" href="#PSR">Purchase Summary Report</a></li>
+                            <li><a data-toggle="pill" href="#PDR">Purchase Detail  Report</a></li>
+                            <li><a data-toggle="pill" href="#RRSR">Receiving Receipt Summary Report</a></li>
+                            <li><a data-toggle="pill" href="#RRDR">Receiving Receipt Detail Report</a></li>
+                            <li><a data-toggle="pill" href="#DSR">Disbursement Summary Report</a></li>
+                            <li><a data-toggle="pill" href="#DDR">Disbursement Detail Report</a></li>
                         </ul>
                     </div>
                     <div class="col-md-8">
@@ -270,6 +271,198 @@
                                     </form>
                                 </div>
                             </div>
+                            <div id="PSR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="purchaseSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="purchaseSummaryReport_StartDate"></div>
+                                                        <input type="hidden" id="purchaseSummaryReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="purchaseSummaryReport_EndDate"></div>
+                                                        <input type="hidden" id="purchaseSummaryReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="PDR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="purchaseDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="purchaseDetailReport_StartDate"></div>
+                                                        <input type="hidden" id="purchaseDetailReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="purchaseDetailReport_EndDate"></div>
+                                                        <input type="hidden" id="purchaseDetailReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="RRSR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="receivingReceiptSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="receivingReceiptSummaryReport_StartDate"></div>
+                                                        <input type="hidden" id="receivingReceiptSummaryReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="receivingReceiptSummaryReport_EndDate"></div>
+                                                        <input type="hidden" id="receivingReceiptSummaryReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="RRDR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="receivingReceiptDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="receivingReceiptDetailReport_StartDate"></div>
+                                                        <input type="hidden" id="receivingReceiptDetailReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="receivingReceiptDetailReport_EndDate"></div>
+                                                        <input type="hidden" id="receivingReceiptDetailReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="DSR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="disbursementSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="disbursementSummaryReport_StartDate"></div>
+                                                        <input type="hidden" id="disbursementSummaryReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="disbursementSummaryReport_EndDate"></div>
+                                                        <input type="hidden" id="disbursementSummaryReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="DDR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="disbursementDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="disbursementDetailReport_StartDate"></div>
+                                                        <input type="hidden" id="disbursementDetailReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="disbursementDetailReport_EndDate"></div>
+                                                        <input type="hidden" id="disbursementDetailReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -306,6 +499,18 @@
         var withHoldingTAXSummarryReportEndDate;
         var certificateOfCreditableTaxWithheldStartDate;
         var certificateOfCreditableTaxWithheldEndDate;
+        var purchaseSummaryReportStartDate;
+        var purchaseSummaryReportEndDate;
+        var purchaseDetailReportStartDate;
+        var purchaseDetailReportEndDate;
+        var receivingReceiptSummaryReportStartDate;
+        var receivingReceiptSummaryReportEndDate;
+        var receivingReceiptDetailReportStartDate;
+        var receivingReceiptDetailReportEndDate;
+        var disbursementSummaryReportStartDate;
+        var disbursementSummaryReportEndDate;
+        var disbursementDetailReportStartDate;
+        var disbursementDetailReportEndDate;
 
         // ===========
         // Get company
@@ -329,7 +534,6 @@
                                 TaxNumber: results[i]["TaxNumber"],
                             });
                         }
-
                         createCboComapny(companies);
                     }
                 }
@@ -384,7 +588,6 @@
                                 AccountCashFlow: results[i]["AccountCashFlow"]
                             });
                         }
-
                         createCboAccount(accounts);
                     }
                 }
@@ -416,7 +619,6 @@
                 }
             });
         }
-
 
         // ============
         // Get supplier
@@ -608,7 +810,6 @@
 
         // get Input VAT Summary Report Start Date
         function getInputVATSummaryReportStartDate() {
-            // Input Vat Summary Report Start Date
             InputVATSummaryReportStartDate.dispose();
             InputVATSummaryReportStartDate = new wijmo.input.InputDate('#InputVATSummaryReport_StartDate', {
                 format: 'MM/dd/yyyy',
@@ -626,7 +827,6 @@
 
         // get Input VAT Summary Report End Date
         function getInputVATSummaryReportEndDate() {
-            // Input Vat Summary Report End Date
             InputVATSummaryReportEndDate.dispose();
             InputVATSummaryReportEndDate = new wijmo.input.InputDate('#InputVATSummaryReport_EndDate', {
                 format: 'MM/dd/yyyy',
@@ -644,7 +844,6 @@
 
         // get WithHolding TAX Detail Report Start Date
         function getWithHoldingTAXDetailReportStartDate() {
-            // WithHolding TAX Detail Report Start Date
             withHoldingTAXDetailReportStartDate.dispose();
             withHoldingTAXDetailReportStartDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_StartDate', {
                 format: 'MM/dd/yyyy',
@@ -662,7 +861,6 @@
 
         // get WithHolding TAX Detail Report End Date
         function getWithHoldingTAXDetailReportEndDate() {
-            // WithHolding TAX Detail Report End Date
             withHoldingTAXDetailReportEndDate.dispose();
             withHoldingTAXDetailReportEndDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_EndDate', {
                 format: 'MM/dd/yyyy',
@@ -680,7 +878,6 @@
 
         // get WithHolding TAX Summary Report Start Date
         function getWithHoldingTAXSummarryReportStartDate() {
-            // WithHolding TAX Summary Report End Date
             withHoldingTAXSummarryReportStartDate.dispose();
             withHoldingTAXSummarryReportStartDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_StartDate', {
                 format: 'MM/dd/yyyy',
@@ -698,7 +895,6 @@
 
         // get WithHolding TAX Summary Report End Date
         function getWithHoldingTAXSummarryReportEndDate() {
-            // WithHolding TAX Summary Report End Date
             withHoldingTAXSummarryReportEndDate.dispose();
             withHoldingTAXSummarryReportEndDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_EndDate', {
                 format: 'MM/dd/yyyy',
@@ -716,7 +912,6 @@
 
         // get Certificate Of Creditable Tax Withheld Start Date
         function getCertificateOfCreditableTaxWithheldStartDate() {
-            // Certificate Of Creditable Tax Withheld Start Date
             certificateOfCreditableTaxWithheldStartDate.dispose();
             certificateOfCreditableTaxWithheldStartDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_StartDate', {
                 format: 'MM/dd/yyyy',
@@ -734,7 +929,6 @@
 
         // get Certificate Of Creditable Tax Withheld End Date
         function getCertificateOfCreditableTaxWithheldEndDate() {
-            // Certificate Of Creditable Tax Withheld End Date
             certificateOfCreditableTaxWithheldEndDate.dispose();
             certificateOfCreditableTaxWithheldEndDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_EndDate', {
                 format: 'MM/dd/yyyy',
@@ -763,6 +957,258 @@
                 document.getElementById('accountsPaybleReport_Comapny').style.border = " ";
                 window.location.href = '/Software/AccountsPayablePDF?DateAsOf=' + accountsPaybleReportDateAsOf + '&CompanyId=' + companyId;
             }
+        }
+
+        // get Purchase Summary Report Start Date
+        function getPurchaseSummaryReportStartDate() {
+            purchaseSummaryReportStartDate.dispose();
+            purchaseSummaryReportStartDate = new wijmo.input.InputDate('#purchaseSummaryReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('purchaseSummaryReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('purchaseSummaryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('purchaseSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getPurchaseSummaryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Purchase Summary Report End Date
+        function getPurchaseSummaryReportEndDate() {
+            purchaseSummaryReportEndDate.dispose();
+            purchaseSummaryReportEndDate = new wijmo.input.InputDate('#purchaseSummaryReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('purchaseSummaryReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('purchaseSummaryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('purchaseSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getPurchaseSummaryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // Purchase Summary report on click
+        function purchaseSummaryReportPDF_OnClick() {
+            var purchaseSummaryReportStartDate = document.getElementById('purchaseSummaryReport_StartDate_data').value;
+            var purchaseSummaryReportEndDate = document.getElementById('purchaseSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsPayablePurchaseSummaryReportPDF?StartDate=' + purchaseSummaryReportStartDate + '&EndDate=' + purchaseSummaryReportEndDate;
+        }
+
+        // get Purchase Detail Report Start Date
+        function getPurchaseDetailReportStartDate() {
+            purchaseDetailReportStartDate.dispose();
+            purchaseDetailReportStartDate = new wijmo.input.InputDate('#purchaseDetailReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('purchaseDetailReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('purchaseDetailReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('purchaseDetailReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getPurchaseDetailReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Purchase Detail Report End Date
+        function getPurchaseDetailReportEndDate() {
+            purchaseDetailReportEndDate.dispose();
+            purchaseDetailReportEndDate = new wijmo.input.InputDate('#purchaseDetailReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('purchaseDetailReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('purchaseDetailReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('purchaseDetailReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getPurchaseDetailReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // Purchase Detail report on click
+        function purchaseDetailReportPDF_OnClick() {
+            var purchaseDetailReportStartDate = document.getElementById('purchaseDetailReport_StartDate_data').value;
+            var purchaseDetailReportEndDate = document.getElementById('purchaseDetailReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsPayablePurchaseDetailReportPDF?StartDate=' + purchaseDetailReportStartDate + '&EndDate=' + purchaseDetailReportEndDate;
+        }
+
+        // get Receiving Receipt Summary Report Start Date
+        function getReceivingReceiptSummaryReportStartDate() {
+            receivingReceiptSummaryReportStartDate.dispose();
+            receivingReceiptSummaryReportStartDate = new wijmo.input.InputDate('#receivingReceiptSummaryReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('receivingReceiptSummaryReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('receivingReceiptSummaryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('receivingReceiptSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getReceivingReceiptSummaryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Receiving Receipt Summary Report End Date
+        function getReceivingReceiptSummaryReportEndDate() {
+            receivingReceiptSummaryReportEndDate.dispose();
+            receivingReceiptSummaryReportEndDate = new wijmo.input.InputDate('#receivingReceiptSummaryReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('receivingReceiptSummaryReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('receivingReceiptSummaryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('receivingReceiptSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getReceivingReceiptSummaryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // Receiving Receipt Summary report on click
+        function receivingReceiptSummaryReportPDF_OnClick() {
+            var receivingReceiptSummaryReportStartDate = document.getElementById('receivingReceiptSummaryReport_StartDate_data').value;
+            var receivingReceiptSummaryReportEndDate = document.getElementById('receivingReceiptSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsPayableReceivingReceiptSummaryReportPDF?StartDate=' + receivingReceiptSummaryReportStartDate + '&EndDate=' + receivingReceiptSummaryReportEndDate;
+        }
+
+        // get Receiving Receipt Detail Report Start Date
+        function getReceivingReceiptDetailReportStartDate() {
+            receivingReceiptDetailReportStartDate.dispose();
+            receivingReceiptDetailReportStartDate = new wijmo.input.InputDate('#receivingReceiptDetailReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('receivingReceiptDetailReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('receivingReceiptDetailReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('receivingReceiptDetailReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getReceivingReceiptDetailReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Receiving Receipt Detail Report End Date
+        function getReceivingReceiptDetailReportEndDate() {
+            receivingReceiptDetailReportEndDate.dispose();
+            receivingReceiptDetailReportEndDate = new wijmo.input.InputDate('#receivingReceiptDetailReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('receivingReceiptDetailReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('receivingReceiptDetailReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('receivingReceiptDetailReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getReceivingReceiptDetailReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // Receiving Receipt Detail report on click
+        function receivingReceiptDetailReportPDF_OnClick() {
+            var receivingReceiptDetailReportStartDate = document.getElementById('receivingReceiptDetailReport_StartDate_data').value;
+            var receivingReceiptDetailReportEndDate = document.getElementById('receivingReceiptDetailReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsPayableReceivingReceiptDetailReportPDF?StartDate=' + receivingReceiptDetailReportStartDate + '&EndDate=' + receivingReceiptDetailReportEndDate;
+        }
+
+        // get Disbursement Summary Report Start Date
+        function getDisbursementSummaryReportStartDate() {
+            disbursementSummaryReportStartDate.dispose();
+            disbursementSummaryReportStartDate = new wijmo.input.InputDate('#disbursementSummaryReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('disbursementSummaryReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('disbursementSummaryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('disbursementSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getDisbursementSummaryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Disbursement Summary Report End Date
+        function getDisbursementSummaryReportEndDate() {
+            disbursementSummaryReportEndDate.dispose();
+            disbursementSummaryReportEndDate = new wijmo.input.InputDate('#disbursementSummaryReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('disbursementSummaryReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('disbursementSummaryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('disbursementSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getDisbursementSummaryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // Disbursement Summary report on click
+        function disbursementSummaryReportPDF_OnClick() {
+            var disbursementSummaryReportStartDate = document.getElementById('disbursementSummaryReport_StartDate_data').value;
+            var disbursementSummaryReportEndDate = document.getElementById('disbursementSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsPayableDisbursementSummaryReportPDF?StartDate=' + disbursementSummaryReportStartDate + '&EndDate=' + disbursementSummaryReportEndDate;
+        }
+
+        // get Disbursement Detail Report Start Date
+        function getDisbursementDetailReportStartDate() {
+            disbursementDetailReportStartDate.dispose();
+            disbursementDetailReportStartDate = new wijmo.input.InputDate('#disbursementDetailReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('disbursementDetailReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('disbursementDetailReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('disbursementDetailReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getDisbursementDetailReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Disbursement Detail Report End Date
+        function getDisbursementDetailReportEndDate() {
+            disbursementDetailReportEndDate.dispose();
+            disbursementDetailReportEndDate = new wijmo.input.InputDate('#disbursementDetailReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('disbursementDetailReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('disbursementDetailReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('disbursementDetailReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getDisbursementDetailReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // Disbursement Detail report on click
+        function disbursementDetailReportPDF_OnClick() {
+            var disbursementDetailReportStartDate = document.getElementById('disbursementDetailReport_StartDate_data').value;
+            var disbursementDetailReportEndDate = document.getElementById('disbursementDetailReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsPayableDisbursementDetailReportPDF?StartDate=' + disbursementDetailReportStartDate + '&EndDate=' + disbursementDetailReportEndDate;
         }
 
         // ===========
@@ -808,6 +1254,66 @@
 
             getCertificateOfCreditableTaxWithheldStartDate();
             getCertificateOfCreditableTaxWithheldEndDate();
+
+            // Purchase Summary Report Dates
+            document.getElementById('purchaseSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('purchaseSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            purchaseSummaryReportStartDate = new wijmo.input.InputDate('#purchaseSummaryReport_StartDate');
+            purchaseSummaryReportEndDate = new wijmo.input.InputDate('#purchaseSummaryReport_EndDate');
+
+            getPurchaseSummaryReportStartDate();
+            getPurchaseSummaryReportEndDate();
+
+            // Purchase Detail Report Dates
+            document.getElementById('purchaseDetailReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('purchaseDetailReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            purchaseDetailReportStartDate = new wijmo.input.InputDate('#purchaseDetailReport_StartDate');
+            purchaseDetailReportEndDate = new wijmo.input.InputDate('#purchaseDetailReport_EndDate');
+
+            getPurchaseDetailReportStartDate();
+            getPurchaseDetailReportEndDate();
+
+            // Receiving Receipt Summary Report Dates
+            document.getElementById('receivingReceiptSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('receivingReceiptSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            receivingReceiptSummaryReportStartDate = new wijmo.input.InputDate('#receivingReceiptSummaryReport_StartDate');
+            receivingReceiptSummaryReportEndDate = new wijmo.input.InputDate('#receivingReceiptSummaryReport_EndDate');
+
+            getReceivingReceiptSummaryReportStartDate();
+            getReceivingReceiptSummaryReportEndDate();
+
+            // Receiving Receipt Detail Report Dates
+            document.getElementById('receivingReceiptDetailReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('receivingReceiptDetailReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            receivingReceiptDetailReportStartDate = new wijmo.input.InputDate('#receivingReceiptDetailReport_StartDate');
+            receivingReceiptDetailReportEndDate = new wijmo.input.InputDate('#receivingReceiptDetailReport_EndDate');
+
+            getReceivingReceiptDetailReportStartDate();
+            getReceivingReceiptDetailReportEndDate();
+
+            // Disbursement Summary Report Dates
+            document.getElementById('disbursementSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('disbursementSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            disbursementSummaryReportStartDate = new wijmo.input.InputDate('#disbursementSummaryReport_StartDate');
+            disbursementSummaryReportEndDate = new wijmo.input.InputDate('#disbursementSummaryReport_EndDate');
+
+            getDisbursementSummaryReportStartDate();
+            getDisbursementSummaryReportEndDate();
+
+            // Disbursement Detail Report Dates
+            document.getElementById('disbursementDetailReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('disbursementDetailReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            disbursementDetailReportStartDate = new wijmo.input.InputDate('#disbursementDetailReport_StartDate');
+            disbursementDetailReportEndDate = new wijmo.input.InputDate('#disbursementDetailReport_EndDate');
+
+            getDisbursementDetailReportStartDate();
+            getDisbursementDetailReportEndDate();
 
             // accounts payable date as of..
             accountsPayableReportDateAsOf = new wijmo.input.InputDate('#accountsPaybleReport_DateAsOf', {
