@@ -2401,6 +2401,8 @@ namespace easyfis.Controllers
                                                   };
                             Decimal totalAmount = collectionLines.Sum(d => d.Amount);
                             tableORHeader.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont2)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                            total = total + totalAmount;
                         }
                         document.Add(tableORHeader);
                     }
