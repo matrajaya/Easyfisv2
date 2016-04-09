@@ -913,8 +913,7 @@ namespace easyfis.Controllers
                             }
 
                             tablePOHeader.AddCell(new PdfPCell(new Phrase(POStatus, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-
-                            var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
+                            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems
                                                      where d.POId == purchaseOrderHeader.Id
                                                      select new Models.TrnPurchaseOrderItem
                                                      {
@@ -931,9 +930,8 @@ namespace easyfis.Controllers
                                                          Cost = d.Cost,
                                                          Amount = d.Amount
                                                      };
-
-                            Decimal totalAmount = PurchaseOrderItems.Sum(d => d.Amount);
-
+                            Decimal totalAmount = purchaseOrderItems.Sum(d => d.Amount);
+                            Debug.WriteLine(totalAmount);
                             tablePOHeader.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont2)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                             total = total + totalAmount;
 
