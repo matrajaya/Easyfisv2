@@ -913,8 +913,29 @@ namespace easyfis.Controllers
                             }
 
                             tablePOHeader.AddCell(new PdfPCell(new Phrase(POStatus, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                            tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.Amount.ToString("#,##0.00"), cellFont2)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                            total = total + purchaseOrderHeader.Amount;
+
+                            var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
+                                                     where d.POId == purchaseOrderHeader.Id
+                                                     select new Models.TrnPurchaseOrderItem
+                                                     {
+                                                         Id = d.Id,
+                                                         POId = d.POId,
+                                                         PO = d.TrnPurchaseOrder.PONumber,
+                                                         ItemId = d.ItemId,
+                                                         Item = d.MstArticle.Article,
+                                                         ItemCode = d.MstArticle.ManualArticleCode,
+                                                         Particulars = d.Particulars,
+                                                         UnitId = d.UnitId,
+                                                         Unit = d.MstUnit.Unit,
+                                                         Quantity = d.Quantity,
+                                                         Cost = d.Cost,
+                                                         Amount = d.Amount
+                                                     };
+
+                            Decimal totalAmount = PurchaseOrderItems.Sum(d => d.Amount);
+
+                            tablePOHeader.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont2)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            total = total + totalAmount;
 
                         }
 
