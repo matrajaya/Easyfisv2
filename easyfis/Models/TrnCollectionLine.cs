@@ -12,6 +12,7 @@ namespace easyfis.Models
         public Int32 Id { get; set; }
         public Int32 ORId { get; set; }
         public String OR { get; set; }
+        public String ORDate { get; set; }
         public Int32 BranchId { get; set; }
         public String Branch { get; set; }
         public Int32 AccountId { get; set; }

@@ -13,6 +13,7 @@ namespace easyfis.Models
         public Int32 Id { get; set; }
         public Int32 SIId { get; set; }
         public String SI { get; set; }
+        public String SIDate { get; set; }
         public Int32 ItemId { get; set; }
         public String ItemCode { get; set; }
         public String Item { get; set; }

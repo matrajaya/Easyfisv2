@@ -18,6 +18,7 @@ namespace easyfis.Models
         public String PO { get; set; }
         public Int32 ItemId { get; set; }
         public String Item { get; set; }
+        public Decimal Price { get; set; }
         public String ItemCode { get; set; }
         public Int32 ItemAccountId { get; set; }
         public String ItemAccount { get; set; }
