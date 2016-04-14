@@ -7,7 +7,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Journal Voucher Detail</title>
@@ -315,21 +314,6 @@
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -460,9 +444,9 @@
         function getJournalVoucherById() {
             var journalVouchers = new wijmo.collections.ObservableArray;
             var journalVoucherId = getParam("JournalVoucherId");
-            $('#loadingModal').modal('show');
+            NProgress.start();
             if (document.location.search.length == 0) {
-                $('#loadingModal').modal('hide');
+                NProgress.done();
             } else {
                 $.ajax({
                     url: '/api/journalVoucher/' + journalVoucherId,
@@ -471,7 +455,6 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        $('#loadingModal').modal('hide');
                         if (Results != null) {
                             document.getElementById('branch_Id_data').value = Results.BranchId;
                             document.getElementById('branch_selectedValue').value = Results.Branch;
@@ -494,6 +477,7 @@
 
                             document.getElementById('JV_IsLocked').value = Results.IsLocked;
 
+                            NProgress.done();
 
                             if (document.getElementById('JV_IsLocked').value == 'true') {
                                 $("#cmdJournalJournalVoucher").prop("disabled", false);
@@ -1238,7 +1222,7 @@
             var journalVoucherLines = new wijmo.collections.ObservableArray;
             var journalVoucherId = getParam("JournalVoucherId");
             if (document.location.search.length > 0) {
-                //$('#loadingModal').modal('show');
+                NProgress.start();
                 $.ajax({
                     url: '/api/listJournalVoucherLineByJVId/' + journalVoucherId,
                     cache: false,
@@ -1246,7 +1230,6 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        //$('#loadingModal').modal('hide');
                         if (Results.length > 0) {
                             var journalVouchers = new wijmo.collections.ObservableArray;
                             var journalVoucherId = getParam("JournalVoucherId");
@@ -1348,6 +1331,8 @@
                         } else {
                             //$('#cmdSaveAndLockJournalVoucher').hide();
                         }
+                        
+                        NProgress.done();
                     }
                 }).fail(function (xhr, textStatus, err) {
                     alert(err);

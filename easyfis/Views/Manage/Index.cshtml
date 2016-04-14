@@ -192,6 +192,7 @@
         // GET Branch for Combo Box
         // ========================
         function getBranchesForComboBox() {
+            NProgress.start();
             branches = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listBranch',
@@ -213,6 +214,7 @@
                     } else {
                         createCboBranch(branches);
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);

@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Stock Transfer</title>
@@ -120,21 +119,6 @@
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -156,12 +140,14 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
+        var isFirstSelect = true;
+
         // =======================================
         // GET Stock Transfer List Flter by STDate
         // =======================================
         function getStockTransferFilterBySTDate(STDateFilter) {
             var stockTransfers = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listStockTransferFilterBySTDate/' + STDateFilter,
                 cache: false,
@@ -169,10 +155,9 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                    $('#loadingModal').modal('hide');
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            if(Results[i]["IsLocked"] == true) {
+                            if (Results[i]["IsLocked"] == true) {
                                 stockTransfers.push({
                                     EditId: "<button class='btn btn-primary btn-xs btn-block' id='StockTransferEditButton' onclick='cmdStockTransferEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                                     DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='StockTransferDeleteButton' onclick='cmdStockTransferDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
@@ -229,13 +214,14 @@
                             }
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             });
             return stockTransfers;
         }
-        
+
         // =================================
         // Stock Transfer Delete Lock Button
         // =================================
@@ -245,14 +231,14 @@
                 backdrop: 'static'
             });
         }
-        
+
         // =========================
         // Stock Transfer Add Button
         // =========================
         function btnAddStockTransfer_OnClick() {
             window.location = '/Software/StockTransferDetail';
         }
-        
+
         // ===========================
         // Stock Transfer Close Button
         // ===========================
@@ -299,7 +285,7 @@
                         $("#cmdConfirmDeleteStockTransfer").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                       
+
                         $('#deleteStockTransferConfirm').modal('hide');
 
                         var STDateFilter = document.getElementById('filterDate_data').value;
@@ -386,7 +372,7 @@
         // ===========
         $(document).ready(function () {
             var STDateFilter_Date = new Date();
-            document.getElementById("filterDate_data").value = [ STDateFilter_Date.getMonth()+1, STDateFilter_Date.getDate(), STDateFilter_Date.getFullYear()].join('-');
+            document.getElementById("filterDate_data").value = [STDateFilter_Date.getMonth() + 1, STDateFilter_Date.getDate(), STDateFilter_Date.getFullYear()].join('-');
 
             var cboFilterDate;
             cboFilterDate = new wijmo.input.InputDate('#filterDate', {
@@ -394,35 +380,39 @@
                 value: new Date(),
                 mask: '99/99/9999',
                 onValueChanged: function () {
-                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
-                    var STDateFilterValue = document.getElementById('filterDate_data').value;
-                    
-                    $('body').removeClass('modal-open');
-                    $(".modal-backdrop").remove();
+                    if (!isFirstSelect) {
+                        document.getElementById('filterDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                        var STDateFilterValue = document.getElementById('filterDate_data').value;
 
-                    stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate(STDateFilterValue));
-                    stockTransfers.canFilter = true;
-                    stockTransfers.pageSize = 15;
+                        $('body').removeClass('modal-open');
+                        $(".modal-backdrop").remove();
 
-                    var filterText = '';
-                    $('#InputFilter').keyup(function () {
-                        filterText = this.value.toLowerCase();
-                        stockTransfers.refresh();
-                    });
-                    stockTransfers.filter = function (item) {
-                        return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
-                    }
-                    stockTransfers.collectionChanged.addHandler(function (sender, args) {
+                        stockTransfers = new wijmo.collections.CollectionView(getStockTransferFilterBySTDate(STDateFilterValue));
+                        stockTransfers.canFilter = true;
+                        stockTransfers.pageSize = 15;
+
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            stockTransfers.refresh();
+                        });
+                        stockTransfers.filter = function (item) {
+                            return !filterText || (item.STNumber.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        stockTransfers.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsStockTransfer();
+                        });
+                        stockTransfers.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        stockTransferGrid.itemsSource = stockTransfers;
+                        stockTransferGrid.trackChanges = true;
+
                         updateNavigateButtonsStockTransfer();
-                    });
-                    stockTransfers.currentChanged.addHandler(function (sender, args) {
-                        updateDetails();
-                    });
-                    
-                    stockTransferGrid.itemsSource = stockTransfers;
-                    stockTransferGrid.trackChanges = true;
-
-                    updateNavigateButtonsStockTransfer();
+                    } else {
+                        isFirstSelect = false;
+                    }
                 }
             });
 
@@ -537,6 +527,6 @@
             });
         });
 
-</script>
+    </script>
 </body>
 </html>

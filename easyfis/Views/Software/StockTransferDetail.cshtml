@@ -7,7 +7,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Stock Transfer Detail</title>
@@ -345,21 +344,6 @@
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -421,9 +405,9 @@
         function getStockTransferById() {
             stockTransfers = new wijmo.collections.ObservableArray;
             var stockTransferId = getParam("StockTransferId");
-            $('#loadingModal').modal('show');
+            NProgress.start();
             if (document.location.search.length == 0) {
-                $('#loadingModal').modal('hide');
+                NProgress.done();
             } else {
                 $.ajax({
                     url: '/api/stockTransfer/' + stockTransferId,
@@ -432,7 +416,6 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        $('#loadingModal').modal('hide');
                         document.getElementById('stockTransfer_Branch_data').value = Results.BranchId;
                         document.getElementById('stockTransfer_Branch_selectedValue').value = Results.Branch;
                         document.getElementById('stockTransfer_STNumber').value = Results.STNumber;
@@ -465,6 +448,8 @@
                         document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
                         document.getElementById('StockTransfer_IsLocked').value = Results.IsLocked;
+
+                        NProgress.done();
 
                         if (document.getElementById('StockTransfer_IsLocked').value == 'true') {
                             document.getElementById('stockTransfer_Particulars').disabled = true;
@@ -1335,6 +1320,7 @@
             var items = new wijmo.collections.ObservableArray;
             var stockTransferId = getParam("StockTransferId");
             if (document.location.search.length > 0) {
+                NProgress.start();
                 $.ajax({
                     url: '/api/listStockTransferItemBySTId/' + stockTransferId,
                     cache: false,
@@ -1342,7 +1328,7 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        $('#loadingModal').modal('hide');
+                        NProgress.done();
                         if (Results.length > 0) {
                             var stockTransfers = new wijmo.collections.ObservableArray;
                             var stockTransferId = getParam("StockTransferId");
@@ -2387,7 +2373,7 @@
         function getInventoryEntries() {
             var inventoryEntries = new wijmo.collections.ObservableArray;
             var stockTransferId = getParam("StockTransferId");
-            $('#loadingModal').modal('show');
+            NProgress.start();
             if(document.location.search.length > 0) {
                 $.ajax({
                     url: '/api/listInventoryBySTId/' + stockTransferId,
@@ -2396,7 +2382,6 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        $('#loadingModal').modal('hide');
                         if (Results.length > 0) {
                             for (i = 0; i < Results.length; i++) {
                                 inventoryEntries.push({
@@ -2424,12 +2409,13 @@
                                 });
                             }
                         }
+                        NProgress.done();
                     }
                 }).fail(function (xhr, textStatus, err) {
                     alert(err);
                 });
             } else {
-                $('#loadingModal').modal('hide');
+                NProgress.done();
             }
             return inventoryEntries;
         }

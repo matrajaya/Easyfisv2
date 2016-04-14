@@ -462,21 +462,6 @@
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -538,7 +523,7 @@
         // Get Article for item by its ID
         // ==============================
         function getArticleItemById() {
-            $('#loadingModal').modal('show');
+            NProgress.start();
             var items = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
                 $.ajax({
@@ -549,7 +534,6 @@
                     data: {},
                     success: function (itemResults) {
                         if (itemResults != null) {
-                            $('#loadingModal').modal('hide');
                             document.getElementById('Item_UsefulLife').value = itemResults.UsefulLife;
                             document.getElementById('Item_SalvageValue').value = itemResults.SalvageValue;
                             document.getElementById('articleItem_code').value = itemResults.ArticleCode;
@@ -575,6 +559,7 @@
                             costAccountSelectedValue = itemResults.CostAccount;
                             accumDepAccountSelectedValue = itemResults.AssetAccount;
                             expenseAccountSelectedValue = itemResults.ExpenseAccount;
+                            NProgress.done();
 
                             if (itemResults.IsLocked == true) {
                                 document.getElementById('articleItem_manualCode').disabled = true;
@@ -637,7 +622,7 @@
                 getArticleItemUnitForComboBox();
                 getArticleTaxTypeForComboBox();
 
-                $('#loadingModal').modal('hide');
+                NProgress.done();
             }
             return items;
         }
@@ -1570,7 +1555,7 @@
         // GET Component List
         // ==================
         function getComponent() {
-            $('#loadingModal').modal('show');
+            NProgress.start();
             var components = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
                 $.ajax({
@@ -1580,7 +1565,6 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (componentResults) {
-                        $('#loadingModal').modal('hide');
                         if (componentResults.length > 0) {
                             $.ajax({
                                 url: '/api/article/' + itemId,
@@ -1617,10 +1601,11 @@
                                 }
                             });
                         }
+                        NProgress.done();
                     }
                 });
             } else {
-                $('#loadingModal').modal('hide');
+                NProgress.done();
             }
             return components;
         }
@@ -1886,7 +1871,7 @@
         // GET Price List
         // ==================
         function getPrice() {
-            $('#loadingModal').modal('show');
+            NProgress.start();
             var prices = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
                 $.ajax({
@@ -1896,7 +1881,6 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (priceResults) {
-                        $('#loadingModal').modal('hide');
                         if (priceResults.length > 0) {
                             $.ajax({
                                 url: '/api/article/' + articleId,
@@ -1905,8 +1889,6 @@
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
                                 success: function (itemResults) {
-                                    $('#loadingModal').modal('hide');
-
                                     var btnEditId;
                                     var btnDeleteId;
                                     if (itemResults.IsLocked == true) {
@@ -1932,10 +1914,11 @@
                                 }
                             });
                         }
+                        NProgress.done();
                     }
                 });
             } else {
-                $('#loadingModal').modal('hide');
+                NProgress.done();
             }
             return prices;
         }
@@ -2225,9 +2208,8 @@
         // ==================
         function getInventory() {
             var inventories = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             if (document.location.search.length > 0) {
-                $('#loadingModal').modal('hide');
                 $.ajax({
                     url: '/api/listArticleInventoryByArticleId/' + itemId,
                     cache: false,
@@ -2235,7 +2217,7 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        $('#loadingModal').modal('hide');
+                        NProgress.done();
                         if (Results.length > 0) {
                             for (i = 0; i < Results.length; i++) {
                                 inventories.push({
@@ -2257,7 +2239,7 @@
                     alert(err);
                 });
             } else {
-                $('#loadingModal').modal('hide');
+                NProgress.done();
             }
             return inventories;
         }

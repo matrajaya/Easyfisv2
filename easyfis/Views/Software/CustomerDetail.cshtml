@@ -201,21 +201,6 @@
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -261,7 +246,7 @@
         // Get Article for Customer by its ID
         // ==================================
         function getArticleCustomerById() {
-            $('#loadingModal').modal('show');
+            NProgress.start();
             if (document.location.search.length > 0) {
                 $.ajax({
                     url: '/api/article/' + customerId,
@@ -271,7 +256,6 @@
                     data: {},
                     success: function (customerResults) {
                         if (customerResults != null) {
-                            $('#loadingModal').modal('hide');
                             document.getElementById('artcileCustomer_code').value = customerResults.ArticleCode;
                             document.getElementById('artcileCustomer_customer').value = customerResults.Article;
                             document.getElementById('artcileCustomer_creditLimit').value = customerResults.CreditLimit.toLocaleString();
@@ -287,6 +271,7 @@
                             customerGroupSelectedValue = customerResults.ArticleGroup;
                             accountSelectedValue = customerResults.Account;
                             termSelectedValue = customerResults.Term;
+                            NProgress.done();
 
                             if (customerResults.IsLocked == true) {
                                 document.getElementById('artcileCustomer_customer').disabled = true;
@@ -333,7 +318,7 @@
                 getArticleCustomerGroupForComboBox();
                 getArticleTermForComboBox();
 
-                $('#loadingModal').modal('hide');
+                NProgress.done();
             }
         }
 
@@ -832,7 +817,6 @@
         // =======================
         function getJournalLedger() {
             //var journalLedgers = new wijmo.collections.ObservableArray;
-            //$('#loadingModal').modal('show');
             //$.ajax({
             //    url: '/api/listAccount',
             //    cache: false,
@@ -840,7 +824,6 @@
             //    contentType: 'application/json; charset=utf-8',
             //    data: {},
             //    success: function (Results) {
-            //        $('#loadingModal').modal('hide');
             //        if (Results.length > 0) {
             //            for (i = 0; i < Results.length; i++) {
             //                journalLedger.push({
@@ -956,7 +939,7 @@
         // ============================
         function getContactInformation() {
             var contactInformations = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listArticleContactByArticleId/' + customerId,
                 cache: false,
@@ -964,7 +947,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (contactInformationResults) {
-                    $('#loadingModal').modal('hide');
                     if (contactInformationResults.length > 0) {
 
                         var customers = new wijmo.collections.ObservableArray;
@@ -975,14 +957,6 @@
                             contentType: 'application/json; charset=utf-8',
                             data: {},
                             success: function (CustomerResults) {
-                                $('#loadingModal').modal('hide');
-                                if (CustomerResults.length > 0) {
-                                    customers.push({
-                                        Id: CustomerResults.Id,
-                                        IsLocked: CustomerResults.IsLocked
-                                    });
-                                }
-
                                 var btnEditId;
                                 var btnDeleteId;
                                 if (CustomerResults.IsLocked == true) {
@@ -1008,6 +982,7 @@
                             }
                         });
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -1030,6 +1005,7 @@
                 });
             });
 
+            document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $('#cmdSaveContactButton').prop('disabled', false);
             $('#cmdContactDetailCloseButton').prop('disabled', false);
 
@@ -1055,6 +1031,7 @@
                 });
             });
 
+            document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $('#cmdSaveContactButton').prop('disabled', false);
             $('#cmdContactDetailCloseButton').prop('disabled', false);
 
@@ -1119,7 +1096,7 @@
                 if (contactId == 0) {
                     $.ajax({
                         type: "POST",
-                        url: '/api/addArticleContact/' + articleId,
+                        url: '/api/addArticleContact/' + customerId,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: contactData,

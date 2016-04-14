@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>System Tables</title>
@@ -950,21 +949,6 @@
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer Menu -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -997,7 +981,7 @@
         // =================
         function getDiscount() {
             var discounts = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listDiscount',
                 cache: false,
@@ -1005,7 +989,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (discountResults) {
-                    $('#loadingModal').modal('hide');
                     if (discountResults.length > 0) {
                         for (i = 0; i < discountResults.length; i++) {
 
@@ -1036,6 +1019,7 @@
                             });
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -1614,7 +1598,7 @@
         // =================
         function getPayType() {
             var paytypes = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listPayType',
                 cache: false,
@@ -1622,7 +1606,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (payTypeResults) {
-                    $('#loadingModal').modal('hide');
                     if (payTypeResults.length > 0) {
                         for (i = 0; i < payTypeResults.length; i++) {
 
@@ -1652,6 +1635,7 @@
 
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -2206,7 +2190,7 @@
         // ============
         function getTax() {
             var taxes = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listTaxType',
                 cache: false,
@@ -2214,7 +2198,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (taxResults) {
-                    $('#loadingModal').modal('hide');
                     if (taxResults.length > 0) {
                         for (i = 0; i < taxResults.length; i++) {
 
@@ -2245,6 +2228,7 @@
                             });
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -2819,7 +2803,7 @@
         // =============
         function getUnit() {
             var units = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listUnit',
                 cache: false,
@@ -2827,7 +2811,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (unitResults) {
-                    $('#loadingModal').modal('hide');
                     if (unitResults.length > 0) {
                         for (i = 0; i < unitResults.length; i++) {
 
@@ -2854,6 +2837,7 @@
 
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -3259,7 +3243,7 @@
         // =============
         function getTerm() {
             var terms = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listTerm',
                 cache: false,
@@ -3267,7 +3251,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (termResults) {
-                    $('#loadingModal').modal('hide');
                     if (termResults.length > 0) {
                         for (i = 0; i < termResults.length; i++) {
 
@@ -3295,6 +3278,7 @@
 
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -3720,7 +3704,7 @@
         // =================
         function getEmployee() {
             var employees = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listArticleByArticleTypeId/4',
                 cache: false,
@@ -3728,7 +3712,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (employeeResults) {
-                    $('#loadingModal').modal('hide');
                     if (employeeResults.length > 0) {
                         for (i = 0; i < employeeResults.length; i++) {
 
@@ -3788,6 +3771,7 @@
 
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -4404,7 +4388,7 @@
         // ======================
         function getArticleGroup() {
             var articlegroups = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listArticleGroup',
                 cache: false,
@@ -4412,7 +4396,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (articleGroupResults) {
-                    $('#loadingModal').modal('hide');
                     if (articleGroupResults.length > 0) {
                         for (i = 0; i < articleGroupResults.length; i++) {
 
@@ -4456,6 +4439,7 @@
 
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -5317,7 +5301,7 @@
         // ======================
         function getOtherArticle() {
             var otherarticles = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listArticleByArticleTypeId/6',
                 cache: false,
@@ -5325,7 +5309,6 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (otherArticleResults) {
-                    $('#loadingModal').modal('hide');
                     if (otherArticleResults.length > 0) {
                         for (i = 0; i < otherArticleResults.length; i++) {
 
@@ -5385,6 +5368,7 @@
 
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);

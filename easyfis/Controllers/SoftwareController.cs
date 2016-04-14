@@ -414,7 +414,7 @@ namespace easyfis.Controllers
 
             // RR for Accounts
             var receivingReceiptsForAccounts = from d in db.TrnReceivingReceipts
-                                               where d.RRDate == Convert.ToDateTime(DateAsOf)
+                                               where d.RRDate <= Convert.ToDateTime(DateAsOf)
                                                && d.MstBranch.CompanyId == CompanyId
                                                && d.BalanceAmount > 0
                                                group d by new
@@ -447,7 +447,7 @@ namespace easyfis.Controllers
 
                     // RR for Accounts
                     var receivingReceiptsForArticleSuppliers = from d in db.TrnReceivingReceipts
-                                                               where d.RRDate == Convert.ToDateTime(DateAsOf)
+                                                               where d.RRDate <= Convert.ToDateTime(DateAsOf)
                                                                && d.MstBranch.CompanyId == CompanyId
                                                                && d.BalanceAmount > 0
                                                                && d.MstArticle.MstAccount.Id == receivingReceiptsForAccount.AccountId
@@ -496,7 +496,7 @@ namespace easyfis.Controllers
 
                             // RR 
                             var receivingReceiptsHasBalances = from d in db.TrnReceivingReceipts
-                                                               where d.RRDate == Convert.ToDateTime(DateAsOf)
+                                                               where d.RRDate <= Convert.ToDateTime(DateAsOf)
                                                                && d.MstBranch.CompanyId == CompanyId
                                                                && d.BalanceAmount > 0
                                                                && d.SupplierId == receivingReceiptsForArticleSupplier.SupplierId

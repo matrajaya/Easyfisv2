@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Purchase Order</title>
@@ -119,23 +118,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
+        
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -158,104 +141,74 @@
         var btnLastPageGrid;
         var btnCurrentPageGrid;
 
+        var isFirstSelect = true;
+
         // ==================
         // GET Purchase Order
         // ==================
         function getPOFilterByDate(PODateFilter) {
             var POs = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listPurchaseOrderFilterByPODate/' + PODateFilter,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            if(Results[i]["IsLocked"] == true) {
-                            
-                                POs.push({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='POEditButton' onclick='POEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='PODeleteButton' onclick='PODeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    BranchId: Results[i]["BranchId"],
-                                    Branch: Results[i]["Branch"],
-                                    PONumber: Results[i]["PONumber"],
-                                    PODate: Results[i]["PODate"],
-                                    SupplierId: Results[i]["SupplierId"],
-                                    Supplier: Results[i]["Supplier"],
-                                    TermId: Results[i]["TermId"],
-                                    Term: Results[i]["Term"],
-                                    ManualRequestNumber: Results[i]["ManualRequestNumber"],
-                                    ManualPONumber: Results[i]["ManualPONumber"],
-                                    DateNeeded: Results[i]["DateNeeded"],
-                                    Remarks: Results[i]["Remarks"],
-                                    IsClose: Results[i]["IsClose"],
-                                    Amount: Results[i]["Amount"],
-                                    RequestedById: Results[i]["RequestedById"],
-                                    RequestedBy: Results[i]["RequestedBy"],
-                                    PreparedById: Results[i]["PreparedById"],
-                                    PreparedBy: Results[i]["PreparedBy"],
-                                    CheckedById: Results[i]["CheckedById"],
-                                    CheckedBy: Results[i]["CheckedBy"],
-                                    ApprovedById: Results[i]["ApprovedById"],
-                                    ApprovedBy: Results[i]["ApprovedBy"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+                success: function (purchaseOrderResults) {
+                    if (purchaseOrderResults.length > 0) {
+                        for (i = 0; i < purchaseOrderResults.length; i++) {
+                            var btnDeleteId;
+                            if (purchaseOrderResults[i]["IsLocked"] == true) {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='PODeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                            
-                                POs.push({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='POEditButton' onclick='POEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='PODeleteButton' onclick='PODeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    BranchId: Results[i]["BranchId"],
-                                    Branch: Results[i]["Branch"],
-                                    PONumber: Results[i]["PONumber"],
-                                    PODate: Results[i]["PODate"],
-                                    SupplierId: Results[i]["SupplierId"],
-                                    Supplier: Results[i]["Supplier"],
-                                    TermId: Results[i]["TermId"],
-                                    Term: Results[i]["Term"],
-                                    ManualRequestNumber: Results[i]["ManualRequestNumber"],
-                                    ManualPONumber: Results[i]["ManualPONumber"],
-                                    DateNeeded: Results[i]["DateNeeded"],
-                                    Remarks: Results[i]["Remarks"],
-                                    IsClose: Results[i]["IsClose"],
-                                    Amount: Results[i]["Amount"],
-                                    RequestedById: Results[i]["RequestedById"],
-                                    RequestedBy: Results[i]["RequestedBy"],
-                                    PreparedById: Results[i]["PreparedById"],
-                                    PreparedBy: Results[i]["PreparedBy"],
-                                    CheckedById: Results[i]["CheckedById"],
-                                    CheckedBy: Results[i]["CheckedBy"],
-                                    ApprovedById: Results[i]["ApprovedById"],
-                                    ApprovedBy: Results[i]["ApprovedBy"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='PODeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             }
+
+                            POs.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='POEditButton' onclick='POEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: btnDeleteId,
+                                Id: purchaseOrderResults[i]["Id"],
+                                BranchId: purchaseOrderResults[i]["BranchId"],
+                                Branch: purchaseOrderResults[i]["Branch"],
+                                PONumber: purchaseOrderResults[i]["PONumber"],
+                                PODate: purchaseOrderResults[i]["PODate"],
+                                SupplierId: purchaseOrderResults[i]["SupplierId"],
+                                Supplier: purchaseOrderResults[i]["Supplier"],
+                                TermId: purchaseOrderResults[i]["TermId"],
+                                Term: purchaseOrderResults[i]["Term"],
+                                ManualRequestNumber: purchaseOrderResults[i]["ManualRequestNumber"],
+                                ManualPONumber: purchaseOrderResults[i]["ManualPONumber"],
+                                DateNeeded: purchaseOrderResults[i]["DateNeeded"],
+                                Remarks: purchaseOrderResults[i]["Remarks"],
+                                IsClose: purchaseOrderResults[i]["IsClose"],
+                                Amount: purchaseOrderResults[i]["Amount"],
+                                RequestedById: purchaseOrderResults[i]["RequestedById"],
+                                RequestedBy: purchaseOrderResults[i]["RequestedBy"],
+                                PreparedById: purchaseOrderResults[i]["PreparedById"],
+                                PreparedBy: purchaseOrderResults[i]["PreparedBy"],
+                                CheckedById: purchaseOrderResults[i]["CheckedById"],
+                                CheckedBy: purchaseOrderResults[i]["CheckedBy"],
+                                ApprovedById: purchaseOrderResults[i]["ApprovedById"],
+                                ApprovedBy: purchaseOrderResults[i]["ApprovedBy"],
+                                IsLocked: purchaseOrderResults[i]["IsLocked"],
+                                CreatedById: purchaseOrderResults[i]["CreatedById"],
+                                CreatedBy: purchaseOrderResults[i]["CreatedBy"],
+                                CreatedDateTime: purchaseOrderResults[i]["CreatedDateTime"],
+                                UpdatedById: purchaseOrderResults[i]["UpdatedById"],
+                                UpdatedBy: purchaseOrderResults[i]["UpdatedBy"],
+                                UpdatedDateTime: purchaseOrderResults[i]["UpdatedDateTime"]
+                            });
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             });
             return POs;
         }
-        
+
         // =====================
         // PO Delete Lock Button
         // =====================
@@ -337,7 +290,7 @@
                         $("#cmdConfirmDeletePO").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                       
+
                         $('#deletePOConfirm').modal('hide');
 
                         var PODateFilter = document.getElementById('filterDate_data').value;
@@ -424,7 +377,7 @@
         // ============
         $(document).ready(function () {
             var PODateFilter_Date = new Date();
-            document.getElementById("filterDate_data").value = [ PODateFilter_Date.getMonth()+1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
+            document.getElementById("filterDate_data").value = [PODateFilter_Date.getMonth() + 1, PODateFilter_Date.getDate(), PODateFilter_Date.getFullYear()].join('-');
 
             var cboFilterDate;
             cboFilterDate = new wijmo.input.InputDate('#filterDate', {
@@ -432,35 +385,39 @@
                 value: new Date(),
                 mask: '99/99/9999',
                 onValueChanged: function () {
-                    document.getElementById('filterDate_data').value = [ this.value.getMonth()+1, this.value.getDate(), this.value.getFullYear() ].join('-');
-                    var PODateFilterValue = document.getElementById('filterDate_data').value;
+                    if (!isFirstSelect) {
+                        document.getElementById('filterDate_data').value = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                        var PODateFilterValue = document.getElementById('filterDate_data').value;
 
-                    $('body').removeClass('modal-open');
-                    $(".modal-backdrop").remove();
+                        $('body').removeClass('modal-open');
+                        $(".modal-backdrop").remove();
 
-                    POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilterValue));
-                    POs.canFilter = true;
-                    POs.pageSize = 15;
+                        POs = new wijmo.collections.CollectionView(getPOFilterByDate(PODateFilterValue));
+                        POs.canFilter = true;
+                        POs.pageSize = 15;
 
-                    var filterText = '';
-                    $('#InputFilter').keyup(function () {
-                        filterText = this.value.toLowerCase();
-                        POs.refresh();
-                    });
-                    POs.filter = function (item) {
-                        return !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
-                    }
-                    POs.collectionChanged.addHandler(function (sender, args) {
+                        var filterText = '';
+                        $('#InputFilter').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            POs.refresh();
+                        });
+                        POs.filter = function (item) {
+                            return !filterText || (item.Supplier.toLowerCase().indexOf(filterText) > -1);
+                        }
+                        POs.collectionChanged.addHandler(function (sender, args) {
+                            updateNavigateButtonsPO();
+                        });
+                        POs.currentChanged.addHandler(function (sender, args) {
+                            updateDetails();
+                        });
+
+                        POGrid.itemsSource = POs;
+                        POGrid.trackChanges = true;
+
                         updateNavigateButtonsPO();
-                    });
-                    POs.currentChanged.addHandler(function (sender, args) {
-                        updateDetails();
-                    });
-
-                    POGrid.itemsSource = POs;
-                    POGrid.trackChanges = true;
-
-                    updateNavigateButtonsPO();
+                    } else {
+                        isFirstSelect = false;
+                    }
                 }
             });
 

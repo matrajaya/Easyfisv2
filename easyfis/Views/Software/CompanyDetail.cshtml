@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Company Detail</title>
@@ -171,21 +170,6 @@
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -284,10 +268,10 @@
         // GET Company by Id
         // =================
         function getCompanyById() {
-            $('#loadingModal').modal('show');
+            NProgress.start();
             var companyId = getParam("CompanyId");
             if (document.location.search.length == 0) {
-                $('#loadingModal').modal('hide');
+                NProgress.done();
             } else {
                 $.ajax({
                     url: '/api/company/' + companyId,
@@ -296,7 +280,6 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        $('#loadingModal').modal('hide');
                         //document.getElementById('companyDetailLabel').innerHTML = Results.Company;
                         //document.getElementById('companyNameLabel').innerHTML = Results.Company + " Branch List";
                         document.getElementById('companyNameModalLabel').innerHTML = Results.Company + " Branch Detail";
@@ -311,6 +294,8 @@
                         document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
                         document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
                         document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+                        
+                        NProgress.done();
 
                         if (document.getElementById('Company_IsLocked').value == 'true') {
                             //$("#cmdSaveCompany").prop("disabled", false);
@@ -645,92 +630,6 @@
             window.location = '/Software/CompanyDetail/?Id=' + id;
         }
 
-        // ================
-        // GET Branch List
-        // ================
-        function getBranch() {
-            var branches = new wijmo.collections.ObservableArray;
-            //$('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listBranch',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    //$('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        var companies = new wijmo.collections.ObservableArray;
-                        var companyId = getParam("CompanyId");
-                        $.ajax({
-                            url: '/api/company/' + companyId,
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (CompanyResults) {
-                                if (CompanyResults.length > 0) {
-                                    companies.push({
-                                        Id: CompanyResults.Id,
-                                        IsLocked: CompanyResults.IsLocked
-                                    });
-                                }
-
-                                if (CompanyResults.IsLocked == true) {
-                                    for (i = 0; i < Results.length; i++) {
-                                        branches.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()' disabled><i class='fa fa-pencil'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            CompanyId: Results[i]["CompanyId"],
-                                            Company: Results[i]["Company"],
-                                            Branch: Results[i]["Branch"],
-                                            BranchCode: Results[i]["BranchCode"],
-                                            Address: Results[i]["Address"],
-                                            ContactNumber: Results[i]["ContactNumber"],
-                                            TaxNumber: Results[i]["TaxNumber"],
-                                            IsLocked: Results[i]["IsLocked"],
-                                            CreatedById: Results[i]["CreatedById"],
-                                            CreatedBy: Results[i]["CreatedBy"],
-                                            CreatedDateTime: Results[i]["CreatedDateTime"],
-                                            UpdatedById: Results[i]["UpdatedById"],
-                                            UpdatedBy: Results[i]["UpdatedBy"],
-                                            UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                        });
-                                    }
-                                } else {
-                                    for (i = 0; i < Results.length; i++) {
-                                        branches.push({
-                                            EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdBranchEditButton_OnClick()'><i class='fa fa-pencil'></i> Edit</button>",
-                                            DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdBranchDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                            Id: Results[i]["Id"],
-                                            CompanyId: Results[i]["CompanyId"],
-                                            Company: Results[i]["Company"],
-                                            Branch: Results[i]["Branch"],
-                                            BranchCode: Results[i]["BranchCode"],
-                                            Address: Results[i]["Address"],
-                                            ContactNumber: Results[i]["ContactNumber"],
-                                            TaxNumber: Results[i]["TaxNumber"],
-                                            IsLocked: Results[i]["IsLocked"],
-                                            CreatedById: Results[i]["CreatedById"],
-                                            CreatedBy: Results[i]["CreatedBy"],
-                                            CreatedDateTime: Results[i]["CreatedDateTime"],
-                                            UpdatedById: Results[i]["UpdatedById"],
-                                            UpdatedBy: Results[i]["UpdatedBy"],
-                                            UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                        });
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return branches;
-        }
-
         // =====================
         // GET Branch List by Id
         // =====================
@@ -739,6 +638,7 @@
             var branches = new wijmo.collections.ObservableArray;
             var companyId = getParam("CompanyId");
             if (document.location.search.length > 0) {
+                NProgress.start();
                 $.ajax({
                     url: '/api/listBranchByCompanyId/' + companyId,
                     cache: false,
@@ -746,7 +646,6 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        // $('#loadingModal').modal('hide');
                         var companies = new wijmo.collections.ObservableArray;
                         var companyId
                         for (i = 0; i < Results.length; i++) {
@@ -816,6 +715,7 @@
                                 }
                             });
                         }
+                        NProgress.done();
                     }
                 }).fail(function (xhr, textStatus, err) {
                     alert(err);

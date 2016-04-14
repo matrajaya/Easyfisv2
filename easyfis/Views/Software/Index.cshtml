@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>EasyFIS - Dashboard</title>
@@ -526,21 +525,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Loading Modal -->
-            <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                <div class=" modal-dialog modal-sm">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <h4>Loading ...</h4>
-                        </div>
-                        <div class="modal-footer">
-                            <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <footer class="dashboard-footer">
@@ -596,12 +580,21 @@
             createCookie(name, "", -1);
         }
 
+        // =========================
+        // Diplay company and branch
+        // =========================
+        function getCompanyAndBranch() {
+            document.getElementById('currentCompanyName').innerHTML = readCookie("company");
+            document.getElementById('currentBranchName').innerHTML = readCookie("branch");
+            NProgress.done();
+        }
+
         // ============
         // On Load Page
         // ============
         $(document).ready(function () {
-            document.getElementById('currentCompanyName').innerHTML = readCookie("company");
-            document.getElementById('currentBranchName').innerHTML = readCookie("branch");
+            NProgress.start();
+            getCompanyAndBranch();
         });
     </script>
 </body>

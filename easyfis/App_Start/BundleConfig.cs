@@ -16,6 +16,7 @@ namespace easyfis
                         "~/Content/toastr.css",
                         "~/fonts/font-awesome/css/font-awesome.min.css",
                         "~/wijmo/styles/wijmo.min.css",
+                        "~/Content/nprogress.css",
                         "~/Content/home.css"));
 
             // ========================
@@ -29,7 +30,8 @@ namespace easyfis
                         "~/wijmo/controls/wijmo.min.js",
                         "~/wijmo/controls/wijmo.input.min.js",
                         "~/wijmo/controls/wijmo.grid.min.js",
-                        "~/wijmo/controls/wijmo.chart.min.js"));
+                        "~/wijmo/controls/wijmo.chart.min.js",
+                        "~/Scripts/nprogress.js"));
 
             // ==============
             // Software - css
@@ -39,6 +41,7 @@ namespace easyfis
                       "~/Content/toastr.css",
                       "~/fonts/font-awesome/css/font-awesome.min.css",
                       "~/wijmo/styles/wijmo.min.css",
+                      "~/Content/nprogress.css",
                       "~/Content/software.css"));
 
             // ============
@@ -54,6 +57,7 @@ namespace easyfis
                     "~/wijmo/controls/wijmo.chart.min.js",
                     "~/Scripts/menu.js",
                     "~/Scripts/menu.min.js",
+                    "~/Scripts/nprogress.js",
                     "~/Scripts/software.js"));
 
 
