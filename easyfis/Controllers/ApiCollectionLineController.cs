@@ -24,6 +24,8 @@ namespace easyfis.Controllers
                                       Id = d.Id,
                                       ORId = d.ORId,
                                       OR = d.TrnCollection.ORNumber,
+                                      ORDate = d.TrnCollection.ORDate.ToShortDateString(),
+                                      Customer = d.TrnCollection.MstArticle.Article,
                                       BranchId = d.BranchId,
                                       Branch = d.MstBranch.Branch,
                                       AccountId = d.AccountId,

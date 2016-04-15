@@ -24,6 +24,9 @@ namespace easyfis.Controllers
                                           {
                                               Id = d.Id,
                                               JVId = d.JVId,
+                                              JVNumber = d.TrnJournalVoucher.JVNumber,
+                                              JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                              JVParticulars = d.TrnJournalVoucher.Particulars,
                                               BranchId = d.BranchId,
                                               Branch = d.MstBranch.Branch,
                                               AccountId = d.AccountId,
