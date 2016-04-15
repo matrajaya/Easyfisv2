@@ -27,6 +27,163 @@
                 </div>
             </div>
         </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12" align="right">
+                    <button class="btn btn-primary btn-sm" id="" onclick=""><i class="fa fa-print"></i> Print</button>
+                    <button class="btn btn-danger btn-sm" id="" onclick=""><i class=" fa fa-times"></i> Close</button>
+                </div>
+            </div>
+            <div class="well">
+                <form class="form-horizontal" role="form">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">Bank</label>
+                                <div class="col-sm-8">
+                                    <div class="comboBox-wide" id="bankReconciliationBank"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">Date Start</label>
+                                <div class="col-sm-8">
+                                    <div class="comboBox-wide" id="bankReconciliationStartDate"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">Date End</label>
+                                <div class="col-sm-8">
+                                    <div type="text" class="comboBox-wide" id="bankReconciliationEndDate"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Ending Balance as per Bank</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm" id="bankReconciliationEndingBalanceAsPerBank" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Total Deposit in Transit</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm " id="bankReconciliationEndDate" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Total Outstanding Withdrawals</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm " id="bankReconciliationEndDate" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Total Adjustments</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm " id="bankReconciliationEndDate" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Adjusted Ending Balance as per Bank</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm " id="bankReconciliationEndDate" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                </form>
+            </div>
+            <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                <li role="presentation" class="active"><a data-toggle="tab" href="#deposits" id="">Deposits (Collection)</a></li>
+                <li role="presentation"><a data-toggle="tab" href="#withdrwals" id="">Withdrwals (Disbursement)</a></li>
+                <li role="presentation"><a data-toggle="tab" href="#adjustments" id="">Adjustments (Journal Voucher)</a></li>
+            </ul>
+            <div class="tab-content">
+                <!-- Deposits -->
+                <div id="deposits" class="tab-pane fade in active">
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="depositGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="naviagtionPageGridDeposits">
+                            <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridDeposits">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridDeposits">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridDeposits"></button>
+                            <button type="button" class="btn btn-default" id="btnMoveToNextPageGridDeposits">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" id="btnMoveToLastPageGridDeposits">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Withdrwals -->
+                <div id="withdrwals" class="tab-pane fade in">
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="withdrwalGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="naviagtionPageGridWithdrwals">
+                            <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridWithdrwals">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridWithdrwals">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridWithdrwals"></button>
+                            <button type="button" class="btn btn-default" id="btnMoveToNextPageGridWithdrwals">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" id="btnMoveToLastPageGridWithdrwals">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adjustments -->
+                <div id="adjustments" class="tab-pane fade in">
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="adjustmentGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="btn-group col-md-7" id="naviagtionPageGridAdjustments">
+                            <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAdjustments">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAdjustments">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAdjustments"></button>
+                            <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAdjustments">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAdjustments">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->
@@ -34,5 +191,107 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var banks;
+        var cboBank;
+
+        // ========
+        // Get Bank
+        // ========
+        function getBank() {
+            banks = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/5',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            banks.push({
+                                Id: Results[i]["Id"],
+                                ArticleCode: Results[i]["ArticleCode"],
+                                ManualArticleCode: Results[i]["ManualArticleCode"],
+                                Article: Results[i]["Article"],
+                                Category: Results[i]["Category"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                ArticleGroupId: Results[i]["ArticleGroupId"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                UnitId: Results[i]["UnitId"],
+                                OutputTaxId: Results[i]["OutputTaxId"],
+                                InputTaxId: Results[i]["InputTaxId"],
+                                WTaxTypeId: Results[i]["WTaxTypeId"],
+                                Price: Results[i]["Price"],
+                                Cost: Results[i]["Cost"],
+                                IsInventory: Results[i]["IsInventory"],
+                                Particulars: Results[i]["Particulars"],
+                                Address: Results[i]["Address"],
+                                TermId: Results[i]["TermId"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                CreditLimit: Results[i]["CreditLimit"],
+                                DateAcquired: Results[i]["DateAcquired"],
+                                UsefulLife: Results[i]["UsefulLife"],
+                                SalvageValue: Results[i]["SalvageValue"],
+                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCBOForBank(banks);
+                    } else {
+                        createCBOForBank(banks);
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+        }
+
+        // =========================
+        // Create combo box for bank
+        // =========================
+        function createCBOForBank(banks) {
+            cboBank.dispose();
+            cboBank = new wijmo.input.ComboBox('#bankReconciliationBank', {
+                placeholder: "bank",
+                itemsSource: banks,
+                displayMemberPath: "Article",
+                isEditable: false,
+                selectedValuePath: "Article",
+                //onSelectedIndexChanged: function () {
+                //    getArticleAccountForComboBox();
+                //}
+            });
+        }
+
+        // ============
+        // On load page
+        // ============
+        $(document).ready(function () {
+            document.getElementById("").disabled = true;
+
+            cboBank = new wijmo.input.ComboBox('#bankReconciliationBank');
+            getBank();
+        });
+
+    </script>
 </body>
 </html>

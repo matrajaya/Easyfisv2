@@ -42,6 +42,14 @@ namespace easyfis.Models
         public Int32 UpdatedById { get; set; }
         public String UpdatedBy { get; set; }
         public String UpdatedDateTime { get; set; }
+        
+        public String DueDate { get; set; }
+        public Int32 NumberOfDaysFromDueDate { get; set; }
+        public Decimal CurrentAmount { get; set; }
+        public Decimal Age30Amount { get; set; }
+        public Decimal Age60Amount { get; set; }
+        public Decimal Age90Amount { get; set; }
+        public Decimal Age120Amount { get; set; }
 
     }
 }

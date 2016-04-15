@@ -371,6 +371,53 @@ namespace easyfis.Controllers
             return CheckCookie();
         }
 
+        public Decimal ComputeAge(Int32 Age, Int32 Elapsed, Decimal Amount)
+        {
+            Decimal returnValue = 0;
+
+            if (Age == 0)
+            {
+                if (Elapsed < 30)
+                {
+                    returnValue = Amount;
+                }
+            }
+            else if (Age == 1)
+            {
+                if (Elapsed >= 30 && Elapsed < 60) 
+                {
+                    returnValue = Amount;
+                }
+            }
+            else if (Age == 2)
+            {
+                if (Elapsed >= 60 && Elapsed < 90)
+                {
+                    returnValue = Amount;
+                }
+            }
+            else if (Age == 3)
+            {
+                if (Elapsed >= 90 && Elapsed < 120)
+                {
+                    returnValue = Amount;
+                }
+            }
+            else if (Age == 4)
+            {
+                if (Elapsed >= 120)
+                {
+                    returnValue = Amount;
+                }
+            }
+            else
+            {
+                returnValue = 0;
+            }
+
+            return returnValue;
+        }
+
         [Authorize]
         public ActionResult AccountsPayablePDF(String DateAsOf, Int32 CompanyId)
         {
@@ -477,8 +524,8 @@ namespace easyfis.Controllers
                             tableRRForAccountHeaderForSupplier.AddCell(new PdfPCell(new Phrase(receivingReceiptsForArticleSupplier.Supplier, columnFontSubHeader)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f });
                             document.Add(tableRRForAccountHeaderForSupplier);
 
-                            PdfPTable tableHeaderDetail = new PdfPTable(5);
-                            float[] widthscellsheader2 = new float[] { 15f, 15f, 20f, 15f, 15f };
+                            PdfPTable tableHeaderDetail = new PdfPTable(10);
+                            float[] widthscellsheader2 = new float[] { 15f, 15f, 20f, 15f, 15f, 15f, 15f, 15f, 15f, 15f };
                             tableHeaderDetail.SetWidths(widthscellsheader2);
                             tableHeaderDetail.WidthPercentage = 100;
                             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("RR Number", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
@@ -486,11 +533,11 @@ namespace easyfis.Controllers
                             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Document Ref.", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
                             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Due Date", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
                             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Current", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("30 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("60 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("90 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Over 120 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Current", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("30 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("60 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("90 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Over 120 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
                             document.Add(tableHeaderDetail);
 
@@ -528,42 +575,55 @@ namespace easyfis.Controllers
                                                                    ApprovedById = d.ApprovedById,
                                                                    ApprovedBy = d.MstUser.FullName,
                                                                    IsLocked = d.IsLocked,
-                                                                   CreatedById = d.CreatedById,
-                                                                   CreatedBy = d.MstUser2.FullName,
-                                                                   CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                                                   UpdatedById = d.UpdatedById,
-                                                                   UpdatedBy = d.MstUser5.FullName,
-                                                                   UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+
+                                                                   DueDate = d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays)).ToShortDateString(),
+                                                                   NumberOfDaysFromDueDate = Convert.ToDateTime(DateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days,
+                                                                   CurrentAmount = ComputeAge(0, Convert.ToDateTime(DateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                                                   Age30Amount = ComputeAge(1, Convert.ToDateTime(DateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                                                   Age60Amount = ComputeAge(2, Convert.ToDateTime(DateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                                                   Age90Amount = ComputeAge(3, Convert.ToDateTime(DateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                                                   Age120Amount = ComputeAge(4, Convert.ToDateTime(DateAsOf).Subtract(d.RRDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount)
                                                                };
+
+                            Decimal totalBalanceAmount = receivingReceiptsHasBalances.Sum(d => d.BalanceAmount);
+                            Decimal totalCurrentAmount = 0;
+                            Decimal totalAge30Amount = 0;
+                            Decimal totalAge60Amount = 0;
+                            Decimal totalAge90Amount = 0;
+                            Decimal totalAge120AmountAmount = 0;
 
                             if (receivingReceiptsHasBalances.Any())
                             {
                                 foreach (var receivingReceiptsHasBalance in receivingReceiptsHasBalances)
                                 {
 
-                                    PdfPTable tableHeaderDetailHasBalance = new PdfPTable(5);
-                                    float[] widthscellsheaderHasBalance = new float[] { 15f, 15f, 20f, 15f, 15f };
+                                    PdfPTable tableHeaderDetailHasBalance = new PdfPTable(10);
+                                    float[] widthscellsheaderHasBalance = new float[] { 15f, 15f, 20f, 15f, 15f, 15f, 15f, 15f, 15f, 15f };
                                     tableHeaderDetailHasBalance.SetWidths(widthscellsheaderHasBalance);
                                     tableHeaderDetailHasBalance.WidthPercentage = 100;
 
                                     tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.RRNumber, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
                                     tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.RRDate, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
                                     tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.DocumentReference, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
-                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.RRDate, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.DueDate, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
                                     tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.BalanceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.CurrentAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.Age30Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.Age60Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.Age90Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(receivingReceiptsHasBalance.Age120Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
                                     document.Add(tableHeaderDetailHasBalance);
+
+                                    totalCurrentAmount = totalCurrentAmount + receivingReceiptsHasBalance.CurrentAmount;
+                                    totalAge30Amount = totalAge30Amount + receivingReceiptsHasBalance.Age30Amount;
+                                    totalAge60Amount = totalAge60Amount + receivingReceiptsHasBalance.Age60Amount;
+                                    totalAge90Amount = totalAge90Amount + receivingReceiptsHasBalance.Age90Amount;
+                                    totalAge120AmountAmount = totalAge120AmountAmount + receivingReceiptsHasBalance.Age120Amount;
                                 }
                             }
 
-                            Decimal totalBalanceAmount = receivingReceiptsHasBalances.Sum(d => d.BalanceAmount);
-
-                            PdfPTable tableFooter = new PdfPTable(5);
-                            float[] widthscellsfooter = new float[] { 5f, 5f, 5f, 50f, 15f };
+                            PdfPTable tableFooter = new PdfPTable(10);
+                            float[] widthscellsfooter = new float[] { 5f, 5f, 5f, 50f, 15f, 15f, 15f, 15f, 15f, 15f };
                             tableFooter.SetWidths(widthscellsfooter);
                             tableFooter.WidthPercentage = 100;
                             tableFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
@@ -571,11 +631,11 @@ namespace easyfis.Controllers
                             tableFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
                             tableFooter.AddCell(new PdfPCell(new Phrase("Sub Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                             tableFooter.AddCell(new PdfPCell(new Phrase(totalBalanceAmount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalCurrentAmount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalAge30Amount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalAge60Amount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalAge90Amount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalAge120AmountAmount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
                             //tableFooter.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
                             //tableFooter.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, });
@@ -594,8 +654,8 @@ namespace easyfis.Controllers
 
                     document.Add(Chunk.NEWLINE);
                     document.Add(line);
-                    PdfPTable tableFooter2 = new PdfPTable(5);
-                    float[] widthscellsfooter2 = new float[] { 5f, 5f, 5f, 50f, 15f };
+                    PdfPTable tableFooter2 = new PdfPTable(10);
+                    float[] widthscellsfooter2 = new float[] { 5f, 5f, 5f, 50f, 15f, 15f, 15f, 15f, 15f, 15f };
                     tableFooter2.SetWidths(widthscellsfooter2);
                     tableFooter2.WidthPercentage = 100;
                     tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
@@ -603,22 +663,22 @@ namespace easyfis.Controllers
                     tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
                     tableFooter2.AddCell(new PdfPCell(new Phrase(receivingReceiptsForAccount.AccountCode + " - " + receivingReceiptsForAccount.Account + " Sub Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                     tableFooter2.AddCell(new PdfPCell(new Phrase(receivingReceiptsForAccount.BalanceAmount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("Book Balance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("Variance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFontItalic)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("Book Balance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("Variance", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFontItalic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
                     document.Add(tableFooter2);
                     document.Add(Chunk.NEWLINE);
@@ -626,8 +686,8 @@ namespace easyfis.Controllers
 
                 document.Add(Chunk.NEWLINE);
                 document.Add(line);
-                PdfPTable tableHeaderFooter3 = new PdfPTable(5);
-                float[] widthscellsfooter3 = new float[] { 5f, 5f, 5f, 50f, 15f };
+                PdfPTable tableHeaderFooter3 = new PdfPTable(10);
+                float[] widthscellsfooter3 = new float[] { 5f, 5f, 5f, 50f, 15f, 15f, 15f, 15f, 15f, 15f };
                 tableHeaderFooter3.SetWidths(widthscellsfooter3);
                 tableHeaderFooter3.WidthPercentage = 100;
                 tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
@@ -635,11 +695,11 @@ namespace easyfis.Controllers
                 tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
                 tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("TOTAL", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                 tableHeaderFooter3.AddCell(new PdfPCell(new Phrase(receivingReceiptsForAccounts.Sum(d => d.BalanceAmount).ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                 document.Add(tableHeaderFooter3);
 
                 document.Add(Chunk.NEWLINE);
@@ -2057,7 +2117,7 @@ namespace easyfis.Controllers
 
             // RR for Accounts
             var salesInvoiceForAccounts = from d in db.TrnSalesInvoices
-                                          where d.SIDate == Convert.ToDateTime(DateAsOf)
+                                          where d.SIDate <= Convert.ToDateTime(DateAsOf)
                                           && d.MstBranch.CompanyId == CompanyId
                                           && d.BalanceAmount > 0
                                           group d by new
@@ -2114,7 +2174,7 @@ namespace easyfis.Controllers
 
                     // RR for Accounts
                     var salesInvoicesForArticleCustomers = from d in db.TrnSalesInvoices
-                                                           where d.SIDate == Convert.ToDateTime(DateAsOf)
+                                                           where d.SIDate <= Convert.ToDateTime(DateAsOf)
                                                            && d.MstBranch.CompanyId == CompanyId
                                                            && d.BalanceAmount > 0
                                                            && d.MstArticle.MstAccount.Id == salesInvoiceForAccount.AccountId
@@ -2143,8 +2203,8 @@ namespace easyfis.Controllers
                             tableSIForAccountHeaderForCustomer.AddCell(new PdfPCell(new Phrase(salesInvoicesForArticleCustomer.Customer, columnFontSubHeader)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f });
                             document.Add(tableSIForAccountHeaderForCustomer);
 
-                            PdfPTable tableHeaderDetail = new PdfPTable(5);
-                            float[] widthscellsheader2 = new float[] { 15f, 15f, 20f, 15f, 15f };
+                            PdfPTable tableHeaderDetail = new PdfPTable(10);
+                            float[] widthscellsheader2 = new float[] { 15f, 15f, 20f, 15f, 15f, 15f, 15f, 15f, 15f, 15f };
                             tableHeaderDetail.SetWidths(widthscellsheader2);
                             tableHeaderDetail.WidthPercentage = 100;
                             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("SI Number", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
@@ -2152,16 +2212,16 @@ namespace easyfis.Controllers
                             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Document Ref.", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
                             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Due Date", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, BackgroundColor = BaseColor.LIGHT_GRAY });
                             tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Current", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("30 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("60 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("90 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                            //tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Over 120 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Current", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, Rowspan = 2, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("30 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("60 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("90 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Over 120 Days", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
                             document.Add(tableHeaderDetail);
 
                             var salesInvoicesHasBalances = from d in db.TrnSalesInvoices
-                                                           where d.SIDate == Convert.ToDateTime(DateAsOf)
+                                                           where d.SIDate <= Convert.ToDateTime(DateAsOf)
                                                            && d.MstBranch.CompanyId == CompanyId
                                                            && d.BalanceAmount > 0
                                                            && d.CustomerId == salesInvoicesForArticleCustomer.CustomerId
@@ -2192,42 +2252,55 @@ namespace easyfis.Controllers
                                                                ApprovedById = d.ApprovedById,
                                                                ApprovedBy = d.MstUser.FullName,
                                                                IsLocked = d.IsLocked,
-                                                               CreatedById = d.CreatedById,
-                                                               CreatedBy = d.MstUser2.FullName,
-                                                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                                               UpdatedById = d.UpdatedById,
-                                                               UpdatedBy = d.MstUser5.FullName,
-                                                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+
+                                                               DueDate = d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays)).ToShortDateString(),
+                                                               NumberOfDaysFromDueDate = Convert.ToDateTime(DateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days,
+                                                               CurrentAmount = ComputeAge(0, Convert.ToDateTime(DateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                                               Age30Amount = ComputeAge(1, Convert.ToDateTime(DateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                                               Age60Amount = ComputeAge(2, Convert.ToDateTime(DateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                                               Age90Amount = ComputeAge(3, Convert.ToDateTime(DateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount),
+                                                               Age120Amount = ComputeAge(4, Convert.ToDateTime(DateAsOf).Subtract(d.SIDate.AddDays(Convert.ToInt32(d.MstTerm.NumberOfDays))).Days, d.BalanceAmount)
                                                            };
+
+                            Decimal totalBalanceAmount = salesInvoicesHasBalances.Sum(d => d.BalanceAmount);
+                            Decimal totalCurrentAmount = 0;
+                            Decimal totalAge30Amount = 0;
+                            Decimal totalAge60Amount = 0;
+                            Decimal totalAge90Amount = 0;
+                            Decimal totalAge120AmountAmount = 0;
 
                             if (salesInvoicesHasBalances.Any())
                             {
                                 foreach (var salesInvoicesHasBalance in salesInvoicesHasBalances)
                                 {
 
-                                    PdfPTable tableHeaderDetailHasBalance = new PdfPTable(5);
-                                    float[] widthscellsheaderHasBalance = new float[] { 15f, 15f, 20f, 15f, 15f };
+                                    PdfPTable tableHeaderDetailHasBalance = new PdfPTable(10);
+                                    float[] widthscellsheaderHasBalance = new float[] { 15f, 15f, 20f, 15f, 15f, 15f, 15f, 15f, 15f, 15f };
                                     tableHeaderDetailHasBalance.SetWidths(widthscellsheaderHasBalance);
                                     tableHeaderDetailHasBalance.WidthPercentage = 100;
 
                                     tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.SINumber, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
                                     tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.SIDate, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
                                     tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.DocumentReference, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
-                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.SIDate, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.DueDate, cellFont)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f });
                                     tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.BalanceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
-                                    //tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.CurrentAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.Age30Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.Age60Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.Age90Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
+                                    tableHeaderDetailHasBalance.AddCell(new PdfPCell(new Phrase(salesInvoicesHasBalance.Age120Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 6f });
                                     document.Add(tableHeaderDetailHasBalance);
+
+                                    totalCurrentAmount = totalCurrentAmount + salesInvoicesHasBalance.CurrentAmount;
+                                    totalAge30Amount = totalAge30Amount + salesInvoicesHasBalance.Age30Amount;
+                                    totalAge60Amount = totalAge60Amount + salesInvoicesHasBalance.Age60Amount;
+                                    totalAge90Amount = totalAge90Amount + salesInvoicesHasBalance.Age90Amount;
+                                    totalAge120AmountAmount = totalAge120AmountAmount + salesInvoicesHasBalance.Age120Amount;
                                 }
                             }
 
-                            Decimal totalBalanceAmount = salesInvoicesHasBalances.Sum(d => d.BalanceAmount);
-
-                            PdfPTable tableFooter = new PdfPTable(5);
-                            float[] widthscellsfooter = new float[] { 5f, 5f, 5f, 50f, 15f };
+                            PdfPTable tableFooter = new PdfPTable(10);
+                            float[] widthscellsfooter = new float[] { 5f, 5f, 5f, 50f, 15f, 15f, 15f, 15f, 15f, 15f };
                             tableFooter.SetWidths(widthscellsfooter);
                             tableFooter.WidthPercentage = 100;
                             tableFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
@@ -2235,11 +2308,11 @@ namespace easyfis.Controllers
                             tableFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
                             tableFooter.AddCell(new PdfPCell(new Phrase("Sub Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                             tableFooter.AddCell(new PdfPCell(new Phrase(totalBalanceAmount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                            //tableFooter.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalCurrentAmount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalAge30Amount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalAge60Amount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalAge90Amount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                            tableFooter.AddCell(new PdfPCell(new Phrase(totalAge120AmountAmount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
                             document.Add(tableFooter);
                         }
@@ -2247,8 +2320,8 @@ namespace easyfis.Controllers
 
                     document.Add(Chunk.NEWLINE);
                     document.Add(line);
-                    PdfPTable tableFooter2 = new PdfPTable(5);
-                    float[] widthscellsfooter2 = new float[] { 5f, 5f, 5f, 50f, 15f };
+                    PdfPTable tableFooter2 = new PdfPTable(10);
+                    float[] widthscellsfooter2 = new float[] { 5f, 5f, 5f, 50f, 15f, 15f, 15f, 15f, 15f, 15f };
                     tableFooter2.SetWidths(widthscellsfooter2);
                     tableFooter2.WidthPercentage = 100;
                     tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
@@ -2256,11 +2329,11 @@ namespace easyfis.Controllers
                     tableFooter2.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
                     tableFooter2.AddCell(new PdfPCell(new Phrase(salesInvoiceForAccount.AccountCode + " - " + salesInvoiceForAccount.Account + " Sub Total", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                     tableFooter2.AddCell(new PdfPCell(new Phrase(salesInvoiceForAccount.BalanceAmount.ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                    //tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableFooter2.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
                     document.Add(tableFooter2);
                     document.Add(Chunk.NEWLINE);
@@ -2268,8 +2341,8 @@ namespace easyfis.Controllers
 
                 document.Add(Chunk.NEWLINE);
                 document.Add(line);
-                PdfPTable tableHeaderFooter3 = new PdfPTable(5);
-                float[] widthscellsfooter3 = new float[] { 5f, 5f, 5f, 50f, 15f };
+                PdfPTable tableHeaderFooter3 = new PdfPTable(10);
+                float[] widthscellsfooter3 = new float[] { 5f, 5f, 5f, 50f, 15f, 15f, 15f, 15f, 15f, 15f };
                 tableHeaderFooter3.SetWidths(widthscellsfooter3);
                 tableHeaderFooter3.WidthPercentage = 100;
                 tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
@@ -2277,11 +2350,11 @@ namespace easyfis.Controllers
                 tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f });
                 tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("TOTAL", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                 tableHeaderFooter3.AddCell(new PdfPCell(new Phrase(salesInvoiceForAccounts.Sum(d => d.BalanceAmount).ToString("#,##0.00"), columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
-                //tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                tableHeaderFooter3.AddCell(new PdfPCell(new Phrase("0.00", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                 document.Add(tableHeaderFooter3);
 
                 document.Add(Chunk.NEWLINE);
