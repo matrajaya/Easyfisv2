@@ -220,8 +220,10 @@
                             });
                         }
                         createCBOForBank(banks);
+                        collectionLineTab();
                     } else {
                         createCBOForBank(banks);
+                        collectionLineTab();
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -240,13 +242,23 @@
                 displayMemberPath: "Article",
                 isEditable: false,
                 selectedValuePath: "Article",
-                //onSelectedIndexChanged: function () {
-                //    getArticleAccountForComboBox();
-                //}
+                onSelectedIndexChanged: function () {
+                    refreshCollectionLine();
+
+                    disbursementTab();
+                    window.disbursementTab = function () {
+                        return true;
+                    };
+                    refreshDisbursementGrid();
+
+                    journalVoucherTab();
+                    window.journalVoucherTab = function () {
+                        return true;
+                    };
+                    refreshJournalVoucherGrid();
+                }
             });
         }
-
-
 
         // get Sale Summary Report Start Date
         function getbankReconciliationStartDate() {
@@ -257,8 +269,22 @@
                 mask: '99/99/9999',
                 max: new Date(bankReconciliationEndDate.value),
                 onValueChanged: function () {
+                    bankReconciliationStartDateDefaultValue = this.value;
                     setTimeout(function () {
                         getbankReconciliationEndDate();
+                        refreshCollectionLineGrid();
+
+                        disbursementTab();
+                        window.disbursementTab = function () {
+                            return true;
+                        };
+                        refreshDisbursementGrid();
+
+                        journalVoucherTab();
+                        window.journalVoucherTab = function () {
+                            return true;
+                        };
+                        refreshJournalVoucherGrid();
                     }, 50);
                 }
             });
@@ -273,11 +299,35 @@
                 mask: '99/99/9999',
                 min: new Date(bankReconciliationStartDate.value),
                 onValueChanged: function () {
+                    bankReconciliationEndtDateDefaultValue = this.value;
                     setTimeout(function () {
                         getbankReconciliationStartDate();
+                        refreshCollectionLineGrid();
+
+                        disbursementTab();
+                        window.disbursementTab = function () {
+                            return true;
+                        };
+                        refreshDisbursementGrid();
+
+                        journalVoucherTab();
+                        window.journalVoucherTab = function () {
+                            return true;
+                        };
+                        refreshJournalVoucherGrid();
                     }, 50);
                 }
             });
+        }
+
+        // ============================
+        // Refresh Collection Line List
+        // ============================
+        function refreshCollectionLineGrid() {
+            collectionLines = new wijmo.collections.CollectionView(getCollectionLines());
+
+            collectionLineGrid.itemsSource = collectionLines;
+            collectionLineGrid.trackChanges = true;
         }
 
         // ========================
@@ -286,8 +336,11 @@
         function getCollectionLines() {
             var collectionLines = new wijmo.collections.ObservableArray;
             NProgress.start();
+            var dateStartValue = [bankReconciliationStartDate.value.getMonth() + 1, bankReconciliationStartDate.value.getDate(), bankReconciliationStartDate.value.getFullYear()].join('-');
+            var dateEndValue = [bankReconciliationEndDate.value.getMonth() + 1, bankReconciliationEndDate.value.getDate(), bankReconciliationEndDate.value.getFullYear()].join('-');
+
             $.ajax({
-                url: '/api/listCollectionLine',
+                url: '/api/listCollectionLineByDepositoryBankIdByORDate/' + cboBank.selectedItem["Id"].toString() + "/" + dateStartValue + "/" + dateEndValue,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -351,42 +404,49 @@
                                 "header": "OR Number",
                                 "binding": "OR",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 130
                             },
                             {
                                 "header": "OR Date",
                                 "binding": "ORDate",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 100
                             },
                             {
                                 "header": "Customer",
                                 "binding": "Customer",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 160
                             },
                             {
                                 "header": "Pay Type",
                                 "binding": "PayType",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 153
                             },
                             {
                                 "header": "Check No.",
                                 "binding": "CheckNumber",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 150
                             },
                             {
                                 "header": "Check Date",
                                 "binding": "CheckDate",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 100
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 160
                             },
                             {
@@ -399,12 +459,12 @@
                                "header": "In Transit",
                                "binding": "",
                                "allowSorting": true,
+                               "isReadOnly": true,
                                "width": 100
                            },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: collectionLines,
-                isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -413,14 +473,27 @@
             collectionLineGrid.trackChanges = true;
         }
 
+        // =========================
+        // Refresh Disbursement Grid
+        // =========================
+        function refreshDisbursementGrid() {
+            disbursements = new wijmo.collections.CollectionView(getDisbursement());
+
+            disbursementGrid.itemsSource = disbursements;
+            disbursementGrid.trackChanges = true;
+        }
+
         // ================
         // GET Disbursement
         // ================
         function getDisbursement() {
             var disbursements = new wijmo.collections.ObservableArray;
             NProgress.start();
+            var dateStartValue = [bankReconciliationStartDate.value.getMonth() + 1, bankReconciliationStartDate.value.getDate(), bankReconciliationStartDate.value.getFullYear()].join('-');
+            var dateEndValue = [bankReconciliationEndDate.value.getMonth() + 1, bankReconciliationEndDate.value.getDate(), bankReconciliationEndDate.value.getFullYear()].join('-');
+
             $.ajax({
-                url: '/api/listDisbursement',
+                url: '/api/listDisbursementByBankIdByCVDate/' + cboBank.selectedItem["Id"] + '/' + dateStartValue + '/' + dateEndValue,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -486,42 +559,49 @@
                                 "header": "CV Number",
                                 "binding": "CVNumber",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 130
                             },
                             {
                                 "header": "CV Date",
                                 "binding": "CVDate",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 100
                             },
                             {
                                 "header": "Payee",
                                 "binding": "Payee",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 160
                             },
                             {
                                 "header": "Pay Type",
                                 "binding": "PayType",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 153
                             },
                             {
                                 "header": "Check No.",
                                 "binding": "CheckNumber",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 150
                             },
                             {
                                 "header": "Check Date",
                                 "binding": "CheckDate",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 100
                             },
                             {
                                 "header": "Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 160
                             },
                             {
@@ -534,17 +614,16 @@
                                "header": "Outstanding",
                                "binding": "",
                                "allowSorting": true,
+                               "isReadOnly": true,
                                "width": 100
                            },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: disbursements,
-                isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-
             disbursementGrid.trackChanges = true;
         }
 
@@ -554,8 +633,11 @@
         function getJournalVoucherLine() {
             var journalVoucherLines = new wijmo.collections.ObservableArray;
             NProgress.start();
+            var dateStartValue = [bankReconciliationStartDate.value.getMonth() + 1, bankReconciliationStartDate.value.getDate(), bankReconciliationStartDate.value.getFullYear()].join('-');
+            var dateEndValue = [bankReconciliationEndDate.value.getMonth() + 1, bankReconciliationEndDate.value.getDate(), bankReconciliationEndDate.value.getFullYear()].join('-');
+
             $.ajax({
-                url: '/api/listJournalVoucherLine',
+                url: '/api/listJournalVoucherLineByJVDate/' + cboBank.selectedItem["Id"].toString() + '/' + dateStartValue + '/' + dateEndValue,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -596,6 +678,16 @@
             return journalVoucherLines;
         }
 
+        // ============================
+        // Refresh Journal Voucher Grid
+        // ============================
+        function refreshJournalVoucherGrid() {
+            journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLine());
+
+            journalVoucherLineGrid.itemsSource = journalVoucherLines;
+            journalVoucherLineGrid.trackChanges = true;
+        }
+
         // ===================
         // Journal Voucher Tab
         // ===================
@@ -610,36 +702,42 @@
                                  "header": "JV Number",
                                  "binding": "JVNumber",
                                  "allowSorting": true,
+                                 "isReadOnly": true,
                                  "width": 130
                              },
                             {
                                 "header": "JV Date",
                                 "binding": "JVDate",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 100
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "JVParticulars",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 243
                             },
                             {
                                 "header": "Debit",
                                 "binding": "DebitAmount",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 160
                             },
                             {
                                 "header": "Credit",
                                 "binding": "CreditAmount",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 160
                             },
                             {
                                 "header": "Balance",
                                 "binding": "",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 160
                             },
                             {
@@ -652,12 +750,12 @@
                                "header": "Adjustments",
                                "binding": "",
                                "allowSorting": true,
+                               "isReadOnly": true,
                                "width": 100
                            },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: journalVoucherLines,
-                isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -676,8 +774,8 @@
             document.getElementById("bankReconciliationTotalAdjustments").disabled = true;
             document.getElementById("bankReconciliationAdjustedEndingBalanceAsPerBank").disabled = true;
 
-            cboBank = new wijmo.input.ComboBox('#bankReconciliationBank');
             getBank();
+            cboBank = new wijmo.input.ComboBox('#bankReconciliationBank');
 
             bankReconciliationStartDate = new wijmo.input.InputDate('#bankReconciliationStartDate');
             bankReconciliationEndDate = new wijmo.input.InputDate('#bankReconciliationEndDate');
@@ -692,6 +790,7 @@
                 $('#deposits').show();
                 $('#withdrwals').hide();
                 $('#adjustments').hide();
+                refreshCollectionLineGrid();
                 window.collectionLineTab = function () {
                     return true;
                 };
@@ -702,6 +801,7 @@
                 $('#withdrwals').show();
                 $('#adjustments').hide();
                 disbursementTab();
+                refreshDisbursementGrid();
                 window.disbursementTab = function () {
                     return true;
                 };
@@ -712,17 +812,16 @@
                 $('#withdrwals').hide();
                 $('#adjustments').show();
                 journalVoucherTab();
+                refreshJournalVoucherGrid();
                 window.journalVoucherTab = function () {
                     return true;
                 };
             });
-
+          
             $('#deposits').show();
             $('#withdrwals').hide();
             $('#adjustments').hide();
-            collectionLineTab();
         });
-
     </script>
 </body>
 </html>
