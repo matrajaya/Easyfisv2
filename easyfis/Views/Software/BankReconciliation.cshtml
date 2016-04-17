@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Bank Reconciliation</title>
@@ -146,19 +145,14 @@
         // ================
         var banks;
         var cboBank;
-
         var bankReconciliationStartDate;
         var bankReconciliationEndDate;
-
         var bankReconciliationStartDateDefaultValue;
         var bankReconciliationEndtDateDefaultValue;
-
         var collectionLines;
         var collectionLineGrid;
-
         var disbursements;
         var disbursementGrid;
-
         var journalVoucherLines;
         var journalVoucherLineGrid;
 
@@ -349,6 +343,12 @@
                     NProgress.done();
                     if (collectionLineResults.length > 0) {
                         for (i = 0; i < collectionLineResults.length; i++) {
+                            if (collectionLineResults[i]["IsClear"] == true) {
+                                IsClearValue = "<button type='checkbox' class='btn btn-default btn-xs' id='isCleared' onclick='inputIsCleared_OnClick()'><i class='fa fa-check'></i></button>";
+                            } else {
+                                IsClearValue = "<button type='checkbox' class='btn btn-default btn-xs emptyCheckBoxButton' id='isCleared' onclick='inputIsCleared_OnClick()'></button>";
+                            }
+
                             collectionLines.push({
                                 Id: collectionLineResults[i]["Id"],
                                 ORId: collectionLineResults[i]["ORId"],
@@ -372,7 +372,8 @@
                                 CheckBank: collectionLineResults[i]["CheckBank"],
                                 DepositoryBankId: collectionLineResults[i]["DepositoryBankId"],
                                 DepositoryBank: collectionLineResults[i]["DepositoryBank"],
-                                IsClear: collectionLineResults[i]["IsClear"]
+                                IsClear: collectionLineResults[i]["IsClear"],
+                                IsClearHtml: IsClearValue
                             });
                         }
                     }
@@ -381,6 +382,19 @@
                 alert(err);
             });
             return collectionLines;
+        }
+        
+        // ================
+        // Input Is Cleared
+        // ================
+        function inputIsCleared_OnClick() {
+            var collectionLine = collectionLines.currentItem;
+
+            if (document.getElementById("isCleared").checked == true) {
+                console.log(collectionLine.IsClear);
+            } else {
+                console.log(collectionLine.IsClear);
+            }
         }
 
         // ================================
@@ -391,10 +405,21 @@
         }
 
         // ===================
+        // FlexGrid Selection
+        // ===================
+        function updateDetails() {
+            var collectionLine = collectionLines.currentItem;
+        }
+
+        // ===================
         // collection line tab
         // ===================
         function collectionLineTab() {
             collectionLines = new wijmo.collections.CollectionView(getCollectionLines());
+
+            collectionLines.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
 
             // Flex Grid for Purchase Collection Line
             collectionLineGrid = new wijmo.grid.FlexGrid('#collectionLineGrid');
@@ -450,9 +475,12 @@
                                 "width": 160
                             },
                             {
-                                "header": "Clear",
-                                "binding": "IsClear",
+                                "header": "C",
+                                "binding": "IsClearHtml",
                                 "allowSorting": true,
+                                "isReadOnly": true,
+                                "isContentHtml": true,
+                                "align": "center",
                                 "width": 50
                             },
                            {
@@ -469,7 +497,6 @@
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-
             collectionLineGrid.trackChanges = true;
         }
 
@@ -645,6 +672,8 @@
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
+                            var balance = Results[i]["DebitAmount"] - Results[i]["CreditAmount"]
+
                             journalVoucherLines.push({
                                 Id: Results[i]["Id"],
                                 JVId: Results[i]["JVId"],
@@ -660,6 +689,7 @@
                                 Particulars: Results[i]["Particulars"],
                                 DebitAmount: Results[i]["DebitAmount"],
                                 CreditAmount: Results[i]["CreditAmount"],
+                                Balance: balance,
                                 APRRId: Results[i]["APRRId"],
                                 APRR: Results[i]["APRR"],
                                 APRRBranch: Results[i]["APRRBranch"],
@@ -735,7 +765,7 @@
                             },
                             {
                                 "header": "Balance",
-                                "binding": "",
+                                "binding": "Balance",
                                 "allowSorting": true,
                                 "isReadOnly": true,
                                 "width": 160
@@ -817,10 +847,11 @@
                     return true;
                 };
             });
-          
+
             $('#deposits').show();
             $('#withdrwals').hide();
             $('#adjustments').hide();
+
         });
     </script>
 </body>
