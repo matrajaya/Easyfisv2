@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Users Detail</title>
@@ -35,9 +34,8 @@
                         <h4 id=""></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-lock"></i> Lock</button>
+                        <button class="btn btn-primary btn-sm"><i class="fa fa-unlock"></i> Unlock</button>
                         <button onclick="window.location.href = '@Url.Action("Users", "Software")'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
@@ -49,36 +47,118 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Username:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />  <!-- Drop down list ni-->
+                                        <input type="text" class="form-control input-sm" id="userDetail_Username" placeholder="Username" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Password:</label>
-                                    <div class="col-sm-8">
-                                        <input type="password" class="form-control input-sm" id="" /> <!-- Auto Generated-->
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Fullname:</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="" />
+                                        <input type="text" class="form-control input-sm" id="userDetail_Fullname" placeholder="Fullname" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Copy rights of:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm" id="">
-                                    </div>
-                                </div>
-                                <div class="col-md-6"></div>
+                                @*<div class="form-group">
+                                        <label class="control-label col-sm-4">Password:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control input-sm" id="userDetail_Password" />
+                                        </div>
+                                    </div>*@
+                            </div>
+                            <div class="col-md-6">
+                                @*<div class="form-group">
+                                        <label class="control-label col-sm-4">Fullname:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control input-sm" id="userDetail_Fullname" />
+                                        </div>
+                                    </div>*@
+                                @*<div class="form-group">
+                                        <label class="control-label col-sm-4">Copy rights of:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control input-sm" id="">
+                                        </div>
+                                    </div>*@
                             </div>
                         </div>
                     </form>
                 </div>
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#UserForm" id="journalLedgerTabId">User Form</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <div id="UserForm" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-lg-12" align="right">
+                                <button class="btn btn-primary btn-sm" id="btnAddUserForm" onclick="cmdAddUserForm_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="userDetailUserFormGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
+
+        <!-- User Form Edit Detail -->
+        <div class="modal fade" id="userFormEdit" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">User Form Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input type="hidden" id="" />
+                            <dl class="dl-horizontal">
+                                <dt>Form</dt>
+                                <dd><input type="text" class="form-control input-sm" id="" placeholder="" /></dd>
+                                <dt>Add</dt>
+                                <dd><input type="checkbox" id="" /></dd>
+                                <dt>Edit</dt>
+                                <dd><input type="checkbox" id="" /></dd>
+                                <dt>Delete</dt>
+                                <dd><input type="checkbox" id="" /></dd>
+                                <dt>Lock</dt>
+                                <dd><input type="checkbox" id="" /></dd>
+                                <dt>Unlock</dt>
+                                <dd><input type="checkbox" id="" /></dd>
+                                <dt>Print</dt>
+                                <dd><input type="checkbox" id="" /></dd>
+                            </dl>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-sm" id="cmdSaveUserFormButton" onclick="cmdUserFormSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                        <button id="cmdUserFormDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Form Delete Modal Confirmation -->
+        <div class="modal fade" id="deleteUserFormConfirm" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Delete Form <i class="fa fa-trash"></i></h4>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteContact" onclick="cmdUserFormConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button id="cmdConfirmDeleteUserFormCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
@@ -90,5 +170,232 @@
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- Scripts JavaScripts -->
     @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var userForms;
+        var userFormGrid;
+
+        var userId = getParam('UserId');
+        var IsLocked;
+
+        // =======================
+        // Get URL Parameter Value
+        // =======================
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null) {
+                return "";
+            } else {
+                return results[1];
+            }
+        }
+
+        // ==============
+        // get User By Id
+        // ==============
+        function getUserByUserId() {
+            NProgress.start();
+            if (document.location.search.length > 0) {
+                $.ajax({
+                    url: '/api/listUserById/' + userId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (userResults) {
+                        if (userResults != null) {
+                            document.getElementById("userDetail_Username").value = userResults.UserName;
+                            document.getElementById("userDetail_Fullname").value = userResults.FullName;
+                            NProgress.done();
+                            if (userResults.IsLocked == true) {
+                                document.getElementById("userDetail_Username").disabled = true;
+                                document.getElementById("userDetail_Fullname").disabled = true;
+                                IsLocked = true;
+                            } else {
+                                document.getElementById("userDetail_Username").disabled = false;
+                                document.getElementById("userDetail_Fullname").disabled = false;
+                                IsLocked = false;
+                            }
+                        } else {
+                            confirm("No Data");
+                            window.location = '/Software/Users';
+                        }
+                    }
+                }).fail(function () {
+                    confirm("URL Not Found");
+                    window.location = '/Software/Users';
+                });
+            } else {
+                NProgress.done();
+            }
+        }
+
+        // ===================
+        // get Form by User Id
+        // ===================
+        function getUserFormByUserId() {
+            var userForms = new wijmo.collections.ObservableArray;
+            NProgress.start();
+            if (document.location.search.length > 0) {
+                $.ajax({
+                    url: '/api/listUserFormByUserId/' + userId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (userFormResults) {
+                        if (userFormResults.length > 0) {
+                            for (i = 0; i < userFormResults.length; i++) {
+                                userForms.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdUserFormEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdUserFormDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: userFormResults[i]["Id"],
+                                    UserId: userFormResults[i]["UserId"],
+                                    User: userFormResults[i]["User"],
+                                    FormId: userFormResults[i]["FormId"],
+                                    Form: userFormResults[i]["Form"],
+                                    CanAdd: userFormResults[i]["CanAdd"],
+                                    CanEdit: userFormResults[i]["CanEdit"],
+                                    CanDelete: userFormResults[i]["CanDelete"],
+                                    CanLock: userFormResults[i]["CanLock"],
+                                    CanUnlock: userFormResults[i]["CanUnlock"],
+                                    CanPrint: userFormResults[i]["CanPrint"]
+                                });
+                            }
+                        }
+                        NProgress.done();
+                    }
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            } else {
+                confirm("URL Not Found");
+                NProgress.done();
+                window.location = '/Software/Users';
+            }
+            return userForms;
+        }
+
+        // ==============
+        // Modal Add Form
+        // ==============
+        function cmdAddUserForm_OnClick() {
+            $('#userFormEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // ===============
+        // Modal Edit Form
+        // ===============
+        function cmdUserFormEditButton_OnClick() {
+            $('#userFormEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // ==============================
+        // Modal Delete Form Confirmation
+        // ==============================
+        function cmdUserFormDeleteButton_OnClick() {
+            $('#deleteUserFormConfirm').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
+        // ============
+        // On Load Page
+        // ============
+        $(document).ready(function () {
+            getUserByUserId();
+
+            userForms = new wijmo.collections.CollectionView(getUserFormByUserId());
+
+            // Flex Grid for Contact Information
+            userFormGrid = new wijmo.grid.FlexGrid('#userDetailUserFormGrid');
+            userFormGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Form",
+                                "binding": "Form",
+                                "width": "3*",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Add",
+                                "binding": "CanAdd",
+                                "allowSorting": true,
+                                "width": 80,
+                            },
+                            {
+                                "header": "Edit",
+                                "binding": "CanEdit",
+                                "allowSorting": true,
+                                "width": 80,
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "CanDelete",
+                                "allowSorting": true,
+                                "width": 80,
+                            },
+                            {
+                                "header": "Lock",
+                                "binding": "CanLock",
+                                "allowSorting": true,
+                                "width": 80,
+                            },
+                            {
+                                "header": "Unlock",
+                                "binding": "CanUnlock",
+                                "allowSorting": true,
+                                "width": 80,
+                            },
+                            {
+                                "header": "Print",
+                                "binding": "CanPrint",
+                                "allowSorting": true,
+                                "width": 80,
+                            }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: userForms,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+            userFormGrid.trackChanges = true;
+        });
+
+    </script>
 </body>
 </html>

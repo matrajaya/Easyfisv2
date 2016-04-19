@@ -1475,7 +1475,10 @@
                 discounts.refresh();
             });
             discounts.filter = function (item) {
-                return !filterTextDiscount || (item.Discount.toLowerCase().indexOf(filterTextDiscount) > -1);
+                return !filterTextDiscount || (item.Discount.toLowerCase().indexOf(filterTextDiscount) > -1)
+                //|| (item.DiscountRate.toLowerCase().indexOf(filterTextDiscount) > -1)
+                //|| (item.IsInclusive.toLowerCase().indexOf(filterTextDiscount) > -1)
+                || (item.Account.toLowerCase().indexOf(filterTextDiscount) > -1);
             }
             discounts.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsDiscount();

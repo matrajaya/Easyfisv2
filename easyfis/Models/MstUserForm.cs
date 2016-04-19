@@ -11,10 +11,10 @@ namespace easyfis.Models
         [Key]
 
         public Int32 Id { get; set; }
-        public Int32 Userid { get; set; }
+        public Int32 UserId { get; set; }
         public String User { get; set; }
-        public String Form { get; set; }
         public Int32 FormId { get; set; }
+        public String Form { get; set; }
         public Boolean CanAdd { get; set; }
         public Boolean CanEdit { get; set; }
         public Boolean CanDelete { get; set; }

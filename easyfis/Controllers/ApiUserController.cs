@@ -52,6 +52,31 @@ namespace easyfis.Controllers
             return users.ToList();
         }
 
+        // ==================
+        // get Mst User by Id
+        // ==================
+        [Route("api/listUserById/{Id}")]
+        public Models.MstUser GetMstUserById(String Id)
+        {
+            var users = from d in db.MstUsers
+                        where d.Id == Convert.ToInt32(Id)
+                        select new Models.MstUser
+                        {
+                            Id = d.Id,
+                            FullName = d.FullName,
+                            UserName = d.UserName,
+                            IsLocked = d.IsLocked,
+                            UserId = d.UserId,
+                            //CreatedById = d.CreatedById,
+                            //CreatedBy = d.MstUser1.FullName,
+                            //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                            //UpdatedById = d.UpdatedById,
+                            //UpdatedBy = d.MstUser2.FullName,
+                            //UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                        };
+            return (Models.MstUser)users.FirstOrDefault();
+        }
+
         // =========================
         // LIST Mst User by Username
         // =========================

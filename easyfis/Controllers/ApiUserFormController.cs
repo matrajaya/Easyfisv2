@@ -21,10 +21,35 @@ namespace easyfis.Controllers
                             select new Models.MstUserForm
                             {
                                 Id = d.Id,
-                                //Userid = d.Userid,
-                                //User = d.User,
-                                //Form = d.Form,
+                                UserId = d.UserId,
+                                User = d.MstUser.FullName,
                                 FormId = d.FormId,
+                                Form = d.SysForm.FormName,
+                                CanAdd = d.CanAdd,
+                                CanEdit = d.CanEdit,
+                                CanDelete = d.CanDelete,
+                                CanLock = d.CanLock,
+                                CanUnlock = d.CanUnlock,
+                                CanPrint = d.CanPrint
+                            };
+            return userForms.ToList();
+        }
+
+        // =========================
+        // LIST User Form by User Id
+        // =========================
+        [Route("api/listUserFormByUserId/{UserId}")]
+        public List<Models.MstUserForm> GetUserFormByUserId(String UserId)
+        {
+            var userForms = from d in db.MstUserForms
+                            where d.UserId == Convert.ToInt32(UserId)
+                            select new Models.MstUserForm
+                            {
+                                Id = d.Id,
+                                UserId = d.UserId,
+                                User = d.MstUser.FullName,
+                                FormId = d.FormId,
+                                Form = d.SysForm.FormName,
                                 CanAdd = d.CanAdd,
                                 CanEdit = d.CanEdit,
                                 CanDelete = d.CanDelete,
