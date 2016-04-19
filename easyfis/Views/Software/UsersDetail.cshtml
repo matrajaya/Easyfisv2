@@ -34,9 +34,9 @@
                         <h4 id=""></h4>
                     </div>
                     <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-lock"></i> Lock</button>
-                        <button class="btn btn-primary btn-sm"><i class="fa fa-unlock"></i> Unlock</button>
-                        <button onclick="window.location.href = '@Url.Action("Users", "Software")'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="btnUserDetailLock" onclick="btnUserDetailLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                        <button class="btn btn-primary btn-sm" id="btnUserDetailUnLock" onclick="btnUserDetailUnLock_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                        <button class="btn btn-danger btn-sm" id="btnUserDetailClose" onclick="btnUserDetailClose_OnClick()"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -113,22 +113,24 @@
                     </div>
                     <div class="modal-body">
                         <form>
-                            <input type="hidden" id="" />
+                            <input type="hidden" id="userForm_Id" />
                             <dl class="dl-horizontal">
                                 <dt>Form</dt>
-                                <dd><input type="text" class="form-control input-sm" id="" placeholder="" /></dd>
+                                <dd>
+                                    <div class="comboBox-wide" id="userForm_FormName"></div>
+                                </dd>
                                 <dt>Add</dt>
-                                <dd><input type="checkbox" id="" /></dd>
+                                <dd><input type="checkbox" id="userForm_CanAdd" /></dd>
                                 <dt>Edit</dt>
-                                <dd><input type="checkbox" id="" /></dd>
+                                <dd><input type="checkbox" id="userForm_CanEdit" /></dd>
                                 <dt>Delete</dt>
-                                <dd><input type="checkbox" id="" /></dd>
+                                <dd><input type="checkbox" id="userForm_CanDelete" /></dd>
                                 <dt>Lock</dt>
-                                <dd><input type="checkbox" id="" /></dd>
+                                <dd><input type="checkbox" id="userForm_CanLock" /></dd>
                                 <dt>Unlock</dt>
-                                <dd><input type="checkbox" id="" /></dd>
+                                <dd><input type="checkbox" id="userForm_CanUnlock" /></dd>
                                 <dt>Print</dt>
-                                <dd><input type="checkbox" id="" /></dd>
+                                <dd><input type="checkbox" id="userForm_CanPrint" /></dd>
                             </dl>
                         </form>
                     </div>
@@ -153,7 +155,7 @@
                         Are you sure you want to delete this?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteContact" onclick="cmdUserFormConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteUserForm" onclick="cmdUserFormConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
                         <button id="cmdConfirmDeleteUserFormCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                     </div>
                 </div>
@@ -179,6 +181,9 @@
 
         var userId = getParam('UserId');
         var IsLocked;
+
+        var cboForForm;
+        var formSelectedValue = "";
 
         // =======================
         // Get URL Parameter Value
@@ -213,12 +218,14 @@
                             document.getElementById("userDetail_Fullname").value = userResults.FullName;
                             NProgress.done();
                             if (userResults.IsLocked == true) {
-                                document.getElementById("userDetail_Username").disabled = true;
                                 document.getElementById("userDetail_Fullname").disabled = true;
+                                $("#btnUserDetailLock").prop("disabled", true);
+                                $("#btnAddUserForm").prop("disabled", true);
                                 IsLocked = true;
                             } else {
-                                document.getElementById("userDetail_Username").disabled = false;
                                 document.getElementById("userDetail_Fullname").disabled = false;
+                                $("#btnUserDetailUnLock").prop("disabled", true);
+                                $("#btnAddUserForm").prop("disabled", false);
                                 IsLocked = false;
                             }
                         } else {
@@ -251,9 +258,16 @@
                     success: function (userFormResults) {
                         if (userFormResults.length > 0) {
                             for (i = 0; i < userFormResults.length; i++) {
+                                var disable;
+                                if (IsLocked == true) {
+                                    disable = "disabled";
+                                } else {
+                                    disable = "";
+                                }
+
                                 userForms.push({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdUserFormEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdUserFormDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdUserFormEditButton_OnClick()' " + disable + "><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdUserFormDeleteButton_OnClick()' " + disable + "><i class='fa fa-trash'></i> Delete</button>",
                                     Id: userFormResults[i]["Id"],
                                     UserId: userFormResults[i]["UserId"],
                                     User: userFormResults[i]["User"],
@@ -281,6 +295,142 @@
             return userForms;
         }
 
+        // ===========
+        // Lock button
+        // ===========
+        function btnUserDetailLock_OnClick() {
+            $('#btnUserDetailLock').prop('disabled', true);
+            $('#btnUserDetailUnLock').prop('disabled', true);
+            $('#btnUserDetailClose').prop('disabled', true);
+
+            var userObject = new Object();
+            userObject.FullName = document.getElementById('userDetail_Fullname').value;
+            userObject.IsLocked = true;
+            var data = JSON.stringify(userObject);
+
+            $.ajax({
+                type: "PUT",
+                url: '/api/updateUser/' + userId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: data,
+                statusCode: {
+                    200: function () {
+                        $('#btnUserDetailLock').prop('disabled', true);
+                        $('#btnUserDetailUnLock').prop('disabled', true);
+                        $('#btnUserDetailClose').prop('disabled', true);
+                        toastr.success("Locked");
+                        window.setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    },
+                    404: function () {
+                        $('#btnUserDetailLock').prop('disabled', true);
+                        $('#btnUserDetailUnLock').prop('disabled', false);
+                        $('#btnUserDetailClose').prop('disabled', false);
+                        toastr.error("Lock request not found");
+                    },
+                    400: function () {
+                        $('#btnUserDetailLock').prop('disabled', false);
+                        $('#btnUserDetailUnLock').prop('disabled', true);
+                        $('#btnUserDetailClose').prop('disabled', false);
+                        toastr.error("Cannot lock record");
+                    }
+                }
+            });
+        }
+
+        // =============
+        // Unlock button
+        // =============
+        function btnUserDetailUnLock_OnClick() {
+            $('#btnUserDetailLock').prop('disabled', true);
+            $('#btnUserDetailUnLock').prop('disabled', true);
+            $('#btnUserDetailClose').prop('disabled', true);
+
+            $.ajax({
+                type: "PUT",
+                url: '/api/unlockUser/' + userId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {},
+                statusCode: {
+                    200: function () {
+                        $('#btnUserDetailLock').prop('disabled', true);
+                        $('#btnUserDetailUnLock').prop('disabled', true);
+                        $('#btnUserDetailClose').prop('disabled', true);
+                        toastr.success("Unlocked");
+                        window.setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    },
+                    404: function () {
+                        $('#btnUserDetailLock').prop('disabled', true);
+                        $('#btnUserDetailUnLock').prop('disabled', false);
+                        $('#btnUserDetailClose').prop('disabled', false);
+                        toastr.error("Unlock request not found");
+
+                    },
+                    400: function () {
+                        $('#btnUserDetailLock').prop('disabled', false);
+                        $('#btnUserDetailUnLock').prop('disabled', true);
+                        $('#btnUserDetailClose').prop('disabled', false);
+                        toastr.error("Cannot unlock record");
+                    }
+                }
+            });
+        }
+
+        // ============
+        // Close button
+        // ============
+        function btnUserDetailClose_OnClick() {
+            window.location = '/Software/Users';
+        }
+
+        // ========
+        // get Form
+        // ========
+        function getForm() {
+            forms = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listForm',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (formResults) {
+                    if (formResults.length > 0) {
+                        for (i = 0; i < formResults.length; i++) {
+                            forms.push({
+                                Id: formResults[i]["Id"],
+                                FormName: formResults[i]["FormName"],
+                                Particulars: formResults[i]["Particulars"]
+                            });
+                        }
+                        createCboForForm(forms);
+                    } else {
+                        createCboForForm(forms);
+                    }
+                }
+            });
+        }
+
+        // =========================
+        // create combo box for form
+        // =========================
+        function createCboForForm(forms) {
+            cboForForm.dispose();
+            cboForForm = new wijmo.input.ComboBox('#userForm_FormName', {
+                placeholder: "Form Name",
+                itemsSource: forms,
+                displayMemberPath: "FormName",
+                isEditable: false,
+                selectedValuePath: "FormName",
+                selectedValue: formSelectedValue.toString()
+            });
+        }
+
         // ==============
         // Modal Add Form
         // ==============
@@ -289,6 +439,20 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $('#cmdSaveUserFormButton').prop('disabled', false);
+            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
+
+            document.getElementById('userForm_Id').value = 0
+            document.getElementById('userForm_CanAdd').checked = false;
+            document.getElementById('userForm_CanEdit').checked = false;
+            document.getElementById('userForm_CanDelete').checked = false;
+            document.getElementById('userForm_CanLock').checked = false;
+            document.getElementById('userForm_CanUnlock').checked = false;
+            document.getElementById('userForm_CanPrint').checked = false;
+
+            formSelectedValue = "";
+            getForm();
         }
 
         // ===============
@@ -299,6 +463,116 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $('#cmdSaveUserFormButton').prop('disabled', false);
+            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
+
+            userForms.editItem(userForms.currentItem);
+            var userForm = userForms.currentEditItem;
+            formSelectedValue = userForm.Form;
+            document.getElementById('userForm_Id').value = userForm.Id;
+            document.getElementById('userForm_CanAdd').checked = userForm.CanAdd;
+            document.getElementById('userForm_CanEdit').checked = userForm.CanEdit;
+            document.getElementById('userForm_CanDelete').checked = userForm.CanDelete;
+            document.getElementById('userForm_CanLock').checked = userForm.CanLock;
+            document.getElementById('userForm_CanUnlock').checked = userForm.CanUnlock;
+            document.getElementById('userForm_CanPrint').checked = userForm.CanPrint;
+
+            getForm();
+        }
+
+        // ====================
+        // Save UserForm button
+        // ====================
+        function cmdUserFormSaveButton_OnClick() {
+            $('#cmdSaveUserFormButton').prop('disabled', true);
+            $('#cmdUserFormDetailCloseButton').prop('disabled', true);
+
+            var userFormId = document.getElementById('userForm_Id').value;
+            var userFormObject = new Object();
+            userFormObject.UserId = userId;
+            userFormObject.FormId = cboForForm.selectedItem["Id"];
+            userFormObject.CanAdd = document.getElementById('userForm_CanAdd').checked;
+            userFormObject.CanEdit = document.getElementById('userForm_CanEdit').checked;
+            userFormObject.CanDelete = document.getElementById('userForm_CanDelete').checked;
+            userFormObject.CanLock = document.getElementById('userForm_CanLock').checked;
+            userFormObject.CanUnlock = document.getElementById('userForm_CanUnlock').checked;
+            userFormObject.CanPrint = document.getElementById('userForm_CanPrint').checked;
+            var data = JSON.stringify(userFormObject);
+
+            if (userFormId == 0) {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addUserForm',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $('#cmdSaveUserFormButton').prop('disabled', true);
+                            $('#cmdUserFormDetailCloseButton').prop('disabled', true);
+                            toastr.success("Successfully Saved");
+                            $('#userFormEdit').modal('hide');
+                            refreshUserFormGrid();
+                        },
+                        404: function () {
+                            $('#cmdSaveUserFormButton').prop('disabled', false);
+                            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
+                            toastr.error("Save request not found");
+                            $('#userFormEdit').modal('hide');
+                            refreshUserFormGrid();
+                        },
+                        400: function () {
+                            $('#cmdSaveUserFormButton').prop('disabled', false);
+                            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
+                            toastr.error("Cannot save record");
+                            $('#userFormEdit').modal('hide');
+                            refreshUserFormGrid();
+                        }
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateUserForm/' + userFormId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            $('#cmdSaveUserFormButton').prop('disabled', true);
+                            $('#cmdUserFormDetailCloseButton').prop('disabled', true);
+                            toastr.success("Successfully Updated");
+                            $('#userFormEdit').modal('hide');
+                            refreshUserFormGrid();
+                        },
+                        404: function () {
+                            $('#cmdSaveUserFormButton').prop('disabled', false);
+                            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
+                            toastr.error("Update request not found");
+                            $('#userFormEdit').modal('hide');
+                            refreshUserFormGrid();
+                        },
+                        400: function () {
+                            $('#cmdSaveUserFormButton').prop('disabled', false);
+                            $('#cmdUserFormDetailCloseButton').prop('disabled', false);
+                            toastr.error("Cannot update record");
+                            $('#userFormEdit').modal('hide');
+                            refreshUserFormGrid();
+                        }
+                    }
+                });
+            }
+        }
+        
+        // ==========================
+        // Refresh UserForm Flex Grid
+        // ==========================
+        function refreshUserFormGrid() {
+            userForms = new wijmo.collections.CollectionView(getUserFormByUserId());
+
+            userFormGrid.itemsSource = userForms;
+            userFormGrid.trackChanges = true;
         }
 
         // ==============================
@@ -309,6 +583,46 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $('#cmdConfirmDeleteUserForm').prop('disabled', false);
+            $('#cmdConfirmDeleteUserFormCloseButton').prop('disabled', false);
+        }
+        // delete Form
+        function cmdUserFormConfirmDeleteButton_OnClick() {
+            userForms.editItem(userForms.currentItem);
+
+            var userForm = userForms.currentEditItem;
+            var userFormId = userForm.Id;
+            $.ajax({
+                type: "DELETE",
+                url: '/api/deleteUserForm/' + userFormId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {},
+                statusCode: {
+                    200: function () {
+                        $('#cmdConfirmDeleteUserForm').prop('disabled', true);
+                        $('#cmdConfirmDeleteUserFormCloseButton').prop('disabled', true);
+                        toastr.success("Successfully Deleted");
+                        $('#deleteUserFormConfirm').modal('hide');
+                        refreshUserFormGrid();
+                    },
+                    404: function () {
+                        $('#cmdConfirmDeleteUserForm').prop('disabled', false);
+                        $('#cmdConfirmDeleteUserFormCloseButton').prop('disabled', false);
+                        toastr.error("Delete request not found");
+                        $('#deleteUserFormConfirm').modal('hide');
+                        refreshUserFormGrid();
+                    },
+                    400: function () {
+                        $('#cmdConfirmDeleteUserForm').prop('disabled', false);
+                        $('#cmdConfirmDeleteUserFormCloseButton').prop('disabled', false);
+                        toastr.error("Cannot delete record");
+                        $('#deleteUserFormConfirm').modal('hide');
+                        refreshUserFormGrid();
+                    }
+                }
+            });
         }
 
         // ============
@@ -316,9 +630,10 @@
         // ============
         $(document).ready(function () {
             getUserByUserId();
+            cboForForm = new wijmo.input.ComboBox('#userForm_FormName');
 
+            document.getElementById("userDetail_Username").disabled = true;
             userForms = new wijmo.collections.CollectionView(getUserFormByUserId());
-
             // Flex Grid for Contact Information
             userFormGrid = new wijmo.grid.FlexGrid('#userDetailUserFormGrid');
             userFormGrid.initialize({
