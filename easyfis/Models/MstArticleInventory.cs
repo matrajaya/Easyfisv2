@@ -29,5 +29,7 @@ namespace easyfis.Models
         public Decimal InQuantity { get; set; }
         public Decimal OutQuantity { get; set; }
         public Decimal EndQuantity { get; set; }
+
+        public String Document { get; set; }
     }
 }

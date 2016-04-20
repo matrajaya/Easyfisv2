@@ -384,7 +384,7 @@ namespace easyfis.Controllers
             }
             else if (Age == 1)
             {
-                if (Elapsed >= 30 && Elapsed < 60) 
+                if (Elapsed >= 30 && Elapsed < 60)
                 {
                     returnValue = Amount;
                 }
@@ -3521,22 +3521,7 @@ namespace easyfis.Controllers
         public ActionResult InventoryReportPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
 
-            var articleInventoriesByBranchId = from d in db.MstArticleInventories
-                                               where d.TrnInventories.Any(i => i.InventoryDate >= Convert.ToDateTime(StartDate))
-                                               && d.TrnInventories.Any(i => i.InventoryDate <= Convert.ToDateTime(EndDate))
-                                               && d.MstBranch.CompanyId == CompanyId
-                                               && d.MstArticle.IsInventory == true
-                                               && d.Quantity >= 0
-                                               group d by new
-                                               {
-                                                   BranchId = d.MstBranch.Id,
-                                                   Branch = d.MstBranch.Branch
-                                               } into g
-                                               select new Models.MstArticleInventory
-                                               {
-                                                   BranchId = g.Key.BranchId,
-                                                   Branch = g.Key.Branch
-                                               };
+            var articleInventoriesByBranchId = from d in db.MstBranches select d;
 
 
             // Company Detail
@@ -3578,16 +3563,11 @@ namespace easyfis.Controllers
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
             document.Add(line);
 
-            Decimal BeginningQuantity = 0;
-            Decimal InQuantity = 0;
-            Decimal OutQuantity = 0;
-            Decimal EndQuantity = 0;
-
             //var begInventories = from d in db.TrnInventories
-            //                     where d.ArticleInventoryId == articleInventory.Id
-            //                     && d.InventoryDate < Convert.ToDateTime(StartDate)
+            //                     where d.InventoryDate < Convert.ToDateTime(StartDate)
             //                     select new Models.MstArticleInventory
             //                     {
+            //                         Document = "Beginning Balance",
             //                         ArticleId = d.ArticleId,
             //                         InventoryCode = d.MstArticleInventory.InventoryCode,
             //                         BegQuantity = d.Quantity,
@@ -3597,11 +3577,11 @@ namespace easyfis.Controllers
             //                     };
 
             //var curInventories = from d in db.TrnInventories
-            //                     where d.ArticleInventoryId == articleInventory.Id
-            //                     && d.InventoryDate >= Convert.ToDateTime(StartDate)
+            //                     where d.InventoryDate >= Convert.ToDateTime(StartDate)
             //                     && d.InventoryDate <= Convert.ToDateTime(EndDate)
             //                     select new Models.MstArticleInventory
             //                     {
+            //                         Document = "Current",
             //                         ArticleId = d.ArticleId,
             //                         InventoryCode = d.MstArticleInventory.InventoryCode,
             //                         BegQuantity = 0,
@@ -3610,25 +3590,94 @@ namespace easyfis.Controllers
             //                         EndQuantity = d.Quantity
             //                     };
 
-            //foreach (var begInventory in begInventories)
-            //{
-            //    BeginningQuantity = begInventory.BegQuantity;
-            //    EndQuantity = begInventory.EndQuantity;
-            //}
-
-            //foreach (var curInventory in curInventories)
-            //{
-            //    InQuantity = curInventory.InQuantity;
-            //    OutQuantity = curInventory.OutQuantity;
-            //}
-
-
-
             Decimal totalAmountForFooter = 0;
             Decimal totalVarianceForFooter = 0;
 
             foreach (var articleInventoryByBranchId in articleInventoriesByBranchId)
             {
+                Decimal BeginningQuantity = 0;
+                Decimal InQuantity = 0;
+                Decimal OutQuantity = 0;
+                Decimal EndQuantity = 0;
+
+                var unionInventories = (from d in db.TrnInventories
+                                   where d.InventoryDate < Convert.ToDateTime(StartDate)
+                                   && d.MstArticleInventory.MstBranch.Id == articleInventoryByBranchId.Id
+                                   && d.MstArticleInventory.MstBranch.CompanyId == CompanyId
+                                   && d.MstArticleInventory.MstArticle.IsInventory == true
+                                   select new Models.MstArticleInventory
+                                   {
+                                       Id = d.Id,
+                                       Document = "Beginning Balance",
+                                       ArticleId = d.MstArticleInventory.ArticleId,
+                                       Article = d.MstArticleInventory.MstArticle.Article,
+                                       InventoryCode = d.MstArticleInventory.InventoryCode,
+                                       Quantity = d.MstArticleInventory.Quantity,
+                                       Cost = d.MstArticleInventory.Cost,
+                                       Amount = d.MstArticleInventory.Amount,
+                                       UnitId = d.MstArticleInventory.MstArticle.MstUnit.Id,
+                                       Unit = d.MstArticleInventory.MstArticle.MstUnit.Unit,
+
+                                       BegQuantity = d.Quantity,
+                                       InQuantity = d.QuantityIn,
+                                       OutQuantity = d.QuantityOut,
+                                       EndQuantity = d.Quantity
+                                   }).Union(from d in db.TrnInventories
+                                            where d.InventoryDate >= Convert.ToDateTime(StartDate)
+                                            && d.InventoryDate <= Convert.ToDateTime(EndDate)
+                                            && d.MstArticleInventory.MstBranch.Id == articleInventoryByBranchId.Id
+                                            && d.MstArticleInventory.MstBranch.CompanyId == CompanyId
+                                            && d.MstArticleInventory.MstArticle.IsInventory == true
+                                            select new Models.MstArticleInventory
+                                            {
+                                                Id = d.Id,
+                                                Document = "Current",
+                                                ArticleId = d.MstArticleInventory.ArticleId,
+                                                Article = d.MstArticleInventory.MstArticle.Article,
+                                                InventoryCode = d.MstArticleInventory.InventoryCode,
+                                                Quantity = d.MstArticleInventory.Quantity,
+                                                Cost = d.MstArticleInventory.Cost,
+                                                Amount = d.MstArticleInventory.Amount,
+                                                UnitId = d.MstArticleInventory.MstArticle.MstUnit.Id,
+                                                Unit = d.MstArticleInventory.MstArticle.MstUnit.Unit,
+
+                                                BegQuantity = d.Quantity,
+                                                InQuantity = d.QuantityIn,
+                                                OutQuantity = d.QuantityOut,
+                                                EndQuantity = d.Quantity
+                                            });
+
+                var inventories = from d in unionInventories
+                                     group d by new 
+                                     {
+                                        Document = d.Document,
+                                        ArticleId = d.ArticleId,
+                                        Article = d.Article,
+                                        InventoryCode = d.InventoryCode,
+                                        Quantity = d.Quantity,
+                                        Cost = d.Cost,
+                                        Amount = d.Amount,
+                                        UnitId = d.UnitId,
+                                        Unit = d.Unit
+                                     } into g
+                                     select new Models.MstArticleInventory
+                                     {
+                                         Document = g.Key.Document,
+                                         ArticleId = g.Key.ArticleId,
+                                         Article = g.Key.Article,
+                                         InventoryCode = g.Key.InventoryCode,
+                                         Quantity = g.Key.Quantity,
+                                         Cost = g.Key.Cost,
+                                         Amount = g.Key.Amount,
+                                         UnitId = g.Key.UnitId,
+                                         Unit = g.Key.Unit,
+
+                                         BegQuantity = g.Sum(d => d.Quantity),
+                                         InQuantity = g.Sum(d => d.InQuantity),
+                                         OutQuantity = g.Sum(d => d.OutQuantity),
+                                         EndQuantity = g.Sum(d => d.Quantity)
+                                     };
+
                 // table branch header
                 PdfPTable tableBranchHeader = new PdfPTable(1);
                 float[] widthCellsTableBranchHeader = new float[] { 100f };
@@ -3672,29 +3721,105 @@ namespace easyfis.Controllers
                 Decimal totalTotalAmount = 0;
                 Decimal totalVarianceAmount = 0;
 
-                // article Inventories
-                var articleInventories = from d in db.MstArticleInventories.OrderBy(d => d.MstArticle.Article)
-                                         where d.TrnInventories.Any(i => i.InventoryDate >= Convert.ToDateTime(StartDate))
-                                         && d.TrnInventories.Any(i => i.InventoryDate <= Convert.ToDateTime(EndDate))
-                                         && d.MstBranch.Id == articleInventoryByBranchId.BranchId
-                                         && d.MstBranch.CompanyId == CompanyId
-                                         && d.MstArticle.IsInventory == true
-                                         && d.Quantity >= 0
-                                         select new Models.MstArticleInventory
-                                         {
-                                             Id = d.Id,
-                                             ArticleId = d.ArticleId,
-                                             ManualArticleCode = d.MstArticle.ManualArticleCode,
-                                             Article = d.MstArticle.Article,
-                                             Quantity = d.Quantity,
-                                             Cost = d.Cost,
-                                             Amount = d.Amount,
-                                             UnitId = d.MstArticle.MstUnit.Id,
-                                             Unit = d.MstArticle.MstUnit.Unit,
-                                             InventoryCode = d.InventoryCode,
-                                         };
+                //// article Inventories
+                //var articleInventories = from d in db.MstArticleInventories.OrderBy(d => d.MstArticle.Article)
+                //                         where d.TrnInventories.Any(i => i.InventoryDate >= Convert.ToDateTime(StartDate))
+                //                         && d.TrnInventories.Any(i => i.InventoryDate <= Convert.ToDateTime(EndDate))
+                //                         && d.MstBranch.Id == articleInventoryByBranchId.BranchId
+                //                         && d.MstBranch.CompanyId == CompanyId
+                //                         && d.MstArticle.IsInventory == true
+                //                         && d.Quantity >= 0
+                //                         select new Models.MstArticleInventory
+                //                         {
+                //                             Id = d.Id,
+                //                             ArticleId = d.ArticleId,
+                //                             ManualArticleCode = d.MstArticle.ManualArticleCode,
+                //                             Article = d.MstArticle.Article,
+                //                             Quantity = d.Quantity,
+                //                             Cost = d.Cost,
+                //                             Amount = d.Amount,
+                //                             UnitId = d.MstArticle.MstUnit.Id,
+                //                             Unit = d.MstArticle.MstUnit.Unit,
+                //                             InventoryCode = d.InventoryCode,
+                //                         };
 
-                foreach (var articleInventory in articleInventories)
+                foreach (var inventory in inventories)
+                {
+                    if (inventory.Document == "Beginning Balance")
+                    {
+                        BeginningQuantity = inventory.Quantity;
+                        InQuantity = Convert.ToDecimal(0);
+                        OutQuantity = Convert.ToDecimal(0);
+                        EndQuantity = inventory.Quantity;
+
+                        totalAmount = inventory.Cost * inventory.Quantity;
+                        count = 0;
+                        quantityVariance = inventory.Quantity - count;
+                        varianceAmount = inventory.Cost * quantityVariance;
+
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.InventoryCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Cost.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(BeginningQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(InQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(OutQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(EndQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(quantityVariance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(varianceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    }
+                    else if (inventory.Document == "Current")
+                    {
+                        BeginningQuantity = Convert.ToDecimal(0);
+                        InQuantity = inventory.InQuantity;
+                        OutQuantity = inventory.OutQuantity;
+                        EndQuantity = inventory.Quantity;
+
+                        totalAmount = inventory.Cost * inventory.Quantity;
+                        count = 0;
+                        quantityVariance = inventory.Quantity - count;
+                        varianceAmount = inventory.Cost * quantityVariance;
+
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.InventoryCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Cost.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(BeginningQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(InQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(OutQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(EndQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(quantityVariance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(varianceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    }
+                    else
+                    {
+                        BeginningQuantity = Convert.ToDecimal(0);
+                        InQuantity = Convert.ToDecimal(0);
+                        OutQuantity = Convert.ToDecimal(0);
+                        EndQuantity = Convert.ToDecimal(0);
+
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.InventoryCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(inventory.Cost.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(BeginningQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(InQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(OutQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(EndQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(quantityVariance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableHeaderDetail.AddCell(new PdfPCell(new Phrase(varianceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    }
+                }
+
+                document.Add(tableHeaderDetail);
+
+                foreach (var articleInventory in inventories)
                 {
                     totalTotalAmount = totalTotalAmount + (articleInventory.Cost * articleInventory.Quantity);
                     quantityVariance = articleInventory.Quantity - count;
@@ -3703,29 +3828,6 @@ namespace easyfis.Controllers
 
                 totalAmountForFooter = totalAmountForFooter + totalTotalAmount;
                 totalVarianceForFooter = totalVarianceForFooter + totalVarianceAmount;
-
-                foreach (var articleInventory in articleInventories)
-                {
-                    totalAmount = articleInventory.Cost * articleInventory.Quantity;
-                    count = 0;
-                    quantityVariance = articleInventory.Quantity - count;
-                    varianceAmount = articleInventory.Cost * quantityVariance;
-
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.InventoryCode, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Article, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Unit, cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(articleInventory.Cost.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(BeginningQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(InQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(OutQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(EndQuantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase("0.00", cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(quantityVariance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(varianceAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                }
-
-                document.Add(tableHeaderDetail);
 
                 PdfPTable tableFooter = new PdfPTable(12);
                 float[] widthscellsfooter = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 12f, 20f, 16f, 16f, 16f, 16f };

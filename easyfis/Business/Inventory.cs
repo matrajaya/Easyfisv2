@@ -695,7 +695,7 @@ namespace easyfis.Business
                                 var articleInventories = from d in db.MstArticleInventories
                                                          where d.BranchId == stockInHeader.BranchId
                                                          && d.ArticleId == stockInItem.ItemId
-                                                         //&& d.InventoryCode == "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber
+                                                         && d.InventoryCode == "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber
                                                          select new Models.MstArticleInventory
                                                          {
                                                              Id = d.Id,
@@ -1171,7 +1171,7 @@ namespace easyfis.Business
                         var articleInventories = from d in db.MstArticleInventories
                                                  where d.BranchId == RRItems.BranchId
                                                  && d.ArticleId == RRItems.ItemId
-                                                 //&& d.InventoryCode == "RR-" + RRItems.BranchCode + "-" + RRItems.RR
+                                                 && d.InventoryCode == "RR-" + RRItems.BranchCode + "-" + RRItems.RR
                                                  select new Models.MstArticleInventory
                                                  {
                                                      Id = d.Id,
