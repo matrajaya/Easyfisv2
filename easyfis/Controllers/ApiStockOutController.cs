@@ -20,7 +20,9 @@ namespace easyfis.Controllers
         [Route("api/listStockOut")]
         public List<Models.TrnStockOut> Get()
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockOuts = from d in db.TrnStockOuts
+                            where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                             select new Models.TrnStockOut
                             {
                                 Id = d.Id,
@@ -57,9 +59,11 @@ namespace easyfis.Controllers
         [Route("api/listStockOutFilterByOTDate/{OTDate}")]
         public List<Models.TrnStockOut> GetStockOutFilterByOTDate(String OTDate)
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockOut_OTDate = Convert.ToDateTime(OTDate);
             var stockOuts = from d in db.TrnStockOuts
                             where d.OTDate == stockOut_OTDate
+                            && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                             select new Models.TrnStockOut
                             {
                                 Id = d.Id,

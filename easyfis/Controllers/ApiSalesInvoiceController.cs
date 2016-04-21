@@ -71,7 +71,9 @@ namespace easyfis.Controllers
         [Route("api/listSalesInvoice")]
         public List<Models.TrnSalesInvoice> Get()
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var salesInvoices = from d in db.TrnSalesInvoices
+                                where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                                 select new Models.TrnSalesInvoice
                                 {
                                     Id = d.Id,
@@ -207,9 +209,11 @@ namespace easyfis.Controllers
         [Route("api/listSalesInvoiceFilterBySIDate/{SIDate}")]
         public List<Models.TrnSalesInvoice> GetSalesFilterBySIDate(String SIDate)
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var sales_SIDate = Convert.ToDateTime(SIDate);
             var salesInvoices = from d in db.TrnSalesInvoices
                                 where d.SIDate == sales_SIDate
+                                && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                                 select new Models.TrnSalesInvoice
                                 {
                                     Id = d.Id,

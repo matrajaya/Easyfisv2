@@ -73,7 +73,9 @@ namespace easyfis.Controllers
         [Route("api/listReceivingReceipt")]
         public List<Models.TrnReceivingReceipt> Get()
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var receivingReceipts = from d in db.TrnReceivingReceipts
+                                    where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                                     select new Models.TrnReceivingReceipt
                                     {
                                         Id = d.Id,
@@ -212,9 +214,11 @@ namespace easyfis.Controllers
         [Route("api/listReceivingReceiptFilterByRRDate/{RRDate}")]
         public List<Models.TrnReceivingReceipt> GetReceivingReceiptFilterByRRDate(String RRDate)
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var receivingReceipt_RRDate = Convert.ToDateTime(RRDate);
             var receivingReceipts = from d in db.TrnReceivingReceipts
                                     where d.RRDate == receivingReceipt_RRDate
+                                    && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                                     select new Models.TrnReceivingReceipt
                                     {
                                         Id = d.Id,

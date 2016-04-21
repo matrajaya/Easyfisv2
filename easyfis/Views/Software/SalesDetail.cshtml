@@ -23,7 +23,14 @@
         <section>
             <div class="sub-nav">
                 <div class="container">
-                    <h4><i class="fa fa-bar-chart"></i> Sales Detail</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><i class="fa fa-bar-chart"></i> Sales Detail</h4>
+                        </div>
+                        <div class="col-md-6" align="right">
+                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                        </div>
+                    </div>
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
@@ -41,7 +48,7 @@
                         <button class="btn btn-primary btn-sm" id="cmdSalesSaveLock" onclick="btnSaveLockSales_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdSalesSave" onclick="btnSalesSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdSalesEdit" onclick="btnSalesEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdSalesPrint" onclick="window.location.href ='@Url.Action("Salespdf", "Software" )'"><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-primary btn-sm" id="cmdSalesPrint" onclick="btnSalesPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Sales", "Software" )'" class="btn btn-danger btn-sm" id="cmdSalesClose"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
@@ -1439,6 +1446,14 @@
                     }
                 }
             });
+        }
+
+        // ========
+        // Print SI
+        // ========
+        function btnSalesPrint_OnClick() {
+            var salesId = getParam('SalesId');
+            window.location = "/Software/SalesPDF?SalesId=" + salesId;
         }
 
         // ===========

@@ -20,7 +20,9 @@ namespace easyfis.Controllers
         [Route("api/listCollection")]
         public List<Models.TrnCollection> Get()
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var collections = from d in db.TrnCollections
+                              where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                               select new Models.TrnCollection
                               {
                                   Id = d.Id,
@@ -92,9 +94,11 @@ namespace easyfis.Controllers
         [Route("api/listCollectionFilterByORDate/{ORDate}")]
         public List<Models.TrnCollection> GetCollectionFilterByORDate(String ORDate)
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var collection_ORDate = Convert.ToDateTime(ORDate);
             var collections = from d in db.TrnCollections
                               where d.ORDate == collection_ORDate
+                              && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                               select new Models.TrnCollection
                               {
                                   Id = d.Id,

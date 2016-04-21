@@ -23,7 +23,14 @@
         <section>
             <div class="sub-nav">
                 <div class="container">
-                    <h4><i class="fa fa-cc-visa"></i> Collection Detail</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><i class="fa fa-cc-visa"></i> Collection Detail</h4>
+                        </div>
+                        <div class="col-md-6" align="right">
+                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                        </div>
+                    </div>
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
@@ -41,7 +48,7 @@
                         <button class="btn btn-primary btn-sm" id="cmdCollectionSaveLock" onclick="btnCollectionSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdCollectionEdit" onclick="btnCollectionEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="window.location.href ='@Url.Action("CollectionPDF", "Software")'"><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="btnCollectionPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("Collection", "Software")'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
@@ -1297,6 +1304,14 @@
                     }
                 }
             });
+        }
+
+        // ========
+        // Print OR
+        // ========
+        function btnCollectionPrint_OnClick() {
+            var collectonId = getParam("CollectonId");
+            window.location = "/Software/CollectionPDF?CollectonId=" + collectonId;
         }
 
         // ========================

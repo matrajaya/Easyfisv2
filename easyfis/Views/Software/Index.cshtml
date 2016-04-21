@@ -20,11 +20,18 @@
         <section>
             <div class="sub-nav">
                 <div class="container">
-                    <h4><i class="fa fa-home"></i> Dashboard</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><i class="fa fa-home"></i> Dashboard </h4>
+                        </div>
+                        <div class="col-md-6" align="right">
+                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                        </div>
+                    </div>
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <span id="currentCompanyName"></span> <span> :\ </span> <span id="currentBranchName"></span>
+                        <a href="@Url.Action("Index", "Software" )" class="currentPageLinkCustom"> Main Menu</a>
                     </div>
                 </div>
             </div>
@@ -540,61 +547,13 @@
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
-        // =============
-        // Create Cookie
-        // =============
-        function createCookie(name, value, days) {
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                var expires = "; expires=" + date.toGMTString();
-            } else {
-                var expires = "";
-            }
-
-            document.cookie = name + "=" + value + expires + "; path=/";
-        }
-
-        // ===========
-        // read Cookie
-        // ===========
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
-                }
-            }
-            return null;
-        }
-
-        // =============
-        // Delete Cookie
-        // =============
-        function eraseCookie(name) {
-            createCookie(name, "", -1);
-        }
-
-        // =========================
-        // Diplay company and branch
-        // =========================
-        function getCompanyAndBranch() {
-            document.getElementById('currentCompanyName').innerHTML = readCookie("company");
-            document.getElementById('currentBranchName').innerHTML = readCookie("branch");
-            NProgress.done();
-        }
-
         // ============
         // On Load Page
         // ============
         $(document).ready(function () {
             NProgress.start();
             getCompanyAndBranch();
+            NProgress.done();
         });
     </script>
 </body>

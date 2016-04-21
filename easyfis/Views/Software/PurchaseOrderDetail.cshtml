@@ -23,7 +23,14 @@
         <section>
             <div class="sub-nav">
                 <div class="container">
-                    <h4><i class="fa fa-shopping-cart"></i> Purchase Order Detail</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><i class="fa fa-shopping-cart"></i> Purchase Order Detail</h4>
+                        </div>
+                        <div class="col-md-6" align="right">
+                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                        </div>
+                    </div>
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
@@ -40,7 +47,7 @@
                         <button class="btn btn-primary btn-sm" id="cmdSaveLockPO" onclick="btnSaveLockPO_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdSavePO" onclick="btnSavePO_OnClick()"><i class="fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdEditPO" onclick="btnEditPO_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdPrintPO" onclick="window.location.href ='@Url.Action("PurchaseOrderPDF", "Software")'"><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-primary btn-sm" id="cmdPrintPO" onclick="btnPrintPO_OnClick()"><i class="fa fa-print"></i> Print</button>
                         <button onclick="window.location.href = '@Url.Action("PurchaseOrder", "Software")'" class="btn btn-danger btn-sm" id="cmdClosePO"><i class="fa fa-times"></i> Close</button>
                     </div>
                 </div>
@@ -1314,6 +1321,14 @@
                     }
                 }
             });
+        }
+
+        // =========
+        // Print PO
+        // ========
+        function btnPrintPO_OnClick() {
+            var PurchaseOrderId = getParam('PurchaseOrderId');
+            window.location = "/Software/PurchaseOrderPDF?POId=" + PurchaseOrderId;
         }
 
         // ==========================

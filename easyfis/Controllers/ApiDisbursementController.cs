@@ -20,7 +20,9 @@ namespace easyfis.Controllers
         [Route("api/listDisbursement")]
         public List<Models.TrnDisbursement> Get()
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var disbursements = from d in db.TrnDisbursements
+                                where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                                 select new Models.TrnDisbursement
                                 {
                                     Id = d.Id,
@@ -160,9 +162,11 @@ namespace easyfis.Controllers
         [Route("api/listDisbursementFilterByCVDate/{CVDate}")]
         public List<Models.TrnDisbursement> GetDisbusementFilterByCVDate(String CVDate)
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var disbursement_CVDate = Convert.ToDateTime(CVDate);
             var disbursements = from d in db.TrnDisbursements
                                 where d.CVDate == disbursement_CVDate
+                                && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                                 select new Models.TrnDisbursement
                                 {
                                     Id = d.Id,
