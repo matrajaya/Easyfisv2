@@ -2611,9 +2611,9 @@ namespace easyfis.Controllers
                                                   UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                               };
 
-                    String Customer = "", Term = "", Remarks = "";
-                    String SINumber = "", SIDate = "";
-                    String PreparedBy = "", CheckedBy = "";
+                    String Customer = "", Term = "", Remarks = "", Sales = "";
+                    String SINumber = "", SIDate = "", DocumentReference = "";
+                    String PreparedBy = "", CheckedBy = "", ApprovedBy = "";
 
                     foreach (var salesInvoiceHeader in salesInvoiceHeaders)
                     {
@@ -2624,6 +2624,9 @@ namespace easyfis.Controllers
                         SIDate = salesInvoiceHeader.SIDate;
                         PreparedBy = salesInvoiceHeader.PreparedBy;
                         CheckedBy = salesInvoiceHeader.CheckedBy;
+                        ApprovedBy = salesInvoiceHeader.ApprovedBy;
+                        Sales = salesInvoiceHeader.SoldBy;
+                        DocumentReference = salesInvoiceHeader.DocumentReference;
                     }
 
                     PdfPTable tableSubHeader = new PdfPTable(4);
@@ -2639,6 +2642,11 @@ namespace easyfis.Controllers
                     tableSubHeader.AddCell(new PdfPCell(new Phrase(Term, cellFont2)) { Border = 0, PaddingTop = 3f });
                     tableSubHeader.AddCell(new PdfPCell(new Phrase("SI date: ", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
                     tableSubHeader.AddCell(new PdfPCell(new Phrase(SIDate, cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("Sales: ", columnFont)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(Sales, cellFont2)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("Document Ref: ", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(DocumentReference, cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
 
                     tableSubHeader.AddCell(new PdfPCell(new Phrase("Remarks: ", columnFont)) { Border = 0, PaddingTop = 3f });
                     tableSubHeader.AddCell(new PdfPCell(new Phrase(Remarks, cellFont2)) { Border = 0, PaddingTop = 3f });
@@ -2681,8 +2689,8 @@ namespace easyfis.Controllers
                                                 BasePrice = d.BasePrice
                                             };
 
-                    PdfPTable tableSILines = new PdfPTable(9);
-                    float[] widthscellsSILines = new float[] { 55f, 60f, 130f, 140f, 90f, 90f, 120f, 90f, 90f };
+                    PdfPTable tableSILines = new PdfPTable(7);
+                    float[] widthscellsSILines = new float[] { 60f, 70f, 130f, 140f, 100f, 100f, 100f };
                     tableSILines.SetWidths(widthscellsSILines);
                     tableSILines.WidthPercentage = 100;
 
@@ -2691,10 +2699,11 @@ namespace easyfis.Controllers
                     tableSILines.AddCell(new PdfPCell(new Phrase("Item", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                     tableSILines.AddCell(new PdfPCell(new Phrase("Particulars", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                     tableSILines.AddCell(new PdfPCell(new Phrase("Price", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("Discount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                     tableSILines.AddCell(new PdfPCell(new Phrase("Amount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    tableSILines.AddCell(new PdfPCell(new Phrase("VAT Analysis", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    tableSILines.AddCell(new PdfPCell(new Phrase("Amount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    tableSILines.AddCell(new PdfPCell(new Phrase("VAT", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    //tableSILines.AddCell(new PdfPCell(new Phrase("VAT Analysis", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    //tableSILines.AddCell(new PdfPCell(new Phrase("VAT Amount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    //tableSILines.AddCell(new PdfPCell(new Phrase("VAT", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
                     Decimal TotalAmount = 0;
                     Decimal TotalAmountMinusVAT = 0;
@@ -2710,22 +2719,23 @@ namespace easyfis.Controllers
                         tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Item, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
                         tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Particulars, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
                         tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Price.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.DiscountAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.VAT, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableSILines.AddCell(new PdfPCell(new Phrase(AmountMinusVAT.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.VATAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        //tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.VAT, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        //tableSILines.AddCell(new PdfPCell(new Phrase(AmountMinusVAT.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        //tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.VATAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                         TotalAmount = TotalAmount + salesInvoiceItem.Amount;
-                        TotalAmountMinusVAT = TotalAmountMinusVAT + AmountMinusVAT;
-                        TotalVAT = TotalVAT + salesInvoiceItem.VATAmount;
+                        //TotalAmountMinusVAT = TotalAmountMinusVAT + AmountMinusVAT;
+                        //TotalVAT = TotalVAT + salesInvoiceItem.VATAmount;
                     }
 
                     document.Add(tableSILines);
 
                     document.Add(Chunk.NEWLINE);
 
-                    PdfPTable tableSILineTotalAmount = new PdfPTable(9);
-                    float[] widthscellsSILinesTotalAmount = new float[] { 55f, 60f, 130f, 140f, 90f, 90f, 120f, 90f, 90f };
+                    PdfPTable tableSILineTotalAmount = new PdfPTable(7);
+                    float[] widthscellsSILinesTotalAmount = new float[] { 60f, 70f, 130f, 140f, 100f, 100f, 100f };
                     tableSILineTotalAmount.SetWidths(widthscellsSILinesTotalAmount);
                     tableSILineTotalAmount.WidthPercentage = 100;
 
@@ -2733,12 +2743,10 @@ namespace easyfis.Controllers
                     tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
                     tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
                     tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("Total: ", cellBoldFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmountMinusVAT.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalVAT.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("Total: ", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    
                     document.Add(tableSILineTotalAmount);
 
                     document.Add(Chunk.NEWLINE);
@@ -2748,17 +2756,21 @@ namespace easyfis.Controllers
                     document.Add(Chunk.NEWLINE);
 
                     // Table for Footer
-                    PdfPTable tableFooter = new PdfPTable(5);
+                    PdfPTable tableFooter = new PdfPTable(7);
                     tableFooter.WidthPercentage = 100;
-                    float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
+                    float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f, 20f, 100f };
                     tableFooter.SetWidths(widthsCells2);
 
                     tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase("Received by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
 
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
@@ -2768,6 +2780,8 @@ namespace easyfis.Controllers
                     tableFooter.AddCell(new PdfPCell(new Phrase(PreparedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
                     tableFooter.AddCell(new PdfPCell(new Phrase(CheckedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(ApprovedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
                     tableFooter.AddCell(new PdfPCell(new Phrase("Date Received: ", columnFont)) { Border = 1, HorizontalAlignment = 0, PaddingBottom = 5f });
 
