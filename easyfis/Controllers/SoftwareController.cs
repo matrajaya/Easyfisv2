@@ -2534,37 +2534,6 @@ namespace easyfis.Controllers
 
                 if (branches.Any())
                 {
-                    //var purchaseOrderHeaders = from d in db.TrnPurchaseOrders
-                    //                           where d.BranchId == branchId
-                    //                           && d.PODate >= Convert.ToDateTime(StartDate)
-                    //                           && d.PODate <= Convert.ToDateTime(EndDate)
-                    //                           select new Models.TrnPurchaseOrder
-                    //                           {
-                    //                               Id = d.Id,
-                    //                               BranchId = d.BranchId,
-                    //                               Branch = d.MstBranch.Branch,
-                    //                               PONumber = d.PONumber,
-                    //                               PODate = d.PODate.ToShortDateString(),
-                    //                               SupplierId = d.SupplierId,
-                    //                               Supplier = d.MstArticle.Article,
-                    //                               TermId = d.TermId,
-                    //                               Term = d.MstTerm.Term,
-                    //                               ManualRequestNumber = d.ManualRequestNumber,
-                    //                               ManualPONumber = d.ManualPONumber,
-                    //                               DateNeeded = d.DateNeeded.ToShortDateString(),
-                    //                               Remarks = d.Remarks,
-                    //                               IsClose = d.IsClose,
-                    //                               RequestedById = d.RequestedById,
-                    //                               RequestedBy = d.MstUser4.FullName,
-                    //                               PreparedById = d.PreparedById,
-                    //                               PreparedBy = d.MstUser3.FullName,
-                    //                               CheckedById = d.CheckedById,
-                    //                               CheckedBy = d.MstUser1.FullName,
-                    //                               ApprovedById = d.ApprovedById,
-                    //                               ApprovedBy = d.MstUser.FullName
-                    //                           };
-
-
                     // Company Detail
                     var companyName = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Company).SingleOrDefault();
                     var address = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Address).SingleOrDefault();
@@ -2586,7 +2555,7 @@ namespace easyfis.Controllers
                     Font headerDetailFont = FontFactory.GetFont("Arial", 11);
                     Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
                     Font cellFont = FontFactory.GetFont("Arial", 9);
-                    Font cellFont2 = FontFactory.GetFont("Arial", 10);
+                    Font cellFont2 = FontFactory.GetFont("Arial", 11);
                     Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
 
                     PdfPTable tableHeader = new PdfPTable(2);
@@ -2597,7 +2566,7 @@ namespace easyfis.Controllers
                     tableHeader.AddCell(new PdfPCell(new Phrase("Sales", headerFont)) { Border = 0, HorizontalAlignment = 2 });
                     tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
                     tableHeader.AddCell(new PdfPCell(new Phrase(branch, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
-                    tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f });
                     tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
 
                     document.Add(tableHeader);
@@ -2605,91 +2574,172 @@ namespace easyfis.Controllers
                     Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
                     document.Add(line);
 
-                    //if (purchaseOrderHeaders.Any())
-                    //{
-                    //    // table branch header
-                    //    PdfPTable tableBranchHeader = new PdfPTable(1);
-                    //    float[] widthCellsTableBranchHeader = new float[] { 100f };
-                    //    tableBranchHeader.SetWidths(widthCellsTableBranchHeader);
-                    //    tableBranchHeader.WidthPercentage = 100;
+                    var salesInvoiceHeaders = from d in db.TrnSalesInvoices
+                                              where d.Id == SalesId
+                                              select new Models.TrnSalesInvoice
+                                              {
+                                                  Id = d.Id,
+                                                  BranchId = d.BranchId,
+                                                  Branch = d.MstBranch.Branch,
+                                                  SINumber = d.SINumber,
+                                                  SIDate = d.SIDate.ToShortDateString(),
+                                                  CustomerId = d.CustomerId,
+                                                  Customer = d.MstArticle.Article,
+                                                  TermId = d.TermId,
+                                                  Term = d.MstTerm.Term,
+                                                  DocumentReference = d.DocumentReference,
+                                                  ManualSINumber = d.ManualSINumber,
+                                                  Remarks = d.Remarks,
+                                                  Amount = d.Amount,
+                                                  PaidAmount = d.PaidAmount,
+                                                  AdjustmentAmount = d.AdjustmentAmount,
+                                                  BalanceAmount = d.BalanceAmount,
+                                                  SoldById = d.SoldById,
+                                                  SoldBy = d.MstUser4.FullName,
+                                                  PreparedById = d.PreparedById,
+                                                  PreparedBy = d.MstUser3.FullName,
+                                                  CheckedById = d.CheckedById,
+                                                  CheckedBy = d.MstUser1.FullName,
+                                                  ApprovedById = d.ApprovedById,
+                                                  ApprovedBy = d.MstUser.FullName,
+                                                  IsLocked = d.IsLocked,
+                                                  CreatedById = d.CreatedById,
+                                                  CreatedBy = d.MstUser2.FullName,
+                                                  CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                                  UpdatedById = d.UpdatedById,
+                                                  UpdatedBy = d.MstUser5.FullName,
+                                                  UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                              };
 
-                    //    PdfPCell branchHeaderColspan = (new PdfPCell(new Phrase(branch, cellBoldFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
-                    //    tableBranchHeader.AddCell(branchHeaderColspan);
-                    //    document.Add(tableBranchHeader);
+                    String Customer = "", Term = "", Remarks = "";
+                    String SINumber = "", SIDate = "";
+                    String PreparedBy = "", CheckedBy = "";
 
-                    //    PdfPTable tablePOHeader = new PdfPTable(7);
-                    //    float[] widthscellsTablePOHeader = new float[] { 25f, 10f, 15f, 25f, 35f, 10f, 20f };
-                    //    tablePOHeader.SetWidths(widthscellsTablePOHeader);
-                    //    tablePOHeader.WidthPercentage = 100;
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Branch", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("PO Date", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("PO Number", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Supplier", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Remarks", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Status", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Amount", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    foreach (var salesInvoiceHeader in salesInvoiceHeaders)
+                    {
+                        Customer = salesInvoiceHeader.Customer;
+                        Term = salesInvoiceHeader.Term;
+                        Remarks = salesInvoiceHeader.Remarks;
+                        SINumber = salesInvoiceHeader.SINumber;
+                        SIDate = salesInvoiceHeader.SIDate;
+                        PreparedBy = salesInvoiceHeader.PreparedBy;
+                        CheckedBy = salesInvoiceHeader.CheckedBy;
+                    }
 
-                    //    foreach (var purchaseOrderHeader in purchaseOrderHeaders)
-                    //    {
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.Branch, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.PODate, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.PONumber, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.Supplier, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.Remarks, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    PdfPTable tableSubHeader = new PdfPTable(4);
+                    float[] widthscellsSubheader = new float[] { 40f, 100f, 100f, 40f };
+                    tableSubHeader.SetWidths(widthscellsSubheader);
+                    tableSubHeader.WidthPercentage = 100;
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("Customer: ", columnFont)) { Border = 0, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(Customer, cellFont2)) { Border = 0, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("SI Number: ", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(SINumber, cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
-                    //        var POStatus = "";
-                    //        if (purchaseOrderHeader.IsClose == true)
-                    //        {
-                    //            POStatus = "Closed";
-                    //        }
-                    //        else
-                    //        {
-                    //            POStatus = " ";
-                    //        }
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("Term: ", columnFont)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(Term, cellFont2)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("SI date: ", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(SIDate, cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
 
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(POStatus, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        var purchaseOrderItems = from d in db.TrnPurchaseOrderItems
-                    //                                 where d.POId == purchaseOrderHeader.Id
-                    //                                 select new Models.TrnPurchaseOrderItem
-                    //                                 {
-                    //                                     Id = d.Id,
-                    //                                     POId = d.POId,
-                    //                                     PO = d.TrnPurchaseOrder.PONumber,
-                    //                                     ItemId = d.ItemId,
-                    //                                     Item = d.MstArticle.Article,
-                    //                                     ItemCode = d.MstArticle.ManualArticleCode,
-                    //                                     Particulars = d.Particulars,
-                    //                                     UnitId = d.UnitId,
-                    //                                     Unit = d.MstUnit.Unit,
-                    //                                     Quantity = d.Quantity,
-                    //                                     Cost = d.Cost,
-                    //                                     Amount = d.Amount
-                    //                                 };
-                    //        Decimal totalAmount = purchaseOrderItems.Sum(d => d.Amount);
-                    //        Debug.WriteLine(totalAmount);
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont2)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        total = total + totalAmount;
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("Remarks: ", columnFont)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(Remarks, cellFont2)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("", cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
 
-                    //    }
+                    document.Add(tableSubHeader);
+                    document.Add(Chunk.NEWLINE);
 
-                    //    document.Add(tablePOHeader);
-                    //}
+                    var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
+                                            where d.SIId == SalesId
+                                            select new Models.TrnSalesInvoiceItem
+                                            {
+                                                Id = d.Id,
+                                                SIId = d.SIId,
+                                                SI = d.TrnSalesInvoice.SINumber,
+                                                ItemId = d.ItemId,
+                                                ItemCode = d.MstArticle.ManualArticleCode,
+                                                Item = d.MstArticle.Article,
+                                                ItemInventoryId = d.ItemInventoryId,
+                                                ItemInventory = d.MstArticleInventory.InventoryCode,
+                                                Particulars = d.Particulars,
+                                                UnitId = d.UnitId,
+                                                Unit = d.MstUnit.Unit,
+                                                Quantity = d.Quantity,
+                                                Price = d.Price,
+                                                DiscountId = d.DiscountId,
+                                                Discount = d.MstDiscount.Discount,
+                                                DiscountRate = d.DiscountRate,
+                                                DiscountAmount = d.DiscountAmount,
+                                                NetPrice = d.NetPrice,
+                                                Amount = d.Amount,
+                                                VATId = d.VATId,
+                                                VAT = d.MstTaxType.TaxType,
+                                                VATPercentage = d.VATPercentage,
+                                                VATAmount = d.VATAmount,
+                                                BaseUnitId = d.BaseUnitId,
+                                                BaseUnit = d.MstUnit1.Unit,
+                                                BaseQuantity = d.BaseQuantity,
+                                                BasePrice = d.BasePrice
+                                            };
 
-                    //document.Add(Chunk.NEWLINE);
+                    PdfPTable tableSILines = new PdfPTable(9);
+                    float[] widthscellsSILines = new float[] { 55f, 60f, 130f, 140f, 90f, 90f, 120f, 90f, 90f };
+                    tableSILines.SetWidths(widthscellsSILines);
+                    tableSILines.WidthPercentage = 100;
 
-                    //PdfPTable tablePOFooter = new PdfPTable(7);
-                    //float[] widthscellsTablePOFooter = new float[] { 25f, 10f, 15f, 25f, 35f, 10f, 20f };
-                    //tablePOFooter.SetWidths(widthscellsTablePOFooter);
-                    //tablePOFooter.WidthPercentage = 100;
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("Total:", columnFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase(total.ToString("#,##0.00"), columnFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("Quantity", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("Unit", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("Item", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("Particulars", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("Price", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("Amount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("VAT Analysis", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("Amount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSILines.AddCell(new PdfPCell(new Phrase("VAT", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
-                    //document.Add(tablePOFooter);
+                    Decimal TotalAmount = 0;
+                    Decimal TotalAmountMinusVAT = 0;
+                    Decimal TotalVAT = 0;
+                    Decimal AmountMinusVAT = 0;
+
+                    foreach (var salesInvoiceItem in salesInvoiceItems)
+                    {
+                        AmountMinusVAT = salesInvoiceItem.Amount - salesInvoiceItem.VATAmount;
+
+                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Unit, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Item, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Particulars, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Price.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.VAT, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSILines.AddCell(new PdfPCell(new Phrase(AmountMinusVAT.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.VATAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                        TotalAmount = TotalAmount + salesInvoiceItem.Amount;
+                        TotalAmountMinusVAT = TotalAmountMinusVAT + AmountMinusVAT;
+                        TotalVAT = TotalVAT + salesInvoiceItem.VATAmount;
+                    }
+
+                    document.Add(tableSILines);
+
+                    document.Add(Chunk.NEWLINE);
+
+                    PdfPTable tableSILineTotalAmount = new PdfPTable(9);
+                    float[] widthscellsSILinesTotalAmount = new float[] { 55f, 60f, 130f, 140f, 90f, 90f, 120f, 90f, 90f };
+                    tableSILineTotalAmount.SetWidths(widthscellsSILinesTotalAmount);
+                    tableSILineTotalAmount.WidthPercentage = 100;
+
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("Total: ", cellBoldFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmountMinusVAT.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalVAT.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                    document.Add(tableSILineTotalAmount);
 
                     document.Add(Chunk.NEWLINE);
                     document.Add(Chunk.NEWLINE);
@@ -2702,16 +2752,25 @@ namespace easyfis.Controllers
                     tableFooter.WidthPercentage = 100;
                     float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
                     tableFooter.SetWidths(widthsCells2);
-                    tableFooter.AddCell(new PdfPCell(new Phrase("prepared by")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("checked by")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("approved by")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Received by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+
+                    tableFooter.AddCell(new PdfPCell(new Phrase(PreparedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(CheckedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Date Received: ", columnFont)) { Border = 1, HorizontalAlignment = 0, PaddingBottom = 5f });
+
                     document.Add(tableFooter);
 
                     // Document End
@@ -3772,37 +3831,6 @@ namespace easyfis.Controllers
 
                 if (branches.Any())
                 {
-                    //var purchaseOrderHeaders = from d in db.TrnPurchaseOrders
-                    //                           where d.BranchId == branchId
-                    //                           && d.PODate >= Convert.ToDateTime(StartDate)
-                    //                           && d.PODate <= Convert.ToDateTime(EndDate)
-                    //                           select new Models.TrnPurchaseOrder
-                    //                           {
-                    //                               Id = d.Id,
-                    //                               BranchId = d.BranchId,
-                    //                               Branch = d.MstBranch.Branch,
-                    //                               PONumber = d.PONumber,
-                    //                               PODate = d.PODate.ToShortDateString(),
-                    //                               SupplierId = d.SupplierId,
-                    //                               Supplier = d.MstArticle.Article,
-                    //                               TermId = d.TermId,
-                    //                               Term = d.MstTerm.Term,
-                    //                               ManualRequestNumber = d.ManualRequestNumber,
-                    //                               ManualPONumber = d.ManualPONumber,
-                    //                               DateNeeded = d.DateNeeded.ToShortDateString(),
-                    //                               Remarks = d.Remarks,
-                    //                               IsClose = d.IsClose,
-                    //                               RequestedById = d.RequestedById,
-                    //                               RequestedBy = d.MstUser4.FullName,
-                    //                               PreparedById = d.PreparedById,
-                    //                               PreparedBy = d.MstUser3.FullName,
-                    //                               CheckedById = d.CheckedById,
-                    //                               CheckedBy = d.MstUser1.FullName,
-                    //                               ApprovedById = d.ApprovedById,
-                    //                               ApprovedBy = d.MstUser.FullName
-                    //                           };
-
-
                     // Company Detail
                     var companyName = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Company).SingleOrDefault();
                     var address = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Address).SingleOrDefault();
@@ -3824,7 +3852,7 @@ namespace easyfis.Controllers
                     Font headerDetailFont = FontFactory.GetFont("Arial", 11);
                     Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
                     Font cellFont = FontFactory.GetFont("Arial", 9);
-                    Font cellFont2 = FontFactory.GetFont("Arial", 10);
+                    Font cellFont2 = FontFactory.GetFont("Arial", 11);
                     Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
 
                     PdfPTable tableHeader = new PdfPTable(2);
@@ -3835,7 +3863,7 @@ namespace easyfis.Controllers
                     tableHeader.AddCell(new PdfPCell(new Phrase("Collection", headerFont)) { Border = 0, HorizontalAlignment = 2 });
                     tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
                     tableHeader.AddCell(new PdfPCell(new Phrase(branch, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
-                    tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f });
                     tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
 
                     document.Add(tableHeader);
@@ -3843,91 +3871,144 @@ namespace easyfis.Controllers
                     Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
                     document.Add(line);
 
-                    //if (purchaseOrderHeaders.Any())
-                    //{
-                    //    // table branch header
-                    //    PdfPTable tableBranchHeader = new PdfPTable(1);
-                    //    float[] widthCellsTableBranchHeader = new float[] { 100f };
-                    //    tableBranchHeader.SetWidths(widthCellsTableBranchHeader);
-                    //    tableBranchHeader.WidthPercentage = 100;
+                    var collectionHeaders = from d in db.TrnCollections
+                                            where d.Id == CollectonId
+                                            select new Models.TrnCollection
+                                            {
+                                                Id = d.Id,
+                                                BranchId = d.BranchId,
+                                                Branch = d.MstBranch.Branch,
+                                                ORNumber = d.ORNumber,
+                                                ORDate = d.ORDate.ToShortDateString(),
+                                                CustomerId = d.CustomerId,
+                                                Customer = d.MstArticle.Article,
+                                                Particulars = d.Particulars,
+                                                ManualORNumber = d.ManualORNumber,
+                                                PreparedById = d.PreparedById,
+                                                PreparedBy = d.MstUser3.FullName,
+                                                CheckedById = d.CheckedById,
+                                                CheckedBy = d.MstUser.FullName,
+                                                ApprovedById = d.ApprovedById,
+                                                ApprovedBy = d.MstUser1.FullName,
+                                                IsLocked = d.IsLocked,
+                                                CreatedById = d.CreatedById,
+                                                CreatedBy = d.MstUser2.FullName,
+                                                CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                                UpdatedById = d.UpdatedById,
+                                                UpdatedBy = d.MstUser4.FullName,
+                                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                            };
 
-                    //    PdfPCell branchHeaderColspan = (new PdfPCell(new Phrase(branch, cellBoldFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
-                    //    tableBranchHeader.AddCell(branchHeaderColspan);
-                    //    document.Add(tableBranchHeader);
+                    String Customer = "", ManualORNumber = "", Particulars = "";
+                    String ORNumber = "", ORDate = "";
+                    String PreparedBy = "", CheckedBy = "", ApprovedBy = "";
 
-                    //    PdfPTable tablePOHeader = new PdfPTable(7);
-                    //    float[] widthscellsTablePOHeader = new float[] { 25f, 10f, 15f, 25f, 35f, 10f, 20f };
-                    //    tablePOHeader.SetWidths(widthscellsTablePOHeader);
-                    //    tablePOHeader.WidthPercentage = 100;
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Branch", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("PO Date", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("PO Number", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Supplier", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Remarks", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Status", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //    tablePOHeader.AddCell(new PdfPCell(new Phrase("Amount", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    foreach (var collectionHeader in collectionHeaders)
+                    {
+                        Customer = collectionHeader.Customer;
+                        ManualORNumber = collectionHeader.ManualORNumber;
+                        Particulars = collectionHeader.Particulars;
+                        ORNumber = collectionHeader.ORNumber;
+                        ORDate = collectionHeader.ORDate;
+                        PreparedBy = collectionHeader.PreparedBy;
+                        CheckedBy = collectionHeader.CheckedBy;
+                        ApprovedBy = collectionHeader.ApprovedBy;
+                    }
 
-                    //    foreach (var purchaseOrderHeader in purchaseOrderHeaders)
-                    //    {
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.Branch, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.PODate, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.PONumber, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.Supplier, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(purchaseOrderHeader.Remarks, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    PdfPTable tableSubHeader = new PdfPTable(4);
+                    float[] widthscellsSubheader = new float[] { 40f, 100f, 100f, 40f };
+                    tableSubHeader.SetWidths(widthscellsSubheader);
+                    tableSubHeader.WidthPercentage = 100;
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("Customer: ", columnFont)) { Border = 0, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(Customer, cellFont2)) { Border = 0, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("OR Number: ", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(ORNumber, cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
-                    //        var POStatus = "";
-                    //        if (purchaseOrderHeader.IsClose == true)
-                    //        {
-                    //            POStatus = "Closed";
-                    //        }
-                    //        else
-                    //        {
-                    //            POStatus = " ";
-                    //        }
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("Manual OR No.: ", columnFont)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(ManualORNumber, cellFont2)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("OR Date: ", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(ORDate, cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
 
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(POStatus, cellFont2)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        var purchaseOrderItems = from d in db.TrnPurchaseOrderItems
-                    //                                 where d.POId == purchaseOrderHeader.Id
-                    //                                 select new Models.TrnPurchaseOrderItem
-                    //                                 {
-                    //                                     Id = d.Id,
-                    //                                     POId = d.POId,
-                    //                                     PO = d.TrnPurchaseOrder.PONumber,
-                    //                                     ItemId = d.ItemId,
-                    //                                     Item = d.MstArticle.Article,
-                    //                                     ItemCode = d.MstArticle.ManualArticleCode,
-                    //                                     Particulars = d.Particulars,
-                    //                                     UnitId = d.UnitId,
-                    //                                     Unit = d.MstUnit.Unit,
-                    //                                     Quantity = d.Quantity,
-                    //                                     Cost = d.Cost,
-                    //                                     Amount = d.Amount
-                    //                                 };
-                    //        Decimal totalAmount = purchaseOrderItems.Sum(d => d.Amount);
-                    //        Debug.WriteLine(totalAmount);
-                    //        tablePOHeader.AddCell(new PdfPCell(new Phrase(totalAmount.ToString("#,##0.00"), cellFont2)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    //        total = total + totalAmount;
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("Particulars: ", columnFont)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(Particulars, cellFont2)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("", cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
 
-                    //    }
+                    document.Add(tableSubHeader);
+                    document.Add(Chunk.NEWLINE);
 
-                    //    document.Add(tablePOHeader);
-                    //}
+                    var collectionLines = from d in db.TrnCollectionLines
+                                          where d.ORId == CollectonId
+                                          select new Models.TrnCollectionLine
+                                          {
+                                              Id = d.Id,
+                                              ORId = d.ORId,
+                                              OR = d.TrnCollection.ORNumber,
+                                              ORDate = d.TrnCollection.ORDate.ToShortDateString(),
+                                              Customer = d.TrnCollection.MstArticle.Article,
+                                              BranchId = d.BranchId,
+                                              Branch = d.MstBranch.Branch,
+                                              AccountId = d.AccountId,
+                                              Account = d.MstAccount.Account,
+                                              ArticleId = d.ArticleId,
+                                              Article = d.MstArticle.Article,
+                                              SIId = d.SIId,
+                                              SI = d.TrnSalesInvoice.SINumber,
+                                              Particulars = d.Particulars,
+                                              Amount = d.Amount,
+                                              PayTypeId = d.PayTypeId,
+                                              PayType = d.MstPayType.PayType,
+                                              CheckNumber = d.CheckNumber,
+                                              CheckDate = d.CheckDate.ToShortDateString(),
+                                              CheckBank = d.CheckBank,
+                                              DepositoryBankId = d.DepositoryBankId,
+                                              DepositoryBank = d.MstArticle1.Article,
+                                              IsClear = d.IsClear
+                                          };
 
-                    //document.Add(Chunk.NEWLINE);
+                    PdfPTable tableORLines = new PdfPTable(6);
+                    float[] widthscellsORLines = new float[] { 70f, 120f, 100f, 80f, 140f, 100f };
+                    tableORLines.SetWidths(widthscellsORLines);
+                    tableORLines.WidthPercentage = 100;
 
-                    //PdfPTable tablePOFooter = new PdfPTable(7);
-                    //float[] widthscellsTablePOFooter = new float[] { 25f, 10f, 15f, 25f, 35f, 10f, 20f };
-                    //tablePOFooter.SetWidths(widthscellsTablePOFooter);
-                    //tablePOFooter.WidthPercentage = 100;
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("", columnFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase("Total:", columnFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
-                    //tablePOFooter.AddCell(new PdfPCell(new Phrase(total.ToString("#,##0.00"), columnFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, Border = 0 });
+                    tableORLines.AddCell(new PdfPCell(new Phrase("SI Number", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableORLines.AddCell(new PdfPCell(new Phrase("Pay Type", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableORLines.AddCell(new PdfPCell(new Phrase("Check No.", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableORLines.AddCell(new PdfPCell(new Phrase("Check Date", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableORLines.AddCell(new PdfPCell(new Phrase("Chgck Bank/Branch", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableORLines.AddCell(new PdfPCell(new Phrase("Amount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
-                    //document.Add(tablePOFooter);
+                    Decimal TotalAmount = 0;
+
+                    foreach (var collectionLine in collectionLines)
+                    {
+                        tableORLines.AddCell(new PdfPCell(new Phrase(collectionLine.SI, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableORLines.AddCell(new PdfPCell(new Phrase(collectionLine.PayType, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableORLines.AddCell(new PdfPCell(new Phrase(collectionLine.CheckNumber, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableORLines.AddCell(new PdfPCell(new Phrase(collectionLine.CheckDate, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableORLines.AddCell(new PdfPCell(new Phrase(collectionLine.CheckBank, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableORLines.AddCell(new PdfPCell(new Phrase(collectionLine.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                        TotalAmount = TotalAmount + collectionLine.Amount;
+                    }
+
+                    document.Add(tableORLines);
+
+                    document.Add(Chunk.NEWLINE);
+
+                    PdfPTable tableORLineTotalAmount = new PdfPTable(6);
+                    float[] widthscellsORLinesTotalAmount = new float[] { 70f, 120f, 100f, 80f, 140f, 100f };
+                    tableORLineTotalAmount.SetWidths(widthscellsORLinesTotalAmount);
+                    tableORLineTotalAmount.WidthPercentage = 100;
+
+                    tableORLineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableORLineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableORLineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableORLineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableORLineTotalAmount.AddCell(new PdfPCell(new Phrase("Total: ", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableORLineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                    document.Add(tableORLineTotalAmount);
 
                     document.Add(Chunk.NEWLINE);
                     document.Add(Chunk.NEWLINE);
@@ -3940,16 +4021,25 @@ namespace easyfis.Controllers
                     tableFooter.WidthPercentage = 100;
                     float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
                     tableFooter.SetWidths(widthsCells2);
-                    tableFooter.AddCell(new PdfPCell(new Phrase("prepared by")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("checked by")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("approved by")) { Border = 0, PaddingTop = 10f, HorizontalAlignment = 1, PaddingBottom = 5f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 1, HorizontalAlignment = 1 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+
+                    tableFooter.AddCell(new PdfPCell(new Phrase(PreparedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(CheckedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(ApprovedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+
                     document.Add(tableFooter);
 
                     // Document End
