@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
@@ -2701,18 +2702,11 @@ namespace easyfis.Controllers
                     tableSILines.AddCell(new PdfPCell(new Phrase("Price", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                     tableSILines.AddCell(new PdfPCell(new Phrase("Discount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                     tableSILines.AddCell(new PdfPCell(new Phrase("Amount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //tableSILines.AddCell(new PdfPCell(new Phrase("VAT Analysis", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //tableSILines.AddCell(new PdfPCell(new Phrase("VAT Amount", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                    //tableSILines.AddCell(new PdfPCell(new Phrase("VAT", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
                     Decimal TotalAmount = 0;
-                    Decimal TotalAmountMinusVAT = 0;
-                    Decimal TotalVAT = 0;
-                    Decimal AmountMinusVAT = 0;
-
                     foreach (var salesInvoiceItem in salesInvoiceItems)
                     {
-                        AmountMinusVAT = salesInvoiceItem.Amount - salesInvoiceItem.VATAmount;
+                        //AmountMinusVAT = salesInvoiceItem.Amount - salesInvoiceItem.VATAmount;
 
                         tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Unit, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
@@ -2721,13 +2715,8 @@ namespace easyfis.Controllers
                         tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Price.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.DiscountAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.Amount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                        //tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.VAT, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                        //tableSILines.AddCell(new PdfPCell(new Phrase(AmountMinusVAT.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                        //tableSILines.AddCell(new PdfPCell(new Phrase(salesInvoiceItem.VATAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                         TotalAmount = TotalAmount + salesInvoiceItem.Amount;
-                        //TotalAmountMinusVAT = TotalAmountMinusVAT + AmountMinusVAT;
-                        //TotalVAT = TotalVAT + salesInvoiceItem.VATAmount;
                     }
 
                     document.Add(tableSILines);
@@ -2746,7 +2735,7 @@ namespace easyfis.Controllers
                     tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
                     tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase("Total: ", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableSILineTotalAmount.AddCell(new PdfPCell(new Phrase(TotalAmount.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    
+
                     document.Add(tableSILineTotalAmount);
 
                     document.Add(Chunk.NEWLINE);
@@ -6590,29 +6579,350 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementCashFlowIndirectPDF()
+        public ActionResult FinancialStatementCashFlowIndirectPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
-            // Start of the PDF
-            MemoryStream workStream = new MemoryStream();
-            Rectangle rec = new Rectangle(PageSize.A3);
-            Document document = new Document(rec, 72, 72, 72, 72);
-            document.SetMargins(50f, 50f, 50f, 50f);
-            PdfWriter.GetInstance(document, workStream).CloseStream = false;
+            HttpCookieCollection cookieCollection = Request.Cookies;
+            HttpCookie branchIdCookie = cookieCollection.Get("branchId");
 
-            // Document Starts
-            document.Open();
+            if (branchIdCookie != null)
+            {
+                var branchId = Convert.ToInt32(Request.Cookies["branchId"].Value);
+                var branches = from d in db.MstBranches where d.Id == branchId select d;
 
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            document.Add(line);
+                if (branches.Any())
+                {
+                    // Company Detail
+                    var companyName = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Company).SingleOrDefault();
+                    var address = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Address).SingleOrDefault();
+                    var contactNo = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.ContactNumber).SingleOrDefault();
+                    var branch = (from d in db.MstBranches where d.Id == branchId select d.Branch).SingleOrDefault();
 
-            // Document End
-            document.Close();
+                    // Start of the PDF
+                    MemoryStream workStream = new MemoryStream();
+                    Rectangle rec = new Rectangle(PageSize.A3);
+                    Document document = new Document(rec, 72, 72, 72, 72);
+                    document.SetMargins(50f, 50f, 50f, 50f);
+                    PdfWriter.GetInstance(document, workStream).CloseStream = false;
 
-            byte[] byteInfo = workStream.ToArray();
-            workStream.Write(byteInfo, 0, byteInfo.Length);
-            workStream.Position = 0;
+                    // Document Starts
+                    document.Open();
 
-            return new FileStreamResult(workStream, "application/pdf");
+                    // Fonts Customization
+                    Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+                    Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+                    Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+                    Font cellFont = FontFactory.GetFont("Arial", 10);
+                    Font cellFont2 = FontFactory.GetFont("Arial", 11);
+                    Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
+                    PdfPTable tableHeader = new PdfPTable(2);
+                    float[] widthscellsheader = new float[] { 100f, 75f };
+                    tableHeader.SetWidths(widthscellsheader);
+                    tableHeader.WidthPercentage = 100;
+                    tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+                    tableHeader.AddCell(new PdfPCell(new Phrase("Cash Flow (Indirect)", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+                    tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+
+                    document.Add(tableHeader);
+
+                    Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+                    var identityUserId = User.Identity.GetUserId();
+                    var mstUserId = from d in db.MstUsers where d.UserId == identityUserId select d;
+                    var incomeAccount = from d in db.MstAccounts where d.Id == mstUserId.FirstOrDefault().IncomeAccountId select d;
+
+                    var cashFlowIncome = from d in db.TrnJournals
+                                         where d.MstBranch.CompanyId == CompanyId
+                                         && d.JournalDate >= Convert.ToDateTime(StartDate)
+                                         && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                         && (d.MstAccount.MstAccountType.AccountCategoryId == 5 || d.MstAccount.MstAccountType.AccountCategoryId == 6)
+                                         select new Models.TrnJournal
+                                         {
+                                             AccountCashFlowCode = d.MstAccount.MstAccountCashFlow.AccountCashFlowCode,
+                                             AccountCashFlow = d.MstAccount.MstAccountCashFlow.AccountCashFlow,
+                                             AccountTypeCode = d.MstAccount.MstAccountType.AccountTypeCode,
+                                             AccountType = d.MstAccount.MstAccountType.AccountType,
+                                             AccountCode = d.MstAccount.AccountCode,
+                                             Account = d.MstAccount.Account,
+                                             DebitAmount = d.DebitAmount,
+                                             CreditAmount = d.CreditAmount
+                                         };
+
+                    var cashFlowBalanceSheet = from d in db.TrnJournals
+                                               where d.MstBranch.CompanyId == CompanyId
+                                               && d.JournalDate >= Convert.ToDateTime(StartDate)
+                                               && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                               && d.MstAccount.MstAccountType.AccountCategoryId < 5
+                                               && (d.MstAccount.AccountCashFlowId == null ? 4 : d.MstAccount.AccountCashFlowId) <= 3
+                                               select new Models.TrnJournal
+                                               {
+                                                   AccountCashFlowCode = d.MstAccount.MstAccountCashFlow.AccountCashFlowCode,
+                                                   AccountCashFlow = d.MstAccount.MstAccountCashFlow.AccountCashFlow,
+                                                   AccountTypeCode = d.MstAccount.MstAccountType.AccountTypeCode,
+                                                   AccountType = d.MstAccount.MstAccountType.AccountType,
+                                                   AccountCode = d.MstAccount.AccountCode,
+                                                   Account = d.MstAccount.Account,
+                                                   DebitAmount = d.DebitAmount,
+                                                   CreditAmount = d.CreditAmount
+                                               };
+
+
+                    var accountCashFlowGroupFromCashFlowIncome = from d in cashFlowIncome.OrderBy(d => d.AccountCashFlowCode)
+                                                                 group d by new
+                                                                 {
+                                                                     AccountCashFlowCode = d.AccountCashFlowCode,
+                                                                     AccountCashFlow = d.AccountCashFlow
+                                                                 } into g
+                                                                 select new Models.TrnJournal
+                                                                 {
+                                                                     AccountCashFlowCode = g.Key.AccountCashFlowCode,
+                                                                     AccountCashFlow = g.Key.AccountCashFlow
+                                                                 };
+
+                    var accountCashFlowGroupFromCashFlowBalanceSheet = from d in cashFlowBalanceSheet.OrderBy(d => d.AccountCashFlowCode)
+                                                                       group d by new
+                                                                       {
+                                                                           AccountCashFlowCode = d.AccountCashFlowCode,
+                                                                           AccountCashFlow = d.AccountCashFlow
+                                                                       } into g
+                                                                       select new Models.TrnJournal
+                                                                       {
+                                                                           AccountCashFlowCode = g.Key.AccountCashFlowCode,
+                                                                           AccountCashFlow = g.Key.AccountCashFlow
+                                                                       };
+
+                    var unionAccountCashFlowGroups = accountCashFlowGroupFromCashFlowIncome.Union(accountCashFlowGroupFromCashFlowBalanceSheet);
+
+                    Decimal totalBalanceAmountOfAllBranches = 0;
+                    foreach (var unionAccountCashFlowGroup in unionAccountCashFlowGroups)
+                    {
+                        PdfPTable tableCashFlow = new PdfPTable(3);
+                        float[] widthCellstableTableCashFlow = new float[] { 50f, 150f, 30f };
+                        tableCashFlow.SetWidths(widthCellstableTableCashFlow);
+                        tableCashFlow.WidthPercentage = 100;
+
+                        document.Add(Chunk.NEWLINE);
+                        document.Add(line);
+
+                        PdfPCell cashFlowColspan = (new PdfPCell(new Phrase(unionAccountCashFlowGroup.AccountCashFlow, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, PaddingLeft = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                        cashFlowColspan.Colspan = 3;
+                        tableCashFlow.AddCell(cashFlowColspan);
+
+                        var accountTypeGroupFromCashFlowIncome = from d in cashFlowIncome.OrderBy(d => d.AccountTypeCode)
+                                                                 where d.AccountCashFlow == unionAccountCashFlowGroup.AccountCashFlow
+                                                                 group d by new
+                                                                 {
+                                                                     AccountCashFlowCode = d.AccountCashFlowCode,
+                                                                     AccountCashFlow = d.AccountCashFlow,
+                                                                     AccountTypeCode = incomeAccount.FirstOrDefault().MstAccountType.AccountTypeCode,
+                                                                     AccountType = incomeAccount.FirstOrDefault().MstAccountType.AccountType,
+                                                                     AccountCode = "0000",
+                                                                     Account = incomeAccount.FirstOrDefault().Account,
+                                                                 } into g
+                                                                 select new Models.TrnJournal
+                                                                 {
+                                                                     AccountCashFlowCode = g.Key.AccountCashFlowCode,
+                                                                     AccountCashFlow = g.Key.AccountCashFlow,
+                                                                     AccountTypeCode = g.Key.AccountTypeCode,
+                                                                     AccountType = g.Key.AccountType,
+                                                                     AccountCode = g.Key.AccountCode,
+                                                                     Account = g.Key.Account,
+                                                                     DebitAmount = g.Sum(d => d.DebitAmount),
+                                                                     CreditAmount = g.Sum(d => d.CreditAmount),
+                                                                     Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                                 };
+
+                        var accountTypeGroupFromCashFlowBalanceSheet = from d in cashFlowBalanceSheet.OrderBy(d => d.AccountTypeCode)
+                                                                       where d.AccountCashFlow == unionAccountCashFlowGroup.AccountCashFlow
+                                                                       group d by new
+                                                                       {
+                                                                           AccountCashFlowCode = d.AccountCashFlowCode,
+                                                                           AccountCashFlow = d.AccountCashFlow,
+                                                                           AccountTypeCode = d.AccountTypeCode,
+                                                                           AccountType = d.AccountType,
+                                                                           AccountCode = d.AccountCode,
+                                                                           Account = d.Account
+                                                                       } into g
+                                                                       select new Models.TrnJournal
+                                                                       {
+                                                                           AccountCashFlowCode = g.Key.AccountCashFlowCode,
+                                                                           AccountCashFlow = g.Key.AccountCashFlow,
+                                                                           AccountTypeCode = g.Key.AccountTypeCode,
+                                                                           AccountType = g.Key.AccountType,
+                                                                           AccountCode = g.Key.AccountCode,
+                                                                           Account = g.Key.Account,
+                                                                           DebitAmount = g.Sum(d => d.DebitAmount),
+                                                                           CreditAmount = g.Sum(d => d.CreditAmount),
+                                                                           Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                                       };
+
+                        var unionAccountTypeGroups = accountTypeGroupFromCashFlowIncome.Union(accountTypeGroupFromCashFlowBalanceSheet);
+
+                        var accountGroupFromCashFlowIncomeRetainEarnings = from d in cashFlowIncome
+                                                                           group d by new
+                                                                           {
+                                                                               AccountCashFlowCode = d.AccountCashFlowCode,
+                                                                               AccountCashFlow = d.AccountCashFlow,
+                                                                               AccountTypeCode = incomeAccount.FirstOrDefault().MstAccountType.AccountTypeCode,
+                                                                               AccountType = incomeAccount.FirstOrDefault().MstAccountType.AccountType,
+                                                                               AccountCode = "0000",
+                                                                               Account = incomeAccount.FirstOrDefault().Account,
+                                                                           } into g
+                                                                           select new Models.TrnJournal
+                                                                           {
+                                                                               AccountCashFlowCode = g.Key.AccountCashFlowCode,
+                                                                               AccountCashFlow = g.Key.AccountCashFlow,
+                                                                               AccountTypeCode = g.Key.AccountTypeCode,
+                                                                               AccountType = g.Key.AccountType,
+                                                                               AccountCode = g.Key.AccountCode,
+                                                                               Account = g.Key.Account,
+                                                                               DebitAmount = g.Sum(d => d.DebitAmount),
+                                                                               CreditAmount = g.Sum(d => d.CreditAmount),
+                                                                               Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                                           };
+
+                        Decimal totalBalanceAmountRetainEarnings = 0;
+                        foreach (var accountTypeGroupFromCashFlowIncomeRetainEarning in accountGroupFromCashFlowIncomeRetainEarnings)
+                        {
+                            PdfPCell accountTypeColspan = (new PdfPCell(new Phrase(accountTypeGroupFromCashFlowIncomeRetainEarning.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                            accountTypeColspan.Colspan = 3;
+                            tableCashFlow.AddCell(accountTypeColspan);
+
+                            foreach (var accountGroupFromCashFlowIncomeRetainEarning in accountGroupFromCashFlowIncomeRetainEarnings)
+                            {
+                                tableCashFlow.AddCell(new PdfPCell(new Phrase(accountGroupFromCashFlowIncomeRetainEarning.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                                tableCashFlow.AddCell(new PdfPCell(new Phrase(accountGroupFromCashFlowIncomeRetainEarning.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                                tableCashFlow.AddCell(new PdfPCell(new Phrase(accountGroupFromCashFlowIncomeRetainEarning.Balance.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                                totalBalanceAmountRetainEarnings = totalBalanceAmountRetainEarnings + accountGroupFromCashFlowIncomeRetainEarning.Balance;
+                            }
+                        }
+
+                        Decimal totalBalanceAmount = 0;
+                        foreach (var unionAccountTypeGroup in unionAccountTypeGroups)
+                        {
+                            var accountGroupFromCashFlowIncome = from d in cashFlowIncome
+                                                                 where d.AccountType == unionAccountTypeGroup.AccountType
+                                                                 && d.AccountCode == unionAccountTypeGroup.AccountCode
+                                                                 && d.AccountCode != "0000"
+                                                                 group d by new
+                                                                 {
+                                                                     AccountCashFlowCode = d.AccountCashFlowCode,
+                                                                     AccountCashFlow = d.AccountCashFlow,
+                                                                     AccountTypeCode = incomeAccount.FirstOrDefault().MstAccountType.AccountTypeCode,
+                                                                     AccountType = incomeAccount.FirstOrDefault().MstAccountType.AccountType,
+                                                                     AccountCode = "0000",
+                                                                     Account = incomeAccount.FirstOrDefault().Account,
+                                                                 } into g
+                                                                 select new Models.TrnJournal
+                                                                 {
+                                                                     AccountCashFlowCode = g.Key.AccountCashFlowCode,
+                                                                     AccountCashFlow = g.Key.AccountCashFlow,
+                                                                     AccountTypeCode = g.Key.AccountTypeCode,
+                                                                     AccountType = g.Key.AccountType,
+                                                                     AccountCode = g.Key.AccountCode,
+                                                                     Account = g.Key.Account,
+                                                                     DebitAmount = g.Sum(d => d.DebitAmount),
+                                                                     CreditAmount = g.Sum(d => d.CreditAmount),
+                                                                     Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                                 };
+
+                            var accountGroupFromCashFlowBalanceSheet = from d in cashFlowBalanceSheet
+                                                                       where d.AccountType == unionAccountTypeGroup.AccountType
+                                                                       && d.AccountCode == unionAccountTypeGroup.AccountCode
+                                                                       && d.AccountCode != "0000"
+                                                                       group d by new
+                                                                       {
+                                                                           AccountCashFlowCode = d.AccountCashFlowCode,
+                                                                           AccountCashFlow = d.AccountCashFlow,
+                                                                           AccountTypeCode = d.AccountTypeCode,
+                                                                           AccountType = d.AccountType,
+                                                                           AccountCode = d.AccountCode,
+                                                                           Account = d.Account
+                                                                       } into g
+                                                                       select new Models.TrnJournal
+                                                                       {
+                                                                           AccountCashFlowCode = g.Key.AccountCashFlowCode,
+                                                                           AccountCashFlow = g.Key.AccountCashFlow,
+                                                                           AccountTypeCode = g.Key.AccountTypeCode,
+                                                                           AccountType = g.Key.AccountType,
+                                                                           AccountCode = g.Key.AccountCode,
+                                                                           Account = g.Key.Account,
+                                                                           DebitAmount = g.Sum(d => d.DebitAmount),
+                                                                           CreditAmount = g.Sum(d => d.CreditAmount),
+                                                                           Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                                       };
+
+                            PdfPCell accountColspan = (new PdfPCell(new Phrase(unionAccountTypeGroup.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                            accountColspan.Colspan = 3;
+                            tableCashFlow.AddCell(accountColspan);
+
+                            var unionAccountGroups = accountGroupFromCashFlowIncome.Union(accountGroupFromCashFlowBalanceSheet).OrderBy(d => d.AccountCode);
+                            foreach (var unionAccountGroup in unionAccountGroups)
+                            {
+                                tableCashFlow.AddCell(new PdfPCell(new Phrase(unionAccountGroup.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                                tableCashFlow.AddCell(new PdfPCell(new Phrase(unionAccountGroup.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                                tableCashFlow.AddCell(new PdfPCell(new Phrase(unionAccountGroup.Balance.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                                totalBalanceAmount = totalBalanceAmount + unionAccountGroup.Balance;
+                            }
+                        }
+
+
+                        Decimal totalAllAmount = totalBalanceAmountRetainEarnings + totalBalanceAmount;
+
+                        document.Add(tableCashFlow);
+
+                        document.Add(line);
+                        PdfPTable tableCashFlowTotal = new PdfPTable(3);
+                        float[] widthCellstableTableCashFlowTotal = new float[] { 50f, 150f, 30f };
+                        tableCashFlowTotal.SetWidths(widthCellstableTableCashFlowTotal);
+                        tableCashFlowTotal.WidthPercentage = 100;
+                        tableCashFlowTotal.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                        tableCashFlowTotal.AddCell(new PdfPCell(new Phrase("Total " + unionAccountCashFlowGroup.AccountCashFlow, cellBoldFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                        tableCashFlowTotal.AddCell(new PdfPCell(new Phrase(totalAllAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+
+                        document.Add(tableCashFlowTotal);
+                        document.Add(Chunk.NEWLINE);
+
+                        totalBalanceAmountOfAllBranches = totalBalanceAmountOfAllBranches + totalAllAmount;
+                    }
+
+                    document.Add(line);
+                    PdfPTable tableCashFlowTotalAllBranches = new PdfPTable(3);
+                    float[] widthCellstableTableCashFlowTotalAllBranches = new float[] { 50f, 150f, 30f };
+                    tableCashFlowTotalAllBranches.SetWidths(widthCellstableTableCashFlowTotalAllBranches);
+                    tableCashFlowTotalAllBranches.WidthPercentage = 100;
+                    tableCashFlowTotalAllBranches.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, Rowspan = 2, PaddingTop = 5f, PaddingBottom = 5f, PaddingLeft = 50f });
+                    tableCashFlowTotalAllBranches.AddCell(new PdfPCell(new Phrase("All Branches Cash Balance ", cellBoldFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 5f, PaddingBottom = 5f, PaddingLeft = 20f });
+                    tableCashFlowTotalAllBranches.AddCell(new PdfPCell(new Phrase(totalBalanceAmountOfAllBranches.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 5f, PaddingBottom = 5f });
+
+                    document.Add(tableCashFlowTotalAllBranches);
+
+                    // Document End
+                    document.Close();
+
+                    // Document End
+                    document.Close();
+
+                    byte[] byteInfo = workStream.ToArray();
+                    workStream.Write(byteInfo, 0, byteInfo.Length);
+                    workStream.Position = 0;
+
+                    return new FileStreamResult(workStream, "application/pdf");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Manage");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "Manage");
+            }
         }
 
         [Authorize]

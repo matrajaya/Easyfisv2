@@ -197,7 +197,7 @@
                             </div>
                             <div id="CF" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementCashFlowIndirectPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementCashFlowInderectPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -2762,6 +2762,22 @@
                 companyId = document.getElementById('FinancialStatementIncomeStatement_Company_data').value;
                 document.getElementById('FinancialStatementIncomeStatement_Company').style.border = " ";
                 window.location.href = '/Software/FinancialStatementIncomeStatementPDF?StartDate=' + financialStatementIncomeStatement_StartDate + '&EndDate=' + financialStatementIncomeStatement_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementCashFlowInderectPDF_OnClick() {
+            var financialStatementCashFlowInderect_StartDate = document.getElementById('FinancialStatementCashFlow_StartDate_data').value;
+            var financialStatementCashFlowInderect_EndDate = document.getElementById('FinancialStatementCashFlow_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementCashFlow_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementCashFlow_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementCashFlow_Company_data').value;
+                document.getElementById('FinancialStatementCashFlow_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementCashFlowIndirectPDF?StartDate=' + financialStatementCashFlowInderect_StartDate + '&EndDate=' + financialStatementCashFlowInderect_EndDate + '&CompanyId=' + companyId;
             }
         }
 
