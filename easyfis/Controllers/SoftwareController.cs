@@ -6670,7 +6670,7 @@ namespace easyfis.Controllers
                                                };
 
 
-                    var accountCashFlowGroupFromCashFlowIncome = from d in cashFlowIncome.OrderBy(d => d.AccountCashFlowCode)
+                    var accountCashFlowGroupFromCashFlowIncome = from d in cashFlowIncome
                                                                  group d by new
                                                                  {
                                                                      AccountCashFlowCode = d.AccountCashFlowCode,
@@ -6682,7 +6682,7 @@ namespace easyfis.Controllers
                                                                      AccountCashFlow = g.Key.AccountCashFlow
                                                                  };
 
-                    var accountCashFlowGroupFromCashFlowBalanceSheet = from d in cashFlowBalanceSheet.OrderBy(d => d.AccountCashFlowCode)
+                    var accountCashFlowGroupFromCashFlowBalanceSheet = from d in cashFlowBalanceSheet
                                                                        group d by new
                                                                        {
                                                                            AccountCashFlowCode = d.AccountCashFlowCode,
@@ -6694,7 +6694,7 @@ namespace easyfis.Controllers
                                                                            AccountCashFlow = g.Key.AccountCashFlow
                                                                        };
 
-                    var unionAccountCashFlowGroups = accountCashFlowGroupFromCashFlowIncome.Union(accountCashFlowGroupFromCashFlowBalanceSheet);
+                    var unionAccountCashFlowGroups = accountCashFlowGroupFromCashFlowIncome.Union(accountCashFlowGroupFromCashFlowBalanceSheet).OrderBy(d => d.AccountCashFlowCode);
 
                     Decimal totalBalanceAmountOfAllBranches = 0;
                     foreach (var unionAccountCashFlowGroup in unionAccountCashFlowGroups)
@@ -6711,7 +6711,7 @@ namespace easyfis.Controllers
                         cashFlowColspan.Colspan = 3;
                         tableCashFlow.AddCell(cashFlowColspan);
 
-                        var accountTypeGroupFromCashFlowIncome = from d in cashFlowIncome.OrderBy(d => d.AccountTypeCode)
+                        var accountTypeGroupFromCashFlowIncome = from d in cashFlowIncome
                                                                  where d.AccountCashFlow == unionAccountCashFlowGroup.AccountCashFlow
                                                                  group d by new
                                                                  {
@@ -6735,7 +6735,7 @@ namespace easyfis.Controllers
                                                                      Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                                                                  };
 
-                        var accountTypeGroupFromCashFlowBalanceSheet = from d in cashFlowBalanceSheet.OrderBy(d => d.AccountTypeCode)
+                        var accountTypeGroupFromCashFlowBalanceSheet = from d in cashFlowBalanceSheet
                                                                        where d.AccountCashFlow == unionAccountCashFlowGroup.AccountCashFlow
                                                                        group d by new
                                                                        {
@@ -6759,55 +6759,14 @@ namespace easyfis.Controllers
                                                                            Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                                                                        };
 
-                        var unionAccountTypeGroups = accountTypeGroupFromCashFlowIncome.Union(accountTypeGroupFromCashFlowBalanceSheet);
-
-                        var accountGroupFromCashFlowIncomeRetainEarnings = from d in cashFlowIncome
-                                                                           group d by new
-                                                                           {
-                                                                               AccountCashFlowCode = d.AccountCashFlowCode,
-                                                                               AccountCashFlow = d.AccountCashFlow,
-                                                                               AccountTypeCode = incomeAccount.FirstOrDefault().MstAccountType.AccountTypeCode,
-                                                                               AccountType = incomeAccount.FirstOrDefault().MstAccountType.AccountType,
-                                                                               AccountCode = "0000",
-                                                                               Account = incomeAccount.FirstOrDefault().Account,
-                                                                           } into g
-                                                                           select new Models.TrnJournal
-                                                                           {
-                                                                               AccountCashFlowCode = g.Key.AccountCashFlowCode,
-                                                                               AccountCashFlow = g.Key.AccountCashFlow,
-                                                                               AccountTypeCode = g.Key.AccountTypeCode,
-                                                                               AccountType = g.Key.AccountType,
-                                                                               AccountCode = g.Key.AccountCode,
-                                                                               Account = g.Key.Account,
-                                                                               DebitAmount = g.Sum(d => d.DebitAmount),
-                                                                               CreditAmount = g.Sum(d => d.CreditAmount),
-                                                                               Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
-                                                                           };
-
-                        Decimal totalBalanceAmountRetainEarnings = 0;
-                        foreach (var accountTypeGroupFromCashFlowIncomeRetainEarning in accountGroupFromCashFlowIncomeRetainEarnings)
-                        {
-                            PdfPCell accountTypeColspan = (new PdfPCell(new Phrase(accountTypeGroupFromCashFlowIncomeRetainEarning.AccountType, cellBoldFont)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
-                            accountTypeColspan.Colspan = 3;
-                            tableCashFlow.AddCell(accountTypeColspan);
-
-                            foreach (var accountGroupFromCashFlowIncomeRetainEarning in accountGroupFromCashFlowIncomeRetainEarnings)
-                            {
-                                tableCashFlow.AddCell(new PdfPCell(new Phrase(accountGroupFromCashFlowIncomeRetainEarning.AccountCode, cellFont)) { Border = 0, HorizontalAlignment = 0, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
-                                tableCashFlow.AddCell(new PdfPCell(new Phrase(accountGroupFromCashFlowIncomeRetainEarning.Account, cellFont)) { Border = 0, HorizontalAlignment = 0, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-                                tableCashFlow.AddCell(new PdfPCell(new Phrase(accountGroupFromCashFlowIncomeRetainEarning.Balance.ToString("#,##0.00"), cellFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
-
-                                totalBalanceAmountRetainEarnings = totalBalanceAmountRetainEarnings + accountGroupFromCashFlowIncomeRetainEarning.Balance;
-                            }
-                        }
+                        var unionAccountTypeGroups = accountTypeGroupFromCashFlowIncome.Union(accountTypeGroupFromCashFlowBalanceSheet).OrderBy(d => d.AccountCode);
 
                         Decimal totalBalanceAmount = 0;
                         foreach (var unionAccountTypeGroup in unionAccountTypeGroups)
                         {
-                            var accountGroupFromCashFlowIncome = from d in cashFlowIncome
-                                                                 where d.AccountType == unionAccountTypeGroup.AccountType
-                                                                 && d.AccountCode == unionAccountTypeGroup.AccountCode
-                                                                 && d.AccountCode != "0000"
+
+                            var accountGroupFromCashFlowIncome = from d in accountTypeGroupFromCashFlowIncome
+                                                                 where d.AccountCode == unionAccountTypeGroup.AccountCode
                                                                  group d by new
                                                                  {
                                                                      AccountCashFlowCode = d.AccountCashFlowCode,
@@ -6830,10 +6789,8 @@ namespace easyfis.Controllers
                                                                      Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                                                                  };
 
-                            var accountGroupFromCashFlowBalanceSheet = from d in cashFlowBalanceSheet
-                                                                       where d.AccountType == unionAccountTypeGroup.AccountType
-                                                                       && d.AccountCode == unionAccountTypeGroup.AccountCode
-                                                                       && d.AccountCode != "0000"
+                            var accountGroupFromCashFlowBalanceSheet = from d in accountTypeGroupFromCashFlowBalanceSheet
+                                                                       where d.AccountCode == unionAccountTypeGroup.AccountCode
                                                                        group d by new
                                                                        {
                                                                            AccountCashFlowCode = d.AccountCashFlowCode,
@@ -6871,9 +6828,6 @@ namespace easyfis.Controllers
                             }
                         }
 
-
-                        Decimal totalAllAmount = totalBalanceAmountRetainEarnings + totalBalanceAmount;
-
                         document.Add(tableCashFlow);
 
                         document.Add(line);
@@ -6883,12 +6837,12 @@ namespace easyfis.Controllers
                         tableCashFlowTotal.WidthPercentage = 100;
                         tableCashFlowTotal.AddCell(new PdfPCell(new Phrase("", cellFont)) { Border = 0, HorizontalAlignment = 0, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
                         tableCashFlowTotal.AddCell(new PdfPCell(new Phrase("Total " + unionAccountCashFlowGroup.AccountCashFlow, cellBoldFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
-                        tableCashFlowTotal.AddCell(new PdfPCell(new Phrase(totalAllAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableCashFlowTotal.AddCell(new PdfPCell(new Phrase(totalBalanceAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                         document.Add(tableCashFlowTotal);
                         document.Add(Chunk.NEWLINE);
 
-                        totalBalanceAmountOfAllBranches = totalBalanceAmountOfAllBranches + totalAllAmount;
+                        totalBalanceAmountOfAllBranches = totalBalanceAmountOfAllBranches + totalBalanceAmount;
                     }
 
                     document.Add(line);
