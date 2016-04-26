@@ -7,7 +7,7 @@
     <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
-    <title>Software Dashboard</title>
+    <title>StockCount</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
@@ -23,7 +23,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4><i class="fa fa-gears"></i> Settings</h4>
+                            <h4><i class="fa fa-cubes"></i> Stock Count</h4>
                         </div>
                         <div class="col-md-6" align="right">
                             <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
@@ -32,11 +32,14 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Settings
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Stock Count
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->
