@@ -14,6 +14,9 @@ namespace easyfis.Models
         public String RR { get; set; }
         public String RRDate { get; set; }
         public Int32 SupplierId { get; set; }
+        public String Supplier { get; set; }
+        public String SupplierTIN { get; set; }
+        public String SupplierAddress { get; set; }
         public Int32 POId { get; set; }
         public String PO { get; set; }
         public Int32 ItemId { get; set; }

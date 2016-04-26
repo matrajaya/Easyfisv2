@@ -40,11 +40,9 @@
                     <div class="col-md-4">
                         <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
                             <li class="active"><a data-toggle="pill" href="#AP">Accounts Payable</a></li>
-                            <li><a data-toggle="pill" href="#APV">Accounts Payable Voucher</a></li>
-                            <li><a data-toggle="pill" href="#IVSR">Input VAT Summary Report</a></li>
-                            <li><a data-toggle="pill" href="#WTDR">Withholding Tax Detail Report</a></li>
-                            <li><a data-toggle="pill" href="#WTSR">Withholding Tax Sumamry Report</a></li>
-                            <li><a data-toggle="pill" href="#COCTW">Certificate of Creditable Tax Withheld (Form 2307)</a></li>
+                            <li class="reportDivider"><a data-toggle="pill" href="#APV">Accounts Payable Voucher</a></li>
+                            <li><a data-toggle="pill" href="#IVR">Input VAT Report</a></li>
+                            <li class="reportDivider"><a data-toggle="pill" href="#WTR">Withholding Tax Report</a></li>
                             <li><a data-toggle="pill" href="#PSR">Purchase Summary Report</a></li>
                             <li><a data-toggle="pill" href="#PDR">Purchase Detail  Report</a></li>
                             <li><a data-toggle="pill" href="#RRSR">Receiving Receipt Summary Report</a></li>
@@ -129,7 +127,7 @@
                             </div>
                             <div id="APV" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsPayableVoucherPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="AccountsPayableVoucherPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -150,9 +148,9 @@
                                     </form>
                                 </div>
                             </div>
-                            <div id="IVSR" class="tab-pane fade">
+                            <div id="IVR" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsPayableInputVATSummaryReportPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="AccountsPayableInputVATReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -162,8 +160,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Start Date</label>
                                                     <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="InputVATSummaryReport_StartDate"></div>
-                                                        <input type="hidden" id="InputVATSummaryReport_StartDate_data" />
+                                                        <div class="comboBox-wide" id="InputVATReport_StartDate"></div>
+                                                        <input type="hidden" id="InputVATReport_StartDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -173,8 +171,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">End Date</label>
                                                     <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="InputVATSummaryReport_EndDate"></div>
-                                                        <input type="hidden" id="InputVATSummaryReport_EndDate_data" />
+                                                        <div class="comboBox-wide" id="InputVATReport_EndDate"></div>
+                                                        <input type="hidden" id="InputVATReport_EndDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,9 +180,9 @@
                                     </form>
                                 </div>
                             </div>
-                            <div id="WTDR" class="tab-pane fade">
+                            <div id="WTR" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsPayableWithholdingTaxDetailReportPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="AccountsPayableWithHoldingTaxReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -194,8 +192,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Start Date</label>
                                                     <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="withHoldingTAXDetailReport_StartDate"></div>
-                                                        <input type="hidden" id="withHoldingTAXDetailReport_StartDate_data" />
+                                                        <div class="comboBox-wide" id="withHoldingTAXReport_StartDate"></div>
+                                                        <input type="hidden" id="withHoldingTAXReport_StartDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -205,72 +203,8 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">End Date</label>
                                                     <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="withHoldingTAXDetailReport_EndDate"></div>
-                                                        <input type="hidden" id="withHoldingTAXDetailReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="WTSR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsPayableWithholdingTaxSummaryReportPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="withHoldingTAXSummarryReport_StartDate"></div>
-                                                        <input type="hidden" id="withHoldingTAXSummarryReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="withHoldingTAXSummarryReport_EndDate"></div>
-                                                        <input type="hidden" id="withHoldingTAXSummarryReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="COCTW" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsPayableForm2037PDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="certificateOfCreditableTaxWithheld_StartDate"></div>
-                                                        <input type="hidden" id="certificateOfCreditableTaxWithheld_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="certificateOfCreditableTaxWithheld_EndDate"></div>
-                                                        <input type="hidden" id="certificateOfCreditableTaxWithheld_EndDate_data" />
+                                                        <div class="comboBox-wide" id="withHoldingTAXReport_EndDate"></div>
+                                                        <input type="hidden" id="withHoldingTAXReport_EndDate_data" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -498,12 +432,10 @@
         var cboSuppliers;
         var RRNos;
         var cboRRNo;
-        var InputVATSummaryReportStartDate;
-        var InputVATSummaryReportEndDate;
-        var withHoldingTAXDetailReportStartDate;
-        var withHoldingTAXDetailReportEndDate;
-        var withHoldingTAXSummarryReportStartDate;
-        var withHoldingTAXSummarryReportEndDate;
+        var InputVATReportStartDate;
+        var InputVATReportEndDate;
+        var withHoldingTAXReportStartDate;
+        var withHoldingTAXReportEndDate;
         var certificateOfCreditableTaxWithheldStartDate;
         var certificateOfCreditableTaxWithheldEndDate;
         var purchaseSummaryReportStartDate;
@@ -815,140 +747,104 @@
             });
         }
 
-        // get Input VAT Summary Report Start Date
-        function getInputVATSummaryReportStartDate() {
-            InputVATSummaryReportStartDate.dispose();
-            InputVATSummaryReportStartDate = new wijmo.input.InputDate('#InputVATSummaryReport_StartDate', {
+        // Print Accounts payable voucher pdf
+        function AccountsPayableVoucherPDF_OnClick() {
+            if (document.getElementById('accountsPayableVoucher_RRNo_data').value == '') {
+                document.getElementById("accountsPayableVoucher_RRNo").style.border = "1px solid red";
+
+                toastr.error("Invalid Entry");
+            } else {
+                document.getElementById("accountsPayableVoucher_RRNo").style.border = "1px solid #C8C8C8";
+
+                var accountsPaybleVoucherReportData = document.getElementById('accountsPayableVoucher_RRNo_data').value;
+                window.location.href = '/Software/AccountsPayableVoucherPDF?RRId=' + accountsPaybleVoucherReportData;
+            }
+        }
+
+
+        // get Input VAT Report Start Date
+        function getInputVATReportStartDate() {
+            InputVATReportStartDate.dispose();
+            InputVATReportStartDate = new wijmo.input.InputDate('#InputVATReport_StartDate', {
                 format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('InputVATSummaryReport_StartDate_data').value),
+                value: new Date(document.getElementById('InputVATReport_StartDate_data').value),
                 mask: '99/99/9999',
-                max: new Date(document.getElementById('InputVATSummaryReport_EndDate_data').value),
+                max: new Date(document.getElementById('InputVATReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('InputVATSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    document.getElementById('InputVATReport_StartDate_data').value = this.value.toLocaleDateString();
                     setTimeout(function () {
-                        getInputVATSummaryReportEndDate();
+                        getInputVATReportEndDate();
                     }, 50);
                 }
             });
         }
 
-        // get Input VAT Summary Report End Date
-        function getInputVATSummaryReportEndDate() {
-            InputVATSummaryReportEndDate.dispose();
-            InputVATSummaryReportEndDate = new wijmo.input.InputDate('#InputVATSummaryReport_EndDate', {
+        // get Input VAT Report End Date
+        function getInputVATReportEndDate() {
+            InputVATReportEndDate.dispose();
+            InputVATReportEndDate = new wijmo.input.InputDate('#InputVATReport_EndDate', {
                 format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('InputVATSummaryReport_EndDate_data').value),
+                value: new Date(document.getElementById('InputVATReport_EndDate_data').value),
                 mask: '99/99/9999',
-                min: new Date(document.getElementById('InputVATSummaryReport_StartDate_data').value),
+                min: new Date(document.getElementById('InputVATReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('InputVATSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    document.getElementById('InputVATReport_EndDate_data').value = this.value.toLocaleDateString();
                     setTimeout(function () {
-                        getInputVATSummaryReportStartDate();
+                        getInputVATReportStartDate();
                     }, 50);
                 }
             });
         }
 
-        // get WithHolding TAX Detail Report Start Date
-        function getWithHoldingTAXDetailReportStartDate() {
-            withHoldingTAXDetailReportStartDate.dispose();
-            withHoldingTAXDetailReportStartDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_StartDate', {
+        // Input VAT report on click
+        function AccountsPayableInputVATReportPDF_OnClick() {
+            var InputVATReportStartDate = document.getElementById('InputVATReport_StartDate_data').value;
+            var InputVATReportEndDate = document.getElementById('InputVATReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsPayableInputVATReportPDF?StartDate=' + InputVATReportStartDate + '&EndDate=' + InputVATReportEndDate;
+        }
+
+        // get WithHolding TAX Report Start Date
+        function getWithHoldingTAXReportStartDate() {
+            withHoldingTAXReportStartDate.dispose();
+            withHoldingTAXReportStartDate = new wijmo.input.InputDate('#withHoldingTAXReport_StartDate', {
                 format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('withHoldingTAXDetailReport_StartDate_data').value),
+                value: new Date(document.getElementById('withHoldingTAXReport_StartDate_data').value),
                 mask: '99/99/9999',
-                max: new Date(document.getElementById('withHoldingTAXDetailReport_EndDate_data').value),
+                max: new Date(document.getElementById('withHoldingTAXReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('withHoldingTAXDetailReport_StartDate_data').value = this.value.toLocaleDateString();
+                    document.getElementById('withHoldingTAXReport_StartDate_data').value = this.value.toLocaleDateString();
                     setTimeout(function () {
-                        getWithHoldingTAXDetailReportEndDate();
+                        getWithHoldingTAXReportEndDate();
                     }, 50);
                 }
             });
         }
 
-        // get WithHolding TAX Detail Report End Date
-        function getWithHoldingTAXDetailReportEndDate() {
-            withHoldingTAXDetailReportEndDate.dispose();
-            withHoldingTAXDetailReportEndDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_EndDate', {
+        // get WithHolding TAX Report End Date
+        function getWithHoldingTAXReportEndDate() {
+            withHoldingTAXReportEndDate.dispose();
+            withHoldingTAXReportEndDate = new wijmo.input.InputDate('#withHoldingTAXReport_EndDate', {
                 format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('withHoldingTAXDetailReport_EndDate_data').value),
+                value: new Date(document.getElementById('withHoldingTAXReport_EndDate_data').value),
                 mask: '99/99/9999',
-                min: new Date(document.getElementById('withHoldingTAXDetailReport_StartDate_data').value),
+                min: new Date(document.getElementById('withHoldingTAXReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('withHoldingTAXDetailReport_EndDate_data').value = this.value.toLocaleDateString();
+                    document.getElementById('withHoldingTAXReport_EndDate_data').value = this.value.toLocaleDateString();
                     setTimeout(function () {
-                        getWithHoldingTAXDetailReportStartDate();
+                        getWithHoldingTAXReportStartDate();
                     }, 50);
                 }
             });
         }
 
-        // get WithHolding TAX Summary Report Start Date
-        function getWithHoldingTAXSummarryReportStartDate() {
-            withHoldingTAXSummarryReportStartDate.dispose();
-            withHoldingTAXSummarryReportStartDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('withHoldingTAXSummarryReport_StartDate_data').value),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('withHoldingTAXSummarryReport_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('withHoldingTAXSummarryReport_StartDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getWithHoldingTAXSummarryReportEndDate();
-                    }, 50);
-                }
-            });
-        }
+        
+        // Input VAT report on click
+        function AccountsPayableWithHoldingTaxReportPDF_OnClick() {
+            var WithHoldingTaxStartDate = document.getElementById('withHoldingTAXReport_StartDate_data').value;
+            var WithHoldingTaxReportEndDate = document.getElementById('withHoldingTAXReport_EndDate_data').value;
 
-        // get WithHolding TAX Summary Report End Date
-        function getWithHoldingTAXSummarryReportEndDate() {
-            withHoldingTAXSummarryReportEndDate.dispose();
-            withHoldingTAXSummarryReportEndDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('withHoldingTAXSummarryReport_EndDate_data').value),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('withHoldingTAXSummarryReport_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('withHoldingTAXSummarryReport_EndDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getWithHoldingTAXSummarryReportStartDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Certificate Of Creditable Tax Withheld Start Date
-        function getCertificateOfCreditableTaxWithheldStartDate() {
-            certificateOfCreditableTaxWithheldStartDate.dispose();
-            certificateOfCreditableTaxWithheldStartDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_StartDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('certificateOfCreditableTaxWithheld_StartDate_data').value),
-                mask: '99/99/9999',
-                max: new Date(document.getElementById('certificateOfCreditableTaxWithheld_EndDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('certificateOfCreditableTaxWithheld_StartDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getCertificateOfCreditableTaxWithheldEndDate();
-                    }, 50);
-                }
-            });
-        }
-
-        // get Certificate Of Creditable Tax Withheld End Date
-        function getCertificateOfCreditableTaxWithheldEndDate() {
-            certificateOfCreditableTaxWithheldEndDate.dispose();
-            certificateOfCreditableTaxWithheldEndDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_EndDate', {
-                format: 'MM/dd/yyyy',
-                value: new Date(document.getElementById('certificateOfCreditableTaxWithheld_EndDate_data').value),
-                mask: '99/99/9999',
-                min: new Date(document.getElementById('certificateOfCreditableTaxWithheld_StartDate_data').value),
-                onValueChanged: function () {
-                    document.getElementById('certificateOfCreditableTaxWithheld_EndDate_data').value = this.value.toLocaleDateString();
-                    setTimeout(function () {
-                        getCertificateOfCreditableTaxWithheldStartDate();
-                    }, 50);
-                }
-            });
+            window.location.href = '/Software/AccountsPayableWithholdingTaxReportPDF?StartDate=' + WithHoldingTaxStartDate + '&EndDate=' + WithHoldingTaxReportEndDate;
         }
 
         function AccountsPayablePDF_OnClick() {
@@ -1222,45 +1118,25 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            // Input Vat Summary Report Dates
-            document.getElementById('InputVATSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('InputVATSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+            // Input Vat Summary Dates
+            document.getElementById('InputVATReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('InputVATReport_EndDate_data').value = new Date().toLocaleDateString();
 
-            InputVATSummaryReportStartDate = new wijmo.input.InputDate('#InputVATSummaryReport_StartDate');
-            InputVATSummaryReportEndDate = new wijmo.input.InputDate('#InputVATSummaryReport_EndDate');
+            InputVATReportStartDate = new wijmo.input.InputDate('#InputVATReport_StartDate');
+            InputVATReportEndDate = new wijmo.input.InputDate('#InputVATReport_EndDate');
 
-            getInputVATSummaryReportStartDate();
-            getInputVATSummaryReportEndDate();
+            getInputVATReportStartDate();
+            getInputVATReportEndDate();
 
-            // WithHolding TAX Detail Report Dates
-            document.getElementById('withHoldingTAXDetailReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('withHoldingTAXDetailReport_EndDate_data').value = new Date().toLocaleDateString();
+            // WithHolding TAX Report Dates
+            document.getElementById('withHoldingTAXReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('withHoldingTAXReport_EndDate_data').value = new Date().toLocaleDateString();
 
-            withHoldingTAXDetailReportStartDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_StartDate');
-            withHoldingTAXDetailReportEndDate = new wijmo.input.InputDate('#withHoldingTAXDetailReport_EndDate');
+            withHoldingTAXReportStartDate = new wijmo.input.InputDate('#withHoldingTAXReport_StartDate');
+            withHoldingTAXReportEndDate = new wijmo.input.InputDate('#withHoldingTAXReport_EndDate');
 
-            getWithHoldingTAXDetailReportStartDate();
-            getWithHoldingTAXDetailReportEndDate();
-
-            // WithHolding TAX Summary Report Dates
-            document.getElementById('withHoldingTAXSummarryReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('withHoldingTAXSummarryReport_EndDate_data').value = new Date().toLocaleDateString();
-
-            withHoldingTAXSummarryReportStartDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_StartDate');
-            withHoldingTAXSummarryReportEndDate = new wijmo.input.InputDate('#withHoldingTAXSummarryReport_EndDate');
-
-            getWithHoldingTAXSummarryReportStartDate();
-            getWithHoldingTAXSummarryReportEndDate();
-
-            // certificate Of Creditable Tax Withheld Dates
-            document.getElementById('certificateOfCreditableTaxWithheld_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('certificateOfCreditableTaxWithheld_EndDate_data').value = new Date().toLocaleDateString();
-
-            certificateOfCreditableTaxWithheldStartDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_StartDate');
-            certificateOfCreditableTaxWithheldEndDate = new wijmo.input.InputDate('#certificateOfCreditableTaxWithheld_EndDate');
-
-            getCertificateOfCreditableTaxWithheldStartDate();
-            getCertificateOfCreditableTaxWithheldEndDate();
+            getWithHoldingTAXReportStartDate();
+            getWithHoldingTAXReportEndDate();
 
             // Purchase Summary Report Dates
             document.getElementById('purchaseSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
