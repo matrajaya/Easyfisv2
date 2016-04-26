@@ -1340,6 +1340,7 @@ namespace easyfis.Controllers
                     var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
                                                 where d.TrnReceivingReceipt.RRDate >= Convert.ToDateTime(StartDate)
                                                 && d.TrnReceivingReceipt.RRDate <= Convert.ToDateTime(EndDate)
+                                                && d.VATAmount > 0
                                                 select new Models.TrnReceivingReceiptItem
                                                 {
                                                     Id = d.Id,
