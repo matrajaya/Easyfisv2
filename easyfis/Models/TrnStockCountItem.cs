@@ -9,15 +9,11 @@ namespace easyfis.Models
     public class TrnStockCountItem
     {
         [Key]
-
         public Int32 Id { get; set; }
         public Int32 SCId { get; set; }
-        public String SC { get; set; }
         public Int32 ItemId { get; set; }
         public String Item { get; set; }
         public String Particulars { get; set; }
         public Decimal Quantity { get; set; }
-
-
     }
 }

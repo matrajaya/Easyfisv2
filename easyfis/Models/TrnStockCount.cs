@@ -9,7 +9,6 @@ namespace easyfis.Models
     public class TrnStockCount
     {
         [Key]
-
         public Int32 Id { get; set; }
         public Int32 BranchId { get; set; }
         public String Branch { get; set; }
@@ -29,6 +28,5 @@ namespace easyfis.Models
         public Int32 UpdatedById { get; set; }
         public String UpdatedBy { get; set; }
         public String UpdatedDateTime { get; set; }
-
     }
 }
