@@ -662,7 +662,7 @@
                 value: new Date(dateValue),
                 mask: '99/99/9999'
             });
-            return dateAcquired.value.toLocaleDateString();
+            return dateAcquired.value;
         }
 
         // ==============================
@@ -1049,7 +1049,7 @@
             itemObject.Cost = document.getElementById('articleItem_manualCost').value;
             itemObject.IsInventory = document.getElementById('articleItem_Inventory').checked;
             itemObject.Particulars = document.getElementById('articleItem_particulars').value;
-            itemObject.DateAcquired = dateAcquired.value.toLocaleDateString();
+            itemObject.DateAcquired = dateAcquired.value;
             //itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
             //itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
             itemObject.ManualArticleOldCode = document.getElementById('articleItem_oldManualCode').value;

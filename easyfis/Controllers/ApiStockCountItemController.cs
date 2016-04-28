@@ -15,8 +15,9 @@ namespace easyfis.Controllers
         // =====================
         // LIST Stock Count Item
         // =====================
-        [Route("api/listStockCountItem")]
-        public List<Models.TrnStockCountItem> Get()
+        [HttpGet]
+        [Route("api/stockCountItem/list")]
+        public List<Models.TrnStockCountItem> listStockCountItem()
         {
             var stockCountItems = from d in db.TrnStockCountItems
                                   select new Models.TrnStockCountItem
@@ -34,8 +35,9 @@ namespace easyfis.Controllers
         // =============================
         // LIST Stock Count Item by SCId
         // =============================
-        [Route("api/listStockCountItemBySCId/{SCId}")]
-        public List<Models.TrnStockCountItem> GetStockCountItemBySCId(String SCId)
+        [HttpGet]
+        [Route("api/stockCountItem/listBySCId/{SCId}")]
+        public List<Models.TrnStockCountItem> getStockCountItemBySCId(String SCId)
         {
             var stockCountItems = from d in db.TrnStockCountItems
                                   where d.SCId == Convert.ToInt32(SCId)
@@ -54,8 +56,9 @@ namespace easyfis.Controllers
         // ====================
         // ADD Stock Count Item
         // ====================
-        [Route("api/addStockCountItem")]
-        public int Post(Models.TrnStockCountItem stockCountItem)
+        [HttpPost]
+        [Route("api/stockCountItem/add")]
+        public int addStockCountItem(Models.TrnStockCountItem stockCountItem)
         {
             try
             {
@@ -80,17 +83,17 @@ namespace easyfis.Controllers
         // =======================
         // UPDATE Stock Count Item
         // =======================
-        [Route("api/updateStockCountItem/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnStockCountItem stockCountItem)
+        [HttpPut]
+        [Route("api/stockCountItem/update/{id}")]
+        public HttpResponseMessage updateStockCountItem(String id, Models.TrnStockCountItem stockCountItem)
         {
             try
             {
                 var stockCountItems = from d in db.TrnStockCountItems where d.Id == Convert.ToInt32(id) select d;
-
                 if (stockCountItems.Any())
                 {
                     var updateStockCountItem = stockCountItems.FirstOrDefault();
-
+                    
                     updateStockCountItem.SCId = stockCountItem.SCId;
                     updateStockCountItem.ItemId = stockCountItem.ItemId;
                     updateStockCountItem.Particulars = stockCountItem.Particulars;
@@ -114,13 +117,13 @@ namespace easyfis.Controllers
         // =======================
         // DELETE Stock Count Item
         // =======================
-        [Route("api/deleteStockCountItem/{id}")]
-        public HttpResponseMessage Delete(String id)
+        [HttpDelete]
+        [Route("api/stockCountItem/delete/{id}")]
+        public HttpResponseMessage deleteStockCountItem(String id)
         {
             try
             {
                 var stockCountItems = from d in db.TrnStockCountItems where d.Id == Convert.ToInt32(id) select d;
-
                 if (stockCountItems.Any())
                 {
                     db.TrnStockCountItems.DeleteOnSubmit(stockCountItems.First());

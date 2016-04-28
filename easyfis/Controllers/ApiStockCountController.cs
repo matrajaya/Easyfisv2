@@ -14,7 +14,7 @@ namespace easyfis.Controllers
         private DateTime date = DateTime.Now;
 
         // ====================
-        // Get Current User (Id)
+        // GET Current User (Id)
         // ====================
         public Int32 currentUserId()
         {
@@ -27,8 +27,9 @@ namespace easyfis.Controllers
         // ================
         // LIST Stock Count
         // ================
+        [HttpGet]
         [Route("api/stockCount/list")]
-        public List<Models.TrnStockCount> ListStockCount()
+        public List<Models.TrnStockCount> listStockCount()
         {
             var stockCounts = from d in db.TrnStockCounts
                               select new Models.TrnStockCount
@@ -59,8 +60,9 @@ namespace easyfis.Controllers
         // ==========================
         // LIST Stock Count by SCDate
         // ==========================
+        [HttpGet]
         [Route("api/stockCount/listBySCDate/{SCDate}")]
-        public List<Models.TrnStockCount> ListStockCountBySCDate()
+        public List<Models.TrnStockCount> listStockCountBySCDate()
         {
             var stockCounts = from d in db.TrnStockCounts
                               select new Models.TrnStockCount
@@ -89,10 +91,11 @@ namespace easyfis.Controllers
         }
 
         // =====================
-        // Get Stock Count by Id
+        // GET Stock Count by Id
         // =====================
+        [HttpGet]
         [Route("api/stockCount/getById/{Id}")]
-        public Models.TrnStockCount GetStockCountById(String Id)
+        public Models.TrnStockCount getStockCountById(String Id)
         {
             var stockCounts = from d in db.TrnStockCounts
                               where d.Id == Convert.ToInt32(Id)
@@ -121,11 +124,48 @@ namespace easyfis.Controllers
             return (Models.TrnStockCount)stockCounts.FirstOrDefault();
         }
 
+
+        // ===========================
+        // GET Stock Count by BranchId
+        // ===========================
+        [HttpGet]
+        [Route("api/stockCount/listByBranchId/{branchId}")]
+        public List<Models.TrnStockCount> listStockCountById(String branchId)
+        {
+            var stockCounts = from d in db.TrnStockCounts
+                              where d.Id == Convert.ToInt32(branchId)
+                              select new Models.TrnStockCount
+                              {
+                                  Id = d.Id,
+                                  BranchId = d.BranchId,
+                                  Branch = d.MstBranch.Branch,
+                                  SCNumber = d.SCNumber,
+                                  SCDate = d.SCDate.ToShortDateString(),
+                                  Particulars = d.Particulars,
+                                  PreparedBy = d.MstUser3.FullName,
+                                  PreparedById = d.PreparedById,
+                                  CheckedBy = d.MstUser1.FullName,
+                                  CheckedById = d.CheckedById,
+                                  ApprovedBy = d.MstUser.FullName,
+                                  ApprovedById = d.ApprovedById,
+                                  IsLocked = d.IsLocked,
+                                  CreatedById = d.CreatedById,
+                                  CreatedBy = d.MstUser2.FullName,
+                                  CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                  UpdatedById = d.UpdatedById,
+                                  UpdatedBy = d.MstUser4.FullName,
+                                  UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                              };
+            return stockCounts.ToList();
+        }
+
+
         // ====================
-        // Get last Stock Count
+        // GET last Stock Count
         // ====================
+        [HttpGet]
         [Route("api/stockCount/getLast")]
-        public Models.TrnStockCount GetLastStockCount()
+        public Models.TrnStockCount getLastStockCount()
         {
             var stockCounts = from d in db.TrnStockCounts.OrderByDescending(d => d.Id)
                               select new Models.TrnStockCount
@@ -156,8 +196,9 @@ namespace easyfis.Controllers
         // ===============
         // ADD Stock Count
         // ===============
+        [HttpPost]
         [Route("api/stockCount/add")]
-        public int Post(Models.TrnStockCount stockCount)
+        public int addStockCount(Models.TrnStockCount stockCount)
         {
             try
             {
@@ -189,8 +230,9 @@ namespace easyfis.Controllers
         // ==================
         // UPDATE Stock Count
         // ==================
+        [HttpPut]
         [Route("api/stockCount/update/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnStockCount stockCount)
+        public HttpResponseMessage updateStockCount(String id, Models.TrnStockCount stockCount)
         {
             try
             {
@@ -226,10 +268,11 @@ namespace easyfis.Controllers
         }
 
         // ==================
-        // Unlock Stock Count
+        // UNLOCK Stock Count
         // ==================
+        [HttpPut]
         [Route("api/stockCount/unlock/{id}")]
-        public HttpResponseMessage PutUnlockStockCount(String id)
+        public HttpResponseMessage unlockStockCount(String id)
         {
             try
             {
@@ -261,8 +304,9 @@ namespace easyfis.Controllers
         // ==================
         // DELETE Stock Count
         // ==================
+        [HttpDelete]
         [Route("api/stockCount/delete/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteStockCount(String id)
         {
             try
             {

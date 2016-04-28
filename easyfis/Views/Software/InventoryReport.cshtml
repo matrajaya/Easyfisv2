@@ -42,12 +42,15 @@
                         <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
                             <li class="active"><a data-toggle="pill" href="#Inventory">Inventory</a></li>
                             <li><a data-toggle="pill" href="#SC">Stock Card</a></li>
+                            <li class="reportDivider"></li>
                             <li><a data-toggle="pill" href="#SIDR">Stock-in Detail Report</a></li>
                             <li><a data-toggle="pill" href="#SODR">Stock-out Detail Report</a></li>
                             <li><a data-toggle="pill" href="#STDR">Stock Transfer Detail Report</a></li>
+                            <li class="reportDivider"></li>
                             <li><a data-toggle="pill" href="#IL">Item List</a></li>
                             <li><a data-toggle="pill" href="#ICL">Item Component List</a></li>
                             <li><a data-toggle="pill" href="#PCS">Physical Count Sheet</a></li>
+                            <li class="reportDivider"></li>
                             <li><a data-toggle="pill" href="#FAR">Fixed Assets Report</a></li>
                         </ul>
                     </div>
@@ -143,8 +146,8 @@
                             </div>
                             <div id="SC" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportStockCardPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="InventoryReportStockCardPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -164,13 +167,22 @@
                                                         <input type="hidden" id="stockCard_EndDate_data" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     <label class="control-label col-sm-2">Company</label>
                                                     <div class="col-sm-6">
                                                         <div class="comboBox-wide" id="StockCard_Company"></div>
 
                                                         <input type="hidden" id="StockCard_Company_data" />
                                                         <input type="hidden" id="StockCard_Company_selectedValue" />
+                                                    </div>
+                                                </div>*@
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Branch</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="StockCard_Branch"></div>
+
+                                                        <input type="hidden" id="StockCard_Branch_data" />
+                                                        <input type="hidden" id="StockCard_Branch_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -202,7 +214,7 @@
                                                 <form class="form-horizontal" role="form">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="form-group">
+                                                            @*<div class="form-group">
                                                                 <label class="control-label col-sm-2">Branch</label>
                                                                 <div class="col-sm-6">
                                                                     <div class="comboBox-wide" id="StockCard_Branch"></div>
@@ -210,7 +222,7 @@
                                                                     <input type="hidden" id="StockCard_Branch_data" />
                                                                     <input type="hidden" id="StockCard_Branch_selectedValue" />
                                                                 </div>
-                                                            </div>
+                                                            </div>*@
                                                             <div class="form-group">
                                                                 <label class="control-label col-sm-2">Stock Count No.</label>
                                                                 <div class="col-sm-6">
@@ -779,22 +791,22 @@
                 }
             });
 
-            // Stock Card
-            cboStockCardCompany.dispose();
-            cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('StockCard_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#StockCard_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+            //// Stock Card
+            //cboStockCardCompany.dispose();
+            //cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company', {
+            //    placeholder: "Select Company",
+            //    itemsSource: companyList,
+            //    isEditable: false,
+            //    required: false,
+            //    selectedValue: document.getElementById('StockCard_Company_selectedValue').value.toString(),
+            //    onSelectedIndexChanged: function () {
+            //        $("#StockCard_Company_data").val(companyCollection.items[this.selectedIndex].Id);
 
-                    document.getElementById('StockCard_Branch_data').value = "";
-                    getBranchesForStockCard();
-                    getStockCountForStockCard();
-                }
-            });
+            //        document.getElementById('StockCard_Branch_data').value = "";
+            //        getBranchesForStockCard();
+            //        getStockCountForStockCard();
+            //    }
+            //});
 
             // Stock In
             cboStockInCompany.dispose();
@@ -958,7 +970,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1118,7 +1130,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1191,15 +1203,15 @@
         function getBranchesForStockCard() {
             branches = new wijmo.collections.ObservableArray();
 
-            var companyId;
-            if (document.getElementById('StockCard_Company_data').value == "") {
-                companyId = 0;
-            } else {
-                companyId = document.getElementById('StockCard_Company_data').value;
-            }
+            //var companyId;
+            //if (document.getElementById('StockCard_Company_data').value == "") {
+            //    companyId = 0;
+            //} else {
+            //    companyId = document.getElementById('StockCard_Company_data').value;
+            //}
 
             $.ajax({
-                url: '/api/listBranchByCompanyId/' + companyId,
+                url: '/api/listBranch',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1278,7 +1290,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1438,7 +1450,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1598,7 +1610,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1758,7 +1770,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -2301,7 +2313,6 @@
             });
         }
 
-
         function InventoryReportPDF_OnClick() {
             var inventoryReportStartDate = document.getElementById('inventory_StartDate_data').value;
             var inventoryReportEndDate = document.getElementById('inventory_EndDate_data').value;
@@ -2315,6 +2326,32 @@
                 companyId = document.getElementById('Inventory_Company_data').value;
                 document.getElementById('Inventory_Company').style.border = " ";
                 window.location.href = '/Software/InventoryReportPDF?StartDate=' + inventoryReportStartDate + '&EndDate=' + inventoryReportEndDate + '&CompanyId=' + companyId;
+            }
+        }
+        
+        function InventoryReportStockCardPDF_OnClick() {
+            var inventoryReportStartDate = document.getElementById('stockCard_StartDate_data').value;
+            var inventoryReportEndDate = document.getElementById('stockCard_EndDate_data').value;
+
+            var branchId;
+            var itemId;
+            if (document.getElementById('StockCard_Branch_data').value == "") {
+                branchId = 0;
+                document.getElementById('StockCard_Branch').style.border = "1px solid red";
+                document.getElementById('Items_Item').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else if(document.getElementById("Items_Item_data").value == "") {
+                itemId = 0;
+                document.getElementById('StockCard_Branch').style.border = "1px solid red";
+                document.getElementById('Items_Item').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                branchId = document.getElementById('StockCard_Branch_data').value;
+                itemId = document.getElementById("Items_Item_data").value;
+
+                document.getElementById('StockCard_Branch').style.border = " ";
+                document.getElementById('Items_Item').style.border = " ";
+                window.location.href = '/Software/InventoryReportStockCardPDF?StartDate=' + inventoryReportStartDate + '&EndDate=' + inventoryReportEndDate + '&BranchId=' + branchId + '&ItemId=' + itemId;
             }
         }
 
@@ -2391,7 +2428,7 @@
             cboIventoryItemGroup = new wijmo.input.ComboBox('#Inventory_ItemGroup');
 
             // Wijmo CBO Combo Box for Stock Card
-            cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company');
+            //cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company');
             cboItems = new wijmo.input.ComboBox('#Items_Item');
             cboStockCardBranches = new wijmo.input.ComboBox('#StockCard_Branch');
             cboStockCountForStockCard = new wijmo.input.ComboBox('#StockCard_StockCountNo');
