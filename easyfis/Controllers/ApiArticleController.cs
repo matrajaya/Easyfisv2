@@ -684,8 +684,8 @@ namespace easyfis.Controllers
                     newArticle.TaxNumber = "NA";
                     newArticle.CreditLimit = 0;
                     newArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
-                    newArticle.UsefulLife = 0;
-                    newArticle.SalvageValue = 0;
+                    newArticle.UsefulLife = article.UsefulLife;
+                    newArticle.SalvageValue = article.SalvageValue;
                     newArticle.ManualArticleOldCode = article.ManualArticleOldCode;
                     newArticle.IsLocked = false;
                     newArticle.CreatedById = mstUserId;
@@ -823,8 +823,8 @@ namespace easyfis.Controllers
                         updateArticle.TermId = db.MstTerms.FirstOrDefault().Id;
                         updateArticle.CreditLimit = 0;
                         updateArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
-                        updateArticle.UsefulLife = 0;
-                        updateArticle.SalvageValue = 0;
+                        updateArticle.UsefulLife = article.UsefulLife;
+                        updateArticle.SalvageValue = article.SalvageValue;
                         updateArticle.ManualArticleOldCode = article.ManualArticleOldCode;
                         updateArticle.IsLocked = true;
                         updateArticle.UpdatedById = mstUserId;

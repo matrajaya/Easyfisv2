@@ -31,5 +31,12 @@ namespace easyfis.Models
         public Decimal EndQuantity { get; set; }
 
         public String Document { get; set; }
+
+        public String DateAquired { get; set; }
+        public Decimal NoOfYears { get; set; }
+        public Decimal SalvageValue { get; set; }
+        public Decimal AccumulatedDepreciation { get; set; }
+        public Decimal AdjustedTotalAmount { get; set; }
+        
     }
 }

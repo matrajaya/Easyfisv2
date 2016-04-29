@@ -1050,8 +1050,8 @@
             itemObject.IsInventory = document.getElementById('articleItem_Inventory').checked;
             itemObject.Particulars = document.getElementById('articleItem_particulars').value;
             itemObject.DateAcquired = dateAcquired.value;
-            //itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
-            //itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
+            itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
+            itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
             itemObject.ManualArticleOldCode = document.getElementById('articleItem_oldManualCode').value;
             var data = JSON.stringify(itemObject);
             return data;
