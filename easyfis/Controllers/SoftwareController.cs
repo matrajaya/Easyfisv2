@@ -9584,6 +9584,12 @@ namespace easyfis.Controllers
             return CheckCookie();
         }
 
+        [Authorize]
+        public ActionResult StockCountDetail()
+        {
+            return CheckCookie();
+        }
+
         public BaseColor ColorGrey { get; set; }
     }
 }

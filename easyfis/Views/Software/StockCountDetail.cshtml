@@ -1,0 +1,613 @@
+﻿@{
+    var userId = ViewData["UserId"];
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- Title of the Page -->
+    <title>StockCount</title>
+
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Content/Software-css")
+</head>
+<body>
+    <div id="o-wrapper" class="o-wrapper">
+        <!-- Header -->
+        @Html.Partial("_SoftwareHeader")
+
+        <!-- Section -->
+        <section>
+            <div class="sub-nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><i class="fa fa-cubes"></i> Stock Count Detail</h4>
+                        </div>
+                        <div class="col-md-6" align="right">
+                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="div_Current_Page">
+                    <div class="container">
+                        <a href="/Software" class="currentPageLinkCustom">Main Menu</a> > <a href="/Software/StockCount" class="currentPageLinkCustom">Stock Count</a> > Stock Count Detail
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 id="stockInDetailLabel"></h4>
+                    </div>
+                    <div class="col-md-6" align="right">
+                        <button class="btn btn-primary btn-sm" id="btnIdStockCountDetailSave" onclick="btnOnclickStockCountDetailSave()"><i class=" fa fa-save"></i> Save</button>
+                        <button class="btn btn-primary btn-sm" id="btnIdStockCountDetailLock" onclick="btnOnclickStockCountDetailLock()"><i class=" fa fa-lock"></i> Lock</button>
+                        <button class="btn btn-primary btn-sm" id="btnIdStockCountDetailUnlock" onclick="btnOnclickStockCountDetailUnlock()"><i class=" fa fa-unlock"></i> Unlock</button>
+                        <button class="btn btn-primary btn-sm" id="btnIdStockCountDetailPrint" onclick="btnOnclickStockCountDetailPrint()"><i class="fa fa-print"></i> Print</button>
+                        <button class="btn btn-danger btn-sm" id="btnIdStockCountDetailClose" onclick="window.location.href='/Software/StockCount'"><i class="fa fa-times"></i> Close</button>
+                    </div>
+                </div>
+                <div class="well">
+                    <form class="form-horizontal" role="form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Branch</label>
+                                    <div class="col-sm-8">
+                                        <div class="comboBox-wide" id="divIdStockCountDetailCboBranch"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">SC Number</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control input-sm requiredStockCount" id="inputIdStockCountDetailSCNumber" placeholder="SC Number" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">SC Date</label>
+                                    <div class="col-sm-8">
+                                        <div class="comboBox-wide" id="divIdStockCountDetailCboSCDate"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Particulars</label>
+                                    <div class="col-sm-8">
+                                        <textarea class="form-control textarea-custom requiredStockCount" id="txtAreaStockCountDetailParticulars" placeholder="Particulars"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Prepared by</label>
+                                    <div class="col-sm-8">
+                                        <div class="comboBox-wide" id="divIdStockCountDetailPreparedBy"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Checked by</label>
+                                    <div class="col-sm-8">
+                                        <div class="comboBox-wide" id="divIdStockCountDetailCheckedBy"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-sm-4">Approved by</label>
+                                    <div class="col-sm-8">
+                                        <div class="comboBox-wide" id="divIdStockCountDetailApprovedBy"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <ul class="nav nav-tabs" role="tablist" id="myTab">
+                    <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
+                </ul>
+                <br />
+                <div class="tab-content">
+                    <div id="Items" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-lg-12" align="right">
+                                <button class="btn btn-primary btn-sm" id="btnIdStockCountItemAdd" onclick="btnOnclickStockCountItemAdd()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="divIdStockCountItemGrid" class="grid"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
+    </div>
+
+    <!-- SideBar Menu -->
+    @Html.Partial("_SoftwareSideBarMenu")
+
+    <!-- c-mask -->
+    <div id="c-mask" class="c-mask"></div>
+
+    <!-- Scripts -->
+    @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        // Global Variables
+        var cboBranch;
+        var branchSelectedValue = "";
+        var cboSCDate;
+        var cboPreparedBy;
+        var preparedBySelectedValue = "";
+        var cboCheckedBy
+        var checkedBySelectedValue = "";
+        var cboApprovedBy;
+        var approvedBySelectedValue = "";
+        var isLocked = false;
+
+        // Get URL Parameter Value
+        function getParameterValue(parameterName) {
+            parameterName = parameterName.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + parameterName + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null) {
+                return "";
+            } else {
+                return results[1];
+            }
+        }
+
+        // read Cookie
+        function readCookie(cookieName) {
+            var nameEQ = cookieName + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
+        // GET Stock Count by Id
+        function getStockCountById() {
+            document.getElementById("inputIdStockCountDetailSCNumber").disabled = true;
+            NProgress.start();
+            if (document.location.search.length > 0) {
+                $("#btnIdStockCountDetailSave").hide();
+                $.ajax({
+                    url: '/api/stockCount/getById/' + getParameterValue("Id"),
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (stockCountResults) {
+                        if (stockCountResults != null) {
+                            branchSelectedValue = stockCountResults.Branch;
+                            document.getElementById("inputIdStockCountDetailSCNumber").value = stockCountResults.SCNumber;
+
+                            var SCDate = stockCountResults.SCDate;
+                            cboSCDate.dispose();
+                            cboSCDate = new wijmo.input.InputDate('#divIdStockCountDetailCboSCDate', {
+                                format: 'MM/dd/yyyy',
+                                value: new Date(SCDate),
+                                mask: '99/99/9999',
+                            });
+
+                            document.getElementById("txtAreaStockCountDetailParticulars").value = stockCountResults.Particulars;
+                            preparedBySelectedValue = stockCountResults.PreparedBy;
+                            checkedBySelectedValue = stockCountResults.CheckedBy;
+                            approvedBySelectedValue = stockCountResults.ApprovedBy;
+
+                            if (stockCountResults.IsLocked == true) {
+                                $("#btnIdStockCountDetailLock").prop("disabled", true);
+                                document.getElementById("txtAreaStockCountDetailParticulars").disabled = true;
+                                cboSCDate.disabled = true;
+                                isLocked = true;
+                            } else {
+                                $("#btnIdStockCountDetailUnlock").prop("disabled", true);
+                                $("#btnIdStockCountDetailPrint").prop("disabled", true);
+                            }
+
+                            NProgress.done();
+                        }
+
+                        getBranch();
+                        getUsers();
+                    }
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            } else {
+                $("#btnIdStockCountDetailLock").hide();
+                $("#btnIdStockCountDetailUnlock").hide();
+                $("#btnIdStockCountDetailPrint").hide();
+
+                getBranch();
+                getLastStockCount();
+                getUsers();
+
+                NProgress.done();
+            }
+        }
+
+        // Get Branch By Id
+        function getBranch() {
+            var branches = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listBranch',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (listBranchresults) {
+                    if (listBranchresults.length > 0) {
+                        for (i = 0; i < listBranchresults.length; i++) {
+                            branches.push({
+                                Id: listBranchresults[i]["Id"],
+                                Branch: listBranchresults[i]["Branch"]
+                            });
+                        }
+
+                        if (document.location.search.length == 0) {
+                            $.ajax({
+                                url: '/api/listBranchById/' + readCookie("branchId"),
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (getBranchByIdResults) {
+                                    if (getBranchByIdResults != null) {
+                                        branchSelectedValue = getBranchByIdResults.Branch;
+                                        console.log("here..")
+                                        createCboBranch(branches);
+                                    }
+                                }
+                            });
+                        } else {
+                            createCboBranch(branches);
+                        }
+                    } else {
+                        createCboBranch(branches);
+                    }
+                }
+            });
+        }
+
+        // Create combo box for branch
+        function createCboBranch(branches) {
+            cboBranch.dispose();
+            cboBranch = new wijmo.input.ComboBox('#divIdStockCountDetailCboBranch', {
+                disabled: true,
+                placeholder: "Branch",
+                itemsSource: branches,
+                displayMemberPath: "Branch",
+                isEditable: false,
+                selectedValuePath: "Branch",
+                selectedValue: branchSelectedValue.toString()
+            });
+        }
+
+        // GET Users for Combo Box
+        function getUsers() {
+            users = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUser',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (listUserResults) {
+                    if (listUserResults.length > 0) {
+                        for (i = 0; i < listUserResults.length; i++) {
+                            users.push({
+                                Id: listUserResults[i]["Id"],
+                                FullName: listUserResults[i]["FullName"]
+                            });
+                        }
+
+                        if (document.location.search.length == 0) {
+                            var userId = "@userId";
+                            $.ajax({
+                                url: '/api/listByMstUserId/' + userId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (listUserByIdresults) {
+                                    if (listUserByIdresults.length > 0) {
+                                        users.push({
+                                            Id: listUserByIdresults.Id,
+                                            FullName: listUserByIdresults.FullName
+                                        });
+                                    }
+
+                                    preparedBySelectedValue = listUserByIdresults.FullName;
+                                    createCboUser(users);
+                                }
+                            });
+                        } else {
+                            createCboUser(users);
+                        }
+                    } else {
+                        createCboUser(users);
+                    }
+                }
+            });
+        }
+
+        // Prepared by, Checked by, Approved by (Users)
+        function createCboUser(users) {
+            cboPreparedBy.dispose();
+            cboPreparedBy = new wijmo.input.ComboBox('#divIdStockCountDetailPreparedBy', {
+                disabled: true,
+                placeholder: "Prepared by",
+                itemsSource: users,
+                displayMemberPath: "FullName",
+                isEditable: false,
+                selectedValuePath: "FullName",
+                selectedValue: preparedBySelectedValue.toString()
+            });
+
+            cboCheckedBy.dispose();
+            cboCheckedBy = new wijmo.input.ComboBox('#divIdStockCountDetailCheckedBy', {
+                disabled: isLocked,
+                placeholder: "Checked by",
+                itemsSource: users,
+                displayMemberPath: "FullName",
+                isEditable: false,
+                selectedValuePath: "FullName",
+                selectedValue: checkedBySelectedValue.toString()
+            });
+
+            cboApprovedBy.dispose();
+            cboApprovedBy = new wijmo.input.ComboBox('#divIdStockCountDetailApprovedBy', {
+                disabled: isLocked,
+                placeholder: "Approved by",
+                itemsSource: users,
+                displayMemberPath: "FullName",
+                isEditable: false,
+                selectedValuePath: "FullName",
+                selectedValue: approvedBySelectedValue.toString()
+            });
+        }
+
+        // Function with leading zeroes to display the SC Number
+        function zerofill(number, length) {
+            var result = number.toString();
+            var pad = length - result.length;
+            while (pad > 0) {
+                result = '0' + result;
+                pad--;
+            }
+            return result;
+        }
+
+        // Get Last Stock Count
+        function getLastStockCount() {
+            $.ajax({
+                url: '/api/stockCount/getLast',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (lastStockCountResults) {
+                    if (lastStockCountResults != null) {
+                        var SCNumber = parseInt(lastStockCountResults.SCNumber) + 0000000001;
+                        document.getElementById('inputIdStockCountDetailSCNumber').value = zerofill(SCNumber, 10);
+                    } else {
+                        document.getElementById('inputIdStockCountDetailSCNumber').value = "0000000001";
+                    }
+                }
+            });
+        }
+
+        // ====================
+        // GET Stock In Last Id
+        // ====================
+        function getLastInsertedStockCount() {
+            $.ajax({
+                url: '/api/stockCount/getLast',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (lastStockCountResults) {
+                    window.location = '/Software/StockCountDetail?Id=' + lastStockCountResults.Id;
+                    window.setTimeout(function () { location.reload() }, 1000);
+                }
+            });
+        }
+
+
+        // Form Validation
+        function stockCountValidation() {
+            var isValid = true;
+            $(".requiredStockCount").each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                } else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            return isValid;
+        }
+
+        // Stock Count Data
+        function stockCountData() {
+            var stockCountObject = new Object();
+            stockCountObject.BranchId = cboBranch.selectedItem["Id"];
+            stockCountObject.SCNumber = document.getElementById("inputIdStockCountDetailSCNumber").value;
+            stockCountObject.SCDate = cboSCDate.value.toLocaleDateString();
+            stockCountObject.Particulars = document.getElementById("txtAreaStockCountDetailParticulars").value;
+            stockCountObject.PreparedById = cboPreparedBy.selectedItem["Id"];
+            stockCountObject.CheckedById = cboCheckedBy.selectedItem["Id"];
+            stockCountObject.ApprovedById = cboApprovedBy.selectedItem["Id"];
+            return JSON.stringify(stockCountObject);
+        }
+
+        // SAVE Stock Count
+        function btnOnclickStockCountDetailSave() {
+            if (stockCountValidation()) {
+                $("#btnIdStockCountDetailSave").prop("disabled", true);
+                $("#btnIdStockCountDetailLock").prop("disabled", true);
+                $("#btnIdStockCountDetailUnlock").prop("disabled", true);
+                $("#btnIdStockCountDetailPrint").prop("disabled", true);
+                $("#btnIdStockCountDetailClose").prop("disabled", true);
+                document.getElementById("btnIdStockCountDetailSave").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/stockCount/save',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: stockCountData(),
+                    statusCode: {
+                        200: function () {
+                            toastr.success("Successfully Saved");
+                            setTimeout(getLastInsertedStockCount, 1000);
+                        },
+                        404: function () {
+                            $("#btnIdStockCountDetailSave").prop("disabled", false);
+                            $("#btnIdStockCountDetailLock").prop("disabled", true);
+                            $("#btnIdStockCountDetailUnlock").prop("disabled", true);
+                            $("#btnIdStockCountDetailPrint").prop("disabled", true);
+                            $("#btnIdStockCountDetailClose").prop("disabled", false);
+                            document.getElementById("btnIdStockCountDetailSave").innerHTML = "<i class='fa fa-save'></i> Save";
+                            toastr.error("Not Found");
+                        },
+                        400: function () {
+                            $("#btnIdStockCountDetailSave").prop("disabled", false);
+                            $("#btnIdStockCountDetailLock").prop("disabled", true);
+                            $("#btnIdStockCountDetailUnlock").prop("disabled", true);
+                            $("#btnIdStockCountDetailPrint").prop("disabled", true);
+                            $("#btnIdStockCountDetailClose").prop("disabled", false);
+                            document.getElementById("btnIdStockCountDetailSave").innerHTML = "<i class='fa fa-save'></i> Save";
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+            } else {
+                toastr.error("Invalid Entry");
+            }
+        }
+
+        // Lock Stock Count
+        function btnOnclickStockCountDetailLock() {
+            if (stockCountValidation()) {
+                $("#btnIdStockCountDetailSave").prop("disabled", true);
+                $("#btnIdStockCountDetailLock").prop("disabled", true);
+                $("#btnIdStockCountDetailUnlock").prop("disabled", true);
+                $("#btnIdStockCountDetailPrint").prop("disabled", true);
+                $("#btnIdStockCountDetailClose").prop("disabled", true);
+                document.getElementById("btnIdStockCountDetailLock").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/stockCount/lock/' + getParameterValue("Id"),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: stockCountData(),
+                    statusCode: {
+                        200: function () {
+                            toastr.success("Locked");
+                            window.setTimeout(function () { location.reload() }, 1000);
+                        },
+                        404: function () {
+                            $("#btnIdStockCountDetailSave").prop("disabled", true);
+                            $("#btnIdStockCountDetailLock").prop("disabled", false);
+                            $("#btnIdStockCountDetailUnlock").prop("disabled", true);
+                            $("#btnIdStockCountDetailPrint").prop("disabled", true);
+                            $("#btnIdStockCountDetailClose").prop("disabled", false);
+                            document.getElementById("btnIdStockCountDetailLock").innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            toastr.error("Not Found");
+                        },
+                        400: function () {
+                            $("#btnIdStockCountDetailSave").prop("disabled", true);
+                            $("#btnIdStockCountDetailLock").prop("disabled", false);
+                            $("#btnIdStockCountDetailUnlock").prop("disabled", true);
+                            $("#btnIdStockCountDetailPrint").prop("disabled", true);
+                            $("#btnIdStockCountDetailClose").prop("disabled", false);
+                            document.getElementById("btnIdStockCountDetailLock").innerHTML = "<i class='fa fa-lock'></i> Lock";
+                            toastr.error("Bad Request");
+                        }
+                    }
+                });
+            } else {
+                toastr.error("Invalid Entry");
+            }
+        }
+
+        // Unlock Stock Count
+        function btnOnclickStockCountDetailUnlock() {
+            $("#btnIdStockCountDetailSave").prop("disabled", true);
+            $("#btnIdStockCountDetailLock").prop("disabled", true);
+            $("#btnIdStockCountDetailUnlock").prop("disabled", true);
+            $("#btnIdStockCountDetailPrint").prop("disabled", true);
+            $("#btnIdStockCountDetailClose").prop("disabled", true);
+            document.getElementById("btnIdStockCountDetailUnlock").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+
+            $.ajax({
+                type: "PUT",
+                url: '/api/stockCount/unlock/' + getParameterValue("Id"),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        toastr.success("Unlocked");
+                        window.setTimeout(function () { location.reload() }, 1000);
+                    },
+                    404: function () {
+                        $("#btnIdStockCountDetailSave").prop("disabled", true);
+                        $("#btnIdStockCountDetailLock").prop("disabled", true);
+                        $("#btnIdStockCountDetailUnlock").prop("disabled", false);
+                        $("#btnIdStockCountDetailPrint").prop("disabled", false);
+                        $("#btnIdStockCountDetailClose").prop("disabled", false);
+                        document.getElementById("btnIdStockCountDetailUnlock").innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        toastr.error("Not Found");
+                    },
+                    400: function () {
+                        $("#btnIdStockCountDetailSave").prop("disabled", true);
+                        $("#btnIdStockCountDetailLock").prop("disabled", true);
+                        $("#btnIdStockCountDetailUnlock").prop("disabled", false);
+                        $("#btnIdStockCountDetailPrint").prop("disabled", false);
+                        $("#btnIdStockCountDetailClose").prop("disabled", false);
+                        document.getElementById("btnIdStockCountDetailUnlock").innerHTML = "<i class='fa fa-unlock'></i> Unlock";
+                        toastr.error("Bad Request");
+                    }
+                }
+            });
+        }
+
+
+        // On Load Page
+        $(document).ready(function () {
+            // Drop down fields
+            cboSCDate = new wijmo.input.InputDate('#divIdStockCountDetailCboSCDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(),
+                mask: '99/99/9999',
+            });
+            cboBranch = new wijmo.input.ComboBox('#divIdStockCountDetailCboBranch');
+            cboPreparedBy = new wijmo.input.ComboBox('#divIdStockCountDetailPreparedBy');
+            cboCheckedBy = new wijmo.input.ComboBox('#divIdStockCountDetailCheckedBy');
+            cboApprovedBy = new wijmo.input.ComboBox('#divIdStockCountDetailApprovedBy');
+
+            // call stock Count
+            getStockCountById();
+        });
+    </script>
+</body>
+</html>

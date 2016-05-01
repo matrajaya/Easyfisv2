@@ -4,7 +4,6 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>StockCount</title>
@@ -32,7 +31,7 @@
                 </div>
                 <div class="div_Current_Page">
                     <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Stock Count
+                        <a href="/Software" class="currentPageLinkCustom">Main Menu</a> > Stock Count
                     </div>
                 </div>
             </div>
@@ -53,8 +52,8 @@
                         </div>
                     </div>
                     <div class="col-lg-8" align="right">
-                        <button class="btn btn-primary btn-sm" onclick="btnOnClickStockCountAdd()"><i class="fa fa-plus"></i> Add</button>
-                        <button class="btn btn-danger btn-sm" onclick="btnOnclickStockCountClose()"><i class=" fa fa-times"></i> Close</button>
+                        <a href="/Software/StockCountDetail" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
+                        <a href="/Software" class="btn btn-danger btn-sm"><i class=" fa fa-times"></i> Close</a>
                     </div>
                 </div>
                 <br />
@@ -112,10 +111,10 @@
                         <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
                     </div>
                     <div class="modal-body">
-                        <i class="fa fa-warning"></i> Sorry, the record is lock. Cannot be deleted.
+                        Sorry, the record is lock. Cannot be deleted.
                     </div>
                     <div class="modal-footer">
-                        <button id="btnIdStockCountDeleteLockModalOkay" class="btn btn-primary btn-sm" data-dismiss="modal"> OK</button>
+                        <button id="btnIdStockCountDeleteLockModalOkay" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
                     </div>
                 </div>
             </div>
@@ -130,28 +129,28 @@
 
     <!-- c-mask -->
     <div id="c-mask" class="c-mask"></div>
+
+    <!-- Scripts -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // Global Variables
         var stockCounts;
         var stockCountGrid;
-
         var btnStockCountFirstPageGrid;
         var btnStockCountPreviousPageGrid;
         var btnStockCountNextPageGrid;
         var btnStockCountLastPageGrid;
         var btnStockCountCurrentPageGrid;
-        var isFirstSelect = true;
-
+        var cboFilterDateIsFirstSelect = true;
         var cboStockCountSCDate;
-
+        var stockCountSCDateValue;
 
         // List StockCount By SCDate
-        function listStockCountBySCDate(SCDate) {
+        function listStockCountBySCDateByBranchId(SCDate) {
             NProgress.start();
             var stockCounts = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/stockCount/listBySCDate/' + SCDate,
+                url: '/api/stockCount/listBySCDateByBranchId/' + SCDate,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -163,14 +162,14 @@
                             // Delete Lock
                             var btnDeleteOnClick;
                             if (stockCountResults[i]["IsLocked"] == true) {
-                                btnDeleteOnClick = "btnStockCountDeleteLockOnclick()";
+                                btnDeleteOnClick = "btnOnclickStockCountDeleteLock()";
                             } else {
-                                btnDeleteOnClick = "btnStockCountDeleteOnclick()";
+                                btnDeleteOnClick = "btnOnclickStockCountDelete()";
                             }
 
                             // Array Push
                             stockCounts.push({
-                                Edit: "<button class='btn btn-primary btn-xs btn-block' id='btnStockCountEdit' onclick='btnStockCountEditOnclick()'><i class='fa fa-edit'></i> Edit</button>",
+                                Edit: "<button class='btn btn-primary btn-xs btn-block' id='btnStockCountEdit' onclick='btnOnclickStockCountEdit()'><i class='fa fa-edit'></i> Edit</button>",
                                 Delete: "<button class='btn btn-danger btn-xs btn-block' id='btnStockCountDelete' onclick='" + btnDeleteOnClick + "'><i class='fa fa-trash'></i> Delete</button>",
                                 Id: stockCountResults[i]["Id"],
                                 BranchId: stockCountResults[i]["BranchId"],
@@ -193,18 +192,78 @@
                                 UpdatedDateTime: stockCountResults[i]["UpdatedDateTime"]
                             });
                         }
-                        NProgress.done();
                     }
+                    NProgress.done();
                 }
             });
             return stockCounts;
         }
 
-        // Stock Count Close button
-        function btnOnclickStockCountClose() {
-            window.location = "/Software";
+        // Stock Count Edit
+        function btnOnclickStockCountEdit() {
+            stockCounts.editItem(stockCounts.currentItem);
+            var stockCount = stockCounts.currentEditItem;
+            var id = stockCount.Id;
+            window.location = '/Software/StockCountDetail?Id=' + id;
         }
 
+        // Stock Count Delete
+        function btnOnclickStockCountDelete() {
+            $('#divIdStockCountConfirmDeleteModal').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#btnIdStockCountConfirmDeleteModalDelete").prop("disabled", false);
+            $("#btnIdConfirmDeleteModalClose").prop("disabled", false);
+            document.getElementById("btnIdStockCountConfirmDeleteModalDelete").innerHTML = "<i class='fa fa-spinner fa-trash'></i> Delete";
+        }
+
+        // Stock Count Confirm Delete Button
+        function btnOnClickStockCountConfirmDeleteModalDelete() {
+            $("#btnIdStockCountConfirmDeleteModalDelete").prop("disabled", true);
+            $("#btnIdConfirmDeleteModalClose").prop("disabled", true);
+            document.getElementById("btnIdStockCountConfirmDeleteModalDelete").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+
+            stockCounts.editItem(stockCounts.currentItem);
+            var id = stockCounts.currentEditItem.Id;
+            $.ajax({
+                url: '/api/stockCount/delete/' + id,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        toastr.success("Successfully Deleted");
+                        $('#divIdStockCountConfirmDeleteModal').modal('hide');
+                        refreshStockCountFlexGrid(stockCountSCDateValue);
+                    },
+                    404: function () {
+                        toastr.error("Not Found");
+                        $('#divIdStockCountConfirmDeleteModal').modal('hide');
+                        $("#btnIdStockCountConfirmDeleteModalDelete").prop("disabled", false);
+                        document.getElementById("btnIdStockCountConfirmDeleteModalDelete").innerHTML = "<i class='fa fa-spinner fa-trash'></i> Delete";
+                        $("#btnIdConfirmDeleteModalClose").prop("disabled", false);
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#divIdStockCountConfirmDeleteModal').modal('hide');
+                        $("#btnIdStockCountConfirmDeleteModalDelete").prop("disabled", false);
+                        document.getElementById("btnIdStockCountConfirmDeleteModalDelete").innerHTML = "<i class='fa fa-spinner fa-trash'></i> Delete";
+                        $("#btnIdConfirmDeleteModalClose").prop("disabled", false);
+                    }
+                }
+            });
+        }
+
+        // Stock Count Delete Lock Record
+        function btnOnclickStockCountDeleteLock() {
+            $('#divIdStockCountDeleteLockModal').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+       
         // Navigation Buttons for Stock Count
         function updateNavigateButtonsStockCount() {
             if (stockCounts.pageSize <= 0) {
@@ -231,10 +290,7 @@
             btnStockCountCurrentPageGrid.innerHTML = (stockCounts.pageIndex + 1) + ' / ' + stockCounts.pageCount;
         }
 
-
-        // ===================
         // FlexGrid Selection
-        // ===================
         function updateSecurityStamp() {
             var item = stockCounts.currentItem;
             document.getElementById("createdBy").innerHTML = item.CreatedBy;
@@ -243,11 +299,47 @@
             document.getElementById("updatedDate").innerHTML = item.UpdatedDateTime;
         }
 
+        // Refresh the Stock Count FlexGrid
+        function refreshStockCountFlexGrid(stockCountSCDateValue) {
+            // Collection View
+            stockCounts = new wijmo.collections.CollectionView(listStockCountBySCDateByBranchId(stockCountSCDateValue));
+            stockCounts.canFilter = true;
+            stockCounts.pageSize = 15;
+
+            // Search (Filter) - Key event
+            var filterText = "";
+            $("#inputIdStockCountSearch").keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockCounts.refresh();
+            });
+
+            // Filter
+            stockCounts.filter = function (item) {
+                return !filterText || (item.SCNumber.toLowerCase().indexOf(filterText) > -1)
+                || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
+            }
+
+            // Navigation Buttons
+            stockCounts.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsStockCount();
+            });
+
+            // Security Stamp
+            stockCounts.currentChanged.addHandler(function (sender, args) {
+                updateSecurityStamp();
+            });
+
+            // Flex Grid
+            stockCountGrid.itemsSource = stockCounts;
+            stockCountGrid.trackChanges = true;
+
+            updateNavigateButtonsStockCount();
+        }
 
         // On load page
         $(document).ready(function () {
             var date = new Date();
-            var currentDate = [date.getMonth() + 1, date.getDate(), date.getFullYear()].join('-');
+            stockCountSCDateValue = [date.getMonth() + 1, date.getDate(), date.getFullYear()].join('-');
 
             // SC Date Dropdown
             cboStockCountSCDate = new wijmo.input.InputDate('#divIdStockCountSCDate', {
@@ -255,59 +347,39 @@
                 value: new Date(),
                 mask: '99/99/9999',
                 onValueChanged: function () {
-                    if (!isFirstSelect) {
-                        var currentDate = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                        
-                        // Collection View
-                        stockCounts = new wijmo.collections.CollectionView(listStockCountBySCDate(stockCountSCDateValue));
-                        stockCounts.canFilter = true;
-                        stockCounts.pageSize = 15;
-
-                        // Search (Filter)
-                        var filterText = "";
-                        $("#inputIdStockCountSearch").keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            stockCounts.refresh();
-                        });
-                        stockCounts.filter = function (item) {
-                            return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        stockCounts.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsStockCount();
-                        });
-
-                        stockCounts.currentChanged.addHandler(function (sender, args) {
-                            updateSecurityStamp();
-                        });
-
-                        stockCountGrid.itemsSource = stockCounts;
-                        stockCountGrid.trackChanges = true;
-
-                        updateNavigateButtonsStockCount();
-                    }
-                    else {
-                        isFirstSelect = false;
+                    if (!cboFilterDateIsFirstSelect) {
+                        stockCountSCDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                        refreshStockCountFlexGrid(stockCountSCDateValue);
+                    } else {
+                        cboFilterDateIsFirstSelect = false;
                     }
                 }
             });
 
             // Collection View
-            stockCounts = new wijmo.collections.CollectionView(listStockCountBySCDate(currentDate));
+            stockCounts = new wijmo.collections.CollectionView(listStockCountBySCDateByBranchId(stockCountSCDateValue));
             stockCounts.canFilter = true;
             stockCounts.pageSize = 15;
 
-            // Search (Filter)
+            // Search (Filter) - Key event
             var filterText = "";
             $("#inputIdStockCountSearch").keyup(function () {
                 filterText = this.value.toLowerCase();
                 stockCounts.refresh();
             });
+
+            // Filter
             stockCounts.filter = function (item) {
-                return !filterText || (item.INNumber.toLowerCase().indexOf(filterText) > -1);
+                return !filterText || (item.SCNumber.toLowerCase().indexOf(filterText) > -1)
+                || (item.Particulars.toLowerCase().indexOf(filterText) > -1);
             }
+
+            // Navigation Buttons
             stockCounts.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsStockCount();
             });
+
+            // Security Stamp
             stockCounts.currentChanged.addHandler(function (sender, args) {
                 updateSecurityStamp();
             });
@@ -370,14 +442,15 @@
 
             stockCountGrid.trackChanges = true;
 
+            // Navigation Buttons
             btnStockCountFirstPageGrid = document.getElementById("btnIdMoveToFirstPageGrid");
             btnStockCountPreviousPageGrid = document.getElementById("btnIdMoveToPreviousPageGrid");
             btnStockCountNextPageGrid = document.getElementById("btnIdMoveToNextPageGrid");
             btnStockCountLastPageGrid = document.getElementById("btnIdMoveToLastPageGrid");
             btnStockCountCurrentPageGrid = document.getElementById("btnIdCurrentPageGrid");
-
             updateNavigateButtonsStockCount();
 
+            // Navigation Button Events
             btnStockCountFirstPageGrid.addEventListener("click", function () {
                 stockCounts.moveToFirstPage();
                 updateNavigateButtonsStockCount();
