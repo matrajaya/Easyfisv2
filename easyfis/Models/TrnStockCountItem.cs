@@ -13,6 +13,7 @@ namespace easyfis.Models
         public Int32 SCId { get; set; }
         public Int32 ItemId { get; set; }
         public String Item { get; set; }
+        public String ItemCode { get; set; }
         public String Particulars { get; set; }
         public Decimal Quantity { get; set; }
         public String Unit { get; set; }

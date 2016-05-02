@@ -649,6 +649,11 @@
             });
         }
 
+        // Print Stock Count
+        function btnOnclickStockCountDetailPrint() {
+            window.location = "/Software/StockCountPDF?Id=" + getParameterValue("Id");
+        }
+
         // Get Stock Count Item by SCId
         function getStockCountItemBySCId() {
             NProgress.start();

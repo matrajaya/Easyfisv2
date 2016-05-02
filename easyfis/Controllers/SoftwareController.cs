@@ -9590,6 +9590,202 @@ namespace easyfis.Controllers
             return CheckCookie();
         }
 
+        [Authorize]
+        public ActionResult StockCountPDF(Int32 Id)
+        {
+            HttpCookieCollection cookieCollection = Request.Cookies;
+            HttpCookie branchIdCookie = cookieCollection.Get("branchId");
+
+            if (branchIdCookie != null)
+            {
+                var branchId = Convert.ToInt32(Request.Cookies["branchId"].Value);
+                var branches = from d in db.MstBranches where d.Id == branchId select d;
+
+                if (branches.Any())
+                {
+                    // Company Detail
+                    var companyName = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Company).SingleOrDefault();
+                    var address = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Address).SingleOrDefault();
+                    var contactNo = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.ContactNumber).SingleOrDefault();
+                    var branch = (from d in db.MstBranches where d.Id == branchId select d.Branch).SingleOrDefault();
+
+                    // Start of the PDF
+                    MemoryStream workStream = new MemoryStream();
+                    Rectangle rec = new Rectangle(PageSize.A3);
+                    Document document = new Document(rec, 72, 72, 72, 72);
+                    document.SetMargins(50f, 50f, 50f, 50f);
+                    PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+                    // Document Starts
+                    document.Open();
+
+                    // Fonts Customization
+                    Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+                    Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+                    Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+                    Font cellFont = FontFactory.GetFont("Arial", 9);
+                    Font cellFont2 = FontFactory.GetFont("Arial", 11);
+                    Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
+                    PdfPTable tableHeader = new PdfPTable(2);
+                    float[] widthscellsheader = new float[] { 100f, 75f };
+                    tableHeader.SetWidths(widthscellsheader);
+                    tableHeader.WidthPercentage = 100;
+                    tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+                    tableHeader.AddCell(new PdfPCell(new Phrase("Stock Count", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+                    tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase(branch, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+
+                    document.Add(tableHeader);
+
+                    Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+                    document.Add(line);
+
+                    var stockCounts = from d in db.TrnStockCounts
+                                      where d.Id == Id
+                                      select new Models.TrnStockCount
+                                      {
+                                          Id = d.Id,
+                                          BranchId = d.BranchId,
+                                          Branch = d.MstBranch.Branch,
+                                          SCNumber = d.SCNumber,
+                                          SCDate = d.SCDate.ToShortDateString(),
+                                          Particulars = d.Particulars,
+                                          PreparedBy = d.MstUser3.FullName,
+                                          PreparedById = d.PreparedById,
+                                          CheckedBy = d.MstUser1.FullName,
+                                          CheckedById = d.CheckedById,
+                                          ApprovedBy = d.MstUser.FullName,
+                                          ApprovedById = d.ApprovedById,
+                                          IsLocked = d.IsLocked,
+                                          CreatedById = d.CreatedById,
+                                          CreatedBy = d.MstUser2.FullName,
+                                          CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                          UpdatedById = d.UpdatedById,
+                                          UpdatedBy = d.MstUser4.FullName,
+                                          UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                      };
+
+                    String Particulars = "";
+                    String SCNumber = "", SCDate = "";
+                    String PreparedBy = "", CheckedBy = "", ApprovedBy = "";
+
+                    foreach (var stockCount in stockCounts)
+                    {
+                        Particulars = stockCount.Particulars;
+                        SCNumber = stockCount.SCNumber;
+                        SCDate = stockCount.SCDate;
+                        PreparedBy = stockCount.PreparedBy;
+                        CheckedBy = stockCount.CheckedBy;
+                        ApprovedBy = stockCount.ApprovedBy;
+                    }
+
+                    PdfPTable tableSubHeader = new PdfPTable(4);
+                    float[] widthscellsSubheader = new float[] { 40f, 100f, 100f, 40f };
+                    tableSubHeader.SetWidths(widthscellsSubheader);
+                    tableSubHeader.WidthPercentage = 100;
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("Particulars: ", columnFont)) { Border = 0, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(Particulars, cellFont2)) { Border = 0, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("SC Number: ", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(SCNumber, cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("", columnFont)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("", cellFont2)) { Border = 0, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase("SC Date: ", columnFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                    tableSubHeader.AddCell(new PdfPCell(new Phrase(SCDate, cellFont2)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f });
+                    document.Add(tableSubHeader);
+
+                    document.Add(Chunk.NEWLINE);
+
+                    var stockCountItems = from d in db.TrnStockCountItems
+                                          where d.SCId == Id
+                                          select new Models.TrnStockCountItem
+                                          {
+                                              Id = d.Id,
+                                              SCId = d.SCId,
+                                              ItemId = d.ItemId,
+                                              Item = d.MstArticle.Article,
+                                              ItemCode = d.MstArticle.ManualArticleCode,
+                                              Particulars = d.Particulars,
+                                              Quantity = d.Quantity,
+                                              Unit = d.MstArticle.MstUnit.Unit
+                                          };
+
+                    PdfPTable tableSCLines = new PdfPTable(4);
+                    float[] widthscellsSCLines = new float[] { 50f, 60f, 100f, 350f };
+                    tableSCLines.SetWidths(widthscellsSCLines);
+                    tableSCLines.WidthPercentage = 100;
+                    tableSCLines.AddCell(new PdfPCell(new Phrase("Quantity", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSCLines.AddCell(new PdfPCell(new Phrase("Unit", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSCLines.AddCell(new PdfPCell(new Phrase("Code", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    tableSCLines.AddCell(new PdfPCell(new Phrase("Item", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                   
+                    foreach (var stockCountItem in stockCountItems)
+                    {
+                        tableSCLines.AddCell(new PdfPCell(new Phrase(stockCountItem.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSCLines.AddCell(new PdfPCell(new Phrase(stockCountItem.Unit, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSCLines.AddCell(new PdfPCell(new Phrase(stockCountItem.ItemCode, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSCLines.AddCell(new PdfPCell(new Phrase(stockCountItem.Item, cellFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    }
+
+                    document.Add(tableSCLines);
+
+                    document.Add(Chunk.NEWLINE);
+                    document.Add(Chunk.NEWLINE);
+                    document.Add(Chunk.NEWLINE);
+                    document.Add(Chunk.NEWLINE);
+                    document.Add(Chunk.NEWLINE);
+
+                    // Table for Footer
+                    PdfPTable tableFooter = new PdfPTable(5);
+                    tableFooter.WidthPercentage = 100;
+                    float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
+                    tableFooter.SetWidths(widthsCells2);
+
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", columnFont)) { Border = 0, HorizontalAlignment = 0 });
+
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+
+                    tableFooter.AddCell(new PdfPCell(new Phrase(PreparedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(CheckedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(ApprovedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+
+                    document.Add(tableFooter);
+
+                    // Document End
+                    document.Close();
+
+                    // Document End
+                    document.Close();
+
+                    byte[] byteInfo = workStream.ToArray();
+                    workStream.Write(byteInfo, 0, byteInfo.Length);
+                    workStream.Position = 0;
+
+                    return new FileStreamResult(workStream, "application/pdf");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Manage");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "Manage");
+            }
+        }
+
         public BaseColor ColorGrey { get; set; }
     }
 }
