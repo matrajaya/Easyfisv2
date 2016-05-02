@@ -10,11 +10,10 @@ namespace easyfis.Controllers
 {
     public class ApiStockCountItemController : ApiController
     {
+        // Global Variable
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
        
-        // =====================
         // LIST Stock Count Item
-        // =====================
         [HttpGet]
         [Route("api/stockCountItem/list")]
         public List<Models.TrnStockCountItem> listStockCountItem()
@@ -27,14 +26,13 @@ namespace easyfis.Controllers
                                       ItemId = d.ItemId,
                                       Item = d.MstArticle.Article,
                                       Particulars = d.Particulars,
-                                      Quantity = d.Quantity
+                                      Quantity = d.Quantity,
+                                      Unit = d.MstArticle.MstUnit.Unit
                                   };
             return stockCountItems.ToList();
         }
 
-        // =============================
         // LIST Stock Count Item by SCId
-        // =============================
         [HttpGet]
         [Route("api/stockCountItem/listBySCId/{SCId}")]
         public List<Models.TrnStockCountItem> getStockCountItemBySCId(String SCId)
@@ -48,14 +46,13 @@ namespace easyfis.Controllers
                                       ItemId = d.ItemId,
                                       Item = d.MstArticle.Article,
                                       Particulars = d.Particulars,
-                                      Quantity = d.Quantity
+                                      Quantity = d.Quantity,
+                                      Unit = d.MstArticle.MstUnit.Unit
                                   };
             return stockCountItems.ToList();
         }
 
-        // ====================
         // ADD Stock Count Item
-        // ====================
         [HttpPost]
         [Route("api/stockCountItem/add")]
         public int addStockCountItem(Models.TrnStockCountItem stockCountItem)
@@ -80,9 +77,7 @@ namespace easyfis.Controllers
             }
         }
 
-        // =======================
         // UPDATE Stock Count Item
-        // =======================
         [HttpPut]
         [Route("api/stockCountItem/update/{id}")]
         public HttpResponseMessage updateStockCountItem(String id, Models.TrnStockCountItem stockCountItem)
@@ -114,9 +109,7 @@ namespace easyfis.Controllers
             }
         }
 
-        // =======================
         // DELETE Stock Count Item
-        // =======================
         [HttpDelete]
         [Route("api/stockCountItem/delete/{id}")]
         public HttpResponseMessage deleteStockCountItem(String id)

@@ -15,5 +15,6 @@ namespace easyfis.Models
         public String Item { get; set; }
         public String Particulars { get; set; }
         public Decimal Quantity { get; set; }
+        public String Unit { get; set; }
     }
 }
