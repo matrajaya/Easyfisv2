@@ -19,7 +19,9 @@ namespace easyfis.Controllers
         [Route("api/listPurchaseOrder")]
         public List<Models.TrnPurchaseOrder> Get()
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var purchaseOrders = from d in db.TrnPurchaseOrders
+                                 where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                                  select new Models.TrnPurchaseOrder
                                  {
                                      Id = d.Id,
@@ -142,9 +144,11 @@ namespace easyfis.Controllers
         [Route("api/listPurchaseOrderFilterByPODate/{PODate}")]
         public List<Models.TrnPurchaseOrder> GetPurchaseOrderFilterByPODate(String PODate)
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var purchaseOrder_PODate = Convert.ToDateTime(PODate);
             var purchaseOrders = from d in db.TrnPurchaseOrders
                                  where d.PODate == purchaseOrder_PODate
+                                 && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                                  select new Models.TrnPurchaseOrder
                                  {
                                      Id = d.Id,
@@ -190,6 +194,7 @@ namespace easyfis.Controllers
             var purchaseOrder_SupplierId = Convert.ToInt32(SupplierId);
             var purchaseOrders = from d in db.TrnPurchaseOrders
                                  where d.SupplierId == purchaseOrder_SupplierId
+                                 && d.IsLocked == true
                                  select new Models.TrnPurchaseOrder
                                  {
                                      Id = d.Id,

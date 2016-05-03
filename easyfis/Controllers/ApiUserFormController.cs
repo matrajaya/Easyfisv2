@@ -21,10 +21,10 @@ namespace easyfis.Controllers
                             select new Models.MstUserForm
                             {
                                 Id = d.Id,
-                                //Userid = d.Userid,
-                                //User = d.User,
-                                //Form = d.Form,
+                                UserId = d.UserId,
+                                User = d.MstUser.FullName,
                                 FormId = d.FormId,
+                                Form = d.SysForm.FormName,
                                 CanAdd = d.CanAdd,
                                 CanEdit = d.CanEdit,
                                 CanDelete = d.CanDelete,
@@ -33,6 +33,125 @@ namespace easyfis.Controllers
                                 CanPrint = d.CanPrint
                             };
             return userForms.ToList();
+        }
+
+        // =========================
+        // LIST User Form by User Id
+        // =========================
+        [Route("api/listUserFormByUserId/{UserId}")]
+        public List<Models.MstUserForm> GetUserFormByUserId(String UserId)
+        {
+            var userForms = from d in db.MstUserForms
+                            where d.UserId == Convert.ToInt32(UserId)
+                            select new Models.MstUserForm
+                            {
+                                Id = d.Id,
+                                UserId = d.UserId,
+                                User = d.MstUser.FullName,
+                                FormId = d.FormId,
+                                Form = d.SysForm.FormName,
+                                CanAdd = d.CanAdd,
+                                CanEdit = d.CanEdit,
+                                CanDelete = d.CanDelete,
+                                CanLock = d.CanLock,
+                                CanUnlock = d.CanUnlock,
+                                CanPrint = d.CanPrint
+                            };
+            return userForms.ToList();
+        }
+        
+        // =============
+        // Add user form
+        // =============
+        [Route("api/addUserForm")]
+        public int Post(Models.MstUserForm userForm)
+        {
+            try
+            {
+                Data.MstUserForm newUserForm = new Data.MstUserForm();
+
+                newUserForm.UserId = userForm.UserId;
+                newUserForm.FormId = userForm.FormId;
+                newUserForm.CanAdd = userForm.CanAdd;
+                newUserForm.CanEdit = userForm.CanEdit;
+                newUserForm.CanDelete = userForm.CanDelete;
+                newUserForm.CanLock = userForm.CanLock;
+                newUserForm.CanUnlock = userForm.CanUnlock;
+                newUserForm.CanPrint = userForm.CanPrint;
+
+                db.MstUserForms.InsertOnSubmit(newUserForm);
+                db.SubmitChanges();
+
+                return newUserForm.Id;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // ================
+        // Update user form
+        // ================
+        [Route("api/updateUserForm/{id}")]
+        public HttpResponseMessage Put(String id, Models.MstUserForm userForm)
+        {
+            try
+            {
+                var userForms = from d in db.MstUserForms where d.Id == Convert.ToInt32(id) select d;
+                if (userForms.Any())
+                {
+                    var updateUserForm = userForms.FirstOrDefault();
+
+                    updateUserForm.UserId = userForm.UserId;
+                    updateUserForm.FormId = userForm.FormId;
+                    updateUserForm.CanAdd = userForm.CanAdd;
+                    updateUserForm.CanEdit = userForm.CanEdit;
+                    updateUserForm.CanDelete = userForm.CanDelete;
+                    updateUserForm.CanLock = userForm.CanLock;
+                    updateUserForm.CanUnlock = userForm.CanUnlock;
+                    updateUserForm.CanPrint = userForm.CanPrint;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // ================
+        // Delete user form
+        // ================
+        [Route("api/deleteUserForm/{id}")]
+        public HttpResponseMessage Delete(String id)
+        {
+            try
+            {
+                var userForms = from d in db.MstUserForms where d.Id == Convert.ToInt32(id) select d;
+                if (userForms.Any())
+                {
+                    db.MstUserForms.DeleteOnSubmit(userForms.First());
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

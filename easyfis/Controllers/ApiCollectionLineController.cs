@@ -24,6 +24,8 @@ namespace easyfis.Controllers
                                       Id = d.Id,
                                       ORId = d.ORId,
                                       OR = d.TrnCollection.ORNumber,
+                                      ORDate = d.TrnCollection.ORDate.ToShortDateString(),
+                                      Customer = d.TrnCollection.MstArticle.Article,
                                       BranchId = d.BranchId,
                                       Branch = d.MstBranch.Branch,
                                       AccountId = d.AccountId,
@@ -41,7 +43,7 @@ namespace easyfis.Controllers
                                       CheckBank = d.CheckBank,
                                       DepositoryBankId = d.DepositoryBankId,
                                       DepositoryBank = d.MstArticle1.Article,
-                                      IsClear = d.IsClear,
+                                      IsClear = d.IsClear
                                   };
             return collectionLines.ToList();
         }
@@ -60,6 +62,8 @@ namespace easyfis.Controllers
                                       Id = d.Id,
                                       ORId = d.ORId,
                                       OR = d.TrnCollection.ORNumber,
+                                      ORDate = d.TrnCollection.ORDate.ToShortDateString(),
+                                      Customer = d.TrnCollection.MstArticle.Article,
                                       BranchId = d.BranchId,
                                       Branch = d.MstBranch.Branch,
                                       AccountId = d.AccountId,
@@ -77,7 +81,46 @@ namespace easyfis.Controllers
                                       CheckBank = d.CheckBank,
                                       DepositoryBankId = d.DepositoryBankId,
                                       DepositoryBank = d.MstArticle1.Article,
-                                      IsClear = d.IsClear,
+                                      IsClear = d.IsClear
+                                  };
+            return collectionLines.ToList();
+        }
+
+        // ===================================================================
+        // LIST Collection Line By dispository Bank and Date start to Date end
+        // ===================================================================
+        [Route("api/listCollectionLineByDepositoryBankIdByORDate/{DepositoryBankId}/{DateStart}/{DateEnd}")]
+        public List<Models.TrnCollectionLine> GetCollectionDepositoryBankIdByORDate(String DepositoryBankId, String DateStart, String DateEnd)
+        {
+            var collectionLines = from d in db.TrnCollectionLines
+                                  where d.DepositoryBankId == Convert.ToInt32(DepositoryBankId)
+                                  && d.TrnCollection.ORDate >= Convert.ToDateTime(DateStart)
+                                  && d.TrnCollection.ORDate <= Convert.ToDateTime(DateEnd)
+                                  select new Models.TrnCollectionLine
+                                  {
+                                      Id = d.Id,
+                                      ORId = d.ORId,
+                                      OR = d.TrnCollection.ORNumber,
+                                      ORDate = d.TrnCollection.ORDate.ToShortDateString(),
+                                      Customer = d.TrnCollection.MstArticle.Article,
+                                      BranchId = d.BranchId,
+                                      Branch = d.MstBranch.Branch,
+                                      AccountId = d.AccountId,
+                                      Account = d.MstAccount.Account,
+                                      ArticleId = d.ArticleId,
+                                      Article = d.MstArticle.Article,
+                                      SIId = d.SIId,
+                                      SI = d.TrnSalesInvoice.SINumber,
+                                      Particulars = d.Particulars,
+                                      Amount = d.Amount,
+                                      PayTypeId = d.PayTypeId,
+                                      PayType = d.MstPayType.PayType,
+                                      CheckNumber = d.CheckNumber,
+                                      CheckDate = d.CheckDate.ToShortDateString(),
+                                      CheckBank = d.CheckBank,
+                                      DepositoryBankId = d.DepositoryBankId,
+                                      DepositoryBank = d.MstArticle1.Article,
+                                      IsClear = d.IsClear
                                   };
             return collectionLines.ToList();
         }

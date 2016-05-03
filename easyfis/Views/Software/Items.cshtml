@@ -1,42 +1,43 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Items</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
-    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
-    <div id="wrapper" class="wrapper">
+    <div id="o-wrapper" class="o-wrapper">
         <!-- Header -->
         @Html.Partial("_SoftwareHeader")
 
         <!-- Section -->
         <section>
-            <br /><br /><br />
+            <div class="sub-nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><i class="fa fa-cart-arrow-down"></i>  Items</h4>
+                        </div>
+                        <div class="col-md-6" align="right">
+                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="div_Current_Page">
+                    <div class="container">
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Items
+                    </div>
+                </div>
+            </div>
             <div class="container">
                 <!-- Items List -->
                 <div id="itemList">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <h4><i class="fa fa-cart-arrow-down fa-2x"></i>  Items</h4>
-                            <br />
-                            <div class="div_Current_Page">
-                                <span id="currentPage"></span>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group input-group-sm">
@@ -45,8 +46,8 @@
                             </div>
                         </div>
                         <div class="col-lg-8" align="right">
-                            <a href="@Url.Action("ItemDetail", "Software", new { ItemId = 0, BranchId = branchId })" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                            <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                            <button class="btn btn-primary btn-sm" onclick="btnAddItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                            <button class="btn btn-danger btn-sm" onclick="btnCloseItem_OnClick()"><i class=" fa fa-times"></i> Close</button>
                         </div>
                     </div>
                     <br />
@@ -116,21 +117,6 @@
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -140,15 +126,12 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
-    @Scripts.Render("~/WijmoScripts/Wijmo-js")
-
     <script type="text/javascript">
         // ================
         // Global Variables
         // ================
         var items;
         var itemGrid;
-
         var btnFirstPageGrid;
         var btnPreviousPageGrid;
         var btnNextPageGrid;
@@ -160,112 +143,72 @@
         // ==============================
         function getArtcileForItems() {
             var items = new wijmo.collections.ObservableArray;
-            $('#loadingModal').modal('show');
+            NProgress.start();
             $.ajax({
                 url: '/api/listArticleByArticleTypeId/1',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            if(Results[i]["IsLocked"] == true) {
-                                items.push ({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdItemEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='cmdItemDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    ArticleCode : Results[i]["ArticleCode"],
-                                    ManualArticleCode : Results[i]["ManualArticleCode"],
-                                    Article : Results[i]["Article"],
-                                    Category : Results[i]["Category"],
-                                    ArticleTypeId : Results[i]["ArticleTypeId"],
-                                    ArticleType : Results[i]["ArticleType"],
-                                    ArticleGroupId : Results[i]["ArticleGroupId"],
-                                    ArticleGroup : Results[i]["ArticleGroup"],
-                                    AccountId : Results[i]["AccountId"],
-                                    Account : Results[i]["Account"],
-                                    SalesAccountId : Results[i]["SalesAccountId"],
-                                    CostAccountId : Results[i]["CostAccountId"],
-                                    AssetAccountId : Results[i]["AssetAccountId"],
-                                    ExpenseAccountId : Results[i]["ExpenseAccountId"],
-                                    UnitId : Results[i]["UnitId"],
-                                    Unit : Results[i]["Unit"],
-                                    OutputTaxId : Results[i]["OutputTaxId"],
-                                    InputTaxId : Results[i]["InputTaxId"],
-                                    WTaxTypeId : Results[i]["WTaxTypeId"],
-                                    Price : Results[i]["Price"],
-                                    Cost : Results[i]["Cost"],
-                                    IsInventory : Results[i]["IsInventory"],
-                                    Particulars : Results[i]["Particulars"],
-                                    Address : Results[i]["Address"],
-                                    TermId : Results[i]["TermId"],
-                                    ContactNumber : Results[i]["ContactNumber"],
-                                    ContactPerson : Results[i]["ContactPerson"],
-                                    TaxNumber : Results[i]["TaxNumber"],
-                                    CreditLimit : Results[i]["CreditLimit"],
-                                    DateAcquired : Results[i]["DateAcquired"],
-                                    UsefulLife : Results[i]["UsefulLife"],
-                                    SalvageValue : Results[i]["SalvageValue"],
-                                    ManualArticleOldCode : Results[i]["ManualArticleOldCode"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+                success: function (itemResults) {
+                    if (itemResults.length > 0) {
+                        for (i = 0; i < itemResults.length; i++) {
+
+                            var btnDeleteId;
+                            if(itemResults[i]["IsLocked"] == true) {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdItemDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                items.push ({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdItemEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='cmdItemDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    ArticleCode : Results[i]["ArticleCode"],
-                                    ManualArticleCode : Results[i]["ManualArticleCode"],
-                                    Article : Results[i]["Article"],
-                                    Category : Results[i]["Category"],
-                                    ArticleTypeId : Results[i]["ArticleTypeId"],
-                                    ArticleType : Results[i]["ArticleType"],
-                                    ArticleGroupId : Results[i]["ArticleGroupId"],
-                                    ArticleGroup : Results[i]["ArticleGroup"],
-                                    AccountId : Results[i]["AccountId"],
-                                    Account : Results[i]["Account"],
-                                    SalesAccountId : Results[i]["SalesAccountId"],
-                                    CostAccountId : Results[i]["CostAccountId"],
-                                    AssetAccountId : Results[i]["AssetAccountId"],
-                                    ExpenseAccountId : Results[i]["ExpenseAccountId"],
-                                    UnitId : Results[i]["UnitId"],
-                                    Unit : Results[i]["Unit"],
-                                    OutputTaxId : Results[i]["OutputTaxId"],
-                                    InputTaxId : Results[i]["InputTaxId"],
-                                    WTaxTypeId : Results[i]["WTaxTypeId"],
-                                    Price : Results[i]["Price"],
-                                    Cost : Results[i]["Cost"],
-                                    IsInventory : Results[i]["IsInventory"],
-                                    Particulars : Results[i]["Particulars"],
-                                    Address : Results[i]["Address"],
-                                    TermId : Results[i]["TermId"],
-                                    ContactNumber : Results[i]["ContactNumber"],
-                                    ContactPerson : Results[i]["ContactPerson"],
-                                    TaxNumber : Results[i]["TaxNumber"],
-                                    CreditLimit : Results[i]["CreditLimit"],
-                                    DateAcquired : Results[i]["DateAcquired"],
-                                    UsefulLife : Results[i]["UsefulLife"],
-                                    SalvageValue : Results[i]["SalvageValue"],
-                                    ManualArticleOldCode : Results[i]["ManualArticleOldCode"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdItemDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             }
+
+                            items.push ({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdItemEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: btnDeleteId,
+                                Id: itemResults[i]["Id"],
+                                ArticleCode : itemResults[i]["ArticleCode"],
+                                ManualArticleCode : itemResults[i]["ManualArticleCode"],
+                                Article : itemResults[i]["Article"],
+                                Category : itemResults[i]["Category"],
+                                ArticleTypeId : itemResults[i]["ArticleTypeId"],
+                                ArticleType : itemResults[i]["ArticleType"],
+                                ArticleGroupId : itemResults[i]["ArticleGroupId"],
+                                ArticleGroup : itemResults[i]["ArticleGroup"],
+                                AccountId : itemResults[i]["AccountId"],
+                                Account : itemResults[i]["Account"],
+                                SalesAccountId : itemResults[i]["SalesAccountId"],
+                                CostAccountId : itemResults[i]["CostAccountId"],
+                                AssetAccountId : itemResults[i]["AssetAccountId"],
+                                ExpenseAccountId : itemResults[i]["ExpenseAccountId"],
+                                UnitId : itemResults[i]["UnitId"],
+                                Unit : itemResults[i]["Unit"],
+                                OutputTaxId : itemResults[i]["OutputTaxId"],
+                                InputTaxId : itemResults[i]["InputTaxId"],
+                                WTaxTypeId : itemResults[i]["WTaxTypeId"],
+                                Price : itemResults[i]["Price"],
+                                Cost : itemResults[i]["Cost"],
+                                IsInventory : itemResults[i]["IsInventory"],
+                                Particulars : itemResults[i]["Particulars"],
+                                Address : itemResults[i]["Address"],
+                                TermId : itemResults[i]["TermId"],
+                                ContactNumber : itemResults[i]["ContactNumber"],
+                                ContactPerson : itemResults[i]["ContactPerson"],
+                                TaxNumber : itemResults[i]["TaxNumber"],
+                                CreditLimit : itemResults[i]["CreditLimit"],
+                                DateAcquired : itemResults[i]["DateAcquired"],
+                                UsefulLife : itemResults[i]["UsefulLife"],
+                                SalvageValue : itemResults[i]["SalvageValue"],
+                                ManualArticleOldCode : itemResults[i]["ManualArticleOldCode"],
+                                IsLocked: itemResults[i]["IsLocked"],
+                                CreatedById: itemResults[i]["CreatedById"],
+                                CreatedBy: itemResults[i]["CreatedBy"],
+                                CreatedDateTime: itemResults[i]["CreatedDateTime"],
+                                UpdatedById: itemResults[i]["UpdatedById"],
+                                UpdatedBy: itemResults[i]["UpdatedBy"],
+                                UpdatedDateTime: itemResults[i]["UpdatedDateTime"]
+                            });
                         }
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
@@ -283,14 +226,56 @@
             });
         }
 
+        // ===============
+        // Item Add Button
+        // ===============
+        function btnAddItem_OnClick() {
+            window.location = '/Software/ItemDetail';
+        }
+
+        // =================
+        // Item Close Button
+        // =================
+        function btnCloseItem_OnClick() {
+            window.location = '/Software';
+        }
+
         // ================
         // Item Edit Button
         // ================
         function cmdItemEditButton_OnClick() {
             items.editItem(items.currentItem);
             var item = items.currentEditItem;
-            var id = item.Id;
-            window.location = '/Software/ItemDetail?ItemId=' + id + '&BranchId=' + @branchId;
+            var itemId = item.Id;
+            window.location = '/Software/ItemDetail?ItemId=' + itemId;
+        }
+
+        // =====================
+        // Refresh Item Flexgrid
+        // =====================
+        function refreshItemFlexgrid() {
+            items = new wijmo.collections.CollectionView(getArtcileForItems());
+            items.canFilter = true;
+            items.pageSize = 15;
+
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                items.refresh();
+            });
+            items.filter = function (item) {
+                return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
+            }
+            items.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsItems();
+            });
+            items.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
+
+            // Flex Grid
+            itemGrid.itemsSource = items;
+            itemGrid.trackChanges = true;
         }
 
         // ==================
@@ -301,14 +286,16 @@
                 show: true,
                 backdrop: 'static'
             });
-
-            $("#cmdConfirmDeleteItem").prop("disabled", false);
-            $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
+            
+            document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $('#cmdConfirmDeleteItem').prop('disabled', false);
+            $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
         }
         // Item Confirm Delete Button
         function cmdItemConfirmDeleteButton_OnClick() {
-            $("#cmdConfirmDeleteItem").prop("disabled", true);
-            $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+            document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            $('#cmdConfirmDeleteItem').prop('disabled', true);
+            $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
 
             items.editItem(items.currentItem);
             var id = items.currentEditItem.Id;
@@ -319,46 +306,26 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteItem").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
+                        document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        $('#cmdConfirmDeleteItem').prop('disabled', true);
+                        $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
                         toastr.success("Successfully Deleted");
-                        
                         $('#deleteItemConfirm').modal('hide');
-
-                        items = new wijmo.collections.CollectionView(getArtcileForItems());
-                        items.canFilter = true;
-                        items.pageSize = 15;
-
-                        var filterText = '';
-                        $('#InputFilter').keyup(function () {
-                            filterText = this.value.toLowerCase();
-                            items.refresh();
-                        });
-                        items.filter = function (item) {
-                            return !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1);
-                        }
-                        items.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsItems();
-                        });
-                        items.currentChanged.addHandler(function (sender, args) {
-                            updateDetails();
-                        });
-
-                        // Flex Grid
-                        itemGrid.itemsSource = items;
-                        itemGrid.trackChanges = true;
+                        refreshItemFlexgrid();
                     },
                     404: function () {
-                        toastr.error("Request Not Found");
+                        document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteItem').prop('disabled', false);
+                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+                        toastr.error("Delete request not found");
                         $('#deleteItemConfirm').modal('hide');
-                        $("#cmdConfirmDeleteItem").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     },
                     400: function () {
-                        toastr.error("Can't be deleted");
+                        $('#cmdConfirmDeleteItem').prop('disabled', false);
+                        document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
+                        toastr.error("Cannot delete record");
                         $('#deleteItemConfirm').modal('hide');
-                        $("#cmdConfirmDeleteItem").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     }
                 }
             });
@@ -406,43 +373,6 @@
         // Onload Page
         // ===========
         $(document).ready(function () {
-            $.ajax({
-                url: '/api/listBranchById/' + @branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        branches.push({
-                            BranchId: results.Id,
-                            BranchBranch: results.Branch
-                        });
-                    }
-                    //document.getElementById('currentBranchName').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="branchNameStyle">' + results.Branch + "</a>: /";
-                }
-            });
-
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Items';
-
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             items = new wijmo.collections.CollectionView(getArtcileForItems());
             items.canFilter = true;
             items.pageSize = 15;
@@ -510,7 +440,7 @@
                             },
                             {
                                 "header": "Quantity",
-                                "binding": "Price",
+                                "binding": "",
                                 "allowSorting": true,
                                 "width": "1.5*"
                             },
@@ -536,12 +466,11 @@
                 autoGenerateColumns: false,
                 itemsSource: items,
                 isReadOnly: true,
-                //frozenColumns: 2,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
-
             itemGrid.trackChanges = true;
 
             //Navigation button
@@ -570,7 +499,6 @@
                 updateNavigateButtonsItems();
             });
         });
-
     </script>
 </body>
 </html>

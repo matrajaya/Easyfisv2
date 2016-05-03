@@ -24,5 +24,19 @@ namespace easyfis.Models
         public String ManualArticleCode { get; set; }
         public Int32 UnitId { get; set; }
         public String Unit { get; set; }
+
+        public Decimal BegQuantity { get; set; }
+        public Decimal InQuantity { get; set; }
+        public Decimal OutQuantity { get; set; }
+        public Decimal EndQuantity { get; set; }
+
+        public String Document { get; set; }
+
+        public String DateAquired { get; set; }
+        public Decimal NoOfYears { get; set; }
+        public Decimal SalvageValue { get; set; }
+        public Decimal AccumulatedDepreciation { get; set; }
+        public Decimal AdjustedTotalAmount { get; set; }
+        
     }
 }

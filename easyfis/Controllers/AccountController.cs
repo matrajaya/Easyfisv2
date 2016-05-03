@@ -176,7 +176,7 @@ namespace easyfis.Controllers
                     var users = from d in db.AspNetUsers where d.UserName == user.UserName select d;
                     //var mstUserId = (from d in db.MstUsers where d.UserId == users.First().Id select d.Id).SingleOrDefault();
                     var isLocked = true;
-                   
+
                     //int mstUserId = Convert.ToInt32(mstUserIdLastValue) + 1;
 
 
@@ -216,7 +216,7 @@ namespace easyfis.Controllers
                         }
                         //db.SubmitChanges();
                     }
-            
+
                     return RedirectToAction("Register", "Account");
                 }
                 //AddErrors(result);
@@ -446,6 +446,18 @@ namespace easyfis.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            HttpCookie branchIdCookie = new HttpCookie("branchId");
+            HttpCookie branchCookie = new HttpCookie("branch");
+            HttpCookie companyCookie = new HttpCookie("company");
+
+            branchIdCookie.Expires = DateTime.Now.AddDays(-1d);
+            branchCookie.Expires = DateTime.Now.AddDays(-1d);
+            companyCookie.Expires = DateTime.Now.AddDays(-1d);
+
+            Response.Cookies.Add(branchIdCookie);
+            Response.Cookies.Add(branchCookie);
+            Response.Cookies.Add(companyCookie);
+
             return RedirectToAction("Index", "Home");
         }
 

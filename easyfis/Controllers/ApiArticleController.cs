@@ -32,6 +32,7 @@ namespace easyfis.Controllers
                                ArticleGroupId = d.ArticleGroupId,
                                ArticleGroup = d.MstArticleGroup.ArticleGroup,
                                AccountId = d.AccountId,
+                               AccountCode = d.MstAccount.AccountCode,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
                                SalesAccount = d.MstAccount1.Account,
@@ -43,10 +44,10 @@ namespace easyfis.Controllers
                                ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
-                               OutputTaxId = d.OutputTaxId,
-                               OutputTax = d.MstTaxType.TaxType,
                                InputTaxId = d.InputTaxId,
-                               InputTax = d.MstTaxType1.TaxType,
+                               InputTax = d.MstTaxType.TaxType,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType1.TaxType,
                                WTaxTypeId = d.WTaxTypeId,
                                WTaxType = d.MstTaxType2.TaxType,
                                Price = d.Price,
@@ -96,6 +97,7 @@ namespace easyfis.Controllers
                                ArticleGroupId = d.ArticleGroupId,
                                ArticleGroup = d.MstArticleGroup.ArticleGroup,
                                AccountId = d.AccountId,
+                               AccountCode = d.MstAccount.AccountCode,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
                                SalesAccount = d.MstAccount1.Account,
@@ -107,10 +109,10 @@ namespace easyfis.Controllers
                                ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
-                               OutputTaxId = d.OutputTaxId,
-                               OutputTax = d.MstTaxType.TaxType,
                                InputTaxId = d.InputTaxId,
-                               InputTax = d.MstTaxType1.TaxType,
+                               InputTax = d.MstTaxType.TaxType,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType1.TaxType,
                                WTaxTypeId = d.WTaxTypeId,
                                WTaxType = d.MstTaxType2.TaxType,
                                Price = d.Price,
@@ -160,6 +162,7 @@ namespace easyfis.Controllers
                                ArticleGroupId = d.ArticleGroupId,
                                ArticleGroup = d.MstArticleGroup.ArticleGroup,
                                AccountId = d.AccountId,
+                               AccountCode = d.MstAccount.AccountCode,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
                                SalesAccount = d.MstAccount1.Account,
@@ -171,10 +174,10 @@ namespace easyfis.Controllers
                                ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
-                               OutputTaxId = d.OutputTaxId,
-                               OutputTax = d.MstTaxType.TaxType,
                                InputTaxId = d.InputTaxId,
-                               InputTax = d.MstTaxType1.TaxType,
+                               InputTax = d.MstTaxType.TaxType,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType1.TaxType,
                                WTaxTypeId = d.WTaxTypeId,
                                WTaxType = d.MstTaxType2.TaxType,
                                Price = d.Price,
@@ -224,6 +227,7 @@ namespace easyfis.Controllers
                                ArticleGroupId = d.ArticleGroupId,
                                ArticleGroup = d.MstArticleGroup.ArticleGroup,
                                AccountId = d.AccountId,
+                               AccountCode = d.MstAccount.AccountCode,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
                                SalesAccount = d.MstAccount1.Account,
@@ -235,10 +239,10 @@ namespace easyfis.Controllers
                                ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
-                               OutputTaxId = d.OutputTaxId,
-                               OutputTax = d.MstTaxType.TaxType,
                                InputTaxId = d.InputTaxId,
-                               InputTax = d.MstTaxType1.TaxType,
+                               InputTax = d.MstTaxType.TaxType,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType1.TaxType,
                                WTaxTypeId = d.WTaxTypeId,
                                WTaxType = d.MstTaxType2.TaxType,
                                Price = d.Price,
@@ -288,6 +292,7 @@ namespace easyfis.Controllers
                                ArticleGroupId = d.ArticleGroupId,
                                ArticleGroup = d.MstArticleGroup.ArticleGroup,
                                AccountId = d.AccountId,
+                               AccountCode = d.MstAccount.AccountCode,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
                                SalesAccount = d.MstAccount1.Account,
@@ -299,10 +304,10 @@ namespace easyfis.Controllers
                                ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
-                               OutputTaxId = d.OutputTaxId,
-                               OutputTax = d.MstTaxType.TaxType,
                                InputTaxId = d.InputTaxId,
-                               InputTax = d.MstTaxType1.TaxType,
+                               InputTax = d.MstTaxType.TaxType,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType1.TaxType,
                                WTaxTypeId = d.WTaxTypeId,
                                WTaxType = d.MstTaxType2.TaxType,
                                Price = d.Price,
@@ -353,6 +358,7 @@ namespace easyfis.Controllers
                                ArticleGroupId = d.ArticleGroupId,
                                ArticleGroup = d.MstArticleGroup.ArticleGroup,
                                AccountId = d.AccountId,
+                               AccountCode = d.MstAccount.AccountCode,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
                                SalesAccount = d.MstAccount1.Account,
@@ -364,10 +370,10 @@ namespace easyfis.Controllers
                                ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
-                               OutputTaxId = d.OutputTaxId,
-                               OutputTax = d.MstTaxType.TaxType,
                                InputTaxId = d.InputTaxId,
-                               InputTax = d.MstTaxType1.TaxType,
+                               InputTax = d.MstTaxType.TaxType,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType1.TaxType,
                                WTaxTypeId = d.WTaxTypeId,
                                WTaxType = d.MstTaxType2.TaxType,
                                Price = d.Price,
@@ -417,6 +423,7 @@ namespace easyfis.Controllers
                                ArticleGroupId = d.ArticleGroupId,
                                ArticleGroup = d.MstArticleGroup.ArticleGroup,
                                AccountId = d.AccountId,
+                               AccountCode = d.MstAccount.AccountCode,
                                Account = d.MstAccount.Account,
                                SalesAccountId = d.SalesAccountId,
                                SalesAccount = d.MstAccount1.Account,
@@ -428,10 +435,10 @@ namespace easyfis.Controllers
                                ExpenseAccount = d.MstAccount4.Account,
                                UnitId = d.UnitId,
                                Unit = d.MstUnit.Unit,
-                               OutputTaxId = d.OutputTaxId,
-                               OutputTax = d.MstTaxType.TaxType,
                                InputTaxId = d.InputTaxId,
-                               InputTax = d.MstTaxType1.TaxType,
+                               InputTax = d.MstTaxType.TaxType,
+                               OutputTaxId = d.OutputTaxId,
+                               OutputTax = d.MstTaxType1.TaxType,
                                WTaxTypeId = d.WTaxTypeId,
                                WTaxType = d.MstTaxType2.TaxType,
                                Price = d.Price,
@@ -468,7 +475,6 @@ namespace easyfis.Controllers
         {
             try
             {
-                var isLocked = false;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -476,32 +482,28 @@ namespace easyfis.Controllers
                 var articleType_Id = Convert.ToInt32(articleTypeId);
 
                 Data.MstArticle newArticle = new Data.MstArticle();
-                if (articleType_Id == 6)
-                {
+                if (articleType_Id == 6) {
                     newArticle.ArticleCode = article.ArticleCode;
                     newArticle.ManualArticleCode = "NULL";
                     newArticle.Article = article.Article;
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = articleType_Id;
                     newArticle.ArticleGroupId = null;
-
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.AccountId;
                     newArticle.CostAccountId = article.AccountId;
                     newArticle.AssetAccountId = article.AccountId;
                     newArticle.ExpenseAccountId = article.AccountId;
-
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 5;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
-
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
                     newArticle.IsInventory = false;
                     newArticle.Particulars = "NA";
                     newArticle.Address = article.Address;
-                    newArticle.TermId = 1;
+                    newArticle.TermId = db.MstTerms.FirstOrDefault().Id;
                     newArticle.ContactNumber = article.ContactNumber;
                     newArticle.ContactPerson = "NA";
                     newArticle.TaxNumber = "NA";
@@ -509,40 +511,34 @@ namespace easyfis.Controllers
                     newArticle.DateAcquired = date;
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
-                    newArticle.ManualArticleOldCode = "NULL";
-
+                    newArticle.ManualArticleOldCode = "NA";
                     newArticle.IsLocked = article.IsLocked;
                     newArticle.CreatedById = mstUserId;
                     newArticle.CreatedDateTime = date;
                     newArticle.UpdatedById = mstUserId;
                     newArticle.UpdatedDateTime = date;
-                }
-                else if (articleType_Id == 5)
-                {
+                } else if (articleType_Id == 5) {
                     newArticle.ArticleCode = article.ArticleCode;
                     newArticle.ManualArticleCode = "NULL";
                     newArticle.Article = article.Article;
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = articleType_Id;
                     newArticle.ArticleGroupId = article.ArticleGroupId;
-
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.AccountId;
                     newArticle.CostAccountId = article.AccountId;
                     newArticle.AssetAccountId = article.AccountId;
                     newArticle.ExpenseAccountId = article.AccountId;
-
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 6;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
-
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
                     newArticle.IsInventory = false;
                     newArticle.Particulars = "NA";
                     newArticle.Address = article.Address;
-                    newArticle.TermId = 1;
+                    newArticle.TermId = db.MstTerms.FirstOrDefault().Id;
                     newArticle.ContactNumber = article.ContactNumber;
                     newArticle.ContactPerson = article.ContactPerson;
                     newArticle.TaxNumber = "NA";
@@ -550,40 +546,34 @@ namespace easyfis.Controllers
                     newArticle.DateAcquired = date;
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
-                    newArticle.ManualArticleOldCode = "NULL";
-
+                    newArticle.ManualArticleOldCode = "NA";
                     newArticle.IsLocked = article.IsLocked;
                     newArticle.CreatedById = mstUserId;
                     newArticle.CreatedDateTime = date;
                     newArticle.UpdatedById = mstUserId;
                     newArticle.UpdatedDateTime = date;
-                }
-                else if (articleType_Id == 4)
-                {
+                } else if (articleType_Id == 4) {
                     newArticle.ArticleCode = article.ArticleCode;
-                    newArticle.ManualArticleCode = "NULL";
+                    newArticle.ManualArticleCode = "NA";
                     newArticle.Article = article.Article;
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = articleType_Id;
                     newArticle.ArticleGroupId = null;
-
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.AccountId;
                     newArticle.CostAccountId = article.AccountId;
                     newArticle.AssetAccountId = article.AccountId;
                     newArticle.ExpenseAccountId = article.AccountId;
-
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 5;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
-
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
                     newArticle.IsInventory = false;
                     newArticle.Particulars = "NA";
                     newArticle.Address = article.Address;
-                    newArticle.TermId = 1;
+                    newArticle.TermId = db.MstTerms.FirstOrDefault().Id;
                     newArticle.ContactNumber = article.ContactNumber;
                     newArticle.ContactPerson = "NA";
                     newArticle.TaxNumber = "NA";
@@ -591,34 +581,28 @@ namespace easyfis.Controllers
                     newArticle.DateAcquired = date;
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
-                    newArticle.ManualArticleOldCode = "NULL";
+                    newArticle.ManualArticleOldCode = "NA";
                     newArticle.IsLocked = article.IsLocked;
-
                     newArticle.CreatedById = mstUserId;
                     newArticle.CreatedDateTime = date;
                     newArticle.UpdatedById = mstUserId;
                     newArticle.UpdatedDateTime = date;
-                }
-                else if (articleType_Id == 3)
-                {
+                } else if (articleType_Id == 3) {
                     newArticle.ArticleCode = article.ArticleCode;
-                    newArticle.ManualArticleCode = " ";
+                    newArticle.ManualArticleCode = "NA";
                     newArticle.Article = article.Article;
-                    newArticle.Category = " ";
+                    newArticle.Category = "NA";
                     newArticle.ArticleTypeId = articleType_Id;
                     newArticle.ArticleGroupId = article.ArticleGroupId;
-
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.SalesAccountId;
                     newArticle.CostAccountId = article.CostAccountId;
                     newArticle.AssetAccountId = article.AssetAccountId;
                     newArticle.ExpenseAccountId = article.ExpenseAccountId;
-
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 5;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
-
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
                     newArticle.IsInventory = false;
@@ -633,33 +617,27 @@ namespace easyfis.Controllers
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
                     newArticle.ManualArticleOldCode = " ";
-
-                    newArticle.IsLocked = isLocked;
+                    newArticle.IsLocked = false;
                     newArticle.CreatedById = mstUserId;
                     newArticle.CreatedDateTime = date;
                     newArticle.UpdatedById = mstUserId;
                     newArticle.UpdatedDateTime = date;
-                }
-                else if (articleType_Id == 2)
-                {
+                } else if (articleType_Id == 2) {
                     newArticle.ArticleCode = article.ArticleCode;
-                    newArticle.ManualArticleCode = " ";
+                    newArticle.ManualArticleCode = "NA";
                     newArticle.Article = article.Article;
-                    newArticle.Category = " ";
-                    newArticle.ArticleTypeId = 2;
+                    newArticle.Category = "NA";
+                    newArticle.ArticleTypeId = articleType_Id;
                     newArticle.ArticleGroupId = article.ArticleGroupId;
-
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.SalesAccountId;
                     newArticle.CostAccountId = article.CostAccountId;
                     newArticle.AssetAccountId = article.AssetAccountId;
                     newArticle.ExpenseAccountId = article.ExpenseAccountId;
-
-                    newArticle.UnitId = 1;
-                    newArticle.OutputTaxId = 5;
-                    newArticle.InputTaxId = 5;
-                    newArticle.WTaxTypeId = 5;
-
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
                     newArticle.IsInventory = false;
@@ -673,57 +651,48 @@ namespace easyfis.Controllers
                     newArticle.DateAcquired = date;
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
-                    newArticle.ManualArticleOldCode = " ";
-
-                    newArticle.IsLocked = isLocked;
+                    newArticle.ManualArticleOldCode = "NA";
+                    newArticle.IsLocked = false;
                     newArticle.CreatedById = mstUserId;
                     newArticle.CreatedDateTime = date;
                     newArticle.UpdatedById = mstUserId;
                     newArticle.UpdatedDateTime = date;
-                }
-                else if (articleType_Id == 1)
-                {
+                } else if (articleType_Id == 1) {
                     newArticle.ArticleCode = article.ArticleCode;
                     newArticle.ManualArticleCode = article.ManualArticleCode;
                     newArticle.Article = article.Article;
                     newArticle.Category = article.Category;
-                    newArticle.ArticleTypeId = 1;
+                    newArticle.ArticleTypeId = articleType_Id;
                     newArticle.ArticleGroupId = article.ArticleGroupId;
-
                     newArticle.AccountId = article.AccountId;
                     newArticle.SalesAccountId = article.SalesAccountId;
                     newArticle.CostAccountId = article.CostAccountId;
                     newArticle.AssetAccountId = article.AssetAccountId;
                     newArticle.ExpenseAccountId = article.ExpenseAccountId;
-
                     newArticle.UnitId = article.UnitId;
                     newArticle.OutputTaxId = article.OutputTaxId;
                     newArticle.InputTaxId = article.InputTaxId;
                     newArticle.WTaxTypeId = article.WTaxTypeId;
-
                     newArticle.Price = article.Price;
                     newArticle.Cost = article.Cost;
                     newArticle.IsInventory = article.IsInventory;
                     newArticle.Particulars = article.Particulars;
-                    newArticle.TermId = 1;
+                    newArticle.TermId = db.MstTerms.FirstOrDefault().Id;
                     newArticle.Address = "NA";
                     newArticle.ContactNumber = "NA";
                     newArticle.ContactPerson = "NA";
                     newArticle.TaxNumber = "NA";
                     newArticle.CreditLimit = 0;
                     newArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
-                    newArticle.UsefulLife = 0;
-                    newArticle.SalvageValue = 0;
+                    newArticle.UsefulLife = article.UsefulLife;
+                    newArticle.SalvageValue = article.SalvageValue;
                     newArticle.ManualArticleOldCode = article.ManualArticleOldCode;
-
-                    newArticle.IsLocked = isLocked;
+                    newArticle.IsLocked = false;
                     newArticle.CreatedById = mstUserId;
                     newArticle.CreatedDateTime = date;
                     newArticle.UpdatedById = mstUserId;
                     newArticle.UpdatedDateTime = date;
-                }
-                else
-                {
+                } else {
                     Debug.WriteLine("Not an Article Type Id");
                 }
 
@@ -748,7 +717,6 @@ namespace easyfis.Controllers
         {
             try
             {
-                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -760,21 +728,17 @@ namespace easyfis.Controllers
                 if (articles.Any())
                 {
                     var updateArticle = articles.FirstOrDefault();
-                    if (articleType_Id == 6)
-                    {
+                    if (articleType_Id == 6) {
                         updateArticle.ArticleCode = article.ArticleCode;
                         updateArticle.Article = article.Article;
                         updateArticle.ArticleTypeId = articleType_Id;
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.Address = article.Address;
                         updateArticle.ContactNumber = article.ContactNumber;
-
                         updateArticle.IsLocked = article.IsLocked;
                         updateArticle.UpdatedById = mstUserId;
                         updateArticle.UpdatedDateTime = date;
-                    }
-                    else if (articleType_Id == 5)
-                    {
+                    } else if (articleType_Id == 5) {
                         updateArticle.ArticleCode = article.ArticleCode;
                         updateArticle.Article = article.Article;
                         updateArticle.ArticleTypeId = articleType_Id;
@@ -783,148 +747,93 @@ namespace easyfis.Controllers
                         updateArticle.Address = article.Address;
                         updateArticle.ContactNumber = article.ContactNumber;
                         updateArticle.ContactPerson = article.ContactPerson;
-
                         updateArticle.IsLocked = article.IsLocked;
                         updateArticle.UpdatedById = mstUserId;
                         updateArticle.UpdatedDateTime = date;
-                    }
-                    else if (articleType_Id == 4)
-                    {
+                    } else if (articleType_Id == 4) {
                         updateArticle.ArticleCode = article.ArticleCode;
                         updateArticle.Article = article.Article;
                         updateArticle.ArticleTypeId = articleType_Id;
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.Address = article.Address;
                         updateArticle.ContactNumber = article.ContactNumber;
-
                         updateArticle.IsLocked = article.IsLocked;
                         updateArticle.UpdatedById = mstUserId;
                         updateArticle.UpdatedDateTime = date;
-                    }
-                    else if (articleType_Id == 3)
-                    {
+                    } else if (articleType_Id == 3) {
                         updateArticle.ArticleCode = article.ArticleCode;
-                        updateArticle.ManualArticleCode = " ";
                         updateArticle.Article = article.Article;
-                        updateArticle.Category = " ";
                         updateArticle.ArticleTypeId = articleType_Id;
                         updateArticle.ArticleGroupId = article.ArticleGroupId;
-
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.SalesAccountId = article.SalesAccountId;
                         updateArticle.CostAccountId = article.CostAccountId;
                         updateArticle.AssetAccountId = article.AssetAccountId;
                         updateArticle.ExpenseAccountId = article.ExpenseAccountId;
-
-                        updateArticle.UnitId = 1;
-                        updateArticle.OutputTaxId = 5;
-                        updateArticle.InputTaxId = 5;
-                        updateArticle.WTaxTypeId = 5;
-
-                        updateArticle.Price = 0;
-                        updateArticle.Cost = 0;
-                        updateArticle.IsInventory = false;
                         updateArticle.Particulars = article.Particulars;
                         updateArticle.Address = article.Address;
                         updateArticle.TermId = article.TermId;
                         updateArticle.ContactNumber = article.ContactNumber;
                         updateArticle.ContactPerson = article.ContactPerson;
                         updateArticle.TaxNumber = article.TaxNumber;
-                        updateArticle.CreditLimit = 0;
-                        updateArticle.DateAcquired = date;
-                        updateArticle.UsefulLife = 0;
-                        updateArticle.SalvageValue = 0;
-                        updateArticle.ManualArticleOldCode = " ";
-
-                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.IsLocked = true;
                         updateArticle.UpdatedById = mstUserId;
                         updateArticle.UpdatedDateTime = date;
-                    }
-                    else if (articleType_Id == 2)
-                    {
+                    } else if (articleType_Id == 2) {
                         updateArticle.ArticleCode = article.ArticleCode;
-                        updateArticle.ManualArticleCode = " ";
                         updateArticle.Article = article.Article;
-                        updateArticle.Category = " ";
                         updateArticle.ArticleTypeId = articleType_Id;
                         updateArticle.ArticleGroupId = article.ArticleGroupId;
-
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.SalesAccountId = article.SalesAccountId;
                         updateArticle.CostAccountId = article.CostAccountId;
                         updateArticle.AssetAccountId = article.AssetAccountId;
                         updateArticle.ExpenseAccountId = article.ExpenseAccountId;
-
-                        updateArticle.UnitId = 1;
-                        updateArticle.OutputTaxId = 5;
-                        updateArticle.InputTaxId = 5;
-                        updateArticle.WTaxTypeId = 5;
-
-                        updateArticle.Price = 0;
-                        updateArticle.Cost = 0;
-                        updateArticle.IsInventory = false;
                         updateArticle.Particulars = article.Particulars;
                         updateArticle.Address = article.Address;
                         updateArticle.TermId = article.TermId;
-                        updateArticle.ContactNumber = article.ContactNumber;
-                        updateArticle.ContactPerson = article.ContactPerson;
-                        updateArticle.TaxNumber = article.TaxNumber;
                         updateArticle.CreditLimit = article.CreditLimit;
-                        updateArticle.DateAcquired = date;
-                        updateArticle.UsefulLife = 0;
-                        updateArticle.SalvageValue = 0;
+                        updateArticle.ContactNumber = article.ContactNumber;
+                        updateArticle.ContactPerson = article.ContactPerson;
+                        updateArticle.TaxNumber = article.TaxNumber;
                         updateArticle.ManualArticleOldCode = " ";
-
-                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.IsLocked = true;
                         updateArticle.UpdatedById = mstUserId;
                         updateArticle.UpdatedDateTime = date;
-                    }
-                    else if (articleType_Id == 1)
-                    {
+                    } else if (articleType_Id == 1) {
                         updateArticle.ArticleCode = article.ArticleCode;
                         updateArticle.ManualArticleCode = article.ManualArticleCode;
                         updateArticle.Article = article.Article;
                         updateArticle.Category = article.Category;
-                        updateArticle.ArticleTypeId = 1;
+                        updateArticle.ArticleTypeId = articleType_Id;
                         updateArticle.ArticleGroupId = article.ArticleGroupId;
-
                         updateArticle.AccountId = article.AccountId;
                         updateArticle.SalesAccountId = article.SalesAccountId;
                         updateArticle.CostAccountId = article.CostAccountId;
                         updateArticle.AssetAccountId = article.AssetAccountId;
                         updateArticle.ExpenseAccountId = article.ExpenseAccountId;
-
                         updateArticle.UnitId = article.UnitId;
                         updateArticle.OutputTaxId = article.OutputTaxId;
                         updateArticle.InputTaxId = article.InputTaxId;
                         updateArticle.WTaxTypeId = article.WTaxTypeId;
-
                         updateArticle.Price = article.Price;
                         updateArticle.Cost = article.Cost;
                         updateArticle.IsInventory = article.IsInventory;
                         updateArticle.Particulars = article.Particulars;
-                        updateArticle.TermId = 1;
-                        updateArticle.Address = "NA";
-                        updateArticle.ContactNumber = "NA";
-                        updateArticle.ContactPerson = "NA";
-                        updateArticle.TaxNumber = "NA";
+                        updateArticle.TermId = db.MstTerms.FirstOrDefault().Id;
                         updateArticle.CreditLimit = 0;
                         updateArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
-                        updateArticle.UsefulLife = 0;
-                        updateArticle.SalvageValue = 0;
+                        updateArticle.UsefulLife = article.UsefulLife;
+                        updateArticle.SalvageValue = article.SalvageValue;
                         updateArticle.ManualArticleOldCode = article.ManualArticleOldCode;
-
-                        updateArticle.IsLocked = article.IsLocked;
+                        updateArticle.IsLocked = true;
                         updateArticle.UpdatedById = mstUserId;
                         updateArticle.UpdatedDateTime = date;
-                    }
-                    else
-                    {
+                    } else {
                         Debug.WriteLine("Not an Article Type Id");
                     }
 
                     db.SubmitChanges();
-
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else
@@ -939,15 +848,14 @@ namespace easyfis.Controllers
             }
         }
 
-        // =====================
-        // UPDATE Article IsLock
-        // =====================
-        [Route("api/updateArticleIsLock/{id}")]
-        public HttpResponseMessage PutIsLock(String id, Models.MstArticle article)
+        // ==============
+        // Article UnLock
+        // ==============
+        [Route("api/unlockArticle/{id}")]
+        public HttpResponseMessage PutIsLock(String id)
         {
             try
             {
-                //var isLocked = true;
                 var identityUserId = User.Identity.GetUserId();
                 var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
                 var date = DateTime.Now;
@@ -959,7 +867,7 @@ namespace easyfis.Controllers
                 {
                     var updateArticle = articles.FirstOrDefault();
 
-                    updateArticle.IsLocked = article.IsLocked;
+                    updateArticle.IsLocked = false;
                     updateArticle.UpdatedById = mstUserId;
                     updateArticle.UpdatedDateTime = date;
 
@@ -971,7 +879,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch (Exception e)
             {
@@ -1002,7 +909,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

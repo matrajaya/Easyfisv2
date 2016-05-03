@@ -1,47 +1,53 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Accounts Receivable</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
-    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
-    <div id="wrapper" class="wrapper">
+    <div id="o-wrapper" class="o-wrapper">
         <!-- Header -->
         @Html.Partial("_SoftwareHeader")
 
         <!-- Section -->
         <section>
-            <br /><br /><br />
-            <div class="container">
-                <h4><span class="accountReportsDetail">AR</span> Accounts Receivable</h4>
-                <br />
-                <div class="div_Current_Page">
-                    @*<label id="currentBranchName"></label>*@
-                    <span id="currentPage"></span>
+            <div class="sub-nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><span class="accountReportsDetail">AR</span> Accounts Receivable</h4>
+                        </div>
+                        <div class="col-md-6" align="right">
+                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                        </div>
+                    </div>
                 </div>
-                @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                    <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>*@
-                @*<br /><br />*@
-                @*<h2>Accounts Payable</h2>*@
+                <div class="div_Current_Page">
+                    <div class="container">
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Accounts Receivable
+                    </div>
+                </div>
+            </div>
+            <div class="container">
                 <div class="row">
                     <div class="col-md-4">
                         <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
                             <li class="active"><a data-toggle="pill" href="#AR">Accounts Receivable</a></li>
-                            @*<li><a data-toggle="pill" href="#ARS">Accounts Receivable Summary</a></li>*@
-                            @*<li><a data-toggle="pill" href="#SOA">Statement of Account</a></li>*@
+                            <li><a data-toggle="pill" href="#ARS">Accounts Receivable Summary</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#SOA">Statement of Account</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#SSR">Sales Summary Report</a></li>
+                            <li><a data-toggle="pill" href="#SDR">Sales Detail Report</a></li>
+                            <li><a data-toggle="pill" href="#CSR">Collection Summary Report</a></li>
+                            <li><a data-toggle="pill" href="#CDR">Collection Detail Report</a></li>
                         </ul>
                     </div>
                     <div class="col-md-8">
@@ -49,7 +55,7 @@
                             <div id="AR" class="tab-pane fade in active">
                                 <div align="right">
                                     <button onclick="AccountsReceivablePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -70,12 +76,12 @@
                                                         <input type="hidden" id="accountReceivableReport_Company_selectedValue" />
                                                     </div>
                                                 </div>
-                                                @*<div class="form-group">
+                                                <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="" />
                                                     </div>
-                                                </div>*@
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -83,8 +89,8 @@
                             </div>
                             <div id="ARS" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsReceivableSummaryPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="AccountsReceivableSummaryPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -118,8 +124,8 @@
                             </div>
                             <div id="SOA" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("AccountsReceivableStatementOfAccountPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="AccountsReceivableStatementOfTheAccountPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -159,6 +165,134 @@
                                     </form>
                                 </div>
                             </div>
+                            <div id="SSR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="SaleSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="SaleSummaryReport_StartDate"></div>
+                                                        <input type="hidden" id="SaleSummaryReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="SaleSummaryReport_EndDate"></div>
+                                                        <input type="hidden" id="SaleSummaryReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="SDR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="SaleDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="SaleDetailReport_StartDate"></div>
+                                                        <input type="hidden" id="SaleDetailReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="SaleDetailReport_EndDate"></div>
+                                                        <input type="hidden" id="SaleDetailReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="CSR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="CollectionSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="CollectionSummaryReport_StartDate"></div>
+                                                        <input type="hidden" id="CollectionSummaryReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="CollectionSummaryReport_EndDate"></div>
+                                                        <input type="hidden" id="CollectionSummaryReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="CDR" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="CollectionDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Start Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="CollectionDetailReport_StartDate"></div>
+                                                        <input type="hidden" id="CollectionDetailReport_StartDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">End Date</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="CollectionDetailReport_EndDate"></div>
+                                                        <input type="hidden" id="CollectionDetailReport_EndDate_data" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -174,7 +308,6 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
-    @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
         // ================
         // Global Variables
@@ -188,6 +321,14 @@
         var StatementOfTheAccountCboCompany;
         var customers;
         var cboCustomer;
+        var saleSummaryReportStartDate;
+        var saleSummaryReportEndDate;
+        var saleDetailReportStartDate;
+        var saleDetailReportEndDate;
+        var collectionSummaryReportStartDate;
+        var collectionSummaryReportEndDate;
+        var collectionDetailReportStartDate;
+        var collectionDetailReportEndDate;
 
         // ===========
         // Get company
@@ -329,13 +470,218 @@
                 window.location.href = '/Software/AccountsReceivablePDF?DateAsOf=' + accountReceivableReportDateAsOf + '&CompanyId=' + companyId;
             }
         }
+        
+        function AccountsReceivableSummaryPDF_OnClick() {
+            var accountReceivableSummaryReportDateAsOf = document.getElementById('accountReceivableSummaryReport_DateAsOf_data').value;
+
+            var companyId;
+            if (document.getElementById('accountReceivableSummaryReport_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('accountReceivableSummaryReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('accountReceivableSummaryReport_Company_data').value;
+                document.getElementById('accountReceivableSummaryReport_Company').style.border = " ";
+                window.location.href = '/Software/AccountsReceivableSummaryPDF?DateAsOf=' + accountReceivableSummaryReportDateAsOf + '&CompanyId=' + companyId;
+            }
+        }
+
+
+        function AccountsReceivableStatementOfTheAccountPDF_OnClick() {
+            var accountReceivableStatementOfTheAccountReportDateAsOf = document.getElementById('StatementOfTheAccount_DateAsOf_data').value;
+            var accountReceivableStatementOfTheAccountReportCustomerId;
+
+            var companyId;
+            if (document.getElementById('StatementOfTheAccount_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('StatementOfTheAccount_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else if (document.getElementById('StatementOfTheAccount_Customer_data').value == "") {
+                accountReceivableStatementOfTheAccountReportCustomerId = 0;
+                document.getElementById('StatementOfTheAccount_Customer').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('StatementOfTheAccount_Company_data').value;
+                accountReceivableStatementOfTheAccountReportCustomerId = document.getElementById('StatementOfTheAccount_Customer_data').value;
+                document.getElementById('StatementOfTheAccount_Company').style.border = " ";
+                document.getElementById('StatementOfTheAccount_Customer').style.border = " ";
+                window.location.href = '/Software/AccountsReceivableStatementOfAccountPDF?DateAsOf=' + accountReceivableStatementOfTheAccountReportDateAsOf + '&CompanyId=' + companyId + '&CustomerId=' + accountReceivableStatementOfTheAccountReportCustomerId;
+            }
+        }
+
+
+        // get Sale Summary Report Start Date
+        function getSaleSummaryReportStartDate() {
+            saleSummaryReportStartDate.dispose();
+            saleSummaryReportStartDate = new wijmo.input.InputDate('#SaleSummaryReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('SaleSummaryReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('SaleSummaryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('SaleSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getSaleSummaryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sale Summary Report End Date
+        function getSaleSummaryReportEndDate() {
+            saleSummaryReportEndDate.dispose();
+            saleSummaryReportEndDate = new wijmo.input.InputDate('#SaleSummaryReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('SaleSummaryReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('SaleSummaryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('SaleSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getSaleSummaryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // sale summary report on click
+        function SaleSummaryReportPDF_OnClick() {
+            var saleSummaryReportStartDate = document.getElementById('SaleSummaryReport_StartDate_data').value;
+            var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsReceivableSalesSummaryReportPDF?StartDate=' + saleSummaryReportStartDate + '&EndDate=' + saleSummaryReportEndDate;
+        }
+
+        // get Sale Detail Report Start Date
+        function getSaleDetailReportStartDate() {
+            saleDetailReportStartDate.dispose();
+            saleDetailReportStartDate = new wijmo.input.InputDate('#SaleDetailReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('SaleDetailReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('SaleDetailReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('SaleDetailReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getSaleDetailReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sale Detail Report End Date
+        function getSaleDetailReportEndDate() {
+            saleDetailReportEndDate.dispose();
+            saleDetailReportEndDate = new wijmo.input.InputDate('#SaleDetailReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('SaleDetailReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('SaleDetailReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('SaleDetailReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getSaleDetailReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // sale detial report on click
+        function SaleDetailReportPDF_OnClick() {
+            var saleDetailReportStartDate = document.getElementById('SaleDetailReport_StartDate_data').value;
+            var saleDetailReportEndDate = document.getElementById('SaleDetailReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsReceivableSalesDetailReportPDF?StartDate=' + saleDetailReportStartDate + '&EndDate=' + saleDetailReportEndDate;
+        }
+
+        // get Collection Summary Report Start Date
+        function getCollectionSummaryReportStartDate() {
+            collectionSummaryReportStartDate.dispose();
+            collectionSummaryReportStartDate = new wijmo.input.InputDate('#CollectionSummaryReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('CollectionSummaryReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('CollectionSummaryReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('CollectionSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getCollectionSummaryReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Collection Summary Report End Date
+        function getCollectionSummaryReportEndDate() {
+            collectionSummaryReportEndDate.dispose();
+            collectionSummaryReportEndDate = new wijmo.input.InputDate('#CollectionSummaryReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('CollectionSummaryReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('CollectionSummaryReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('CollectionSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getCollectionSummaryReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // collection summary report on click
+        function CollectionSummaryReportPDF_OnClick() {
+            var collectionSummaryReportStartDate = document.getElementById('CollectionSummaryReport_StartDate_data').value;
+            var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsReceivableCollectionSummaryReportPDF?StartDate=' + collectionSummaryReportStartDate + '&EndDate=' + collectionSummaryReportEndDate;
+        }
+
+        // get Collection Detail Report Start Date
+        function getCollectionDetailReportStartDate() {
+            collectionDetailReportStartDate.dispose();
+            collectionDetailReportStartDate = new wijmo.input.InputDate('#CollectionDetailReport_StartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('CollectionDetailReport_StartDate_data').value),
+                mask: '99/99/9999',
+                max: new Date(document.getElementById('CollectionDetailReport_EndDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('CollectionDetailReport_StartDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getCollectionDetailReportEndDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Collection Detail Report End Date
+        function getCollectionDetailReportEndDate() {
+            collectionDetailReportEndDate.dispose();
+            collectionDetailReportEndDate = new wijmo.input.InputDate('#CollectionDetailReport_EndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(document.getElementById('CollectionDetailReport_EndDate_data').value),
+                mask: '99/99/9999',
+                min: new Date(document.getElementById('CollectionDetailReport_StartDate_data').value),
+                onValueChanged: function () {
+                    document.getElementById('CollectionDetailReport_EndDate_data').value = this.value.toLocaleDateString();
+                    setTimeout(function () {
+                        getCollectionDetailReportStartDate();
+                    }, 50);
+                }
+            });
+        }
+
+        // collection detail report on click
+        function CollectionDetailReportPDF_OnClick() {
+            var collectionDetailReportStartDate = document.getElementById('CollectionDetailReport_StartDate_data').value;
+            var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
+
+            window.location.href = '/Software/AccountsReceivableCollectionDetailReportPDF?StartDate=' + collectionDetailReportStartDate + '&EndDate=' + collectionDetailReportEndDate;
+        }
 
         // ============
         // On Load Page
         // ============
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Accounts Receivable';
-
             accountReceivableCboCompany = new wijmo.input.ComboBox('#accountReceivableReport_Company');
             accountReceivableSummaryCboCompany = new wijmo.input.ComboBox('#accountReceivableSummaryReport_Company');
             StatementOfTheAccountCboCompany = new wijmo.input.ComboBox('#StatementOfTheAccount_Company');
@@ -377,8 +723,46 @@
                 }
             });
 
-        });
+            // sale summary report
+            document.getElementById('SaleSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('SaleSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
 
+            saleSummaryReportStartDate = new wijmo.input.InputDate('#SaleSummaryReport_StartDate');
+            saleSummaryReportEndDate = new wijmo.input.InputDate('#SaleSummaryReport_EndDate');
+
+            getSaleSummaryReportStartDate();
+            getSaleSummaryReportEndDate();
+
+            // sale detail report
+            document.getElementById('SaleDetailReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('SaleDetailReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            saleDetailReportStartDate = new wijmo.input.InputDate('#SaleDetailReport_StartDate');
+            saleDetailReportEndDate = new wijmo.input.InputDate('#SaleDetailReport_EndDate');
+
+            getSaleDetailReportStartDate();
+            getSaleDetailReportEndDate();
+
+            // collection summary report
+            document.getElementById('CollectionSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('CollectionSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            collectionSummaryReportStartDate = new wijmo.input.InputDate('#CollectionSummaryReport_StartDate');
+            collectionSummaryReportEndDate = new wijmo.input.InputDate('#CollectionSummaryReport_EndDate');
+
+            getCollectionSummaryReportStartDate();
+            getCollectionSummaryReportEndDate();
+
+            // collection detail report
+            document.getElementById('CollectionDetailReport_StartDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('CollectionDetailReport_EndDate_data').value = new Date().toLocaleDateString();
+
+            collectionDetailReportStartDate = new wijmo.input.InputDate('#CollectionDetailReport_StartDate');
+            collectionDetailReportEndDate = new wijmo.input.InputDate('#CollectionDetailReport_EndDate');
+
+            getCollectionDetailReportStartDate();
+            getCollectionDetailReportEndDate();
+        });
     </script>
 </body>
 </html>

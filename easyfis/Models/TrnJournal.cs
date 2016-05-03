@@ -37,7 +37,12 @@ namespace easyfis.Models
         public Int32 AccountCategoryId { get; set; }
         public String AccountCategory { get; set; }
         public String SubCategoryDescription { get; set; }
+        public String AccountTypeCode { get; set; }
         public String AccountType { get; set; }
         public Decimal Balance { get; set; }
+
+        public Int32 AccountCashFlowId { get; set; }
+        public String AccountCashFlowCode { get; set; }
+        public String AccountCashFlow { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace easyfis
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 //AllowOnlyAlphanumericUserNames = false,
-                //RequireUniqueEmail = true
+                RequireUniqueEmail = true
             };
 
             // Configure validation logic for passwords
@@ -55,7 +55,7 @@ namespace easyfis
             {
                 RequiredLength = 6,
                 //RequireNonLetterOrDigit = true,
-                RequireDigit = true,
+                //RequireDigit = true,
                 //RequireLowercase = true,
                 //RequireUppercase = true,
             };

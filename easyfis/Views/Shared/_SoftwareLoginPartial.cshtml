@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    var branchId = Request.QueryString["BranchId"];
+}
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+    {
+        @Html.AntiForgeryToken()
+        <ul class="nav navbar-nav">
+            <li><a href="#" id="c-button--slide-left">Menu</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            @*<li><a href="@Url.Action("Login", "Account")">@ViewData["UserName"]</a></li>*@
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">@ViewData["FullName"] <i class="fa fa-caret-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="@Url.Action("Login", "Account")"><i class="fa fa-user"></i> Profile</a></li>
+                    <li class="divider"></li>
+                    <li><a href="@Url.Action("ChangePassword", "Manage")"><i class="fa fa-pencil-square-o"></i> Change Password</a></li>
+                    <li><a href="#" data-toggle="modal" onclick="cmdLogoutModal_OnClick()"><i class="fa fa-sign-out"></i> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="@Url.Action("Login", "Account")"><i class="fa fa-sign-in"></i> Sign in</a></li>
+    </ul>
+}
+
+<script type="text/javascript">
+    function cmdLogoutModal_OnClick() {
+        $('#modalLogout').modal({
+            show: true,
+            backdrop: 'static'
+        });
+    }
+</script>

@@ -9,10 +9,7 @@
     <title>@ViewData["FullName"]</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Content/css")
-    @Styles.Render("~/Font-Awesome/css")
-    @Styles.Render("~/Content/custom-css")
-    @Styles.Render("~/WijmoCSS/Wijmo-css")
+    @Styles.Render("~/Content/Home-css")
 </head>
 <body data-spy="scroll" data-offset="100" id="home">
     <!-- Header -->
@@ -57,15 +54,53 @@
     </div>
 
     <!-- Scripts JavaScripts -->
-    @Scripts.Render("~/Scripts/js")
+    @Scripts.Render("~/Scripts/Home-js")
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
         // ================
         // Global Variables
         // ================
         var branches;
         var cboBranch;
+
+        // =============
+        // Create Cookie
+        // =============
+        function createCookie(name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            } else {
+                var expires = "";
+            }
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
+        // =============
+        // Delete Cookie
+        // =============
+        function eraseCookie(name) {
+            createCookie(name, "", -1);
+        }
 
         // =================
         // Modal User Detail
@@ -77,16 +112,10 @@
             });
         }
 
-        // ==================
-        // Update User Detail
-        // ==================
-        function cmdUserSaveButton_OnClick() {
-            var userObject = new Object();
-            var id = document.getElementById('userId').value;
-
-            userObject.FullName = document.getElementById('profileDetail_fullName').value;
-            var data = JSON.stringify(userObject);
-
+        // =====================
+        // User Entry Validation
+        // =====================
+        function userEntryValidation() {
             var isValid = true;
             $('.requiredUser').each(function () {
                 if ($.trim($(this).val()) == '') {
@@ -102,36 +131,25 @@
                     });
                 }
             });
-            if (isValid == false) {
-                e.preventDefault();
-            }
-            else {
-                $.ajax({
-                    type: "PUT",
-                    url: '/api/updateAspUser/' + id,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: data,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdSaveUserButton").prop("disabled", true);
-                            $("#cmdUserDetailCloseButton").prop("disabled", true);
-                            toastr.success("Successfully Updated Profile");
-                            window.setTimeout(function () {
-                                location.reload()
-                            }, 1000);
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                        },
-                        500: function () {
-                            toastr.error("Server Error");
-                        }
-                    }
-                });
+
+            return isValid;
+        }
+
+        // ==================
+        // Update User Detail
+        // ==================
+        function cmdUserSaveButton_OnClick() {
+            var userObject = new Object();
+            var id = document.getElementById('userId').value;
+
+            userObject.FullName = document.getElementById('profileDetail_fullName').value;
+            var data = JSON.stringify(userObject);
+
+            if (userEntryValidation() == false) {
+                toastr.error("Invalid Entry");
+            } else {
+                $('#cmdSaveUserButton').prop('disabled', true);
+                $('#cmdUserDetailCloseButton').prop('disabled', true);
 
                 $.ajax({
                     type: "PUT",
@@ -141,20 +159,29 @@
                     data: data,
                     statusCode: {
                         200: function () {
-                            $("#cmdSaveUserButton").prop("disabled", true);
-                            $("#cmdUserDetailCloseButton").prop("disabled", true);
+                            $('#cmdSaveUserButton').prop('disabled', true);
+                            $('#cmdUserDetailCloseButton').prop('disabled', true);
+                            toastr.success("Successfully updated");
+
                             window.setTimeout(function () {
                                 location.reload()
                             }, 1000);
+
                         },
                         404: function () {
-                            toastr.error("Can't Update");
+                            $('#cmdSaveUserButton').prop('disabled', false);
+                            $('#cmdUserDetailCloseButton').prop('disabled', false);
+                            toastr.error("Update request not found");
                         },
                         400: function () {
-                            toastr.error("Bad Request");
+                            $('#cmdSaveUserButton').prop('disabled', false);
+                            $('#cmdUserDetailCloseButton').prop('disabled', false);
+                            toastr.error("Cannot update profile");
                         },
                         500: function () {
-                            toastr.error("Server Error");
+                            $('#cmdSaveUserButton').prop('disabled', false);
+                            $('#cmdUserDetailCloseButton').prop('disabled', false);
+                            toastr.error("Internal Server Error");
                         }
                     }
                 });
@@ -165,6 +192,7 @@
         // GET Branch for Combo Box
         // ========================
         function getBranchesForComboBox() {
+            NProgress.start();
             branches = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listBranch',
@@ -177,41 +205,43 @@
                         for (i = 0; i < results.length; i++) {
                             branches.push({
                                 BranchId: results[i]["Id"],
-                                BranchBranch: results[i]["Branch"]
+                                Branch: results[i]["Branch"],
+                                CompanyId: results[i]["CompanyId"],
+                                Company: results[i]["Company"]
                             });
                         }
                         createCboBranch(branches);
+                    } else {
+                        createCboBranch(branches);
                     }
+                    NProgress.done();
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
-            }
-            );
+            });
         }
 
         // ======================
         // Combo Box for Branches
         // ======================
         function createCboBranch(branches) {
-            var branchCollections = new wijmo.collections.CollectionView(branches);
-            var branchList = new Array();
-            for (var i = 0; i < branchCollections.items.length; i++) {
-                branchList.push(branchCollections.items[i].BranchBranch);
+            var disabled;
+            if (branches == 0) {
+                disabled = true;
+            } else {
+                disabled = false;
             }
 
-            //cboBranch.dispose();
             cboBranch = new wijmo.input.ComboBox('#branch_Id', {
+                disabled: disabled,
                 placeholder: "Select branch",
-                itemsSource: branchList,
+                itemsSource: branches,
+                displayMemberPath: "Branch",
                 isEditable: false,
-                selectedValue: "",
                 onSelectedIndexChanged: function () {
-                    $("#branch_Id_Data").val(branchCollections.items[this.selectedIndex].BranchId);
                     $('#LaunchSoftware').prop('disabled', false);
                 }
             });
-
-            document.getElementById('branch_Id_Data').value = branchCollections.items[cboBranch.selectedIndex].BranchId;
         }
 
         // ===============
@@ -221,37 +251,18 @@
             document.getElementById('LaunchSoftware').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Launching Software..."
             document.getElementById('LaunchSoftware').disabled = true;
 
-            var branchId = document.getElementById('branch_Id_Data').value;
-            window.location = '/Software?BranchId=' + branchId;
+            createCookie("null", "null", -1);
+            createCookie("company", cboBranch.selectedItem["Company"], 365);
+            createCookie("branchId", cboBranch.selectedItem["BranchId"], 365);
+            createCookie("branch", cboBranch.selectedItem["Branch"], 365);
+            window.location = '/Software';
         }
 
         // =======
         // On Load
         // =======
         $(document).ready(function () {
-            toastr.options = {
-                "closeButton": true,
-                "debug": true,
-                "newestOnTop": true,
-                "progressBar": true,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-
             getBranchesForComboBox();
-            if (branch_Id_Data == '') {
-                document.getElementById('LaunchSoftware').disabled = true;
-            }
-
         });
     </script>
 </body>

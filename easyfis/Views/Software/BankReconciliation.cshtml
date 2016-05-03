@@ -4,30 +4,141 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
-    <title>Software Dashboard</title>
+    <title>Bank Reconciliation</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
 </head>
 <body>
-    <div id="wrapper" class="wrapper">
+    <div id="o-wrapper" class="o-wrapper">
         <!-- Header -->
         @Html.Partial("_SoftwareHeader")
 
-        <!-- Section -->
-        <section>
-            <br /><br /><br />
+        <div class="sub-nav">
             <div class="container">
-                <button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>
-                <br /><br />
-                <h2>Back Reconciliation</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4><i class="fa fa-check"></i> Bank Reconciliation</h4>
+                    </div>
+                    <div class="col-md-6" align="right">
+                        <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                    </div>
+                </div>
             </div>
-        </section>
+            <div class="div_Current_Page">
+                <div class="container">
+                    <a href="@Url.Action("Index", "Software" )" class="currentPageLinkCustom">Main Menu</a> > Bank Reconciliation
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12" align="right">
+                    <button class="btn btn-primary btn-sm" id="" onclick="btnBankReconciliationPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                    <button class="btn btn-danger btn-sm" id="" onclick="btnBankReconciliationClose_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                </div>
+            </div>
+            <div class="well">
+                <form class="form-horizontal" role="form">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">Bank</label>
+                                <div class="col-sm-8">
+                                    <div class="comboBox-wide" id="bankReconciliationBank"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">Date Start</label>
+                                <div class="col-sm-8">
+                                    <div class="comboBox-wide" id="bankReconciliationStartDate"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-4">Date End</label>
+                                <div class="col-sm-8">
+                                    <div type="text" class="comboBox-wide" id="bankReconciliationEndDate"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Ending Balance as per Bank</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm" id="bankReconciliationEndingBalanceAsPerBank" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Total Deposit in Transit</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm " id="bankReconciliationTotalDepositInTransit" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Total Outstanding Withdrawals</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm " id="bankReconciliationTotalOutstandingWithdrawals" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Total Adjustments</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm " id="bankReconciliationTotalAdjustments" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-6">Adjusted Ending Balance as per Bank</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control input-sm " id="bankReconciliationAdjustedEndingBalanceAsPerBank" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6"></div>
+                    </div>
+                </form>
+            </div>
+            <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                <li role="presentation" class="active"><a data-toggle="tab" href="#deposits" id="depositsCollection">Deposits (Collection)</a></li>
+                <li role="presentation"><a data-toggle="tab" href="#withdrwals" id="withdrwalsDisbursment">Withdrwals (Disbursement)</a></li>
+                <li role="presentation"><a data-toggle="tab" href="#adjustments" id="adjustmentsJournalVoucher">Adjustments (Journal Voucher)</a></li>
+            </ul>
+            <div class="tab-content">
+                <!-- Deposits -->
+                <div id="deposits" class="tab-pane fade in active">
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="collectionLineGrid" class="grid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Withdrwals -->
+                <div id="withdrwals" class="tab-pane fade in">
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="disbursementGrid" class="grid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Adjustments -->
+                <div id="adjustments" class="tab-pane fade in">
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="adjustmentGrid" class="grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        @Html.Partial("_SoftwareFooter")
     </div>
 
     <!-- SideBar Menu -->
@@ -35,5 +146,720 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        // ================
+        // Global Variables
+        // ================
+        var banks;
+        var cboBank;
+        var bankReconciliationStartDate;
+        var bankReconciliationEndDate;
+        var bankReconciliationStartDateDefaultValue;
+        var bankReconciliationEndtDateDefaultValue;
+        var collectionLines;
+        var collectionLineGrid;
+        var disbursements;
+        var disbursementGrid;
+        var journalVoucherLines;
+        var journalVoucherLineGrid;
+
+        // ========
+        // Get Bank
+        // ========
+        function getBank() {
+            banks = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/5',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            banks.push({
+                                Id: Results[i]["Id"],
+                                ArticleCode: Results[i]["ArticleCode"],
+                                ManualArticleCode: Results[i]["ManualArticleCode"],
+                                Article: Results[i]["Article"],
+                                Category: Results[i]["Category"],
+                                ArticleTypeId: Results[i]["ArticleTypeId"],
+                                ArticleType: Results[i]["ArticleType"],
+                                ArticleGroupId: Results[i]["ArticleGroupId"],
+                                ArticleGroup: Results[i]["ArticleGroup"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                SalesAccountId: Results[i]["SalesAccountId"],
+                                CostAccountId: Results[i]["CostAccountId"],
+                                AssetAccountId: Results[i]["AssetAccountId"],
+                                ExpenseAccountId: Results[i]["ExpenseAccountId"],
+                                UnitId: Results[i]["UnitId"],
+                                OutputTaxId: Results[i]["OutputTaxId"],
+                                InputTaxId: Results[i]["InputTaxId"],
+                                WTaxTypeId: Results[i]["WTaxTypeId"],
+                                Price: Results[i]["Price"],
+                                Cost: Results[i]["Cost"],
+                                IsInventory: Results[i]["IsInventory"],
+                                Particulars: Results[i]["Particulars"],
+                                Address: Results[i]["Address"],
+                                TermId: Results[i]["TermId"],
+                                ContactNumber: Results[i]["ContactNumber"],
+                                ContactPerson: Results[i]["ContactPerson"],
+                                TaxNumber: Results[i]["TaxNumber"],
+                                CreditLimit: Results[i]["CreditLimit"],
+                                DateAcquired: Results[i]["DateAcquired"],
+                                UsefulLife: Results[i]["UsefulLife"],
+                                SalvageValue: Results[i]["SalvageValue"],
+                                ManualArticleOldCode: Results[i]["ManualArticleOldCode"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+                        }
+                        createCBOForBank(banks);
+                        collectionLineTab();
+                    } else {
+                        createCBOForBank(banks);
+                        collectionLineTab();
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+        }
+
+        // =========================
+        // Create combo box for bank
+        // =========================
+        function createCBOForBank(banks) {
+            cboBank.dispose();
+            cboBank = new wijmo.input.ComboBox('#bankReconciliationBank', {
+                placeholder: "bank",
+                itemsSource: banks,
+                displayMemberPath: "Article",
+                isEditable: false,
+                selectedValuePath: "Article",
+                onSelectedIndexChanged: function () {
+                    refreshCollectionLine();
+
+                    disbursementTab();
+                    window.disbursementTab = function () {
+                        return true;
+                    };
+                    refreshDisbursementGrid();
+
+                    journalVoucherTab();
+                    window.journalVoucherTab = function () {
+                        return true;
+                    };
+                    refreshJournalVoucherGrid();
+                }
+            });
+        }
+
+        // get Sale Summary Report Start Date
+        function getbankReconciliationStartDate() {
+            bankReconciliationStartDate.dispose();
+            bankReconciliationStartDate = new wijmo.input.InputDate('#bankReconciliationStartDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(bankReconciliationStartDateDefaultValue),
+                mask: '99/99/9999',
+                max: new Date(bankReconciliationEndDate.value),
+                onValueChanged: function () {
+                    bankReconciliationStartDateDefaultValue = this.value;
+                    setTimeout(function () {
+                        getbankReconciliationEndDate();
+                        refreshCollectionLineGrid();
+
+                        disbursementTab();
+                        window.disbursementTab = function () {
+                            return true;
+                        };
+                        refreshDisbursementGrid();
+
+                        journalVoucherTab();
+                        window.journalVoucherTab = function () {
+                            return true;
+                        };
+                        refreshJournalVoucherGrid();
+                    }, 50);
+                }
+            });
+        }
+
+        // get Sale Summary Report End Date
+        function getbankReconciliationEndDate() {
+            bankReconciliationEndDate.dispose();
+            bankReconciliationEndDate = new wijmo.input.InputDate('#bankReconciliationEndDate', {
+                format: 'MM/dd/yyyy',
+                value: new Date(bankReconciliationEndtDateDefaultValue),
+                mask: '99/99/9999',
+                min: new Date(bankReconciliationStartDate.value),
+                onValueChanged: function () {
+                    bankReconciliationEndtDateDefaultValue = this.value;
+                    setTimeout(function () {
+                        getbankReconciliationStartDate();
+                        refreshCollectionLineGrid();
+
+                        disbursementTab();
+                        window.disbursementTab = function () {
+                            return true;
+                        };
+                        refreshDisbursementGrid();
+
+                        journalVoucherTab();
+                        window.journalVoucherTab = function () {
+                            return true;
+                        };
+                        refreshJournalVoucherGrid();
+                    }, 50);
+                }
+            });
+        }
+
+        // ============================
+        // Refresh Collection Line List
+        // ============================
+        function refreshCollectionLineGrid() {
+            collectionLines = new wijmo.collections.CollectionView(getCollectionLines());
+
+            collectionLineGrid.itemsSource = collectionLines;
+            collectionLineGrid.trackChanges = true;
+        }
+
+        // ========================
+        // GET Collection Line List
+        // ========================
+        function getCollectionLines() {
+            var collectionLines = new wijmo.collections.ObservableArray;
+            NProgress.start();
+            var dateStartValue = [bankReconciliationStartDate.value.getMonth() + 1, bankReconciliationStartDate.value.getDate(), bankReconciliationStartDate.value.getFullYear()].join('-');
+            var dateEndValue = [bankReconciliationEndDate.value.getMonth() + 1, bankReconciliationEndDate.value.getDate(), bankReconciliationEndDate.value.getFullYear()].join('-');
+
+            $.ajax({
+                url: '/api/listCollectionLineByDepositoryBankIdByORDate/' + cboBank.selectedItem["Id"].toString() + "/" + dateStartValue + "/" + dateEndValue,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (collectionLineResults) {
+                    NProgress.done();
+                    if (collectionLineResults.length > 0) {
+                        for (i = 0; i < collectionLineResults.length; i++) {
+                            if (collectionLineResults[i]["IsClear"] == true) {
+                                IsClearValue = "<button type='checkbox' class='btn btn-default btn-xs' id='isCleared' onclick='inputIsCleared_OnClick()'><i class='fa fa-check'></i></button>";
+                            } else {
+                                IsClearValue = "<button type='checkbox' class='btn btn-default btn-xs emptyCheckBoxButton' id='isCleared' onclick='inputIsCleared_OnClick()'></button>";
+                            }
+
+                            collectionLines.push({
+                                Id: collectionLineResults[i]["Id"],
+                                ORId: collectionLineResults[i]["ORId"],
+                                OR: collectionLineResults[i]["OR"],
+                                ORDate: collectionLineResults[i]["ORDate"],
+                                Customer: collectionLineResults[i]["Customer"],
+                                BranchId: collectionLineResults[i]["BranchId"],
+                                Branch: collectionLineResults[i]["Branch"],
+                                AccountId: collectionLineResults[i]["AccountId"],
+                                Account: collectionLineResults[i]["Account"],
+                                ArticleId: collectionLineResults[i]["ArticleId"],
+                                Article: collectionLineResults[i]["Article"],
+                                SIId: collectionLineResults[i]["SIId"],
+                                SI: collectionLineResults[i]["SI"],
+                                Particulars: collectionLineResults[i]["Particulars"],
+                                Amount: collectionLineResults[i]["Amount"],
+                                PayTypeId: collectionLineResults[i]["PayTypeId"],
+                                PayType: collectionLineResults[i]["PayType"],
+                                CheckNumber: collectionLineResults[i]["CheckNumber"],
+                                CheckDate: collectionLineResults[i]["CheckDate"],
+                                CheckBank: collectionLineResults[i]["CheckBank"],
+                                DepositoryBankId: collectionLineResults[i]["DepositoryBankId"],
+                                DepositoryBank: collectionLineResults[i]["DepositoryBank"],
+                                IsClear: collectionLineResults[i]["IsClear"],
+                                IsClearHtml: IsClearValue
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return collectionLines;
+        }
+        
+        // ================
+        // Input Is Cleared
+        // ================
+        function inputIsCleared_OnClick() {
+            var collectionLine = collectionLines.currentItem;
+
+            if (document.getElementById("isCleared").checked == true) {
+                console.log(collectionLine.IsClear);
+            } else {
+                console.log(collectionLine.IsClear);
+            }
+        }
+
+        // ================================
+        // Bank Reconciliation Close Button
+        // ================================
+        function btnBankReconciliationClose_OnClick() {
+            window.location = '/Software';
+        }
+
+        // ===================
+        // FlexGrid Selection
+        // ===================
+        function updateDetails() {
+            var collectionLine = collectionLines.currentItem;
+        }
+
+        // ===================
+        // collection line tab
+        // ===================
+        function collectionLineTab() {
+            collectionLines = new wijmo.collections.CollectionView(getCollectionLines());
+
+            collectionLines.currentChanged.addHandler(function (sender, args) {
+                updateDetails();
+            });
+
+            // Flex Grid for Purchase Collection Line
+            collectionLineGrid = new wijmo.grid.FlexGrid('#collectionLineGrid');
+            collectionLineGrid.initialize({
+                columns: [
+                            {
+                                "header": "OR Number",
+                                "binding": "OR",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 130
+                            },
+                            {
+                                "header": "OR Date",
+                                "binding": "ORDate",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 100
+                            },
+                            {
+                                "header": "Customer",
+                                "binding": "Customer",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 160
+                            },
+                            {
+                                "header": "Pay Type",
+                                "binding": "PayType",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 153
+                            },
+                            {
+                                "header": "Check No.",
+                                "binding": "CheckNumber",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 150
+                            },
+                            {
+                                "header": "Check Date",
+                                "binding": "CheckDate",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 100
+                            },
+                            {
+                                "header": "Amount",
+                                "binding": "Amount",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 160
+                            },
+                            {
+                                "header": "C",
+                                "binding": "IsClearHtml",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "isContentHtml": true,
+                                "align": "center",
+                                "width": 50
+                            },
+                           {
+                               "header": "In Transit",
+                               "binding": "",
+                               "allowSorting": true,
+                               "isReadOnly": true,
+                               "width": 100
+                           },
+                ],
+                autoGenerateColumns: false,
+                itemsSource: collectionLines,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+            collectionLineGrid.trackChanges = true;
+        }
+
+        // =========================
+        // Refresh Disbursement Grid
+        // =========================
+        function refreshDisbursementGrid() {
+            disbursements = new wijmo.collections.CollectionView(getDisbursement());
+
+            disbursementGrid.itemsSource = disbursements;
+            disbursementGrid.trackChanges = true;
+        }
+
+        // ================
+        // GET Disbursement
+        // ================
+        function getDisbursement() {
+            var disbursements = new wijmo.collections.ObservableArray;
+            NProgress.start();
+            var dateStartValue = [bankReconciliationStartDate.value.getMonth() + 1, bankReconciliationStartDate.value.getDate(), bankReconciliationStartDate.value.getFullYear()].join('-');
+            var dateEndValue = [bankReconciliationEndDate.value.getMonth() + 1, bankReconciliationEndDate.value.getDate(), bankReconciliationEndDate.value.getFullYear()].join('-');
+
+            $.ajax({
+                url: '/api/listDisbursementByBankIdByCVDate/' + cboBank.selectedItem["Id"] + '/' + dateStartValue + '/' + dateEndValue,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (disbursementResults) {
+                    if (disbursementResults.length > 0) {
+                        for (i = 0; i < disbursementResults.length; i++) {
+                            disbursements.push({
+                                Id: disbursementResults[i]["Id"],
+                                BranchId: disbursementResults[i]["BranchId"],
+                                Branch: disbursementResults[i]["Branch"],
+                                CVNumber: disbursementResults[i]["CVNumber"],
+                                CVDate: disbursementResults[i]["CVDate"],
+                                SupplierId: disbursementResults[i]["SupplierId"],
+                                Supplier: disbursementResults[i]["Supplier"],
+                                Payee: disbursementResults[i]["Payee"],
+                                PayTypeId: disbursementResults[i]["PayTypeId"],
+                                PayType: disbursementResults[i]["PayType"],
+                                BankId: disbursementResults[i]["BankId"],
+                                Bank: disbursementResults[i]["Bank"],
+                                ManualCVNumber: disbursementResults[i]["ManualCVNumber"],
+                                Particulars: disbursementResults[i]["Particulars"],
+                                CheckNumber: disbursementResults[i]["CheckNumber"],
+                                CheckDate: disbursementResults[i]["CheckDate"],
+                                Amount: disbursementResults[i]["Amount"],
+                                IsCrossCheck: disbursementResults[i]["IsCrossCheck"],
+                                IsClear: disbursementResults[i]["IsClear"],
+                                PreparedById: disbursementResults[i]["PreparedById"],
+                                PreparedBy: disbursementResults[i]["PreparedBy"],
+                                CheckedById: disbursementResults[i]["CheckedById"],
+                                CheckedBy: disbursementResults[i]["CheckedBy"],
+                                ApprovedById: disbursementResults[i]["ApprovedById"],
+                                ApprovedBy: disbursementResults[i]["ApprovedBy"],
+                                IsLocked: disbursementResults[i]["IsLocked"],
+                                CreatedById: disbursementResults[i]["CreatedById"],
+                                CreatedBy: disbursementResults[i]["CreatedBy"],
+                                CreatedDateTime: disbursementResults[i]["CreatedDateTime"],
+                                UpdatedById: disbursementResults[i]["UpdatedById"],
+                                UpdatedBy: disbursementResults[i]["UpdatedBy"],
+                                UpdatedDateTime: disbursementResults[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+                    NProgress.done();
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return disbursements;
+        }
+
+        // ================
+        // disbursement tab
+        // ================
+        function disbursementTab() {
+            disbursements = new wijmo.collections.CollectionView(getDisbursement());
+
+            // Flex Grid
+            disbursementGrid = new wijmo.grid.FlexGrid('#disbursementGrid');
+            disbursementGrid.initialize({
+                columns: [
+                            {
+                                "header": "CV Number",
+                                "binding": "CVNumber",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 130
+                            },
+                            {
+                                "header": "CV Date",
+                                "binding": "CVDate",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 100
+                            },
+                            {
+                                "header": "Payee",
+                                "binding": "Payee",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 160
+                            },
+                            {
+                                "header": "Pay Type",
+                                "binding": "PayType",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 153
+                            },
+                            {
+                                "header": "Check No.",
+                                "binding": "CheckNumber",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 150
+                            },
+                            {
+                                "header": "Check Date",
+                                "binding": "CheckDate",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 100
+                            },
+                            {
+                                "header": "Amount",
+                                "binding": "Amount",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 160
+                            },
+                            {
+                                "header": "Clear",
+                                "binding": "IsClear",
+                                "allowSorting": true,
+                                "width": 50
+                            },
+                           {
+                               "header": "Outstanding",
+                               "binding": "",
+                               "allowSorting": true,
+                               "isReadOnly": true,
+                               "width": 100
+                           },
+                ],
+                autoGenerateColumns: false,
+                itemsSource: disbursements,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+            disbursementGrid.trackChanges = true;
+        }
+
+        // ========================
+        // get Journal Voucher Line
+        // ========================
+        function getJournalVoucherLine() {
+            var journalVoucherLines = new wijmo.collections.ObservableArray;
+            NProgress.start();
+            var dateStartValue = [bankReconciliationStartDate.value.getMonth() + 1, bankReconciliationStartDate.value.getDate(), bankReconciliationStartDate.value.getFullYear()].join('-');
+            var dateEndValue = [bankReconciliationEndDate.value.getMonth() + 1, bankReconciliationEndDate.value.getDate(), bankReconciliationEndDate.value.getFullYear()].join('-');
+
+            $.ajax({
+                url: '/api/listJournalVoucherLineByJVDate/' + cboBank.selectedItem["Id"].toString() + '/' + dateStartValue + '/' + dateEndValue,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (Results) {
+                    if (Results.length > 0) {
+                        for (i = 0; i < Results.length; i++) {
+                            var balance = Results[i]["DebitAmount"] - Results[i]["CreditAmount"]
+
+                            journalVoucherLines.push({
+                                Id: Results[i]["Id"],
+                                JVId: Results[i]["JVId"],
+                                JVNumber: Results[i]["JVNumber"],
+                                JVDate: Results[i]["JVDate"],
+                                JVParticulars: Results[i]["JVParticulars"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                AccountId: Results[i]["AccountId"],
+                                Account: Results[i]["Account"],
+                                ArticleId: Results[i]["ArticleId"],
+                                Article: Results[i]["Article"],
+                                Particulars: Results[i]["Particulars"],
+                                DebitAmount: Results[i]["DebitAmount"],
+                                CreditAmount: Results[i]["CreditAmount"],
+                                Balance: balance,
+                                APRRId: Results[i]["APRRId"],
+                                APRR: Results[i]["APRR"],
+                                APRRBranch: Results[i]["APRRBranch"],
+                                ARSIId: Results[i]["ARSIId"],
+                                ARSI: Results[i]["ARSI"],
+                                ARSIBranch: Results[i]["ARSIBranch"],
+                                IsClear: Results[i]["IsClear"],
+                            });
+                        }
+                    }
+                    NProgress.done();
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return journalVoucherLines;
+        }
+
+        // ============================
+        // Refresh Journal Voucher Grid
+        // ============================
+        function refreshJournalVoucherGrid() {
+            journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLine());
+
+            journalVoucherLineGrid.itemsSource = journalVoucherLines;
+            journalVoucherLineGrid.trackChanges = true;
+        }
+
+        // ===================
+        // Journal Voucher Tab
+        // ===================
+        function journalVoucherTab() {
+            journalVoucherLines = new wijmo.collections.CollectionView(getJournalVoucherLine());
+
+            // Flex Grid
+            journalVoucherLineGrid = new wijmo.grid.FlexGrid('#adjustmentGrid');
+            journalVoucherLineGrid.initialize({
+                columns: [
+                             {
+                                 "header": "JV Number",
+                                 "binding": "JVNumber",
+                                 "allowSorting": true,
+                                 "isReadOnly": true,
+                                 "width": 130
+                             },
+                            {
+                                "header": "JV Date",
+                                "binding": "JVDate",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 100
+                            },
+                            {
+                                "header": "Particulars",
+                                "binding": "JVParticulars",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 243
+                            },
+                            {
+                                "header": "Debit",
+                                "binding": "DebitAmount",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 160
+                            },
+                            {
+                                "header": "Credit",
+                                "binding": "CreditAmount",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 160
+                            },
+                            {
+                                "header": "Balance",
+                                "binding": "Balance",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": 160
+                            },
+                            {
+                                "header": "Clear",
+                                "binding": "IsClear",
+                                "allowSorting": true,
+                                "width": 50
+                            },
+                           {
+                               "header": "Adjustments",
+                               "binding": "",
+                               "allowSorting": true,
+                               "isReadOnly": true,
+                               "width": 100
+                           },
+                ],
+                autoGenerateColumns: false,
+                itemsSource: journalVoucherLines,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            journalVoucherLineGrid.trackChanges = true;
+        }
+
+
+        // ============
+        // On load page
+        // ============
+        $(document).ready(function () {
+            document.getElementById("bankReconciliationTotalDepositInTransit").disabled = true;
+            document.getElementById("bankReconciliationTotalOutstandingWithdrawals").disabled = true;
+            document.getElementById("bankReconciliationTotalAdjustments").disabled = true;
+            document.getElementById("bankReconciliationAdjustedEndingBalanceAsPerBank").disabled = true;
+
+            getBank();
+            cboBank = new wijmo.input.ComboBox('#bankReconciliationBank');
+
+            bankReconciliationStartDate = new wijmo.input.InputDate('#bankReconciliationStartDate');
+            bankReconciliationEndDate = new wijmo.input.InputDate('#bankReconciliationEndDate');
+
+            bankReconciliationStartDateDefaultValue = new Date().toLocaleDateString();
+            bankReconciliationEndtDateDefaultValue = new Date().toLocaleDateString();
+
+            getbankReconciliationStartDate();
+            getbankReconciliationEndDate();
+
+            $('#depositsCollection').click(function () {
+                $('#deposits').show();
+                $('#withdrwals').hide();
+                $('#adjustments').hide();
+                refreshCollectionLineGrid();
+                window.collectionLineTab = function () {
+                    return true;
+                };
+            });
+
+            $('#withdrwalsDisbursment').click(function () {
+                $('#deposits').hide();
+                $('#withdrwals').show();
+                $('#adjustments').hide();
+                disbursementTab();
+                refreshDisbursementGrid();
+                window.disbursementTab = function () {
+                    return true;
+                };
+            });
+
+            $('#adjustmentsJournalVoucher').click(function () {
+                $('#deposits').hide();
+                $('#withdrwals').hide();
+                $('#adjustments').show();
+                journalVoucherTab();
+                refreshJournalVoucherGrid();
+                window.journalVoucherTab = function () {
+                    return true;
+                };
+            });
+
+            $('#deposits').show();
+            $('#withdrwals').hide();
+            $('#adjustments').hide();
+
+        });
+    </script>
 </body>
 </html>

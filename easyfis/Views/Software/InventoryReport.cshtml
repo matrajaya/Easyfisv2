@@ -1,7 +1,4 @@
-﻿@{
-    var branchId = Request.QueryString["BranchId"];
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Meta -->
@@ -13,41 +10,48 @@
     <title>Inventory Report</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
-    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
-    <div id="wrapper" class="wrapper">
+    <div id="o-wrapper" class="o-wrapper">
         <!-- Header -->
         @Html.Partial("_SoftwareHeader")
 
         <!-- Section -->
         <section>
-            <br /><br /><br />
-            <div class="container">
-                <h4><i class="fa fa-print fa-2x"></i> Inventory Report</h4>
-                <br />
-                <div class="div_Current_Page">
-                    @*<label id="currentBranchName"></label>*@
-                    <span id="currentPage"></span>
+            <div class="sub-nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><i class="fa fa-print"></i> Inventory Report</h4>
+                        </div>
+                        <div class="col-md-6" align="right">
+                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                        </div>
+                    </div>
                 </div>
-                @*<button id="c-button--push-left" class="btn btn-default"><i class="fa fa-bars"></i> Menu</button>
-                    <a href="@Url.Action("Index","Software")" class="btn btn-default"><i class="fa fa-table"></i> DashBoard</a>*@
-                @*<br /><br />*@
-                @*<h2>Accounts Payable</h2>*@
+                <div class="div_Current_Page">
+                    <div class="container">
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Inventory Report
+                    </div>
+                </div>
+            </div>
+            <div class="container">
                 <div class="row">
                     <div class="col-md-4">
                         <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
                             <li class="active"><a data-toggle="pill" href="#Inventory">Inventory</a></li>
-                            @*<li><a data-toggle="pill" href="#SC">Stock Card</a></li>*@
-                            @*<li><a data-toggle="pill" href="#SIDR">Stock-in Detail Report</a></li>
+                            <li><a data-toggle="pill" href="#SC">Stock Card</a></li>
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#SIDR">Stock-in Detail Report</a></li>
                             <li><a data-toggle="pill" href="#SODR">Stock-out Detail Report</a></li>
                             <li><a data-toggle="pill" href="#STDR">Stock Transfer Detail Report</a></li>
+                            <li class="reportDivider"></li>
                             <li><a data-toggle="pill" href="#IL">Item List</a></li>
                             <li><a data-toggle="pill" href="#ICL">Item Component List</a></li>
                             <li><a data-toggle="pill" href="#PCS">Physical Count Sheet</a></li>
-                            <li><a data-toggle="pill" href="#FAR">Fixed Assets Report</a></li>*@
+                            <li class="reportDivider"></li>
+                            <li><a data-toggle="pill" href="#FAR">Fixed Assets Report</a></li>
                         </ul>
                     </div>
                     <div class="col-md-8">
@@ -55,7 +59,7 @@
                             <div id="Inventory" class="tab-pane fade in active">
                                 <div align="right">
                                     <button onclick="InventoryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -84,12 +88,12 @@
                                                         <input type="hidden" id="Inventory_Company_selectedValue" />
                                                     </div>
                                                 </div>
-                                                @*<div class="form-group">
+                                                <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="Inventory_Filter" />
                                                     </div>
-                                                </div>*@
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -142,8 +146,8 @@
                             </div>
                             <div id="SC" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportStockCardPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="InventoryReportStockCardPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -163,13 +167,22 @@
                                                         <input type="hidden" id="stockCard_EndDate_data" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Company</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="StockCard_Company"></div>
+                                                @*<div class="form-group">
+                                                        <label class="control-label col-sm-2">Company</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="comboBox-wide" id="StockCard_Company"></div>
 
-                                                        <input type="hidden" id="StockCard_Company_data" />
-                                                        <input type="hidden" id="StockCard_Company_selectedValue" />
+                                                            <input type="hidden" id="StockCard_Company_data" />
+                                                            <input type="hidden" id="StockCard_Company_selectedValue" />
+                                                        </div>
+                                                    </div>*@
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-2">Branch</label>
+                                                    <div class="col-sm-6">
+                                                        <div class="comboBox-wide" id="StockCard_Branch"></div>
+
+                                                        <input type="hidden" id="StockCard_Branch_data" />
+                                                        <input type="hidden" id="StockCard_Branch_selectedValue" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -180,12 +193,12 @@
                                                         <input type="hidden" id="Items_Item_selectedValue" />
                                                     </div>
                                                 </div>
-                                                @*<div class="form-group">
+                                                <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter:</label>
                                                     <div class="col-sm-6">
                                                         <input type="checkbox" id="StockCard_Filter" />
                                                     </div>
-                                                </div>*@
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -201,15 +214,15 @@
                                                 <form class="form-horizontal" role="form">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Branch</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockCard_Branch"></div>
+                                                            @*<div class="form-group">
+                                                                    <label class="control-label col-sm-2">Branch</label>
+                                                                    <div class="col-sm-6">
+                                                                        <div class="comboBox-wide" id="StockCard_Branch"></div>
 
-                                                                    <input type="hidden" id="StockCard_Branch_data" />
-                                                                    <input type="hidden" id="StockCard_Branch_selectedValue" />
-                                                                </div>
-                                                            </div>
+                                                                        <input type="hidden" id="StockCard_Branch_data" />
+                                                                        <input type="hidden" id="StockCard_Branch_selectedValue" />
+                                                                    </div>
+                                                                </div>*@
                                                             <div class="form-group">
                                                                 <label class="control-label col-sm-2">Stock Count No.</label>
                                                                 <div class="col-sm-6">
@@ -238,8 +251,8 @@
                             </div>
                             <div id="SIDR" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportStockInDetailPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="InventoryReportStockInDetailPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -260,14 +273,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label col-sm-2">Company</label>
+                                                    <label class="control-label col-sm-2">Branch</label>
                                                     <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="StockIn_Company"></div>
+                                                        <div class="comboBox-wide" id="StockIn_Branch"></div>
 
-                                                        <input type="hidden" id="StockIn_Company_data" />
-                                                        <input type="hidden" id="StockIn_Company_selectedValue" />
+                                                        <input type="hidden" id="StockIn_Branch_data" />
+                                                        <input type="hidden" id="StockIn_Branch_selectedValue" />
                                                     </div>
                                                 </div>
+                                                @*<div class="form-group">
+                                                        <label class="control-label col-sm-2">Company</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="comboBox-wide" id="StockIn_Company"></div>
+
+                                                            <input type="hidden" id="StockIn_Company_data" />
+                                                            <input type="hidden" id="StockIn_Company_selectedValue" />
+                                                        </div>
+                                                    </div>*@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter</label>
                                                     <div class="col-sm-6">
@@ -289,15 +311,15 @@
                                                 <form class="form-horizontal" role="form">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Branch</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockIn_Branch"></div>
+                                                            @*<div class="form-group">
+                                                                    <label class="control-label col-sm-2">Branch</label>
+                                                                    <div class="col-sm-6">
+                                                                        <div class="comboBox-wide" id="StockIn_Branch"></div>
 
-                                                                    <input type="hidden" id="StockIn_Branch_data" />
-                                                                    <input type="hidden" id="StockIn_Branch_selectedValue" />
-                                                                </div>
-                                                            </div>
+                                                                        <input type="hidden" id="StockIn_Branch_data" />
+                                                                        <input type="hidden" id="StockIn_Branch_selectedValue" />
+                                                                    </div>
+                                                                </div>*@
                                                             <div class="form-group">
                                                                 <label class="control-label col-sm-2">Stock Count No.</label>
                                                                 <div class="col-sm-6">
@@ -326,8 +348,8 @@
                             </div>
                             <div id="SODR" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportStockOutDetailPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="InventoryReportStockOutDetailPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -348,14 +370,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label col-sm-2">Company</label>
+                                                    <label class="control-label col-sm-2">Branch</label>
                                                     <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="StockOut_Company"></div>
+                                                        <div class="comboBox-wide" id="StockOut_Branch"></div>
 
-                                                        <input type="hidden" id="StockOut_Company_data" />
-                                                        <input type="hidden" id="StockOut_Company_selectedValue" />
+                                                        <input type="hidden" id="StockOut_Branch_data" />
+                                                        <input type="hidden" id="StockOut_Branch_selectedValue" />
                                                     </div>
                                                 </div>
+                                                @*<div class="form-group">
+                                                        <label class="control-label col-sm-2">Company</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="comboBox-wide" id="StockOut_Company"></div>
+
+                                                            <input type="hidden" id="StockOut_Company_data" />
+                                                            <input type="hidden" id="StockOut_Company_selectedValue" />
+                                                        </div>
+                                                    </div>*@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter</label>
                                                     <div class="col-sm-6">
@@ -377,15 +408,15 @@
                                                 <form class="form-horizontal" role="form">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Branch</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockOut_Branch"></div>
+                                                            @*<div class="form-group">
+                                                                    <label class="control-label col-sm-2">Branch</label>
+                                                                    <div class="col-sm-6">
+                                                                        <div class="comboBox-wide" id="StockOut_Branch"></div>
 
-                                                                    <input type="hidden" id="StockOut_Branch_data" />
-                                                                    <input type="hidden" id="StockOut_Branch_selectedValue" />
-                                                                </div>
-                                                            </div>
+                                                                        <input type="hidden" id="StockOut_Branch_data" />
+                                                                        <input type="hidden" id="StockOut_Branch_selectedValue" />
+                                                                    </div>
+                                                                </div>*@
                                                             <div class="form-group">
                                                                 <label class="control-label col-sm-2">Stock Count No.</label>
                                                                 <div class="col-sm-6">
@@ -414,8 +445,8 @@
                             </div>
                             <div id="STDR" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportStockTransferDetailPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="InventoryReportStockTransferDetailPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -436,14 +467,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label col-sm-2">Company</label>
+                                                    <label class="control-label col-sm-2">Branch</label>
                                                     <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="StockTransfer_Company"></div>
+                                                        <div class="comboBox-wide" id="StockTransfer_Branch"></div>
 
-                                                        <input type="hidden" id="StockTransfer_Company_data" />
-                                                        <input type="hidden" id="StockTransfer_Company_selectedValue" />
+                                                        <input type="hidden" id="StockTransfer_Branch_data" />
+                                                        <input type="hidden" id="StockTransfer_Branch_selectedValue" />
                                                     </div>
                                                 </div>
+                                                @*<div class="form-group">
+                                                        <label class="control-label col-sm-2">Company</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="comboBox-wide" id="StockTransfer_Company"></div>
+
+                                                            <input type="hidden" id="StockTransfer_Company_data" />
+                                                            <input type="hidden" id="StockTransfer_Company_selectedValue" />
+                                                        </div>
+                                                    </div>*@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-2">Filter</label>
                                                     <div class="col-sm-6">
@@ -465,15 +505,15 @@
                                                 <form class="form-horizontal" role="form">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Branch</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockTransfer_Branch"></div>
+                                                            @*<div class="form-group">
+                                                                    <label class="control-label col-sm-2">Branch</label>
+                                                                    <div class="col-sm-6">
+                                                                        <div class="comboBox-wide" id="StockTransfer_Branch"></div>
 
-                                                                    <input type="hidden" id="StockTransfer_Branch_data" />
-                                                                    <input type="hidden" id="StockTransfer_Branch_selectedValue" />
-                                                                </div>
-                                                            </div>
+                                                                        <input type="hidden" id="StockTransfer_Branch_data" />
+                                                                        <input type="hidden" id="StockTransfer_Branch_selectedValue" />
+                                                                    </div>
+                                                                </div>*@
                                                             <div class="form-group">
                                                                 <label class="control-label col-sm-2">Stock Count No.</label>
                                                                 <div class="col-sm-6">
@@ -502,8 +542,8 @@
                             </div>
                             <div id="IL" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportItemListPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="InventoryReportItemListPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -525,8 +565,8 @@
                             </div>
                             <div id="ICL" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportItemComponentListPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="InventoryReportItemComponentListPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -548,8 +588,8 @@
                             </div>
                             <div id="PCS" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportPhysicalCountSheetPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="InventoryReportPhysicalCountSheetPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -571,9 +611,8 @@
                             </div>
                             <div id="FAR" class="tab-pane fade">
                                 <div align="right">
-
-                                    <button onclick="window.location.href ='@Url.Action("InventoryReportFixedAssetsPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                    <button onclick="InventoryReportFixedAssetsPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
@@ -673,7 +712,6 @@
 
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
-    @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
         // ================
         // Global Variables
@@ -774,78 +812,77 @@
                     $("#Inventory_Company_data").val(companyCollection.items[this.selectedIndex].Id);
 
                     document.getElementById('Inventory_Branch_data').value = "";
-                    getBranchesForInventory();
                     getStockCountForInventory();
                 }
             });
 
-            // Stock Card
-            cboStockCardCompany.dispose();
-            cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('StockCard_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#StockCard_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+            //// Stock Card
+            //cboStockCardCompany.dispose();
+            //cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company', {
+            //    placeholder: "Select Company",
+            //    itemsSource: companyList,
+            //    isEditable: false,
+            //    required: false,
+            //    selectedValue: document.getElementById('StockCard_Company_selectedValue').value.toString(),
+            //    onSelectedIndexChanged: function () {
+            //        $("#StockCard_Company_data").val(companyCollection.items[this.selectedIndex].Id);
 
-                    document.getElementById('StockCard_Branch_data').value = "";
-                    getBranchesForStockCard();
-                    getStockCountForStockCard();
-                }
-            });
+            //        document.getElementById('StockCard_Branch_data').value = "";
+            //        getBranchesForStockCard();
+            //        getStockCountForStockCard();
+            //    }
+            //});
 
             // Stock In
-            cboStockInCompany.dispose();
-            cboStockInCompany = new wijmo.input.ComboBox('#StockIn_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('StockIn_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#StockIn_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+            //cboStockInCompany.dispose();
+            //cboStockInCompany = new wijmo.input.ComboBox('#StockIn_Company', {
+            //    placeholder: "Select Company",
+            //    itemsSource: companyList,
+            //    isEditable: false,
+            //    required: false,
+            //    selectedValue: document.getElementById('StockIn_Company_selectedValue').value.toString(),
+            //    onSelectedIndexChanged: function () {
+            //        $("#StockIn_Company_data").val(companyCollection.items[this.selectedIndex].Id);
 
-                    document.getElementById('StockIn_Branch_data').value = "";
-                    getBranchesForStockIn();
-                    getStockCountForStockIn();
-                }
-            });
+            //        document.getElementById('StockIn_Branch_data').value = "";
+            //        getBranchesForStockIn();
+            //        getStockCountForStockIn();
+            //    }
+            //});
 
             // Stock Out
-            cboStockOutCompany.dispose();
-            cboStockOutCompany = new wijmo.input.ComboBox('#StockOut_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('StockOut_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#StockOut_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+            //cboStockOutCompany.dispose();
+            //cboStockOutCompany = new wijmo.input.ComboBox('#StockOut_Company', {
+            //    placeholder: "Select Company",
+            //    itemsSource: companyList,
+            //    isEditable: false,
+            //    required: false,
+            //    selectedValue: document.getElementById('StockOut_Company_selectedValue').value.toString(),
+            //    onSelectedIndexChanged: function () {
+            //        $("#StockOut_Company_data").val(companyCollection.items[this.selectedIndex].Id);
 
-                    document.getElementById('StockOut_Branch_data').value = "";
-                    getBranchesForStockOut();
-                    getStockCountForStockOut();
-                }
-            });
+            //        document.getElementById('StockOut_Branch_data').value = "";
+            //        getBranchesForStockOut();
+            //        getStockCountForStockOut();
+            //    }
+            //});
 
             // Stock Transfer
-            cboStockTransferCompany.dispose();
-            cboStockTransferCompany = new wijmo.input.ComboBox('#StockTransfer_Company', {
-                placeholder: "Select Company",
-                itemsSource: companyList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('StockTransfer_Company_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#StockTransfer_Company_data").val(companyCollection.items[this.selectedIndex].Id);
+            //cboStockTransferCompany.dispose();
+            //cboStockTransferCompany = new wijmo.input.ComboBox('#StockTransfer_Company', {
+            //    placeholder: "Select Company",
+            //    itemsSource: companyList,
+            //    isEditable: false,
+            //    required: false,
+            //    selectedValue: document.getElementById('StockTransfer_Company_selectedValue').value.toString(),
+            //    onSelectedIndexChanged: function () {
+            //        $("#StockTransfer_Company_data").val(companyCollection.items[this.selectedIndex].Id);
 
-                    document.getElementById('StockTransfer_Branch_data').value = "";
-                    getBranchesForStockTransfer();
-                    getStockCountForStockTransfer();
-                }
-            });
+            //        document.getElementById('StockTransfer_Branch_data').value = "";
+            //        getBranchesForStockTransfer();
+            //        getStockCountForStockTransfer();
+            //    }
+            //});
 
             // fixed Asset Report Company
             cboFixedAssetReportCompany.dispose();
@@ -859,7 +896,6 @@
                     $("#fixedAssetReport_Company_data").val(companyCollection.items[this.selectedIndex].Id);
 
                     document.getElementById('FixedAssetReport_Branch_data').value = "";
-                    getBranchesForFixedAssetReport();
                     getStockCountForFixedAssetReport();
                 }
             });
@@ -958,7 +994,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1025,49 +1061,6 @@
             });
         }
 
-        // ==========================
-        // Get branches for Inventory
-        // ==========================
-        function getBranchesForInventory() {
-            branches = new wijmo.collections.ObservableArray();
-
-            var companyId;
-            if (document.getElementById('Inventory_Company_data').value == "") {
-                companyId = 0;
-            } else {
-                companyId = document.getElementById('Inventory_Company_data').value;
-            }
-
-            $.ajax({
-                url: '/api/listBranchByCompanyId/' + companyId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            branches.push({
-                                Id: results[i]["Id"],
-                                CompanyId: results[i]["CompanyId"],
-                                Company: results[i]["Company"],
-                                BranchCode: results[i]["BranchCode"],
-                                Branch: results[i]["Branch"],
-                                Address: results[i]["Address"],
-                                ContactNumber: results[i]["ContactNumber"],
-                                TaxNumber: results[i]["TaxNumber"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboBranchesInventoryFilterByCompany(branches);
-                    } else {
-                        createCboBranchesInventoryFilterByCompany(branches);
-                    }
-                }
-            });
-            return branches;
-        }
-
         // =========================
         // CBO Branches in Inventory
         // =========================
@@ -1118,7 +1111,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1188,18 +1181,18 @@
         // ===========================
         // Get branches for Stock Card
         // ===========================
-        function getBranchesForStockCard() {
+        function getBranches() {
             branches = new wijmo.collections.ObservableArray();
 
-            var companyId;
-            if (document.getElementById('StockCard_Company_data').value == "") {
-                companyId = 0;
-            } else {
-                companyId = document.getElementById('StockCard_Company_data').value;
-            }
+            //var companyId;
+            //if (document.getElementById('StockCard_Company_data').value == "") {
+            //    companyId = 0;
+            //} else {
+            //    companyId = document.getElementById('StockCard_Company_data').value;
+            //}
 
             $.ajax({
-                url: '/api/listBranchByCompanyId/' + companyId,
+                url: '/api/listBranch',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1220,8 +1213,16 @@
                             });
                         }
                         createCboBranchesStockCardFilterByCompany(branches);
+                        createCboBranchesStockInFilterByCompany(branches);
+                        createCboBranchesStockOutFilterByCompany(branches);
+                        createCboBranchesInventoryFilterByCompany(branches);
+                        createCboBranchesStockTransferFilterByCompany(branches);
                     } else {
                         createCboBranchesStockCardFilterByCompany(branches);
+                        createCboBranchesStockInFilterByCompany(branches);
+                        createCboBranchesStockOutFilterByCompany(branches);
+                        createCboBranchesInventoryFilterByCompany(branches);
+                        createCboBranchesStockTransferFilterByCompany(branches);
                     }
                 }
             });
@@ -1278,7 +1279,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1345,49 +1346,6 @@
             });
         }
 
-        // ================================
-        // Get branches for Stock In Detail
-        // ================================
-        function getBranchesForStockIn() {
-            branches = new wijmo.collections.ObservableArray();
-
-            var companyId;
-            if (document.getElementById('StockIn_Company_data').value == "") {
-                companyId = 0;
-            } else {
-                companyId = document.getElementById('StockIn_Company_data').value;
-            }
-
-            $.ajax({
-                url: '/api/listBranchByCompanyId/' + companyId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            branches.push({
-                                Id: results[i]["Id"],
-                                CompanyId: results[i]["CompanyId"],
-                                Company: results[i]["Company"],
-                                BranchCode: results[i]["BranchCode"],
-                                Branch: results[i]["Branch"],
-                                Address: results[i]["Address"],
-                                ContactNumber: results[i]["ContactNumber"],
-                                TaxNumber: results[i]["TaxNumber"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboBranchesStockInFilterByCompany(branches);
-                    } else {
-                        createCboBranchesStockInFilterByCompany(branches);
-                    }
-                }
-            });
-            return branches;
-        }
-
         // ========================
         // CBO Branches in Stock In
         // ========================
@@ -1438,7 +1396,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1505,49 +1463,6 @@
             });
         }
 
-        // =================================
-        // Get branches for Stock Out Detail
-        // =================================
-        function getBranchesForStockOut() {
-            branches = new wijmo.collections.ObservableArray();
-
-            var companyId;
-            if (document.getElementById('StockOut_Company_data').value == "") {
-                companyId = 0;
-            } else {
-                companyId = document.getElementById('StockOut_Company_data').value;
-            }
-
-            $.ajax({
-                url: '/api/listBranchByCompanyId/' + companyId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            branches.push({
-                                Id: results[i]["Id"],
-                                CompanyId: results[i]["CompanyId"],
-                                Company: results[i]["Company"],
-                                BranchCode: results[i]["BranchCode"],
-                                Branch: results[i]["Branch"],
-                                Address: results[i]["Address"],
-                                ContactNumber: results[i]["ContactNumber"],
-                                TaxNumber: results[i]["TaxNumber"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboBranchesStockOutFilterByCompany(branches);
-                    } else {
-                        createCboBranchesStockOutFilterByCompany(branches);
-                    }
-                }
-            });
-            return branches;
-        }
-
         // =========================
         // CBO Branches in Stock Out
         // =========================
@@ -1598,7 +1513,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1665,49 +1580,6 @@
             });
         }
 
-        // ======================================
-        // Get branches for Stock Transfer Detail
-        // ======================================
-        function getBranchesForStockTransfer() {
-            branches = new wijmo.collections.ObservableArray();
-
-            var companyId;
-            if (document.getElementById('StockTransfer_Company_data').value == "") {
-                companyId = 0;
-            } else {
-                companyId = document.getElementById('StockTransfer_Company_data').value;
-            }
-
-            $.ajax({
-                url: '/api/listBranchByCompanyId/' + companyId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            branches.push({
-                                Id: results[i]["Id"],
-                                CompanyId: results[i]["CompanyId"],
-                                Company: results[i]["Company"],
-                                BranchCode: results[i]["BranchCode"],
-                                Branch: results[i]["Branch"],
-                                Address: results[i]["Address"],
-                                ContactNumber: results[i]["ContactNumber"],
-                                TaxNumber: results[i]["TaxNumber"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboBranchesStockTransferFilterByCompany(branches);
-                    } else {
-                        createCboBranchesStockTransferFilterByCompany(branches);
-                    }
-                }
-            });
-            return branches;
-        }
-
         // ==============================
         // CBO Branches in Stock Transfer
         // ==============================
@@ -1758,7 +1630,7 @@
             }
 
             $.ajax({
-                url: '/api/listStockCountByBranchId/' + branchId,
+                url: '/api/stockCount/listByBranchId/' + branchId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -2301,7 +2173,6 @@
             });
         }
 
-
         function InventoryReportPDF_OnClick() {
             var inventoryReportStartDate = document.getElementById('inventory_StartDate_data').value;
             var inventoryReportEndDate = document.getElementById('inventory_EndDate_data').value;
@@ -2318,12 +2189,140 @@
             }
         }
 
+        function InventoryReportStockCardPDF_OnClick() {
+            var inventoryReportStockCardStartDate = document.getElementById('stockCard_StartDate_data').value;
+            var inventoryReportStockCardEndDate = document.getElementById('stockCard_EndDate_data').value;
+
+            var branchId;
+            var itemId;
+            if (document.getElementById('StockCard_Branch_data').value == "") {
+                branchId = 0;
+                document.getElementById('StockCard_Branch').style.border = "1px solid red";
+                document.getElementById('Items_Item').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else if (document.getElementById("Items_Item_data").value == "") {
+                itemId = 0;
+                document.getElementById('StockCard_Branch').style.border = "1px solid red";
+                document.getElementById('Items_Item').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                branchId = document.getElementById('StockCard_Branch_data').value;
+                itemId = document.getElementById("Items_Item_data").value;
+
+                document.getElementById('StockCard_Branch').style.border = " ";
+                document.getElementById('Items_Item').style.border = " ";
+                window.location.href = '/Software/InventoryReportStockCardPDF?StartDate=' + inventoryReportStockCardStartDate + '&EndDate=' + inventoryReportStockCardEndDate + '&BranchId=' + branchId + '&ItemId=' + itemId;
+            }
+        }
+
+        function InventoryReportStockInDetailPDF_OnClick() {
+            var inventoryReportStockInDetailStartDate = document.getElementById('stockIn_StartDate_data').value;
+            var inventoryReportStockInDetailEndDate = document.getElementById('stockIn_EndDate_data').value;
+
+            var branchId;
+            if (document.getElementById('StockIn_Branch_data').value == "") {
+                branchId = 0;
+                document.getElementById('StockIn_Branch').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                branchId = document.getElementById('StockIn_Branch_data').value;
+                document.getElementById('StockIn_Branch').style.border = " ";
+                window.location.href = '/Software/InventoryReportStockInDetailPDF?StartDate=' + inventoryReportStockInDetailStartDate + '&EndDate=' + inventoryReportStockInDetailEndDate + '&BranchId=' + branchId;
+            }
+        }
+
+        function InventoryReportStockOutDetailPDF_OnClick() {
+            var inventoryReportStockOutDetailStartDate = document.getElementById('stockOut_StartDate_data').value;
+            var inventoryReportStockOutDetailEndDate = document.getElementById('stockOut_EndDate_data').value;
+
+            var branchId;
+            if (document.getElementById('StockOut_Branch_data').value == "") {
+                branchId = 0;
+                document.getElementById('StockOut_Branch').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                branchId = document.getElementById('StockOut_Branch_data').value;
+                document.getElementById('StockOut_Branch').style.border = " ";
+                window.location.href = '/Software/InventoryReportStockOutDetailPDF?StartDate=' + inventoryReportStockOutDetailStartDate + '&EndDate=' + inventoryReportStockOutDetailEndDate + '&BranchId=' + branchId;
+            }
+        }
+
+        function InventoryReportStockTransferDetailPDF_OnClick() {
+            var inventoryReportStockTransferDetailStartDate = document.getElementById('stockTransfer_StartDate_data').value;
+            var inventoryReportStockTransferDetailEndDate = document.getElementById('stockTransfer_EndDate_data').value;
+
+            var branchId;
+            if (document.getElementById('StockTransfer_Branch_data').value == "") {
+                branchId = 0;
+                document.getElementById('StockTransfer_Branch').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                branchId = document.getElementById('StockTransfer_Branch_data').value;
+                document.getElementById('StockTransfer_Branch').style.border = " ";
+                window.location.href = '/Software/InventoryReportStockTransferDetailPDF?StartDate=' + inventoryReportStockTransferDetailStartDate + '&EndDate=' + inventoryReportStockTransferDetailEndDate + '&BranchId=' + branchId;
+            }
+        }
+
+        function InventoryReportItemListPDF_OnClick() {
+            var ItemGroupId;
+            if (document.getElementById('ItemGroup_Item_data').value == "") {
+                branchId = 0;
+                document.getElementById('ItemGroup_Item').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                ItemGroupId = document.getElementById('ItemGroup_Item_data').value;
+                document.getElementById('ItemGroup_Item').style.border = "";
+                window.location.href = '/Software/InventoryReportItemListPDF?ItemGroupId=' + ItemGroupId;
+            }
+        }
+        
+        function InventoryReportPhysicalCountSheetPDF_OnClick() {
+            var ItemGroupId;
+            if (document.getElementById('ItemGroup_PhysicalCountSheet_data').value == "") {
+                branchId = 0;
+                document.getElementById('ItemGroup_PhysicalCountSheet').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                ItemGroupId = document.getElementById('ItemGroup_PhysicalCountSheet_data').value;
+                document.getElementById('ItemGroup_PhysicalCountSheet').style.border = "";
+                window.location.href = '/Software/InventoryReportPhysicalCountSheetPDF?ItemGroupId=' + ItemGroupId;
+            }
+        }
+
+        function InventoryReportItemComponentListPDF_OnClick() {
+            var ItemGroupId;
+            if (document.getElementById('ItemGroup_ItemComponent_data').value == "") {
+                branchId = 0;
+                document.getElementById('ItemGroup_ItemComponent').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                ItemGroupId = document.getElementById('ItemGroup_ItemComponent_data').value;
+                document.getElementById('ItemGroup_ItemComponent').style.border = "";
+                window.location.href = '/Software/InventoryReportItemComponentListPDF?ItemGroupId=' + ItemGroupId;
+            }
+        }
+
+        
+        function InventoryReportFixedAssetsPDF_OnClick() {
+            var inventoryReportFixedAssetsStartDate = document.getElementById('fixedAssetReport_StartDate_data').value;
+            var inventoryReportFixedAssetsEndDate = document.getElementById('fixedAssetReport_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('fixedAssetReport_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('fixedAssetReport_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('fixedAssetReport_Company_data').value;
+                document.getElementById('fixedAssetReport_Company').style.border = " ";
+                window.location.href = '/Software/InventoryReportFixedAssetsPDF?StartDate=' + inventoryReportFixedAssetsStartDate + '&EndDate=' + inventoryReportFixedAssetsEndDate + '&CompanyId=' + companyId;
+            }
+        }
+
         // ===========
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> ' + ' > Inventory Report';
-
             // Inventory Dates
             document.getElementById('inventory_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('inventory_EndDate_data').value = new Date().toLocaleDateString();
@@ -2393,26 +2392,26 @@
             cboIventoryItemGroup = new wijmo.input.ComboBox('#Inventory_ItemGroup');
 
             // Wijmo CBO Combo Box for Stock Card
-            cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company');
+            //cboStockCardCompany = new wijmo.input.ComboBox('#StockCard_Company');
             cboItems = new wijmo.input.ComboBox('#Items_Item');
             cboStockCardBranches = new wijmo.input.ComboBox('#StockCard_Branch');
             cboStockCountForStockCard = new wijmo.input.ComboBox('#StockCard_StockCountNo');
             cboStockCardItemGroup = new wijmo.input.ComboBox('#StockCard_ItemGroup');
 
             // Wijmo CBO Combo Box for Stock In
-            cboStockInCompany = new wijmo.input.ComboBox('#StockIn_Company');
+            //cboStockInCompany = new wijmo.input.ComboBox('#StockIn_Company');
             cboStockInBranches = new wijmo.input.ComboBox('#StockIn_Branch');
             cboStockCountForStockIn = new wijmo.input.ComboBox('#StockIn_StockCountNo');
             cboStockInItemGroup = new wijmo.input.ComboBox('#StockIn_ItemGroup');
 
             // Wijmo CBO Combo Box for Stock Out
-            cboStockOutCompany = new wijmo.input.ComboBox('#StockOut_Company');
+            //cboStockOutCompany = new wijmo.input.ComboBox('#StockOut_Company');
             cboStockOutBranches = new wijmo.input.ComboBox('#StockOut_Branch');
             cboStockCountForStockOut = new wijmo.input.ComboBox('#StockOut_StockCountNo');
             cboStockOutItemGroup = new wijmo.input.ComboBox('#StockOut_ItemGroup');
 
             // Wijmo CBO Combo Box for Stock Transfer
-            cboStockTransferCompany = new wijmo.input.ComboBox('#StockTransfer_Company');
+            //cboStockTransferCompany = new wijmo.input.ComboBox('#StockTransfer_Company');
             cboStockTransferBranches = new wijmo.input.ComboBox('#StockTransfer_Branch');
             cboStockCountForStockTransfer = new wijmo.input.ComboBox('#StockTransfer_StockCountNo');
             cboStockTransferItemGroup = new wijmo.input.ComboBox('#StockTransfer_ItemGroup');
@@ -2438,19 +2437,15 @@
             getItemGroup();
             getBranchesForFixedAssetReport();
             getStockCountForFixedAssetReport();
-            getBranchesForInventory();
             getStockCountForInventory();
-            getBranchesForStockCard();
+            getBranches();
             getStockCountForStockCard();
-            getBranchesForStockIn();
             getStockCountForStockIn();
-            getBranchesForStockOut();
             getStockCountForStockOut();
-            getBranchesForStockTransfer();
             getStockCountForStockTransfer();
 
             // filter Inventory
-            //document.getElementById('Inventory_Filter').checked = false;
+            document.getElementById('Inventory_Filter').checked = false;
             $('#filterTabsInventory').hide();
             $("#Inventory_Filter").click(function () {
                 if ($(this).is(':checked')) {
@@ -2461,7 +2456,7 @@
             });
 
             // filter Stock Card
-            //document.getElementById('StockCard_Filter').checked = false;
+            document.getElementById('StockCard_Filter').checked = false;
             $('#filterTabsStockCardFilter').hide();
             $("#StockCard_Filter").click(function () {
                 if ($(this).is(':checked')) {

@@ -2,81 +2,255 @@
     var branchId = Request.QueryString["BranchId"];
 }
 <!-- SideBar Menu -->
-<nav id="c-menu--push-left" class="c-menu c-menu--push-left">
-    <b class="c-menu__close">Menu  <a href="#" style="float: right;"><i class="fa fa-times sidebar-menu-close"></i></a></b>
-
+<nav id="c-menu--slide-left" class="c-menu c-menu--slide-left">
     <div class="panel-group" id="accordion">
-        <div class="panel panel-custom-menu">
+        <div class="panel panel-menu panel-link-menu ">
+            <button style="margin-top: 4px;" class="pull-right btn btn-sm btn-default c-menu__close">
+                <i class="fa fa-arrow-left"></i> 
+            </button>
+            <h4><b> Menu</b></h4>
+        </div>
+        <div class="panel panel-menu">
             <b>
-                <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="sidebar-menu-link menu-link-custom menu-main-menu">Main Menu</a>
+                <a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="panel-link-dashboard"><i class="fa fa-home"></i> Dashboard</a>
             </b>
         </div>
-        <div class="panel panel-custom-menu">
+        <div class="panel panel-menu">
             <b>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="sidebar-menu-link menu-link-custom menu-green">
-                    Setup <i class="fa-drop1 fa fa-chevron-down pull-right"></i>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="panel-link-setup">
+                    <i class="fa fa-wrench"></i> Setup <i class="fa-drop1 fa fa-chevron-down pull-right"></i>
                 </a>
             </b>
             <div id="collapse1" class="panel-collapse collapse">
-                <ul class="menu-items">
-                    <li class="menu-items"><a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Supplier</a></li>
-                    <li class="menu-items"><a href="@Url.Action("Customer", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Customer</a></li>
-                    <li class="menu-items"><a href="@Url.Action("Items", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Items</a></li>
-                    <li class="menu-items"><a href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Chart of Accounts</a></li>
-                    <li class="menu-items"><a href="@Url.Action("Bank", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Bank</a></li>
+                <ul class="panel-collapse-links">
+                    <li class="collapse-link-list"><a href="@Url.Action("Supplier", "Software", new { BranchId = branchId })" class="collapse-link">Supplier</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Customer", "Software", new { BranchId = branchId })" class="collapse-link">Customer</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Items", "Software", new { BranchId = branchId })" class="collapse-link">Items</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("ChartOfAccounts", "Software", new { BranchId = branchId })" class="collapse-link">Chart of Accounts</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Bank", "Software", new { BranchId = branchId })" class="collapse-link">Bank</a></li>
                 </ul>
             </div>
         </div>
-        <div class="panel panel-custom-menu">
+        <div class="panel panel-menu">
             <b>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="sidebar-menu-link menu-link-custom menu-lavander">
-                    System <i class="fa-drop2 fa fa-chevron-down pull-right"></i>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="panel-link-system">
+                    <i class="fa fa-desktop"></i> System <i class="fa-drop2 fa fa-chevron-down pull-right"></i>
                 </a>
             </b>
             <div id="collapse2" class="panel-collapse collapse">
-                <ul class="menu-items">
-                    <li class="menu-items"><a href="@Url.Action("Company", "Software", new { BranchId = branchId })" class=" menu-link sidebar-menu-link">Company</a></li>
-                    <li class="menu-items"><a href="@Url.Action("Users", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Users</a></li>
-                    <li class="menu-items"><a href="@Url.Action("Settings", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Settings</a></li>
-                    <li class="menu-items"><a href="@Url.Action("SystemTables", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">System Tables</a></li>
+                <ul class="panel-collapse-links">
+                    <li class="collapse-link-list"><a href="@Url.Action("Company", "Software", new { BranchId = branchId })" class="collapse-link">Company</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Users", "Software", new { BranchId = branchId })" class="collapse-link">Users</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("SystemTables", "Software", new { BranchId = branchId })" class="collapse-link">System Tables</a></li>
                 </ul>
             </div>
         </div>
-        <div class="panel panel-custom-menu">
+        <div class="panel panel-menu">
             <b>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="sidebar-menu-link menu-link-custom menu-blue">
-                    Activity <i class="fa-drop3 fa fa-chevron-down pull-right"></i>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="panel-link-activity">
+                    <i class="fa fa-line-chart"></i> Activity <i class="fa-drop3 fa fa-chevron-down pull-right"></i>
                 </a>
             </b>
             <div id="collapse3" class="panel-collapse collapse">
-                <ul class="menu-items">
-                    <li class="menu-items"><a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Purchase Order</a></li>
-                    <li class="menu-items"><a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Receiving Receipt</a></li>
-                    <li class="menu-items"><a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Disbursement</a></li>
-                    <li class="menu-items"><a href="@Url.Action("Sales", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Sales</a></li>
-                    <li class="menu-items"><a href="@Url.Action("Collection", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Collection</a></li>
-                    <li class="menu-items"><a href="@Url.Action("StockIn", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Stock In</a></li>
-                    <li class="menu-items"><a href="@Url.Action("StockOut", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Stock Out</a></li>
-                    <li class="menu-items"><a href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Stock Transfer</a></li>
-                    <li class="menu-items"><a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Journal Voucher</a></li>
+                <ul class="panel-collapse-links">
+                    <li class="collapse-link-list"><a href="@Url.Action("PurchaseOrder", "Software", new { BranchId = branchId })" class="collapse-link">Purchase Order</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("ReceivingReceipt", "Software", new { BranchId = branchId })" class="collapse-link">Receiving Receipt</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Disbursement", "Software", new { BranchId = branchId })" class="collapse-link">Disbursement</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Sales", "Software", new { BranchId = branchId })" class="collapse-link">Sales</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("Collection", "Software", new { BranchId = branchId })" class="collapse-link">Collection</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("StockIn", "Software", new { BranchId = branchId })" class="collapse-link">Stock In</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("StockOut", "Software", new { BranchId = branchId })" class="collapse-link">Stock Out</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("StockTransfer", "Software", new { BranchId = branchId })" class="collapse-link">Stock Transfer</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("StockCount", "Software", new { BranchId = branchId })" class="collapse-link">Stock Count</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("JournalVoucher", "Software", new { BranchId = branchId })" class="collapse-link">Journal Voucher</a></li>
                 </ul>
             </div>
         </div>
-        <div class="panel panel-custom-menu">
+        <div class="panel panel-menu">
             <b>
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="sidebar-menu-link menu-link-custom menu-orange">
-                    Reports <i class="fa-drop4 fa fa-chevron-down pull-right"></i>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="panel-link-reports">
+                    <i class="fa fa-print"></i>  Reports <i class="fa-drop4 fa fa-chevron-down pull-right"></i>
                 </a>
             </b>
             <div id="collapse4" class="panel-collapse collapse">
-                <ul class="menu-items">
-                    <li class="menu-items"><a href="@Url.Action("AccountsPayable", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Accounts Payable</a></li>
-                    <li class="menu-items"><a href="@Url.Action("AccountsReceivable", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Accounts Receivable</a></li>
-                    <li class="menu-items"><a href="@Url.Action("InventoryReport", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Inventory Report</a></li>
-                    <li class="menu-items"><a href="@Url.Action("FinancialStatements", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Financial Statements</a></li>
-                    <li class="menu-items"><a href="@Url.Action("BankReconciliation", "Software", new { BranchId = branchId })" class="menu-link sidebar-menu-link">Bank Reconciliation</a></li>
+                <ul class="panel-collapse-links">
+                    <li class="collapse-link-list"><a href="@Url.Action("AccountsPayable", "Software", new { BranchId = branchId })" class="collapse-link">Accounts Payable</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("AccountsReceivable", "Software", new { BranchId = branchId })" class="collapse-link">Accounts Receivable</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("InventoryReport", "Software", new { BranchId = branchId })" class="collapse-link">Inventory Report</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("FinancialStatements", "Software", new { BranchId = branchId })" class="collapse-link">Financial Statements</a></li>
+                    <li class="collapse-link-list"><a href="@Url.Action("BankReconciliation", "Software", new { BranchId = branchId })" class="collapse-link">Bank Reconciliation</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </nav><!-- /c-menu push-left -->
+
+
+@*<nav id="c-menu--slide-left" class="c-menu c-menu--slide-left">
+    <div class="panel-group" id="accordion">
+        <div class="panel">
+            <button style="margin-top: 4px; margin-right: 5px;" class="border-sharp-edge pull-right btn btn-sm btn-danger c-menu__close">
+                Close
+            </button>
+            <h4 style="margin-left: 30px;"><b> Menu</b></h4>
+        </div>
+        <div class="panel link-panel-custom">
+            <b>
+                <a href="admin.php" class="panel-collapse-link">
+                    <div class="panel-link-div ">
+                        Dashboard
+                    </div>
+                </a>
+                <a href="#" class=""></a>
+            </b>
+        </div>
+
+        <div class="panel link-panel-custom">
+            <b>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="panel-collapse-link">
+                    <div class="panel-link-div">
+                        Setups <i class="fa-drop1 fa fa-chevron-down pull-right"></i>
+                    </div>
+                </a>
+            </b>
+            <div id="collapse1" class="panel-collapse collapse collapse-panel-link">
+                <ul class="collapse-panel-links">
+                    <li>
+                        <a href="school.php" class="">
+                            <div class="panel-collapse-link-div">
+                                School / School Branches
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Departments and Colleges / Courses
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Students info
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Election Type / Department
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="panel link-panel-custom">
+            <b>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="panel-collapse-link">
+                    <div class="panel-link-div">
+                        Activities <i class="fa-drop1 fa fa-chevron-down pull-right"></i>
+                    </div>
+                </a>
+            </b>
+            <div id="collapse2" class="panel-collapse collapse collapse-panel-link">
+                <ul class="collapse-panel-links">
+
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Candidacy Forms from candidates / Candidacy form detail
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Parties / Candidates
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Vote / Elect
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Election Results
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="panel link-panel-custom">
+            <b>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="panel-collapse-link">
+                    <div class="panel-link-div">
+                        System <i class="fa-drop1 fa fa-chevron-down pull-right"></i>
+                    </div>
+                </a>
+            </b>
+            <div id="collapse3" class="panel-collapse collapse collapse-panel-link">
+                <ul class="collapse-panel-links">
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Users
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                System Tables
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="panel link-panel-custom">
+            <b>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="panel-collapse-link">
+                    <div class="panel-link-div">
+                        Reports <i class="fa-drop1 fa fa-chevron-down pull-right"></i>
+                    </div>
+                </a>
+            </b>
+            <div id="collapse4" class="panel-collapse collapse collapse-panel-link">
+                <ul class="collapse-panel-links">
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Voters Report
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Candidates Report
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="">
+                            <div class="panel-collapse-link-div">
+                                Result Report
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>*@

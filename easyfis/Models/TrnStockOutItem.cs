@@ -10,6 +10,7 @@ namespace easyfis.Models
         public Int32 Id { get; set; }
         public Int32 OTId { get; set; }
         public String OT { get; set; }
+        public String OTDate { get; set; }
         public Int32 ExpenseAccountId { get; set; }
         public String ExpenseAccount { get; set; }
         public Int32 ItemId { get; set; }

@@ -142,7 +142,7 @@ namespace easyfis.Business
             }
             catch (Exception e)
             {
-
+                Debug.WriteLine(e);
             }
         }
         // delete Stock-Transfer in Journal

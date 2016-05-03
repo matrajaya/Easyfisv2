@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using System.Diagnostics;
 
 namespace easyfis.Controllers
 {
@@ -20,11 +21,11 @@ namespace easyfis.Controllers
         {
             var users = from d in db.AspNetUsers
                         select new Models.ApplicationUser
-                            {
-                                Id = d.Id,
-                                FullName = d.FullName,
-                                UserName = d.UserName
-                            };
+                        {
+                            Id = d.Id,
+                            FullName = d.FullName,
+                            UserName = d.UserName
+                        };
             return users.ToList();
         }
 
@@ -36,20 +37,45 @@ namespace easyfis.Controllers
         {
             var users = from d in db.MstUsers
                         select new Models.MstUser
-                            {
-                                Id = d.Id,
-                                FullName = d.FullName,
-                                UserName = d.UserName,
-                                IsLocked = d.IsLocked,
-                                UserId = d.UserId,
-                                //CreatedById = d.CreatedById,
-                                //CreatedBy = d.MstUser1.FullName,
-                                //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                //UpdatedById = d.UpdatedById,
-                                //UpdatedBy = d.MstUser2.FullName,
-                                //UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                            };
+                        {
+                            Id = d.Id,
+                            FullName = d.FullName,
+                            UserName = d.UserName,
+                            IsLocked = d.IsLocked,
+                            UserId = d.UserId,
+                            //CreatedById = d.CreatedById,
+                            //CreatedBy = d.MstUser1.FullName,
+                            //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                            //UpdatedById = d.UpdatedById,
+                            //UpdatedBy = d.MstUser2.FullName,
+                            //UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                        };
             return users.ToList();
+        }
+
+        // ==================
+        // get Mst User by Id
+        // ==================
+        [Route("api/listUserById/{Id}")]
+        public Models.MstUser GetMstUserById(String Id)
+        {
+            var users = from d in db.MstUsers
+                        where d.Id == Convert.ToInt32(Id)
+                        select new Models.MstUser
+                        {
+                            Id = d.Id,
+                            FullName = d.FullName,
+                            UserName = d.UserName,
+                            IsLocked = d.IsLocked,
+                            UserId = d.UserId,
+                            //CreatedById = d.CreatedById,
+                            //CreatedBy = d.MstUser1.FullName,
+                            //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                            //UpdatedById = d.UpdatedById,
+                            //UpdatedBy = d.MstUser2.FullName,
+                            //UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                        };
+            return (Models.MstUser)users.FirstOrDefault();
         }
 
         // =========================
@@ -64,12 +90,12 @@ namespace easyfis.Controllers
             var users = from d in db.MstUsers
                         where d.Id == mstUserId
                         select new Models.MstUser
-                                  {
-                                      Id = d.Id,
-                                      FullName = d.FullName,
-                                      UserName = d.UserName,
-                                      IsLocked = d.IsLocked
-                                  };
+                        {
+                            Id = d.Id,
+                            FullName = d.FullName,
+                            UserName = d.UserName,
+                            IsLocked = d.IsLocked
+                        };
             return (Models.MstUser)users.FirstOrDefault();
         }
 
@@ -121,6 +147,82 @@ namespace easyfis.Controllers
 
                     updateMstUsers.FullName = mstUser.FullName;
                     updateMstUsers.IsLocked = isLocked;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // ===========
+        // UPDATE User
+        // ===========
+        [Route("api/updateUser/{id}")]
+        public HttpResponseMessage PutUser(String id, Models.MstUser mstUser)
+        {
+            try
+            {
+                var isLocked = true;
+                var mstUsers = from d in db.MstUsers where d.Id == Convert.ToInt32(id) select d;
+
+                var mstUserUserId = (from d in db.MstUsers where d.Id == Convert.ToInt32(id) select d.UserId).SingleOrDefault();
+                var aspUsers = from d in db.AspNetUsers where d.Id == mstUserUserId select d;
+
+                Debug.WriteLine(mstUserUserId);
+
+                if (mstUsers.Any())
+                {
+                    var updateMstUsers = mstUsers.FirstOrDefault();
+
+                    updateMstUsers.FullName = mstUser.FullName;
+                    updateMstUsers.IsLocked = isLocked;
+
+                    db.SubmitChanges();
+                    if (aspUsers.Any())
+                    {
+                        var updateAspUsers = aspUsers.FirstOrDefault();
+                        updateAspUsers.FullName = mstUser.FullName;
+
+                        db.SubmitChanges();
+                    }
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // ========================
+        // UPDATE Mst User - Unlock
+        // ========================
+        [Route("api/unlockUser/{id}")]
+        public HttpResponseMessage PutIsLock(String id, Models.MstUser mstUser)
+        {
+            try
+            {
+                var mstUsers = from d in db.MstUsers where d.Id == Convert.ToInt32(id) select d;
+                if (mstUsers.Any())
+                {
+                    var updateMstUsers = mstUsers.FirstOrDefault();
+                    updateMstUsers.IsLocked = false;
 
                     db.SubmitChanges();
 

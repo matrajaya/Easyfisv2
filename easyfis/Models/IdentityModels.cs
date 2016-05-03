@@ -21,7 +21,7 @@ namespace easyfis.Models
 
         public string FullName { get; set; }
     }
- 
+
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()

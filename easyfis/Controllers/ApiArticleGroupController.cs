@@ -26,15 +26,20 @@ namespace easyfis.Controllers
                                     ArticleTypeId = d.ArticleTypeId,
                                     ArticleType = d.MstArticleType.ArticleType,
                                     AccountId = d.AccountId,
+                                    AccountCode = d.MstAccount.AccountCode,
                                     Account = d.MstAccount.Account,
                                     SalesAccountId = d.SalesAccountId,
-                                    SalesAccount = d.MstAccount1.Account,
+                                    SalesAccountCode = d.MstAccount4.AccountCode,
+                                    SalesAccount = d.MstAccount4.Account,
                                     CostAccountId = d.CostAccountId,
+                                    CostAccountCode = d.MstAccount2.AccountCode,
                                     CostAccount = d.MstAccount2.Account,
                                     AssetAccountId = d.AssetAccountId,
-                                    AssetAccount = d.MstAccount3.Account,
+                                    AssetAccountCode = d.MstAccount1.AccountCode,
+                                    AssetAccount = d.MstAccount1.Account,
                                     ExpenseAccountId = d.ExpenseAccountId,
-                                    ExpenseAccount = d.MstAccount4.Account,
+                                    ExpenseAccountCode = d.MstAccount3.AccountCode,
+                                    ExpenseAccount = d.MstAccount3.Account,
                                     IsLocked = d.IsLocked,
                                     CreatedById = d.CreatedById,
                                     CreatedBy = d.MstUser.FullName,
@@ -62,15 +67,20 @@ namespace easyfis.Controllers
                                     ArticleTypeId = d.ArticleTypeId,
                                     ArticleType = d.MstArticleType.ArticleType,
                                     AccountId = d.AccountId,
+                                    AccountCode = d.MstAccount.AccountCode,
                                     Account = d.MstAccount.Account,
                                     SalesAccountId = d.SalesAccountId,
-                                    SalesAccount = d.MstAccount1.Account,
+                                    SalesAccountCode = d.MstAccount4.AccountCode,
+                                    SalesAccount = d.MstAccount4.Account,
                                     CostAccountId = d.CostAccountId,
+                                    CostAccountCode = d.MstAccount2.AccountCode,
                                     CostAccount = d.MstAccount2.Account,
                                     AssetAccountId = d.AssetAccountId,
-                                    AssetAccount = d.MstAccount3.Account,
+                                    AssetAccountCode = d.MstAccount1.AccountCode,
+                                    AssetAccount = d.MstAccount1.Account,
                                     ExpenseAccountId = d.ExpenseAccountId,
-                                    ExpenseAccount = d.MstAccount4.Account,
+                                    ExpenseAccountCode = d.MstAccount3.AccountCode,
+                                    ExpenseAccount = d.MstAccount3.Account,
                                     IsLocked = d.IsLocked,
                                     CreatedById = d.CreatedById,
                                     CreatedBy = d.MstUser.FullName,
@@ -86,7 +96,7 @@ namespace easyfis.Controllers
         // ADD Article Group
         // =================
         [Route("api/addArticleGroup")]
-        public int Post(Models.MstArticleGroup  articleGroup)
+        public int Post(Models.MstArticleGroup articleGroup)
         {
             try
             {

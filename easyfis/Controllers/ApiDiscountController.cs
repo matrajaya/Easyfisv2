@@ -26,6 +26,7 @@ namespace easyfis.Controllers
                                 DiscountRate = d.DiscountRate,
                                 IsInclusive = d.IsInclusive,
                                 AccountId = d.AccountId,
+                                AccountCode = d.MstAccount.AccountCode,
                                 Account = d.MstAccount.Account,
                                 IsLocked = d.IsLocked,
                                 CreatedById = d.CreatedById,

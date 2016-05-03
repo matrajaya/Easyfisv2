@@ -24,6 +24,46 @@ namespace easyfis.Controllers
                                           {
                                               Id = d.Id,
                                               JVId = d.JVId,
+                                              JVNumber = d.TrnJournalVoucher.JVNumber,
+                                              JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                              JVParticulars = d.TrnJournalVoucher.Particulars,
+                                              BranchId = d.BranchId,
+                                              Branch = d.MstBranch.Branch,
+                                              AccountId = d.AccountId,
+                                              Account = d.MstAccount.Account,
+                                              ArticleId = d.ArticleId,
+                                              Article = d.MstArticle.Article,
+                                              Particulars = d.Particulars,
+                                              DebitAmount = d.DebitAmount,
+                                              CreditAmount = d.CreditAmount,
+                                              APRRId = d.APRRId,
+                                              APRR = d.TrnReceivingReceipt.RRNumber,
+                                              APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
+                                              ARSIId = d.ARSIId,
+                                              ARSI = d.TrnSalesInvoice.SINumber,
+                                              ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
+                                              IsClear = d.IsClear
+                                          };
+            return journalVoucherLines.ToList();
+        }
+
+        // ==================================================
+        // LIST Journal Voucher Line by JV Date start and end
+        // ==================================================
+        [Route("api/listJournalVoucherLineByJVDate/{ArticleId}/{DateStart}/{DateEnd}")]
+        public List<Models.TrnJournalVoucherLine> GetJournalVoucherLineByJVDate(String ArticleId, String DateStart, String DateEnd)
+        {
+            var journalVoucherLines = from d in db.TrnJournalVoucherLines
+                                      where d.ArticleId == Convert.ToInt32(ArticleId)
+                                      where d.TrnJournalVoucher.JVDate >= Convert.ToDateTime(DateStart)
+                                      where d.TrnJournalVoucher.JVDate <= Convert.ToDateTime(DateEnd)
+                                      select new Models.TrnJournalVoucherLine
+                                          {
+                                              Id = d.Id,
+                                              JVId = d.JVId,
+                                              JVNumber = d.TrnJournalVoucher.JVNumber,
+                                              JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                              JVParticulars = d.TrnJournalVoucher.Particulars,
                                               BranchId = d.BranchId,
                                               Branch = d.MstBranch.Branch,
                                               AccountId = d.AccountId,

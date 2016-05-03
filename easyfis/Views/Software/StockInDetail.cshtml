@@ -1,6 +1,4 @@
 ﻿@{
-    var branchId = Request.QueryString["BranchId"];
-    var stockInId = Request.QueryString["StockInId"];
     var userId = ViewData["UserId"];
 }
 <!DOCTYPE html>
@@ -9,34 +7,38 @@
     <!-- Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="description" content="Some slide and push menu demos using CSS3 transitions.">
 
     <!-- Title of the Page -->
     <title>Stock In Detail</title>
 
     <!-- CSS StyleSheets-->
-    @Styles.Render("~/Font-Awesome/css")
     @Styles.Render("~/Content/Software-css")
-    @Styles.Render("~/WijmoCSS/Wijmo-css")
 </head>
 <body>
-    <div id="wrapper" class="wrapper">
+    <div id="o-wrapper" class="o-wrapper">
         <!-- Header -->
         @Html.Partial("_SoftwareHeader")
 
         <!-- Section -->
         <section>
-            <br /><br /><br />
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h4><i class="fa fa-archive fa-2x"></i>  Stock In Detail</h4>
-                        <br />
-                        <div class="div_Current_Page">
-                            <span id="currentPage"></span>
+            <div class="sub-nav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4><i class="fa fa-archive"></i>  Stock In Detail</h4>
+                        </div>
+                        <div class="col-md-6" align="right">
+                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
                         </div>
                     </div>
                 </div>
+                <div class="div_Current_Page">
+                    <div class="container">
+                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("StockIn", "Software")" class="currentPageLinkCustom">Sock In</a> > Stock In Detail
+                    </div>
+                </div>
+            </div>
+            <div class="container">
                 <div class="row">
                     <div class="col-md-6">
                         <h4 id="stockInDetailLabel"></h4>
@@ -46,8 +48,8 @@
                         <button class="btn btn-primary btn-sm" id="cmdStockInSaveLock" onclick="btnStockInSaveLock_OnClick()"><i class=" fa fa-save"></i> Save (Lock)</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockInSave" onclick="btnStockInSave_OnClick()"><i class=" fa fa-save"></i> Save</button>
                         <button class="btn btn-primary btn-sm" id="cmdStockInEdit" onclick="btnStockInEdit_OnClick()"><i class=" fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockInPrint" onclick="window.location.href ='@Url.Action("StockInPDF", "Software", new { StockInId = stockInId })'"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("StockIn", "Software", new { BranchId = branchId })'" class="btn btn-danger btn-sm" id="cmdStockInClose"><i class=" fa fa-times"></i> Close</button>
+                        <button class="btn btn-primary btn-sm" id="cmdStockInPrint" onclick="btnStockInPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                        <button onclick="window.location.href = '@Url.Action("StockIn", "Software")'" class="btn btn-danger btn-sm" id="cmdStockInClose"><i class=" fa fa-times"></i> Close</button>
                     </div>
                 </div>
                 @*<hr />*@
@@ -67,7 +69,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">IN Number</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_INnumber_Display" />
+                                        <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_INnumber_Display" placeholder="IN Number"/>
                                         <input type="hidden" id="StockIn_INnumber" />
                                     </div>
                                 </div>
@@ -99,7 +101,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Particulars</label>
                                     <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom requiredStockIn" id="StockIn_Particulars"></textarea>
+                                        <textarea class="form-control textarea-custom requiredStockIn" id="StockIn_Particulars" placeholder="Particulars"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +109,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-4">Manual IN Number</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_ManualINNumber">
+                                        <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_ManualINNumber" placeholder="Manual IN Number">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -162,11 +164,6 @@
                         </div>
                     </form>
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h4>Stock In Line</h4>
-                    </div>
-                </div>
                 <!-- Stock In line -->
                 <ul class="nav nav-tabs" role="tablist" id="myTab">
                     <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
@@ -177,84 +174,24 @@
                     <div id="Items" class="tab-pane fade in active">
                         <!-- Item  List -->
                         <div class="row">
-                            <div class="col-lg-12">
-                                <h4>Items</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterItem" placeholder="Search">
-                                </div>
-                            </div>
-                            <div class="col-lg-8" align="right">
+                            <div class="col-lg-12" align="right">
                                 <button class="btn btn-primary btn-sm" id="btnAddStockInItem" onclick="cmdAddStockInItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
                             </div>
                         </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <div id="ItemGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="navigationPageGridItem">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridItem">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridItem">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridItem"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridItem">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridItem">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
+                                <div id="ItemGrid" class="grid"></div>
                             </div>
                         </div>
                     </div>
 
-                    <div id="InventoryEntries" class="tab-pane fade in active">
+                    <div id="InventoryEntries" class="tab-pane fade in">
                         <!-- Inventory Entries List -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h4>Inventory Entries</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterInventoryEntry" placeholder="Search">
-                                </div>
-                            </div>
-                        </div>
                         <br />
                         <div class="row" align="left">
                             <div class="col-lg-12">
-                                <div id="InventoryEntryGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="navigationPageGridInventoryEntry">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridInventoryEntry">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridInventoryEntry">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridInventoryEntry"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridInventoryEntry">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridInventoryEntry">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
+                                <div id="InventoryEntryGrid" class="grid"></div>
                             </div>
                         </div>
                     </div>
@@ -350,52 +287,49 @@
                         <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="row" align="left">
-                            <center>
-                                <h4>
-                                    <span id="loadingJournalGridList"></span>
-                                </h4>
-                            </center>
-                            <div class="col-lg-12">
-                                <div id="journalGrid" class="grid" align="left"></div>
+                        <center>
+                            <h4>
+                                <span id="loadingJournalGridList"></span>
+                            </h4>
+                        </center>
+                        <div id="journal_Content">
+                            <div class="row" align="left">
+                                <div class="col-lg-12">
+                                    <div id="journalGrid" class="grid" align="left"></div>
+                                </div>
                             </div>
-                        </div>
-                        <br /><br />
-                        <div class="row" id="footerModalJournalNavigationButtons">
-                            <div class="btn-group col-md-9" id="navigationPageGridJournal">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournal">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournal">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournal"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournal">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournal">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
-                            </div>
-                            <div class="col-md-3">
-                                <table>
-                                    <tr>
-                                        <td align="right"> <b>Total Debit:</b> </td>
-                                        <td style="padding-left: 15px"></td>
-                                        <td> <span id="totalDebitInJournal"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"> <b>Total Credit:</b> </td>
-                                        <td style="padding-left: 15px"></td>
-                                        <td> <span id="totalCreditInJournal"></span></td>
-                                    </tr>
-                                </table>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6" align="right">
+                                    <table>
+                                        <tr>
+                                            <td align="right"> <b>Total Debit:</b> </td>
+                                            <td style="padding-left: 35px"></td>
+                                            <td> <span id="totalDebitInJournal"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right"> <b>Total Credit:</b> </td>
+                                            <td style="padding-left: 35px"></td>
+                                            <td> <span id="totalCreditInJournal"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px"> </td>
+                                            <td style="padding: 10px"> </td>
+                                            <td style="padding: 10px"> </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right"> <b>Variance: </b> </td>
+                                            <td style="padding-left: 35px"></td>
+                                            <td> <span id="variance"></span></td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        @*<button class="btn btn-primary btn-sm" id="cmdSaveJournalButton" onclick="cmdJournalSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
-                        <button id="cmdJournalDetailCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                        <button id="cmdJournalDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                     </div>
                 </div>
             </div>
@@ -423,21 +357,6 @@
             </div>
         </div>
 
-        <!-- Loading Modal -->
-        <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="Loading..." aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class=" modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>Loading ...</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <img class="img-thumbnail img-responsive center-block img-custom" src='~/images/loading/progress_bar.gif'>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
@@ -448,7 +367,6 @@
     <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     <!-- Scripts JavaScripts -->
     @Scripts.Render("~/Scripts/Software-js")
-    @Scripts.Render("~/WijmoScripts/Wijmo-js")
     <script type="text/javascript">
         // ================
         // Global Variables
@@ -466,156 +384,164 @@
         var cboCheckedBy;
         var cboApprovedBy;
 
+        // =======================
+        // Get URL Parameter Value
+        // =======================
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+
+        // ===========
+        // read Cookie
+        // ===========
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) {
+                        return c.substring(nameEQ.length, c.length);
+                    }
+                }
+            }
+            return null;
+        }
+
         // ================
         // GET Stock In List
         // ================
         function getStockInById() {
-            stockIns = new wijmo.collections.ObservableArray;
-            var stockInId = @stockInId;
-            $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/stockIn/' + stockInId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        stockIns.push({
-                            Id: Results.Id,
-                            BranchId: Results.BranchId,
-                            Branch: Results.Branch,
-                            INNumber: Results.INNumber,
-                            INDate: Results.INDate,
-                            AccountId: Results.AccountId,
-                            Account: Results.Account,
-                            ArticleId: Results.ArticleId,
-                            Article: Results.Article,
-                            Particulars: Results.Particulars,
-                            ManualINNumber: Results.ManualINNumber,
-                            IsProduced: Results.IsProduced,
-                            PreparedById: Results.PreparedById,
-                            PreparedBy: Results.PreparedBy,
-                            CheckedById: Results.CheckedById,
-                            CheckedBy: Results.CheckedBy,
-                            ApprovedById: Results.ApprovedById,
-                            ApprovedBy: Results.ApprovedBy,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
-                        });
-                    }
-                    document.getElementById('StockIn_Branch_data').value = Results.BranchId;
-                    document.getElementById('StockIn_Branch_selectedValue').value = Results.Branch;
+            NProgress.start();
+            var stockInId = getParam("StockInId");
+            if (document.location.search.length == 0) {
+                NProgress.done();
+            } else {
+                $.ajax({
+                    url: '/api/stockIn/' + stockInId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results != null) {
+                            document.getElementById('StockIn_Branch_data').value = Results.BranchId;
+                            document.getElementById('StockIn_Branch_selectedValue').value = Results.Branch;
 
-                    document.getElementById('StockIn_INnumber').value = Results.INNumber;
-                    document.getElementById('StockIn_INnumber_Display').value = Results.INNumber;
-                    document.getElementById('StockIn_InDate_data').value = Results.INDate;
+                            document.getElementById('StockIn_INnumber').value = Results.INNumber;
+                            document.getElementById('StockIn_INnumber_Display').value = Results.INNumber;
+                            document.getElementById('StockIn_InDate_data').value = Results.INDate;
 
-                    var INDate_date = Results.INDate;
-                    INDate.dispose();
-                    INDate = new wijmo.input.InputDate('#StockIn_InDate', {
-                        format: 'MM/dd/yyyy',
-                        value: new Date(INDate_date),
-                        mask: '99/99/9999',
-                        onValueChanged: function () {
-                            document.getElementById('StockIn_InDate_data').value = this.value.toLocaleDateString();
+                            var INDate_date = Results.INDate;
+                            INDate.dispose();
+                            INDate = new wijmo.input.InputDate('#StockIn_InDate', {
+                                format: 'MM/dd/yyyy',
+                                value: new Date(INDate_date),
+                                mask: '99/99/9999',
+                                onValueChanged: function () {
+                                    document.getElementById('StockIn_InDate_data').value = this.value.toLocaleDateString();
+                                }
+                            });
+
+                            document.getElementById('StockIn_Account_data').value = Results.AccountId;
+                            document.getElementById('StockIn_Account_selectedValue').value = Results.Account;
+
+                            document.getElementById('StockIn_Article_data').value = Results.ArticleId;
+                            document.getElementById('StockIn_Article_selectedValue').value = Results.Article;
+
+                            document.getElementById('StockIn_Particulars').value = Results.Particulars;
+                            document.getElementById('StockIn_ManualINNumber').value = Results.ManualINNumber
+                            document.getElementById('StockIn_Produce').checked = Results.IsProduced;
+
+                            document.getElementById('StockIn_PreparedBy_data').value = Results.PreparedById;
+                            document.getElementById('StockIn_PreparedBy_selectedValue').value = Results.PreparedBy;
+
+                            document.getElementById('StockIn_CheckedBy_data').value = Results.CheckedById;
+                            document.getElementById('StockIn_CheckedBy_selectedValue').value = Results.CheckedBy;
+
+                            document.getElementById('StockIn_ApprovedBy_data').value = Results.ApprovedById;
+                            document.getElementById('StockIn_ApprovedBy_selectedValue').value = Results.ApprovedBy;
+
+                            document.getElementById('StockIn_Lock').checked = Results.IsLocked;
+                            document.getElementById('StockIn_IsLocked').value = Results.IsLocked;
+
+                            document.getElementById('createdBy').innerHTML = Results.CreatedBy;
+                            document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
+                            document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
+                            document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
+
+                            NProgress.done();
+
+                            if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                                document.getElementById('StockIn_Particulars').disabled = true;
+                                document.getElementById('StockIn_ManualINNumber').disabled = true;
+
+                                var INDate_date = Results.INDate;
+                                INDate.dispose();
+                                INDate = new wijmo.input.InputDate('#StockIn_InDate', {
+                                    disabled: true,
+                                    format: 'MM/dd/yyyy',
+                                    value: new Date(INDate_date),
+                                    mask: '99/99/9999',
+                                    onValueChanged: function () {
+                                        document.getElementById('StockIn_InDate_data').value = this.value.toLocaleDateString();
+                                    }
+                                });
+
+                                $("#cmdStockInJournal").prop("disabled", false);
+                                $("#cmdStockInSaveLock").prop("disabled", true);
+                                $("#cmdStockInSave").prop("disabled", true);
+                                $("#cmdStockInEdit").prop("disabled", false);
+                                $("#cmdStockInPrint").prop("disabled", false);
+                                $("#btnAddStockInItem").prop("disabled", true);
+
+                                document.getElementById('StockIn_Produce').disabled = true;
+                            } else if (document.getElementById('StockIn_IsLocked').value == 'false') {
+                                document.getElementById('StockIn_Particulars').disabled = false;
+                                document.getElementById('StockIn_ManualINNumber').disabled = false;
+
+                                var INDate_date = Results.INDate;
+                                INDate.dispose();
+                                INDate = new wijmo.input.InputDate('#StockIn_InDate', {
+                                    disabled: false,
+                                    format: 'MM/dd/yyyy',
+                                    value: new Date(INDate_date),
+                                    mask: '99/99/9999',
+                                    onValueChanged: function () {
+                                        document.getElementById('StockIn_InDate_data').value = this.value.toLocaleDateString();
+                                    }
+                                });
+
+                                $("#cmdStockInJournal").prop("disabled", true);
+                                $("#cmdStockInSaveLock").prop("disabled", false);
+                                $("#cmdStockInSave").prop("disabled", true);
+                                $("#cmdStockInEdit").prop("disabled", true);
+                                $("#cmdStockInPrint").prop("disabled", true);
+                                $("#btnAddStockInItem").prop("disabled", false);
+
+                                document.getElementById('StockIn_Produce').disabled = false;
+                            } else {
+                                console.log("Invalid IsLocked");
+                            }
+
+                            getBranchesForComboBox();
+                            getUsersForComboBox();
+                            getAccountForComboBox();
+                            getArticlesForComboBox();
                         }
-                    });
-
-                    document.getElementById('StockIn_Account_data').value = Results.AccountId;
-                    document.getElementById('StockIn_Account_selectedValue').value = Results.Account;
-
-                    document.getElementById('StockIn_Article_data').value = Results.ArticleId;
-                    document.getElementById('StockIn_Article_selectedValue').value = Results.Article;
-
-                    document.getElementById('StockIn_Particulars').value = Results.Particulars;
-                    document.getElementById('StockIn_ManualINNumber').value = Results.ManualINNumber
-                    document.getElementById('StockIn_Produce').checked = Results.IsProduced;
-
-                    document.getElementById('StockIn_PreparedBy_data').value = Results.PreparedById;
-                    document.getElementById('StockIn_PreparedBy_selectedValue').value = Results.PreparedBy;
-
-                    document.getElementById('StockIn_CheckedBy_data').value = Results.CheckedById;
-                    document.getElementById('StockIn_CheckedBy_selectedValue').value = Results.CheckedBy;
-
-                    document.getElementById('StockIn_ApprovedBy_data').value = Results.ApprovedById;
-                    document.getElementById('StockIn_ApprovedBy_selectedValue').value = Results.ApprovedBy;
-
-                    document.getElementById('StockIn_Lock').checked = Results.IsLocked;
-                    document.getElementById('StockIn_IsLocked').value = Results.IsLocked;
-
-                    document.getElementById('createdBy').innerHTML = Results.CreatedBy;
-                    document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
-                    document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
-                    document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
-
-                    if(document.getElementById('StockIn_IsLocked').value == 'true') {
-                        document.getElementById('StockIn_Particulars').disabled = true;
-                        document.getElementById('StockIn_ManualINNumber').disabled = true;
-
-                        var INDate_date = Results.INDate;
-                        INDate.dispose();
-                        INDate = new wijmo.input.InputDate('#StockIn_InDate', {
-                            disabled: true,
-                            format: 'MM/dd/yyyy',
-                            value: new Date(INDate_date),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('StockIn_InDate_data').value = this.value.toLocaleDateString();
-                            }
-                        });
-
-                        $("#cmdStockInJournal").prop("disabled", false);
-                        $("#cmdStockInSaveLock").prop("disabled", true);
-                        $("#cmdStockInSave").prop("disabled", true);
-                        $("#cmdStockInEdit").prop("disabled", false);
-                        $("#cmdStockInPrint").prop("disabled", false);
-                        $("#btnAddStockInItem").prop("disabled", true);
-
-                        document.getElementById('StockIn_Produce').disabled = true;
-                    } else if(document.getElementById('StockIn_IsLocked').value == 'false') {
-                        document.getElementById('StockIn_Particulars').disabled = false;
-                        document.getElementById('StockIn_ManualINNumber').disabled = false;
-
-                        var INDate_date = Results.INDate;
-                        INDate.dispose();
-                        INDate = new wijmo.input.InputDate('#StockIn_InDate', {
-                            disabled: false,
-                            format: 'MM/dd/yyyy',
-                            value: new Date(INDate_date),
-                            mask: '99/99/9999',
-                            onValueChanged: function () {
-                                document.getElementById('StockIn_InDate_data').value = this.value.toLocaleDateString();
-                            }
-                        });
-
-                        $("#cmdStockInJournal").prop("disabled", true);
-                        $("#cmdStockInSaveLock").prop("disabled", false);
-                        $("#cmdStockInSave").prop("disabled", true);
-                        $("#cmdStockInEdit").prop("disabled", true);
-                        $("#cmdStockInPrint").prop("disabled", true);
-                        $("#btnAddStockInItem").prop("disabled", false);
-                        
-                        document.getElementById('StockIn_Produce').disabled = false;
-                    } else {
-                        console.log("Invalid IsLocked");
                     }
-
-                    getBranchesForComboBox();
-                    getUsersForComboBox();
-                    getAccountForComboBox();
-                    getArticlesForComboBox();
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return stockIns;
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            }
         }
 
         // ====================
@@ -630,13 +556,7 @@
                 contentType: 'application/json; charset=utf-8',
                 data: {},
                 success: function (Results) {
-                    if (Results.length > 0) {
-                        stockIns.push({
-                            Id: Results.Id,
-                            INNumber: Results.INNumber
-                        });
-                    }
-                    window.location = '/Software/StockInDetail?StockInId=' + Results.Id + '&BranchId=' + @branchId;
+                    window.location = '/Software/StockInDetail?StockInId=' + Results.Id;
                     window.setTimeout(function () { location.reload() }, 1000);
                 }
             });
@@ -663,30 +583,29 @@
                             });
                         }
 
-                        var stockInId = @stockInId;
-                        if(stockInId == 0) {
+                        var stockInId = getParam("StockInId");
+                        var branchId = readCookie("branchId");
+                        if (document.location.search.length == 0) {
                             $.ajax({
-                                url: '/api/listBranchById/' + @branchId,
+                                url: '/api/listBranchById/' + branchId,
                                 cache: false,
                                 type: 'GET',
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
-                                success: function (results) {
-                                    if (results.length > 0) {
-                                        branches.push({
-                                            BranchId: results.Id,
-                                            Branch: results.Branch
-                                        });
-                                    }
-                                    document.getElementById('StockIn_Branch_data').value = results.Id;
-                                    document.getElementById('StockIn_Branch_selectedValue').value = results.Branch;
+                                success: function (branchResults) {
+                                    if (branchResults != null) {
+                                        document.getElementById('StockIn_Branch_data').value = branchResults.Id;
+                                        document.getElementById('StockIn_Branch_selectedValue').value = branchResults.Branch;
 
-                                    createCboBranch(branches);
+                                        createCboBranch(branches);
+                                    }
                                 }
                             });
                         } else {
                             createCboBranch(branches);
                         }
+                    } else {
+                        createCboBranch(branches);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -706,18 +625,34 @@
                 branchList.push(branchCollections.items[i].BranchBranch);
             }
 
+            var disabled;
+            if (branches == 0) {
+                disabled = true;
+            } else {
+                if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
             cboBranch.dispose();
             cboBranch = new wijmo.input.ComboBox('#StockIn_Branch', {
                 disabled: true,
                 placeholder: "Select Branch",
                 itemsSource: branchList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('StockIn_Branch_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#StockIn_Branch_data").val(branchCollections.items[this.selectedIndex].BranchId);
                 }
             });
+
+            if (branches == 0) {
+                document.getElementById('StockIn_Branch_data').value = "";
+            } else {
+                document.getElementById('StockIn_Branch_data').value = branchCollections.items[cboBranch.selectedIndex].BranchId;
+            }
         }
 
         // ====================
@@ -740,6 +675,8 @@
                             });
                         }
                         createCboForAccount(accounts);
+                    } else {
+                        createCboForAccount(accounts);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -751,51 +688,42 @@
         // ===============
         // CBO for Account
         // ===============
-        function  createCboForAccount(accounts) {
+        function createCboForAccount(accounts) {
             var accountCollection = new wijmo.collections.CollectionView(accounts);
             var accountList = new Array();
             for (var i = 0; i < accountCollection.items.length; i++) {
                 accountList.push(accountCollection.items[i].AccountAccount);
             }
 
-            if(document.getElementById('StockIn_IsLocked').value == 'true') {
-                cboForAccount.dispose();
-                cboForAccount = new wijmo.input.ComboBox('#StockIn_Account', {
-                    disabled: true,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
-            } else if(document.getElementById('StockIn_IsLocked').value == 'false') {
-                cboForAccount.dispose();
-                cboForAccount = new wijmo.input.ComboBox('#StockIn_Account', {
-                    disabled: false,
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+            var disabled;
+            if (accounts == 0) {
+                disabled = true;
             } else {
-                cboForAccount.dispose();
-                cboForAccount = new wijmo.input.ComboBox('#StockIn_Account', {
-                    placeholder: "Select Account",
-                    itemsSource: accountList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_Account_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                    }
-                });
+                if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboForAccount.dispose();
+            cboForAccount = new wijmo.input.ComboBox('#StockIn_Account', {
+                disabled: disabled,
+                placeholder: "Select Account",
+                itemsSource: accountList,
+                isEditable: false,
+                selectedValue: document.getElementById('StockIn_Account_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockIn_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    getArticlesForComboBox();
+                }
+            });
+
+            if (accounts == 0) {
+                document.getElementById('StockIn_Account_data').value = "";
+            } else {
+                document.getElementById('StockIn_Account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
+                getArticlesForComboBox();
             }
         }
 
@@ -804,27 +732,106 @@
         // ==========================
         function getArticlesForComboBox() {
             articles = new wijmo.collections.ObservableArray();
+
+            var accountId;
+            if (document.getElementById('StockIn_Account_data').value == "") {
+                accountId = 0;
+            } else {
+                accountId = document.getElementById('StockIn_Account_data').value;
+            }
+
+            articlesArticleTypes = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticle',
+                url: '/api/listAccountArticleTypeByAccountId/' + accountId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            articles.push({
-                                ArticleId: results[i]["Id"],
-                                ArticleArticle: results[i]["Article"]
+                success: function (articlesResults) {
+                    if (articlesResults.length > 0) {
+                        for (i = 0; i < articlesResults.length; i++) {
+                            articlesArticleTypes.push({
+                                Id: articlesResults[i]["Id"],
+                                ArticleTypeId: articlesResults[i]["ArticleTypeId"]
                             });
+
+                            $.ajax({
+                                url: '/api/listArticleByArticleTypeId/' + articlesResults[i]["ArticleTypeId"],
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (results) {
+                                    if (results.length > 0) {
+                                        for (i = 0; i < results.length; i++) {
+                                            articles.push({
+                                                ArticleId: results[i]["Id"],
+                                                ArticleArticle: results[i]["Article"]
+                                            });
+                                        }
+                                        createCboArticles(articles);
+                                    } else {
+                                        createCboArticles(articles);
+                                    }
+                                }
+                            }).fail(function (xhr, textStatus, err) {
+                                alert(err);
+                            });
+
                         }
-                        createCboArticles(articles);
+                    } else {
+                        $.ajax({
+                            url: '/api/listArticleByArticleTypeId/' + 0,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (results) {
+                                if (results.length > 0) {
+                                    for (i = 0; i < results.length; i++) {
+                                        articles.push({
+                                            ArticleId: results[i]["Id"],
+                                            ArticleArticle: results[i]["Article"]
+                                        });
+                                    }
+                                    createCboArticles(articles);
+                                } else {
+                                    createCboArticles(articles);
+                                }
+                            }
+                        }).fail(function (xhr, textStatus, err) {
+                            alert(err);
+                        });
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
-            }
-            );
+            });
+
+
+
+            //articles = new wijmo.collections.ObservableArray();
+            //$.ajax({
+            //    url: '/api/listArticle',
+            //    cache: false,
+            //    type: 'GET',
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: {},
+            //    success: function (results) {
+            //        if (results.length > 0) {
+            //            for (i = 0; i < results.length; i++) {
+            //                articles.push({
+            //                    ArticleId: results[i]["Id"],
+            //                    ArticleArticle: results[i]["Article"]
+            //                });
+            //            }
+            //            createCboArticles(articles);
+            //        }
+            //    }
+            //}).fail(function (xhr, textStatus, err) {
+            //    alert(err);
+            //}
+            //);
         }
 
         // ======================
@@ -837,44 +844,33 @@
                 articleList.push(articleCollections.items[i].ArticleArticle);
             }
 
-            if(document.getElementById('StockIn_IsLocked').value == 'true') {
-                cboArticle.dispose();
-                cboArticle = new wijmo.input.ComboBox('#StockIn_Article', {
-                    disabled: true,
-                    placeholder: "Select Article",
-                    itemsSource: articleList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_Article_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_Article_data").val(articleCollections.items[this.selectedIndex].ArticleId);
-                    }
-                });
-            } else if(document.getElementById('StockIn_IsLocked').value == 'false') {
-                cboArticle.dispose();
-                cboArticle = new wijmo.input.ComboBox('#StockIn_Article', {
-                    disabled: false,
-                    placeholder: "Select Article",
-                    itemsSource: articleList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_Article_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_Article_data").val(articleCollections.items[this.selectedIndex].ArticleId);
-                    }
-                });
+            var disabled;
+            if (articles == 0) {
+                disabled = true;
             } else {
-                cboArticle.dispose();
-                cboArticle = new wijmo.input.ComboBox('#StockIn_Article', {
-                    placeholder: "Select Article",
-                    itemsSource: articleList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_Article_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_Article_data").val(articleCollections.items[this.selectedIndex].ArticleId);
-                    }
-                });
+                if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboArticle.dispose();
+            cboArticle = new wijmo.input.ComboBox('#StockIn_Article', {
+                disabled: disabled,
+                placeholder: "Select Article",
+                itemsSource: articleList,
+                isEditable: false,
+                selectedValue: document.getElementById('StockIn_Article_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockIn_Article_data").val(articleCollections.items[this.selectedIndex].ArticleId);
+                }
+            });
+
+            if (articles == 0) {
+                document.getElementById('StockIn_Article_data').value = "";
+            } else {
+                document.getElementById('StockIn_Article_data').value = articleCollections.items[cboArticle.selectedIndex].ArticleId;
             }
         }
 
@@ -898,8 +894,8 @@
                             });
                         }
 
-                        var stockInId = @stockInId;
-                        if(stockInId == 0) {
+                        var stockInId = getParam("StockInId");
+                        if (document.location.search.length == 0) {
                             var userId = document.getElementById('userId_data').value;
                             $.ajax({
                                 url: '/api/listByMstUserId/' + userId,
@@ -916,7 +912,7 @@
                                     }
 
                                     document.getElementById('StockIn_PreparedBy_data').value = results.Id;
-                                    document.getElementById('StockIn_PreparedBy_selectedValue').value =  results.FullName;
+                                    document.getElementById('StockIn_PreparedBy_selectedValue').value = results.FullName;
 
                                     createCboUserPreparedBy(users);
                                     createCboUserCheckedBy(users);
@@ -927,8 +923,11 @@
                             createCboUserPreparedBy(users);
                             createCboUserCheckedBy(users);
                             createCboUserApprovedBy(users);
-
                         }
+                    } else {
+                        createCboUserPreparedBy(users);
+                        createCboUserCheckedBy(users);
+                        createCboUserApprovedBy(users);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -947,6 +946,17 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
+            var disabled;
+            if (users == 0) {
+                disabled = true;
+            } else {
+                if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
             cboPreparedBy.dispose();
             cboPreparedBy = new wijmo.input.ComboBox('#StockIn_PreparedBy', {
                 disabled: true,
@@ -959,6 +969,12 @@
                     $("#StockIn_PreparedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
                 }
             });
+
+            if (users == 0) {
+                document.getElementById('StockIn_PreparedBy_data').value = "";
+            } else {
+                document.getElementById('StockIn_PreparedBy_data').value = usersCollection.items[cboPreparedBy.selectedIndex].UserId;
+            }
         }
 
         // ==================================
@@ -971,44 +987,33 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            if(document.getElementById('StockIn_IsLocked').value == 'true') {
-                cboCheckedBy.dispose();
-                cboCheckedBy = new wijmo.input.ComboBox('#StockIn_CheckedBy', {
-                    disabled: true,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_CheckedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            } else if(document.getElementById('StockIn_IsLocked').value == 'false') {
-                cboCheckedBy.dispose();
-                cboCheckedBy = new wijmo.input.ComboBox('#StockIn_CheckedBy', {
-                    disabled: false,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_CheckedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+            var disabled;
+            if (users == 0) {
+                disabled = true;
             } else {
-                cboCheckedBy.dispose();
-                cboCheckedBy = new wijmo.input.ComboBox('#StockIn_CheckedBy', {
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_CheckedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+                if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboCheckedBy.dispose();
+            cboCheckedBy = new wijmo.input.ComboBox('#StockIn_CheckedBy', {
+                disabled: disabled,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                selectedValue: document.getElementById('StockIn_CheckedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockIn_CheckedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+
+            if (users == 0) {
+                document.getElementById('StockIn_CheckedBy_data').value = "";
+            } else {
+                document.getElementById('StockIn_CheckedBy_data').value = usersCollection.items[cboCheckedBy.selectedIndex].UserId;
             }
         }
 
@@ -1022,44 +1027,33 @@
                 userList.push(usersCollection.items[i].UserFullName);
             }
 
-            if(document.getElementById('StockIn_IsLocked').value == 'true') {
-                cboApprovedBy.dispose();
-                cboApprovedBy = new wijmo.input.ComboBox('#StockIn_ApprovedBy', {
-                    disabled: true,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_ApprovedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
-            } else if(document.getElementById('StockIn_IsLocked').value == 'false') {
-                cboApprovedBy.dispose();
-                cboApprovedBy = new wijmo.input.ComboBox('#StockIn_ApprovedBy', {
-                    disabled: false,
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_ApprovedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+            var disabled;
+            if (users == 0) {
+                disabled = true;
             } else {
-                cboApprovedBy.dispose();
-                cboApprovedBy = new wijmo.input.ComboBox('#StockIn_ApprovedBy', {
-                    placeholder: "Select User",
-                    itemsSource: userList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('StockIn_ApprovedBy_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#StockIn_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
-                    }
-                });
+                if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboApprovedBy.dispose();
+            cboApprovedBy = new wijmo.input.ComboBox('#StockIn_ApprovedBy', {
+                disabled: disabled,
+                placeholder: "Select User",
+                itemsSource: userList,
+                isEditable: false,
+                selectedValue: document.getElementById('StockIn_ApprovedBy_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockIn_ApprovedBy_data").val(usersCollection.items[this.selectedIndex].UserId);
+                }
+            });
+
+            if (users == 0) {
+                document.getElementById('StockIn_ApprovedBy_data').value = "";
+            } else {
+                document.getElementById('StockIn_ApprovedBy_data').value = usersCollection.items[cboApprovedBy.selectedIndex].UserId;
             }
         }
 
@@ -1069,7 +1063,7 @@
         function zerofill(number, length) {
             var result = number.toString();
             var pad = length - result.length;
-            while(pad > 0) {
+            while (pad > 0) {
                 result = '0' + result;
                 pad--;
             }
@@ -1081,7 +1075,7 @@
         // ============
         function btnStockInSave_OnClick() {
             var stockInObject = new Object();
-            var stockInId = @stockInId;
+            var stockInId = getParam("StockInId");
             stockInObject.BranchId = document.getElementById('StockIn_Branch_data').value;
             stockInObject.INNumber = document.getElementById('StockIn_INnumber_Display').value;
             stockInObject.INDate = document.getElementById('StockIn_InDate_data').value;
@@ -1095,31 +1089,31 @@
             stockInObject.ApprovedById = document.getElementById('StockIn_ApprovedBy_data').value;
             var data = JSON.stringify(stockInObject);
 
-            if( document.getElementById('StockIn_Account_data').value == '') {
+            if (document.getElementById('StockIn_Account_data').value == '') {
                 document.getElementById("StockIn_Account").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_Account").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('StockIn_Article_data').value == '') {
+            if (document.getElementById('StockIn_Article_data').value == '') {
                 document.getElementById("StockIn_Article").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_Article").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('StockIn_PreparedBy_data').value == '') {
+            if (document.getElementById('StockIn_PreparedBy_data').value == '') {
                 document.getElementById("StockIn_PreparedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_PreparedBy").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('StockIn_CheckedBy_data').value == '') {
+            if (document.getElementById('StockIn_CheckedBy_data').value == '') {
                 document.getElementById("StockIn_CheckedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_CheckedBy").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('StockIn_ApprovedBy_data').value == '') {
+            if (document.getElementById('StockIn_ApprovedBy_data').value == '') {
                 document.getElementById("StockIn_ApprovedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_ApprovedBy").style.border = "1px solid #C8C8C8   ";
@@ -1145,7 +1139,7 @@
                 e.preventDefault();
             }
             else {
-                if (stockInId == 0) {
+                if (document.location.search.length == 0) {
                     $.ajax({
                         type: "POST",
                         url: '/api/addStockIn',
@@ -1232,7 +1226,7 @@
         // ====================
         function btnStockInSaveLock_OnClick() {
             var stockInObject = new Object();
-            var stockInId = @stockInId;
+            var stockInId = getParam("StockInId");
             stockInObject.BranchId = document.getElementById('StockIn_Branch_data').value;
             stockInObject.INNumber = document.getElementById('StockIn_INnumber_Display').value;
             stockInObject.INDate = document.getElementById('StockIn_InDate_data').value;
@@ -1247,31 +1241,31 @@
             stockInObject.IsLocked = true;
             var data = JSON.stringify(stockInObject);
 
-            if( document.getElementById('StockIn_Account_data').value == '') {
+            if (document.getElementById('StockIn_Account_data').value == '') {
                 document.getElementById("StockIn_Account").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_Account").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('StockIn_Article_data').value == '') {
+            if (document.getElementById('StockIn_Article_data').value == '') {
                 document.getElementById("StockIn_Article").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_Article").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('StockIn_PreparedBy_data').value == '') {
+            if (document.getElementById('StockIn_PreparedBy_data').value == '') {
                 document.getElementById("StockIn_PreparedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_PreparedBy").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('StockIn_CheckedBy_data').value == '') {
+            if (document.getElementById('StockIn_CheckedBy_data').value == '') {
                 document.getElementById("StockIn_CheckedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_CheckedBy").style.border = "1px solid #C8C8C8   ";
             }
 
-            if( document.getElementById('StockIn_ApprovedBy_data').value == '') {
+            if (document.getElementById('StockIn_ApprovedBy_data').value == '') {
                 document.getElementById("StockIn_ApprovedBy").style.border = "1px solid red";
             } else {
                 document.getElementById("StockIn_ApprovedBy").style.border = "1px solid #C8C8C8   ";
@@ -1297,7 +1291,7 @@
                 e.preventDefault();
             }
             else {
-                if (stockInId == 0) {
+                if (document.location.search.length == 0) {
                     $.ajax({
                         type: "POST",
                         url: '/api/addStockIn',
@@ -1384,7 +1378,7 @@
         // ======================
         function btnStockInEdit_OnClick() {
             var stockInObject = new Object();
-            var stockInId = @stockInId;
+            var stockInId = getParam("StockInId");
             stockInObject.IsLocked = false;
             var data = JSON.stringify(stockInObject);
 
@@ -1428,13 +1422,21 @@
                 }
             });
         }
+        
+        // ========
+        // Print IN
+        // ========
+        function btnStockInPrint_OnClick() {
+            var stockInId = getParam("StockInId");
+            window.location = "/Software/StockInPDF?StockInId=" + stockInId;
+        }
 
         // ===========
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            var StockInId = @stockInId;
-            if(StockInId == 0) {
+            var stockInId = getParam("StockInId");
+            if (document.location.search.length == 0) {
                 $('#cmdStockInJournal').hide();
                 $('#cmdStockInSaveLock').hide();
                 $('#cmdStockInSave').show();
@@ -1450,14 +1452,13 @@
                 $('#cmdStockInEdit').show();
             }
 
-            document.getElementById('currentPage').innerHTML = '<a href="@Url.Action("Index", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Main Menu</a> > ' + ' <a href="@Url.Action("StockIn", "Software", new { BranchId = branchId })" class="currentPageLinkCustom">Sock In</a> ' + ' > Stock In Detail';
             document.getElementById('StockIn_INnumber_Display').disabled = true;
             document.getElementById('StockIn_Lock').disabled = true;
 
             cboBranch = new wijmo.input.ComboBox('#StockIn_Branch');
 
             var d = new Date();
-            document.getElementById("StockIn_InDate_data").value = [ d.getMonth()+1, d.getDate(), d.getFullYear()].join('/');
+            document.getElementById("StockIn_InDate_data").value = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join('/');
             INDate = new wijmo.input.InputDate('#StockIn_InDate', {
                 format: 'MM/dd/yyyy',
                 value: new Date(),
@@ -1475,14 +1476,14 @@
 
             getStockInById();
 
-            var stockInId = @stockInId;
-            if(stockInId == 0) {
+            var stockInId = getParam("StockInId");
+            if (document.location.search.length == 0) {
                 getBranchesForComboBox();
                 getUsersForComboBox();
                 getAccountForComboBox();
                 getArticlesForComboBox();
 
-                if(document.getElementById('StockIn_INnumber').value == 0) {
+                if (document.getElementById('StockIn_INnumber').value == 0) {
                     document.getElementById('StockIn_INnumber_Display').value = "0000000001";
                 }
 
@@ -1496,19 +1497,22 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        if (Results.length > 0) {
-                            stockIns.push({
-                                Id: Results.Id,
-                                INNumber: Results.INNumber
-                            });
-                        }
-                        var IN_Number = parseInt(Results.INNumber);
-                        var IN_Number_PlusOne = 0000000001;
-                        var IN_Num_Results = IN_Number + IN_Number_PlusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+                        //if (Results.length > 0) {
+                        //    stockIns.push({
+                        //        Id: Results.Id,
+                        //        INNumber: Results.INNumber
+                        //    });
+                        //}
 
-                        document.getElementById('StockIn_INnumber').value = zerofill(IN_Num_Results, 10);
-                        document.getElementById('StockIn_INnumber_Display').value = zerofill(IN_Num_Results, 10);
+                        if (Results != null) {
+                            var IN_Number = parseInt(Results.INNumber);
+                            var IN_Number_PlusOne = 0000000001;
+                            var IN_Num_Results = IN_Number + IN_Number_PlusOne;
+                            //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+
+                            document.getElementById('StockIn_INnumber').value = zerofill(IN_Num_Results, 10);
+                            document.getElementById('StockIn_INnumber_Display').value = zerofill(IN_Num_Results, 10);
+                        }
                     }
                 });
             }
@@ -1519,176 +1523,186 @@
     <!-- Items Scripts -->
     <!-- ============= -->
     <script type="text/javascript">
-    // ==========================
-    // Global Variables for Items
-    // ==========================
-    var items;
-    var itemGrid;
+        // ==========================
+        // Global Variables for Items
+        // ==========================
+        var items;
+        var itemGrid;
 
-    var btnFirstPageGridItem;
-    var btnPreviousPageGridItem;
-    var btnNextPageGridItem;
-    var btnLastPageGridItem;
-    var btnCurrentPageGridItem;
+        var articleItems;
+        var cboManualCodeArticleItems;
+        var cboItemDescriptionArticleItems;
 
-    var articleItems;
-    var cboManualCodeArticleItems;
-    var cboItemDescriptionArticleItems;
+        var stockInUnits;
+        var cboStockInUnit;
+        var cboBaseUnit;
 
-    var stockInUnits;
-    var cboStockInUnit;
-    var cboBaseUnit;
+        // ======================
+        // GET Stock IN Item List
+        // ======================
+        function getItem() {
+            var items = new wijmo.collections.ObservableArray;
+            var stockInId = getParam("StockInId");
+            NProgress.start();
+            if (document.location.search.length > 0) {
+                $.ajax({
+                    url: '/api/listStockInItemByINId/' + stockInId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            stockIns = new wijmo.collections.ObservableArray;
+                            var stockInId = getParam("StockInId");
+                            $.ajax({
+                                url: '/api/stockIn/' + stockInId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (StockInResults) {
+                                    if (StockInResults.length > 0) {
+                                        stockIns.push({
+                                            Id: StockInResults.Id,
+                                            IsLocked: StockInResults.IsLocked
+                                        });
+                                    }
 
-    // ======================
-    // GET Stock IN Item List
-    // ======================
-    function getItem() {
-        var items = new wijmo.collections.ObservableArray;
-        var INId = @stockInId;
-        $('#loadingModal').modal('show');
-        $.ajax({
-            url: '/api/listStockInItemByINId/' + INId,
-            cache: false,
-            type: 'GET',
-            contentType: 'application/json; charset=utf-8',
-            data: {},
-            success: function (Results) {
-                $('#loadingModal').modal('hide');
-                if (Results.length > 0) {
-                    stockIns = new wijmo.collections.ObservableArray;
-                    var stockInId = @stockInId;
-                    $.ajax({
-                        url: '/api/stockIn/' + stockInId,
-                        cache: false,
-                        type: 'GET',
-                        contentType: 'application/json; charset=utf-8',
-                        data: {},
-                        success: function (StockInResults) {
-                            if (StockInResults.length > 0) {
-                                stockIns.push({
-                                    Id: StockInResults.Id,
-                                    IsLocked: StockInResults.IsLocked
-                                });
-                            }
-
-                            if(StockInResults.IsLocked == true) {
-                                for (i = 0; i < Results.length; i++) {
-                                    items.push({
-                                        EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()' disabled><i class='fa fa-edit'></i> Edit</button>",
-                                        DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                        Id: Results[i]["Id"],
-                                        INId: Results[i]["INId"],
-                                        IN: Results[i]["IN"],
-                                        ItemId: Results[i]["ItemId"],
-                                        ItemCode: Results[i]["ItemCode"],
-                                        Item: Results[i]["Item"],
-                                        Particulars: Results[i]["Particulars"],
-                                        UnitId: Results[i]["UnitId"],
-                                        Unit: Results[i]["Unit"],
-                                        Quantity: Results[i]["Quantity"],
-                                        Cost: Results[i]["Cost"],
-                                        Amount: Results[i]["Amount"],
-                                        BaseUnitId: Results[i]["BaseUnitId"],
-                                        BaseUnit: Results[i]["BaseUnit"],
-                                        BaseQuantity: Results[i]["BaseQuantity"],
-                                        BaseCost: Results[i]["BaseCost"]
-                                    });
+                                    if (StockInResults.IsLocked == true) {
+                                        for (i = 0; i < Results.length; i++) {
+                                            items.push({
+                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()' disabled><i class='fa fa-edit'></i> Edit</button>",
+                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()' disabled><i class='fa fa-trash'></i> Delete</button>",
+                                                Id: Results[i]["Id"],
+                                                INId: Results[i]["INId"],
+                                                IN: Results[i]["IN"],
+                                                ItemId: Results[i]["ItemId"],
+                                                ItemCode: Results[i]["ItemCode"],
+                                                Item: Results[i]["Item"],
+                                                Particulars: Results[i]["Particulars"],
+                                                UnitId: Results[i]["UnitId"],
+                                                Unit: Results[i]["Unit"],
+                                                Quantity: Results[i]["Quantity"],
+                                                Cost: Results[i]["Cost"],
+                                                Amount: Results[i]["Amount"],
+                                                BaseUnitId: Results[i]["BaseUnitId"],
+                                                BaseUnit: Results[i]["BaseUnit"],
+                                                BaseQuantity: Results[i]["BaseQuantity"],
+                                                BaseCost: Results[i]["BaseCost"]
+                                            });
+                                        }
+                                    } else {
+                                        for (i = 0; i < Results.length; i++) {
+                                            items.push({
+                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()'><i class='fa fa-edit'></i> Edit</button>",
+                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()'><i class='fa fa-trash'></i> Delete</button>",
+                                                Id: Results[i]["Id"],
+                                                INId: Results[i]["INId"],
+                                                IN: Results[i]["IN"],
+                                                ItemId: Results[i]["ItemId"],
+                                                ItemCode: Results[i]["ItemCode"],
+                                                Item: Results[i]["Item"],
+                                                Particulars: Results[i]["Particulars"],
+                                                UnitId: Results[i]["UnitId"],
+                                                Unit: Results[i]["Unit"],
+                                                Quantity: Results[i]["Quantity"],
+                                                Cost: Results[i]["Cost"],
+                                                Amount: Results[i]["Amount"],
+                                                BaseUnitId: Results[i]["BaseUnitId"],
+                                                BaseUnit: Results[i]["BaseUnit"],
+                                                BaseQuantity: Results[i]["BaseQuantity"],
+                                                BaseCost: Results[i]["BaseCost"]
+                                            });
+                                        }
+                                    }
                                 }
-                            } else {
-                                for (i = 0; i < Results.length; i++) {
-                                    items.push({
-                                        EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()'><i class='fa fa-edit'></i> Edit</button>",
-                                        DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()'><i class='fa fa-trash'></i> Delete</button>",
-                                        Id: Results[i]["Id"],
-                                        INId: Results[i]["INId"],
-                                        IN: Results[i]["IN"],
-                                        ItemId: Results[i]["ItemId"],
-                                        ItemCode: Results[i]["ItemCode"],
-                                        Item: Results[i]["Item"],
-                                        Particulars: Results[i]["Particulars"],
-                                        UnitId: Results[i]["UnitId"],
-                                        Unit: Results[i]["Unit"],
-                                        Quantity: Results[i]["Quantity"],
-                                        Cost: Results[i]["Cost"],
-                                        Amount: Results[i]["Amount"],
-                                        BaseUnitId: Results[i]["BaseUnitId"],
-                                        BaseUnit: Results[i]["BaseUnit"],
-                                        BaseQuantity: Results[i]["BaseQuantity"],
-                                        BaseCost: Results[i]["BaseCost"]
-                                    });
-                                }
-                            }
+                            });
                         }
-                    });
-
-
-                }
-            }
-        }).fail(function (xhr, textStatus, err) {
-            alert(err);
-        });
-        return items;
-    }
-
-    // ======================================
-    // GET Item Id, Manual Code and Component
-    // ======================================
-    function getArticleItemForManualCodeAndComponent() {
-        articleItems = new wijmo.collections.ObservableArray();
-        $.ajax({
-            url: '/api/listArticleByArticleTypeId/1',
-            cache: false,
-            type: 'GET',
-            contentType: 'application/json; charset=utf-8',
-            data: {},
-            success: function (results) {
-                if (results.length > 0) {
-                    for (i = 0; i < results.length; i++) {
-                        articleItems.push({
-                            ItemId: results[i]["Id"],
-                            ItemCode: results[i]["ManualArticleCode"],
-                            ItemDescription: results[i]["Article"],
-                            UnitId: results[i]["UnitId"],
-                            Unit: results[i]["Unit"],
-                            Particulars: results[i]["Particulars"]
-                        });
+                        NProgress.done();
                     }
-                    createCboForManualCode(articleItems);
-                    createCboForItemDescription(articleItems);
-                }
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            } else {
+                NProgress.done();
             }
-        });
-    }
-
-    // ===============
-    // CBO Manual Code
-    // ===============
-    function createCboForManualCode(articleItems) {
-        var ManualCodeCollections = new wijmo.collections.CollectionView(articleItems);
-        var ManualCodeList = new Array();
-        for (var i = 0; i < ManualCodeCollections.items.length; i++) {
-            ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
+            return items;
         }
 
-        cboManualCodeArticleItems.dispose();
-        cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemCode', {
-            placeholder: "Select Manual Code",
-            itemsSource: ManualCodeList,
-            isEditable: false,
-            required: false,
-            selectedValue: document.getElementById('stockInItem_ItemCode_selectedValue').value.toString(),
-            onSelectedIndexChanged: function () {
-                $("#stockInItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
-                $("#stockInItem_ItemCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
-                $("#stockInItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
-                $("#stockInItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
-                $("#stockInItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
-                $("#stockInItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
-                $("#stockInItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
-                $("#stockInItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
+        // ======================================
+        // GET Item Id, Manual Code and Component
+        // ======================================
+        function getArticleItemForManualCodeAndComponent() {
+            articleItems = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleByArticleTypeId/1',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            articleItems.push({
+                                ItemId: results[i]["Id"],
+                                ItemCode: results[i]["ManualArticleCode"],
+                                ItemDescription: results[i]["Article"],
+                                UnitId: results[i]["UnitId"],
+                                Unit: results[i]["Unit"],
+                                Particulars: results[i]["Particulars"]
+                            });
+                        }
+                        createCboForManualCode(articleItems);
+                        createCboForItemDescription(articleItems);
+                    } else {
+                        createCboForManualCode(articleItems);
+                        createCboForItemDescription(articleItems);
+                    }
+                }
+            });
+        }
 
-                stockIns = new wijmo.collections.ObservableArray;
-                var stockInId = @stockInId;
+        // ===============
+        // CBO Manual Code
+        // ===============
+        function createCboForManualCode(articleItems) {
+            var ManualCodeCollections = new wijmo.collections.CollectionView(articleItems);
+            var ManualCodeList = new Array();
+            for (var i = 0; i < ManualCodeCollections.items.length; i++) {
+                ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
+            }
+
+            var disabled;
+            if (articleItems == 0) {
+                disabled = true;
+            } else {
+                if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboManualCodeArticleItems.dispose();
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemCode', {
+                disabled: disabled,
+                placeholder: "Select Manual Code",
+                itemsSource: ManualCodeList,
+                isEditable: false,
+                selectedValue: document.getElementById('stockInItem_ItemCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockInItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
+                    $("#stockInItem_ItemCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
+                    $("#stockInItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
+                    $("#stockInItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    $("#stockInItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    $("#stockInItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    $("#stockInItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    $("#stockInItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
+
+                    stockIns = new wijmo.collections.ObservableArray;
+                    var stockInId = getParam("StockInId");
                     $.ajax({
                         url: '/api/stockIn/' + stockInId,
                         cache: false,
@@ -1705,8 +1719,7 @@
 
                             //document.getElementById('StockIn_Produce').checked = Results.IsProduced;
 
-                            if(Results.IsProduced == true)
-                            {
+                            if (Results.IsProduced == true) {
                                 var inventories = new wijmo.collections.ObservableArray();
                                 var articleId = document.getElementById('stockInItem_ItemId_data').value;
                                 var branchId = document.getElementById('StockIn_Branch_data').value;
@@ -1730,8 +1743,8 @@
                                                     Particulars: results[i]["Particulars"]
                                                 });
                                                 //createCboForInventoryCode(inventories);
-                                                if(document.getElementById('StockIn_Produce').checked) {
-                                                    document.getElementById('stockInItem_Cost').value = Math.round(( results[i]["Cost"] ) * 100) / 100;
+                                                if (document.getElementById('StockIn_Produce').checked) {
+                                                    document.getElementById('stockInItem_Cost').value = Math.round((results[i]["Cost"]) * 100) / 100;
                                                 } else {
                                                     document.getElementById('stockInItem_Cost').value = 0;
                                                 }
@@ -1751,6 +1764,28 @@
                     getStockInItemUnitForComboBox();
                 }
             });
+
+            if (articleItems == 0) {
+                document.getElementById('stockInItem_ItemId_data').value = "";
+                document.getElementById('stockInItem_ItemCode_selectedValue').value = "";
+                document.getElementById('stockInItem_ItemDescription_selectedValue').value = "";
+                document.getElementById('stockInItem_Unit_data').value = "";
+                document.getElementById('stockInItem_Unit_selectedValue').value = "";
+                document.getElementById('stockInItem_BUCUnit_data').value = "";
+                document.getElementById('stockInItem_BUCUnit_selectedValue').value = "";
+                document.getElementById('stockInItem_Particulars').value = "";
+            } else {
+                document.getElementById('stockInItem_ItemId_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId;
+                document.getElementById('stockInItem_ItemCode_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemCode;
+                document.getElementById('stockInItem_ItemDescription_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemDescription;
+                document.getElementById('stockInItem_Unit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
+                document.getElementById('stockInItem_Unit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
+                document.getElementById('stockInItem_BUCUnit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
+                document.getElementById('stockInItem_BUCUnit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
+                document.getElementById('stockInItem_Particulars').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Particulars;
+
+                getStockInItemUnitForComboBox();
+            }
         }
 
         // ====================
@@ -1763,12 +1798,23 @@
                 ItemDescriptionList.push(ItemDescriptionCollections.items[i].ItemDescription);
             }
 
+            var disabled;
+            if (articleItems == 0) {
+                disabled = true;
+            } else {
+                if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
             cboItemDescriptionArticleItems.dispose();
             cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemDescription', {
+                disabled: disabled,
                 placeholder: "Select Item Description",
                 itemsSource: ItemDescriptionList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockInItem_ItemDescription_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockInItem_ItemId_data").val(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
@@ -1781,7 +1827,7 @@
                     $("#stockInItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
 
                     stockIns = new wijmo.collections.ObservableArray;
-                    var stockInId = @stockInId;
+                    var stockInId = getParam("StockInId");
                     $.ajax({
                         url: '/api/stockIn/' + stockInId,
                         cache: false,
@@ -1797,8 +1843,7 @@
                             }
 
                             //document.getElementById('StockIn_Produce').checked = Results.IsProduced;
-                            if(Results.IsProduced == true)
-                            {
+                            if (Results.IsProduced == true) {
                                 var inventories = new wijmo.collections.ObservableArray();
                                 var articleId = document.getElementById('stockInItem_ItemId_data').value;
                                 var branchId = document.getElementById('StockIn_Branch_data').value;
@@ -1822,8 +1867,8 @@
                                                     Particulars: results[i]["Particulars"]
                                                 });
                                                 //createCboForInventoryCode(inventories);
-                                                if(document.getElementById('StockIn_Produce').checked) {
-                                                    document.getElementById('stockInItem_Cost').value = Math.round(( results[i]["Cost"] ) * 100 ) /100;
+                                                if (document.getElementById('StockIn_Produce').checked) {
+                                                    document.getElementById('stockInItem_Cost').value = Math.round((results[i]["Cost"]) * 100) / 100;
                                                 } else {
                                                     document.getElementById('stockInItem_Cost').value = 0;
                                                 }
@@ -1843,6 +1888,26 @@
                     getStockInItemUnitForComboBox();
                 }
             });
+
+            if (articleItems == 0) {
+                document.getElementById('stockInItem_ItemId_data').value = "";
+                document.getElementById('stockInItem_ItemCode_selectedValue').value = "";
+                document.getElementById('stockInItem_ItemDescription_selectedValue').value = "";
+                document.getElementById('stockInItem_Unit_data').value = "";
+                document.getElementById('stockInItem_Unit_selectedValue').value = "";
+                document.getElementById('stockInItem_BUCUnit_data').value = "";
+                document.getElementById('stockInItem_BUCUnit_selectedValue').value = "";
+                document.getElementById('stockInItem_Particulars').value = "";
+            } else {
+                document.getElementById('stockInItem_ItemId_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId;
+                document.getElementById('stockInItem_ItemCode_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemCode;
+                document.getElementById('stockInItem_ItemDescription_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemDescription;
+                document.getElementById('stockInItem_Unit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
+                document.getElementById('stockInItem_Unit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
+                document.getElementById('stockInItem_BUCUnit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
+                document.getElementById('stockInItem_BUCUnit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
+                document.getElementById('stockInItem_Particulars').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Particulars;
+            }
         }
 
         // =============
@@ -1864,6 +1929,9 @@
                                 Unit: results[i]["Unit"]
                             });
                         }
+                        createCboForStockInUnit(stockInUnits);
+                        createCboForStockInBaseUnit(stockInUnits);
+                    } else {
                         createCboForStockInUnit(stockInUnits);
                         createCboForStockInBaseUnit(stockInUnits);
                     }
@@ -1947,7 +2015,7 @@
             $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
 
             getArticleItemForManualCodeAndComponent();
-            getStockInItemUnitForComboBox();
+            //getStockInItemUnitForComboBox();
 
             document.getElementById('stockInItem_Id').value = 0;
             document.getElementById('stockInItem_ItemId_data').value = '';
@@ -1985,7 +2053,7 @@
             $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
 
             getArticleItemForManualCodeAndComponent();
-            getStockInItemUnitForComboBox();
+            //getStockInItemUnitForComboBox();
 
             var item = items.currentEditItem;
             document.getElementById('stockInItem_Id').value = item.Id;
@@ -2037,20 +2105,6 @@
                         $('#deletStockInItemsConfirm').modal('hide');
 
                         items = new wijmo.collections.CollectionView(getItem());
-                        items.canFilter = true;
-                        items.pageSize = 15;
-
-                        var filterTextItem = '';
-                        $('#InputFilterItem').keyup(function () {
-                            filterTextItem = this.value.toLowerCase();
-                            items.refresh();
-                        });
-                        items.filter = function (item) {
-                            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
-                        }
-                        items.collectionChanged.addHandler(function (sender, args) {
-                            updateNavigateButtonsItem();
-                        });
 
                         // Flex Grid for Items
                         itemGrid.itemsSource = items;
@@ -2078,501 +2132,405 @@
         // ==================
         function cmdStockInItemSaveButton_OnClick() {
             var stockInItmeObject = new Object();
-            var INId = @stockInId;
+            var stockInId = getParam("StockInId");
 
-        var stockInItemId = document.getElementById('stockInItem_Id').value;
-        stockInItmeObject.INId = INId;
-        stockInItmeObject.ItemId = document.getElementById('stockInItem_ItemId_data').value;
-        stockInItmeObject.Particulars = document.getElementById('stockInItem_Particulars').value;
-        stockInItmeObject.UnitId = document.getElementById('stockInItem_Unit_data').value;
-        stockInItmeObject.Quantity = document.getElementById('stockInItem_Quantity').value;
-        stockInItmeObject.Cost = document.getElementById('stockInItem_Cost').value;
-        stockInItmeObject.Amount = document.getElementById('stockInItem_Amount').value;
-        stockInItmeObject.BaseUnitId = document.getElementById('stockInItem_BUCUnit_data').value;
-        stockInItmeObject.BaseCost = document.getElementById('stockInItem_BUCCost').value;
-        stockInItmeObject.BaseQuantity = document.getElementById('stockInItem_BUCQuantity').value;
-        var stockInItemData = JSON.stringify(stockInItmeObject);
+            var stockInItemId = document.getElementById('stockInItem_Id').value;
+            stockInItmeObject.INId = stockInId;
+            stockInItmeObject.ItemId = document.getElementById('stockInItem_ItemId_data').value;
+            stockInItmeObject.Particulars = document.getElementById('stockInItem_Particulars').value;
+            stockInItmeObject.UnitId = document.getElementById('stockInItem_Unit_data').value;
+            stockInItmeObject.Quantity = document.getElementById('stockInItem_Quantity').value;
+            stockInItmeObject.Cost = document.getElementById('stockInItem_Cost').value;
+            stockInItmeObject.Amount = document.getElementById('stockInItem_Amount').value;
+            stockInItmeObject.BaseUnitId = document.getElementById('stockInItem_BUCUnit_data').value;
+            stockInItmeObject.BaseCost = document.getElementById('stockInItem_BUCCost').value;
+            stockInItmeObject.BaseQuantity = document.getElementById('stockInItem_BUCQuantity').value;
+            var stockInItemData = JSON.stringify(stockInItmeObject);
 
-        if( document.getElementById('stockInItem_ItemId_data').value == '') {
-            document.getElementById("stockInItem_ItemCode").style.border = "1px solid red";
-            document.getElementById("stockInItem_ItemDescription").style.border = "1px solid red";
-        } else {
-            document.getElementById("stockInItem_ItemCode").style.border = "1px solid #C8C8C8";
-            document.getElementById("stockInItem_ItemDescription").style.border = "1px solid #C8C8C8";
-        }
+            if (document.getElementById('stockInItem_ItemId_data').value == '') {
+                document.getElementById("stockInItem_ItemCode").style.border = "1px solid red";
+                document.getElementById("stockInItem_ItemDescription").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockInItem_ItemCode").style.border = "1px solid #C8C8C8";
+                document.getElementById("stockInItem_ItemDescription").style.border = "1px solid #C8C8C8";
+            }
 
-        if( document.getElementById('stockInItem_Unit_data').value == '') {
-            document.getElementById("stockInItem_Unit").style.border = "1px solid red";
-        } else {
-            document.getElementById("stockInItem_Unit").style.border = "1px solid #C8C8C8";
-        }
+            if (document.getElementById('stockInItem_Unit_data').value == '') {
+                document.getElementById("stockInItem_Unit").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockInItem_Unit").style.border = "1px solid #C8C8C8";
+            }
 
-        if( document.getElementById('stockInItem_BUCUnit_data').value == '') {
-            document.getElementById("stockInItem_BUCUnit").style.border = "1px solid red";
-        } else {
-            document.getElementById("stockInItem_BUCUnit").style.border = "1px solid #C8C8C8";
-        }
+            if (document.getElementById('stockInItem_BUCUnit_data').value == '') {
+                document.getElementById("stockInItem_BUCUnit").style.border = "1px solid red";
+            } else {
+                document.getElementById("stockInItem_BUCUnit").style.border = "1px solid #C8C8C8";
+            }
 
-        var isValid = true;
-        $('.requiredStockInItem').each(function () {
-            if ($.trim($(this).val()) == '') {
-                isValid = false;
-                $(this).css({
-                    "border": "1px solid red"
-                });
+            var isValid = true;
+            $('.requiredStockInItem').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            if (isValid == false) {
+                toastr.error("Invalid Entry");
             }
             else {
-                $(this).css({
-                    "border": "",
-                });
-            }
-        });
-        if (isValid == false) {
-            toastr.error("Invalid Entry");
-        }
-        else {
-            $("#cmdSaveStockInItemButton").prop("disabled", true);
-            $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
-            if (stockInItemId == 0) {
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addStockInItem',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: stockInItemData,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdSaveStockInItemButton").prop("disabled", true);
-                            $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
-                            toastr.success("Successfully Saved");
+                $("#cmdSaveStockInItemButton").prop("disabled", true);
+                $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+                if (stockInItemId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addStockInItem',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: stockInItemData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveStockInItemButton").prop("disabled", true);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Saved");
 
-                            $('#stockInItemsEdit').modal('hide');
+                                $('#stockInItemsEdit').modal('hide');
 
-                            items = new wijmo.collections.CollectionView(getItem());
-                            items.canFilter = true;
-                            items.pageSize = 15;
+                                items = new wijmo.collections.CollectionView(getItem());
 
-                            var filterTextItem = '';
-                            $('#InputFilterItem').keyup(function () {
-                                filterTextItem = this.value.toLowerCase();
-                                items.refresh();
-                            });
-                            items.filter = function (item) {
-                                return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                // Flex Grid for Items
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Save");
+                                $('#stockInItemsEdit').modal('hide');
+                                $("#cmdSaveStockInItemButton").prop("disabled", false);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#stockInItemsEdit').modal('hide');
+                                $("#cmdSaveStockInItemButton").prop("disabled", false);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
                             }
-                            items.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsItem();
-                            });
-
-                            // Flex Grid for Items
-                            itemGrid.itemsSource = items;
-                            itemGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Save");
-                            $('#stockInItemsEdit').modal('hide');
-                            $("#cmdSaveStockInItemButton").prop("disabled", false);
-                            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                            $('#stockInItemsEdit').modal('hide');
-                            $("#cmdSaveStockInItemButton").prop("disabled", false);
-                            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
                         }
-                    }
-                });
-            } else {
-                $.ajax({
-                    type: "PUT",
-                    url: '/api/updateStockInItem/' + stockInItemId,
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: stockInItemData,
-                    statusCode: {
-                        200: function () {
-                            $("#cmdSaveStockInItemButton").prop("disabled", true);
-                            $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
-                            toastr.success("Successfully Updated");
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateStockInItem/' + stockInItemId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: stockInItemData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdSaveStockInItemButton").prop("disabled", true);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+                                toastr.success("Successfully Updated");
 
-                            $('#stockInItemsEdit').modal('hide');
+                                $('#stockInItemsEdit').modal('hide');
 
-                            items = new wijmo.collections.CollectionView(getItem());
-                            items.canFilter = true;
-                            items.pageSize = 15;
+                                items = new wijmo.collections.CollectionView(getItem());
 
-                            var filterTextItem = '';
-                            $('#InputFilterItem').keyup(function () {
-                                filterTextItem = this.value.toLowerCase();
-                                items.refresh();
-                            });
-                            items.filter = function (item) {
-                                return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
+                                // Flex Grid for Items
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Can't Update");
+                                $('#stockInItemsEdit').modal('hide');
+                                $("#cmdSaveStockInItemButton").prop("disabled", false);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#stockInItemsEdit').modal('hide');
+                                $("#cmdSaveStockInItemButton").prop("disabled", false);
+                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
                             }
-                            items.collectionChanged.addHandler(function (sender, args) {
-                                updateNavigateButtonsItem();
-                            });
-
-                            // Flex Grid for Items
-                            itemGrid.itemsSource = items;
-                            itemGrid.trackChanges = true;
-                        },
-                        404: function () {
-                            toastr.error("Can't Update");
-                            $('#stockInItemsEdit').modal('hide');
-                            $("#cmdSaveStockInItemButton").prop("disabled", false);
-                            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
-                        },
-                        400: function () {
-                            toastr.error("Bad Request");
-                            $('#stockInItemsEdit').modal('hide');
-                            $("#cmdSaveStockInItemButton").prop("disabled", false);
-                            $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
                         }
-                    }
-                });
+                    });
+                }
             }
         }
-    }
 
-    // ============================
-    // Navigation Buttons for Items
-    // ============================
-    function updateNavigateButtonsItem() {
-        if (items.pageSize <= 0) {
-            document.getElementById('navigationPageGridItem').style.display = 'none';
-            return;
+        // ======
+        //  Items
+        // ======
+        function itemTab() {
+            $("#stockInItem_Quantity").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#stockInItem_Cost").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#stockInItem_Amount").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#stockInItem_BUCQuantity").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#stockInItem_BUCCost").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $('#stockInItem_Quantity').keyup(function () {
+                document.getElementById('stockInItem_BUCQuantity').value = this.value;
+
+                var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value;
+                var stockIn_Cost = document.getElementById('stockInItem_Cost').value;
+
+                document.getElementById('stockInItem_Amount').value = Math.round((stockIn_Quantity * stockIn_Cost) * 100) / 100;
+                if (this.value == 0) {
+                    document.getElementById('stockInItem_BUCCost').value = 0;
+                } else {
+                    document.getElementById('stockInItem_BUCCost').value = stockIn_Cost;
+                }
+            });
+
+            $('#stockInItem_Cost').keyup(function () {
+                document.getElementById('stockInItem_BUCCost').value = this.value;;
+
+                var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value;
+                var stockIn_Cost = document.getElementById('stockInItem_Cost').value;
+
+                document.getElementById('stockInItem_Amount').value = Math.round((stockIn_Quantity * stockIn_Cost) * 100) / 100;
+            });
+
+
+            document.getElementById('stockInItem_BUCQuantity').disabled = true;
+            document.getElementById('stockInItem_BUCCost').disabled = true;
+            document.getElementById('stockInItem_Amount').disabled = true;
+            //document.getElementById('stockInItem_Cost').disabled = true;
+
+            cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemCode');
+            cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemDescription');
+            cboStockInUnit = new wijmo.input.ComboBox('#stockInItem_Unit');
+            cboBaseUnit = new wijmo.input.ComboBox('#stockInItem_BUCUnit');
+
+            items = new wijmo.collections.CollectionView(getItem());
+
+            // Flex Grid for Items
+            itemGrid = new wijmo.grid.FlexGrid('#ItemGrid');
+            itemGrid.initialize({
+                columns: [
+                            {
+                                "header": "Edit",
+                                "binding": "EditId",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Delete",
+                                "binding": "DeleteId",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                            {
+                                "header": "Code",
+                                "binding": "ItemCode",
+                                "allowSorting": true,
+                                "width": 60
+                            },
+                            {
+                                "header": "Item",
+                                "binding": "Item",
+                                "allowSorting": true,
+                                "width": 140
+                            },
+                            {
+                                "header": "Particulars",
+                                "binding": "Particulars",
+                                "allowSorting": true,
+                                "width": 150
+                            },
+                            {
+                                "header": "Quantity",
+                                "binding": "Quantity",
+                                "allowSorting": true,
+                                "width": 90
+                            },
+                            {
+                                "header": "Unit",
+                                "binding": "Unit",
+                                "allowSorting": true,
+                                "width": 100
+                            },
+                            {
+                                "header": "Cost",
+                                "binding": "Cost",
+                                "allowSorting": true,
+                                "width": 100
+                            },
+                             {
+                                 "header": "Amount",
+                                 "binding": "Amount",
+                                 "allowSorting": true,
+                                 "width": 100
+                             },
+                             {
+                                 "header": "Unit",
+                                 "binding": "BaseUnit",
+                                 "allowSorting": true,
+                                 "width": 100
+                             },
+                            {
+                                "header": "Quantity",
+                                "binding": "BaseQuantity",
+                                "allowSorting": true,
+                                "width": 90
+                            },
+                           {
+                               "header": "Cost",
+                               "binding": "BaseCost",
+                               "allowSorting": true,
+                               "width": 100
+                           },
+                ],
+                autoGenerateColumns: false,
+                itemsSource: items,
+                isReadOnly: true,
+                frozenColumns: 2,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            itemGrid.trackChanges = true;
+
+            var hr = new wijmo.grid.Row();
+            itemGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+            itemGrid.columnHeaders.rows.push(hr);
+            itemGrid.columnHeaders.rows[0].allowMerging = true;
+
+            itemGrid.columnHeaders.columns[0].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 0, 'Edit');
+
+            itemGrid.columnHeaders.columns[1].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 1, 'Delete');
+
+            itemGrid.columnHeaders.columns[2].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 2, 'Code');
+
+            itemGrid.columnHeaders.columns[3].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 3, 'Item');
+
+            itemGrid.columnHeaders.columns[4].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 4, 'Particulars');
+
+            itemGrid.columnHeaders.columns[5].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 5, 'Quantity');
+
+            itemGrid.columnHeaders.columns[6].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 6, 'Unit');
+
+            itemGrid.columnHeaders.columns[7].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 7, 'Cost');
+
+            itemGrid.columnHeaders.columns[8].allowMerging = true;
+            itemGrid.columnHeaders.setCellData(0, 8, 'Amount');
+
+            for (var columnBasicUnitConversion = 9; columnBasicUnitConversion <= 11; columnBasicUnitConversion++) {
+                itemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
+            }
         }
-        document.getElementById('navigationPageGridItem').style.display = 'block';
-        if (items.pageIndex === 0) {
-            btnFirstPageGridItem.setAttribute('disabled', 'disabled');
-            btnPreviousPageGridItem.setAttribute('disabled', 'disabled');
-            btnNextPageGridItem.removeAttribute('disabled');
-            btnLastPageGridItem.removeAttribute('disabled');
-        } else if (items.pageIndex === (items.pageCount - 1)) {
-            btnFirstPageGridItem.removeAttribute('disabled');
-            btnPreviousPageGridItem.removeAttribute('disabled');
-            btnLastPageGridItem.setAttribute('disabled', 'disabled');
-            btnNextPageGridItem.setAttribute('disabled', 'disabled');
-        } else {
-            btnFirstPageGridItem.removeAttribute('disabled');
-            btnPreviousPageGridItem.removeAttribute('disabled');
-            btnNextPageGridItem.removeAttribute('disabled');
-            btnLastPageGridItem.removeAttribute('disabled');
-        }
-        btnCurrentPageGridItem.innerHTML = (items.pageIndex + 1) + ' / ' + items.pageCount;
-    }
-
-    // ======
-    //  Items
-    // ======
-    function itemTab() {
-        $("#stockInItem_Quantity").keydown(function (e) {
-            // Allow: backspace, delete, tab, escape, enter and .
-            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                // Allow: Ctrl+A
-                (e.keyCode == 65 && e.ctrlKey === true) ||
-                // Allow: Ctrl+C
-                (e.keyCode == 67 && e.ctrlKey === true) ||
-                // Allow: Ctrl+X
-                (e.keyCode == 88 && e.ctrlKey === true) ||
-                // Allow: home, end, left, right
-                (e.keyCode >= 35 && e.keyCode <= 39)) {
-                // let it happen, don't do anything
-                return;
-            }
-            // Ensure that it is a number and stop the keypress
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
-            }
-        });
-
-        $("#stockInItem_Cost").keydown(function (e) {
-            // Allow: backspace, delete, tab, escape, enter and .
-            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                // Allow: Ctrl+A
-                (e.keyCode == 65 && e.ctrlKey === true) ||
-                // Allow: Ctrl+C
-                (e.keyCode == 67 && e.ctrlKey === true) ||
-                // Allow: Ctrl+X
-                (e.keyCode == 88 && e.ctrlKey === true) ||
-                // Allow: home, end, left, right
-                (e.keyCode >= 35 && e.keyCode <= 39)) {
-                // let it happen, don't do anything
-                return;
-            }
-            // Ensure that it is a number and stop the keypress
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
-            }
-        });
-
-        $("#stockInItem_Amount").keydown(function (e) {
-            // Allow: backspace, delete, tab, escape, enter and .
-            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                // Allow: Ctrl+A
-                (e.keyCode == 65 && e.ctrlKey === true) ||
-                // Allow: Ctrl+C
-                (e.keyCode == 67 && e.ctrlKey === true) ||
-                // Allow: Ctrl+X
-                (e.keyCode == 88 && e.ctrlKey === true) ||
-                // Allow: home, end, left, right
-                (e.keyCode >= 35 && e.keyCode <= 39)) {
-                // let it happen, don't do anything
-                return;
-            }
-            // Ensure that it is a number and stop the keypress
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
-            }
-        });
-
-        $("#stockInItem_BUCQuantity").keydown(function (e) {
-            // Allow: backspace, delete, tab, escape, enter and .
-            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                // Allow: Ctrl+A
-                (e.keyCode == 65 && e.ctrlKey === true) ||
-                // Allow: Ctrl+C
-                (e.keyCode == 67 && e.ctrlKey === true) ||
-                // Allow: Ctrl+X
-                (e.keyCode == 88 && e.ctrlKey === true) ||
-                // Allow: home, end, left, right
-                (e.keyCode >= 35 && e.keyCode <= 39)) {
-                // let it happen, don't do anything
-                return;
-            }
-            // Ensure that it is a number and stop the keypress
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
-            }
-        });
-
-        $("#stockInItem_BUCCost").keydown(function (e) {
-            // Allow: backspace, delete, tab, escape, enter and .
-            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-                // Allow: Ctrl+A
-                (e.keyCode == 65 && e.ctrlKey === true) ||
-                // Allow: Ctrl+C
-                (e.keyCode == 67 && e.ctrlKey === true) ||
-                // Allow: Ctrl+X
-                (e.keyCode == 88 && e.ctrlKey === true) ||
-                // Allow: home, end, left, right
-                (e.keyCode >= 35 && e.keyCode <= 39)) {
-                // let it happen, don't do anything
-                return;
-            }
-            // Ensure that it is a number and stop the keypress
-            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-                e.preventDefault();
-            }
-        });
-
-        $('#stockInItem_Quantity').keyup(function() {
-            document.getElementById('stockInItem_BUCQuantity').value = this.value;
-
-            var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value;
-            var stockIn_Cost = document.getElementById('stockInItem_Cost').value;
-
-            document.getElementById('stockInItem_Amount').value = Math.round(( stockIn_Quantity * stockIn_Cost ) * 100 ) / 100;
-            if(this.value == 0) {
-                document.getElementById('stockInItem_BUCCost').value = 0;
-            } else {
-                document.getElementById('stockInItem_BUCCost').value = stockIn_Cost;
-            }
-        });
-
-        $('#stockInItem_Cost').keyup(function() {
-            document.getElementById('stockInItem_BUCCost').value = this.value;;
-
-            var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value;
-            var stockIn_Cost = document.getElementById('stockInItem_Cost').value;
-
-            document.getElementById('stockInItem_Amount').value = Math.round(( stockIn_Quantity * stockIn_Cost ) * 100 ) / 100;
-        });
-
-
-        document.getElementById('stockInItem_BUCQuantity').disabled = true;
-        document.getElementById('stockInItem_BUCCost').disabled = true;
-        document.getElementById('stockInItem_Amount').disabled = true;
-        //document.getElementById('stockInItem_Cost').disabled = true;
-
-        cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemCode');
-        cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockInItem_ItemDescription');
-        cboStockInUnit = new wijmo.input.ComboBox('#stockInItem_Unit');
-        cboBaseUnit = new wijmo.input.ComboBox('#stockInItem_BUCUnit');
-
-        items = new wijmo.collections.CollectionView(getItem());
-        items.canFilter = true;
-        items.pageSize = 15;
-
-        var filterTextItem = '';
-        $('#InputFilterItem').keyup(function () {
-            filterTextItem = this.value.toLowerCase();
-            items.refresh();
-        });
-        items.filter = function (item) {
-            return !filterTextItem || (item.ItemCode.toLowerCase().indexOf(filterTextItem) > -1);
-        }
-        items.collectionChanged.addHandler(function (sender, args) {
-            updateNavigateButtonsItem();
-        });
-
-        // Flex Grid for Items
-        itemGrid = new wijmo.grid.FlexGrid('#ItemGrid');
-        itemGrid.initialize({
-            columns: [
-                        {
-                            "header": "Edit",
-                            "binding": "EditId",
-                            "width": 60,
-                            "align": "center",
-                            "allowResizing": false,
-                            "allowSorting": false,
-                            "isContentHtml": true
-                        },
-                        {
-                            "header": "Delete",
-                            "binding": "DeleteId",
-                            "width": 70,
-                            "align": "center",
-                            "allowResizing": false,
-                            "allowSorting": false,
-                            "isContentHtml": true
-                        },
-                        {
-                            "header": "Item Code",
-                            "binding": "ItemCode",
-                            "allowSorting": true,
-                            "width": 150
-                        },
-                        {
-                            "header": "Item Description",
-                            "binding": "Item",
-                            "allowSorting": true,
-                            "width": 350
-                        },
-                        {
-                            "header": "Particulars",
-                            "binding": "Particulars",
-                            "allowSorting": true,
-                            "width": 300
-                        },
-                        {
-                            "header": "Quantity",
-                            "binding": "Quantity",
-                            "allowSorting": true,
-                            "width": 130
-                        },
-                        {
-                            "header": "Unit",
-                            "binding": "Unit",
-                            "allowSorting": true,
-                            "width": 200
-                        },
-                        {
-                            "header": "Cost",
-                            "binding": "Cost",
-                            "allowSorting": true,
-                            "width": 130
-                        },
-                         {
-                             "header": "Amount",
-                             "binding": "Amount",
-                             "allowSorting": true,
-                             "width": 130
-                         },
-                         {
-                             "header": "Unit",
-                             "binding": "BaseUnit",
-                             "allowSorting": true,
-                             "width": 200
-                         },
-                        {
-                            "header": "Quantity",
-                            "binding": "BaseQuantity",
-                            "allowSorting": true,
-                            "width": 130
-                        },
-                       {
-                           "header": "Cost",
-                           "binding": "BaseCost",
-                           "allowSorting": true,
-                           "width": 130
-                       },
-            ],
-            autoGenerateColumns: false,
-            itemsSource: items,
-            isReadOnly: true,
-            frozenColumns: 2,
-            autoSizeMode: wijmo.grid.AutoSizeMode.Both,
-            allowDragging: wijmo.grid.AllowDragging.None,
-            selectionMode: wijmo.grid.SelectionMode.Row
-        });
-
-        itemGrid.trackChanges = true;
-
-        var hr = new wijmo.grid.Row();
-        itemGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
-        itemGrid.columnHeaders.rows.push(hr);
-        itemGrid.columnHeaders.rows[0].allowMerging = true;
-
-        itemGrid.columnHeaders.columns[0].allowMerging = true;
-        itemGrid.columnHeaders.setCellData(0, 0, 'Edit');
-
-        itemGrid.columnHeaders.columns[1].allowMerging = true;
-        itemGrid.columnHeaders.setCellData(0, 1, 'Delete');
-
-        itemGrid.columnHeaders.columns[2].allowMerging = true;
-        itemGrid.columnHeaders.setCellData(0, 2, 'Item Code');
-
-        itemGrid.columnHeaders.columns[3].allowMerging = true;
-        itemGrid.columnHeaders.setCellData(0, 3, 'Item Description');
-
-        itemGrid.columnHeaders.columns[4].allowMerging = true;
-        itemGrid.columnHeaders.setCellData(0, 4, 'Particulars');
-
-        itemGrid.columnHeaders.columns[5].allowMerging = true;
-        itemGrid.columnHeaders.setCellData(0, 5, 'Quantity');
-
-        itemGrid.columnHeaders.columns[6].allowMerging = true;
-        itemGrid.columnHeaders.setCellData(0, 6, 'Unit');
-
-        itemGrid.columnHeaders.columns[7].allowMerging = true;
-        itemGrid.columnHeaders.setCellData(0, 7, 'Cost');
-
-        itemGrid.columnHeaders.columns[8].allowMerging = true;
-        itemGrid.columnHeaders.setCellData(0, 8, 'Amount');
-
-        for (var columnBasicUnitConversion = 9; columnBasicUnitConversion <= 11; columnBasicUnitConversion++) {
-            itemGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Basic Unit Conversion');
-        }
-
-        //Navigation button for Items
-        btnFirstPageGridItem = document.getElementById('btnMoveToFirstPageGridItem');
-        btnPreviousPageGridItem = document.getElementById('btnMoveToPreviousPageGridItem');
-        btnNextPageGridItem = document.getElementById('btnMoveToNextPageGridItem');
-        btnLastPageGridItem = document.getElementById('btnMoveToLastPageGridItem');
-        btnCurrentPageGridItem = document.getElementById('btnCurrentPageGridItem');
-
-        updateNavigateButtonsItem();
-
-        btnFirstPageGridItem.addEventListener('click', function () {
-            items.moveToFirstPage();
-            updateNavigateButtonsItem();
-        });
-        btnPreviousPageGridItem.addEventListener('click', function () {
-            items.moveToPreviousPage();
-            updateNavigateButtonsItem();
-        });
-        btnNextPageGridItem.addEventListener('click', function () {
-            items.moveToNextPage();
-            updateNavigateButtonsItem();
-        });
-        btnLastPageGridItem.addEventListener('click', function () {
-            items.moveToLastPage();
-            updateNavigateButtonsItem();
-        });
-    }
     </script>
 
     <!-- ========================= -->
@@ -2584,59 +2542,56 @@
         // ======================================
         var inventoryEntries;
         var inventoryEntryGrid;
-
-        var btnFirstPageGridInventoryEntry;
-        var btnPreviousPageGridInventoryEntry;
-        var btnNextPageGridInventoryEntry;
-        var btnLastPageGridInventoryEntry;
-        var btnCurrentPageGridInventoryEntry;
-
-        // ============================
-        // GET Contact Information List
-        // ============================
+        // ==================
+        // GET Inventory List
+        // ==================
         function getInventoryEntries() {
             var inventoryEntries = new wijmo.collections.ObservableArray;
-            var INId = @stockInId;
-            $('#loadingModal').modal('show');
-            $.ajax({
-                url: '/api/listInventoryByINId/' + INId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    $('#loadingModal').modal('hide');
-                    if (Results.length > 0) {
-                        for (i = 0; i < Results.length; i++) {
-                            inventoryEntries.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                Id: Results[i]["Id"],
-                                BranchId: Results[i]["BranchId"],
-                                Branch: Results[i]["Branch"],
-                                InventoryDate: Results[i]["InventoryDate"],
-                                ArticleId: Results[i]["ArticleId"],
-                                Article: Results[i]["Article"],
-                                ArticleInventoryId: Results[i]["ArticleInventoryId"],
-                                RRId: Results[i]["RRId"],
-                                SIId: Results[i]["SIId"],
-                                INId: Results[i]["INId"],
-                                OTId: Results[i]["OTId"],
-                                STId: Results[i]["STId"],
-                                QuantityIn: Results[i]["QuantityIn"],
-                                Quantity: Results[i]["Quantity"],
-                                QuantityOut: Results[i]["QuantityOut"],
-                                Amount: Results[i]["Amount"],
-                                Particulars: Results[i]["Particulars"],
-                                Code: Results[i]["Code"],
-                                Unit: Results[i]["Unit"]
-                            });
+            var stockInId = getParam("StockInId");
+            NProgress.start();
+            if (document.location.search.length > 0) {
+                $.ajax({
+                    url: '/api/listInventoryByINId/' + stockInId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        if (Results.length > 0) {
+                            for (i = 0; i < Results.length; i++) {
+                                inventoryEntries.push({
+                                    EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                    Id: Results[i]["Id"],
+                                    BranchId: Results[i]["BranchId"],
+                                    Branch: Results[i]["Branch"],
+                                    InventoryDate: Results[i]["InventoryDate"],
+                                    ArticleId: Results[i]["ArticleId"],
+                                    Article: Results[i]["Article"],
+                                    ArticleInventoryId: Results[i]["ArticleInventoryId"],
+                                    RRId: Results[i]["RRId"],
+                                    SIId: Results[i]["SIId"],
+                                    INId: Results[i]["INId"],
+                                    OTId: Results[i]["OTId"],
+                                    STId: Results[i]["STId"],
+                                    QuantityIn: Results[i]["QuantityIn"],
+                                    Quantity: Results[i]["Quantity"],
+                                    QuantityOut: Results[i]["QuantityOut"],
+                                    Amount: Results[i]["Amount"],
+                                    Particulars: Results[i]["Particulars"],
+                                    Code: Results[i]["Code"],
+                                    Unit: Results[i]["Unit"]
+                                });
+                            }
                         }
+                        NProgress.done();
                     }
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            } else {
+                NProgress.done();
+            }
             return inventoryEntries;
         }
 
@@ -2651,56 +2606,11 @@
             document.getElementById('updatedDate').innerHTML = item.UpdatedDateTime;
         }
 
-        // ========================================
-        // Navigation Buttons for Inventory Entries
-        // ========================================
-        function updateNavigateButtonsInventoryEntry() {
-            if (inventoryEntries.pageSize <= 0) {
-                document.getElementById('navigationPageGridInventoryEntry').style.display = 'none';
-                return;
-            }
-            document.getElementById('navigationPageGridInventoryEntry').style.display = 'block';
-            if (inventoryEntries.pageIndex === 0) {
-                btnFirstPageGridInventoryEntry.setAttribute('disabled', 'disabled');
-                btnPreviousPageGridInventoryEntry.setAttribute('disabled', 'disabled');
-                btnNextPageGridInventoryEntry.removeAttribute('disabled');
-                btnLastPageGridInventoryEntry.removeAttribute('disabled');
-            } else if (inventoryEntries.pageIndex === (inventoryEntries.pageCount - 1)) {
-                btnFirstPageGridInventoryEntry.removeAttribute('disabled');
-                btnPreviousPageGridInventoryEntry.removeAttribute('disabled');
-                btnLastPageGridInventoryEntry.setAttribute('disabled', 'disabled');
-                btnNextPageGridInventoryEntry.setAttribute('disabled', 'disabled');
-            } else {
-                btnFirstPageGridInventoryEntry.removeAttribute('disabled');
-                btnPreviousPageGridInventoryEntry.removeAttribute('disabled');
-                btnNextPageGridInventoryEntry.removeAttribute('disabled');
-                btnLastPageGridInventoryEntry.removeAttribute('disabled');
-            }
-            btnCurrentPageGridInventoryEntry.innerHTML = (inventoryEntries.pageIndex + 1) + ' / ' + inventoryEntries.pageCount;
-        }
-
         // ==================================
         // On Page Load for Inventory Entries
         // ==================================
         function inventoryEntryTab() {
             inventoryEntries = new wijmo.collections.CollectionView(getInventoryEntries());
-            inventoryEntries.canFilter = true;
-            inventoryEntries.pageSize = 15;
-
-            var filterTextInventoryEntry = '';
-            $('#InputFilterInventoryEntry').keyup(function () {
-                filterTextInventoryEntry = this.value.toLowerCase();
-                inventoryEntries.refresh();
-            });
-            inventoryEntries.filter = function (item) {
-                return !filterTextInventoryEntry || (item.Article.toLowerCase().indexOf(filterTextInventoryEntry) > -1);
-            }
-            inventoryEntries.collectionChanged.addHandler(function (sender, args) {
-                updateNavigateButtonsInventoryEntry();
-            });
-            inventoryEntries.currentChanged.addHandler(function (sender, args) {
-                updateDetailsInventoryEntry();
-            });
 
             // Flex Grid for Inventory Entries
             inventoryEntryGrid = new wijmo.grid.FlexGrid('#InventoryEntryGrid');
@@ -2710,45 +2620,45 @@
                                 "header": "Date",
                                 "binding": "InventoryDate",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": 80,
                             },
                             {
                                 "header": "Branch",
                                 "binding": "Branch",
                                 "allowSorting": true,
-                                "width": 250,
+                                "width": 150,
                             },
                             {
                                 "header": "Item",
                                 "binding": "Article",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": 300,
+                                "width": 165,
                             },
                             {
                                 "header": "Particulars",
                                 "binding": "Particulars",
                                 "align": "left",
                                 "allowSorting": true,
-                                "width": 400,
+                                "width": 170,
                             },
                             {
-                                "header": "Code",
+                                "header": "Inventory Code",
                                 "binding": "Code",
                                 "allowSorting": true,
-                                "width": 200,
+                                "width": 160,
                             },
                             {
                                 "header": "Quantity",
                                 "binding": "Quantity",
                                 "allowSorting": true,
-                                "width": 150,
+                                "width": 110,
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
-                                "width": 100,
+                                "width": 118,
                             },
                             {
                                 "header": "Amount",
@@ -2766,32 +2676,6 @@
             });
 
             inventoryEntryGrid.trackChanges = true;
-
-            //Navigation button for Inventory Entries
-            btnFirstPageGridInventoryEntry = document.getElementById('btnMoveToFirstPageGridInventoryEntry');
-            btnPreviousPageGridInventoryEntry = document.getElementById('btnMoveToPreviousPageGridInventoryEntry');
-            btnNextPageGridInventoryEntry = document.getElementById('btnMoveToNextPageGridInventoryEntry');
-            btnLastPageGridInventoryEntry = document.getElementById('btnMoveToLastPageGridInventoryEntry');
-            btnCurrentPageGridInventoryEntry = document.getElementById('btnCurrentPageGridInventoryEntry');
-
-            updateNavigateButtonsInventoryEntry();
-
-            btnFirstPageGridInventoryEntry.addEventListener('click', function () {
-                inventoryEntries.moveToFirstPage();
-                updateNavigateButtonsInventoryEntry();
-            });
-            btnPreviousPageGridInventoryEntry.addEventListener('click', function () {
-                inventoryEntries.moveToPreviousPage();
-                updateNavigateButtonsInventoryEntry();
-            });
-            btnNextPageGridInventoryEntry.addEventListener('click', function () {
-                inventoryEntries.moveToNextPage();
-                updateNavigateButtonsInventoryEntry();
-            });
-            btnLastPageGridInventoryEntry.addEventListener('click', function () {
-                inventoryEntries.moveToLastPage();
-                updateNavigateButtonsInventoryEntry();
-            });
         }
     </script>
 
@@ -2802,21 +2686,15 @@
         var journals;
         var journalListGrid;
 
-        var btnFirstPageGridJournal;
-        var btnPreviousPageGridJournal;
-        var btnNextPageGridJournal;
-        var btnLastPageGridJournal;
-        var btnCurrentPageGridJournal;
-
         // ===========
         // Get Journal
         // ===========
         function getJournalListForStockIn() {
             var journals = new wijmo.collections.ObservableArray;
-            var INId = @stockInId;
+            var stockInId = getParam("StockInId");
             //$('#loadingModal').modal('show');
             $.ajax({
-                url: '/api/listJournalByINId/' + INId,
+                url: '/api/listJournalByINId/' + stockInId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -2866,6 +2744,8 @@
 
                         document.getElementById('totalDebitInJournal').innerHTML = debitAmountTotal.toLocaleString();
                         document.getElementById('totalCreditInJournal').innerHTML = creditAmountTotal.toLocaleString();
+                        var variance = debitAmountTotal - creditAmountTotal;
+                        document.getElementById('variance').innerHTML = variance.toLocaleString();
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -2874,114 +2754,66 @@
             return journals;
         }
 
-        // ==============================
-        // Navigation Buttons for Journal
-        // ==============================
-        function updateNavigateButtonsJournal() {
-            if (journals.pageSize <= 0) {
-                document.getElementById('navigationPageGridJournal').style.display = 'none';
-                return;
-            }
-            document.getElementById('navigationPageGridJournal').style.display = 'block';
-            if (journals.pageIndex === 0) {
-                btnFirstPageGridJournal.setAttribute('disabled', 'disabled');
-                btnPreviousPageGridJournal.setAttribute('disabled', 'disabled');
-                btnNextPageGridJournal.removeAttribute('disabled');
-                btnLastPageGridJournal.removeAttribute('disabled');
-            } else if (journals.pageIndex === (journals.pageCount - 1)) {
-                btnFirstPageGridJournal.removeAttribute('disabled');
-                btnPreviousPageGridJournal.removeAttribute('disabled');
-                btnLastPageGridJournal.setAttribute('disabled', 'disabled');
-                btnNextPageGridJournal.setAttribute('disabled', 'disabled');
-            } else {
-                btnFirstPageGridJournal.removeAttribute('disabled');
-                btnPreviousPageGridJournal.removeAttribute('disabled');
-                btnNextPageGridJournal.removeAttribute('disabled');
-                btnLastPageGridJournal.removeAttribute('disabled');
-            }
-            btnCurrentPageGridJournal.innerHTML = (journals.pageIndex + 1) + ' / ' + journals.pageCount;
-        }
-
         // ============
         // Journal List
         // ============
         function stockInJournal_OnClick() {
             journals = new wijmo.collections.CollectionView(getJournalListForStockIn());
-            journals.pageSize = 10;
 
             document.getElementById("loadingJournalGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Journal...';
 
             $("#loadingJournalGridList").show();
-            $("#footerModalJournalNavigationButtons").hide();
-            setTimeout(function() {
+            $("#journal_Content").hide();
+            setTimeout(function () {
                 $("#loadingJournalGridList").hide();
-                $("#footerModalJournalNavigationButtons").show();
+                $("#journal_Content").show();
                 // Flex Grid
                 journalListGrid = new wijmo.grid.FlexGrid('#journalGrid');
                 journalListGrid.initialize({
                     columns: [
-                                //{
-                                //    "header": "Edit",
-                                //    "binding": "EditId",
-                                //    "width": 60,
-                                //    "align": "center",
-                                //    "allowResizing": false,
-                                //    "allowSorting": false,
-                                //    "isContentHtml": true
-                                //},
-                                //{
-                                //    "header": "Delete",
-                                //    "binding": "DeleteId",
-                                //    "width": 70,
-                                //    "align": "center",
-                                //    "allowResizing": false,
-                                //    "allowSorting": false,
-                                //    "isContentHtml": true
-                                //},
-                                {
-                                    "header": "Date",
-                                    "binding": "JournalDate",
-                                    "allowSorting": true,
-                                    "width": 150,
-                                },
-                                {
-                                    "header": "Branch",
-                                    "binding": "Branch",
-                                    "allowSorting": true,
-                                    "width": 220
-                                },
+                                 {
+                                     "header": "Branch",
+                                     "binding": "Branch",
+                                     "allowSorting": true,
+                                     "width": 150
+                                 },
                                 {
                                     "header": "Code",
                                     "binding": "AccountCode",
                                     "allowSorting": true,
-                                    "width": 100
+                                    "width": 60
                                 },
                                 {
                                     "header": "Account",
                                     "binding": "Account",
                                     "allowSorting": true,
-                                    "width": 250
+                                    "width": 200
                                 },
                                 {
                                     "header": "Article",
                                     "binding": "Article",
                                     "allowSorting": true,
-                                    "width": 350
+                                    "width": 162
                                 },
                                 {
-                                    "header": "Debit Amount",
+                                    "header": "Debit",
                                     "binding": "DebitAmount",
                                     "allowSorting": true,
                                     "width": 130
                                 }
                                 ,
                                 {
-                                    "header": "Credit Amount",
+                                    "header": "Credit",
                                     "binding": "CreditAmount",
                                     "allowSorting": true,
                                     "width": 130
+                                },
+                                {
+                                    "header": "Date",
+                                    "binding": "JournalDate",
+                                    "allowSorting": true,
+                                    "width": 80,
                                 }
-
                     ],
                     autoGenerateColumns: false,
                     itemsSource: journals,
@@ -2992,34 +2824,6 @@
                 });
 
                 journalListGrid.trackChanges = true;
-
-
-                //Navigation button
-                btnFirstPageGridJournal = document.getElementById('btnMoveToFirstPageGridJournal');
-                btnPreviousPageGridJournal = document.getElementById('btnMoveToPreviousPageGridJournal');
-                btnNextPageGridJournal = document.getElementById('btnMoveToNextPageGridJournal');
-                btnLastPageGridJournal = document.getElementById('btnMoveToLastPageGridJournal');
-                btnCurrentPageGridJournal = document.getElementById('btnCurrentPageGridJournal');
-
-                updateNavigateButtonsJournal();
-
-                btnFirstPageGridJournal.addEventListener('click', function () {
-                    journals.moveToFirstPage();
-                    updateNavigateButtonsJournal();
-                });
-                btnPreviousPageGridJournal.addEventListener('click', function () {
-                    journals.moveToPreviousPage();
-                    updateNavigateButtonsJournal();
-                });
-                btnNextPageGridJournal.addEventListener('click', function () {
-                    journals.moveToNextPage();
-                    updateNavigateButtonsJournal();
-                });
-                btnLastPageGridJournal.addEventListener('click', function () {
-                    journals.moveToLastPage();
-                    updateNavigateButtonsJournal();
-                });
-
             }, 1000);
         }
 

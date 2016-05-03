@@ -129,6 +129,7 @@ namespace easyfis.Business
                                            STDate = d.STDate.ToShortDateString(),
                                            ToBranchId = d.ToBranchId,
                                            ToBranch = d.MstBranch1.Branch,
+                                           ToBranchCode = d.MstBranch1.BranchCode,
                                            Particulars = d.Particulars,
                                            ManualSTNumber = d.ManualSTNumber,
                                            PreparedById = d.PreparedById,
@@ -205,16 +206,15 @@ namespace easyfis.Business
                                     db.TrnInventories.InsertOnSubmit(newInventoryForStockTransferStockOut);
                                     db.SubmitChanges();
 
+                                    Debug.WriteLine(stockTransferItem.ItemInventoryId);
+
                                     UpdateArticleInventory(stockTransferItem.ItemInventoryId);
-
-
-
 
                                     // retrieve Artticle Inventory
                                     var articleInventories = from d in db.MstArticleInventories
-                                                             where d.BranchId == stockTransferHeader.BranchId
+                                                             where d.BranchId == stockTransferHeader.ToBranchId
                                                              && d.ArticleId == stockTransferItem.ItemId
-                                                             && d.InventoryCode == "ST-" + stockTransferHeader.BranchCode + "-" + stockTransferHeader.STNumber
+                                                             && d.InventoryCode == "ST-" + stockTransferHeader.ToBranchCode + "-" + stockTransferHeader.STNumber
                                                              select new Models.MstArticleInventory
                                                              {
                                                                  Id = d.Id,
@@ -263,9 +263,9 @@ namespace easyfis.Business
                                         // article Inventory
                                         Data.MstArticleInventory newArticleInventory = new Data.MstArticleInventory();
 
-                                        newArticleInventory.BranchId = stockTransferHeader.BranchId;
+                                        newArticleInventory.BranchId = stockTransferHeader.ToBranchId;
                                         newArticleInventory.ArticleId = stockTransferItem.ItemId;
-                                        newArticleInventory.InventoryCode = "ST-" + stockTransferHeader.BranchCode + "-" + stockTransferHeader.STNumber;
+                                        newArticleInventory.InventoryCode = "ST-" + stockTransferHeader.ToBranchCode + "-" + stockTransferHeader.STNumber;
                                         newArticleInventory.Quantity = stockTransferItem.Quantity;
                                         newArticleInventory.Cost = stockTransferItem.Amount / stockTransferItem.Quantity;
                                         newArticleInventory.Amount = stockTransferItem.Amount;
@@ -276,18 +276,18 @@ namespace easyfis.Business
 
                                         // retrieve Artticle Inventory - Id
                                         var newArticleInventoryId = (from d in db.MstArticleInventories
-                                                                     where d.BranchId == stockTransferHeader.BranchId
+                                                                     where d.BranchId == stockTransferHeader.ToBranchId
                                                                      && d.ArticleId == stockTransferItem.ItemId
-                                                                     && d.InventoryCode == "ST-" + stockTransferHeader.BranchCode + "-" + stockTransferHeader.STNumber
+                                                                     && d.InventoryCode == "ST-" + stockTransferHeader.ToBranchCode + "-" + stockTransferHeader.STNumber
                                                                      select d.Id).SingleOrDefault();
 
                                         // stock transfer - In
                                         Data.TrnInventory newInventoryForStockTransferStockIn = new Data.TrnInventory();
 
-                                        newInventoryForStockTransferStockIn.BranchId = stockTransferHeader.BranchId;
+                                        newInventoryForStockTransferStockIn.BranchId = stockTransferHeader.ToBranchId;
                                         newInventoryForStockTransferStockIn.InventoryDate = Convert.ToDateTime(stockTransferHeader.STDate);
                                         newInventoryForStockTransferStockIn.ArticleId = stockTransferItem.ItemId;
-                                        newInventoryForStockTransferStockIn.ArticleInventoryId = articleInventoryId;
+                                        newInventoryForStockTransferStockIn.ArticleInventoryId = newArticleInventoryId;
                                         newInventoryForStockTransferStockIn.RRId = null;
                                         newInventoryForStockTransferStockIn.SIId = null;
                                         newInventoryForStockTransferStockIn.INId = null;
@@ -695,7 +695,7 @@ namespace easyfis.Business
                                 var articleInventories = from d in db.MstArticleInventories
                                                          where d.BranchId == stockInHeader.BranchId
                                                          && d.ArticleId == stockInItem.ItemId
-                                                         //&& d.InventoryCode == "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber
+                                                         && d.InventoryCode == "IN-" + stockInHeader.BranchCode + "-" + stockInHeader.INNumber
                                                          select new Models.MstArticleInventory
                                                          {
                                                              Id = d.Id,
@@ -1171,7 +1171,7 @@ namespace easyfis.Business
                         var articleInventories = from d in db.MstArticleInventories
                                                  where d.BranchId == RRItems.BranchId
                                                  && d.ArticleId == RRItems.ItemId
-                                                 //&& d.InventoryCode == "RR-" + RRItems.BranchCode + "-" + RRItems.RR
+                                                 && d.InventoryCode == "RR-" + RRItems.BranchCode + "-" + RRItems.RR
                                                  select new Models.MstArticleInventory
                                                  {
                                                      Id = d.Id,

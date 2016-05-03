@@ -20,7 +20,9 @@ namespace easyfis.Controllers
         [Route("api/listDisbursement")]
         public List<Models.TrnDisbursement> Get()
         {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var disbursements = from d in db.TrnDisbursements
+                                where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
                                 select new Models.TrnDisbursement
                                 {
                                     Id = d.Id,
@@ -29,12 +31,12 @@ namespace easyfis.Controllers
                                     CVNumber = d.CVNumber,
                                     CVDate = d.CVDate.ToShortDateString(),
                                     SupplierId = d.SupplierId,
-                                    Supplier = d.MstArticle.Article,
+                                    Supplier = d.MstArticle1.Article,
                                     Payee = d.Payee,
                                     PayTypeId = d.PayTypeId,
                                     PayType = d.MstPayType.PayType,
                                     BankId = d.BankId,
-                                    Bank = d.MstArticle1.Article,
+                                    Bank = d.MstArticle.Article,
                                     ManualCVNumber = d.ManualCVNumber,
                                     Particulars = d.Particulars,
                                     CheckNumber = d.CheckNumber,
@@ -76,12 +78,12 @@ namespace easyfis.Controllers
                                     CVNumber = d.CVNumber,
                                     CVDate = d.CVDate.ToShortDateString(),
                                     SupplierId = d.SupplierId,
-                                    Supplier = d.MstArticle.Article,
+                                    Supplier = d.MstArticle1.Article,
                                     Payee = d.Payee,
                                     PayTypeId = d.PayTypeId,
                                     PayType = d.MstPayType.PayType,
                                     BankId = d.BankId,
-                                    Bank = d.MstArticle1.Article,
+                                    Bank = d.MstArticle.Article,
                                     ManualCVNumber = d.ManualCVNumber,
                                     Particulars = d.Particulars,
                                     CheckNumber = d.CheckNumber,
@@ -106,15 +108,16 @@ namespace easyfis.Controllers
             return (Models.TrnDisbursement)disbursements.FirstOrDefault();
         }
 
-        // ==================================
-        // GET Disbursement Filter by CV Date
-        // ==================================
-        [Route("api/listDisbursementFilterByCVDate/{CVDate}")]
-        public List<Models.TrnDisbursement> GetDisbusementFilterByCVDate(String CVDate)
+        // =======================================
+        // GET Disbursement By Bank abd by CV Date
+        // =======================================
+        [Route("api/listDisbursementByBankIdByCVDate/{BankId}/{DateStart}/{DateEnd}")]
+        public List<Models.TrnDisbursement> GetDisbusementByBankIdByCVDate(String BankId, String DateStart, String DateEnd)
         {
-            var disbursement_CVDate = Convert.ToDateTime(CVDate);
             var disbursements = from d in db.TrnDisbursements
-                                where d.CVDate == disbursement_CVDate
+                                where d.BankId == Convert.ToInt32(BankId)
+                                && d.CVDate >= Convert.ToDateTime(DateStart)
+                                && d.CVDate <= Convert.ToDateTime(DateEnd)
                                 select new Models.TrnDisbursement
                                 {
                                     Id = d.Id,
@@ -123,12 +126,61 @@ namespace easyfis.Controllers
                                     CVNumber = d.CVNumber,
                                     CVDate = d.CVDate.ToShortDateString(),
                                     SupplierId = d.SupplierId,
-                                    Supplier = d.MstArticle.Article,
+                                    Supplier = d.MstArticle1.Article,
                                     Payee = d.Payee,
                                     PayTypeId = d.PayTypeId,
                                     PayType = d.MstPayType.PayType,
                                     BankId = d.BankId,
-                                    Bank = d.MstArticle1.Article,
+                                    Bank = d.MstArticle.Article,
+                                    ManualCVNumber = d.ManualCVNumber,
+                                    Particulars = d.Particulars,
+                                    CheckNumber = d.CheckNumber,
+                                    CheckDate = d.CheckDate.ToShortDateString(),
+                                    Amount = d.Amount,
+                                    IsCrossCheck = d.IsCrossCheck,
+                                    IsClear = d.IsClear,
+                                    PreparedById = d.PreparedById,
+                                    PreparedBy = d.MstUser3.FullName,
+                                    CheckedById = d.CheckedById,
+                                    CheckedBy = d.MstUser1.FullName,
+                                    ApprovedById = d.ApprovedById,
+                                    ApprovedBy = d.MstUser.FullName,
+                                    IsLocked = d.IsLocked,
+                                    CreatedById = d.CreatedById,
+                                    CreatedBy = d.MstUser2.FullName,
+                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                    UpdatedById = d.UpdatedById,
+                                    UpdatedBy = d.MstUser4.FullName,
+                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                };
+            return disbursements.ToList();
+        }
+
+        // ==================================
+        // GET Disbursement Filter by CV Date
+        // ==================================
+        [Route("api/listDisbursementFilterByCVDate/{CVDate}")]
+        public List<Models.TrnDisbursement> GetDisbusementFilterByCVDate(String CVDate)
+        {
+            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
+            var disbursement_CVDate = Convert.ToDateTime(CVDate);
+            var disbursements = from d in db.TrnDisbursements
+                                where d.CVDate == disbursement_CVDate
+                                && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                                select new Models.TrnDisbursement
+                                {
+                                    Id = d.Id,
+                                    BranchId = d.BranchId,
+                                    Branch = d.MstBranch.Branch,
+                                    CVNumber = d.CVNumber,
+                                    CVDate = d.CVDate.ToShortDateString(),
+                                    SupplierId = d.SupplierId,
+                                    Supplier = d.MstArticle1.Article,
+                                    Payee = d.Payee,
+                                    PayTypeId = d.PayTypeId,
+                                    PayType = d.MstPayType.PayType,
+                                    BankId = d.BankId,
+                                    Bank = d.MstArticle.Article,
                                     ManualCVNumber = d.ManualCVNumber,
                                     Particulars = d.Particulars,
                                     CheckNumber = d.CheckNumber,
@@ -168,12 +220,12 @@ namespace easyfis.Controllers
                                     CVNumber = d.CVNumber,
                                     CVDate = d.CVDate.ToShortDateString(),
                                     SupplierId = d.SupplierId,
-                                    Supplier = d.MstArticle.Article,
+                                    Supplier = d.MstArticle1.Article,
                                     Payee = d.Payee,
                                     PayTypeId = d.PayTypeId,
                                     PayType = d.MstPayType.PayType,
                                     BankId = d.BankId,
-                                    Bank = d.MstArticle1.Article,
+                                    Bank = d.MstArticle.Article,
                                     ManualCVNumber = d.ManualCVNumber,
                                     Particulars = d.Particulars,
                                     CheckNumber = d.CheckNumber,
@@ -213,12 +265,12 @@ namespace easyfis.Controllers
                                     CVNumber = d.CVNumber,
                                     CVDate = d.CVDate.ToShortDateString(),
                                     SupplierId = d.SupplierId,
-                                    Supplier = d.MstArticle.Article,
+                                    Supplier = d.MstArticle1.Article,
                                     Payee = d.Payee,
                                     PayTypeId = d.PayTypeId,
                                     PayType = d.MstPayType.PayType,
                                     BankId = d.BankId,
-                                    Bank = d.MstArticle1.Article,
+                                    Bank = d.MstArticle.Article,
                                     ManualCVNumber = d.ManualCVNumber,
                                     Particulars = d.Particulars,
                                     CheckNumber = d.CheckNumber,

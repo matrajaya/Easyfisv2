@@ -10,6 +10,7 @@ namespace easyfis.Models
         public Int32 Id { get; set; }
         public Int32 STId { get; set; }
         public String ST { get; set; }
+        public String STDate { get; set; }
         public Int32 ItemId { get; set; }
         public String ItemCode { get; set; }
         public String Item { get; set; }
@@ -26,5 +27,6 @@ namespace easyfis.Models
         public Decimal BaseQuantity { get; set; }
         public Decimal BaseCost { get; set; }
         public Int32 AccountId { get; set; }
+        public String ToBranch { get; set; }
     }
 }
