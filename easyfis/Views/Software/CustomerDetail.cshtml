@@ -768,6 +768,8 @@
                             var articleCode = parseInt(lastArticleCodeResults.ArticleCode);
                             var articleCodeResults = articleCode + 0000000001;
                             document.getElementById('artcileCustomer_code').value = zerofill(articleCodeResults, 10);
+                        } else {
+                            document.getElementById('artcileCustomer_code').value = "0000000001";
                         }
                     }
                 });

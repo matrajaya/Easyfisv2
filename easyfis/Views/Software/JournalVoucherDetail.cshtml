@@ -1651,6 +1651,7 @@
                 placeholder: "Select SI Number",
                 itemsSource: salesList,
                 isEditable: false,
+                required: false,
                 selectedValue: document.getElementById('JVL_ARSIId_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#JVL_ARSIId_data").val(salesCollections.items[this.selectedIndex].SalesId);
@@ -1722,6 +1723,7 @@
                 placeholder: "Select RR Number",
                 itemsSource: RRList,
                 isEditable: false,
+                required: false,
                 selectedValue: document.getElementById('JVL_APRRId_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#JVL_APRRId_data").val(RRCollections.items[this.selectedIndex].RRId);
