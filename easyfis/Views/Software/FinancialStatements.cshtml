@@ -47,8 +47,10 @@
                             <li class="active"><a data-toggle="pill" href="#BS">Balance Sheet</a></li>
                             <li><a data-toggle="pill" href="#IS">Income Statement</a></li>
                             <li><a data-toggle="pill" href="#CF">Cash Flow (Indirect)</a></li>
+                            <li class="reportDivider"></li>
                             <li><a data-toggle="pill" href="#TB">Trial Balance</a></li>
                             <li><a data-toggle="pill" href="#AL">Account Ledger</a></li>
+                            <li class="reportDivider"></li>
                             <li><a data-toggle="pill" href="#RRB">Receiving Receipt Book</a></li>
                             <li><a data-toggle="pill" href="#DB">Disbursement Book</a></li>
                             <li><a data-toggle="pill" href="#SB">Sales Book</a></li>
@@ -337,7 +339,7 @@
                             </div>
                             <div id="AL" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementAccountLedgerPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementAccountLedgerPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -416,7 +418,7 @@
                             </div>
                             <div id="RRB" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementReceivingReceiptBookPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementReceivingReceiptBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -486,7 +488,7 @@
                             </div>
                             <div id="DB" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementDisbursementBookPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementDisbursementBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -556,7 +558,7 @@
                             </div>
                             <div id="SB" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementSalesBookPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementSalesBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -626,7 +628,7 @@
                             </div>
                             <div id="CB" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementCollectionBookPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementCollectionBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -696,7 +698,7 @@
                             </div>
                             <div id="SIB" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementStockInBookPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementStockInBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -766,7 +768,7 @@
                             </div>
                             <div id="SOB" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementStockOutBookPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementStockOutBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -836,7 +838,7 @@
                             </div>
                             <div id="STB" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementStockTransferBookPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementStockTransferBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -906,7 +908,7 @@
                             </div>
                             <div id="JVB" class="tab-pane fade">
                                 <div align="right">
-                                    <button onclick="window.location.href ='@Url.Action("FinancialStatementJournalVoucherBookPDF", "Software")'" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <button onclick="FinancialStatementJournalVoucherBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                     <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                 </div>
                                 <div class="well">
@@ -974,7 +976,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="COA" class="tab-pane fade"> </div>
+                            <div id="COA" class="tab-pane fade">
+                                <div align="right">
+                                    <button onclick="FinancialStatementChartOfAccountsPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1155,7 +1162,7 @@
                     getBranchesForFinancialStatementAccountLedger();
                 }
             });
-            
+
             cboFinancialReceivingReceiptBookCompany.dispose();
             cboFinancialReceivingReceiptBookCompany = new wijmo.input.ComboBox('#FinancialReceivingReceiptBook_Company', {
                 placeholder: "Select Company",
@@ -2156,8 +2163,8 @@
                     $("#FinancialStatementStockOutBook_Branch_data").val(branchesCollection.items[this.selectedIndex].Id);
                 }
             });
-        } 
-        
+        }
+
         // ========================================================
         // Get branches for Financial Statement Stock Transfer Book
         // ========================================================
@@ -2245,7 +2252,7 @@
             } else {
                 companyId = document.getElementById('FinancialStatementJournalVoucherBook_Company_data').value;
             }
-           
+
             $.ajax({
                 url: '/api/listBranchByCompanyId/' + companyId,
                 cache: false,
@@ -2360,7 +2367,7 @@
                 }
             });
         }
-        
+
         // get Financial Statement Cash Flow End Date
         function getFinancialStatementCashFlowEndDate() {
             FinancialStatementCashFlowEndDate.dispose();
@@ -2428,7 +2435,7 @@
                 }
             });
         }
-        
+
         // get Financial Statement Account Ledger End Date
         function getFinancialStatementAccountLedgerEndDate() {
             FinancialStatementAccountLedgerEndDate.dispose();
@@ -2462,7 +2469,7 @@
                 }
             });
         }
-        
+
         // get Financial Statement Receiving Receipt Book End Date
         function getFinancialReceivingReceiptBookEndDate() {
             FinancialReceivingReceiptBookEndDate.dispose();
@@ -2700,7 +2707,7 @@
                 }
             });
         }
-        
+
         // get Financial Statement Journal Voucher Book End Date
         function getFinancialStatementJournalVoucherBookEndDate() {
             FinancialStatementJournalVoucherBookEndDate.dispose();
@@ -2720,7 +2727,7 @@
 
         function FinancialStatementBalanceSheetPDF_OnClick() {
             var financialStatementBalanceSheetDateAsOf = document.getElementById('FinancialStatementBalanceSheet_DateAsOf_data').value;
-            
+
             var companyId;
             if (document.getElementById('FinancialStatementBalanceSheet_Company_data').value == "") {
                 companyId = 0;
@@ -2736,7 +2743,7 @@
         function FinancialStatementTrialBalancePDF_OnClick() {
             var financialStatementTrialBalance_StartDate = document.getElementById('FinancialStatementTrialBalance_StartDate_data').value;
             var financialStatementTrialBalance_EndDate = document.getElementById('FinancialStatementTrialBalance_EndDate_data').value;
-            
+
             var companyId;
             if (document.getElementById('FinancialStatementTrialBalance_Company_data').value == "") {
                 companyId = 0;
@@ -2781,11 +2788,165 @@
             }
         }
 
+        function FinancialStatementAccountLedgerPDF_OnClick() {
+            var financialStatementAccountLedger_StartDate = document.getElementById('FinancialStatementAccountLedger_StartDate_data').value;
+            var financialStatementAccountLedger_EndDate = document.getElementById('FinancialStatementAccountLedger_EndDate_data').value;
+
+            var companyId;
+            var accountId;
+            if (document.getElementById('FinancialStatementAccountLedger_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementAccountLedger_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else if (document.getElementById('FinancialStatementAccountLedger_Account_data').value == "") {
+                accountId = 0;
+                document.getElementById('FinancialStatementAccountLedger_Account').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementAccountLedger_Company_data').value;
+                accountId = document.getElementById('FinancialStatementAccountLedger_Account_data').value;
+                document.getElementById('FinancialStatementTrialBalance_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementAccountLedgerPDF?StartDate=' + financialStatementAccountLedger_StartDate + '&EndDate=' + financialStatementAccountLedger_EndDate + '&CompanyId=' + companyId + '&AccountId=' + accountId;
+            }
+        }
+
+        function FinancialStatementReceivingReceiptBookPDF_OnClick() {
+            var financialStatementReceivingReceiptBook_StartDate = document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value;
+            var financialStatementReceivingReceiptBook_EndDate = document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialReceivingReceiptBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialReceivingReceiptBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialReceivingReceiptBook_Company_data').value;
+                document.getElementById('FinancialReceivingReceiptBook_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementReceivingReceiptBookPDF?StartDate=' + financialStatementReceivingReceiptBook_StartDate + '&EndDate=' + financialStatementReceivingReceiptBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementDisbursementBookPDF_OnClick() {
+            var financialStatementDisbursementBook_StartDate = document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value;
+            var financialStatementDisbursementBook_EndDate = document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementDisbursementBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementDisbursementBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementDisbursementBook_Company_data').value;
+                document.getElementById('FinancialStatementDisbursementBook_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementDisbursementBookPDF?StartDate=' + financialStatementDisbursementBook_StartDate + '&EndDate=' + financialStatementDisbursementBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementSalesBookPDF_OnClick() {
+            var financialStatementSalesBook_StartDate = document.getElementById('FinancialStatementSalesBook_StartDate_data').value;
+            var financialStatementSalesBook_EndDate = document.getElementById('FinancialStatementSalesBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementSalesBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementSalesBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementSalesBook_Company_data').value;
+                document.getElementById('FinancialStatementSalesBook_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementSalesBookPDF?StartDate=' + financialStatementSalesBook_StartDate + '&EndDate=' + financialStatementSalesBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementCollectionBookPDF_OnClick() {
+            var financialStatementCollectionBook_StartDate = document.getElementById('FinancialStatementCollectionBook_StartDate_data').value;
+            var financialStatementCollectionBook_EndDate = document.getElementById('FinancialStatementCollectionBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementCollectionBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementCollectionBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementCollectionBook_Company_data').value;
+                document.getElementById('FinancialStatementCollectionBook_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementCollectionBookPDF?StartDate=' + financialStatementCollectionBook_StartDate + '&EndDate=' + financialStatementCollectionBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementStockInBookPDF_OnClick() {
+            var financialStatementStockInBook_StartDate = document.getElementById('FinancialStatementStockInBook_StartDate_data').value;
+            var financialStatementStockInBook_EndDate = document.getElementById('FinancialStatementStockInBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementStockInBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementStockInBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementStockInBook_Company_data').value;
+                document.getElementById('FinancialStatementStockInBook_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementStockInBookPDF?StartDate=' + financialStatementStockInBook_StartDate + '&EndDate=' + financialStatementStockInBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementStockOutBookPDF_OnClick() {
+            var financialStatementStockOutBook_StartDate = document.getElementById('FinancialStatementStockOutBook_StartDate_data').value;
+            var financialStatementStockOutBook_EndDate = document.getElementById('FinancialStatementStockOutBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementStockOutBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementStockOutBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementStockOutBook_Company_data').value;
+                document.getElementById('FinancialStatementStockOutBook_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementStockOutBookPDF?StartDate=' + financialStatementStockOutBook_StartDate + '&EndDate=' + financialStatementStockOutBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementStockTransferBookPDF_OnClick() {
+            var financialStatementStockTransferBook_StartDate = document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value;
+            var financialStatementStockTransferBook_EndDate = document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementStockTransferBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementStockTransferBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementStockTransferBook_Company_data').value;
+                document.getElementById('FinancialStatementStockTransferBook_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementStockTransferBookPDF?StartDate=' + financialStatementStockTransferBook_StartDate + '&EndDate=' + financialStatementStockTransferBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementJournalVoucherBookPDF_OnClick() {
+            var financialStatementJournalVoucherBook_StartDate = document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value;
+            var financialStatementJournalVoucherBook_EndDate = document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementJournalVoucherBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementJournalVoucherBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementJournalVoucherBook_Company_data').value;
+                document.getElementById('FinancialStatementJournalVoucherBook_Company').style.border = " ";
+                window.location.href = '/Software/FinancialStatementJournalVoucherBookPDF?StartDate=' + financialStatementJournalVoucherBook_StartDate + '&EndDate=' + financialStatementJournalVoucherBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementChartOfAccountsPDF_OnClick() {
+            window.location.href = '/Software/FinancialStatementChartOfAccountsBookPDF';
+        }
+
         // ============
         // On Load Page
         // ============
         $(document).ready(function () {
-            // Financial Statement Balance Sheet Date As Of .. 
+            // Financial Statement Balance Sheet Date As Of ..
             accountsPayableReportDateAsOf = new wijmo.input.InputDate('#FinancialStatementBalanceSheet_DateAsOf', {
                 format: 'MM/dd/yyyy',
                 value: new Date(),
@@ -2928,7 +3089,7 @@
                     $('#filterTabsFinancialStatementStockTransferBook').hide();
                 }
             });
-            
+
             // filter financial Statement Journal Voucher Book
             $('#filterTabsFinancialStatementJournalVoucherBook').hide();
             document.getElementById('FinancialStatementJournalVoucherBook_filter').checked = false;
@@ -2939,7 +3100,7 @@
                     $('#filterTabsFinancialStatementJournalVoucherBook').hide();
                 }
             });
-            
+
             // Financial Statement Income Statement Dates
             document.getElementById('FinancialStatementIncomeStatement_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('FinancialStatementIncomeStatement_EndDate_data').value = new Date().toLocaleDateString();
@@ -3029,7 +3190,7 @@
 
             getFinancialStatementStockInBookStartDate();
             getFinancialStatementStockInBookEndDate();
-            
+
             // Financial Statement Stock Out Book
             document.getElementById('FinancialStatementStockOutBook_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('FinancialStatementStockOutBook_EndDate_data').value = new Date().toLocaleDateString();
@@ -3077,7 +3238,7 @@
             document.getElementById('FinancialStatementTrialBalance_Company_data').value = "";
             cboFinancialStatementTrialBalanceCompany = new wijmo.input.ComboBox('#FinancialStatementTrialBalance_Company');
             cboFinancialStatementTrialBalanceBranch = new wijmo.input.ComboBox('#FinancialStatementTrialBalance_Branch');
-            
+
             // Wijmo CBO combobox Financial Statement Account Ledger
             cboFinancialStatementAccountLedgerCompany = new wijmo.input.ComboBox('#FinancialStatementAccountLedger_Company');
             cboFinancialStatementAccountLedgerAccounts = new wijmo.input.ComboBox('#FinancialStatementAccountLedger_Account');

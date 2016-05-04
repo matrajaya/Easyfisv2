@@ -2389,7 +2389,7 @@
             var inventoryEntries = new wijmo.collections.ObservableArray;
             var stockTransferId = getParam("StockTransferId");
             NProgress.start();
-            if(document.location.search.length > 0) {
+            if (document.location.search.length > 0) {
                 $.ajax({
                     url: '/api/listInventoryBySTId/' + stockTransferId,
                     cache: false,
@@ -2644,68 +2644,49 @@
                 journalListGrid = new wijmo.grid.FlexGrid('#journalGrid');
                 journalListGrid.initialize({
                     columns: [
-                                //{
-                                //    "header": "Edit",
-                                //    "binding": "EditId",
-                                //    "width": 60,
-                                //    "align": "center",
-                                //    "allowResizing": false,
-                                //    "allowSorting": false,
-                                //    "isContentHtml": true
-                                //},
-                                //{
-                                //    "header": "Delete",
-                                //    "binding": "DeleteId",
-                                //    "width": 70,
-                                //    "align": "center",
-                                //    "allowResizing": false,
-                                //    "allowSorting": false,
-                                //    "isContentHtml": true
-                                //},
-                                {
-                                    "header": "Date",
-                                    "binding": "JournalDate",
-                                    "allowSorting": true,
-                                    "width": 150,
-                                },
                                 {
                                     "header": "Branch",
                                     "binding": "Branch",
                                     "allowSorting": true,
-                                    "width": 220
+                                    "width": 150
                                 },
                                 {
                                     "header": "Code",
                                     "binding": "AccountCode",
                                     "allowSorting": true,
-                                    "width": 100
+                                    "width": 60
                                 },
                                 {
                                     "header": "Account",
                                     "binding": "Account",
                                     "allowSorting": true,
-                                    "width": 250
+                                    "width": 200
                                 },
                                 {
                                     "header": "Article",
                                     "binding": "Article",
                                     "allowSorting": true,
-                                    "width": 350
+                                    "width": 162
                                 },
                                 {
-                                    "header": "Debit Amount",
+                                    "header": "Debit",
                                     "binding": "DebitAmount",
                                     "allowSorting": true,
                                     "width": 130
                                 }
                                 ,
                                 {
-                                    "header": "Credit Amount",
+                                    "header": "Credit",
                                     "binding": "CreditAmount",
                                     "allowSorting": true,
                                     "width": 130
+                                },
+                                {
+                                    "header": "Date",
+                                    "binding": "JournalDate",
+                                    "allowSorting": true,
+                                    "width": 80,
                                 }
-
                     ],
                     autoGenerateColumns: false,
                     itemsSource: journals,

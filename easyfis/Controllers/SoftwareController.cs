@@ -1639,32 +1639,6 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult AccountsPayableForm2037PDF()
-        {
-            // Start of the PDF
-            MemoryStream workStream = new MemoryStream();
-            Rectangle rec = new Rectangle(PageSize.A3);
-            Document document = new Document(rec, 72, 72, 72, 72);
-            document.SetMargins(50f, 50f, 50f, 50f);
-            PdfWriter.GetInstance(document, workStream).CloseStream = false;
-
-            // Document Starts
-            document.Open();
-
-            Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
-            document.Add(line);
-
-            // Document End
-            document.Close();
-
-            byte[] byteInfo = workStream.ToArray();
-            workStream.Write(byteInfo, 0, byteInfo.Length);
-            workStream.Position = 0;
-
-            return new FileStreamResult(workStream, "application/pdf");
-        }
-
-        [Authorize]
         public ActionResult AccountsPayablePurchaseSummaryReportPDF(String StartDate, String EndDate)
         {
             HttpCookieCollection cookieCollection = Request.Cookies;
@@ -9332,8 +9306,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementAccountLedgerPDF()
+        public ActionResult FinancialStatementAccountLedgerPDF(String StartDate, String EndDate, Int32 CompanyId, Int32 AccountId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -9344,8 +9323,117 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 10);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Account Ledger", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
             document.Add(line);
+
+            var journalAccounts = from d in db.MstAccounts
+                                  where d.Id == AccountId
+                                  select new Models.TrnJournal
+                                  {
+                                      AccountCode = d.AccountCode,
+                                      Account = d.Account
+                                  };
+
+            // table branch account
+            PdfPTable tableAccountHeader = new PdfPTable(1);
+            float[] widthCellsTableBAccountHeader = new float[] { 100f };
+            tableAccountHeader.SetWidths(widthCellsTableBAccountHeader);
+            tableAccountHeader.WidthPercentage = 100;
+
+            foreach (var journalAccount in journalAccounts)
+            {
+                tableAccountHeader.AddCell(new PdfPCell(new Phrase(journalAccount.AccountCode + " - " + journalAccount.Account, columnFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
+                document.Add(tableAccountHeader);
+            }
+
+            PdfPTable tableHeaderDetail = new PdfPTable(7);
+            PdfPCell Cell = new PdfPCell();
+            float[] widthscellsheader2 = new float[] { 60f, 125f, 130f, 150f, 100f, 100f, 100f };
+            tableHeaderDetail.SetWidths(widthscellsheader2);
+            tableHeaderDetail.WidthPercentage = 100;
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Date", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Document Reference", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Article", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Particulars", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+            tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+            var journals = from d in db.TrnJournals
+                           where d.JournalDate >= Convert.ToDateTime(StartDate)
+                           && d.JournalDate <= Convert.ToDateTime(EndDate)
+                           && d.MstBranch.CompanyId == CompanyId
+                           && d.AccountId == AccountId
+                           select new Models.TrnJournal
+                           {
+                               JournalDate = d.JournalDate.ToShortDateString(),
+                               DocumentReference = d.DocumentReference,
+                               Article = d.MstArticle.Article,
+                               Particulars = d.Particulars,
+                               DebitAmount = d.DebitAmount,
+                               CreditAmount = d.CreditAmount
+                           };
+
+            Decimal totalDebitAmount = 0;
+            Decimal totalCreditAmount = 0;
+            Decimal totalBalance = 0;
+            Decimal balance = 0;
+            foreach (var journal in journals)
+            {
+                balance = journal.DebitAmount - journal.CreditAmount;
+
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.JournalDate, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DocumentReference, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Article, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Particulars, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                totalDebitAmount = totalDebitAmount + journal.DebitAmount;
+                totalCreditAmount = totalCreditAmount + journal.CreditAmount;
+                totalBalance = totalBalance + balance;
+            }
+
+            document.Add(tableHeaderDetail);
+
+            // table Balance Sheet footer in Asset CAtegory
+            PdfPTable tableFooter = new PdfPTable(7);
+            float[] widthCellstableFooter = new float[] { 60f, 125f, 130f, 150f, 100f, 100f, 100f };
+            tableFooter.SetWidths(widthCellstableFooter);
+            tableFooter.WidthPercentage = 100;
+
+            tableFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableFooter.AddCell(new PdfPCell(new Phrase("Totals", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(totalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(totalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableFooter.AddCell(new PdfPCell(new Phrase(totalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+            document.Add(tableFooter);
+            document.Add(Chunk.NEWLINE);
 
             // Document End
             document.Close();
@@ -9358,8 +9446,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementReceivingReceiptBookPDF()
+        public ActionResult FinancialStatementReceivingReceiptBookPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -9370,8 +9463,143 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 10);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Receiving Receipt Book", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
             document.Add(line);
+
+            var journalsDocumentReferences = from d in db.TrnJournals
+                                             where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                             && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                             && d.MstBranch.CompanyId == CompanyId
+                                             && d.RRId != null
+                                             group d by new
+                                             {
+                                                 DocumentReference = d.DocumentReference
+                                             } into g
+                                             select new Models.TrnJournal
+                                             {
+                                                 DocumentReference = g.Key.DocumentReference
+                                             };
+
+            Decimal TotalDebitAmount = 0;
+            Decimal TotalCreditAmount = 0;
+            Decimal TotalBalance = 0;
+            foreach (var journalsDocumentReference in journalsDocumentReferences)
+            {
+
+                // table branch account
+                PdfPTable tableDocRefHeader = new PdfPTable(1);
+                float[] widthCellsTableDocRefHeader = new float[] { 100f };
+                tableDocRefHeader.SetWidths(widthCellsTableDocRefHeader);
+                tableDocRefHeader.WidthPercentage = 100;
+
+                tableDocRefHeader.AddCell(new PdfPCell(new Phrase(journalsDocumentReference.DocumentReference, columnFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
+                document.Add(tableDocRefHeader);
+
+                PdfPTable tableHeaderDetail = new PdfPTable(6);
+                PdfPCell Cell = new PdfPCell();
+                float[] widthscellsheader2 = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableHeaderDetail.SetWidths(widthscellsheader2);
+                tableHeaderDetail.WidthPercentage = 100;
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Article", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                var journals = from d in db.TrnJournals
+                               where d.DocumentReference == journalsDocumentReference.DocumentReference
+                               select new Models.TrnJournal
+                               {
+                                   AccountCode = d.MstAccount.AccountCode,
+                                   Account = d.MstAccount.Account,
+                                   Article = d.MstArticle.Article,
+                                   Particulars = d.Particulars,
+                                   DebitAmount = d.DebitAmount,
+                                   CreditAmount = d.CreditAmount
+                               };
+
+                Decimal subTotalDebitAmount = 0;
+                Decimal subTotalCreditAmount = 0;
+                Decimal subTotalBalance = 0;
+                Decimal balance = 0;
+
+                foreach (var journal in journals)
+                {
+                    balance = journal.DebitAmount - journal.CreditAmount;
+
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.AccountCode, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Account, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Article, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                    subTotalDebitAmount = subTotalDebitAmount + journal.DebitAmount;
+                    subTotalCreditAmount = subTotalCreditAmount + journal.CreditAmount;
+                    subTotalBalance = subTotalBalance + balance;
+                }
+
+                document.Add(tableHeaderDetail);
+
+                // table Balance Sheet footer in Asset CAtegory
+                PdfPTable tableSubTotalFooter = new PdfPTable(6);
+                float[] widthCellstableSubTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableSubTotalFooter.SetWidths(widthCellstableSubTotalFooter);
+                tableSubTotalFooter.WidthPercentage = 100;
+
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("Sub Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                document.Add(tableSubTotalFooter);
+                document.Add(Chunk.NEWLINE);
+
+                TotalDebitAmount = TotalDebitAmount + subTotalDebitAmount;
+                TotalCreditAmount = TotalCreditAmount + subTotalCreditAmount;
+                TotalBalance = TotalBalance + subTotalBalance;
+            }
+
+            document.Add(line);
+            // table Balance Sheet footer in Asset CAtegory
+            PdfPTable tableTotalFooter = new PdfPTable(6);
+            float[] widthCellstableTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+            tableTotalFooter.SetWidths(widthCellstableTotalFooter);
+            tableTotalFooter.WidthPercentage = 100;
+
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+            document.Add(tableTotalFooter);
+            document.Add(Chunk.NEWLINE);
 
             // Document End
             document.Close();
@@ -9384,8 +9612,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementDisbursementBookPDF()
+        public ActionResult FinancialStatementDisbursementBookPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -9396,8 +9629,143 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 10);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Disbursement Book", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
             document.Add(line);
+
+            var journalsDocumentReferences = from d in db.TrnJournals
+                                             where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                             && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                             && d.MstBranch.CompanyId == CompanyId
+                                             && d.CVId != null
+                                             group d by new
+                                             {
+                                                 DocumentReference = d.DocumentReference
+                                             } into g
+                                             select new Models.TrnJournal
+                                             {
+                                                 DocumentReference = g.Key.DocumentReference
+                                             };
+
+            Decimal TotalDebitAmount = 0;
+            Decimal TotalCreditAmount = 0;
+            Decimal TotalBalance = 0;
+            foreach (var journalsDocumentReference in journalsDocumentReferences)
+            {
+
+                // table branch account
+                PdfPTable tableDocRefHeader = new PdfPTable(1);
+                float[] widthCellsTableDocRefHeader = new float[] { 100f };
+                tableDocRefHeader.SetWidths(widthCellsTableDocRefHeader);
+                tableDocRefHeader.WidthPercentage = 100;
+
+                tableDocRefHeader.AddCell(new PdfPCell(new Phrase(journalsDocumentReference.DocumentReference, columnFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
+                document.Add(tableDocRefHeader);
+
+                PdfPTable tableHeaderDetail = new PdfPTable(6);
+                PdfPCell Cell = new PdfPCell();
+                float[] widthscellsheader2 = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableHeaderDetail.SetWidths(widthscellsheader2);
+                tableHeaderDetail.WidthPercentage = 100;
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Article", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                var journals = from d in db.TrnJournals
+                               where d.DocumentReference == journalsDocumentReference.DocumentReference
+                               select new Models.TrnJournal
+                               {
+                                   AccountCode = d.MstAccount.AccountCode,
+                                   Account = d.MstAccount.Account,
+                                   Article = d.MstArticle.Article,
+                                   Particulars = d.Particulars,
+                                   DebitAmount = d.DebitAmount,
+                                   CreditAmount = d.CreditAmount
+                               };
+
+                Decimal subTotalDebitAmount = 0;
+                Decimal subTotalCreditAmount = 0;
+                Decimal subTotalBalance = 0;
+                Decimal balance = 0;
+
+                foreach (var journal in journals)
+                {
+                    balance = journal.DebitAmount - journal.CreditAmount;
+
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.AccountCode, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Account, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Article, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                    subTotalDebitAmount = subTotalDebitAmount + journal.DebitAmount;
+                    subTotalCreditAmount = subTotalCreditAmount + journal.CreditAmount;
+                    subTotalBalance = subTotalBalance + balance;
+                }
+
+                document.Add(tableHeaderDetail);
+
+                // table Balance Sheet footer in Asset CAtegory
+                PdfPTable tableSubTotalFooter = new PdfPTable(6);
+                float[] widthCellstableSubTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableSubTotalFooter.SetWidths(widthCellstableSubTotalFooter);
+                tableSubTotalFooter.WidthPercentage = 100;
+
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("Sub Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                document.Add(tableSubTotalFooter);
+                document.Add(Chunk.NEWLINE);
+
+                TotalDebitAmount = TotalDebitAmount + subTotalDebitAmount;
+                TotalCreditAmount = TotalCreditAmount + subTotalCreditAmount;
+                TotalBalance = TotalBalance + subTotalBalance;
+            }
+
+            document.Add(line);
+            // table Balance Sheet footer in Asset CAtegory
+            PdfPTable tableTotalFooter = new PdfPTable(6);
+            float[] widthCellstableTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+            tableTotalFooter.SetWidths(widthCellstableTotalFooter);
+            tableTotalFooter.WidthPercentage = 100;
+
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+            document.Add(tableTotalFooter);
+            document.Add(Chunk.NEWLINE);
 
             // Document End
             document.Close();
@@ -9410,8 +9778,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementSalesBookPDF()
+        public ActionResult FinancialStatementSalesBookPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -9422,8 +9795,142 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 10);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Sales Book", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
             document.Add(line);
+
+            var journalsDocumentReferences = from d in db.TrnJournals
+                                             where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                             && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                             && d.MstBranch.CompanyId == CompanyId
+                                             && d.SIId != null
+                                             group d by new
+                                             {
+                                                 DocumentReference = d.DocumentReference
+                                             } into g
+                                             select new Models.TrnJournal
+                                             {
+                                                 DocumentReference = g.Key.DocumentReference
+                                             };
+
+            Decimal TotalDebitAmount = 0;
+            Decimal TotalCreditAmount = 0;
+            Decimal TotalBalance = 0;
+            foreach (var journalsDocumentReference in journalsDocumentReferences)
+            {
+                // table branch account
+                PdfPTable tableDocRefHeader = new PdfPTable(1);
+                float[] widthCellsTableDocRefHeader = new float[] { 100f };
+                tableDocRefHeader.SetWidths(widthCellsTableDocRefHeader);
+                tableDocRefHeader.WidthPercentage = 100;
+
+                tableDocRefHeader.AddCell(new PdfPCell(new Phrase(journalsDocumentReference.DocumentReference, columnFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
+                document.Add(tableDocRefHeader);
+
+                PdfPTable tableHeaderDetail = new PdfPTable(6);
+                PdfPCell Cell = new PdfPCell();
+                float[] widthscellsheader2 = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableHeaderDetail.SetWidths(widthscellsheader2);
+                tableHeaderDetail.WidthPercentage = 100;
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Article", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                var journals = from d in db.TrnJournals
+                               where d.DocumentReference == journalsDocumentReference.DocumentReference
+                               select new Models.TrnJournal
+                               {
+                                   AccountCode = d.MstAccount.AccountCode,
+                                   Account = d.MstAccount.Account,
+                                   Article = d.MstArticle.Article,
+                                   Particulars = d.Particulars,
+                                   DebitAmount = d.DebitAmount,
+                                   CreditAmount = d.CreditAmount
+                               };
+
+                Decimal subTotalDebitAmount = 0;
+                Decimal subTotalCreditAmount = 0;
+                Decimal subTotalBalance = 0;
+                Decimal balance = 0;
+
+                foreach (var journal in journals)
+                {
+                    balance = journal.DebitAmount - journal.CreditAmount;
+
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.AccountCode, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Account, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Article, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                    subTotalDebitAmount = subTotalDebitAmount + journal.DebitAmount;
+                    subTotalCreditAmount = subTotalCreditAmount + journal.CreditAmount;
+                    subTotalBalance = subTotalBalance + balance;
+                }
+
+                document.Add(tableHeaderDetail);
+
+                // table Balance Sheet footer in Asset CAtegory
+                PdfPTable tableSubTotalFooter = new PdfPTable(6);
+                float[] widthCellstableSubTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableSubTotalFooter.SetWidths(widthCellstableSubTotalFooter);
+                tableSubTotalFooter.WidthPercentage = 100;
+
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("Sub Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                document.Add(tableSubTotalFooter);
+                document.Add(Chunk.NEWLINE);
+
+                TotalDebitAmount = TotalDebitAmount + subTotalDebitAmount;
+                TotalCreditAmount = TotalCreditAmount + subTotalCreditAmount;
+                TotalBalance = TotalBalance + subTotalBalance;
+            }
+
+            document.Add(line);
+            // table Balance Sheet footer in Asset CAtegory
+            PdfPTable tableTotalFooter = new PdfPTable(6);
+            float[] widthCellstableTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+            tableTotalFooter.SetWidths(widthCellstableTotalFooter);
+            tableTotalFooter.WidthPercentage = 100;
+
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+            document.Add(tableTotalFooter);
+            document.Add(Chunk.NEWLINE);
 
             // Document End
             document.Close();
@@ -9436,8 +9943,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementCollectionBookPDF()
+        public ActionResult FinancialStatementCollectionBookPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -9448,8 +9960,142 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 10);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Collection Book", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
             document.Add(line);
+
+            var journalsDocumentReferences = from d in db.TrnJournals
+                                             where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                             && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                             && d.MstBranch.CompanyId == CompanyId
+                                             && d.ORId != null
+                                             group d by new
+                                             {
+                                                 DocumentReference = d.DocumentReference
+                                             } into g
+                                             select new Models.TrnJournal
+                                             {
+                                                 DocumentReference = g.Key.DocumentReference
+                                             };
+
+            Decimal TotalDebitAmount = 0;
+            Decimal TotalCreditAmount = 0;
+            Decimal TotalBalance = 0;
+            foreach (var journalsDocumentReference in journalsDocumentReferences)
+            {
+                // table branch account
+                PdfPTable tableDocRefHeader = new PdfPTable(1);
+                float[] widthCellsTableDocRefHeader = new float[] { 100f };
+                tableDocRefHeader.SetWidths(widthCellsTableDocRefHeader);
+                tableDocRefHeader.WidthPercentage = 100;
+
+                tableDocRefHeader.AddCell(new PdfPCell(new Phrase(journalsDocumentReference.DocumentReference, columnFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
+                document.Add(tableDocRefHeader);
+
+                PdfPTable tableHeaderDetail = new PdfPTable(6);
+                PdfPCell Cell = new PdfPCell();
+                float[] widthscellsheader2 = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableHeaderDetail.SetWidths(widthscellsheader2);
+                tableHeaderDetail.WidthPercentage = 100;
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Article", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                var journals = from d in db.TrnJournals
+                               where d.DocumentReference == journalsDocumentReference.DocumentReference
+                               select new Models.TrnJournal
+                               {
+                                   AccountCode = d.MstAccount.AccountCode,
+                                   Account = d.MstAccount.Account,
+                                   Article = d.MstArticle.Article,
+                                   Particulars = d.Particulars,
+                                   DebitAmount = d.DebitAmount,
+                                   CreditAmount = d.CreditAmount
+                               };
+
+                Decimal subTotalDebitAmount = 0;
+                Decimal subTotalCreditAmount = 0;
+                Decimal subTotalBalance = 0;
+                Decimal balance = 0;
+
+                foreach (var journal in journals)
+                {
+                    balance = journal.DebitAmount - journal.CreditAmount;
+
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.AccountCode, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Account, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Article, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                    subTotalDebitAmount = subTotalDebitAmount + journal.DebitAmount;
+                    subTotalCreditAmount = subTotalCreditAmount + journal.CreditAmount;
+                    subTotalBalance = subTotalBalance + balance;
+                }
+
+                document.Add(tableHeaderDetail);
+
+                // table Balance Sheet footer in Asset CAtegory
+                PdfPTable tableSubTotalFooter = new PdfPTable(6);
+                float[] widthCellstableSubTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableSubTotalFooter.SetWidths(widthCellstableSubTotalFooter);
+                tableSubTotalFooter.WidthPercentage = 100;
+
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("Sub Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                document.Add(tableSubTotalFooter);
+                document.Add(Chunk.NEWLINE);
+
+                TotalDebitAmount = TotalDebitAmount + subTotalDebitAmount;
+                TotalCreditAmount = TotalCreditAmount + subTotalCreditAmount;
+                TotalBalance = TotalBalance + subTotalBalance;
+            }
+
+            document.Add(line);
+            // table Balance Sheet footer in Asset CAtegory
+            PdfPTable tableTotalFooter = new PdfPTable(6);
+            float[] widthCellstableTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+            tableTotalFooter.SetWidths(widthCellstableTotalFooter);
+            tableTotalFooter.WidthPercentage = 100;
+
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+            document.Add(tableTotalFooter);
+            document.Add(Chunk.NEWLINE);
 
             // Document End
             document.Close();
@@ -9462,8 +10108,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementStockInBookPDF()
+        public ActionResult FinancialStatementStockInBookPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -9474,8 +10125,142 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 10);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Stock In Book", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
             document.Add(line);
+
+            var journalsDocumentReferences = from d in db.TrnJournals
+                                             where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                             && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                             && d.MstBranch.CompanyId == CompanyId
+                                             && d.INId != null
+                                             group d by new
+                                             {
+                                                 DocumentReference = d.DocumentReference
+                                             } into g
+                                             select new Models.TrnJournal
+                                             {
+                                                 DocumentReference = g.Key.DocumentReference
+                                             };
+
+            Decimal TotalDebitAmount = 0;
+            Decimal TotalCreditAmount = 0;
+            Decimal TotalBalance = 0;
+            foreach (var journalsDocumentReference in journalsDocumentReferences)
+            {
+                // table branch account
+                PdfPTable tableDocRefHeader = new PdfPTable(1);
+                float[] widthCellsTableDocRefHeader = new float[] { 100f };
+                tableDocRefHeader.SetWidths(widthCellsTableDocRefHeader);
+                tableDocRefHeader.WidthPercentage = 100;
+
+                tableDocRefHeader.AddCell(new PdfPCell(new Phrase(journalsDocumentReference.DocumentReference, columnFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
+                document.Add(tableDocRefHeader);
+
+                PdfPTable tableHeaderDetail = new PdfPTable(6);
+                PdfPCell Cell = new PdfPCell();
+                float[] widthscellsheader2 = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableHeaderDetail.SetWidths(widthscellsheader2);
+                tableHeaderDetail.WidthPercentage = 100;
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Article", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                var journals = from d in db.TrnJournals
+                               where d.DocumentReference == journalsDocumentReference.DocumentReference
+                               select new Models.TrnJournal
+                               {
+                                   AccountCode = d.MstAccount.AccountCode,
+                                   Account = d.MstAccount.Account,
+                                   Article = d.MstArticle.Article,
+                                   Particulars = d.Particulars,
+                                   DebitAmount = d.DebitAmount,
+                                   CreditAmount = d.CreditAmount
+                               };
+
+                Decimal subTotalDebitAmount = 0;
+                Decimal subTotalCreditAmount = 0;
+                Decimal subTotalBalance = 0;
+                Decimal balance = 0;
+
+                foreach (var journal in journals)
+                {
+                    balance = journal.DebitAmount - journal.CreditAmount;
+
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.AccountCode, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Account, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Article, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                    subTotalDebitAmount = subTotalDebitAmount + journal.DebitAmount;
+                    subTotalCreditAmount = subTotalCreditAmount + journal.CreditAmount;
+                    subTotalBalance = subTotalBalance + balance;
+                }
+
+                document.Add(tableHeaderDetail);
+
+                // table Balance Sheet footer in Asset CAtegory
+                PdfPTable tableSubTotalFooter = new PdfPTable(6);
+                float[] widthCellstableSubTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableSubTotalFooter.SetWidths(widthCellstableSubTotalFooter);
+                tableSubTotalFooter.WidthPercentage = 100;
+
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("Sub Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                document.Add(tableSubTotalFooter);
+                document.Add(Chunk.NEWLINE);
+
+                TotalDebitAmount = TotalDebitAmount + subTotalDebitAmount;
+                TotalCreditAmount = TotalCreditAmount + subTotalCreditAmount;
+                TotalBalance = TotalBalance + subTotalBalance;
+            }
+
+            document.Add(line);
+            // table Balance Sheet footer in Asset CAtegory
+            PdfPTable tableTotalFooter = new PdfPTable(6);
+            float[] widthCellstableTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+            tableTotalFooter.SetWidths(widthCellstableTotalFooter);
+            tableTotalFooter.WidthPercentage = 100;
+
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+            document.Add(tableTotalFooter);
+            document.Add(Chunk.NEWLINE);
 
             // Document End
             document.Close();
@@ -9488,8 +10273,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementStockOutBookPDF()
+        public ActionResult FinancialStatementStockOutBookPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -9500,8 +10290,142 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 10);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Stock Out Book", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
             document.Add(line);
+
+            var journalsDocumentReferences = from d in db.TrnJournals
+                                             where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                             && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                             && d.MstBranch.CompanyId == CompanyId
+                                             && d.OTId != null
+                                             group d by new
+                                             {
+                                                 DocumentReference = d.DocumentReference
+                                             } into g
+                                             select new Models.TrnJournal
+                                             {
+                                                 DocumentReference = g.Key.DocumentReference
+                                             };
+
+            Decimal TotalDebitAmount = 0;
+            Decimal TotalCreditAmount = 0;
+            Decimal TotalBalance = 0;
+            foreach (var journalsDocumentReference in journalsDocumentReferences)
+            {
+                // table branch account
+                PdfPTable tableDocRefHeader = new PdfPTable(1);
+                float[] widthCellsTableDocRefHeader = new float[] { 100f };
+                tableDocRefHeader.SetWidths(widthCellsTableDocRefHeader);
+                tableDocRefHeader.WidthPercentage = 100;
+
+                tableDocRefHeader.AddCell(new PdfPCell(new Phrase(journalsDocumentReference.DocumentReference, columnFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
+                document.Add(tableDocRefHeader);
+
+                PdfPTable tableHeaderDetail = new PdfPTable(6);
+                PdfPCell Cell = new PdfPCell();
+                float[] widthscellsheader2 = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableHeaderDetail.SetWidths(widthscellsheader2);
+                tableHeaderDetail.WidthPercentage = 100;
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Article", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                var journals = from d in db.TrnJournals
+                               where d.DocumentReference == journalsDocumentReference.DocumentReference
+                               select new Models.TrnJournal
+                               {
+                                   AccountCode = d.MstAccount.AccountCode,
+                                   Account = d.MstAccount.Account,
+                                   Article = d.MstArticle.Article,
+                                   Particulars = d.Particulars,
+                                   DebitAmount = d.DebitAmount,
+                                   CreditAmount = d.CreditAmount
+                               };
+
+                Decimal subTotalDebitAmount = 0;
+                Decimal subTotalCreditAmount = 0;
+                Decimal subTotalBalance = 0;
+                Decimal balance = 0;
+
+                foreach (var journal in journals)
+                {
+                    balance = journal.DebitAmount - journal.CreditAmount;
+
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.AccountCode, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Account, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Article, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                    subTotalDebitAmount = subTotalDebitAmount + journal.DebitAmount;
+                    subTotalCreditAmount = subTotalCreditAmount + journal.CreditAmount;
+                    subTotalBalance = subTotalBalance + balance;
+                }
+
+                document.Add(tableHeaderDetail);
+
+                // table Balance Sheet footer in Asset CAtegory
+                PdfPTable tableSubTotalFooter = new PdfPTable(6);
+                float[] widthCellstableSubTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableSubTotalFooter.SetWidths(widthCellstableSubTotalFooter);
+                tableSubTotalFooter.WidthPercentage = 100;
+
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("Sub Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                document.Add(tableSubTotalFooter);
+                document.Add(Chunk.NEWLINE);
+
+                TotalDebitAmount = TotalDebitAmount + subTotalDebitAmount;
+                TotalCreditAmount = TotalCreditAmount + subTotalCreditAmount;
+                TotalBalance = TotalBalance + subTotalBalance;
+            }
+
+            document.Add(line);
+            // table Balance Sheet footer in Asset CAtegory
+            PdfPTable tableTotalFooter = new PdfPTable(6);
+            float[] widthCellstableTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+            tableTotalFooter.SetWidths(widthCellstableTotalFooter);
+            tableTotalFooter.WidthPercentage = 100;
+
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+            document.Add(tableTotalFooter);
+            document.Add(Chunk.NEWLINE);
 
             // Document End
             document.Close();
@@ -9514,8 +10438,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementStockTransferBookPDF()
+        public ActionResult FinancialStatementStockTransferBookPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -9523,12 +10452,145 @@ namespace easyfis.Controllers
             document.SetMargins(50f, 50f, 50f, 50f);
             PdfWriter.GetInstance(document, workStream).CloseStream = false;
 
-
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 10);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Stock Transfer Book", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
             document.Add(line);
+
+            var journalsDocumentReferences = from d in db.TrnJournals
+                                             where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                             && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                             && d.MstBranch.CompanyId == CompanyId
+                                             && d.STId != null
+                                             group d by new
+                                             {
+                                                 DocumentReference = d.DocumentReference
+                                             } into g
+                                             select new Models.TrnJournal
+                                             {
+                                                 DocumentReference = g.Key.DocumentReference
+                                             };
+
+            Decimal TotalDebitAmount = 0;
+            Decimal TotalCreditAmount = 0;
+            Decimal TotalBalance = 0;
+            foreach (var journalsDocumentReference in journalsDocumentReferences)
+            {
+                // table branch account
+                PdfPTable tableDocRefHeader = new PdfPTable(1);
+                float[] widthCellsTableDocRefHeader = new float[] { 100f };
+                tableDocRefHeader.SetWidths(widthCellsTableDocRefHeader);
+                tableDocRefHeader.WidthPercentage = 100;
+
+                tableDocRefHeader.AddCell(new PdfPCell(new Phrase(journalsDocumentReference.DocumentReference, columnFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
+                document.Add(tableDocRefHeader);
+
+                PdfPTable tableHeaderDetail = new PdfPTable(6);
+                PdfPCell Cell = new PdfPCell();
+                float[] widthscellsheader2 = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableHeaderDetail.SetWidths(widthscellsheader2);
+                tableHeaderDetail.WidthPercentage = 100;
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Article", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                var journals = from d in db.TrnJournals
+                               where d.DocumentReference == journalsDocumentReference.DocumentReference
+                               select new Models.TrnJournal
+                               {
+                                   AccountCode = d.MstAccount.AccountCode,
+                                   Account = d.MstAccount.Account,
+                                   Article = d.MstArticle.Article,
+                                   Particulars = d.Particulars,
+                                   DebitAmount = d.DebitAmount,
+                                   CreditAmount = d.CreditAmount
+                               };
+
+                Decimal subTotalDebitAmount = 0;
+                Decimal subTotalCreditAmount = 0;
+                Decimal subTotalBalance = 0;
+                Decimal balance = 0;
+
+                foreach (var journal in journals)
+                {
+                    balance = journal.DebitAmount - journal.CreditAmount;
+
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.AccountCode, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Account, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Article, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                    subTotalDebitAmount = subTotalDebitAmount + journal.DebitAmount;
+                    subTotalCreditAmount = subTotalCreditAmount + journal.CreditAmount;
+                    subTotalBalance = subTotalBalance + balance;
+                }
+
+                document.Add(tableHeaderDetail);
+
+                // table Balance Sheet footer in Asset CAtegory
+                PdfPTable tableSubTotalFooter = new PdfPTable(6);
+                float[] widthCellstableSubTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableSubTotalFooter.SetWidths(widthCellstableSubTotalFooter);
+                tableSubTotalFooter.WidthPercentage = 100;
+
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("Sub Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                document.Add(tableSubTotalFooter);
+                document.Add(Chunk.NEWLINE);
+
+                TotalDebitAmount = TotalDebitAmount + subTotalDebitAmount;
+                TotalCreditAmount = TotalCreditAmount + subTotalCreditAmount;
+                TotalBalance = TotalBalance + subTotalBalance;
+            }
+
+            document.Add(line);
+            // table Balance Sheet footer in Asset CAtegory
+            PdfPTable tableTotalFooter = new PdfPTable(6);
+            float[] widthCellstableTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+            tableTotalFooter.SetWidths(widthCellstableTotalFooter);
+            tableTotalFooter.WidthPercentage = 100;
+
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+            document.Add(tableTotalFooter);
+            document.Add(Chunk.NEWLINE);
 
             // Document End
             document.Close();
@@ -9541,8 +10603,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
-        public ActionResult FinancialStatementJournalVoucherBookPDF()
+        public ActionResult FinancialStatementJournalVoucherBookPDF(String StartDate, String EndDate, Int32 CompanyId)
         {
+            // Company Detail
+            var companyName = (from d in db.MstCompanies where d.Id == CompanyId select d.Company).SingleOrDefault();
+            var address = (from d in db.MstCompanies where d.Id == CompanyId select d.Address).SingleOrDefault();
+            var contactNo = (from d in db.MstCompanies where d.Id == CompanyId select d.ContactNumber).SingleOrDefault();
+
             // Start of the PDF
             MemoryStream workStream = new MemoryStream();
             Rectangle rec = new Rectangle(PageSize.A3);
@@ -9553,8 +10620,142 @@ namespace easyfis.Controllers
             // Document Starts
             document.Open();
 
+            // Fonts Customization
+            Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+            Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+            Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+            Font cellFont = FontFactory.GetFont("Arial", 10);
+            Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
             Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+
+            // table main header
+            PdfPTable tableHeader = new PdfPTable(2);
+            float[] widthscellsheader = new float[] { 100f, 75f };
+            tableHeader.SetWidths(widthscellsheader);
+            tableHeader.WidthPercentage = 100;
+            tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Journal Voucher Book", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Date from " + StartDate + " to " + EndDate, headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+            tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+            document.Add(tableHeader);
+
             document.Add(line);
+
+            var journalsDocumentReferences = from d in db.TrnJournals
+                                             where d.JournalDate >= Convert.ToDateTime(StartDate)
+                                             && d.JournalDate <= Convert.ToDateTime(EndDate)
+                                             && d.MstBranch.CompanyId == CompanyId
+                                             && d.JVId != null
+                                             group d by new
+                                             {
+                                                 DocumentReference = d.DocumentReference
+                                             } into g
+                                             select new Models.TrnJournal
+                                             {
+                                                 DocumentReference = g.Key.DocumentReference
+                                             };
+
+            Decimal TotalDebitAmount = 0;
+            Decimal TotalCreditAmount = 0;
+            Decimal TotalBalance = 0;
+            foreach (var journalsDocumentReference in journalsDocumentReferences)
+            {
+                // table branch account
+                PdfPTable tableDocRefHeader = new PdfPTable(1);
+                float[] widthCellsTableDocRefHeader = new float[] { 100f };
+                tableDocRefHeader.SetWidths(widthCellsTableDocRefHeader);
+                tableDocRefHeader.WidthPercentage = 100;
+
+                tableDocRefHeader.AddCell(new PdfPCell(new Phrase(journalsDocumentReference.DocumentReference, columnFont)) { HorizontalAlignment = 0, PaddingTop = 6f, PaddingBottom = 9f, Border = 0 });
+                document.Add(tableDocRefHeader);
+
+                PdfPTable tableHeaderDetail = new PdfPTable(6);
+                PdfPCell Cell = new PdfPCell();
+                float[] widthscellsheader2 = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableHeaderDetail.SetWidths(widthscellsheader2);
+                tableHeaderDetail.WidthPercentage = 100;
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Code", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Account", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Article", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Debit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Credit", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                tableHeaderDetail.AddCell(new PdfPCell(new Phrase("Balance", columnFont)) { HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
+
+                var journals = from d in db.TrnJournals
+                               where d.DocumentReference == journalsDocumentReference.DocumentReference
+                               select new Models.TrnJournal
+                               {
+                                   AccountCode = d.MstAccount.AccountCode,
+                                   Account = d.MstAccount.Account,
+                                   Article = d.MstArticle.Article,
+                                   Particulars = d.Particulars,
+                                   DebitAmount = d.DebitAmount,
+                                   CreditAmount = d.CreditAmount
+                               };
+
+                Decimal subTotalDebitAmount = 0;
+                Decimal subTotalCreditAmount = 0;
+                Decimal subTotalBalance = 0;
+                Decimal balance = 0;
+
+                foreach (var journal in journals)
+                {
+                    balance = journal.DebitAmount - journal.CreditAmount;
+
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.AccountCode, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Account, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.Article, cellFont)) { HorizontalAlignment = 1, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+                    tableHeaderDetail.AddCell(new PdfPCell(new Phrase(balance.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingBottom = 5f, PaddingLeft = 5f, PaddingRight = 5f });
+
+                    subTotalDebitAmount = subTotalDebitAmount + journal.DebitAmount;
+                    subTotalCreditAmount = subTotalCreditAmount + journal.CreditAmount;
+                    subTotalBalance = subTotalBalance + balance;
+                }
+
+                document.Add(tableHeaderDetail);
+
+                // table Balance Sheet footer in Asset CAtegory
+                PdfPTable tableSubTotalFooter = new PdfPTable(6);
+                float[] widthCellstableSubTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+                tableSubTotalFooter.SetWidths(widthCellstableSubTotalFooter);
+                tableSubTotalFooter.WidthPercentage = 100;
+
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase("Sub Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+                tableSubTotalFooter.AddCell(new PdfPCell(new Phrase(subTotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                document.Add(tableSubTotalFooter);
+                document.Add(Chunk.NEWLINE);
+
+                TotalDebitAmount = TotalDebitAmount + subTotalDebitAmount;
+                TotalCreditAmount = TotalCreditAmount + subTotalCreditAmount;
+                TotalBalance = TotalBalance + subTotalBalance;
+            }
+
+            document.Add(line);
+            // table Balance Sheet footer in Asset CAtegory
+            PdfPTable tableTotalFooter = new PdfPTable(6);
+            float[] widthCellstableTotalFooter = new float[] { 80f, 130f, 150f, 100f, 100f, 100f };
+            tableTotalFooter.SetWidths(widthCellstableTotalFooter);
+            tableTotalFooter.WidthPercentage = 100;
+
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("", cellBoldFont)) { Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase("Total", cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalDebitAmount.ToString("#,##0.00"), cellBoldFont)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f, PaddingBottom = 5f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalCreditAmount.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 50f });
+            tableTotalFooter.AddCell(new PdfPCell(new Phrase(TotalBalance.ToString("#,##0.00"), cellBoldFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+            document.Add(tableTotalFooter);
+            document.Add(Chunk.NEWLINE);
 
             // Document End
             document.Close();
@@ -9564,6 +10765,172 @@ namespace easyfis.Controllers
             workStream.Position = 0;
 
             return new FileStreamResult(workStream, "application/pdf");
+        }
+
+        [Authorize]
+        public ActionResult FinancialStatementChartOfAccountsBookPDF()
+        {
+            HttpCookieCollection cookieCollection = Request.Cookies;
+            HttpCookie branchIdCookie = cookieCollection.Get("branchId");
+
+            if (branchIdCookie != null)
+            {
+                var branchId = Convert.ToInt32(Request.Cookies["branchId"].Value);
+                var branches = from d in db.MstBranches where d.Id == branchId select d;
+
+                if (branches.Any())
+                {
+                    // Company Detail
+                    var companyName = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Company).SingleOrDefault();
+                    var address = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.Address).SingleOrDefault();
+                    var contactNo = (from d in db.MstBranches where d.Id == branchId select d.MstCompany.ContactNumber).SingleOrDefault();
+                    var branch = (from d in db.MstBranches where d.Id == branchId select d.Branch).SingleOrDefault();
+
+                    // Start of the PDF
+                    MemoryStream workStream = new MemoryStream();
+                    Rectangle rec = new Rectangle(PageSize.A3);
+                    Document document = new Document(rec, 72, 72, 72, 72);
+                    document.SetMargins(50f, 50f, 50f, 50f);
+                    PdfWriter.GetInstance(document, workStream).CloseStream = false;
+
+                    // Document Starts
+                    document.Open();
+
+                    // Fonts Customization
+                    Font headerFont = FontFactory.GetFont("Arial", 17, Font.BOLD);
+                    Font headerDetailFont = FontFactory.GetFont("Arial", 11);
+                    Font columnFont = FontFactory.GetFont("Arial", 11, Font.BOLD);
+                    Font cellFont = FontFactory.GetFont("Arial", 10);
+                    Font cellFont2 = FontFactory.GetFont("Arial", 11);
+                    Font cellBoldFont = FontFactory.GetFont("Arial", 10, Font.BOLD);
+
+                    PdfPTable tableHeader = new PdfPTable(2);
+                    float[] widthscellsheader = new float[] { 100f, 75f };
+                    tableHeader.SetWidths(widthscellsheader);
+                    tableHeader.WidthPercentage = 100;
+                    tableHeader.AddCell(new PdfPCell(new Phrase(companyName, headerFont)) { Border = 0 });
+                    tableHeader.AddCell(new PdfPCell(new Phrase("Chart of Accounts", headerFont)) { Border = 0, HorizontalAlignment = 2 });
+                    tableHeader.AddCell(new PdfPCell(new Phrase(address, headerDetailFont)) { Border = 0, PaddingTop = 5f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase("", headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase(contactNo, headerDetailFont)) { Border = 0, PaddingTop = 5f, PaddingBottom = 18f });
+                    tableHeader.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), headerDetailFont)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 5f });
+
+                    document.Add(tableHeader);
+
+                    Paragraph line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 1)));
+                    document.Add(line);
+
+                    var accountCategories = from d in db.MstAccountCategories
+                                            group d by new
+                                            {
+                                                AccountCategoryCode = d.AccountCategoryCode,
+                                                AccountCategory = d.AccountCategory
+                                            } into g
+                                            select new Models.MstAccountCategory
+                                            {
+                                                AccountCategoryCode = g.Key.AccountCategoryCode,
+                                                AccountCategory = g.Key.AccountCategory
+                                            };
+
+                    foreach (var accountCategory in accountCategories)
+                    {
+
+                        PdfPTable tableAccountCategory = new PdfPTable(1);
+                        float[] widthscellsTableAccountCategory = new float[] { 100f };
+                        tableAccountCategory.SetWidths(widthscellsTableAccountCategory);
+                        tableAccountCategory.WidthPercentage = 100;
+
+                        tableAccountCategory.AddCell(new PdfPCell(new Phrase(accountCategory.AccountCategory, cellFont2)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, Border = 0, BackgroundColor = BaseColor.LIGHT_GRAY });
+                        document.Add(tableAccountCategory);
+
+                        var accountSubCategories = from d in db.MstAccountTypes
+                                                   where d.MstAccountCategory.AccountCategory == accountCategory.AccountCategory
+                                                   group d by new
+                                                   {
+                                                       SubCategoryDescription = d.SubCategoryDescription
+                                                   } into g
+                                                   select new Models.MstAccountType
+                                                   {
+                                                       SubCategoryDescription = g.Key.SubCategoryDescription
+                                                   };
+
+                        foreach (var accountSubCategory in accountSubCategories)
+                        {
+                            PdfPTable tableSubAccountCategory = new PdfPTable(1);
+                            float[] widthscellsTableSubAccountCategory = new float[] { 100f };
+                            tableSubAccountCategory.SetWidths(widthscellsTableSubAccountCategory);
+                            tableSubAccountCategory.WidthPercentage = 100;
+
+                            tableSubAccountCategory.AddCell(new PdfPCell(new Phrase(accountSubCategory.SubCategoryDescription, cellFont2)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f, Border = 0 });
+                            document.Add(tableSubAccountCategory);
+
+                            var accountTypes = from d in db.MstAccountTypes
+                                               where d.SubCategoryDescription == accountSubCategory.SubCategoryDescription
+                                               group d by new
+                                               {
+                                                   AccountType = d.AccountType
+                                               } into g
+                                               select new Models.MstAccountType
+                                               {
+                                                   AccountType = g.Key.AccountType
+                                               };
+
+                            foreach (var accountType in accountTypes)
+                            {
+                                PdfPTable tableAccountType = new PdfPTable(1);
+                                float[] widthscellsTableAccountType = new float[] { 100f };
+                                tableAccountType.SetWidths(widthscellsTableAccountType);
+                                tableAccountType.WidthPercentage = 100;
+
+                                tableAccountType.AddCell(new PdfPCell(new Phrase(accountType.AccountType, cellFont2)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 40f, Border = 0 });
+                                document.Add(tableAccountType);
+
+                                var accounts = from d in db.MstAccounts
+                                               where d.MstAccountType.AccountType == accountType.AccountType
+                                               select new Models.MstAccount
+                                               {
+                                                   AccountCode = d.AccountCode,
+                                                   Account = d.Account
+                                               };
+
+                                foreach (var account in accounts)
+                                {
+                                    PdfPTable tableAccount = new PdfPTable(2);
+                                    float[] widthscellsTableAccount = new float[] { 20f, 100f };
+                                    tableAccount.SetWidths(widthscellsTableAccount);
+                                    tableAccount.WidthPercentage = 100;
+
+                                    tableAccount.AddCell(new PdfPCell(new Phrase(account.AccountCode, cellFont2)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 60f, Border = 0 });
+                                    tableAccount.AddCell(new PdfPCell(new Phrase(account.Account, cellFont2)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 10f, Border = 0 });
+                                    document.Add(tableAccount);
+
+                                }
+                            }
+
+                        }
+                    }
+
+                    // Document End
+                    document.Close();
+
+                    // Document End
+                    document.Close();
+
+                    byte[] byteInfo = workStream.ToArray();
+                    workStream.Write(byteInfo, 0, byteInfo.Length);
+                    workStream.Position = 0;
+
+                    return new FileStreamResult(workStream, "application/pdf");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Manage");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index", "Manage");
+            }
         }
 
         [Authorize]
@@ -9720,7 +11087,7 @@ namespace easyfis.Controllers
                     tableSCLines.AddCell(new PdfPCell(new Phrase("Unit", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                     tableSCLines.AddCell(new PdfPCell(new Phrase("Code", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                     tableSCLines.AddCell(new PdfPCell(new Phrase("Item", cellBoldFont)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                   
+
                     foreach (var stockCountItem in stockCountItems)
                     {
                         tableSCLines.AddCell(new PdfPCell(new Phrase(stockCountItem.Quantity.ToString("#,##0.00"), cellFont)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
