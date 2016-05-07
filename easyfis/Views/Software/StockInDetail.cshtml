@@ -14,358 +14,350 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
-    <div id="o-wrapper" class="o-wrapper">
-        <!-- Header -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
         @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
 
-        <!-- Section -->
-        <section>
-            <div class="sub-nav">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4><i class="fa fa-archive"></i>  Stock In Detail</h4>
-                        </div>
-                        <div class="col-md-6" align="right">
-                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="div_Current_Page">
-                    <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("StockIn", "Software")" class="currentPageLinkCustom">Sock In</a> > Stock In Detail
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 id="stockInDetailLabel"></h4>
-                    </div>
-                    <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="cmdStockInJournal" onclick="stockInJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockInSaveLock" onclick="btnStockInSaveLock_OnClick()"><i class=" fa fa-save"></i> Save (Lock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockInSave" onclick="btnStockInSave_OnClick()"><i class=" fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockInEdit" onclick="btnStockInEdit_OnClick()"><i class=" fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockInPrint" onclick="btnStockInPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("StockIn", "Software")'" class="btn btn-danger btn-sm" id="cmdStockInClose"><i class=" fa fa-times"></i> Close</button>
-                    </div>
-                </div>
-                @*<hr />*@
-                <div class="well">
-                    <form class="form-horizontal" role="form">
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Stock In Detail
+                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="/Software/StockIn"><i class="fa fa-dashboard"></i> Stock In</a></li>
+                    <li> Stock In Detail </li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Branch</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="StockIn_Branch"></div>
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6" align="right">
+                                <button class="btn btn-primary btn-sm" id="cmdStockInJournal" onclick="stockInJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockInSaveLock" onclick="btnStockInSaveLock_OnClick()"><i class=" fa fa-save"></i> Save (Lock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockInSave" onclick="btnStockInSave_OnClick()"><i class=" fa fa-save"></i> Save</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockInEdit" onclick="btnStockInEdit_OnClick()"><i class=" fa fa-edit"></i> Edit (Unlock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockInPrint" onclick="btnStockInPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                <button onclick="window.location.href = '@Url.Action("StockIn", "Software")'" class="btn btn-danger btn-sm" id="cmdStockInClose"><i class=" fa fa-times"></i> Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="well">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Branch</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="StockIn_Branch"></div>
 
-                                        <input type="hidden" id="StockIn_Branch_data" class="requiredStockIn" />
-                                        <input type="hidden" id="StockIn_Branch_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">IN Number</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_INnumber_Display" placeholder="IN Number"/>
-                                        <input type="hidden" id="StockIn_INnumber" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">IN Date</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="StockIn_InDate"></div>
-                                        <input type="hidden" id="StockIn_InDate_data" class="requiredStockIn" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Account</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="StockIn_Account"></div>
+                                                <input type="hidden" id="StockIn_Branch_data" class="requiredStockIn" />
+                                                <input type="hidden" id="StockIn_Branch_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">IN Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_INnumber_Display" placeholder="IN Number" />
+                                                <input type="hidden" id="StockIn_INnumber" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">IN Date</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="StockIn_InDate"></div>
+                                                <input type="hidden" id="StockIn_InDate_data" class="requiredStockIn" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Account</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="StockIn_Account"></div>
 
-                                        <input type="hidden" id="StockIn_Account_data" class="requiredStockIn" />
-                                        <input type="hidden" id="StockIn_Account_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Article</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="StockIn_Article"></div>
+                                                <input type="hidden" id="StockIn_Account_data" class="requiredStockIn" />
+                                                <input type="hidden" id="StockIn_Account_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Article</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="StockIn_Article"></div>
 
-                                        <input type="hidden" id="StockIn_Article_data" class="requiredStockIn" />
-                                        <input type="hidden" id="StockIn_Article_selectedValue" />
+                                                <input type="hidden" id="StockIn_Article_data" class="requiredStockIn" />
+                                                <input type="hidden" id="StockIn_Article_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Particulars</label>
+                                            <div class="col-sm-8">
+                                                <textarea class="form-control textarea-custom requiredStockIn" id="StockIn_Particulars" placeholder="Particulars"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Manual IN Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_ManualINNumber" placeholder="Manual IN Number">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Produce</label>
+                                            <div class="col-sm-8">
+                                                <input type="checkbox" id="StockIn_Produce">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Prepared by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="StockIn_PreparedBy"></div>
+
+                                                <input type="hidden" id="StockIn_PreparedBy_data" class="requiredStockIn" />
+                                                <input type="hidden" id="StockIn_PreparedBy_selectedValue" />
+                                                <input type="hidden" id="userId_data" value="@userId" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Checked by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="StockIn_CheckedBy"></div>
+
+                                                <input type="hidden" id="StockIn_CheckedBy_data" class="requiredStockIn" />
+                                                <input type="hidden" id="StockIn_CheckedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Approved by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="StockIn_ApprovedBy"></div>
+
+                                                <input type="hidden" id="StockIn_ApprovedBy_data" class="requiredStockIn" />
+                                                <input type="hidden" id="StockIn_ApprovedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Lock</label>
+                                            <div class="col-sm-8">
+                                                <input type="checkbox" id="StockIn_Lock">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8">
+                                                <input type="hidden" id="StockIn_IsLocked">
+                                                <input type="hidden" id="StockIn_IsLocked_defaultTrue">
+                                                <input type="hidden" id="StockIn_IsLocked_defaultFalse">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Particulars</label>
-                                    <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom requiredStockIn" id="StockIn_Particulars" placeholder="Particulars"></textarea>
+                            </form>
+                        </div>
+                        <br />
+                        <!-- Stock In line -->
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">inventory entries</a></li>
+                        </ul>
+                        <br />
+                        <div class="tab-content">
+                            <div id="Items" class="tab-pane fade in active">
+                                <!-- Item  List -->
+                                <div class="row">
+                                    <div class="col-lg-12" align="right">
+                                        <button class="btn btn-primary btn-sm" id="btnAddStockInItem" onclick="cmdAddStockInItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="ItemGrid" class="grid"></div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div id="InventoryEntries" class="tab-pane fade in">
+                                <!-- Inventory Entries List -->
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="InventoryEntryGrid" class="grid"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        @Html.Partial("_SoftwareFooter")
+    </div>
+
+    <!-- ==================== -->
+    <!-- Stock In Item Detail -->
+    <!-- ==================== -->
+    <div class="modal fade" id="stockInItemsEdit" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="stockInItemsModalLabel">Stock-In Line Item Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="stockInItemsDetailForm">
+                        <input type="hidden" id="stockInItem_Id" />
+                        <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Manual IN Number</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_ManualINNumber" placeholder="Manual IN Number">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Produce</label>
-                                    <div class="col-sm-8">
-                                        <input type="checkbox" id="StockIn_Produce">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Prepared by</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="StockIn_PreparedBy"></div>
+                                <dl class="dl-horizontal">
+                                    <dt>Item Code</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="stockInItem_ItemCode"></div>
 
-                                        <input type="hidden" id="StockIn_PreparedBy_data" class="requiredStockIn" />
-                                        <input type="hidden" id="StockIn_PreparedBy_selectedValue" />
-                                        <input type="hidden" id="userId_data" value="@userId" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Checked by</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="StockIn_CheckedBy"></div>
+                                        <input type="hidden" id="stockInItem_ItemId_data" class="requiredStockInItem">
+                                        <input type="hidden" id="stockInItem_ItemCode_selectedValue" />
+                                    </dd>
+                                    <dt>Item Description</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="stockInItem_ItemDescription"></div>
 
-                                        <input type="hidden" id="StockIn_CheckedBy_data" class="requiredStockIn" />
-                                        <input type="hidden" id="StockIn_CheckedBy_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Approved by</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="StockIn_ApprovedBy"></div>
+                                        <input type="hidden" id="stockInItem_ItemDescription_selectedValue" />
+                                    </dd>
+                                    <dt>Particulars</dt>
+                                    <dd><textarea class="form-control textarea-custom requiredStockInItem" id="stockInItem_Particulars"></textarea></dd>
+                                    <dt>Quantity</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Quantity" /></dd>
+                                    <dt>Unit</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="stockInItem_Unit"></div>
 
-                                        <input type="hidden" id="StockIn_ApprovedBy_data" class="requiredStockIn" />
-                                        <input type="hidden" id="StockIn_ApprovedBy_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Lock</label>
-                                    <div class="col-sm-8">
-                                        <input type="checkbox" id="StockIn_Lock">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-4"></div>
-                                    <div class="col-sm-8">
-                                        <input type="hidden" id="StockIn_IsLocked">
-                                        <input type="hidden" id="StockIn_IsLocked_defaultTrue">
-                                        <input type="hidden" id="StockIn_IsLocked_defaultFalse">
-                                    </div>
-                                </div>
+                                        <input type="hidden" id="stockInItem_Unit_data" class="requiredStockInItem">
+                                        <input type="hidden" id="stockInItem_Unit_selectedValue" />
+                                    </dd>
+                                    <dt>Cost</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Cost" /></dd>
+                                    <dt>Amount</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Amount" /></dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-6">
+                                <dl class="dl-horizontal">
+                                    <dt></dt>
+                                    <dd>
+                                        <center><label>Basic Unit Conversion</label></center>
+                                        <br />
+                                    </dd>
+                                    <dt>Unit</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="stockInItem_BUCUnit"></div>
+
+                                        <input type="hidden" id="stockInItem_BUCUnit_data" class="requiredStockInItem">
+                                        <input type="hidden" id="stockInItem_BUCUnit_selectedValue" />
+                                    </dd>
+                                    <dt>Quantity</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_BUCQuantity" /></dd>
+                                    <dt>Cost</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_BUCCost" /></dd>
+                                </dl>
                             </div>
                         </div>
                     </form>
                 </div>
-                <!-- Stock In line -->
-                <ul class="nav nav-tabs" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">inventory entries</a></li>
-                </ul>
-                <br />
-                <div class="tab-content">
-                    <div id="Items" class="tab-pane fade in active">
-                        <!-- Item  List -->
-                        <div class="row">
-                            <div class="col-lg-12" align="right">
-                                <button class="btn btn-primary btn-sm" id="btnAddStockInItem" onclick="cmdAddStockInItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="ItemGrid" class="grid"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="InventoryEntries" class="tab-pane fade in">
-                        <!-- Inventory Entries List -->
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="InventoryEntryGrid" class="grid"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== -->
-        <!-- Stock In Item Detail -->
-        <!-- ==================== -->
-        <div class="modal fade" id="stockInItemsEdit" role="dialog">
-            <div class="modal-dialog modal-lg">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="stockInItemsModalLabel">Stock-In Line Item Detail</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="stockInItemsDetailForm">
-                            <input type="hidden" id="stockInItem_Id" />
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <dl class="dl-horizontal">
-                                        <dt>Item Code</dt>
-                                        <dd>
-                                            <div class="comboBox-wide" id="stockInItem_ItemCode"></div>
-
-                                            <input type="hidden" id="stockInItem_ItemId_data" class="requiredStockInItem">
-                                            <input type="hidden" id="stockInItem_ItemCode_selectedValue" />
-                                        </dd>
-                                        <dt>Item Description</dt>
-                                        <dd>
-                                            <div class="comboBox-wide" id="stockInItem_ItemDescription"></div>
-
-                                            <input type="hidden" id="stockInItem_ItemDescription_selectedValue" />
-                                        </dd>
-                                        <dt>Particulars</dt>
-                                        <dd><textarea class="form-control textarea-custom requiredStockInItem" id="stockInItem_Particulars"></textarea></dd>
-                                        <dt>Quantity</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Quantity" /></dd>
-                                        <dt>Unit</dt>
-                                        <dd>
-                                            <div class="comboBox-wide" id="stockInItem_Unit"></div>
-
-                                            <input type="hidden" id="stockInItem_Unit_data" class="requiredStockInItem">
-                                            <input type="hidden" id="stockInItem_Unit_selectedValue" />
-                                        </dd>
-                                        <dt>Cost</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Cost" /></dd>
-                                        <dt>Amount</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Amount" /></dd>
-                                    </dl>
-                                </div>
-                                <div class="col-md-6">
-                                    <dl class="dl-horizontal">
-                                        <dt></dt>
-                                        <dd>
-                                            <center><label>Basic Unit Conversion</label></center>
-                                            <br />
-                                        </dd>
-                                        <dt>Unit</dt>
-                                        <dd>
-                                            <div class="comboBox-wide" id="stockInItem_BUCUnit"></div>
-
-                                            <input type="hidden" id="stockInItem_BUCUnit_data" class="requiredStockInItem">
-                                            <input type="hidden" id="stockInItem_BUCUnit_selectedValue" />
-                                        </dd>
-                                        <dt>Quantity</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_BUCQuantity" /></dd>
-                                        <dt>Cost</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_BUCCost" /></dd>
-                                    </dl>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdSaveStockInItemButton" onclick="cmdStockInItemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button id="cmdStockInItemDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdSaveStockInItemButton" onclick="cmdStockInItemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdStockInItemDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
-
-        <!-- Journal Detail -->
-        <div class="modal fade" id="journalDetail" role="dialog">
-            <div class="modal-dialog modal-lg">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <h4>
-                                <span id="loadingJournalGridList"></span>
-                            </h4>
-                        </center>
-                        <div id="journal_Content">
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="journalGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-6"></div>
-                                <div class="col-md-6" align="right">
-                                    <table>
-                                        <tr>
-                                            <td align="right"> <b>Total Debit:</b> </td>
-                                            <td style="padding-left: 35px"></td>
-                                            <td> <span id="totalDebitInJournal"></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right"> <b>Total Credit:</b> </td>
-                                            <td style="padding-left: 35px"></td>
-                                            <td> <span id="totalCreditInJournal"></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 10px"> </td>
-                                            <td style="padding: 10px"> </td>
-                                            <td style="padding: 10px"> </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right"> <b>Variance: </b> </td>
-                                            <td style="padding-left: 35px"></td>
-                                            <td> <span id="variance"></span></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="cmdJournalDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ======================================== -->
-        <!-- Stock-In Items Delete Modal Confirmation -->
-        <!-- ======================================== -->
-        <div class="modal fade" id="deletStockInItemsConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Stock-In Item <i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteStockInItems" onclick="cmdStockInItemsConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteStockInItemsCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        @Html.Partial("_SoftwareFooter")
     </div>
 
-    <!-- SideBar Menu -->
-    @Html.Partial("_SoftwareSideBarMenu")
+    <!-- Journal Detail -->
+    <div class="modal fade" id="journalDetail" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <h4>
+                            <span id="loadingJournalGridList"></span>
+                        </h4>
+                    </center>
+                    <div id="journal_Content">
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="journalGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6" align="right">
+                                <table>
+                                    <tr>
+                                        <td align="right"> <b>Total Debit:</b> </td>
+                                        <td style="padding-left: 35px"></td>
+                                        <td> <span id="totalDebitInJournal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"> <b>Total Credit:</b> </td>
+                                        <td style="padding-left: 35px"></td>
+                                        <td> <span id="totalCreditInJournal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px"> </td>
+                                        <td style="padding: 10px"> </td>
+                                        <td style="padding: 10px"> </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"> <b>Variance: </b> </td>
+                                        <td style="padding-left: 35px"></td>
+                                        <td> <span id="variance"></span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
-    <!-- Scripts JavaScripts -->
+    <!-- ======================================== -->
+    <!-- Stock-In Items Delete Modal Confirmation -->
+    <!-- ======================================== -->
+    <div class="modal fade" id="deletStockInItemsConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Stock-In Item <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteStockInItems" onclick="cmdStockInItemsConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteStockInItemsCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================
@@ -1422,7 +1414,7 @@
                 }
             });
         }
-        
+
         // ========
         // Print IN
         // ========

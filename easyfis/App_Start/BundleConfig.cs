@@ -55,10 +55,12 @@ namespace easyfis
                     "~/wijmo/controls/wijmo.input.min.js",
                     "~/wijmo/controls/wijmo.grid.min.js",
                     "~/wijmo/controls/wijmo.chart.min.js",
-                    "~/Scripts/menu.js",
-                    "~/Scripts/menu.min.js",
+                    //"~/Scripts/menu.js",
+                    //"~/Scripts/menu.min.js",
                     "~/Scripts/nprogress.js",
-                    "~/Scripts/software.js"));
+                    "~/Scripts/software.js",
+                    "~/Scripts/jquery.slimscroll.min.js",
+                    "~/Scripts/app.min.js"));
 
 
             // ========

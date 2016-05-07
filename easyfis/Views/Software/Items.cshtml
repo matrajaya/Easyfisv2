@@ -11,120 +11,115 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
-    <div id="o-wrapper" class="o-wrapper">
-        <!-- Header -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
         @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
 
-        <!-- Section -->
-        <section>
-            <div class="sub-nav">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4><i class="fa fa-cart-arrow-down"></i>  Items</h4>
-                        </div>
-                        <div class="col-md-6" align="right">
-                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
-                        </div>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Item
+                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li> Item </li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
+
                     </div>
-                </div>
-                <div class="div_Current_Page">
-                    <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Items
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <!-- Items List -->
-                <div id="itemList">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                    <div class="box-body">
+                        <!-- Items List -->
+                        <div id="itemList">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                    </div>
+                                </div>
+                                <div class="col-lg-8" align="right">
+                                    <button class="btn btn-primary btn-sm" onclick="btnAddItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-danger btn-sm" onclick="btnCloseItem_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row" align="left">
+                                <div class="col-lg-12">
+                                    <div id="ItemGrid" class="grid" align="left"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                        <span class="glyphicon glyphicon-fast-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                        <span class="glyphicon glyphicon-step-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                        <span class="glyphicon glyphicon-step-forward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                        <span class="glyphicon glyphicon-fast-forward"></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-8" align="right">
-                            <button class="btn btn-primary btn-sm" onclick="btnAddItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            <button class="btn btn-danger btn-sm" onclick="btnCloseItem_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row" align="left">
-                        <div class="col-lg-12">
-                            <div id="ItemGrid" class="grid" align="left"></div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
-                                <span class="glyphicon glyphicon-fast-backward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
-                                <span class="glyphicon glyphicon-step-backward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
-                                <span class="glyphicon glyphicon-step-forward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
-                                <span class="glyphicon glyphicon-fast-forward"></span>
-                            </button>
-                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Item Delete -->
-        <div class="modal fade" id="deleteItemConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Item <i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteItem" onclick="cmdItemConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
+            </section>
         </div>
 
-        <!-- Delete Lock -->
-        <div class="modal fade" id="deleteRecordLock" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Sorry, the record is lock! It can't be deleted!
-                    </div>
-                    <div class="modal-footer">
-                        <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
 
-    <!-- SideBar Menu -->
-    @Html.Partial("_SoftwareSideBarMenu")
+    <!-- Item Delete -->
+    <div class="modal fade" id="deleteItemConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Item <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteItem" onclick="cmdItemConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    <!-- Delete Lock -->
+    <div class="modal fade" id="deleteRecordLock" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Sorry, the record is lock! It can't be deleted!
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================
@@ -155,49 +150,49 @@
                         for (i = 0; i < itemResults.length; i++) {
 
                             var btnDeleteId;
-                            if(itemResults[i]["IsLocked"] == true) {
+                            if (itemResults[i]["IsLocked"] == true) {
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdItemDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             } else {
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdItemDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
                             }
 
-                            items.push ({
+                            items.push({
                                 EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='cmdItemEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: itemResults[i]["Id"],
-                                ArticleCode : itemResults[i]["ArticleCode"],
-                                ManualArticleCode : itemResults[i]["ManualArticleCode"],
-                                Article : itemResults[i]["Article"],
-                                Category : itemResults[i]["Category"],
-                                ArticleTypeId : itemResults[i]["ArticleTypeId"],
-                                ArticleType : itemResults[i]["ArticleType"],
-                                ArticleGroupId : itemResults[i]["ArticleGroupId"],
-                                ArticleGroup : itemResults[i]["ArticleGroup"],
-                                AccountId : itemResults[i]["AccountId"],
-                                Account : itemResults[i]["Account"],
-                                SalesAccountId : itemResults[i]["SalesAccountId"],
-                                CostAccountId : itemResults[i]["CostAccountId"],
-                                AssetAccountId : itemResults[i]["AssetAccountId"],
-                                ExpenseAccountId : itemResults[i]["ExpenseAccountId"],
-                                UnitId : itemResults[i]["UnitId"],
-                                Unit : itemResults[i]["Unit"],
-                                OutputTaxId : itemResults[i]["OutputTaxId"],
-                                InputTaxId : itemResults[i]["InputTaxId"],
-                                WTaxTypeId : itemResults[i]["WTaxTypeId"],
-                                Price : itemResults[i]["Price"],
-                                Cost : itemResults[i]["Cost"],
-                                IsInventory : itemResults[i]["IsInventory"],
-                                Particulars : itemResults[i]["Particulars"],
-                                Address : itemResults[i]["Address"],
-                                TermId : itemResults[i]["TermId"],
-                                ContactNumber : itemResults[i]["ContactNumber"],
-                                ContactPerson : itemResults[i]["ContactPerson"],
-                                TaxNumber : itemResults[i]["TaxNumber"],
-                                CreditLimit : itemResults[i]["CreditLimit"],
-                                DateAcquired : itemResults[i]["DateAcquired"],
-                                UsefulLife : itemResults[i]["UsefulLife"],
-                                SalvageValue : itemResults[i]["SalvageValue"],
-                                ManualArticleOldCode : itemResults[i]["ManualArticleOldCode"],
+                                ArticleCode: itemResults[i]["ArticleCode"],
+                                ManualArticleCode: itemResults[i]["ManualArticleCode"],
+                                Article: itemResults[i]["Article"],
+                                Category: itemResults[i]["Category"],
+                                ArticleTypeId: itemResults[i]["ArticleTypeId"],
+                                ArticleType: itemResults[i]["ArticleType"],
+                                ArticleGroupId: itemResults[i]["ArticleGroupId"],
+                                ArticleGroup: itemResults[i]["ArticleGroup"],
+                                AccountId: itemResults[i]["AccountId"],
+                                Account: itemResults[i]["Account"],
+                                SalesAccountId: itemResults[i]["SalesAccountId"],
+                                CostAccountId: itemResults[i]["CostAccountId"],
+                                AssetAccountId: itemResults[i]["AssetAccountId"],
+                                ExpenseAccountId: itemResults[i]["ExpenseAccountId"],
+                                UnitId: itemResults[i]["UnitId"],
+                                Unit: itemResults[i]["Unit"],
+                                OutputTaxId: itemResults[i]["OutputTaxId"],
+                                InputTaxId: itemResults[i]["InputTaxId"],
+                                WTaxTypeId: itemResults[i]["WTaxTypeId"],
+                                Price: itemResults[i]["Price"],
+                                Cost: itemResults[i]["Cost"],
+                                IsInventory: itemResults[i]["IsInventory"],
+                                Particulars: itemResults[i]["Particulars"],
+                                Address: itemResults[i]["Address"],
+                                TermId: itemResults[i]["TermId"],
+                                ContactNumber: itemResults[i]["ContactNumber"],
+                                ContactPerson: itemResults[i]["ContactPerson"],
+                                TaxNumber: itemResults[i]["TaxNumber"],
+                                CreditLimit: itemResults[i]["CreditLimit"],
+                                DateAcquired: itemResults[i]["DateAcquired"],
+                                UsefulLife: itemResults[i]["UsefulLife"],
+                                SalvageValue: itemResults[i]["SalvageValue"],
+                                ManualArticleOldCode: itemResults[i]["ManualArticleOldCode"],
                                 IsLocked: itemResults[i]["IsLocked"],
                                 CreatedById: itemResults[i]["CreatedById"],
                                 CreatedBy: itemResults[i]["CreatedBy"],
@@ -286,7 +281,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $('#cmdConfirmDeleteItem').prop('disabled', false);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', false);

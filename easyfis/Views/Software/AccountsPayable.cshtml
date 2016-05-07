@@ -11,413 +11,408 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
-    <div id="o-wrapper" class="o-wrapper">
-        <!-- Header -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
         @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
 
-        <!-- Section -->
-        <section>
-            <div class="sub-nav">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4><span class="accountReportsDetail">AP</span> Accounts Payable</h4>
-                        </div>
-                        <div class="col-md-6" align="right">
-                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
-                        </div>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Accounts Payable
+                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li> Accounts Payable </li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
+
                     </div>
-                </div>
-                <div class="div_Current_Page">
-                    <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Accounts Payable
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
-                        <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
-                            <li class="active"><a data-toggle="pill" href="#AP">Accounts Payable</a></li>
-                            <li class="reportDivider"><a data-toggle="pill" href="#APV">Accounts Payable Voucher</a></li>
-                            <li><a data-toggle="pill" href="#IVR">Input VAT Report</a></li>
-                            <li class="reportDivider"><a data-toggle="pill" href="#WTR">Withholding Tax Report</a></li>
-                            <li><a data-toggle="pill" href="#PSR">Purchase Summary Report</a></li>
-                            <li><a data-toggle="pill" href="#PDR">Purchase Detail  Report</a></li>
-                            <li><a data-toggle="pill" href="#RRSR">Receiving Receipt Summary Report</a></li>
-                            <li><a data-toggle="pill" href="#RRDR">Receiving Receipt Detail Report</a></li>
-                            <li><a data-toggle="pill" href="#DSR">Disbursement Summary Report</a></li>
-                            <li><a data-toggle="pill" href="#DDR">Disbursement Detail Report</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="tab-content">
-                            <div id="AP" class="tab-pane fade in active">
-                                <div align="right">
-                                    <button onclick="AccountsPayablePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Date as of</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="accountsPaybleReport_DateAsOf"></div>
-                                                        <input type="hidden" id="accountsPaybleReport_DateAsOf_data" />
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
+                                    <li class="active"><a data-toggle="pill" href="#AP">Accounts Payable</a></li>
+                                    <li class="reportDivider"><a data-toggle="pill" href="#APV">Accounts Payable Voucher</a></li>
+                                    <li><a data-toggle="pill" href="#IVR">Input VAT Report</a></li>
+                                    <li class="reportDivider"><a data-toggle="pill" href="#WTR">Withholding Tax Report</a></li>
+                                    <li><a data-toggle="pill" href="#PSR">Purchase Summary Report</a></li>
+                                    <li><a data-toggle="pill" href="#PDR">Purchase Detail  Report</a></li>
+                                    <li><a data-toggle="pill" href="#RRSR">Receiving Receipt Summary Report</a></li>
+                                    <li><a data-toggle="pill" href="#RRDR">Receiving Receipt Detail Report</a></li>
+                                    <li><a data-toggle="pill" href="#DSR">Disbursement Summary Report</a></li>
+                                    <li><a data-toggle="pill" href="#DDR">Disbursement Detail Report</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="tab-content">
+                                    <div id="AP" class="tab-pane fade in active">
+                                        <div align="right">
+                                            <button onclick="AccountsPayablePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Date as of</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="accountsPaybleReport_DateAsOf"></div>
+                                                                <input type="hidden" id="accountsPaybleReport_DateAsOf_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Company</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="accountsPaybleReport_Comapny"></div>
+
+                                                                <input type="hidden" id="accountsPaybleReport_Comapny_data" />
+                                                                <input type="hidden" id="accountsPaybleReport_Comapny_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Filter:</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="checkbox" id="filterAccountAndSupplier" />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Company</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="accountsPaybleReport_Comapny"></div>
+                                            </form>
+                                        </div>
+                                        <div id="filterTabs">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                            </ul>
 
-                                                        <input type="hidden" id="accountsPaybleReport_Comapny_data" />
-                                                        <input type="hidden" id="accountsPaybleReport_Comapny_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Filter:</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="checkbox" id="filterAccountAndSupplier" />
+                                            <div class="tab-content">
+                                                <div id="one" class="tab-pane fade in active">
+                                                    <div class="well">
+                                                        <form class="form-horizontal" role="form">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Account</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="accountsPaybleReport_Accounts"></div>
+
+                                                                            <input type="hidden" id="accountsPaybleReport_Accounts_data" />
+                                                                            <input type="hidden" id="accountsPaybleReport_Accounts_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Supplier</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="accountsPaybleReport_Supplier"></div>
+
+                                                                            <input type="hidden" id="accountsPaybleReport_Supplier_data" />
+                                                                            <input type="hidden" id="accountsPaybleReport_Supplier_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-                                <div id="filterTabs">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
-                                    </ul>
+                                    </div>
+                                    <div id="APV" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="AccountsPayableVoucherPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">RR No.</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="accountsPayableVoucher_RRNo"></div>
 
-                                    <div class="tab-content">
-                                        <div id="one" class="tab-pane fade in active">
-                                            <div class="well">
-                                                <form class="form-horizontal" role="form">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Account</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="accountsPaybleReport_Accounts"></div>
-
-                                                                    <input type="hidden" id="accountsPaybleReport_Accounts_data" />
-                                                                    <input type="hidden" id="accountsPaybleReport_Accounts_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Supplier</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="accountsPaybleReport_Supplier"></div>
-
-                                                                    <input type="hidden" id="accountsPaybleReport_Supplier_data" />
-                                                                    <input type="hidden" id="accountsPaybleReport_Supplier_selectedValue" />
-                                                                </div>
+                                                                <input type="hidden" id="accountsPayableVoucher_RRNo_data" />
+                                                                <input type="hidden" id="accountsPayableVoucher_RRNo_selectedValue" />
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </form>
-                                            </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="IVR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="AccountsPayableInputVATReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="InputVATReport_StartDate"></div>
+                                                                <input type="hidden" id="InputVATReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="InputVATReport_EndDate"></div>
+                                                                <input type="hidden" id="InputVATReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="WTR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="AccountsPayableWithHoldingTaxReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="withHoldingTAXReport_StartDate"></div>
+                                                                <input type="hidden" id="withHoldingTAXReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="withHoldingTAXReport_EndDate"></div>
+                                                                <input type="hidden" id="withHoldingTAXReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="PSR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="purchaseSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="purchaseSummaryReport_StartDate"></div>
+                                                                <input type="hidden" id="purchaseSummaryReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="purchaseSummaryReport_EndDate"></div>
+                                                                <input type="hidden" id="purchaseSummaryReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="PDR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="purchaseDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="purchaseDetailReport_StartDate"></div>
+                                                                <input type="hidden" id="purchaseDetailReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="purchaseDetailReport_EndDate"></div>
+                                                                <input type="hidden" id="purchaseDetailReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="RRSR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="receivingReceiptSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="receivingReceiptSummaryReport_StartDate"></div>
+                                                                <input type="hidden" id="receivingReceiptSummaryReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="receivingReceiptSummaryReport_EndDate"></div>
+                                                                <input type="hidden" id="receivingReceiptSummaryReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="RRDR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="receivingReceiptDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="receivingReceiptDetailReport_StartDate"></div>
+                                                                <input type="hidden" id="receivingReceiptDetailReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="receivingReceiptDetailReport_EndDate"></div>
+                                                                <input type="hidden" id="receivingReceiptDetailReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="DSR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="disbursementSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="disbursementSummaryReport_StartDate"></div>
+                                                                <input type="hidden" id="disbursementSummaryReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="disbursementSummaryReport_EndDate"></div>
+                                                                <input type="hidden" id="disbursementSummaryReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="DDR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="disbursementDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="disbursementDetailReport_StartDate"></div>
+                                                                <input type="hidden" id="disbursementDetailReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="disbursementDetailReport_EndDate"></div>
+                                                                <input type="hidden" id="disbursementDetailReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="APV" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="AccountsPayableVoucherPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">RR No.</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="accountsPayableVoucher_RRNo"></div>
-
-                                                        <input type="hidden" id="accountsPayableVoucher_RRNo_data" />
-                                                        <input type="hidden" id="accountsPayableVoucher_RRNo_selectedValue" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="IVR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="AccountsPayableInputVATReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="InputVATReport_StartDate"></div>
-                                                        <input type="hidden" id="InputVATReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="InputVATReport_EndDate"></div>
-                                                        <input type="hidden" id="InputVATReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="WTR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="AccountsPayableWithHoldingTaxReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="withHoldingTAXReport_StartDate"></div>
-                                                        <input type="hidden" id="withHoldingTAXReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="withHoldingTAXReport_EndDate"></div>
-                                                        <input type="hidden" id="withHoldingTAXReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="PSR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="purchaseSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="purchaseSummaryReport_StartDate"></div>
-                                                        <input type="hidden" id="purchaseSummaryReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="purchaseSummaryReport_EndDate"></div>
-                                                        <input type="hidden" id="purchaseSummaryReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="PDR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="purchaseDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="purchaseDetailReport_StartDate"></div>
-                                                        <input type="hidden" id="purchaseDetailReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="purchaseDetailReport_EndDate"></div>
-                                                        <input type="hidden" id="purchaseDetailReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="RRSR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="receivingReceiptSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="receivingReceiptSummaryReport_StartDate"></div>
-                                                        <input type="hidden" id="receivingReceiptSummaryReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="receivingReceiptSummaryReport_EndDate"></div>
-                                                        <input type="hidden" id="receivingReceiptSummaryReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="RRDR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="receivingReceiptDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="receivingReceiptDetailReport_StartDate"></div>
-                                                        <input type="hidden" id="receivingReceiptDetailReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="receivingReceiptDetailReport_EndDate"></div>
-                                                        <input type="hidden" id="receivingReceiptDetailReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="DSR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="disbursementSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="disbursementSummaryReport_StartDate"></div>
-                                                        <input type="hidden" id="disbursementSummaryReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="disbursementSummaryReport_EndDate"></div>
-                                                        <input type="hidden" id="disbursementSummaryReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="DDR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="disbursementDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="disbursementDetailReport_StartDate"></div>
-                                                        <input type="hidden" id="disbursementDetailReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="disbursementDetailReport_EndDate"></div>
-                                                        <input type="hidden" id="disbursementDetailReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
-        <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
 
-    <!-- SideBar Menu -->
-    @Html.Partial("_SoftwareSideBarMenu")
-
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================

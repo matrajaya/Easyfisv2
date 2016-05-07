@@ -1,26 +1,21 @@
-﻿<!-- Header -->
-<header>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="@Url.Action("Index","Home")" class="navbar-brand">EasyFIS</a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                @Html.Partial("_SoftwareLoginPartial")
-            </div>
-        </div>
+﻿<header class="main-header">
+    <a href="/Home" class="logo">
+        <span class="logo-mini"><b>e</b>FIS</span>
+        <span class="logo-lg"><b>EasyFIS</b></span>
+    </a>
+    <nav class="navbar navbar-static-top" role="navigation">
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+            @Html.Partial("_SoftwareLoginPartial")
     </nav>
 </header>
 
-<!-- Modal for Signout -->
 <div class="modal fade" id="modalLogout" role="dialog">
     <div class="modal-dialog modal-sm">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -30,10 +25,8 @@
                 Are you sure you want to logout?
             </div>
             <div class="modal-footer">
-                @*<a href="#" class="modal-footer-custom">Forgot Password?</a>
-                    Not yet a member? <a href="#">Register</a>*@
                 <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-primary btn-sm"><i class="fa fa-sign-out"></i> Logout</a>
-                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                <button class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
             </div>
         </div>
     </div>

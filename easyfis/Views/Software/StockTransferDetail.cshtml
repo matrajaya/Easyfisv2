@@ -14,352 +14,346 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
-    <div id="o-wrapper" class="o-wrapper">
-        <!-- Header -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
         @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
 
-        <!-- Section -->
-        <section>
-            <div class="sub-nav">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4><i class="fa fa-exchange"></i> Stock Transfer Detail</h4>
-                        </div>
-                        <div class="col-md-6" align="right">
-                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="div_Current_Page">
-                    <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("StockTransfer", "Software")" class="currentPageLinkCustom">Stock Transfer</a> > Stock Transfer Detail
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 id="collectionDetailLabel"></h4>
-                    </div>
-                    <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="cmdStockTransferJournal" onclick="stockTransferJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockTransferSaveLock" onclick="btnStockTransferSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockTransferSave" onclick="btnStockTransferSave_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockTransferEdit" onclick="btnStockTransferEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdStockTransferPrint" onclick="btnStockTransferPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("StockTransfer", "Software")'" class="btn btn-danger btn-sm" id="cmdStockTransferClose"><i class="fa fa-times"></i> Close</button>
-                    </div>
-                </div>
-                @*<hr />*@
-                <div class="well">
-                    <form class="form-horizontal" role="form">
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Stock Transfer Detail
+                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="/Software/StockTransfer"> Stock Transfer </a></li>
+                    <li>Stock Transfer Detail</li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Branch</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="stockTransfer_Branch"></div>
+                                <h4 id="collectionDetailLabel"></h4>
+                            </div>
+                            <div class="col-md-6" align="right">
+                                <button class="btn btn-primary btn-sm" id="cmdStockTransferJournal" onclick="stockTransferJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockTransferSaveLock" onclick="btnStockTransferSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockTransferSave" onclick="btnStockTransferSave_OnClick()"><i class="fa fa-save"></i> Save</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockTransferEdit" onclick="btnStockTransferEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockTransferPrint" onclick="btnStockTransferPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                <button onclick="window.location.href = '@Url.Action("StockTransfer", "Software")'" class="btn btn-danger btn-sm" id="cmdStockTransferClose"><i class="fa fa-times"></i> Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="well">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Branch</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="stockTransfer_Branch"></div>
 
-                                        <input type="hidden" id="stockTransfer_Branch_data" class="requiredStockTransfer" />
-                                        <input type="hidden" id="stockTransfer_Branch_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">ST Number</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_STNumber_Display" />
-                                        <input type="hidden" id="stockTransfer_STNumber" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">ST Date</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="stockTransfer_STDate"></div>
-                                        <input type="hidden" id="stockTransfer_STDate_data" class="requiredStockTransfer" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">To branch</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="stockTransfer_ToBranch"></div>
+                                                <input type="hidden" id="stockTransfer_Branch_data" class="requiredStockTransfer" />
+                                                <input type="hidden" id="stockTransfer_Branch_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">ST Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_STNumber_Display" />
+                                                <input type="hidden" id="stockTransfer_STNumber" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">ST Date</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="stockTransfer_STDate"></div>
+                                                <input type="hidden" id="stockTransfer_STDate_data" class="requiredStockTransfer" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">To branch</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="stockTransfer_ToBranch"></div>
 
-                                        <input type="hidden" id="stockTransfer_ToBranch_data" class="requiredStockTransfer" />
-                                        <input type="hidden" id="stockTransfer_ToBranch_selectedValue" />
+                                                <input type="hidden" id="stockTransfer_ToBranch_data" class="requiredStockTransfer" />
+                                                <input type="hidden" id="stockTransfer_ToBranch_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Particulars</label>
+                                            <div class="col-sm-8">
+                                                <textarea class="form-control textarea-custom requiredStockTransfer" id="stockTransfer_Particulars"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Manual ST Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_ManualSTNumber">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Prepared by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="stockTransfer_PreparedBy"></div>
+
+                                                <input type="hidden" id="stockTransfer_PreparedBy_data" class="requiredStockTransfer" />
+                                                <input type="hidden" id="stockTransfer_PreparedBy_selectedValue" />
+                                                <input type="hidden" id="userId_data" value="@userId" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Checked by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="stockTransfer_CheckedBy"></div>
+
+                                                <input type="hidden" id="stockTransfer_CheckedBy_data" class="requiredStockTransfer" />
+                                                <input type="hidden" id="stockTransfer_CheckedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Approved by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="stockTransfer_ApprovedBy"></div>
+
+                                                <input type="hidden" id="stockTransfer_ApprovedBy_data" class="requiredStockTransfer" />
+                                                <input type="hidden" id="stockTransfer_ApprovedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Lock</label>
+                                            <div class="col-sm-8">
+                                                <input type="checkbox" id="StockTransfer_Lock">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8">
+                                                <input type="hidden" id="StockTransfer_IsLocked">
+                                                <input type="hidden" id="StockTransfer_IsLocked_defaultTrue">
+                                                <input type="hidden" id="StockTransfer_IsLocked_defaultFalse">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Particulars</label>
-                                    <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom requiredStockTransfer" id="stockTransfer_Particulars"></textarea>
+                            </form>
+                        </div>
+                        <br />
+                        <!-- Stock Transfer line -->
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>
+                        </ul>
+                        <br />
+                        <div class="tab-content">
+                            <div id="Items" class="tab-pane fade in active">
+                                <div class="row">
+                                    <div class="col-lg-12" align="right">
+                                        <button class="btn btn-primary btn-sm" id="btnAddStockTransferItem" onclick="cmdAddStockTransferItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="ItemGrid" class="grid"></div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div id="InventoryEntries" class="tab-pane fade in active">
+                                <!-- Inventory Entries List -->
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="InventoryEntryGrid" class="grid" align="left"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        @Html.Partial("_SoftwareFooter")
+    </div>
+
+    <!-- ========================== -->
+    <!-- Stock Transfer Item Detail -->
+    <!-- ========================== -->
+    <div class="modal fade" id="stockTransferItemsEdit" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="stockTransferItemsModalLabel">Stock-Transfer Line Item Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="stockTransferItemsDetailForm">
+                        <input type="hidden" id="stockTransferItem_Id" />
+                        <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Manual ST Number</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredStockTransfer" id="stockTransfer_ManualSTNumber">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Prepared by</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="stockTransfer_PreparedBy"></div>
+                                <dl class="dl-horizontal">
+                                    <dt>Item Code</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="stockTransferItem_ItemCode"></div>
 
-                                        <input type="hidden" id="stockTransfer_PreparedBy_data" class="requiredStockTransfer" />
-                                        <input type="hidden" id="stockTransfer_PreparedBy_selectedValue" />
-                                        <input type="hidden" id="userId_data" value="@userId" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Checked by</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="stockTransfer_CheckedBy"></div>
+                                        <input type="hidden" id="stockTransferItem_ItemId_data" class="requiredStockTransferItem">
+                                        <input type="hidden" id="stockTransferItem_ItemCode_selectedValue" />
+                                    </dd>
+                                    <dt>Item Description</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="stockTransferItem_ItemDescription"></div>
 
-                                        <input type="hidden" id="stockTransfer_CheckedBy_data" class="requiredStockTransfer" />
-                                        <input type="hidden" id="stockTransfer_CheckedBy_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Approved by</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="stockTransfer_ApprovedBy"></div>
+                                        <input type="hidden" id="stockTransferItem_ItemDescription_selectedValue" />
+                                    </dd>
+                                    <dt>Particulars</dt>
+                                    <dd><textarea class="form-control textarea-custom requiredStockTransferItem" id="stockTransferItem_Particulars"></textarea></dd>
+                                    <dt>Item Inventory Code</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="stockTransferItem_ItemInventoryCode"></div>
 
-                                        <input type="hidden" id="stockTransfer_ApprovedBy_data" class="requiredStockTransfer" />
-                                        <input type="hidden" id="stockTransfer_ApprovedBy_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Lock</label>
-                                    <div class="col-sm-8">
-                                        <input type="checkbox" id="StockTransfer_Lock">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-4"></div>
-                                    <div class="col-sm-8">
-                                        <input type="hidden" id="StockTransfer_IsLocked">
-                                        <input type="hidden" id="StockTransfer_IsLocked_defaultTrue">
-                                        <input type="hidden" id="StockTransfer_IsLocked_defaultFalse">
-                                    </div>
-                                </div>
+                                        <input type="hidden" id="stockTransferItem_ItemInventoryCode_data" class="requiredStockTransferItem">
+                                        <input type="hidden" id="stockTransferItem_ItemInventoryCode_selectedValue" />
+                                    </dd>
+                                    <dt>Quantity</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Quantity" /></dd>
+                                    <dt>Unit</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="stockTransferItem_Unit"></div>
+
+                                        <input type="hidden" id="stockTransferItem_Unit_data" class="requiredStockTransferItem">
+                                        <input type="hidden" id="stockTransferItem_Unit_selectedValue" />
+                                    </dd>
+                                    <dt>Cost</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Cost" /></dd>
+                                    <dt>Amount</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Amount" /></dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-6">
+                                <dl class="dl-horizontal">
+                                    <dt></dt>
+                                    <dd>
+                                        <center><label>Basic Unit Conversion</label></center>
+                                        <br />
+                                    </dd>
+                                    <dt>Unit</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="stockTransferItem_BUCUnit"></div>
+
+                                        <input type="hidden" id="stockTransferItem_BUCUnit_data" class="requiredStockTransferItem">
+                                        <input type="hidden" id="stockTransferItem_BUCUnit_selectedValue" />
+                                    </dd>
+                                    <dt>Quantity</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_BUCQuantity" /></dd>
+                                    <dt>Cost</dt>
+                                    <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_BUCCost" /></dd>
+                                </dl>
                             </div>
                         </div>
                     </form>
                 </div>
-                <!-- Stock Transfer line -->
-                <ul class="nav nav-tabs" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#Items" id="itemTabId">Items</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#InventoryEntries" id="inventoryEntryTabId">Inventory Entries</a></li>
-                </ul>
-                <br />
-                <div class="tab-content">
-                    <div id="Items" class="tab-pane fade in active">
-                        <div class="row">
-                            <div class="col-lg-12" align="right">
-                                <button class="btn btn-primary btn-sm" id="btnAddStockTransferItem" onclick="cmdAddStockTransferItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="ItemGrid" class="grid"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="InventoryEntries" class="tab-pane fade in active">
-                        <!-- Inventory Entries List -->
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="InventoryEntryGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========================== -->
-        <!-- Stock Transfer Item Detail -->
-        <!-- ========================== -->
-        <div class="modal fade" id="stockTransferItemsEdit" role="dialog">
-            <div class="modal-dialog modal-lg">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="stockTransferItemsModalLabel">Stock-Transfer Line Item Detail</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="stockTransferItemsDetailForm">
-                            <input type="hidden" id="stockTransferItem_Id" />
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <dl class="dl-horizontal">
-                                        <dt>Item Code</dt>
-                                        <dd>
-                                            <div class="comboBox-wide" id="stockTransferItem_ItemCode"></div>
-
-                                            <input type="hidden" id="stockTransferItem_ItemId_data" class="requiredStockTransferItem">
-                                            <input type="hidden" id="stockTransferItem_ItemCode_selectedValue" />
-                                        </dd>
-                                        <dt>Item Description</dt>
-                                        <dd>
-                                            <div class="comboBox-wide" id="stockTransferItem_ItemDescription"></div>
-
-                                            <input type="hidden" id="stockTransferItem_ItemDescription_selectedValue" />
-                                        </dd>
-                                        <dt>Particulars</dt>
-                                        <dd><textarea class="form-control textarea-custom requiredStockTransferItem" id="stockTransferItem_Particulars"></textarea></dd>
-                                        <dt>Item Inventory Code</dt>
-                                        <dd>
-                                            <div class="comboBox-wide" id="stockTransferItem_ItemInventoryCode"></div>
-
-                                            <input type="hidden" id="stockTransferItem_ItemInventoryCode_data" class="requiredStockTransferItem">
-                                            <input type="hidden" id="stockTransferItem_ItemInventoryCode_selectedValue" />
-                                        </dd>
-                                        <dt>Quantity</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Quantity" /></dd>
-                                        <dt>Unit</dt>
-                                        <dd>
-                                            <div class="comboBox-wide" id="stockTransferItem_Unit"></div>
-
-                                            <input type="hidden" id="stockTransferItem_Unit_data" class="requiredStockTransferItem">
-                                            <input type="hidden" id="stockTransferItem_Unit_selectedValue" />
-                                        </dd>
-                                        <dt>Cost</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Cost" /></dd>
-                                        <dt>Amount</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Amount" /></dd>
-                                    </dl>
-                                </div>
-                                <div class="col-md-6">
-                                    <dl class="dl-horizontal">
-                                        <dt></dt>
-                                        <dd>
-                                            <center><label>Basic Unit Conversion</label></center>
-                                            <br />
-                                        </dd>
-                                        <dt>Unit</dt>
-                                        <dd>
-                                            <div class="comboBox-wide" id="stockTransferItem_BUCUnit"></div>
-
-                                            <input type="hidden" id="stockTransferItem_BUCUnit_data" class="requiredStockTransferItem">
-                                            <input type="hidden" id="stockTransferItem_BUCUnit_selectedValue" />
-                                        </dd>
-                                        <dt>Quantity</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_BUCQuantity" /></dd>
-                                        <dt>Cost</dt>
-                                        <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_BUCCost" /></dd>
-                                    </dl>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdSaveStockTransferItemButton" onclick="cmdStockTransferItemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button id="cmdStockTransferItemDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdSaveStockTransferItemButton" onclick="cmdStockTransferItemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdStockTransferItemDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
-
-        <!-- Journal Detail -->
-        <div class="modal fade" id="journalDetail" role="dialog">
-            <div class="modal-dialog modal-lg">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row" align="left">
-                            <center>
-                                <h4>
-                                    <span id="loadingJournalGridList"></span>
-                                </h4>
-                            </center>
-                            <div class="col-lg-12">
-                                <div id="journalGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br /><br />
-                        <div class="row" id="footerModalJournalNavigationButtons">
-                            <div class="btn-group col-md-9" id="navigationPageGridJournal">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournal">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournal">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournal"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournal">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournal">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
-                            </div>
-                            <div class="col-md-3">
-                                <table>
-                                    <tr>
-                                        <td align="right"> <b>Total Debit:</b> </td>
-                                        <td style="padding-left: 15px"></td>
-                                        <td> <span id="totalDebitInJournal"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="right"> <b>Total Credit:</b> </td>
-                                        <td style="padding-left: 15px"></td>
-                                        <td> <span id="totalCreditInJournal"></span></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        @*<button class="btn btn-primary btn-sm" id="cmdSaveJournalButton" onclick="cmdJournalSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
-                        <button id="cmdJournalDetailCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================== -->
-        <!-- Stock-Transfer Items Delete Modal Confirmation -->
-        <!-- ============================================== -->
-        <div class="modal fade" id="deleteStockTransferItemsConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Stock-Transfer Item <i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteStockTransferItems" onclick="cmdStockTransferItemsConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteStockTransferItemsCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        @Html.Partial("_SoftwareFooter")
     </div>
 
-    <!-- SideBar Menu -->
-    @Html.Partial("_SoftwareSideBarMenu")
+    <!-- Journal Detail -->
+    <div class="modal fade" id="journalDetail" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row" align="left">
+                        <center>
+                            <h4>
+                                <span id="loadingJournalGridList"></span>
+                            </h4>
+                        </center>
+                        <div class="col-lg-12">
+                            <div id="journalGrid" class="grid" align="left"></div>
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row" id="footerModalJournalNavigationButtons">
+                        <div class="btn-group col-md-9" id="navigationPageGridJournal">
+                            <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournal">
+                                <span class="glyphicon glyphicon-fast-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournal">
+                                <span class="glyphicon glyphicon-step-backward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournal"></button>
+                            <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournal">
+                                <span class="glyphicon glyphicon-step-forward"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournal">
+                                <span class="glyphicon glyphicon-fast-forward"></span>
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <table>
+                                <tr>
+                                    <td align="right"> <b>Total Debit:</b> </td>
+                                    <td style="padding-left: 15px"></td>
+                                    <td> <span id="totalDebitInJournal"></span></td>
+                                </tr>
+                                <tr>
+                                    <td align="right"> <b>Total Credit:</b> </td>
+                                    <td style="padding-left: 15px"></td>
+                                    <td> <span id="totalCreditInJournal"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @*<button class="btn btn-primary btn-sm" id="cmdSaveJournalButton" onclick="cmdJournalSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                    <button id="cmdJournalDetailCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
-    <!-- Scripts JavaScripts -->
+    <!-- ============================================== -->
+    <!-- Stock-Transfer Items Delete Modal Confirmation -->
+    <!-- ============================================== -->
+    <div class="modal fade" id="deleteStockTransferItemsConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Stock-Transfer Item <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteStockTransferItems" onclick="cmdStockTransferItemsConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteStockTransferItemsCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================

@@ -11,131 +11,125 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
-    <div id="o-wrapper" class="o-wrapper">
-        <!-- Header -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
         @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
 
-        <!-- Section -->
-        <section>
-            <div class="sub-nav">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4><i class="fa fa-book"></i> Journal Voucher</h4>
-                        </div>
-                        <div class="col-md-6" align="right">
-                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
-                        </div>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Journal Voucher
+                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li> Journal Voucher </li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
+
                     </div>
-                </div>
-                <div class="div_Current_Page">
-                    <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Journal Voucher
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <!-- Journal Voucher List -->
-                <div id="journalVoucherList">
-                    <label>Branch </label>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="comboBox-wide" id="branch_Id"></div>
-                            <input type="hidden" id="branch_Id_data" />
-                            <input type="hidden" id="currentBranchName" />
-                        </div>
-                        <div class="col-lg-8"></div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" class="form-control input-sm" id="InputFilterJournalVoucher" placeholder="Search">
+                    <div class="box-body">
+                        <!-- Journal Voucher List -->
+                        <div id="journalVoucherList">
+                            <label>Branch </label>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="comboBox-wide" id="branch_Id"></div>
+                                    <input type="hidden" id="branch_Id_data" />
+                                    <input type="hidden" id="currentBranchName" />
+                                </div>
+                                <div class="col-lg-8"></div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                        <input type="text" class="form-control input-sm" id="InputFilterJournalVoucher" placeholder="Search">
+                                    </div>
+                                </div>
+                                <div class="col-lg-8" align="right">
+                                    <button class="btn btn-primary btn-sm" onclick="btnAddJournalVoucher_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    <button class="btn btn-danger btn-sm" onclick="btnCloseJournalVoucher_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row" align="left">
+                                <div class="col-lg-12">
+                                    <div id="JournalVoucherGrid" class="grid" align="left"></div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="btn-group col-md-7" id="naviagtionPageGridJournalVoucher">
+                                    <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournalVoucher">
+                                        <span class="glyphicon glyphicon-fast-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournalVoucher">
+                                        <span class="glyphicon glyphicon-step-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournalVoucher"></button>
+                                    <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournalVoucher">
+                                        <span class="glyphicon glyphicon-step-forward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournalVoucher">
+                                        <span class="glyphicon glyphicon-fast-forward"></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-lg-8" align="right">
-                            <button class="btn btn-primary btn-sm" onclick="btnAddJournalVoucher_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            <button class="btn btn-danger btn-sm" onclick="btnCloseJournalVoucher_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row" align="left">
-                        <div class="col-lg-12">
-                            <div id="JournalVoucherGrid" class="grid" align="left"></div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="btn-group col-md-7" id="naviagtionPageGridJournalVoucher">
-                            <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridJournalVoucher">
-                                <span class="glyphicon glyphicon-fast-backward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridJournalVoucher">
-                                <span class="glyphicon glyphicon-step-backward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridJournalVoucher"></button>
-                            <button type="button" class="btn btn-default" id="btnMoveToNextPageGridJournalVoucher">
-                                <span class="glyphicon glyphicon-step-forward"></span>
-                            </button>
-                            <button type="button" class="btn btn-default" id="btnMoveToLastPageGridJournalVoucher">
-                                <span class="glyphicon glyphicon-fast-forward"></span>
-                            </button>
-                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Journal Voucher Delete -->
-        <div class="modal fade" id="deleteJournalVoucherConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Journal Voucher <i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdJournalVoucherDeleteCompany" onclick="cmdJournalVoucherConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteCloseButtonJournalVoucher" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
+            </section>
         </div>
 
-        <!-- Delete Lock -->
-        <div class="modal fade" id="deleteRecordLock" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Sorry, the record is lock! It can't be deleted!
-                    </div>
-                    <div class="modal-footer">
-                        <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
 
-    <!-- SideBar Menu -->
-    @Html.Partial("_SoftwareSideBarMenu")
+    <!-- Journal Voucher Delete -->
+    <div class="modal fade" id="deleteJournalVoucherConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Journal Voucher <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdJournalVoucherDeleteCompany" onclick="cmdJournalVoucherConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonJournalVoucher" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div id="c-mask" class="c-mask"></div>
-    <!-- /c-mask -->
+    <!-- Delete Lock -->
+    <div class="modal fade" id="deleteRecordLock" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Sorry, the record is lock! It can't be deleted!
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================
@@ -152,7 +146,7 @@
         var btnNextPageGridJournalVoucher;
         var btnLastPageGridJournalVoucher;
         var btnCurrentPageGridJournalVoucher;
-        
+
         // ===========
         // read Cookie
         // ===========
@@ -191,7 +185,7 @@
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            if(Results[i]["IsLocked"] == true) {
+                            if (Results[i]["IsLocked"] == true) {
                                 journalVouchers.push({
                                     EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdJournalVoucherEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
                                     DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='cmdJournalVoucherDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
@@ -261,14 +255,14 @@
                 backdrop: 'static'
             });
         }
-        
+
         // ==========================
         // Journal Voucher Add Button
         // ==========================
         function btnAddJournalVoucher_OnClick() {
             window.location = '/Software/JournalVoucherDetail';
         }
-        
+
         // ============================
         // Journal Voucher Close Button
         // ============================
@@ -315,7 +309,7 @@
                         $("#cmdJournalVoucherDeleteCompany").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButtonJournalVoucher").prop("disabled", true);
                         toastr.success("Successfully Deleted");
-                        
+
                         $('#deleteJournalVoucherConfirm').modal('hide');
 
                         journalVouchers = new wijmo.collections.CollectionView(getJournalVoucher());
@@ -376,7 +370,7 @@
                                 BranchBranch: results[i]["Branch"]
                             });
                         }
-                        
+
                         var branchId = readCookie("branchId");
                         $.ajax({
                             url: '/api/listBranchById/' + branchId,
@@ -395,7 +389,7 @@
                             }
                         });
 
-                        setTimeout(function() {
+                        setTimeout(function () {
                             createCboBranch(branches);
                         }, 200);
                     }

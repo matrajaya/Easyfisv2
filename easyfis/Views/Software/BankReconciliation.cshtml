@@ -11,140 +11,138 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
-    <div id="o-wrapper" class="o-wrapper">
-        <!-- Header -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
         @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
 
-        <div class="sub-nav">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4><i class="fa fa-check"></i> Bank Reconciliation</h4>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Bank Reconciliation
+                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li> Bank Reconciliation </li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
+                        <div class="row">
+                            <div class="col-md-12" align="right">
+                                <button class="btn btn-primary btn-sm" id="" onclick="btnBankReconciliationPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                <button class="btn btn-danger btn-sm" id="" onclick="btnBankReconciliationClose_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6" align="right">
-                        <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+                    <div class="box-body">
+                        <div class="well">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Bank</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="bankReconciliationBank"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Date Start</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="bankReconciliationStartDate"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Date End</label>
+                                            <div class="col-sm-8">
+                                                <div type="text" class="comboBox-wide" id="bankReconciliationEndDate"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Ending Balance as per Bank</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control input-sm" id="bankReconciliationEndingBalanceAsPerBank" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Total Deposit in Transit</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control input-sm " id="bankReconciliationTotalDepositInTransit" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Total Outstanding Withdrawals</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control input-sm " id="bankReconciliationTotalOutstandingWithdrawals" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Total Adjustments</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control input-sm " id="bankReconciliationTotalAdjustments" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-6">Adjusted Ending Balance as per Bank</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control input-sm " id="bankReconciliationAdjustedEndingBalanceAsPerBank" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"></div>
+                                </div>
+                            </form>
+                        </div>
+                        <br />
+                        <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#deposits" id="depositsCollection">Deposits (Collection)</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#withdrwals" id="withdrwalsDisbursment">Withdrwals (Disbursement)</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#adjustments" id="adjustmentsJournalVoucher">Adjustments (Journal Voucher)</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <!-- Deposits -->
+                            <div id="deposits" class="tab-pane fade in active">
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="collectionLineGrid" class="grid"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Withdrwals -->
+                            <div id="withdrwals" class="tab-pane fade in">
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="disbursementGrid" class="grid"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Adjustments -->
+                            <div id="adjustments" class="tab-pane fade in">
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="adjustmentGrid" class="grid"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="div_Current_Page">
-                <div class="container">
-                    <a href="@Url.Action("Index", "Software" )" class="currentPageLinkCustom">Main Menu</a> > Bank Reconciliation
-                </div>
-            </div>
+            </section>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12" align="right">
-                    <button class="btn btn-primary btn-sm" id="" onclick="btnBankReconciliationPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                    <button class="btn btn-danger btn-sm" id="" onclick="btnBankReconciliationClose_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                </div>
-            </div>
-            <div class="well">
-                <form class="form-horizontal" role="form">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label class="control-label col-sm-4">Bank</label>
-                                <div class="col-sm-8">
-                                    <div class="comboBox-wide" id="bankReconciliationBank"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-4">Date Start</label>
-                                <div class="col-sm-8">
-                                    <div class="comboBox-wide" id="bankReconciliationStartDate"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-4">Date End</label>
-                                <div class="col-sm-8">
-                                    <div type="text" class="comboBox-wide" id="bankReconciliationEndDate"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="form-group">
-                                <label class="control-label col-sm-6">Ending Balance as per Bank</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-sm" id="bankReconciliationEndingBalanceAsPerBank" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-6">Total Deposit in Transit</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-sm " id="bankReconciliationTotalDepositInTransit" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-6">Total Outstanding Withdrawals</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-sm " id="bankReconciliationTotalOutstandingWithdrawals" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-6">Total Adjustments</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-sm " id="bankReconciliationTotalAdjustments" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-6">Adjusted Ending Balance as per Bank</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control input-sm " id="bankReconciliationAdjustedEndingBalanceAsPerBank" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6"></div>
-                    </div>
-                </form>
-            </div>
-            <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
-                <li role="presentation" class="active"><a data-toggle="tab" href="#deposits" id="depositsCollection">Deposits (Collection)</a></li>
-                <li role="presentation"><a data-toggle="tab" href="#withdrwals" id="withdrwalsDisbursment">Withdrwals (Disbursement)</a></li>
-                <li role="presentation"><a data-toggle="tab" href="#adjustments" id="adjustmentsJournalVoucher">Adjustments (Journal Voucher)</a></li>
-            </ul>
-            <div class="tab-content">
-                <!-- Deposits -->
-                <div id="deposits" class="tab-pane fade in active">
-                    <br />
-                    <div class="row" align="left">
-                        <div class="col-lg-12">
-                            <div id="collectionLineGrid" class="grid"></div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Withdrwals -->
-                <div id="withdrwals" class="tab-pane fade in">
-                    <br />
-                    <div class="row" align="left">
-                        <div class="col-lg-12">
-                            <div id="disbursementGrid" class="grid"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Adjustments -->
-                <div id="adjustments" class="tab-pane fade in">
-                    <br />
-                    <div class="row" align="left">
-                        <div class="col-lg-12">
-                            <div id="adjustmentGrid" class="grid"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
 
-    <!-- SideBar Menu -->
-    @Html.Partial("_SoftwareSideBarMenu")
-
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================

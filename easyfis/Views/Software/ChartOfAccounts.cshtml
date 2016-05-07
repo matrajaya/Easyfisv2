@@ -11,546 +11,540 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
-    <div id="o-wrapper" class="o-wrapper">
-        <!-- Header -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
         @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
 
-        <!-- Section -->
-        <section>
-            <div class="sub-nav">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4><i class="fa fa-list"></i> Chart of Accounts</h4>
-                        </div>
-                        <div class="col-md-6" align="right">
-                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="div_Current_Page">
-                    <div class="container">
-                        <a href="@Url.Action("Index", "Software" )" class="currentPageLinkCustom"> Main Menu</a> > Chart of Accounts
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Account Cash Flow</a></li>
-                    <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Account Category</a></li>
-                </ul>
-                <br />
-                <div class="tab-content">
-                    <!-- Account List -->
-                    <div id="Account" class="tab-pane fade in active">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h4>Account</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
-                                </div>
-                            </div>
-                            <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger btn-sm" onclick="cmdCloseAccount_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="AccountGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="AccountType" class="tab-pane fade">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h4>Account Type</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccountType" placeholder="Search">
-                                </div>
-                            </div>
-                            <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountType_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="AccountTypeGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccountType">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountType">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountType">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountType"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountType">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountType">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="AccountCashFlow" class="tab-pane fade">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h4>Account Cash Flow</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccountCashFlow" placeholder="Search">
-                                </div>
-                            </div>
-                            <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCashFlow_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="AccountCashFlowGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccountCashFlow">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountCashFlow">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountCashFlow">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountCashFlow"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountCashFlow">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountCashFlow">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="AccountCategory" class="tab-pane fade">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h4>Account Category</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterAccountCategory" placeholder="Search">
-                                </div>
-                            </div>
-                            <div class="col-lg-8" align="right">
-                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCategory_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="AccountCategoryGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="btn-group col-md-7" id="naviagtionPageGridAccountCategory">
-                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountCategory">
-                                    <span class="glyphicon glyphicon-fast-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountCategory">
-                                    <span class="glyphicon glyphicon-step-backward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountCategory"></button>
-                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountCategory">
-                                    <span class="glyphicon glyphicon-step-forward"></span>
-                                </button>
-                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountCategory">
-                                    <span class="glyphicon glyphicon-fast-forward"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Chart of Accounts
+                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li><i class="fa fa-dashboard"></i> Chart of Accounts</li>
+                </ol>
+            </section>
 
-        <!-- =================== -->
-        <!-- Account Edit Detail -->
-        <!-- =================== -->
-        <div class="modal fade" id="accountEdit" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="accountModalLabel">Account Detail <span id="accountLockAndUnLock"></span> </h4>
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
+                        <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#Account" id="accountTabId">Account</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#AccountType" id="accountTypeTabId">Account Type</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#AccountCashFlow" id="accountCashFlowTabId">Account Cash Flow</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#AccountCategory" id="accountCategoryTabId">Account Category</a></li>
+                        </ul>
+                        <br />
                     </div>
-                    <div class="modal-body">
-                        <form id="AccountDetailForm">
-                            <input type="hidden" id="account_id" />
-                            <dl class="dl-horizontal">
-                                <dt>Account Code</dt>
-                                <dd><input type="text" class="form-control input-sm requiredAccount" id="account_code" placeholder="Code" /></dd>
-                                <dt>Account</dt>
-                                <dd><input type="text" class="form-control input-sm requiredAccount" id="account_account" placeholder="Account" /></dd>
-                                <dt>Account Type</dt>
-                                <dd>
-                                    <div id="account_type_id" class="comboBox-wide"></div>
-                                </dd>
-                                <dt>Cash Flow</dt>
-                                <dd>
-                                    <div id="account_cash_flow_id" class="comboBox-wide"></div>
-                                </dd>
-                                <dt>Lock (Edit)</dt>
-                                <dd>
-                                    <input type="checkbox" id="accountEdit_IsLocked" />
-                                </dd>
-                            </dl>
-                        </form>
-                        <hr id="hrAccountArticleType" />
-                        <center><label id="loadingAccountArtitleType"></label></center>
-                        <div id="accountArticleTypeDiv">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <label>Account Article Type</label>
+                    <div class="box-body">
+                        <div class="tab-content">
+                            <!-- Account List -->
+                            <div id="Account" class="tab-pane fade in active">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4>Account</h4>
+                                    </div>
                                 </div>
-                                <div class="col-lg-6" align="right">
-                                    <button class="btn btn-primary btn-sm" id="btnAddACcountArticleType" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8" align="right">
+                                        <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-danger btn-sm" onclick="cmdCloseAccount_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="AccountGrid" class="grid" align="left"></div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
+                                        <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                                            <span class="glyphicon glyphicon-fast-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                            <span class="glyphicon glyphicon-step-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                            <span class="glyphicon glyphicon-step-forward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                            <span class="glyphicon glyphicon-fast-forward"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="AccountArticleTypeGrid" class="grid" align="left"></div>
+                            <div id="AccountType" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4>Account Type</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilterAccountType" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8" align="right">
+                                        <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountType_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="AccountTypeGrid" class="grid" align="left"></div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="btn-group col-md-7" id="naviagtionPageGridAccountType">
+                                        <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountType">
+                                            <span class="glyphicon glyphicon-fast-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountType">
+                                            <span class="glyphicon glyphicon-step-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountType"></button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountType">
+                                            <span class="glyphicon glyphicon-step-forward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountType">
+                                            <span class="glyphicon glyphicon-fast-forward"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="AccountCashFlow" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4>Account Cash Flow</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilterAccountCashFlow" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8" align="right">
+                                        <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCashFlow_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="AccountCashFlowGrid" class="grid" align="left"></div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="btn-group col-md-7" id="naviagtionPageGridAccountCashFlow">
+                                        <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountCashFlow">
+                                            <span class="glyphicon glyphicon-fast-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountCashFlow">
+                                            <span class="glyphicon glyphicon-step-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountCashFlow"></button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountCashFlow">
+                                            <span class="glyphicon glyphicon-step-forward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountCashFlow">
+                                            <span class="glyphicon glyphicon-fast-forward"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="AccountCategory" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4>Account Category</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilterAccountCategory" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8" align="right">
+                                        <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCategory_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="AccountCategoryGrid" class="grid" align="left"></div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="btn-group col-md-7" id="naviagtionPageGridAccountCategory">
+                                        <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountCategory">
+                                            <span class="glyphicon glyphicon-fast-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountCategory">
+                                            <span class="glyphicon glyphicon-step-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountCategory"></button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountCategory">
+                                            <span class="glyphicon glyphicon-step-forward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountCategory">
+                                            <span class="glyphicon glyphicon-fast-forward"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdSaveAccountButton" onclick="cmdAccountSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button id="cmdAccountDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
                 </div>
-            </div>
+            </section>
         </div>
 
-        <!-- ==================== -->
-        <!-- Account Article Type -->
-        <!-- ==================== -->
-        <div class="modal fade" id="accountArticleTypeModal" role="dialog">
-            <div class="modal-dialog btn-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="accountArticleTypeModalLabel">Account Article Type Detail</h4>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" id="accountArticleType_id" />
-                        <form id="AccountTypeDetailForm">
-                            <dl class="dl-horizontal">
-                                <dt>Article Type</dt>
-                                <dd>
-                                    <div id="accountArticleType_articleType" class="comboBox-wide"></div>
-                                </dd>
-                            </dl>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdSaveaccountArticleTypeButton" onclick="cmdAccountArticleTypeSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button id="cmdaccountArticleTypeDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- =========================== -->
-        <!-- Account Article Type Delete -->
-        <!-- =========================== -->
-        <div class="modal fade" id="deleteAccountArticleTypeConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Article Type<i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountArticleType" onclick="cmdAccountArticleTypeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteCloseButtonAccountArticleType" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============== -->
-        <!-- Account Delete -->
-        <!-- ============== -->
-        <div class="modal fade" id="deleteAccountConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Account <i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccount" onclick="cmdAccountConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteCloseButtonAccount" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- ======================== -->
-        <!-- Account Type Edit Detail -->
-        <!-- ======================== -->
-        <div class="modal fade" id="accountTypeEdit" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="accountTypeModalLabel">Account Type Detail <span id="accountTypeLockAndUnLock"></span> </h4>
-                    </div>
-                    <div class="modal-body">
-                        <input type="hidden" id="accountType_id" />
-                        <form id="AccountTypeDetailForm">
-                            <dl class="dl-horizontal">
-                                <dt>Account Type Code</dt>
-                                <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_code" placeholder="Code" /></dd>
-                                <dt>Account Type</dt>
-                                <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_accountType" placeholder="Account Type" /></dd>
-                                <dt>Category</dt>
-                                <dd>
-                                    <div id="accountType_CategoryId" class="comboBox-wide"></div>
-                                </dd>
-                                <dt>Category Description</dt>
-                                <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_SubCategoryDescription" placeholder="Sub-Category Description" /></dd>
-                                <dt>Lock (Edit)</dt>
-                                <dd><input type="checkbox" id="accountTypeEdit_IsLocked" /></dd>
-                            </dl>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdSaveAccountTypeButton" onclick="cmdAccountTypeSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button id="cmdAccountTypeDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- =================== -->
-        <!-- Account Type Delete -->
-        <!-- =================== -->
-        <div class="modal fade" id="deleteAccountTypeConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Account Type <i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountType" onclick="cmdAccountTypeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteCloseButtonAccountType" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================= -->
-        <!-- Account Cash Flow Edit Detail -->
-        <!-- ============================= -->
-        <div class="modal fade" id="accountCashFlowEdit" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="accountCashFlowModalLabel">Account Cash Flow Detail <span id="accountCashFlowLockAndUnLock"></span></h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="AccountCashFlowDetailForm">
-                            <input type="hidden" id="accountCashFlow_Id" />
-                            <dl class="dl-horizontal">
-                                <dt>Cash Flow Code</dt>
-                                <dd><input type="text" class="form-control input-sm requiredAccountCashFlow" id="accountCashFlow_Code" placeholder="Code" /></dd>
-                                <dt>Cash Flow</dt>
-                                <dd><input type="text" class="form-control input-sm requiredAccountCashFlow" id="accountCashFlow_CashFlow" placeholder="Cash FLow" /></dd>
-                                <dt>Lock (Edit)</dt>
-                                <dd><input type="checkbox" id="accountCashFlowEdit_IsLocked" /></dd>
-                            </dl>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdSaveAccountCashFlowButton" onclick="cmdAccountCashFlowSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button id="cmdAccountCashFlowDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ======================== -->
-        <!-- Account Cash Flow Delete -->
-        <!-- ======================== -->
-        <div class="modal fade" id="deleteAccountCashFlowConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Account Cash Flow <i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountCashFlow" onclick="cmdAccountCashFlowConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteCloseButtonAccountCashFlow" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================ -->
-        <!-- Account Category Edit Detail -->
-        <!-- ============================ -->
-        <div class="modal fade" id="accountCategoryEdit" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="accountCategoryModalLabel">Account Category Detail <span id="accountCategoryLockAndUnLock"></span></h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="AccountCategoryDetailForm">
-                            <input type="hidden" id="accountCategory_Id" />
-                            <dl class="dl-horizontal">
-                                <dt>Category Code</dt>
-                                <dd><input type="text" class="form-control input-sm requiredAccountCategory" id="accountCategory_Code" placeholder="Code" /></dd>
-                                <dt>Category</dt>
-                                <dd><input type="text" class="form-control input-sm requiredAccountCategory" id="accountCategory_Category" placeholder="Category" /></dd>
-                                <dt>Lock (Edit)</dt>
-                                <dd><input type="checkbox" id="accountCategoryEdit_IsLocked" /></dd>
-                            </dl>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdSaveAccountCategoryButton" onclick="cmdAccountCategorySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button id="cmdAccountCategoryDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ======================= -->
-        <!-- Account Category Delete -->
-        <!-- ======================= -->
-        <div class="modal fade" id="deleteAccountCategoryConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Account Category <i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountCategory" onclick="cmdAccountCategoryConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteCloseButtonAccountCategory" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Lock -->
-        <div class="modal fade" id="deleteRecordLock" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Sorry, the record is lock! It can't be deleted!
-                    </div>
-                    <div class="modal-footer">
-                        <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
 
-    <!-- SideBar Menu -->
-    @Html.Partial("_SoftwareSideBarMenu")
+    <!-- =================== -->
+    <!-- Account Edit Detail -->
+    <!-- =================== -->
+    <div class="modal fade" id="accountEdit" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="accountModalLabel">Account Detail <span id="accountLockAndUnLock"></span> </h4>
+                </div>
+                <div class="modal-body">
+                    <form id="AccountDetailForm">
+                        <input type="hidden" id="account_id" />
+                        <dl class="dl-horizontal">
+                            <dt>Account Code</dt>
+                            <dd><input type="text" class="form-control input-sm requiredAccount" id="account_code" placeholder="Code" /></dd>
+                            <dt>Account</dt>
+                            <dd><input type="text" class="form-control input-sm requiredAccount" id="account_account" placeholder="Account" /></dd>
+                            <dt>Account Type</dt>
+                            <dd>
+                                <div id="account_type_id" class="comboBox-wide"></div>
+                            </dd>
+                            <dt>Cash Flow</dt>
+                            <dd>
+                                <div id="account_cash_flow_id" class="comboBox-wide"></div>
+                            </dd>
+                            <dt>Lock (Edit)</dt>
+                            <dd>
+                                <input type="checkbox" id="accountEdit_IsLocked" />
+                            </dd>
+                        </dl>
+                    </form>
+                    <hr id="hrAccountArticleType" />
+                    <center><label id="loadingAccountArtitleType"></label></center>
+                    <div id="accountArticleTypeDiv">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label>Account Article Type</label>
+                            </div>
+                            <div class="col-lg-6" align="right">
+                                <button class="btn btn-primary btn-sm" id="btnAddACcountArticleType" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="AccountArticleTypeGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdSaveAccountButton" onclick="cmdAccountSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdAccountDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
+    <!-- ==================== -->
+    <!-- Account Article Type -->
+    <!-- ==================== -->
+    <div class="modal fade" id="accountArticleTypeModal" role="dialog">
+        <div class="modal-dialog btn-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="accountArticleTypeModalLabel">Account Article Type Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="accountArticleType_id" />
+                    <form id="AccountTypeDetailForm">
+                        <dl class="dl-horizontal">
+                            <dt>Article Type</dt>
+                            <dd>
+                                <div id="accountArticleType_articleType" class="comboBox-wide"></div>
+                            </dd>
+                        </dl>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdSaveaccountArticleTypeButton" onclick="cmdAccountArticleTypeSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdaccountArticleTypeDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================== -->
+    <!-- Account Article Type Delete -->
+    <!-- =========================== -->
+    <div class="modal fade" id="deleteAccountArticleTypeConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Article Type<i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountArticleType" onclick="cmdAccountArticleTypeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonAccountArticleType" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============== -->
+    <!-- Account Delete -->
+    <!-- ============== -->
+    <div class="modal fade" id="deleteAccountConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Account <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccount" onclick="cmdAccountConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonAccount" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ======================== -->
+    <!-- Account Type Edit Detail -->
+    <!-- ======================== -->
+    <div class="modal fade" id="accountTypeEdit" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="accountTypeModalLabel">Account Type Detail <span id="accountTypeLockAndUnLock"></span> </h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="accountType_id" />
+                    <form id="AccountTypeDetailForm">
+                        <dl class="dl-horizontal">
+                            <dt>Account Type Code</dt>
+                            <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_code" placeholder="Code" /></dd>
+                            <dt>Account Type</dt>
+                            <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_accountType" placeholder="Account Type" /></dd>
+                            <dt>Category</dt>
+                            <dd>
+                                <div id="accountType_CategoryId" class="comboBox-wide"></div>
+                            </dd>
+                            <dt>Category Description</dt>
+                            <dd><input type="text" class="form-control input-sm requiredAccountType" id="accountType_SubCategoryDescription" placeholder="Sub-Category Description" /></dd>
+                            <dt>Lock (Edit)</dt>
+                            <dd><input type="checkbox" id="accountTypeEdit_IsLocked" /></dd>
+                        </dl>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdSaveAccountTypeButton" onclick="cmdAccountTypeSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdAccountTypeDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =================== -->
+    <!-- Account Type Delete -->
+    <!-- =================== -->
+    <div class="modal fade" id="deleteAccountTypeConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Account Type <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountType" onclick="cmdAccountTypeConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonAccountType" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================= -->
+    <!-- Account Cash Flow Edit Detail -->
+    <!-- ============================= -->
+    <div class="modal fade" id="accountCashFlowEdit" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="accountCashFlowModalLabel">Account Cash Flow Detail <span id="accountCashFlowLockAndUnLock"></span></h4>
+                </div>
+                <div class="modal-body">
+                    <form id="AccountCashFlowDetailForm">
+                        <input type="hidden" id="accountCashFlow_Id" />
+                        <dl class="dl-horizontal">
+                            <dt>Cash Flow Code</dt>
+                            <dd><input type="text" class="form-control input-sm requiredAccountCashFlow" id="accountCashFlow_Code" placeholder="Code" /></dd>
+                            <dt>Cash Flow</dt>
+                            <dd><input type="text" class="form-control input-sm requiredAccountCashFlow" id="accountCashFlow_CashFlow" placeholder="Cash FLow" /></dd>
+                            <dt>Lock (Edit)</dt>
+                            <dd><input type="checkbox" id="accountCashFlowEdit_IsLocked" /></dd>
+                        </dl>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdSaveAccountCashFlowButton" onclick="cmdAccountCashFlowSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdAccountCashFlowDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================== -->
+    <!-- Account Cash Flow Delete -->
+    <!-- ======================== -->
+    <div class="modal fade" id="deleteAccountCashFlowConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Account Cash Flow <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountCashFlow" onclick="cmdAccountCashFlowConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonAccountCashFlow" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================ -->
+    <!-- Account Category Edit Detail -->
+    <!-- ============================ -->
+    <div class="modal fade" id="accountCategoryEdit" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="accountCategoryModalLabel">Account Category Detail <span id="accountCategoryLockAndUnLock"></span></h4>
+                </div>
+                <div class="modal-body">
+                    <form id="AccountCategoryDetailForm">
+                        <input type="hidden" id="accountCategory_Id" />
+                        <dl class="dl-horizontal">
+                            <dt>Category Code</dt>
+                            <dd><input type="text" class="form-control input-sm requiredAccountCategory" id="accountCategory_Code" placeholder="Code" /></dd>
+                            <dt>Category</dt>
+                            <dd><input type="text" class="form-control input-sm requiredAccountCategory" id="accountCategory_Category" placeholder="Category" /></dd>
+                            <dt>Lock (Edit)</dt>
+                            <dd><input type="checkbox" id="accountCategoryEdit_IsLocked" /></dd>
+                        </dl>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdSaveAccountCategoryButton" onclick="cmdAccountCategorySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdAccountCategoryDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= -->
+    <!-- Account Category Delete -->
+    <!-- ======================= -->
+    <div class="modal fade" id="deleteAccountCategoryConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Account Category <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteAccountCategory" onclick="cmdAccountCategoryConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCloseButtonAccountCategory" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Lock -->
+    <div class="modal fade" id="deleteRecordLock" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Record Locked <i class="fa fa-lock"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Sorry, the record is lock! It can't be deleted!
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdConfirmDeleteCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"> Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <!-- =============== -->
     <!-- Account Scripts -->
@@ -2776,7 +2770,7 @@
             accountCategoryGrid.itemsSource = accountCategories;
             accountCategoryGrid.trackChanges = true;
         }
-        
+
         // =================================
         // Account Category Entry Validation
         // =================================
@@ -2882,7 +2876,7 @@
             accountCategoryObject.AccountCategory = document.getElementById('accountCategory_Category').value;
             accountCategoryObject.IsLocked = document.getElementById('accountCategoryEdit_IsLocked').checked;
             var data = JSON.stringify(accountCategoryObject);
-           
+
             if (accountCategoryEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             }

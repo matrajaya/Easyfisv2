@@ -14,378 +14,368 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
-    <div id="o-wrapper" class="o-wrapper">
-        <!-- Header -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
         @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
 
-        <!-- Section -->
-        <section>
-            <div class="sub-nav">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4><i class="fa fa-cc-visa"></i> Collection Detail</h4>
-                        </div>
-                        <div class="col-md-6" align="right">
-                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="div_Current_Page">
-                    <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > <a href="@Url.Action("Collection", "Software")" class="currentPageLinkCustom">Collection</a> > Collection Detail
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 id="collectionDetailLabel"></h4>
-                    </div>
-                    <div class="col-md-6" align="right">
-                        <button class="btn btn-primary btn-sm" id="cmdCollectionJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                        <button class="btn btn-primary btn-sm" id="cmdCollectionSaveLock" onclick="btnCollectionSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-primary btn-sm" id="cmdCollectionEdit" onclick="btnCollectionEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
-                        <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="btnCollectionPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                        <button onclick="window.location.href = '@Url.Action("Collection", "Software")'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
-                    </div>
-                </div>
-                @*<hr />*@
-                <div class="well">
-                    <form class="form-horizontal" role="form">
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Collection Detail
+                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="/Software/Collection"> Collection </a></li>
+                    <li> Collection Detail </li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Branch</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="collection_Branch"></div>
+                            <div class="col-md-12" align="right">
+                                <button class="btn btn-primary btn-sm" id="cmdCollectionJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                <button class="btn btn-primary btn-sm" id="cmdCollectionSaveLock" onclick="btnCollectionSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>
+                                <button class="btn btn-primary btn-sm" id="cmdCollectionEdit" onclick="btnCollectionEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="btnCollectionPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                <button onclick="window.location.href = '@Url.Action("Collection", "Software")'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="well">
+                            <form class="form-horizontal" role="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Branch</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="collection_Branch"></div>
 
-                                        <input type="hidden" id="collection_Branch_data" class="requiredCollection" />
-                                        <input type="hidden" id="collection_Branch_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">OR Number</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredCollection" id="collection_ORNumber_Display" />
-                                        <input type="hidden" id="collection_ORNumber" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">OR Date</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="collection_ORDate"></div>
-                                        <input type="hidden" id="collection_ORDate_data" class="requiredCollection" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Manual OR Number</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control input-sm requiredCollection" id="collection_ManualORNumber">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Customer</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                            <div class="comboBox-wide" id="collection_Customer"></div>
+                                                <input type="hidden" id="collection_Branch_data" class="requiredCollection" />
+                                                <input type="hidden" id="collection_Branch_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">OR Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control input-sm requiredCollection" id="collection_ORNumber_Display" />
+                                                <input type="hidden" id="collection_ORNumber" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">OR Date</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="collection_ORDate"></div>
+                                                <input type="hidden" id="collection_ORDate_data" class="requiredCollection" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Manual OR Number</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control input-sm requiredCollection" id="collection_ManualORNumber">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Customer</label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <div class="comboBox-wide" id="collection_Customer"></div>
 
-                                            <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
-                                            <input type="hidden" id="collection_Customer_selectedValue" />
-                                            <div class="input-group-btn">
-                                                <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
-                                                @*<button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>*@
+                                                    <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
+                                                    <input type="hidden" id="collection_Customer_selectedValue" />
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
+                                                        @*<button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Particulars</label>
+                                            <div class="col-sm-8">
+                                                <textarea class="form-control textarea-custom requiredCollection" id="collection_Particulars"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Prepared by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="collection_PreparedBy"></div>
+
+                                                <input type="hidden" id="collection_PreparedBy_data" class="requiredCollection" />
+                                                <input type="hidden" id="collection_PreparedBy_selectedValue" />
+                                                <input type="hidden" id="userId_data" value="@userId" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Checked by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="collection_CheckedBy"></div>
+
+                                                <input type="hidden" id="collection_CheckedBy_data" class="requiredCollection" />
+                                                <input type="hidden" id="collection_CheckedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Approved by</label>
+                                            <div class="col-sm-8">
+                                                <div class="comboBox-wide" id="collection_ApprovedBy"></div>
+
+                                                <input type="hidden" id="collection_ApprovedBy_data" class="requiredCollection" />
+                                                <input type="hidden" id="collection_ApprovedBy_selectedValue" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Lock</label>
+                                            <div class="col-sm-8">
+                                                <input type="checkbox" id="collection_Lock">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8">
+                                                <input type="hidden" id="collection_IsLocked">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Particulars</label>
-                                    <div class="col-sm-8">
-                                        <textarea class="form-control textarea-custom requiredCollection" id="collection_Particulars"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Prepared by</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="collection_PreparedBy"></div>
-
-                                        <input type="hidden" id="collection_PreparedBy_data" class="requiredCollection" />
-                                        <input type="hidden" id="collection_PreparedBy_selectedValue" />
-                                        <input type="hidden" id="userId_data" value="@userId" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Checked by</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="collection_CheckedBy"></div>
-
-                                        <input type="hidden" id="collection_CheckedBy_data" class="requiredCollection" />
-                                        <input type="hidden" id="collection_CheckedBy_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Approved by</label>
-                                    <div class="col-sm-8">
-                                        <div class="comboBox-wide" id="collection_ApprovedBy"></div>
-
-                                        <input type="hidden" id="collection_ApprovedBy_data" class="requiredCollection" />
-                                        <input type="hidden" id="collection_ApprovedBy_selectedValue" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-4">Lock</label>
-                                    <div class="col-sm-8">
-                                        <input type="checkbox" id="collection_Lock">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-4"></div>
-                                    <div class="col-sm-8">
-                                        <input type="hidden" id="collection_IsLocked">
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
-                <ul class="nav nav-tabs" role="tablist" id="myTab">
-                    <li role="presentation" class="active"><a data-toggle="tab" href="#CollectionLine" id="itemTabId">Collection Line</a></li>
-                </ul>
-                <br />
-                <div class="tab-content">
-                    <div id="CollectionLine" class="tab-pane fade in active">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <button type="submit" class="btn btn-primary pull-right btn-sm" id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                            </div>
-                        </div>
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#CollectionLine" id="itemTabId">Collection Line</a></li>
+                        </ul>
                         <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="CollectionLineGrid" class="grid" align="left"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sales for Collection Modal -->
-        <div class="modal fade" id="SalesStatus" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="POStatusModalLabel">Sales Invoice Status</h4>
-                    </div>
-                    <div class="modal-body">
-
-                    </div>
-                    <div class="modal-footer">
-                        <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
-                        <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- customer Advances for Collection Modal -->
-        <div class="modal fade" id="customerAdvances" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="POStatusModalLabel">Customer Advances</h4>
-                    </div>
-                    <div class="modal-body">
-
-                    </div>
-                    <div class="modal-footer">
-                        <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
-                        <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Collection Line Edit Detail -->
-        <div class="modal fade" id="collectionLineEdit" role="dialog">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="collectionLineModalLabel">Collection Line Detail</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="collectionLineDetailForm">
-                            <input type="hidden" id="collectionLine_Id" />
-                            <dl class="dl-horizontal">
-                                <dt>Branch</dt>
-                                <dd>
-                                    <div class="comboBox-wide" id="collectionLine_branch"></div>
-
-                                    <input type="hidden" id="collectionLine_branch_data" class="requiredCollectionLine">
-                                    <input type="hidden" id="collectionLine_branch_selectedValue" />
-                                </dd>
-                                <dt>Pay Type</dt>
-                                <dd>
-                                    <div class="comboBox-wide" id="collectionLine_payType"></div>
-
-                                    <input type="hidden" id="collectionLine_payType_data" class="requiredCollectionLine">
-                                    <input type="hidden" id="collectionLine_payType_selectedValue" />
-                                </dd>
-                                <dt>Particulars</dt>
-                                <dd><textarea class="form-control textarea-custom requiredCollectionLine" id="collectionLine_Particulars"></textarea></dd>
-                                <dt>SI No.</dt>
-                                <dd>
-                                    <div class="comboBox-wide" id="collectionLine_SINo"></div>
-
-                                    <input type="hidden" id="collectionLine_SINo_data" />
-                                    <input type="hidden" id="collectionLine_SINo_selectedValue" />
-                                </dd>
-                                <dt>Amount</dt>
-                                <dd><input class="form-control input-sm requiredCollectionLine" id="collectionLine_amount" /></dd>
-                                <dt>Account</dt>
-                                <dd>
-                                    <div class="comboBox-wide" id="collectionLine_account"></div>
-
-                                    <input type="hidden" id="collectionLine_account_data" class="requiredCollectionLine">
-                                    <input type="hidden" id="collectionLine_account_selectedValue" />
-                                </dd>
-                                <dt>Article</dt>
-                                <dd>
-                                    <div class="comboBox-wide" id="collectionLine_article"></div>
-
-                                    <input type="hidden" id="collectionLine_article_data" class="requiredCollectionLine">
-                                    <input type="hidden" id="collectionLine_article_selectedValue" />
-                                </dd>
-                                <dt>Check No.</dt>
-                                <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkNo" /></dd>
-                                <dt>Check Date</dt>
-                                <dd>
-                                    <div class="comboBox-wide" id="collectionLine_checkDate"></div>
-
-                                    <input type="hidden" class="requiredCollectionLine" id="collectionLine_checkDate_data" />
-                                </dd>
-                                <dt>Check Bank</dt>
-                                <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkBank" /></dd>
-                                <dt>Depository Bank</dt>
-                                <dd>
-                                    <div class="comboBox-wide" id="collectionLine_depositoryBank"></div>
-
-                                    <input type="hidden" id="collectionLine_depositoryBank_data" class="requiredCollectionLine">
-                                    <input type="hidden" id="collectionLine_depositoryBank_selectedValue" />
-                                </dd>
-                                <dt>Clear</dt>
-                                <dd><input type="checkbox" id="collectionLine_Clear" /></dd>
-                            </dl>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary btn-sm" id="cmdSaveCollectionLineButton" onclick="cmdCollectionLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                        <button id="cmdCollectionLineDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============== -->
-        <!-- Journal Detail -->
-        <!-- ============== -->
-        <div class="modal fade" id="journalDetail" role="dialog">
-            <div class="modal-dialog modal-lg">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <h4>
-                                <span id="loadingJournalGridList"></span>
-                            </h4>
-                        </center>
-                        <div id="journal_Content">
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="journalListGrid" class="grid" align="left"></div>
+                        <div class="tab-content">
+                            <div id="CollectionLine" class="tab-pane fade in active">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <hr />
-                            <div class="row">
-                                <div class="col-md-6"></div>
-                                <div class="col-md-6" align="right">
-                                    <table>
-                                        <tr>
-                                            <td align="right"> <b>Total Debit:</b> </td>
-                                            <td style="padding-left: 35px"></td>
-                                            <td> <span id="totalDebitInJournal"></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right"> <b>Total Credit:</b> </td>
-                                            <td style="padding-left: 35px"></td>
-                                            <td> <span id="totalCreditInJournal"></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 10px"> </td>
-                                            <td style="padding: 10px"> </td>
-                                            <td style="padding: 10px"> </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right"> <b>Variance: </b> </td>
-                                            <td style="padding-left: 35px"></td>
-                                            <td> <span id="variance"></span></td>
-                                        </tr>
-                                    </table>
+                                <br />
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="CollectionLineGrid" class="grid" align="left"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button id="cmdJournalDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                    </div>
                 </div>
-            </div>
+            </section>
         </div>
 
-        <!-- Collection Line Delete Modal Confirmation -->
-        <div class="modal fade" id="deleteCollectionLineConfirm" role="dialog">
-            <div class="modal-dialog modal-sm">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Delete Collection Line <i class="fa fa-trash"></i></h4>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to delete this?
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteCollectionLine" onclick="cmdCollectionLineConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
-                        <button id="cmdConfirmDeleteCollectionLineCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
 
-    <!-- SideBar Menu -->
-    @Html.Partial("_SoftwareSideBarMenu")
+    <!-- Sales for Collection Modal -->
+    <div class="modal fade" id="SalesStatus" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="POStatusModalLabel">Sales Invoice Status</h4>
+                </div>
+                <div class="modal-body">
 
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
-    <!-- Scripts JavaScripts -->
+                </div>
+                <div class="modal-footer">
+                    <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- customer Advances for Collection Modal -->
+    <div class="modal fade" id="customerAdvances" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="POStatusModalLabel">Customer Advances</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection Line Edit Detail -->
+    <div class="modal fade" id="collectionLineEdit" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="collectionLineModalLabel">Collection Line Detail</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="collectionLineDetailForm">
+                        <input type="hidden" id="collectionLine_Id" />
+                        <dl class="dl-horizontal">
+                            <dt>Branch</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="collectionLine_branch"></div>
+
+                                <input type="hidden" id="collectionLine_branch_data" class="requiredCollectionLine">
+                                <input type="hidden" id="collectionLine_branch_selectedValue" />
+                            </dd>
+                            <dt>Pay Type</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="collectionLine_payType"></div>
+
+                                <input type="hidden" id="collectionLine_payType_data" class="requiredCollectionLine">
+                                <input type="hidden" id="collectionLine_payType_selectedValue" />
+                            </dd>
+                            <dt>Particulars</dt>
+                            <dd><textarea class="form-control textarea-custom requiredCollectionLine" id="collectionLine_Particulars"></textarea></dd>
+                            <dt>SI No.</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="collectionLine_SINo"></div>
+
+                                <input type="hidden" id="collectionLine_SINo_data" />
+                                <input type="hidden" id="collectionLine_SINo_selectedValue" />
+                            </dd>
+                            <dt>Amount</dt>
+                            <dd><input class="form-control input-sm requiredCollectionLine" id="collectionLine_amount" /></dd>
+                            <dt>Account</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="collectionLine_account"></div>
+
+                                <input type="hidden" id="collectionLine_account_data" class="requiredCollectionLine">
+                                <input type="hidden" id="collectionLine_account_selectedValue" />
+                            </dd>
+                            <dt>Article</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="collectionLine_article"></div>
+
+                                <input type="hidden" id="collectionLine_article_data" class="requiredCollectionLine">
+                                <input type="hidden" id="collectionLine_article_selectedValue" />
+                            </dd>
+                            <dt>Check No.</dt>
+                            <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkNo" /></dd>
+                            <dt>Check Date</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="collectionLine_checkDate"></div>
+
+                                <input type="hidden" class="requiredCollectionLine" id="collectionLine_checkDate_data" />
+                            </dd>
+                            <dt>Check Bank</dt>
+                            <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkBank" /></dd>
+                            <dt>Depository Bank</dt>
+                            <dd>
+                                <div class="comboBox-wide" id="collectionLine_depositoryBank"></div>
+
+                                <input type="hidden" id="collectionLine_depositoryBank_data" class="requiredCollectionLine">
+                                <input type="hidden" id="collectionLine_depositoryBank_selectedValue" />
+                            </dd>
+                            <dt>Clear</dt>
+                            <dd><input type="checkbox" id="collectionLine_Clear" /></dd>
+                        </dl>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdSaveCollectionLineButton" onclick="cmdCollectionLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                    <button id="cmdCollectionLineDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============== -->
+    <!-- Journal Detail -->
+    <!-- ============== -->
+    <div class="modal fade" id="journalDetail" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="journalModalLabel"> Journal</h4>
+                </div>
+                <div class="modal-body">
+                    <center>
+                        <h4>
+                            <span id="loadingJournalGridList"></span>
+                        </h4>
+                    </center>
+                    <div id="journal_Content">
+                        <div class="row" align="left">
+                            <div class="col-lg-12">
+                                <div id="journalListGrid" class="grid" align="left"></div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6" align="right">
+                                <table>
+                                    <tr>
+                                        <td align="right"> <b>Total Debit:</b> </td>
+                                        <td style="padding-left: 35px"></td>
+                                        <td> <span id="totalDebitInJournal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"> <b>Total Credit:</b> </td>
+                                        <td style="padding-left: 35px"></td>
+                                        <td> <span id="totalCreditInJournal"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px"> </td>
+                                        <td style="padding: 10px"> </td>
+                                        <td style="padding: 10px"> </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"> <b>Variance: </b> </td>
+                                        <td style="padding-left: 35px"></td>
+                                        <td> <span id="variance"></span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cmdJournalDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Collection Line Delete Modal Confirmation -->
+    <div class="modal fade" id="deleteCollectionLineConfirm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Collection Line <i class="fa fa-trash"></i></h4>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" id="cmdConfirmDeleteCollectionLine" onclick="cmdCollectionLineConfirmDeleteButton_OnClick()"><i class="fa fa-trash"></i> Delete</button>
+                    <button id="cmdConfirmDeleteCollectionLineCloseButton" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================

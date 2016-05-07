@@ -12,705 +12,700 @@
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Software-css")
 </head>
-<body>
-    <div id="o-wrapper" class="o-wrapper">
-        <!-- Header -->
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
         @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
 
-        <!-- Section -->
-        <section>
-            <div class="sub-nav">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4><i class="fa fa-print"></i> Inventory Report</h4>
-                        </div>
-                        <div class="col-md-6" align="right">
-                            <h5><strong><span id="currentCompanyName"></span> <span> / </span> <span id="currentBranchName"></span></strong></h5>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Inventory Report
+                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li> Inventory Report </li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
+
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
+                                    <li class="active"><a data-toggle="pill" href="#Inventory">Inventory</a></li>
+                                    <li><a data-toggle="pill" href="#SC">Stock Card</a></li>
+                                    <li class="reportDivider"></li>
+                                    <li><a data-toggle="pill" href="#SIDR">Stock-in Detail Report</a></li>
+                                    <li><a data-toggle="pill" href="#SODR">Stock-out Detail Report</a></li>
+                                    <li><a data-toggle="pill" href="#STDR">Stock Transfer Detail Report</a></li>
+                                    <li class="reportDivider"></li>
+                                    <li><a data-toggle="pill" href="#IL">Item List</a></li>
+                                    <li><a data-toggle="pill" href="#ICL">Item Component List</a></li>
+                                    <li><a data-toggle="pill" href="#PCS">Physical Count Sheet</a></li>
+                                    <li class="reportDivider"></li>
+                                    <li><a data-toggle="pill" href="#FAR">Fixed Assets Report</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="tab-content">
+                                    <div id="Inventory" class="tab-pane fade in active">
+                                        <div align="right">
+                                            <button onclick="InventoryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="inventory_StartDate"></div>
+                                                                <input type="hidden" id="inventory_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="inventory_EndDate"></div>
+                                                                <input type="hidden" id="inventory_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Company</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="Inventory_Company"></div>
+
+                                                                <input type="hidden" id="Inventory_Company_data" />
+                                                                <input type="hidden" id="Inventory_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Filter:</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="checkbox" id="Inventory_Filter" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div id="filterTabsInventory">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div id="one" class="tab-pane fade in active">
+                                                    <div class="well">
+                                                        <form class="form-horizontal" role="form">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Branch</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="Inventory_Branch"></div>
+
+                                                                            <input type="hidden" id="Inventory_Branch_data" />
+                                                                            <input type="hidden" id="Inventory_Branch_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Stock Count No.</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="Inventory_StockCountNo"></div>
+
+                                                                            <input type="hidden" id="Inventory_StockCountNo_data" />
+                                                                            <input type="hidden" id="Inventory_StockCountNo_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Item Group</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="Inventory_ItemGroup"></div>
+
+                                                                            <input type="hidden" id="Inventory_ItemGroup_data" />
+                                                                            <input type="hidden" id="Inventory_ItemGroup_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="SC" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="InventoryReportStockCardPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="stockCard_StartDate"></div>
+                                                                <input type="hidden" id="stockCard_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="stockCard_EndDate"></div>
+                                                                <input type="hidden" id="stockCard_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label class="control-label col-sm-2">Company</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockCard_Company"></div>
+
+                                                                    <input type="hidden" id="StockCard_Company_data" />
+                                                                    <input type="hidden" id="StockCard_Company_selectedValue" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Branch</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="StockCard_Branch"></div>
+
+                                                                <input type="hidden" id="StockCard_Branch_data" />
+                                                                <input type="hidden" id="StockCard_Branch_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Item</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="Items_Item"></div>
+                                                                <input type="hidden" id="Items_Item_data" />
+                                                                <input type="hidden" id="Items_Item_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Filter:</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="checkbox" id="StockCard_Filter" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div id="filterTabsStockCardFilter">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div id="one" class="tab-pane fade in active">
+                                                    <div class="well">
+                                                        <form class="form-horizontal" role="form">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    @*<div class="form-group">
+                                                                            <label class="control-label col-sm-2">Branch</label>
+                                                                            <div class="col-sm-6">
+                                                                                <div class="comboBox-wide" id="StockCard_Branch"></div>
+
+                                                                                <input type="hidden" id="StockCard_Branch_data" />
+                                                                                <input type="hidden" id="StockCard_Branch_selectedValue" />
+                                                                            </div>
+                                                                        </div>*@
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Stock Count No.</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="StockCard_StockCountNo"></div>
+
+                                                                            <input type="hidden" id="StockCard_StockCountNo_data" />
+                                                                            <input type="hidden" id="StockCard_StockCountNo_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Item Group</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="StockCard_ItemGroup"></div>
+
+                                                                            <input type="hidden" id="StockCard_ItemGroup_data" />
+                                                                            <input type="hidden" id="StockCard_ItemGroup_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="SIDR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="InventoryReportStockInDetailPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="stockIn_StartDate"></div>
+                                                                <input type="hidden" id="stockIn_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="stockIn_EndDate"></div>
+                                                                <input type="hidden" id="stockIn_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Branch</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="StockIn_Branch"></div>
+
+                                                                <input type="hidden" id="StockIn_Branch_data" />
+                                                                <input type="hidden" id="StockIn_Branch_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label class="control-label col-sm-2">Company</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockIn_Company"></div>
+
+                                                                    <input type="hidden" id="StockIn_Company_data" />
+                                                                    <input type="hidden" id="StockIn_Company_selectedValue" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Filter</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="checkbox" id="StockIn_Filter" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div id="filterTabsStockIn">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div id="one" class="tab-pane fade in active">
+                                                    <div class="well">
+                                                        <form class="form-horizontal" role="form">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    @*<div class="form-group">
+                                                                            <label class="control-label col-sm-2">Branch</label>
+                                                                            <div class="col-sm-6">
+                                                                                <div class="comboBox-wide" id="StockIn_Branch"></div>
+
+                                                                                <input type="hidden" id="StockIn_Branch_data" />
+                                                                                <input type="hidden" id="StockIn_Branch_selectedValue" />
+                                                                            </div>
+                                                                        </div>*@
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Stock Count No.</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="StockIn_StockCountNo"></div>
+
+                                                                            <input type="hidden" id="StockIn_StockCountNo_data" />
+                                                                            <input type="hidden" id="StockIn_StockCountNo_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Item Group</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="StockIn_ItemGroup"></div>
+
+                                                                            <input type="hidden" id="StockIn_ItemGroup_data" />
+                                                                            <input type="hidden" id="StockIn_ItemGroup_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="SODR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="InventoryReportStockOutDetailPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="stockOut_StartDate"></div>
+                                                                <input type="hidden" id="stockOut_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="stockOut_EndDate"></div>
+                                                                <input type="hidden" id="stockOut_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Branch</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="StockOut_Branch"></div>
+
+                                                                <input type="hidden" id="StockOut_Branch_data" />
+                                                                <input type="hidden" id="StockOut_Branch_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label class="control-label col-sm-2">Company</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockOut_Company"></div>
+
+                                                                    <input type="hidden" id="StockOut_Company_data" />
+                                                                    <input type="hidden" id="StockOut_Company_selectedValue" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Filter</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="checkbox" id="StockOut_Filter" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div id="filterTabsStockOut">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div id="one" class="tab-pane fade in active">
+                                                    <div class="well">
+                                                        <form class="form-horizontal" role="form">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    @*<div class="form-group">
+                                                                            <label class="control-label col-sm-2">Branch</label>
+                                                                            <div class="col-sm-6">
+                                                                                <div class="comboBox-wide" id="StockOut_Branch"></div>
+
+                                                                                <input type="hidden" id="StockOut_Branch_data" />
+                                                                                <input type="hidden" id="StockOut_Branch_selectedValue" />
+                                                                            </div>
+                                                                        </div>*@
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Stock Count No.</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="StockOut_StockCountNo"></div>
+
+                                                                            <input type="hidden" id="StockOut_StockCountNo_data" />
+                                                                            <input type="hidden" id="StockOut_StockCountNo_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Item Group</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="StockOut_ItemGroup"></div>
+
+                                                                            <input type="hidden" id="StockOut_ItemGroup_data" />
+                                                                            <input type="hidden" id="StockOut_ItemGroup_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="STDR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="InventoryReportStockTransferDetailPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="stockTransfer_StartDate"></div>
+                                                                <input type="hidden" id="stockTransfer_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="stockTransfer_EndDate"></div>
+                                                                <input type="hidden" id="stockTransfer_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Branch</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="StockTransfer_Branch"></div>
+
+                                                                <input type="hidden" id="StockTransfer_Branch_data" />
+                                                                <input type="hidden" id="StockTransfer_Branch_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="form-group">
+                                                                <label class="control-label col-sm-2">Company</label>
+                                                                <div class="col-sm-6">
+                                                                    <div class="comboBox-wide" id="StockTransfer_Company"></div>
+
+                                                                    <input type="hidden" id="StockTransfer_Company_data" />
+                                                                    <input type="hidden" id="StockTransfer_Company_selectedValue" />
+                                                                </div>
+                                                            </div>*@
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Filter</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="checkbox" id="StockTransfer_Filter" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div id="filterTabsStockTransfer">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div id="one" class="tab-pane fade in active">
+                                                    <div class="well">
+                                                        <form class="form-horizontal" role="form">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    @*<div class="form-group">
+                                                                            <label class="control-label col-sm-2">Branch</label>
+                                                                            <div class="col-sm-6">
+                                                                                <div class="comboBox-wide" id="StockTransfer_Branch"></div>
+
+                                                                                <input type="hidden" id="StockTransfer_Branch_data" />
+                                                                                <input type="hidden" id="StockTransfer_Branch_selectedValue" />
+                                                                            </div>
+                                                                        </div>*@
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Stock Count No.</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="StockTransfer_StockCountNo"></div>
+
+                                                                            <input type="hidden" id="StockTransfer_StockCountNo_data" />
+                                                                            <input type="hidden" id="StockTransfer_StockCountNo_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Item Group</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="StockTransfer_ItemGroup"></div>
+
+                                                                            <input type="hidden" id="StockTransfer_ItemGroup_data" />
+                                                                            <input type="hidden" id="StockTransfer_ItemGroup_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="IL" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="InventoryReportItemListPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Item Group</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="ItemGroup_Item"></div>
+
+                                                                <input type="hidden" id="ItemGroup_Item_data" />
+                                                                <input type="hidden" id="ItemGroup_Item_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="ICL" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="InventoryReportItemComponentListPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Item Group</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="ItemGroup_ItemComponent"></div>
+
+                                                                <input type="hidden" id="ItemGroup_ItemComponent_data" />
+                                                                <input type="hidden" id="ItemGroup_ItemComponent_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="PCS" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="InventoryReportPhysicalCountSheetPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Item Group</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="ItemGroup_PhysicalCountSheet"></div>
+
+                                                                <input type="hidden" id="ItemGroup_PhysicalCountSheet_data" />
+                                                                <input type="hidden" id="ItemGroup_PhysicalCountSheet_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="FAR" class="tab-pane fade">
+                                        <div align="right">
+                                            <button onclick="InventoryReportFixedAssetsPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
+                                        </div>
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Start Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="fixedAssetReport_StartDate"></div>
+                                                                <input type="hidden" id="fixedAssetReport_StartDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">End Date</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="fixedAssetReport_EndDate"></div>
+                                                                <input type="hidden" id="fixedAssetReport_EndDate_data" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Company</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="fixedAssetReport_Company"></div>
+
+                                                                <input type="hidden" id="fixedAssetReport_Company_data" />
+                                                                <input type="hidden" id="fixedAssetReport_Company_selectedValue" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-2">Filter</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="checkbox" id="filterBranchStockCountNoAndItemGroup" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div id="filterTabsFixedAssetReport">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a data-toggle="tab" href="#one">1</a></li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div id="one" class="tab-pane fade in active">
+                                                    <div class="well">
+                                                        <form class="form-horizontal" role="form">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Branch</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="FixedAssetReport_Branch"></div>
+
+                                                                            <input type="hidden" id="FixedAssetReport_Branch_data" />
+                                                                            <input type="hidden" id="FixedAssetReport_Branch_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Stock Count No.</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="FixedAssetReport_StockCountNo"></div>
+
+                                                                            <input type="hidden" id="FixedAssetReport_StockCountNo_data" />
+                                                                            <input type="hidden" id="FixedAssetReport_StockCountNo_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-sm-2">Item Group</label>
+                                                                        <div class="col-sm-6">
+                                                                            <div class="comboBox-wide" id="FixedAssetReport_ItemGroup"></div>
+
+                                                                            <input type="hidden" id="FixedAssetReport_ItemGroup_data" />
+                                                                            <input type="hidden" id="FixedAssetReport_ItemGroup_selectedValue" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="div_Current_Page">
-                    <div class="container">
-                        <a href="@Url.Action("Index", "Software")" class="currentPageLinkCustom">Main Menu</a> > Inventory Report
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
-                        <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
-                            <li class="active"><a data-toggle="pill" href="#Inventory">Inventory</a></li>
-                            <li><a data-toggle="pill" href="#SC">Stock Card</a></li>
-                            <li class="reportDivider"></li>
-                            <li><a data-toggle="pill" href="#SIDR">Stock-in Detail Report</a></li>
-                            <li><a data-toggle="pill" href="#SODR">Stock-out Detail Report</a></li>
-                            <li><a data-toggle="pill" href="#STDR">Stock Transfer Detail Report</a></li>
-                            <li class="reportDivider"></li>
-                            <li><a data-toggle="pill" href="#IL">Item List</a></li>
-                            <li><a data-toggle="pill" href="#ICL">Item Component List</a></li>
-                            <li><a data-toggle="pill" href="#PCS">Physical Count Sheet</a></li>
-                            <li class="reportDivider"></li>
-                            <li><a data-toggle="pill" href="#FAR">Fixed Assets Report</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="tab-content">
-                            <div id="Inventory" class="tab-pane fade in active">
-                                <div align="right">
-                                    <button onclick="InventoryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="inventory_StartDate"></div>
-                                                        <input type="hidden" id="inventory_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="inventory_EndDate"></div>
-                                                        <input type="hidden" id="inventory_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Company</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="Inventory_Company"></div>
+            </section>
+        </div>
 
-                                                        <input type="hidden" id="Inventory_Company_data" />
-                                                        <input type="hidden" id="Inventory_Company_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Filter:</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="checkbox" id="Inventory_Filter" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="filterTabsInventory">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
-                                    </ul>
-
-                                    <div class="tab-content">
-                                        <div id="one" class="tab-pane fade in active">
-                                            <div class="well">
-                                                <form class="form-horizontal" role="form">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Branch</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="Inventory_Branch"></div>
-
-                                                                    <input type="hidden" id="Inventory_Branch_data" />
-                                                                    <input type="hidden" id="Inventory_Branch_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Stock Count No.</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="Inventory_StockCountNo"></div>
-
-                                                                    <input type="hidden" id="Inventory_StockCountNo_data" />
-                                                                    <input type="hidden" id="Inventory_StockCountNo_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Item Group</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="Inventory_ItemGroup"></div>
-
-                                                                    <input type="hidden" id="Inventory_ItemGroup_data" />
-                                                                    <input type="hidden" id="Inventory_ItemGroup_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="SC" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="InventoryReportStockCardPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="stockCard_StartDate"></div>
-                                                        <input type="hidden" id="stockCard_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="stockCard_EndDate"></div>
-                                                        <input type="hidden" id="stockCard_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                                @*<div class="form-group">
-                                                        <label class="control-label col-sm-2">Company</label>
-                                                        <div class="col-sm-6">
-                                                            <div class="comboBox-wide" id="StockCard_Company"></div>
-
-                                                            <input type="hidden" id="StockCard_Company_data" />
-                                                            <input type="hidden" id="StockCard_Company_selectedValue" />
-                                                        </div>
-                                                    </div>*@
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Branch</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="StockCard_Branch"></div>
-
-                                                        <input type="hidden" id="StockCard_Branch_data" />
-                                                        <input type="hidden" id="StockCard_Branch_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Item</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="Items_Item"></div>
-                                                        <input type="hidden" id="Items_Item_data" />
-                                                        <input type="hidden" id="Items_Item_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Filter:</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="checkbox" id="StockCard_Filter" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="filterTabsStockCardFilter">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
-                                    </ul>
-
-                                    <div class="tab-content">
-                                        <div id="one" class="tab-pane fade in active">
-                                            <div class="well">
-                                                <form class="form-horizontal" role="form">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            @*<div class="form-group">
-                                                                    <label class="control-label col-sm-2">Branch</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="StockCard_Branch"></div>
-
-                                                                        <input type="hidden" id="StockCard_Branch_data" />
-                                                                        <input type="hidden" id="StockCard_Branch_selectedValue" />
-                                                                    </div>
-                                                                </div>*@
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Stock Count No.</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockCard_StockCountNo"></div>
-
-                                                                    <input type="hidden" id="StockCard_StockCountNo_data" />
-                                                                    <input type="hidden" id="StockCard_StockCountNo_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Item Group</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockCard_ItemGroup"></div>
-
-                                                                    <input type="hidden" id="StockCard_ItemGroup_data" />
-                                                                    <input type="hidden" id="StockCard_ItemGroup_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="SIDR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="InventoryReportStockInDetailPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="stockIn_StartDate"></div>
-                                                        <input type="hidden" id="stockIn_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="stockIn_EndDate"></div>
-                                                        <input type="hidden" id="stockIn_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Branch</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="StockIn_Branch"></div>
-
-                                                        <input type="hidden" id="StockIn_Branch_data" />
-                                                        <input type="hidden" id="StockIn_Branch_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                @*<div class="form-group">
-                                                        <label class="control-label col-sm-2">Company</label>
-                                                        <div class="col-sm-6">
-                                                            <div class="comboBox-wide" id="StockIn_Company"></div>
-
-                                                            <input type="hidden" id="StockIn_Company_data" />
-                                                            <input type="hidden" id="StockIn_Company_selectedValue" />
-                                                        </div>
-                                                    </div>*@
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Filter</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="checkbox" id="StockIn_Filter" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="filterTabsStockIn">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
-                                    </ul>
-
-                                    <div class="tab-content">
-                                        <div id="one" class="tab-pane fade in active">
-                                            <div class="well">
-                                                <form class="form-horizontal" role="form">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            @*<div class="form-group">
-                                                                    <label class="control-label col-sm-2">Branch</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="StockIn_Branch"></div>
-
-                                                                        <input type="hidden" id="StockIn_Branch_data" />
-                                                                        <input type="hidden" id="StockIn_Branch_selectedValue" />
-                                                                    </div>
-                                                                </div>*@
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Stock Count No.</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockIn_StockCountNo"></div>
-
-                                                                    <input type="hidden" id="StockIn_StockCountNo_data" />
-                                                                    <input type="hidden" id="StockIn_StockCountNo_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Item Group</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockIn_ItemGroup"></div>
-
-                                                                    <input type="hidden" id="StockIn_ItemGroup_data" />
-                                                                    <input type="hidden" id="StockIn_ItemGroup_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="SODR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="InventoryReportStockOutDetailPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="stockOut_StartDate"></div>
-                                                        <input type="hidden" id="stockOut_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="stockOut_EndDate"></div>
-                                                        <input type="hidden" id="stockOut_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Branch</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="StockOut_Branch"></div>
-
-                                                        <input type="hidden" id="StockOut_Branch_data" />
-                                                        <input type="hidden" id="StockOut_Branch_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                @*<div class="form-group">
-                                                        <label class="control-label col-sm-2">Company</label>
-                                                        <div class="col-sm-6">
-                                                            <div class="comboBox-wide" id="StockOut_Company"></div>
-
-                                                            <input type="hidden" id="StockOut_Company_data" />
-                                                            <input type="hidden" id="StockOut_Company_selectedValue" />
-                                                        </div>
-                                                    </div>*@
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Filter</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="checkbox" id="StockOut_Filter" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="filterTabsStockOut">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
-                                    </ul>
-
-                                    <div class="tab-content">
-                                        <div id="one" class="tab-pane fade in active">
-                                            <div class="well">
-                                                <form class="form-horizontal" role="form">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            @*<div class="form-group">
-                                                                    <label class="control-label col-sm-2">Branch</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="StockOut_Branch"></div>
-
-                                                                        <input type="hidden" id="StockOut_Branch_data" />
-                                                                        <input type="hidden" id="StockOut_Branch_selectedValue" />
-                                                                    </div>
-                                                                </div>*@
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Stock Count No.</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockOut_StockCountNo"></div>
-
-                                                                    <input type="hidden" id="StockOut_StockCountNo_data" />
-                                                                    <input type="hidden" id="StockOut_StockCountNo_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Item Group</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockOut_ItemGroup"></div>
-
-                                                                    <input type="hidden" id="StockOut_ItemGroup_data" />
-                                                                    <input type="hidden" id="StockOut_ItemGroup_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="STDR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="InventoryReportStockTransferDetailPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="stockTransfer_StartDate"></div>
-                                                        <input type="hidden" id="stockTransfer_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="stockTransfer_EndDate"></div>
-                                                        <input type="hidden" id="stockTransfer_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Branch</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="StockTransfer_Branch"></div>
-
-                                                        <input type="hidden" id="StockTransfer_Branch_data" />
-                                                        <input type="hidden" id="StockTransfer_Branch_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                @*<div class="form-group">
-                                                        <label class="control-label col-sm-2">Company</label>
-                                                        <div class="col-sm-6">
-                                                            <div class="comboBox-wide" id="StockTransfer_Company"></div>
-
-                                                            <input type="hidden" id="StockTransfer_Company_data" />
-                                                            <input type="hidden" id="StockTransfer_Company_selectedValue" />
-                                                        </div>
-                                                    </div>*@
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Filter</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="checkbox" id="StockTransfer_Filter" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="filterTabsStockTransfer">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
-                                    </ul>
-
-                                    <div class="tab-content">
-                                        <div id="one" class="tab-pane fade in active">
-                                            <div class="well">
-                                                <form class="form-horizontal" role="form">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            @*<div class="form-group">
-                                                                    <label class="control-label col-sm-2">Branch</label>
-                                                                    <div class="col-sm-6">
-                                                                        <div class="comboBox-wide" id="StockTransfer_Branch"></div>
-
-                                                                        <input type="hidden" id="StockTransfer_Branch_data" />
-                                                                        <input type="hidden" id="StockTransfer_Branch_selectedValue" />
-                                                                    </div>
-                                                                </div>*@
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Stock Count No.</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockTransfer_StockCountNo"></div>
-
-                                                                    <input type="hidden" id="StockTransfer_StockCountNo_data" />
-                                                                    <input type="hidden" id="StockTransfer_StockCountNo_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Item Group</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="StockTransfer_ItemGroup"></div>
-
-                                                                    <input type="hidden" id="StockTransfer_ItemGroup_data" />
-                                                                    <input type="hidden" id="StockTransfer_ItemGroup_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="IL" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="InventoryReportItemListPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Item Group</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="ItemGroup_Item"></div>
-
-                                                        <input type="hidden" id="ItemGroup_Item_data" />
-                                                        <input type="hidden" id="ItemGroup_Item_selectedValue" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="ICL" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="InventoryReportItemComponentListPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Item Group</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="ItemGroup_ItemComponent"></div>
-
-                                                        <input type="hidden" id="ItemGroup_ItemComponent_data" />
-                                                        <input type="hidden" id="ItemGroup_ItemComponent_selectedValue" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="PCS" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="InventoryReportPhysicalCountSheetPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Item Group</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="ItemGroup_PhysicalCountSheet"></div>
-
-                                                        <input type="hidden" id="ItemGroup_PhysicalCountSheet_data" />
-                                                        <input type="hidden" id="ItemGroup_PhysicalCountSheet_selectedValue" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="FAR" class="tab-pane fade">
-                                <div align="right">
-                                    <button onclick="InventoryReportFixedAssetsPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
-                                </div>
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Start Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="fixedAssetReport_StartDate"></div>
-                                                        <input type="hidden" id="fixedAssetReport_StartDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">End Date</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="fixedAssetReport_EndDate"></div>
-                                                        <input type="hidden" id="fixedAssetReport_EndDate_data" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Company</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="fixedAssetReport_Company"></div>
-
-                                                        <input type="hidden" id="fixedAssetReport_Company_data" />
-                                                        <input type="hidden" id="fixedAssetReport_Company_selectedValue" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-2">Filter</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="checkbox" id="filterBranchStockCountNoAndItemGroup" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="filterTabsFixedAssetReport">
-                                    <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#one">1</a></li>
-                                    </ul>
-
-                                    <div class="tab-content">
-                                        <div id="one" class="tab-pane fade in active">
-                                            <div class="well">
-                                                <form class="form-horizontal" role="form">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Branch</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="FixedAssetReport_Branch"></div>
-
-                                                                    <input type="hidden" id="FixedAssetReport_Branch_data" />
-                                                                    <input type="hidden" id="FixedAssetReport_Branch_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Stock Count No.</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="FixedAssetReport_StockCountNo"></div>
-
-                                                                    <input type="hidden" id="FixedAssetReport_StockCountNo_data" />
-                                                                    <input type="hidden" id="FixedAssetReport_StockCountNo_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="control-label col-sm-2">Item Group</label>
-                                                                <div class="col-sm-6">
-                                                                    <div class="comboBox-wide" id="FixedAssetReport_ItemGroup"></div>
-
-                                                                    <input type="hidden" id="FixedAssetReport_ItemGroup_data" />
-                                                                    <input type="hidden" id="FixedAssetReport_ItemGroup_selectedValue" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
         @Html.Partial("_SoftwareFooter")
     </div>
 
-    <!-- SideBar Menu -->
-    @Html.Partial("_SoftwareSideBarMenu")
-
-    <div id="c-mask" class="c-mask"></div><!-- /c-mask -->
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================
@@ -2275,7 +2270,7 @@
                 window.location.href = '/Software/InventoryReportItemListPDF?ItemGroupId=' + ItemGroupId;
             }
         }
-        
+
         function InventoryReportPhysicalCountSheetPDF_OnClick() {
             var ItemGroupId;
             if (document.getElementById('ItemGroup_PhysicalCountSheet_data').value == "") {
@@ -2302,7 +2297,7 @@
             }
         }
 
-        
+
         function InventoryReportFixedAssetsPDF_OnClick() {
             var inventoryReportFixedAssetsStartDate = document.getElementById('fixedAssetReport_StartDate_data').value;
             var inventoryReportFixedAssetsEndDate = document.getElementById('fixedAssetReport_EndDate_data').value;
