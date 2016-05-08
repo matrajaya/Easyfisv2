@@ -213,7 +213,7 @@
     <!-- Sales Items Detail -->
     <!-- ================== -->
     <div class="modal fade" id="saleItemsEdit" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -222,9 +222,15 @@
                 </div>
                 <div class="modal-body">
                     <form id="SalesLineDetailForm">
-                        <input type="hidden" id="saleItem_Id" />
-                        <div class="row">
-                            <div class="col-md-6">
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#SIItem" id="SIItemTabId">Items</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#SITax" id="SITaxTabId">Tax</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#SIBUC" id="SIBUCTabId">Basic Unit Conversion</a></li>
+                        </ul>
+                        <br />
+                        <div class="tab-content">
+                            <div id="SIItem" class="tab-pane fade in active">
+                                <input type="hidden" id="saleItem_Id" />
                                 <dl class="dl-horizontal">
                                     <dt>Item Code</dt>
                                     <dd>
@@ -271,15 +277,14 @@
                                     <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_DiscountRate" /></dd>
                                     <dt>Discount Amount</dt>
                                     <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_DiscountAmount" /></dd>
-                                </dl>
-                            </div>
-                            <div class="col-md-6">
-                                <dl class="dl-horizontal">
                                     <dt>Net Price</dt>
                                     <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_NetPrice" /></dd>
                                     <dt>Amount</dt>
                                     <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_Amount" /></dd>
-
+                                </dl>
+                            </div>
+                            <div id="SITax" class="tab-pane fade in">
+                                <dl class="dl-horizontal">
                                     <dt>VAT</dt>
                                     <dd>
                                         <div class="comboBox-wide" id="saleItem_VAT"></div>
@@ -292,13 +297,10 @@
                                     <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_VATRate" /></dd>
                                     <dt>VAT Amount</dt>
                                     <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_VATAmount" /></dd>
-                                    <dt></dt>
-                                    <dd>
-                                        <br />
-                                        <hr />
-                                        <center><label>Basic Unit Conversion</label></center>
-                                        <br />
-                                    </dd>
+                                </dl>
+                            </div>
+                            <div id="SIBUC" class="tab-pane fade in">
+                                <dl class="dl-horizontal">
                                     <dt>Unit</dt>
                                     <dd>
                                         <div class="comboBox-wide" id="saleItem_BUCUnit"></div>

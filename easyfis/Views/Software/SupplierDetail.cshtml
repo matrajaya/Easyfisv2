@@ -487,8 +487,7 @@
                 success: function (lastSupplierResults) {
                     if (lastSupplierResults != null) {
                         window.setTimeout(function () {
-                            var newurl = '/Software/SupplierDetail?SupplierId=' + lastSupplierResults.Id;
-                            window.history.pushState({ path: newurl }, '', newurl);
+                            window.location = '/Software/SupplierDetail?SupplierId=' + lastSupplierResults.Id;
                         }, 1000);
                     }
                 }

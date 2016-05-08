@@ -12,89 +12,70 @@
 }
 else
 {
-    <!-- Section -->
     <section>
-        <div class="cover-register-photo-custom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6">
-                        <div class="panel-group">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Register</h4>
-                                </div>
-                                <div class="panel-body">
+        <div class="container">
+            <br /><br /><br /><br />
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Register</h4>
+                            </div>
+                            <div class="panel-body">
+                                <br />
+                                @model easyfis.Models.RegisterViewModel
+                                @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Full name:</label>
+                                        <div class="col-sm-8">
+                                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", @placeholder = "Full name" })
+                                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Username:</label>
+                                        <div class="col-sm-8">
+                                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
+                                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Password:</label>
+                                        <div class="col-sm-8">
+                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Confirm Password:</label>
+                                        <div class="col-sm-8">
+                                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm Password" })
+                                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4">Captcha:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="code" placeholder="Code">
+                                        </div>
+                                    </div>
                                     <br />
-                                    @*<form class="form-horizontal" role="form">*@
-                                    @model easyfis.Models.RegisterViewModel
-                                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        @*<div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <span class="help-block">
-                                                        @Html.ValidationSummary("", new { @class = "text-danger" })
-                                                    </span>
-                                                </div>
-                                            </div>*@
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Full name:</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", @placeholder = "Full name" })
-                                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
-                                                @*<input type="text" class="form-control" id="lastName" placeholder="Last name">*@
-                                            </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-4"></div>
+                                        <div class="col-sm-8">
+                                            <input type="submit" class="btn btn-primary" value="Submit">
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Username:</label>
-                                            <div class="col-sm-8">
-                                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
-                                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
-                                                @*<input type="email" class="form-control modal-form-border" id="email" placeholder="Email address">*@
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Password:</label>
-                                            <div class="col-sm-8">
-                                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
-                                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                                                @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Password">*@
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Confirm Password:</label>
-                                            <div class="col-sm-8">
-                                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm Password" })
-                                                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-                                                @*<input type="password" class="form-control modal-form-border" id="pwd" placeholder="Confirm Password">*@
-                                            </div>
-                                        </div>
-                                        <hr class="divider" />
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Captcha:</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control" id="code" placeholder="Code">
-                                            </div>
-                                        </div>
-                                        <br /><br />
-                                        <div class="form-group">
-                                            <div class="col-sm-4"></div>
-                                            <div class="col-sm-8">
-                                                <input type="submit" class="btn btn-primary" value="Submit">
-                                            </div>
-                                        </div>
-                                    }
-                                    @*</form>*@
-                                </div>
-                                @*<div class="panel-footer">
-                                        <p>Do not forget to put captca in your registration</p>
-                                    </div>*@
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3"></div>
                 </div>
+                <div class="col-md-3"></div>
             </div>
         </div>
     </section>

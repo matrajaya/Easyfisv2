@@ -353,9 +353,8 @@
                 data: {},
                 success: function (lastCustomerResults) {
                     if (lastCustomerResults != null) {
-                        var lastCustomerId = lastCustomerResults.Id
                         window.setTimeout(function () {
-                            window.location = '/Software/CustomerDetail?CustomerId=' + lastCustomerId;
+                            window.location = '/Software/CustomerDetail?CustomerId=' + lastCustomerResults.Id;
                         }, 1000);
                     }
                 }

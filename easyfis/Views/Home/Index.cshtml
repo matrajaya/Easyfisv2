@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html class="home-html-height">
 <head>
     <!-- Meta Tags -->
     <meta charset="utf-8" />
@@ -7,240 +7,199 @@
 
     <!-- Title of the Page -->
     <title>EasyFIS</title>
-     
+
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Home-css")
 </head>
-<body data-spy="scroll" data-offset="100" id="home">
-    <!-- Header -->
-    <header>
-        <!-- navbar -->
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="@Url.Action("Index", "Home")">EasyFIS</a>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">About <i class="fa fa-caret-down"></i></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#sales"><i class="fa fa-bar-chart"></i> Sales</a></li>
-                                <li><a href="#purchases"><i class="fa fa-shopping-cart"></i> Purchases</a></li>
-                                <li><a href="#warehouseInventory"><i class="fa fa-cubes"></i> Warehouse Inventory</a></li>
-                                <li><a href="#productManagement"><i class="fa fa-list"></i> Product Management</a></li>
-                                <li><a href="#bankManagement"><i class="fa fa-university"></i> Bank Management</a></li>
-                                <li><a href="#financials"><i class="fa fa-money"></i> Financials</a></li>
-                                <li><a href="#multiUserSetup"><i class="fa fa-users"></i> Mutli-user Setup</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#support">Support</a></li>
-                        @*<li><a href="#">News</a></li> 
-                        <li><a href="#">Subscribe</a></li>*@
-                    </ul>
-
-                        @Html.Partial("_LoginPartial")
-                    
-                </div>
+<body id="page-top" class="home-body-height">
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">EasyFIS</a>
             </div>
-        </nav>
-        <!-- end of navbar -->
-        <!-- cover page -->
-        <div class="cover-photo-custom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div>
-                            <!-- <center><img class="img-responsive" data-src="holder.js/500x500/auto" alt="" src="../images/logo/logoSample.png" width="300"></center> -->
-                            <h1>EasyFIS</h1>
-                            <h3>Easy Accounting</h3>
-                            <p>The easiest way to manage your sales, purchases, disbursements, collections, warehouse inventories and financials in the cloud using any device.</p>
-                            <hr class="intro-divider">
-                            @Html.Partial("_HomeIndex")
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+
+    <header class="homeHeader">
+        <div class="header-content">
+            <div class="header-content-inner">
+                <h1>Easy Financial Information System</h1>
+                <hr>
+                <p>The easiest way to manage your sales, purchases, disbursements, collections, warehouse inventories and financials in the cloud using any device.</p>
+                <a href="#about" class="btn btn-primary btn-xl page-scroll">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="bg-primary homeSection" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <img src="~/images/sectionImages/devices.png" class="img-responsive" alt="">
+                    <br /><br />
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2 ">
+                            <h2 class="section-heading">EasyFIS</h2>
+                            <p class="text-faded">EasyFIS is a multi-tenant cloud-based Software-as-a-Service (SaaS) business app that caters to micro, small and medium trading businesses. You can manage your sales, purchases, disbursements, collections, warehouse inventories, banks and financials in the cloud using any device.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- End of cover page -->
-    </header>
+    </section>
 
-    <!-- About Section -->
-    <section>
+    <section id="services" class="homeSection">
         <div class="container">
-
-            <!-- About Simplified Accouting -->
-            <hr class="featurette-divider">
-            <div class="row featurette">
-                <div class="col-md-12">
-                    <center><h2 class="featurette-heading">EasyFIS</h2></center>
-                    <p class="lead custom-lead">EasyFIS is a multi-tenant cloud-based Software-as-a-Service (SaaS) business app that caters to micro, small and medium trading businesses. You can manage your sales, purchases, disbursements, collections, warehouse inventories, banks and financials in the cloud using any device.</p>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Services</h2>
+                    <hr class="primary">
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <br /><br />
+            <div class="row">
+                <div class="col-md-6 portfolio-item">
+                    <br /><br />
+                    <center><img class="img-responsive img-thumbnail" src="~/images/sectionImages/sales.jpg" alt="" style="width: 100%; height: 373.5px;"></center>
+                    <h3>
+                        <i class="fa fa-bar-chart"></i> Sales
+                    </h3>
+                    <p>You can perform customer orders and invoices of products and services in the cloud. You are provided with the list of products with its on-hand inventory in real-time. Automated posting of Accounts Receivable (AR), Journal Entries and Inventory. In-line tax computation and comprehensive discounting.</p>
+                </div>
+                <div class="col-md-6 portfolio-item">
+                    <br /><br />
+                    <center><img class="img-responsive img-thumbnail" src="~/images/sectionImages/purchase.jpg" alt="" style="width: 100%; height: 373.5px;"></center>
+                    <h3>
+                        <i class="fa fa-shopping-cart"></i> Purchases
+                    </h3>
+                    <p>You can perform supplier orders and invoices of your expenses in the cloud. Automated posting of Accounts Payable (AP), Journal Entries and Inventory. Automated inventory batch cost posting of products. In-line tax computation. Provides you with an order status report.</p>
                 </div>
             </div>
 
-            <!-- Sales -->
-            <hr class="featurette-divider">
-            <div id="sales" class="row featurette section-padding-top">
-                <div class="col-md-7">
-                    <center><h2 class="featurette-heading">Sales</h2></center>
-                    <p class="lead custom-lead">You can perform customer orders and invoices of products and services in the cloud. You are provided with the list of products with its on-hand inventory in real-time. Automated posting of Accounts Receivable (AR), Journal Entries and Inventory. In-line tax computation and comprehensive discounting.</p>
-                    @*<center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>*@
+            <div class="row">
+                <div class="col-md-6 portfolio-item">
+                    <br /><br />
+                    <center><img class="img-responsive img-thumbnail" src="~/images/sectionImages/warehouseInventory.jpg" alt="" style="width: 100%; height: 373.5px;"></center>
+                    <h3>
+                        <i class="fa fa-cubes"></i> Warehouse Inventory
+                    </h3>
+                    <p>Unlimited warehouse or branch creation. You can perform stock in and out as well as transfer of products from one warehouse or branch to another. You can perform consignment procedures.</p>
                 </div>
-                <div class="col-md-5">
-                    <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/sales.jpg">
-                </div>
-            </div>
-
-            <!-- Purchases -->
-            <hr class="featurette-divider">
-            <div id="purchases" class="row featurette section-padding-top">
-                <div class="col-md-7 col-md-push-5">
-                    <center><h2 class="featurette-heading">Purchases</h2></center>
-                    <p class="lead custom-lead">You can perform supplier orders and invoices of your expenses in the cloud. Automated posting of Accounts Payable (AP), Journal Entries and Inventory. Automated inventory batch cost posting of products. In-line tax computation. Provides you with an order status report.</p>
-                    @*<center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>*@
-                </div>
-                <div class="col-md-5 col-md-pull-7">
-                    <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/purchase.jpg">
+                <div class="col-md-6 portfolio-item">
+                    <br /><br />
+                    <center><img class="img-responsive img-thumbnail" src="~/images/sectionImages/productManagement.jpg" alt="" style="width: 100%; height: 373.5px;"></center>
+                    <h3>
+                        <i class="fa fa-list"></i> Product Management
+                    </h3>
+                    <p>Allows multiple product prices, e.g., SRP, Wholesale, etc. Allows multiple units of measure. You can perform product ingredients and components.</p>
                 </div>
             </div>
 
-            <!-- Warehouse Inventory -->
-            <hr class="featurette-divider">
-            <div id="warehouseInventory" class="row featurette section-padding-top">
-                <div class="col-md-7">
-                    <center><h2 class="featurette-heading">Warehouse Inventory</h2></center>
-                    <p class="lead custom-lead">Unlimited warehouse or branch creation. You can perform stock in and out as well as transfer of products from one warehouse or branch to another. You can perform consignment procedures.</p>
-                    @*<center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>*@
+            <div class="row">
+                <div class="col-md-6 portfolio-item">
+                    <br /><br />
+                    <center><img class="img-responsive img-thumbnail" src="~/images/sectionImages/bankManagement.jpg" alt="" style="width: 100%; height: 373.5px;"></center>
+                    <h3>
+                        <i class="fa fa-university"></i> Bank Management
+                    </h3>
+                    <p>Unlimited bank creation. Automated posting of deposit and withdrawal from collection and disbursement. Real-time bank reconciliation report.</p>
                 </div>
-                <div class="col-md-5">
-                    <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/warehouseInventory.jpg">
-                </div>
-            </div>
-
-            <!-- Product Management -->
-            <hr class="featurette-divider">
-            <div id="productManagement" class="row featurette section-padding-top">
-                <div class="col-md-7 col-md-push-5">
-                    <center><h2 class="featurette-heading">Product Management</h2></center>
-                    <p class="lead custom-lead">Allows multiple product prices, e.g., SRP, Wholesale, etc. Allows multiple units of measure. You can perform product ingredients and components.</p>
-                    @*<center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>*@
-                </div>
-                <div class="col-md-5 col-md-pull-7">
-                    <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/productManagement.jpg">
+                <div class="col-md-6 portfolio-item">
+                    <br /><br />
+                    <center><img class="img-responsive img-thumbnail" src="~/images/sectionImages/financials.jpg" alt="" style="width: 100%; height: 373.5px;"></center>
+                    <h3>
+                        <i class="fa fa-money"></i> Financials
+                    </h3>
+                    <p>Real-time Balance Sheet and Income Statement report per branch or consolidated. Drill down report from Trial Balance to Ledger and then to the transaction itself. You can perform comprehensive account adjustments through Journal Voucher.</p>
                 </div>
             </div>
 
-            <!-- Bank Management -->
-            <hr class="featurette-divider">
-            <div id="bankManagement" class="row featurette section-padding-top">
-                <div class="col-md-7">
-                    <center><h2 class="featurette-heading">Bank Management</h2></center>
-                    <p class="lead custom-lead">Unlimited bank creation. Automated posting of deposit and withdrawal from collection and disbursement. Real-time bank reconciliation report.</p>
-                    @*<center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>*@
-                </div>
-                <div class="col-md-5">
-                    <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/bankManagement.jpg">
-                </div>
-            </div>
-
-            <!-- Financials -->
-            <hr class="featurette-divider">
-            <div id="financials" class="row featurette section-padding-top">
-                <div class="col-md-7 col-md-push-5">
-                    <center><h2 class="featurette-heading">Financials</h2></center>
-                    <p class="lead custom-lead">Real-time Balance Sheet and Income Statement report per branch or consolidated. Drill down report from Trial Balance to Ledger and then to the transaction itself. You can perform comprehensive account adjustments through Journal Voucher.</p>
-                    @*<center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>*@
-                </div>
-                <div class="col-md-5 col-md-pull-7">
-                    <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/financials.jpg">
-                </div>
-            </div>
-
-            <!-- Multi-User Set up -->
-            <hr class="featurette-divider">
-            <div id="multiUserSetup" class="row featurette section-padding-top">
-                <div class="col-md-7">
-                    <center><h2 class="featurette-heading">Mutli-user Setup</h2></center>
-                    <p class="lead custom-lead">If you have multiple user and staff, you can give rights and access to your company. Unlimited user registration. Automated transaction tagging of user, e.g., who first created the transaction and who last updated it.</p>
-                    @*<center><a href="#" class="btn btn-success btn-lg btn-custom">Learn more</a></center>*@
-                </div>
-                <div class="col-md-5">
-                    <img class="img-thumbnail img-responsive center-block img-custom" data-src="holder.js/500x500/auto" alt="" src="../images/sectionImages/multiUserSetUp.png">
+            <div class="row">
+                <div class="col-md-6 portfolio-item">
+                    <br /><br />
+                    <center><img class="img-responsive img-thumbnail" src="~/images/sectionImages/multiUserSetUp.png" alt="" style="width: 100%;"></center>
+                    <h3>
+                        <i class="fa fa-users"></i> Mutli-user Setup
+                    </h3>
+                    <p>If you have multiple user and staff, you can give rights and access to your company. Unlimited user registration. Automated transaction tagging of user, e.g., who first created the transaction and who last updated it.</p>
                 </div>
             </div>
         </div>
     </section>
-    <!-- End of the About Section -->
-    <!-- Modal for Login page -->
-    <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <center><h4 class="modal-title">Login</h4></center>
+
+    <section class="no-padding" id="support">
+        <aside class="bg-dark">
+            <div class="container">
+                <div class="call-to-action">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2><i class="fa fa-wrench"></i> Annual Subscription Support: </h2>
+                            <br />
+                            <h4 style="margin-left: 50px;"><i class="fa fa-circle-o"></i> Telephone Call, Call Ticket, Forum</h4>
+                            <h4 style="margin-left: 50px;"><i class="fa fa-circle-o"></i> One-hour response time</h4>
+                            <h4 style="margin-left: 50px;"><i class="fa fa-circle-o"></i> Remote support, e.g., Teamviewer, Logmein, etc.</h4>
+                            <h4 style="margin-left: 50px;"><i class="fa fa-circle-o"></i> Deployment of on-site technical support if necessary</h4>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="email">Email:</label>
-                            <div class="col-sm-10">
-                                <input type="email" class="form-control modal-form-border" id="email" placeholder="Enter email address as username..." required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="pwd">Password:</label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control modal-form-border" id="pwd" placeholder="Enter password..." required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div>
-                                    <label class="control-label"><input type="checkbox"> Remember me</label>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-info"><i class="fa fa-sign-in"></i> Login</button>
-                                <button type="button" class="btn btn-info" data-dismiss="modal"><i class="fa fa-times-circle-o"></i> Cancel</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div class="alert alert-danger fade in">
-                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                    <strong><i class="fa fa-times"></i> Invalid Email Password!</strong> This alert box is intended for user authentication
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="featurette-divider">
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="button" class="btn btn-primary"><i class="fa fa-facebook-official"></i> Login using Facebook Account</button>
-                            </div>
-                        </div>
-                    </form>
+            </div>
+        </aside>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">Contact Us!</h2>
+                    <hr class="primary">
+                    <p>Ready to subscribe with us? That's great! Give us a call or send us an email and we will get back to you as soon as possible!</p>
                 </div>
-                <div class="modal-footer">
-                    <a href="#" class="modal-footer-custom">Forgot Password?</a>
-                    Not yet a member? <a href="#">Register</a>
+                <div class="col-lg-4 col-lg-offset-2 text-center">
+                    <i class="fa fa-phone fa-3x wow bounceIn"></i>
+                    <p>(032) 266 3773</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fa fa-envelope-o fa-3x wow bounceIn" data-wow-delay=".1s"></i>
+                    <p><a href="mailto:your-email@your-domain.com">info@innosoft.ph</a></p>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <footer class="footer-custom">
+        <div class="container-fluid" align="center">
+            <div class="row">
+                <div class="col-lg-12">
+                    <a href="#" class="btn btn-primary" data-placement="top" data-toggle="tooltip" title="Like us on Facebook"><i class="fa fa-facebook-official"></i> </a>
+                    <a href="#" class="btn btn-info" data-placement="right" data-toggle="tooltip" title="Follow us on twitter"><i class="fa fa-twitter"></i> </a>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label>EasyFISv2 © Cebu Innosoft Solutions Inc. All rights reserved.</label>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Modal for Signout -->
     <div class="modal fade" id="modalLogout" role="dialog">
         <div class="modal-dialog modal-sm">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -250,8 +209,6 @@
                     Are you sure you want to logout?
                 </div>
                 <div class="modal-footer">
-                    @*<a href="#" class="modal-footer-custom">Forgot Password?</a>
-                        Not yet a member? <a href="#">Register</a>*@
                     <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-primary"><i class="fa fa-sign-out"></i> Logout</a>
                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
@@ -259,51 +216,6 @@
         </div>
     </div>
 
-    <br>
-    <section id="support">
-        <!-- cover page support -->
-        <div class="cover-photo-support-custom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h2>Annual Subscription Support: </h2>
-                        <br>
-                        <ul>
-                            <li><h4>Telephone Call, Call Ticket, Forum</h4></li>
-                            <li><h4>One-hour response time</h4></li>
-                            <li><h4>Remote support, e.g., Teamviewer, Logmein, etc.</h4></li>
-                            <li><h4>Deployment of on-site technical support if necessary</h4></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End of cover page support -->
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <!-- cover page support -->
-        <div class="cover-photo-footer-custom">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <a href="#" class="btn btn-primary" data-placement="top" data-toggle="tooltip" title="Like us on Facebook"><i class="fa fa-facebook-official"></i> Facebook</a>
-                        <a href="#" class="btn btn-info" data-placement="right" data-toggle="tooltip" title="Follow us on twitter"><i class="fa fa-twitter"></i> Twitter</a>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <label>EasyFISv2 © Cebu Innosoft Solutions Inc. All rights reserved.</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End of cover page support -->
-    </footer>
-
-    <!-- Scripts JavaScripts -->
     @Scripts.Render("~/Scripts/Home-js")
 </body>
 </html>

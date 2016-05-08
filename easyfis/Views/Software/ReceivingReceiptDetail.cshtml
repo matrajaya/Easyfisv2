@@ -204,8 +204,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </section>
@@ -339,7 +337,7 @@
 
     <!-- Modal for RRLines -->
     <div class="modal fade" id="RRLinesEdit" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -348,10 +346,23 @@
                 </div>
                 <div class="modal-body">
                     <form id="RRLinesDetailForm">
-                        <input type="hidden" id="RRLine_Id" />
-                        <div class="row">
-                            <div class="col-md-6">
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#RRItem" id="RRItemTabId">Items</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#RRTax" id="RRTaxTabId">Tax</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#RRBUC" id="RRBUCTabId">Basic Unit Conversion</a></li>
+                        </ul>
+                        <br />
+                        <div class="tab-content">
+                            <div id="RRItem" class="tab-pane fade in active">
+                                <input type="hidden" id="RRLine_Id" />
                                 <dl class="dl-horizontal">
+                                    <dt>Branch</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="RRLine_Branch"></div>
+
+                                        <input type="hidden" id="RRLine_Branch_data" class="requiredRRLine">
+                                        <input type="hidden" id="RRLine_Branch_selectedValue" />
+                                    </dd>
                                     <dt>Purchase Order No</dt>
                                     <dd>
                                         <div class="comboBox-wide" id="RRLine_PONo"></div>
@@ -386,16 +397,9 @@
                                     <dd><input type="text" class="form-control input-sm requiredRRLine" id="RRLine_Cost" /></dd>
                                     <dt>Amount</dt>
                                     <dd><input type="text" class="form-control input-sm requiredRRLine" id="RRLine_Amount" /></dd>
-                                    <dt>Branch</dt>
-                                    <dd>
-                                        <div class="comboBox-wide" id="RRLine_Branch"></div>
-
-                                        <input type="hidden" id="RRLine_Branch_data" class="requiredRRLine">
-                                        <input type="hidden" id="RRLine_Branch_selectedValue" />
-                                    </dd>
                                 </dl>
                             </div>
-                            <div class="col-md-6">
+                            <div id="RRTax" class="tab-pane fade">
                                 <dl class="dl-horizontal">
                                     <dt>VAT</dt>
                                     <dd>
@@ -421,12 +425,10 @@
                                     <dt>WTAX Amount</dt>
                                     <dd><input type="text" class="form-control input-sm requiredRRLine" id="RRLine_WTAXAmount" /></dd>
                                     <dt></dt>
-                                    <dd>
-                                        <br />
-                                        <hr />
-                                        <center><label>Basic Unit Conversion</label></center>
-                                        <br />
-                                    </dd>
+                                </dl>
+                            </div>
+                            <div id="RRBUC" class="tab-pane fade">
+                                <dl class="dl-horizontal">
                                     <dt>Unit</dt>
                                     <dd>
                                         <div class="comboBox-wide" id="RRLine_BUCUnit"></div>

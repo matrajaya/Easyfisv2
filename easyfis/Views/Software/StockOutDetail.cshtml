@@ -142,11 +142,11 @@
                                             </div>
                                         </div>
                                         @*<div class="form-group">
-                            <div class="col-sm-4"></div>
-                            <div class="col-sm-8">
-                                <button type="button" class="btn btn-primary btn-sm">FA Disposal</button>
-                            </div>
-                        </div>*@
+                                                <div class="col-sm-4"></div>
+                                                <div class="col-sm-8">
+                                                    <button type="button" class="btn btn-primary btn-sm">FA Disposal</button>
+                                                </div>
+                                            </div>*@
                                         <div class="form-group">
                                             <div class="col-sm-4"></div>
                                             <div class="col-sm-8">
@@ -213,6 +213,17 @@
                 </div>
                 <div class="modal-body">
                     <form id="stockOutItemsDetailForm">
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#INItem" id="INItemTabId">Items</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#INBUC" id="INBUCTabId">Basic Unit Conversion</a></li>
+                        </ul>
+                        <br />
+                        <div class="tab-content">
+                            <div id="INItem" class="tab-pane fade in active">
+
+                            </div>
+                        </div>
+
                         <input type="hidden" id="stockOutItem_Id" />
                         <div class="row">
                             <div class="col-md-6">
@@ -394,7 +405,7 @@
         var cboPreparedBy;
         var cboCheckedBy;
         var cboApprovedBy;
-        
+
         // =======================
         // Get URL Parameter Value
         // =======================
@@ -590,7 +601,7 @@
                                 BranchBranch: results[i]["Branch"]
                             });
                         }
-                        
+
                         var stockOutId = getParam("StockOutId");
                         var branchId = readCookie("branchId");
                         if(document.location.search.length == 0) {
@@ -891,7 +902,7 @@
                                 UserFullName: results[i]["FullName"]
                             });
                         }
-                        
+
                         var stockOutId = getParam("StockOutId");
                         if(document.location.search.length == 0) {
                             var userId = document.getElementById('userId_data').value;
@@ -1480,7 +1491,7 @@
             cboApprovedBy = new wijmo.input.ComboBox('#StockOut_ApprovedBy');
 
             getStockOutById();
-            
+
             var stockOutId = getParam("StockOutId");
             if(document.location.search.length == 0) {
                 getBranchesForComboBox();
@@ -1819,7 +1830,7 @@
             for (var i = 0; i < ItemDescriptionCollections.items.length; i++) {
                 ItemDescriptionList.push(ItemDescriptionCollections.items[i].ItemDescription);
             }
-            
+
             var disabled;
             if(articleItems == 0) {
                 disabled = true;
@@ -1904,7 +1915,7 @@
             for (var i = 0; i < InventoryCodeCollection.items.length; i++) {
                 InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
             }
-            
+
             var disabled;
             if(articleInventories == 0) {
                 disabled = true;
@@ -2018,7 +2029,7 @@
             for (var i = 0; i < StockOutUnitCollection.items.length; i++) {
                 StockOutUnitList.push(StockOutUnitCollection.items[i].Unit);
             }
-            
+
             var disabled;
             if(stockOutUnits == 0) {
                 disabled = true;
@@ -2069,7 +2080,7 @@
             for (var i = 0; i < StockOutBaseUnitCollection.items.length; i++) {
                 StockOutBaseUnitList.push(StockOutBaseUnitCollection.items[i].Unit);
             }
-            
+
             var disabled;
             if(stockOutUnits == 0) {
                 disabled = true;
@@ -2098,7 +2109,7 @@
                     createCboForStockOutUnit(stockOutUnits);
                 }
             });
-            
+
             if(stockOutUnits == 0) {
                 document.getElementById('stockOutItem_BUCUnit_data').value = "";
                 document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
@@ -2150,7 +2161,7 @@
             for (var i = 0; i < stockOutAccountCollection.items.length; i++) {
                 stockOutAccountList.push(stockOutAccountCollection.items[i].AccountAccount);
             }
-            
+
             var disabled;
             if(stockOutItemAccounts == 0) {
                 disabled = true;

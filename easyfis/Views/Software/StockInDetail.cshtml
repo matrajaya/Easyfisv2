@@ -204,7 +204,7 @@
     <!-- Stock In Item Detail -->
     <!-- ==================== -->
     <div class="modal fade" id="stockInItemsEdit" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -213,9 +213,14 @@
                 </div>
                 <div class="modal-body">
                     <form id="stockInItemsDetailForm">
-                        <input type="hidden" id="stockInItem_Id" />
-                        <div class="row">
-                            <div class="col-md-6">
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#INItem" id="INItemTabId">Items</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#INBUC" id="INBUCTabId">Basic Unit Conversion</a></li>
+                        </ul>
+                        <br />
+                        <div class="tab-content">
+                            <div id="INItem" class="tab-pane fade in active">
+                                <input type="hidden" id="stockInItem_Id" />
                                 <dl class="dl-horizontal">
                                     <dt>Item Code</dt>
                                     <dd>
@@ -247,7 +252,7 @@
                                     <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Amount" /></dd>
                                 </dl>
                             </div>
-                            <div class="col-md-6">
+                            <div id="INBUC" class="tab-pane fade in">
                                 <dl class="dl-horizontal">
                                     <dt></dt>
                                     <dd>
