@@ -190,7 +190,7 @@
     <!-- Stock Transfer Item Detail -->
     <!-- ========================== -->
     <div class="modal fade" id="stockTransferItemsEdit" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -199,9 +199,14 @@
                 </div>
                 <div class="modal-body">
                     <form id="stockTransferItemsDetailForm">
-                        <input type="hidden" id="stockTransferItem_Id" />
-                        <div class="row">
-                            <div class="col-md-6">
+                        <ul class="nav nav-tabs" role="tablist" id="myTab">
+                            <li role="presentation" class="active"><a data-toggle="tab" href="#STItem" id="STItemTabId">Items</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#STBUC" id="STBUCTabId">Basic Unit Conversion</a></li>
+                        </ul>
+                        <br />
+                        <div class="tab-content">
+                            <div id="STItem" class="tab-pane fade in active">
+                                <input type="hidden" id="stockTransferItem_Id" />
                                 <dl class="dl-horizontal">
                                     <dt>Item Code</dt>
                                     <dd>
@@ -240,7 +245,7 @@
                                     <dd><input type="text" class="form-control input-sm requiredStockTransferItem" id="stockTransferItem_Amount" /></dd>
                                 </dl>
                             </div>
-                            <div class="col-md-6">
+                            <div id="STBUC" class="tab-pane fade in">
                                 <dl class="dl-horizontal">
                                     <dt></dt>
                                     <dd>
