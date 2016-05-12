@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
@@ -324,15 +323,15 @@ namespace easyfis.Controllers
                     tableTotalReceivingReceiptAccountFooter.AddCell(new PdfPCell(new Phrase("0.00", fontArial9Italic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
                     tableTotalReceivingReceiptAccountFooter.AddCell(new PdfPCell(new Phrase("0.00", fontArial9Italic)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f });
 
-                    document.Add(tableTotalReceivingReceiptAccountFooter);
-                    document.Add(Chunk.NEWLINE);
-
                     totalBalanceAmount = totalBalanceAmount + accountSubTotalBalanceAmount;
                     totalCurrentAmount = totalCurrentAmount + accountSubTotalCurrentAmount;
                     totalAge30Amount = totalAge30Amount + accountSubTotalAge30Amount;
                     totalAge60Amount = totalAge60Amount + accountSubTotalAge60Amount;
                     totalAge90Amount = totalAge90Amount + accountSubTotalAge90Amount;
                     totalAge120AmountAmount = totalAge120AmountAmount + accountSubTotalAge120AmountAmount;
+
+                    document.Add(tableTotalReceivingReceiptAccountFooter);
+                    document.Add(Chunk.NEWLINE);
                 }
 
                 document.Add(Chunk.NEWLINE);

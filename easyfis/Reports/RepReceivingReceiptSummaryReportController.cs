@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNet.Identity;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using iTextSharp.text;
-using System.IO;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.AspNet.Identity;
+using System;
+using System.IO;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace easyfis.Controllers
 {

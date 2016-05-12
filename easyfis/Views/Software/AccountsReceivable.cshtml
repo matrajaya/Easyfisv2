@@ -34,7 +34,6 @@
 
                     </div>
                     <div class="box-body">
-
                         <div class="row">
                             <div class="col-md-4">
                                 <ul class="nav nav-pills nav-stacked pill-custom pill-report-custom" role="tablist" id="myTab">
@@ -463,7 +462,7 @@
             } else {
                 companyId = document.getElementById('accountReceivableReport_Company_data').value;
                 document.getElementById('accountReceivableReport_Company').style.border = " ";
-                window.location.href = '/Software/AccountsReceivablePDF?DateAsOf=' + accountReceivableReportDateAsOf + '&CompanyId=' + companyId;
+                window.location.href = '/RepAccountsReceivable/AccountsReceivable?DateAsOf=' + accountReceivableReportDateAsOf + '&CompanyId=' + companyId;
             }
         }
 
@@ -478,7 +477,7 @@
             } else {
                 companyId = document.getElementById('accountReceivableSummaryReport_Company_data').value;
                 document.getElementById('accountReceivableSummaryReport_Company').style.border = " ";
-                window.location.href = '/Software/AccountsReceivableSummaryPDF?DateAsOf=' + accountReceivableSummaryReportDateAsOf + '&CompanyId=' + companyId;
+                window.location.href = '/RepAccountsReceivableSummary/AccountsReceivableSummary?DateAsOf=' + accountReceivableSummaryReportDateAsOf + '&CompanyId=' + companyId;
             }
         }
 
@@ -501,7 +500,7 @@
                 accountReceivableStatementOfTheAccountReportCustomerId = document.getElementById('StatementOfTheAccount_Customer_data').value;
                 document.getElementById('StatementOfTheAccount_Company').style.border = " ";
                 document.getElementById('StatementOfTheAccount_Customer').style.border = " ";
-                window.location.href = '/Software/AccountsReceivableStatementOfAccountPDF?DateAsOf=' + accountReceivableStatementOfTheAccountReportDateAsOf + '&CompanyId=' + companyId + '&CustomerId=' + accountReceivableStatementOfTheAccountReportCustomerId;
+                window.location.href = '/RepStatementOfAccount/StatementOfAccount?DateAsOf=' + accountReceivableStatementOfTheAccountReportDateAsOf + '&CompanyId=' + companyId + '&CustomerId=' + accountReceivableStatementOfTheAccountReportCustomerId;
             }
         }
 
@@ -545,7 +544,7 @@
             var saleSummaryReportStartDate = document.getElementById('SaleSummaryReport_StartDate_data').value;
             var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsReceivableSalesSummaryReportPDF?StartDate=' + saleSummaryReportStartDate + '&EndDate=' + saleSummaryReportEndDate;
+            window.location.href = '/RepSalesSummaryReport/SalesSummaryReport?StartDate=' + saleSummaryReportStartDate + '&EndDate=' + saleSummaryReportEndDate;
         }
 
         // get Sale Detail Report Start Date
@@ -587,7 +586,7 @@
             var saleDetailReportStartDate = document.getElementById('SaleDetailReport_StartDate_data').value;
             var saleDetailReportEndDate = document.getElementById('SaleDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsReceivableSalesDetailReportPDF?StartDate=' + saleDetailReportStartDate + '&EndDate=' + saleDetailReportEndDate;
+            window.location.href = '/RepSalesDetailReport/SalesDetailReport?StartDate=' + saleDetailReportStartDate + '&EndDate=' + saleDetailReportEndDate;
         }
 
         // get Collection Summary Report Start Date
@@ -629,7 +628,7 @@
             var collectionSummaryReportStartDate = document.getElementById('CollectionSummaryReport_StartDate_data').value;
             var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsReceivableCollectionSummaryReportPDF?StartDate=' + collectionSummaryReportStartDate + '&EndDate=' + collectionSummaryReportEndDate;
+            window.location.href = '/RepCollectionSummaryReport/CollectionSummaryReport?StartDate=' + collectionSummaryReportStartDate + '&EndDate=' + collectionSummaryReportEndDate;
         }
 
         // get Collection Detail Report Start Date
@@ -671,7 +670,7 @@
             var collectionDetailReportStartDate = document.getElementById('CollectionDetailReport_StartDate_data').value;
             var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsReceivableCollectionDetailReportPDF?StartDate=' + collectionDetailReportStartDate + '&EndDate=' + collectionDetailReportEndDate;
+            window.location.href = '/RepCollectionDetailReport/CollectionDetailReport?StartDate=' + collectionDetailReportStartDate + '&EndDate=' + collectionDetailReportEndDate;
         }
 
         // ============
