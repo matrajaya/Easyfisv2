@@ -752,7 +752,7 @@
                 document.getElementById("accountsPayableVoucher_RRNo").style.border = "1px solid #C8C8C8";
 
                 var accountsPaybleVoucherReportData = document.getElementById('accountsPayableVoucher_RRNo_data').value;
-                window.location.href = '/Software/AccountsPayableVoucherPDF?RRId=' + accountsPaybleVoucherReportData;
+                window.location.href = '/RepAccountsPayableVoucher/AccountsPayableVoucher?ReceivingReceiptId=' + accountsPaybleVoucherReportData;
             }
         }
 
@@ -796,7 +796,7 @@
             var InputVATReportStartDate = document.getElementById('InputVATReport_StartDate_data').value;
             var InputVATReportEndDate = document.getElementById('InputVATReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsPayableInputVATReportPDF?StartDate=' + InputVATReportStartDate + '&EndDate=' + InputVATReportEndDate;
+            window.location.href = '/RepInputVATReport/InputVATReport?StartDate=' + InputVATReportStartDate + '&EndDate=' + InputVATReportEndDate;
         }
 
         // get WithHolding TAX Report Start Date
@@ -839,7 +839,7 @@
             var WithHoldingTaxStartDate = document.getElementById('withHoldingTAXReport_StartDate_data').value;
             var WithHoldingTaxReportEndDate = document.getElementById('withHoldingTAXReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsPayableWithholdingTaxReportPDF?StartDate=' + WithHoldingTaxStartDate + '&EndDate=' + WithHoldingTaxReportEndDate;
+            window.location.href = '/RepWithholdingTaxReport/WithholdingTaxReport?StartDate=' + WithHoldingTaxStartDate + '&EndDate=' + WithHoldingTaxReportEndDate;
         }
 
         function AccountsPayablePDF_OnClick() {
@@ -853,7 +853,7 @@
             } else {
                 companyId = document.getElementById('accountsPaybleReport_Comapny_data').value;
                 document.getElementById('accountsPaybleReport_Comapny').style.border = " ";
-                window.location.href = '/Software/AccountsPayablePDF?DateAsOf=' + accountsPaybleReportDateAsOf + '&CompanyId=' + companyId;
+                window.location.href = '/RepAccountsPayable/AccountsPayable?DateAsOf=' + accountsPaybleReportDateAsOf + '&CompanyId=' + companyId;
             }
         }
 
@@ -896,7 +896,7 @@
             var purchaseSummaryReportStartDate = document.getElementById('purchaseSummaryReport_StartDate_data').value;
             var purchaseSummaryReportEndDate = document.getElementById('purchaseSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsPayablePurchaseSummaryReportPDF?StartDate=' + purchaseSummaryReportStartDate + '&EndDate=' + purchaseSummaryReportEndDate;
+            window.location.href = '/RepPurchaseSummaryReport/PurchaseSummaryReport?StartDate=' + purchaseSummaryReportStartDate + '&EndDate=' + purchaseSummaryReportEndDate;
         }
 
         // get Purchase Detail Report Start Date
@@ -938,7 +938,7 @@
             var purchaseDetailReportStartDate = document.getElementById('purchaseDetailReport_StartDate_data').value;
             var purchaseDetailReportEndDate = document.getElementById('purchaseDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsPayablePurchaseDetailReportPDF?StartDate=' + purchaseDetailReportStartDate + '&EndDate=' + purchaseDetailReportEndDate;
+            window.location.href = '/RepPurchaseDetailReport/PurchaseDetailReport?StartDate=' + purchaseDetailReportStartDate + '&EndDate=' + purchaseDetailReportEndDate;
         }
 
         // get Receiving Receipt Summary Report Start Date
@@ -980,7 +980,7 @@
             var receivingReceiptSummaryReportStartDate = document.getElementById('receivingReceiptSummaryReport_StartDate_data').value;
             var receivingReceiptSummaryReportEndDate = document.getElementById('receivingReceiptSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsPayableReceivingReceiptSummaryReportPDF?StartDate=' + receivingReceiptSummaryReportStartDate + '&EndDate=' + receivingReceiptSummaryReportEndDate;
+            window.location.href = '/RepReceivingReceiptSummaryReport/ReceivingReceiptSummaryReport?StartDate=' + receivingReceiptSummaryReportStartDate + '&EndDate=' + receivingReceiptSummaryReportEndDate;
         }
 
         // get Receiving Receipt Detail Report Start Date
@@ -1022,7 +1022,7 @@
             var receivingReceiptDetailReportStartDate = document.getElementById('receivingReceiptDetailReport_StartDate_data').value;
             var receivingReceiptDetailReportEndDate = document.getElementById('receivingReceiptDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsPayableReceivingReceiptDetailReportPDF?StartDate=' + receivingReceiptDetailReportStartDate + '&EndDate=' + receivingReceiptDetailReportEndDate;
+            window.location.href = '/RepReceivingReceiptDetailReport/ReceivingReceiptDetailReport?StartDate=' + receivingReceiptDetailReportStartDate + '&EndDate=' + receivingReceiptDetailReportEndDate;
         }
 
         // get Disbursement Summary Report Start Date
@@ -1064,7 +1064,7 @@
             var disbursementSummaryReportStartDate = document.getElementById('disbursementSummaryReport_StartDate_data').value;
             var disbursementSummaryReportEndDate = document.getElementById('disbursementSummaryReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsPayableDisbursementSummaryReportPDF?StartDate=' + disbursementSummaryReportStartDate + '&EndDate=' + disbursementSummaryReportEndDate;
+            window.location.href = '/RepDisbursementSummaryReport/DisbursementSummaryReport?StartDate=' + disbursementSummaryReportStartDate + '&EndDate=' + disbursementSummaryReportEndDate;
         }
 
         // get Disbursement Detail Report Start Date
@@ -1106,7 +1106,7 @@
             var disbursementDetailReportStartDate = document.getElementById('disbursementDetailReport_StartDate_data').value;
             var disbursementDetailReportEndDate = document.getElementById('disbursementDetailReport_EndDate_data').value;
 
-            window.location.href = '/Software/AccountsPayableDisbursementDetailReportPDF?StartDate=' + disbursementDetailReportStartDate + '&EndDate=' + disbursementDetailReportEndDate;
+            window.location.href = '/RepDisbursementDetailReport/DisbursementDetailReport?StartDate=' + disbursementDetailReportStartDate + '&EndDate=' + disbursementDetailReportEndDate;
         }
 
         // ===========

@@ -22,5 +22,6 @@ namespace easyfis.Models
         public String UpdatedBy { get; set; }
         public String UpdatedDateTime { get; set; }
         public Int32 IncomeAccountId { get; set; }
+        public Int32 BranchId { get; set; }
     }
 }

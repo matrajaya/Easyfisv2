@@ -387,6 +387,7 @@
       <Association Name="MstBranch_TrnStockOut" Member="TrnStockOuts" ThisKey="Id" OtherKey="BranchId" Type="TrnStockOut" />
       <Association Name="MstBranch_TrnStockTransfer" Member="TrnStockTransfers" ThisKey="Id" OtherKey="BranchId" Type="TrnStockTransfer" />
       <Association Name="MstBranch_TrnStockTransfer1" Member="TrnStockTransfers1" ThisKey="Id" OtherKey="ToBranchId" Type="TrnStockTransfer" />
+      <Association Name="MstBranch_MstUser" Member="MstUsers" ThisKey="Id" OtherKey="BranchId" Type="MstUser" />
       <Association Name="MstCompany_MstBranch" Member="MstCompany" ThisKey="CompanyId" OtherKey="Id" Type="MstCompany" IsForeignKey="true" />
       <Association Name="MstUser_MstBranch" Member="MstUser" ThisKey="CreatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
       <Association Name="MstUser_MstBranch1" Member="MstUser1" ThisKey="UpdatedById" OtherKey="Id" Type="MstUser" IsForeignKey="true" />
@@ -1330,6 +1331,7 @@
       <Column Name="UpdatedDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="UserId" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
       <Column Name="IncomeAccountId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BranchId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Association Name="MstUser_MstAccount" Member="MstAccounts" ThisKey="Id" OtherKey="CreatedById" Type="MstAccount" />
       <Association Name="MstUser_MstAccount1" Member="MstAccounts1" ThisKey="Id" OtherKey="UpdatedById" Type="MstAccount" />
       <Association Name="MstUser_MstAccountCashFlow" Member="MstAccountCashFlows" ThisKey="Id" OtherKey="CreatedById" Type="MstAccountCashFlow" />
@@ -1414,6 +1416,7 @@
       <Association Name="MstUser_TrnStockTransfer3" Member="TrnStockTransfers3" ThisKey="Id" OtherKey="PreparedById" Type="TrnStockTransfer" />
       <Association Name="MstUser_TrnStockTransfer4" Member="TrnStockTransfers4" ThisKey="Id" OtherKey="UpdatedById" Type="TrnStockTransfer" />
       <Association Name="AspNetUser_MstUser" Member="AspNetUser" ThisKey="UserId" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+      <Association Name="MstBranch_MstUser" Member="MstBranch" ThisKey="BranchId" OtherKey="Id" Type="MstBranch" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

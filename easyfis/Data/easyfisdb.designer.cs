@@ -9458,6 +9458,8 @@ namespace easyfis.Data
 		
 		private EntitySet<TrnStockTransfer> _TrnStockTransfers1;
 		
+		private EntitySet<MstUser> _MstUsers;
+		
 		private EntityRef<MstCompany> _MstCompany;
 		
 		private EntityRef<MstUser> _MstUser;
@@ -9514,6 +9516,7 @@ namespace easyfis.Data
 			this._TrnStockOuts = new EntitySet<TrnStockOut>(new Action<TrnStockOut>(this.attach_TrnStockOuts), new Action<TrnStockOut>(this.detach_TrnStockOuts));
 			this._TrnStockTransfers = new EntitySet<TrnStockTransfer>(new Action<TrnStockTransfer>(this.attach_TrnStockTransfers), new Action<TrnStockTransfer>(this.detach_TrnStockTransfers));
 			this._TrnStockTransfers1 = new EntitySet<TrnStockTransfer>(new Action<TrnStockTransfer>(this.attach_TrnStockTransfers1), new Action<TrnStockTransfer>(this.detach_TrnStockTransfers1));
+			this._MstUsers = new EntitySet<MstUser>(new Action<MstUser>(this.attach_MstUsers), new Action<MstUser>(this.detach_MstUsers));
 			this._MstCompany = default(EntityRef<MstCompany>);
 			this._MstUser = default(EntityRef<MstUser>);
 			this._MstUser1 = default(EntityRef<MstUser>);
@@ -10006,6 +10009,19 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstBranch_MstUser", Storage="_MstUsers", ThisKey="Id", OtherKey="BranchId")]
+		public EntitySet<MstUser> MstUsers
+		{
+			get
+			{
+				return this._MstUsers;
+			}
+			set
+			{
+				this._MstUsers.Assign(value);
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstCompany_MstBranch", Storage="_MstCompany", ThisKey="CompanyId", OtherKey="Id", IsForeignKey=true)]
 		public MstCompany MstCompany
 		{
@@ -10342,6 +10358,18 @@ namespace easyfis.Data
 		{
 			this.SendPropertyChanging();
 			entity.MstBranch1 = null;
+		}
+		
+		private void attach_MstUsers(MstUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstBranch = this;
+		}
+		
+		private void detach_MstUsers(MstUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.MstBranch = null;
 		}
 	}
 	
@@ -32942,6 +32970,8 @@ namespace easyfis.Data
 		
 		private System.Nullable<int> _IncomeAccountId;
 		
+		private int _BranchId;
+		
 		private EntitySet<MstAccount> _MstAccounts;
 		
 		private EntitySet<MstAccount> _MstAccounts1;
@@ -33110,6 +33140,8 @@ namespace easyfis.Data
 		
 		private EntityRef<AspNetUser> _AspNetUser;
 		
+		private EntityRef<MstBranch> _MstBranch;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -33136,6 +33168,8 @@ namespace easyfis.Data
     partial void OnUserIdChanged();
     partial void OnIncomeAccountIdChanging(System.Nullable<int> value);
     partial void OnIncomeAccountIdChanged();
+    partial void OnBranchIdChanging(int value);
+    partial void OnBranchIdChanged();
     #endregion
 		
 		public MstUser()
@@ -33224,6 +33258,7 @@ namespace easyfis.Data
 			this._TrnStockTransfers3 = new EntitySet<TrnStockTransfer>(new Action<TrnStockTransfer>(this.attach_TrnStockTransfers3), new Action<TrnStockTransfer>(this.detach_TrnStockTransfers3));
 			this._TrnStockTransfers4 = new EntitySet<TrnStockTransfer>(new Action<TrnStockTransfer>(this.attach_TrnStockTransfers4), new Action<TrnStockTransfer>(this.detach_TrnStockTransfers4));
 			this._AspNetUser = default(EntityRef<AspNetUser>);
+			this._MstBranch = default(EntityRef<MstBranch>);
 			OnCreated();
 		}
 		
@@ -33447,6 +33482,30 @@ namespace easyfis.Data
 					this._IncomeAccountId = value;
 					this.SendPropertyChanged("IncomeAccountId");
 					this.OnIncomeAccountIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchId", DbType="Int NOT NULL")]
+		public int BranchId
+		{
+			get
+			{
+				return this._BranchId;
+			}
+			set
+			{
+				if ((this._BranchId != value))
+				{
+					if (this._MstBranch.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnBranchIdChanging(value);
+					this.SendPropertyChanging();
+					this._BranchId = value;
+					this.SendPropertyChanged("BranchId");
+					this.OnBranchIdChanged();
 				}
 			}
 		}
@@ -34560,6 +34619,40 @@ namespace easyfis.Data
 						this._UserId = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="MstBranch_MstUser", Storage="_MstBranch", ThisKey="BranchId", OtherKey="Id", IsForeignKey=true)]
+		public MstBranch MstBranch
+		{
+			get
+			{
+				return this._MstBranch.Entity;
+			}
+			set
+			{
+				MstBranch previousValue = this._MstBranch.Entity;
+				if (((previousValue != value) 
+							|| (this._MstBranch.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._MstBranch.Entity = null;
+						previousValue.MstUsers.Remove(this);
+					}
+					this._MstBranch.Entity = value;
+					if ((value != null))
+					{
+						value.MstUsers.Add(this);
+						this._BranchId = value.Id;
+					}
+					else
+					{
+						this._BranchId = default(int);
+					}
+					this.SendPropertyChanged("MstBranch");
 				}
 			}
 		}
