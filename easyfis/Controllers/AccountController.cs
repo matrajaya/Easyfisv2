@@ -155,9 +155,10 @@ namespace easyfis.Controllers
             {
                 var user = new ApplicationUser
                 {
+                    UserName = model.UserName,
                     FullName = model.FullName,
-                    UserName = model.UserName
                 };
+
                 //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -171,50 +172,39 @@ namespace easyfis.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-                    Data.MstUser newUser = new Data.MstUser();
+                    var identityUserId = User.Identity.GetUserId();
 
-                    var users = from d in db.AspNetUsers where d.UserName == user.UserName select d;
-                    //var mstUserId = (from d in db.MstUsers where d.UserId == users.First().Id select d.Id).SingleOrDefault();
-                    var isLocked = true;
-
-                    //int mstUserId = Convert.ToInt32(mstUserIdLastValue) + 1;
-
-
-                    var date = DateTime.Now;
-
-                    var mstUserIdLastValueId = (from d in db.MstUsers.OrderByDescending(d => d.Id) select d.Id).FirstOrDefault();
-
-                    if (users.Any())
+                    var aspUsersData = from d in db.AspNetUsers where d.Id == identityUserId select d;
+                    if (aspUsersData.Any())
                     {
-                        newUser.UserId = users.First().Id;
-                        newUser.UserName = model.UserName;
-                        newUser.Password = model.Password;
-                        newUser.FullName = model.FullName;
+                        Data.MstUser newMstUser = new Data.MstUser();
 
-                        newUser.IsLocked = isLocked;
-                        newUser.CreatedById = mstUserIdLastValueId;
-                        newUser.CreatedDateTime = date;
-                        newUser.UpdatedById = mstUserIdLastValueId;
-                        newUser.UpdatedDateTime = date;
+                        newMstUser.UserName = model.UserName;
+                        newMstUser.Password = model.Password;
+                        newMstUser.FullName = model.FullName;
+                        newMstUser.IsLocked = true;
+                        newMstUser.CreatedById = 0;
+                        newMstUser.CreatedDateTime = DateTime.Now;
+                        newMstUser.UpdatedById = 0;
+                        newMstUser.UpdatedDateTime = DateTime.Now;
 
-                        db.MstUsers.InsertOnSubmit(newUser);
+                        newMstUser.UserId = identityUserId;
+                        newMstUser.IncomeAccountId = 0;
+                        newMstUser.BranchId = db.MstBranches.FirstOrDefault().Id;
+
+                        db.MstUsers.InsertOnSubmit(newMstUser);
                         db.SubmitChanges();
 
-                        // after submit, get last inserted Id and update the userid for created by and updated by.
-                        var identityUserId = User.Identity.GetUserId();
-                        var mstUserIdLastValueOfTheLastId = (from d in db.MstUsers.OrderByDescending(d => d.Id) select d.Id).FirstOrDefault();
-                        var mstUsersData = from d in db.MstUsers where d.Id == mstUserIdLastValueOfTheLastId select d;
-
-                        var mstUsersId = from d in db.MstUsers where d.UserId == identityUserId select d.Id;
-
+                        var mstUsersData = from d in db.MstUsers where d.UserId == identityUserId select d;
                         if (mstUsersData.Any())
                         {
-                            newUser.CreatedById = mstUserIdLastValueOfTheLastId;
-                            newUser.UpdatedById = mstUserIdLastValueOfTheLastId;
+                            var mstUserLastInsertedId = (from d in db.MstUsers.OrderByDescending(d => d.Id) where d.UserId == identityUserId select d.Id).FirstOrDefault();
+                            var updateMstUsersData = mstUsersData.FirstOrDefault();
+                            updateMstUsersData.CreatedById = mstUserLastInsertedId;
+                            updateMstUsersData.UpdatedById = mstUserLastInsertedId;
 
                             db.SubmitChanges();
                         }
-                        //db.SubmitChanges();
                     }
 
                     return RedirectToAction("Register", "Account");

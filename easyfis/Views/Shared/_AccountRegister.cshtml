@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNet.Identity
-@using Microsoft.AspNet.Identity.EntityFramework
+﻿@model easyfis.Models.RegisterViewModel
 
 @if (Request.IsAuthenticated)
 {
@@ -25,7 +24,6 @@ else
                             </div>
                             <div class="panel-body">
                                 <br />
-                                @model easyfis.Models.RegisterViewModel
                                 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                                 {
                                     @Html.AntiForgeryToken()
@@ -36,6 +34,13 @@ else
                                             @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
+                                    @*<div class="form-group">
+                                        <label class="control-label col-sm-4">Email:</label>
+                                        <div class="col-sm-8">
+                                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Email", @value = "NA" })
+                                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>*@
                                     <div class="form-group">
                                         <label class="control-label col-sm-4">Username:</label>
                                         <div class="col-sm-8">
