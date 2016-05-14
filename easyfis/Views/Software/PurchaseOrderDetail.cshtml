@@ -63,21 +63,21 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">PO Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredPO" id="PO_PONumber_Display" />
+                                                <input type="text" class="form-control input-30 input-sm requiredPO" id="PO_PONumber_Display" />
                                                 <input type="hidden" id="PO_PONumber" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">PO Date</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="PO_Date"></div>
+                                                <div class="input-50" id="PO_Date"></div>
                                                 <input type="hidden" class="requiredPO" id="PO_Date_data" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Manual PO Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredPO" id="PO_ManualPONumber">
+                                                <input type="text" class="form-control input-sm requiredPO" id="PO_ManualPONumber" placeholder="Manual PO Number" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -92,7 +92,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Term</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="PO_Term"></div>
+                                                <div class="input-70" id="PO_Term"></div>
 
                                                 <input type="hidden" class="requiredPO" id="PO_Term_data" />
                                                 <input type="hidden" id="PO_Term_selectedValue" />
@@ -101,7 +101,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Remarks</label>
                                             <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredPO" id="PO_Remarks"></textarea>
+                                                <textarea class="form-control textarea-custom requiredPO" id="PO_Remarks" placeholder="Remarks"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -109,13 +109,13 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Request Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredPO" id="PO_RequestNumber">
+                                                <input type="text" class="form-control input-sm requiredPO" id="PO_RequestNumber" placeholder="Request Number">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Date Needed</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="PO_DateNeeded"></div>
+                                                <div class="input-50" id="PO_DateNeeded"></div>
                                                 <input type="hidden" class="requiredPO" id="PO_DateNeeded_data" />
                                             </div>
                                         </div>
@@ -221,35 +221,31 @@
                     <form id="POLinesDetailForm">
                         <input type="hidden" id="POLine_Id" />
                         <dl class="dl-horizontal">
-                            <dt>Item Code</dt>
+                            <dt>Item</dt>
                             <dd>
-                                <div class="comboBox-wide" id="POLine_ItemCode"></div>
+                                <div class="input-30" id="POLine_ItemCode"></div>
+                                <div class="input-68" id="POLine_ItemDescription"></div>
 
                                 <input type="hidden" id="POLine_ItemCode_data" class="requiredPOLine">
                                 <input type="hidden" id="POLine_ItemCode_selectedValue" />
-                            </dd>
-                            <dt>Item Description</dt>
-                            <dd>
-                                <div class="comboBox-wide" id="POLine_ItemDescription"></div>
-
                                 <input type="hidden" id="POLine_ItemDescription_data" class="requiredPOLine">
                                 <input type="hidden" id="POLine_ItemDescription_selectedValue" />
                             </dd>
                             <dt>Particulars</dt>
-                            <dd><textarea class="form-control textarea-custom requiredPOLine" id="POLine_Particulars"></textarea></dd>
+                            <dd><textarea class="form-control textarea-custom requiredPOLine" id="POLine_Particulars" placeholder="Particulars"></textarea></dd>
                             <dt>Quantity</dt>
-                            <dd><input type="text" class="form-control input-sm requiredPOLine" id="POLine_Quantity" /></dd>
+                            <dd><input type="text" class="form-control input-50 numberField input-sm requiredPOLine" id="POLine_Quantity" placeholder="Quantity" /></dd>
                             <dt>Unit</dt>
                             <dd>
-                                <div class="comboBox-wide" id="POLine_Unit"></div>
+                                <div class="input-50" id="POLine_Unit"></div>
 
                                 <input type="hidden" id="POLine_Unit_data" class="requiredPOLine">
                                 <input type="hidden" id="POLine_Unit_selectedValue" />
                             </dd>
                             <dt>Cost</dt>
-                            <dd><input type="text" class="form-control input-sm requiredPOLine" id="POLine_Cost" /></dd>
+                            <dd><input type="text" class="form-control input-50 numberField input-sm requiredPOLine" id="POLine_Cost" /></dd>
                             <dt>Amount</dt>
-                            <dd><input type="text" class="form-control input-sm requiredPOLine" id="POLine_Amount" /></dd>
+                            <dd><input type="text" class="form-control input-50 numberField input-sm requiredPOLine" id="POLine_Amount" /></dd>
                         </dl>
                     </form>
                 </div>
@@ -776,8 +772,15 @@
                                 data: {},
                                 success: function (mstUserResults) {
                                     if (mstUserResults != null) {
+                                        document.getElementById('RequestedBy_data').value = mstUserResults.Id;
                                         document.getElementById('PreparedBy_data').value = mstUserResults.Id;
+                                        document.getElementById('CheckedBy_data').value = mstUserResults.Id;
+                                        document.getElementById('ApprovedBy_data').value = mstUserResults.Id;
+                                        
+                                        document.getElementById('RequestedBy_selectedValue').value = mstUserResults.FullName;
                                         document.getElementById('PreparedBy_selectedValue').value = mstUserResults.FullName;
+                                        document.getElementById('CheckedBy_selectedValue').value = mstUserResults.FullName;
+                                        document.getElementById('ApprovedBy_selectedValue').value = mstUserResults.FullName;
 
                                         createCboUserRequestedBy(users);
                                         createCboUserPreparedBy(users);

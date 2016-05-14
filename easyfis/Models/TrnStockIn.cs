@@ -17,6 +17,7 @@ namespace easyfis.Models
         public String INNumber { get; set; }
         public String INDate { get; set; }
         public Int32 AccountId { get; set; }
+        public String AccountCode { get; set; }
         public String Account { get; set; }
         public Int32 ArticleId { get; set; }
         public String Article { get; set; }

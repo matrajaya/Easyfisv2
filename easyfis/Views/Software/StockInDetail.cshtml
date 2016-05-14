@@ -64,24 +64,26 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">IN Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredStockIn" id="StockIn_INnumber_Display" placeholder="IN Number" />
+                                                <input type="text" class="form-control input-30 input-sm requiredStockIn" id="StockIn_INnumber_Display" placeholder="IN Number" />
                                                 <input type="hidden" id="StockIn_INnumber" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">IN Date</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="StockIn_InDate"></div>
+                                                <div class="input-50" id="StockIn_InDate"></div>
                                                 <input type="hidden" id="StockIn_InDate_data" class="requiredStockIn" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Account</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="StockIn_Account"></div>
+                                                <div class="input-30" id="StockIn_AccountCode"></div>
+                                                <div class="input-68" id="StockIn_Account"></div>
 
                                                 <input type="hidden" id="StockIn_Account_data" class="requiredStockIn" />
                                                 <input type="hidden" id="StockIn_Account_selectedValue" />
+                                                <input type="hidden" id="StockIn_AccountCode_selectedValue" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -222,49 +224,45 @@
                             <div id="INItem" class="tab-pane fade in active">
                                 <input type="hidden" id="stockInItem_Id" />
                                 <dl class="dl-horizontal">
-                                    <dt>Item Code</dt>
+                                    <dt>Item</dt>
                                     <dd>
-                                        <div class="comboBox-wide" id="stockInItem_ItemCode"></div>
+                                        <div class="input-30" id="stockInItem_ItemCode"></div>
+                                        <div class="input-68" id="stockInItem_ItemDescription"></div>
 
                                         <input type="hidden" id="stockInItem_ItemId_data" class="requiredStockInItem">
-                                        <input type="hidden" id="stockInItem_ItemCode_selectedValue" />
-                                    </dd>
-                                    <dt>Item Description</dt>
-                                    <dd>
-                                        <div class="comboBox-wide" id="stockInItem_ItemDescription"></div>
-
+                                        <input type="hidden" id="stockInItem_ItemCode_selectedValue" /> 
                                         <input type="hidden" id="stockInItem_ItemDescription_selectedValue" />
                                     </dd>
                                     <dt>Particulars</dt>
                                     <dd><textarea class="form-control textarea-custom requiredStockInItem" id="stockInItem_Particulars"></textarea></dd>
                                     <dt>Quantity</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Quantity" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredStockInItem" id="stockInItem_Quantity" /></dd>
                                     <dt>Unit</dt>
                                     <dd>
-                                        <div class="comboBox-wide" id="stockInItem_Unit"></div>
+                                        <div class="input-50" id="stockInItem_Unit"></div>
 
                                         <input type="hidden" id="stockInItem_Unit_data" class="requiredStockInItem">
                                         <input type="hidden" id="stockInItem_Unit_selectedValue" />
                                     </dd>
                                     <dt>Cost</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Cost" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredStockInItem" id="stockInItem_Cost" /></dd>
                                     <dt>Amount</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_Amount" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredStockInItem" id="stockInItem_Amount" /></dd>
                                 </dl>
                             </div>
                             <div id="INBUC" class="tab-pane fade in">
                                 <dl class="dl-horizontal">
                                     <dt>Unit</dt>
                                     <dd>
-                                        <div class="comboBox-wide" id="stockInItem_BUCUnit"></div>
+                                        <div class="input-50" id="stockInItem_BUCUnit"></div>
 
                                         <input type="hidden" id="stockInItem_BUCUnit_data" class="requiredStockInItem">
                                         <input type="hidden" id="stockInItem_BUCUnit_selectedValue" />
                                     </dd>
                                     <dt>Quantity</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_BUCQuantity" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredStockInItem" id="stockInItem_BUCQuantity" /></dd>
                                     <dt>Cost</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredStockInItem" id="stockInItem_BUCCost" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredStockInItem" id="stockInItem_BUCCost" /></dd>
                                 </dl>
                             </div>
                         </div>
@@ -370,6 +368,7 @@
         var articles;
         var INDate;
         var cboBranch;
+        var cboForAccountCode;
         var cboForAccount;
         var cboArticle;
         var cboPreparedBy;
@@ -445,6 +444,8 @@
 
                             document.getElementById('StockIn_Account_data').value = Results.AccountId;
                             document.getElementById('StockIn_Account_selectedValue').value = Results.Account;
+                            document.getElementById('StockIn_AccountCode_selectedValue').value = Results.Account;
+                            
 
                             document.getElementById('StockIn_Article_data').value = Results.ArticleId;
                             document.getElementById('StockIn_Article_selectedValue').value = Results.Article;
@@ -663,18 +664,65 @@
                         for (i = 0; i < results.length; i++) {
                             accounts.push({
                                 AccountId: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
                                 AccountAccount: results[i]["Account"]
                             });
                         }
+                        createCboForAccountCode(accounts);
                         createCboForAccount(accounts);
                     } else {
+                        createCboForAccountCode(accounts);
                         createCboForAccount(accounts);
+                    }
+                    
+                    var accountCollection = new wijmo.collections.CollectionView(accounts);
+                    if (accounts == 0) {
+                        document.getElementById('StockIn_Account_data').value = "";
+                    } else {
+                        document.getElementById('StockIn_Account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
+                        getArticlesForComboBox();
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
+            });
+        }
+
+        // ====================
+        // CBO for Account Code
+        // ====================
+        function createCboForAccountCode(accounts) {
+            var accountCollection = new wijmo.collections.CollectionView(accounts);
+            var accountList = new Array();
+            for (var i = 0; i < accountCollection.items.length; i++) {
+                accountList.push(accountCollection.items[i].AccountCode);
             }
-            );
+
+            var disabled;
+            if (accounts == 0) {
+                disabled = true;
+            } else {
+                if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+
+            cboForAccountCode.dispose();
+            cboForAccountCode = new wijmo.input.ComboBox('#StockIn_AccountCode', {
+                disabled: disabled,
+                placeholder: "Select Account Code",
+                itemsSource: accountList,
+                isEditable: false,
+                selectedValue: document.getElementById('StockIn_AccountCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#StockIn_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    $("#StockIn_Account_selectedValue").val(accountCollection.items[this.selectedIndex].AccountAccount);
+                    getArticlesForComboBox();
+                    createCboForAccount(accounts);
+                }
+            });
         }
 
         // ===============
@@ -707,16 +755,11 @@
                 selectedValue: document.getElementById('StockIn_Account_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#StockIn_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                    $("#StockIn_AccountCode_selectedValue").val(accountCollection.items[this.selectedIndex].AccountCode);
                     getArticlesForComboBox();
+                    createCboForAccountCode(accounts);
                 }
             });
-
-            if (accounts == 0) {
-                document.getElementById('StockIn_Account_data').value = "";
-            } else {
-                document.getElementById('StockIn_Account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
-                getArticlesForComboBox();
-            }
         }
 
         // ==========================
@@ -904,7 +947,12 @@
                                     }
 
                                     document.getElementById('StockIn_PreparedBy_data').value = results.Id;
+                                    document.getElementById('StockIn_CheckedBy_data').value = results.Id;
+                                    document.getElementById('StockIn_ApprovedBy_data').value = results.Id;
+                                        
                                     document.getElementById('StockIn_PreparedBy_selectedValue').value = results.FullName;
+                                    document.getElementById('StockIn_CheckedBy_selectedValue').value = results.FullName;
+                                    document.getElementById('StockIn_ApprovedBy_selectedValue').value = results.FullName;
 
                                     createCboUserPreparedBy(users);
                                     createCboUserCheckedBy(users);
@@ -1460,6 +1508,7 @@
                 }
             });
 
+            cboForAccountCode = new wijmo.input.ComboBox('#StockIn_AccountCode');
             cboForAccount = new wijmo.input.ComboBox('#StockIn_Account');
             cboArticle = new wijmo.input.ComboBox('#StockIn_Article');
             cboPreparedBy = new wijmo.input.ComboBox('#StockIn_PreparedBy');
@@ -2358,12 +2407,13 @@
             });
 
             $('#stockInItem_Quantity').keyup(function () {
-                document.getElementById('stockInItem_BUCQuantity').value = this.value;
+                document.getElementById('stockInItem_BUCQuantity').value = this.value.replace(/\,/g, '');
 
-                var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value;
-                var stockIn_Cost = document.getElementById('stockInItem_Cost').value;
+                var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value.replace(/\,/g, '');
+                var stockIn_Cost = document.getElementById('stockInItem_Cost').value.replace(/\,/g, '');
+                var stockInItemAmount = stockIn_Quantity * stockIn_Cost;
 
-                document.getElementById('stockInItem_Amount').value = Math.round((stockIn_Quantity * stockIn_Cost) * 100) / 100;
+                document.getElementById('stockInItem_Amount').value = stockInItemAmount.toLocaleString();
                 if (this.value == 0) {
                     document.getElementById('stockInItem_BUCCost').value = 0;
                 } else {
@@ -2372,12 +2422,13 @@
             });
 
             $('#stockInItem_Cost').keyup(function () {
-                document.getElementById('stockInItem_BUCCost').value = this.value;;
+                document.getElementById('stockInItem_BUCCost').value = this.value.replace(/\,/g, '');
 
-                var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value;
-                var stockIn_Cost = document.getElementById('stockInItem_Cost').value;
+                var stockIn_Quantity = document.getElementById('stockInItem_Quantity').value.replace(/\,/g, '');
+                var stockIn_Cost = document.getElementById('stockInItem_Cost').value.replace(/\,/g, '');
+                var stockInItemAmount = stockIn_Quantity * stockIn_Cost;
 
-                document.getElementById('stockInItem_Amount').value = Math.round((stockIn_Quantity * stockIn_Cost) * 100) / 100;
+                document.getElementById('stockInItem_Amount').value = stockInItemAmount.toLocaleString();
             });
 
 

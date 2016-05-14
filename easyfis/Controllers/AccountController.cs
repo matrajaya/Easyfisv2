@@ -172,39 +172,32 @@ namespace easyfis.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-                    var identityUserId = User.Identity.GetUserId();
 
-                    var aspUsersData = from d in db.AspNetUsers where d.Id == identityUserId select d;
-                    if (aspUsersData.Any())
+                    Data.MstUser newMstUser = new Data.MstUser();
+                    newMstUser.UserName = model.UserName;
+                    newMstUser.Password = model.Password;
+                    newMstUser.FullName = model.FullName;
+                    newMstUser.IsLocked = true;
+                    newMstUser.CreatedById = 0;
+                    newMstUser.CreatedDateTime = DateTime.Now;
+                    newMstUser.UpdatedById = 0;
+                    newMstUser.UpdatedDateTime = DateTime.Now;
+                    newMstUser.UserId = user.Id;
+                    newMstUser.IncomeAccountId = 0;
+                    newMstUser.BranchId = db.MstBranches.FirstOrDefault().Id;
+                    db.MstUsers.InsertOnSubmit(newMstUser);
+                    db.SubmitChanges();
+
+                    var mstUsersData = from d in db.MstUsers where d.UserId == user.Id select d;
+                    if (mstUsersData.Any())
                     {
-                        Data.MstUser newMstUser = new Data.MstUser();
+                        var mstUserLastInsertedId = (from d in db.MstUsers.OrderByDescending(d => d.Id) where d.UserId == user.Id select d.Id).FirstOrDefault();
 
-                        newMstUser.UserName = model.UserName;
-                        newMstUser.Password = model.Password;
-                        newMstUser.FullName = model.FullName;
-                        newMstUser.IsLocked = true;
-                        newMstUser.CreatedById = 0;
-                        newMstUser.CreatedDateTime = DateTime.Now;
-                        newMstUser.UpdatedById = 0;
-                        newMstUser.UpdatedDateTime = DateTime.Now;
+                        var updateMstUsersData = mstUsersData.FirstOrDefault();
+                        updateMstUsersData.CreatedById = mstUserLastInsertedId;
+                        updateMstUsersData.UpdatedById = mstUserLastInsertedId;
 
-                        newMstUser.UserId = identityUserId;
-                        newMstUser.IncomeAccountId = 0;
-                        newMstUser.BranchId = db.MstBranches.FirstOrDefault().Id;
-
-                        db.MstUsers.InsertOnSubmit(newMstUser);
                         db.SubmitChanges();
-
-                        var mstUsersData = from d in db.MstUsers where d.UserId == identityUserId select d;
-                        if (mstUsersData.Any())
-                        {
-                            var mstUserLastInsertedId = (from d in db.MstUsers.OrderByDescending(d => d.Id) where d.UserId == identityUserId select d.Id).FirstOrDefault();
-                            var updateMstUsersData = mstUsersData.FirstOrDefault();
-                            updateMstUsersData.CreatedById = mstUserLastInsertedId;
-                            updateMstUsersData.UpdatedById = mstUserLastInsertedId;
-
-                            db.SubmitChanges();
-                        }
                     }
 
                     return RedirectToAction("Register", "Account");

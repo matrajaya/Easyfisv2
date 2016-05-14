@@ -12,6 +12,7 @@ namespace easyfis.Models
         public String OT { get; set; }
         public String OTDate { get; set; }
         public Int32 ExpenseAccountId { get; set; }
+        public String ExpenseAccountCode { get; set; }
         public String ExpenseAccount { get; set; }
         public Int32 ItemId { get; set; }
         public String Item { get; set; }

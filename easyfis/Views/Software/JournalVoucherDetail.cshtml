@@ -62,27 +62,27 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">JV Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="journalVoucher_No_Display" class="form-control input-sm">
+                                                <input type="text" id="journalVoucher_No_Display" class="form-control input-30 input-sm">
                                                 <input type="hidden" id="journalVoucher_No">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">JV Date</label>
                                             <div class="col-sm-8">
-                                                <div id="journalVoucher_Date" class="comboBox-wide"></div>
+                                                <div id="journalVoucher_Date" class="input-50"></div>
                                                 <input type="hidden" id="journalVoucher_date_Data" class="requiredJournalVoucher" required />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Manual JV Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="manual_JournalVoucher_No" class="form-control input-sm requiredJournalVoucher" />
+                                                <input type="text" id="manual_JournalVoucher_No" class="form-control input-sm requiredJournalVoucher"  placeholder="Manual JV Number"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Particulars</label>
                                             <div class="col-sm-8">
-                                                <textarea type="text" id="journalVoucher_Particulars" class="form-control textarea-custom requiredJournalVoucher"></textarea>
+                                                <textarea type="text" id="journalVoucher_Particulars" class="form-control textarea-custom requiredJournalVoucher" placeholder="Particulars"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -202,9 +202,11 @@
                             </dd>
                             <dt>Account</dt>
                             <dd>
-                                <div id="JVL_Account_Id" class="comboBox-wide"></div>
+                                <div id="JVL_AccountCode_Id" class="input-30"></div>
+                                <div id="JVL_Account_Id" class="input-68"></div>
 
                                 <input type="hidden" id="JVL_Account_Id_Data" class="requiredJournalVoucherLine" />
+                                <input type="hidden" id="JVL_AccountCode_Id_selectedValue" />
                                 <input type="hidden" id="JVL_Account_Id_selectedValue" />
                             </dd>
                             <dt>Aritcle</dt>
@@ -215,11 +217,11 @@
                                 <input type="hidden" id="JVL_Aritcle_Id_selectedValue" />
                             </dd>
                             <dt>Particulars</dt>
-                            <dd><textarea id="JVL_Particulars" class="form-control textarea-custom requiredJournalVoucherLine"></textarea></dd>
+                            <dd><textarea id="JVL_Particulars" class="form-control textarea-custom requiredJournalVoucherLine" placeholder="Particulars"></textarea></dd>
                             <dt>Debit Amount</dt>
-                            <dd><input type="text" id="JVL_DebitAmount" class="form-control input-sm requiredJournalVoucherLine" /></dd>
+                            <dd><input type="text" id="JVL_DebitAmount" class="form-control input-50 numberField input-sm requiredJournalVoucherLine" /></dd>
                             <dt>Credit Amount</dt>
-                            <dd><input type="text" id="JVL_CreditAmount" class="form-control input-sm requiredJournalVoucherLine" /></dd>
+                            <dd><input type="text" id="JVL_CreditAmount" class="form-control input-50 numberField input-sm requiredJournalVoucherLine" /></dd>
                             <dt>RR No.</dt>
                             <dd>
                                 <div id="JVL_APRRId" class="comboBox-wide"></div>
@@ -345,6 +347,7 @@
         var accounts;
         var articles;
         var cboBranchJVL;
+        var cboAccountCodeJVL;
         var cboAccountJVL;
         var cboArticleJVL;
         var sales;
@@ -683,7 +686,12 @@
                                     }
 
                                     document.getElementById('preparedByUserId_Data').value = results.Id;
+                                    document.getElementById('checkedByUserId_Data').value = results.Id;
+                                    document.getElementById('approvedByUserId_Data').value = results.Id;
+                                        
                                     document.getElementById('preparedByUserId_selectedValue').value = results.FullName;
+                                    document.getElementById('checkedByUserId_selectedValue').value = results.FullName;
+                                    document.getElementById('approvedByUserId_selectedValue').value = results.FullName;
 
                                     createCboUserPreparedBy(users)
                                     createCboUserCheckedBy(users);
@@ -1457,18 +1465,66 @@
                         for (i = 0; i < results.length; i++) {
                             accounts.push({
                                 AccountId: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
                                 AccountAccount: results[i]["Account"]
                             });
                         }
+                        createCboAccountCodesForJournalVoucherLine(accounts);
                         createCboAccountsForJournalVoucherLine(accounts);
                     } else {
+                        createCboAccountCodesForJournalVoucherLine(accounts);
                         createCboAccountsForJournalVoucherLine(accounts);
+                    }
+
+                    var accountCollections = new wijmo.collections.CollectionView(accounts);
+                    if (accounts == 0) {
+                        document.getElementById('JVL_Account_Id_Data').value = "";
+                    } else {
+                        document.getElementById('JVL_Account_Id_Data').value = accountCollections.items[cboAccountJVL.selectedIndex].AccountId;
+                        getArticlesForComboBoxInJournalVoucherLine();
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
+            });
+        }
+
+        
+        // ===================================================
+        // Combo Box for Account Codes in Journal Voucher Line
+        // ===================================================
+        function createCboAccountCodesForJournalVoucherLine(accounts) {
+            var accountCollections = new wijmo.collections.CollectionView(accounts);
+            var accountCodeList = new Array();
+            for (var i = 0; i < accountCollections.items.length; i++) {
+                accountCodeList.push(accountCollections.items[i].AccountCode);
             }
-            );
+
+            var disabled;
+            if (accounts == 0) {
+                disabled = true;
+            } else {
+                if (document.getElementById('JV_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
+            }
+            
+            cboAccountCodeJVL.dispose();
+            cboAccountCodeJVL = new wijmo.input.ComboBox('#JVL_AccountCode_Id', {
+                disabled: disabled,
+                placeholder: "Select Account Code",
+                itemsSource: accountCodeList,
+                isEditable: false,
+                selectedValue: document.getElementById('JVL_AccountCode_Id_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#JVL_Account_Id_Data").val(accountCollections.items[this.selectedIndex].AccountId);
+                    $("#JVL_Account_Id_selectedValue").val(accountCollections.items[this.selectedIndex].AccountAccount);
+                    getArticlesForComboBoxInJournalVoucherLine();
+                    createCboAccountsForJournalVoucherLine(accounts);
+                }
+            });
         }
 
         // ==============================================
@@ -1480,7 +1536,7 @@
             for (var i = 0; i < accountCollections.items.length; i++) {
                 accountList.push(accountCollections.items[i].AccountAccount);
             }
-
+          
             var disabled;
             if (accounts == 0) {
                 disabled = true;
@@ -1501,16 +1557,11 @@
                 selectedValue: document.getElementById('JVL_Account_Id_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#JVL_Account_Id_Data").val(accountCollections.items[this.selectedIndex].AccountId);
+                    $("#JVL_AccountCode_Id_selectedValue").val(accountCollections.items[this.selectedIndex].AccountCode);
                     getArticlesForComboBoxInJournalVoucherLine();
+                    createCboAccountCodesForJournalVoucherLine(accounts);
                 }
             });
-
-            if (accounts == 0) {
-                document.getElementById('JVL_Account_Id_Data').value = "";
-            } else {
-                document.getElementById('JVL_Account_Id_Data').value = accountCollections.items[cboAccountJVL.selectedIndex].AccountId;
-                getArticlesForComboBoxInJournalVoucherLine();
-            }
         }
 
         // ==================================================
@@ -1766,8 +1817,8 @@
             document.getElementById('JVL_Aritcle_Id_Data').value = '';
             document.getElementById('JVL_Aritcle_Id_selectedValue').value = '';
             document.getElementById('JVL_Particulars').value = '';
-            document.getElementById('JVL_DebitAmount').value = '';
-            document.getElementById('JVL_CreditAmount').value = '';
+            document.getElementById('JVL_DebitAmount').value = '0';
+            document.getElementById('JVL_CreditAmount').value = '0';
             document.getElementById('JVL_APRRId_data').value = '';
             document.getElementById('JVL_APRRId_selectedValue').value = '';
             document.getElementById('JVL_ARSIId_data').value = '';
@@ -2276,6 +2327,7 @@
             cboUserApprovedBy = new wijmo.input.ComboBox('#approvedByUserId');
 
             cboBranchJVL = new wijmo.input.ComboBox('#JVL_Branch_Id');
+            cboAccountCodeJVL = new wijmo.input.ComboBox('#JVL_AccountCode_Id');
             cboAccountJVL = new wijmo.input.ComboBox('#JVL_Account_Id');
             cboArticleJVL = new wijmo.input.ComboBox('#JVL_Aritcle_Id');
 

@@ -62,13 +62,13 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">SC Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredStockCount" id="inputIdStockCountDetailSCNumber" placeholder="SC Number" />
+                                                <input type="text" class="form-control input-sm input-30 requiredStockCount" id="inputIdStockCountDetailSCNumber" placeholder="SC Number" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">SC Date</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="divIdStockCountDetailCboSCDate"></div>
+                                                <div class="input-50" id="divIdStockCountDetailCboSCDate"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -141,15 +141,16 @@
                         <dl class="dl-horizontal">
                             <dt>Item</dt>
                             <dd>
-                                <div class="comboBox-wide" id="divIdStockCountItem"></div>
+                                <div class="input-30" id="divIdStockCountItemCode"></div>
+                                <div class="input-68" id="divIdStockCountItem"></div>
                             </dd>
                             <dt>Particulars</dt>
                             <dd><textarea class="form-control textarea-custom requiredStockCountItem" id="txtAreaIdStockCountItemParticulars" placeholder="Particulars"></textarea></dd>
                             <dt>Quantity</dt>
-                            <dd><input type="text" class="form-control input-sm requiredStockCountItem" id="inputIdStockCountItemQuantity" placeholder="Quantity" /></dd>
+                            <dd><input type="text" class="form-control input-50 numberField input-sm requiredStockCountItem" id="inputIdStockCountItemQuantity" placeholder="0.00" /></dd>
                             <dt>Unit</dt>
                             <dd>
-                                <div class="comboBox-wide" id="divIdStockCountItemUnit"></div>
+                                <div class="input-50" id="divIdStockCountItemUnit"></div>
                             </dd>
                         </dl>
                     </form>
@@ -196,6 +197,8 @@
         var stockCountItems;
         var stockCountItemGrid;
         var items;
+        var cboItemCode;
+        var itemCodeSelectedValue = "";
         var itemSelectedValue = "";
         var itemUnitSelectedValue = "";
         var stockCountItemId;
@@ -383,6 +386,9 @@
                                 data: {},
                                 success: function (listUserByIdResults) {
                                     preparedBySelectedValue = listUserByIdResults.FullName;
+                                    checkedBySelectedValue = listUserByIdResults.FullName;
+                                    approvedBySelectedValue = listUserByIdResults.FullName;
+
                                     createCboUser(users);
                                 }
                             });
@@ -674,6 +680,7 @@
                                     Id: stockCountItemResults[i]["Id"],
                                     SCId: stockCountItemResults[i]["SCId"],
                                     ItemId: stockCountItemResults[i]["ItemId"],
+                                    ItemCode: stockCountItemResults[i]["ItemCode"],
                                     Item: stockCountItemResults[i]["Item"],
                                     Particulars: stockCountItemResults[i]["Particulars"],
                                     Quantity: stockCountItemResults[i]["Quantity"],
@@ -703,6 +710,7 @@
 
             stockCountItemId = 0;
             itemSelectedValue = "";
+            itemCodeSelectedValue = "";
             document.getElementById("txtAreaIdStockCountItemParticulars").value = "";
             document.getElementById("inputIdStockCountItemQuantity").value = "";
             itemUnitSelectedValue = "";
@@ -724,6 +732,7 @@
             var stockCountItem = stockCountItems.currentEditItem;
             stockCountItemId = stockCountItem.Id;
             itemSelectedValue = stockCountItem.Item;
+            itemCodeSelectedValue = stockCountItem.ItemCode;
             document.getElementById("txtAreaIdStockCountItemParticulars").value = stockCountItem.Particulars;
             document.getElementById("inputIdStockCountItemQuantity").value = stockCountItem.Quantity;
             itemUnitSelectedValue = stockCountItem.Unit;
@@ -946,12 +955,33 @@
                                 UpdatedDateTime: listArticleItemResults[i]["UpdatedDateTime"]
                             });
                         }
+                        createCboItemCode(items);
                         createCboItem(items);
                         createCboItemUnit(items);
                     } else {
+                        createCboItemCode(items);
                         createCboItem(items);
                         createCboItemUnit(items);
                     }
+                }
+            });
+        }
+
+        // Combo Box for Article Item Code
+        function createCboItemCode(items) {
+            cboItemCode.dispose();
+            cboItemCode = new wijmo.input.ComboBox('#divIdStockCountItemCode', {
+                placeholder: "Item",
+                itemsSource: items,
+                displayMemberPath: "ManualArticleCode",
+                isEditable: false,
+                selectedValuePath: "ManualArticleCode",
+                selectedValue: itemCodeSelectedValue.toString(),
+                onSelectedIndexChanged: function () {
+                    itemUnitSelectedValue = this.selectedItem["Unit"];
+                    itemSelectedValue = this.selectedItem["Article"];
+                    createCboItem(items)
+                    createCboItemUnit(items);
                 }
             });
         }
@@ -968,7 +998,9 @@
                 selectedValue: itemSelectedValue.toString(),
                 onSelectedIndexChanged: function () {
                     itemUnitSelectedValue = this.selectedItem["Unit"];
+                    itemCodeSelectedValue = this.selectedItem["ManualArticleCode"];
                     createCboItemUnit(items);
+                    createCboItemCode(items);
                 }
             });
         }
@@ -1067,6 +1099,7 @@
             // call stock Count
             getStockCountById();
 
+            cboItemCode = new wijmo.input.ComboBox('#divIdStockCountItemCode');
             cboItem = new wijmo.input.ComboBox('#divIdStockCountItem');
             cboItemUnit = new wijmo.input.ComboBox('#divIdStockCountItemUnit');
         });

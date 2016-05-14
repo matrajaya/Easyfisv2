@@ -64,21 +64,21 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">CV Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_CVNumber_Display" />
+                                                <input type="text" class="form-control input-30 input-sm requiredDisbursement" id="disbursement_CVNumber_Display" />
                                                 <input type="hidden" id="disbursement_CVNumber" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">CV Date</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="disbursement_CVDate"></div>
+                                                <div class="input-68" id="disbursement_CVDate"></div>
                                                 <input type="hidden" id="disbursement_CVDate_data" class="requiredDisbursement" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Manual CV Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_ManualCVNumber">
+                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_ManualCVNumber" placeholder="Manual CV Number"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -91,7 +91,7 @@
                                                     <input type="hidden" id="disbursement_Supplier_selectedValue" />
                                                     <div class="input-group-btn">
                                                         <button type="button" class="btn btn-primary btn-sm" id="cmdAP" onclick="AP_OnClick()">AP</button>
-                                                        @*<button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="Advances_OnClick()">Advances</button>*@
+                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="Advances_OnClick()">Advances</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -99,13 +99,13 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Payee</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_Payee">
+                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_Payee" placeholder="Payee" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Pay Type</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="disbursement_PayType"></div>
+                                                <div class="input-70" id="disbursement_PayType"></div>
 
                                                 <input type="hidden" id="disbursement_PayType_data" class="requiredDisbursement" />
                                                 <input type="hidden" id="disbursement_PayType_selectedValue" />
@@ -114,7 +114,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Particulars</label>
                                             <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredDisbursement" id="disbursement_Particulars"></textarea>
+                                                <textarea class="form-control textarea-custom requiredDisbursement" id="disbursement_Particulars" placeholder="Particulars"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -131,20 +131,20 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Check Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_CheckNumber">
+                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_CheckNumber" placeholder="Check Number" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Check Date</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="disbursement_CheckDate"></div>
+                                                <div class="input-50" id="disbursement_CheckDate"></div>
                                                 <input type="hidden" id="disbursement_CheckDate_data" class="requiredDisbursement" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Amount</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_Amount">
+                                                <input type="text" class="form-control input-50 numberField input-sm requiredDisbursement" id="disbursement_Amount">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -289,10 +289,12 @@
                             </dd>
                             <dt>Account</dt>
                             <dd>
-                                <div class="comboBox-wide" id="disbursementLine_account"></div>
+                                <div class="input-30" id="disbursementLine_accountCode"></div>
+                                <div class="input-68" id="disbursementLine_account"></div>
 
                                 <input type="hidden" id="disbursementLine_account_data" class="requiredDisbursementLine">
                                 <input type="hidden" id="disbursementLine_account_selectedValue" />
+                                <input type="hidden" id="disbursementLine_accountCode_selectedValue" />
                             </dd>
                             <dt>Article</dt>
                             <dd>
@@ -302,7 +304,9 @@
                                 <input type="hidden" id="disbursementLine_article_selectedValue" />
                             </dd>
                             <dt>Particulars</dt>
-                            <dd><textarea class="form-control textarea-custom requiredDisbursementLine" id="disbursementLine_Particulars"></textarea></dd>
+                            <dd><textarea class="form-control textarea-custom requiredDisbursementLine" id="disbursementLine_Particulars" placeholder="Particulars"></textarea></dd>
+                            <dt>Amount</dt>
+                            <dd><input class="form-control input-50 numberField input-sm requiredDisbursementLine" id="disbursementLine_Amount" placeholder="Amount" /></dd>
                             <dt>RR No.</dt>
                             <dd>
                                 <div class="comboBox-wide" id="disbursementLine_RRNo"></div>
@@ -310,8 +314,6 @@
                                 <input type="hidden" id="disbursementLine_RRNo_data" class="requiredDisbursementLine">
                                 <input type="hidden" id="disbursementLine_RRNo_selectedValue" />
                             </dd>
-                            <dt>Amount</dt>
-                            <dd><input class="form-control input-sm requiredDisbursementLine" id="disbursementLine_Amount" /></dd>
                         </dl>
                     </form>
                 </div>
@@ -436,6 +438,7 @@
         var cboDisbursementBranch;
 
         var disbursementLineAccounts;
+        var cboDisbursementLineAccountCode;
         var cboDisbursementLineAccount;
 
         var disbursementLineArticles;
@@ -787,6 +790,7 @@
                     selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
                         $("#disbursement_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                        $("#disbursement_Payee").val(supplierCollection.items[this.selectedIndex].Supplier);
                     }
                 });
             } else if (document.getElementById('disbursement_IsLocked').value == 'false') {
@@ -800,6 +804,7 @@
                     selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
                         $("#disbursement_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                        $("#disbursement_Payee").val(supplierCollection.items[this.selectedIndex].Supplier);
                     }
                 });
             } else {
@@ -812,6 +817,7 @@
                     selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
                     onSelectedIndexChanged: function () {
                         $("#disbursement_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                        $("#disbursement_Payee").val(supplierCollection.items[this.selectedIndex].Supplier);
                     }
                 });
             }
@@ -1010,7 +1016,12 @@
                                     }
 
                                     document.getElementById('disbursement_PreparedBy_data').value = results.Id;
+                                    document.getElementById('disbursement_CheckedBy_data').value = results.Id;
+                                    document.getElementById('disbursement_ApprovedBy_data').value = results.Id;
+
                                     document.getElementById('disbursement_PreparedBy_selectedValue').value = results.FullName;
+                                    document.getElementById('disbursement_CheckedBy_selectedValue').value = results.FullName;
+                                    document.getElementById('disbursement_ApprovedBy_selectedValue').value = results.FullName;
 
                                     createCboUserPreparedBy(users);
                                     createCboUserCheckedBy(users);
@@ -1736,14 +1747,46 @@
                         for (i = 0; i < results.length; i++) {
                             disbursementLineAccounts.push({
                                 AccountId: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
                                 AccountAccount: results[i]["Account"]
                             });
                         }
+                        createDisbursementLineCboForAccountCode(disbursementLineAccounts);
+                        createDisbursementLineCboForAccount(disbursementLineAccounts);
+                    } else {
+                        createDisbursementLineCboForAccountCode(disbursementLineAccounts);
                         createDisbursementLineCboForAccount(disbursementLineAccounts);
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
+            });
+        }
+        
+        // ====================
+        // CBO for Account Code
+        // ====================
+        function createDisbursementLineCboForAccountCode(disbursementLineAccounts) {
+            var disbursementLineAccountCollection = new wijmo.collections.CollectionView(disbursementLineAccounts);
+            var disbursementLineAccountCodeList = new Array();
+            for (var i = 0; i < disbursementLineAccountCollection.items.length; i++) {
+                disbursementLineAccountCodeList.push(disbursementLineAccountCollection.items[i].AccountCode);
+            }
+
+            cboDisbursementLineAccountCode.dispose();
+            cboDisbursementLineAccountCode = new wijmo.input.ComboBox('#disbursementLine_accountCode', {
+                disabled: false,
+                placeholder: "Select Account Code",
+                itemsSource: disbursementLineAccountCodeList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursementLine_accountCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#disbursementLine_account_data").val(disbursementLineAccountCollection.items[this.selectedIndex].AccountId);
+                    $("#disbursementLine_account_selectedValue").val(disbursementLineAccountCollection.items[this.selectedIndex].AccountAccount);
+                    createDisbursementLineCboForAccount(disbursementLineAccounts);
+                    getDisbursementArticlesForComboBox();
+                }
             });
         }
 
@@ -1767,6 +1810,8 @@
                 selectedValue: document.getElementById('disbursementLine_account_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#disbursementLine_account_data").val(disbursementLineAccountCollection.items[this.selectedIndex].AccountId);
+                    $("#disbursementLine_accountCode_selectedValue").val(disbursementLineAccountCollection.items[this.selectedIndex].AccountCode);
+                    createDisbursementLineCboForAccountCode(disbursementLineAccounts);
                     getDisbursementArticlesForComboBox();
                 }
             });
@@ -2000,7 +2045,7 @@
             document.getElementById('disbursementLine_Particulars').value = '';
             document.getElementById('disbursementLine_RRNo_data').value = '';
             document.getElementById('disbursementLine_RRNo_selectedValue').value = '';
-            document.getElementById('disbursementLine_Amount').value = '';
+            document.getElementById('disbursementLine_Amount').value = '0';
 
             getDisbursementBranchesForComboBox();
             getDisbursementLineAccountForComboBox();
@@ -2415,7 +2460,8 @@
 
             document.getElementById('disbursement_Amount').disabled = true;
 
-            cboDisbursementBranch = new wijmo.input.ComboBox('#disbursementLine_branch');
+            cboDisbursementBranch = new wijmo.input.ComboBox('#disbursementLine_branch'); 
+            cboDisbursementLineAccountCode = new wijmo.input.ComboBox('#disbursementLine_accountCode');
             cboDisbursementLineAccount = new wijmo.input.ComboBox('#disbursementLine_account');
             cboDisbursementLineArticle = new wijmo.input.ComboBox('#disbursementLine_article');
             cboDisbursementLineRR = new wijmo.input.ComboBox('#disbursementLine_RRNo');

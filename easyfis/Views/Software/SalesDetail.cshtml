@@ -64,14 +64,14 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">SI Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredSales" id="SI_SINumber_Display">
+                                                <input type="text" class="form-control input-30 input-sm requiredSales" id="SI_SINumber_Display">
                                                 <input type="hidden" id="SI_SINumber">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">SI Date</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="SI_SIDate"></div>
+                                                <div class="input-50" id="SI_SIDate"></div>
                                                 <input type="hidden" id="SI_SIDate_data" class="requiredSales" />
                                             </div>
                                         </div>
@@ -93,7 +93,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Term</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="SI_Term"></div>
+                                                <div class="input-70" id="SI_Term"></div>
 
                                                 <input type="hidden" id="SI_Term_data" class="requiredSales" />
                                                 <input type="hidden" id="SI_Term_selectedValue" />
@@ -232,17 +232,13 @@
                             <div id="SIItem" class="tab-pane fade in active">
                                 <input type="hidden" id="saleItem_Id" />
                                 <dl class="dl-horizontal">
-                                    <dt>Item Code</dt>
+                                    <dt>Item</dt>
                                     <dd>
-                                        <div class="comboBox-wide" id="saleItem_ItemCode"></div>
+                                        <div class="input-30" id="saleItem_ItemCode"></div>
+                                        <div class="input-68" id="saleItem_ItemDescription"></div>
 
                                         <input type="hidden" id="saleItem_ItemId_data" class="requiredSaleItem">
                                         <input type="hidden" id="saleItem_ItemCode_selectedValue" />
-                                    </dd>
-                                    <dt>Item Description</dt>
-                                    <dd>
-                                        <div class="comboBox-wide" id="saleItem_ItemDescription"></div>
-
                                         <input type="hidden" id="saleItem_ItemDescription_selectedValue" />
                                     </dd>
                                     <dt>Particulars</dt>
@@ -255,16 +251,16 @@
                                         <input type="hidden" id="saleItem_InventoryCode_selectedValue" />
                                     </dd>
                                     <dt>Quantity</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_Quantity" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_Quantity" /></dd>
                                     <dt>Unit</dt>
                                     <dd>
-                                        <div class="comboBox-wide" id="saleItem_Unit"></div>
+                                        <div class="input-50" id="saleItem_Unit"></div>
 
                                         <input type="hidden" id="saleItem_Unit_data" class="requiredSaleItem">
                                         <input type="hidden" id="saleItem_Unit_selectedValue" />
                                     </dd>
                                     <dt>Price</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_PriceExVAT" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_PriceExVAT" /></dd>
                                     <dt>Discount</dt>
                                     <dd>
                                         <div class="comboBox-wide" id="saleItem_Discont"></div>
@@ -274,13 +270,13 @@
                                         <input type="hidden" id="saleItem_DiscontInclusive" />
                                     </dd>
                                     <dt>Discount Rate</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_DiscountRate" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_DiscountRate" /></dd>
                                     <dt>Discount Amount</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_DiscountAmount" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_DiscountAmount" /></dd>
                                     <dt>Net Price</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_NetPrice" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_NetPrice" /></dd>
                                     <dt>Amount</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_Amount" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_Amount" /></dd>
                                 </dl>
                             </div>
                             <div id="SITax" class="tab-pane fade in">
@@ -294,24 +290,24 @@
                                         <input type="hidden" id="saleItem_TAXInclusive" />
                                     </dd>
                                     <dt>VAT Rate</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_VATRate" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_VATRate" /></dd>
                                     <dt>VAT Amount</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_VATAmount" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_VATAmount" /></dd>
                                 </dl>
                             </div>
                             <div id="SIBUC" class="tab-pane fade in">
                                 <dl class="dl-horizontal">
                                     <dt>Unit</dt>
                                     <dd>
-                                        <div class="comboBox-wide" id="saleItem_BUCUnit"></div>
+                                        <div class="input-50" id="saleItem_BUCUnit"></div>
 
                                         <input type="hidden" id="saleItem_BUCUnit_data" class="requiredSaleItem">
                                         <input type="hidden" id="saleItem_BUCUnit_selectedValue" />
                                     </dd>
                                     <dt>Quantity</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_BUCQuantity" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_BUCQuantity" /></dd>
                                     <dt>Price</dt>
-                                    <dd><input type="text" class="form-control input-sm requiredSaleItem" id="saleItem_BUCPrice" /></dd>
+                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_BUCPrice" /></dd>
                                 </dl>
                             </div>
                         </div>
@@ -870,8 +866,15 @@
                                         });
                                     }
 
+                                    document.getElementById('SI_SoldBy_data').value = results.Id;
                                     document.getElementById('SI_PreparedBy_data').value = results.Id;
+                                    document.getElementById('SI_CheckedBy_data').value = results.Id;
+                                    document.getElementById('SI_ApprovedBy_data').value = results.Id;
+                                        
+                                    document.getElementById('SI_SoldBy_selectedValue').value = results.FullName;
                                     document.getElementById('SI_PreparedBy_selectedValue').value = results.FullName;
+                                    document.getElementById('SI_CheckedBy_selectedValue').value = results.FullName;
+                                    document.getElementById('SI_ApprovedBy_selectedValue').value = results.FullName;
 
                                     createCboUserSoldBy(users);
                                     createCboUserPreparedBy(users);
@@ -2407,27 +2410,34 @@
         // Compute NET Price
         // =================
         function computeNetPrice() {
-            var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value;
-            var DiscountRate = document.getElementById('saleItem_DiscountRate').value;
-            var PriceExVATPrice = document.getElementById('saleItem_PriceExVAT').value;
-            var VATPercentage = document.getElementById('saleItem_VATRate').value;
-            var discountAmount = document.getElementById('saleItem_DiscountAmount').value;
+            var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value.replace(/\,/g, '');;
+            var DiscountRate = document.getElementById('saleItem_DiscountRate').value.replace(/\,/g, '');;
+            var PriceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');;
+            var VATPercentage = document.getElementById('saleItem_VATRate').value.replace(/\,/g, '');;
+            var discountAmount = document.getElementById('saleItem_DiscountAmount').value.replace(/\,/g, '');;
 
             var price;
             if (document.getElementById('saleItem_DiscontInclusive').value == 'false') {
                 price = PriceExVATPrice / (1 + (VATPercentage / 100));
+                var saleItemDiscountAmount = price * (DiscountRate / 100);
 
-                document.getElementById('saleItem_DiscountAmount').value = Math.round((price * (DiscountRate / 100)) * 100) / 100;
+                document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount.toLocaleString();
 
                 var newDiscountAmount = price * (DiscountRate / 100);
-                document.getElementById('saleItem_NetPrice').value = Math.round((price - newDiscountAmount) * 100) / 100;
+                var netPrice = price - newDiscountAmount;
+
+                document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
 
                 computeAmount();
             } else {
+                var saleItemDiscountAmount = PriceExVATPrice * (DiscountRate / 100);
 
-                document.getElementById('saleItem_DiscountAmount').value = Math.round((PriceExVATPrice * (DiscountRate / 100)) * 100) / 100;
+                document.getElementById('saleItem_DiscountAmount').value = saleItemDiscountAmount.toLocaleString();
+
                 var newDiscountAmount = PriceExVATPrice * (DiscountRate / 100);
-                document.getElementById('saleItem_NetPrice').value = Math.round((PriceExVATPrice - newDiscountAmount) * 100) / 100;
+                var netPrice = PriceExVATPrice - newDiscountAmount;
+
+                document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
             }
         }
 
@@ -2435,32 +2445,36 @@
         // Compute Amount
         // ==============
         function computeAmount() {
-            var quantity = document.getElementById('saleItem_Quantity').value;
-            var netPrice = document.getElementById('saleItem_NetPrice').value;
+            var quantity = document.getElementById('saleItem_Quantity').value.replace(/\,/g, '');
+            var netPrice = document.getElementById('saleItem_NetPrice').value.replace(/\,/g, '');
+            var amount = quantity * netPrice;
 
-            document.getElementById('saleItem_Amount').value = Math.round((quantity * netPrice) * 100) / 100;
-
+            document.getElementById('saleItem_Amount').value = amount.toLocaleString();
             computeTax();
-
         }
 
         // ===========
         // Compute Tax
         // ===========
         function computeTax() {
-            var PriceExVATPrice = document.getElementById('saleItem_PriceExVAT').value;
-            var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value;
-            var VATPercentage = document.getElementById('saleItem_VATRate').value;
-            var netPrice = document.getElementById('saleItem_NetPrice').value;
-            var VATAmount = document.getElementById('saleItem_VATAmount').value;
-            var amount = document.getElementById('saleItem_Amount').value;
-            var quantity = document.getElementById('saleItem_Quantity').value;
+            var PriceExVATPrice = document.getElementById('saleItem_PriceExVAT').value.replace(/\,/g, '');;
+            var DiscountIsInclusive = document.getElementById('saleItem_DiscontInclusive').value.replace(/\,/g, '');;
+            var VATPercentage = document.getElementById('saleItem_VATRate').value.replace(/\,/g, '');;
+            var netPrice = document.getElementById('saleItem_NetPrice').value.replace(/\,/g, '');;
+            var VATAmount = document.getElementById('saleItem_VATAmount').value.replace(/\,/g, '');;
+            var amount = document.getElementById('saleItem_Amount').value.replace(/\,/g, '');;
+            var quantity = document.getElementById('saleItem_Quantity').value.replace(/\,/g, '');;
 
             if (document.getElementById('saleItem_TAXInclusive').value == 'true') {
-                document.getElementById('saleItem_VATAmount').value = Math.round((amount / (1 + (VATPercentage / 100)) * (VATPercentage / 100)) * 100) / 100;
+                var VATAmount = amount / (1 + (VATPercentage / 100)) * (VATPercentage / 100);
+
+                document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
             } else {
-                document.getElementById('saleItem_VATAmount').value = Math.round((amount * (VATPercentage / 100)) * 100) / 100;
-                document.getElementById('saleItem_Amount').value = Math.round((netPrice * quantity) * 100) / 100;
+                var amount = netPrice * quantity;
+                var VATAmount = amount * (VATPercentage / 100);
+
+                document.getElementById('saleItem_VATAmount').value = VATAmount.toLocaleString();
+                document.getElementById('saleItem_Amount').value = amount.toLocaleString();
             }
         }
 
@@ -3359,8 +3373,8 @@
             var quantity = document.getElementById('saleItem_Quantity').value;
             var price = document.getElementById('saleItem_PriceExVAT').value;
 
-            document.getElementById('saleItem_BUCQuantity').value = quantity;
-            document.getElementById('saleItem_BUCPrice').value = price;
+            document.getElementById('saleItem_BUCQuantity').value = quantity.replace(/\,/g, '');;
+            document.getElementById('saleItem_BUCPrice').value = price.replace(/\,/g, '');;
         });
 
         $("#saleItem_Quantity").keyup(function (e) {
@@ -3370,8 +3384,8 @@
             var quantity = document.getElementById('saleItem_Quantity').value;
             var price = document.getElementById('saleItem_PriceExVAT').value;
 
-            document.getElementById('saleItem_BUCQuantity').value = quantity;
-            document.getElementById('saleItem_BUCPrice').value = price;
+            document.getElementById('saleItem_BUCQuantity').value = quantity.replace(/\,/g, '');;
+            document.getElementById('saleItem_BUCPrice').value = price.replace(/\,/g, '');;
         });
 
         $("#saleItem_DiscountRate").keyup(function (e) {
@@ -3426,6 +3440,27 @@
                 e.preventDefault();
             }
         });
+
+        $("#saleItem_DiscountRate").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: Ctrl+C
+                (e.keyCode == 67 && e.ctrlKey === true) ||
+                // Allow: Ctrl+X
+                (e.keyCode == 88 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
 
         // ====
         // TABS
