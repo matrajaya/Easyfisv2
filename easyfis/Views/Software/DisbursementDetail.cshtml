@@ -78,7 +78,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Manual CV Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_ManualCVNumber" placeholder="Manual CV Number"/>
+                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_ManualCVNumber" placeholder="Manual CV Number" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -90,8 +90,8 @@
                                                     <input type="hidden" id="disbursement_Supplier_data" class="requiredDisbursement" />
                                                     <input type="hidden" id="disbursement_Supplier_selectedValue" />
                                                     <div class="input-group-btn">
-                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdAP" onclick="AP_OnClick()">AP</button>
-                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="Advances_OnClick()">Advances</button>
+                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdAP" onclick="btnnOclickAP()">AP</button>
+                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="btnnOclickAdvances()">Advances</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -229,7 +229,7 @@
 
     <!-- RR status -->
     <div class="modal fade" id="RRStatus" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -237,7 +237,36 @@
                     <h4 class="modal-title" id="RRStatusModalLabel">Receiving Receipt Status</h4>
                 </div>
                 <div class="modal-body">
-
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form id="">
+                                <dl class="dl-horizontal">
+                                    <dt>Supplier</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="RRStatusSupplier"></div>
+                                    </dd>
+                                </dl>
+                            </form>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-lg-6"></div>
+                        <div class="col-lg-6" align="right">
+                            <button class="btn btn-primary btn-sm" id="btnIdApplyAllRR" onclick="btnOnclickApplyAllRR()"><i class="fa fa-check"></i> Apply all</button>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="receivingStatusGrid" class="grid" align="left"></div>
+                        </div>
+                        <center>
+                            <h4>
+                                <span id="loadingRRStatus"></span>
+                            </h4>
+                        </center>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
@@ -446,6 +475,140 @@
 
         var disbursementReceivingReceipts;
         var cboDisbursementLineRR;
+
+        var cboRRStatusSupplier;
+        var receivingStatusGrid;
+
+        // =============================
+        // Receiving Receipt Status Grid
+        // =============================
+        function getReceivingStatusGrid() {
+            document.getElementById("loadingRRStatus").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            $('#loadingRRStatus').show();
+            $('#btnIdApplyAllRR').hide();
+
+            setTimeout(function () {
+                $('#loadingRRStatus').hide();
+                $('#btnIdApplyAllRR').show();
+                // Flex Grid for Purchase Disbursement Line
+                receivingStatusGrid = new wijmo.grid.FlexGrid('#receivingStatusGrid');
+                receivingStatusGrid.initialize({
+                    columns: [
+                                {
+                                    "header": "Pick",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                },
+                                {
+                                    "header": "Date",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                },
+                                {
+                                    "header": "RR / AP Number",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Particulars",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "RR Amount",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Withholding",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Payments",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Adjustments",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Balance",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Amount",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                }
+                    ],
+                    autoGenerateColumns: false,
+                    //itemsSource: disbursementLines,
+                    isReadOnly: true,
+                    autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                    allowDragging: wijmo.grid.AllowDragging.None,
+                    selectionMode: wijmo.grid.SelectionMode.Row
+                });
+
+                receivingStatusGrid.trackChanges = true;
+
+                // Merge column Headers
+                var hr = new wijmo.grid.Row();
+                receivingStatusGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+                receivingStatusGrid.columnHeaders.rows.push(hr);
+                receivingStatusGrid.columnHeaders.rows[0].allowMerging = true;
+
+                receivingStatusGrid.columnHeaders.columns[0].allowMerging = true;
+                receivingStatusGrid.columnHeaders.setCellData(0, 0, 'Pick');
+
+                receivingStatusGrid.columnHeaders.columns[1].allowMerging = true;
+                receivingStatusGrid.columnHeaders.setCellData(0, 1, 'Date');
+
+                receivingStatusGrid.columnHeaders.columns[2].allowMerging = true;
+                receivingStatusGrid.columnHeaders.setCellData(0, 2, 'RR / AP Number');
+
+                receivingStatusGrid.columnHeaders.columns[3].allowMerging = true;
+                receivingStatusGrid.columnHeaders.setCellData(0, 3, 'Particulars');
+
+                for (var columnQuantityTopAssigned = 4; columnQuantityTopAssigned <= 8; columnQuantityTopAssigned++) {
+                    receivingStatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Amount');
+                }
+            }, 1000);
+        }
+
+        // ======================================
+        // Receiving Receipt Status Grid Supplier
+        // ======================================
+        function createCBOSupplierRRStatus(suppliers) {
+            var supplierCollection = new wijmo.collections.CollectionView(suppliers);
+            var supplierList = new Array();
+            for (var i = 0; i < supplierCollection.items.length; i++) {
+                supplierList.push(supplierCollection.items[i].Supplier);
+            }
+
+            cboRRStatusSupplier.dispose();
+            cboRRStatusSupplier = new wijmo.input.ComboBox('#RRStatusSupplier', {
+                disabled: true,
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
+            });
+        }
 
         // =======================
         // Get URL Parameter Value
@@ -762,6 +925,7 @@
                                 Supplier: results[i]["Article"]
                             });
                         }
+                        createCBOSupplierRRStatus(suppliers);
                         createCbosupplier(suppliers);
                     }
                 }
@@ -1762,7 +1926,7 @@
                 alert(err);
             });
         }
-        
+
         // ====================
         // CBO for Account Code
         // ====================
@@ -2436,6 +2600,31 @@
             };
         });
 
+        // ==
+        // AP
+        // ==
+        function btnnOclickAP() {
+            $('#RRStatus').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            getReceivingStatusGrid();
+            window.getReceivingStatusGrid = function () {
+                return true;
+            };
+
+        }
+
+        // ========
+        // Advances
+        // ========
+        function btnnOclickAdvances() {
+            $('#SupplierAdvances').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
 
         // ===========
         // OnLoad Page
@@ -2460,7 +2649,7 @@
 
             document.getElementById('disbursement_Amount').disabled = true;
 
-            cboDisbursementBranch = new wijmo.input.ComboBox('#disbursementLine_branch'); 
+            cboDisbursementBranch = new wijmo.input.ComboBox('#disbursementLine_branch');
             cboDisbursementLineAccountCode = new wijmo.input.ComboBox('#disbursementLine_accountCode');
             cboDisbursementLineAccount = new wijmo.input.ComboBox('#disbursementLine_account');
             cboDisbursementLineArticle = new wijmo.input.ComboBox('#disbursementLine_article');
@@ -2468,20 +2657,6 @@
 
             document.getElementById('disbursement_CVNumber_Display').disabled = true;
             document.getElementById('disbursement_Lock').disabled = true;
-
-            $('#cmdAP').click(function () {
-                $('#RRStatus').modal({
-                    show: true,
-                    backdrop: 'static'
-                });
-            });
-
-            $('#cmdAdvances').click(function () {
-                $('#SupplierAdvances').modal({
-                    show: true,
-                    backdrop: 'static'
-                });
-            });
 
             cboBranch = new wijmo.input.ComboBox('#disbursement_Branch');
 
@@ -2505,7 +2680,7 @@
                     document.getElementById('disbursement_CheckDate_data').value = this.value.toLocaleDateString();
                 }
             });
-
+            cboRRStatusSupplier = new wijmo.input.ComboBox('#RRStatusSupplier');
             cboSupplier = new wijmo.input.ComboBox('#disbursement_Supplier');
             cboPayType = new wijmo.input.ComboBox('#disbursement_PayType');
             cboBank = new wijmo.input.ComboBox('#disbursement_Bank');

@@ -50,7 +50,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Code</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredItem" id="articleItem_code" placeholder="Code" />
+                                                <input type="text" class="form-control input-30 input-sm requiredItem" id="articleItem_code" placeholder="Code" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -68,25 +68,25 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Item Group</label>
                                             <div class="col-sm-8">
-                                                <div type="text" class="comboBox-wide" id="articleItem_itemGroup"></div>
+                                                <div type="text" class="input-70" id="articleItem_itemGroup"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Category</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredItem" id="articleItem_category" placeholder="Category" />
+                                                <input type="text" class="form-control input-70 input-sm requiredItem" id="articleItem_category" placeholder="Category" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Unit</label>
                                             <div class="col-sm-8">
-                                                <div type="text" class="comboBox-wide" id="articleItem_unit"></div>
+                                                <div type="text" class="input-50" id="articleItem_unit"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Price</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredItem" id="articleItem_price" placeholder="Price" />
+                                                <input type="text" class="form-control input-50 numberField input-sm requiredItem" id="articleItem_price" placeholder="0.00" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -130,7 +130,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Manual Cost</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredItem" id="articleItem_manualCost" placeholder="Manual Cost" />
+                                                <input type="text" class="form-control input-50 numberField input-sm requiredItem" id="articleItem_manualCost" placeholder="0.00" />
                                             </div>
                                         </div>
                                     </div>
@@ -214,31 +214,36 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Account</label>
                                                     <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="Item_Account"></div>
+                                                        <div class="input-30" id="Item_AccountCode"></div>
+                                                        <div class="input-68" id="Item_Account"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Sales Account</label>
                                                     <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="Item_SalesAccount"></div>
+                                                        <div class="input-30" id="Item_SalesAccountCode"></div>
+                                                        <div class="input-68" id="Item_SalesAccount"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Cost Account</label>
                                                     <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="Item_CostAccount"></div>
+                                                        <div class="input-30" id="Item_CostAccountCode"></div>
+                                                        <div class="input-68" id="Item_CostAccount"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Accum Dep Account</label>
                                                     <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="Item_AccumDepAccount"></div>
+                                                        <div class="input-30" id="Item_AccumDepAccountCode"></div>
+                                                        <div class="input-68" id="Item_AccumDepAccount"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Expense Account</label>
                                                     <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="Item_ExpenseAccount"></div>
+                                                        <div class="input-30" id="Item_ExpenseAccountCode"></div>
+                                                        <div class="input-68" id="Item_ExpenseAccount"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -264,13 +269,13 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Useful Life (Years)</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm" id="Item_UsefulLife" placeholder="Useful Life (Years)" />
+                                                        <input type="text" class="form-control input-50 numberField input-sm" id="Item_UsefulLife" placeholder="Useful Life (Years)" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Salvage Value</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-sm" id="Item_SalvageValue" placeholder="Salvage Value" />
+                                                        <input type="text" class="form-control input-50 numberField input-sm" id="Item_SalvageValue" placeholder="Salvage Value" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -424,7 +429,7 @@
                             <dt>Price Description</dt>
                             <dd><input type="text" class="form-control input-sm requiredPrice" id="price_PriceDescription" placeholder="Price Description" /></dd>
                             <dt>Price</dt>
-                            <dd><input type="text" class="form-control input-sm requiredPrice" id="price_Price" placeholder="Price" /></dd>
+                            <dd><input type="text" class="form-control input-50 numberField input-sm requiredPrice" id="price_Price" placeholder="Price" /></dd>
                             <dt>Remarks</dt>
                             <dd><textarea class="form-control textarea-custom requiredPrice" id="price_Remarks" placeholder="Remarks"></textarea></dd>
                         </dl>
@@ -469,10 +474,15 @@
         var articleItemUnits;
         var taxTypes;
         var accounts;
+        var cboAccountCode;
         var cboAccount;
+        var cboSaleAccountCode;
         var cboSaleAccount;
+        var cboCostAccountCode;
         var cboCostAccount;
+        var cboAccumDepAccountCode;
         var cboAccumDepAccount;
+        var cboExpenseAccountCode;
         var cboExpenseAccount;
         var cboArticleGroupForItem;
         var cboArticleUnitForItem;
@@ -682,14 +692,19 @@
                                 ArticleGroupId: itemGroupResults[i]["Id"],
                                 ArticleGroup: itemGroupResults[i]["ArticleGroup"],
                                 AccountId: itemGroupResults[i]["AccountId"],
+                                AccountCode: itemGroupResults[i]["AccountCode"],
                                 Account: itemGroupResults[i]["Account"],
                                 SalesAccountId: itemGroupResults[i]["SalesAccountId"],
+                                SalesAccountCode: itemGroupResults[i]["SalesAccountCode"],
                                 SalesAccount: itemGroupResults[i]["SalesAccount"],
                                 CostAccountId: itemGroupResults[i]["CostAccountId"],
+                                CostAccountCode: itemGroupResults[i]["CostAccountCode"],
                                 CostAccount: itemGroupResults[i]["CostAccount"],
                                 AssetAccountId: itemGroupResults[i]["AssetAccountId"],
+                                AssetAccountCode: itemGroupResults[i]["AssetAccountCode"],
                                 AssetAccount: itemGroupResults[i]["AssetAccount"],
                                 ExpenseAccountId: itemGroupResults[i]["ExpenseAccountId"],
+                                ExpenseAccountCode: itemGroupResults[i]["ExpenseAccountCode"],
                                 ExpenseAccount: itemGroupResults[i]["ExpenseAccount"]
                             });
                         }
@@ -851,14 +866,77 @@
                         for (i = 0; i < accountResults.length; i++) {
                             accounts.push({
                                 AccountId: accountResults[i]["Id"],
+                                AccountCode: accountResults[i]["AccountCode"],
                                 Account: accountResults[i]["Account"]
                             });
                         }
+                        createCboForGLAccountCode(accounts);
                         createCboForGLAccount(accounts);
                     } else {
+                        createCboForGLAccountCode(accounts);
                         createCboForGLAccount(accounts);
                     }
                 }
+            });
+        }
+
+        // ====================
+        // CBO for Account Code
+        // ====================
+        function createCboForGLAccountCode(accounts) {
+            cboAccountCode.dispose();
+            cboAccountCode = new wijmo.input.ComboBox('#Item_AccountCode', {
+                disabled: true,
+                placeholder: "Account Code",
+                itemsSource: accounts,
+                displayMemberPath: "AccountCode",
+                isEditable: false,
+                selectedValuePath: "AccountCode",
+                selectedValue: cboArticleGroupForItem.selectedItem["AccountCode"].toString()
+            });
+
+            cboSaleAccountCode.dispose();
+            cboSaleAccountCode = new wijmo.input.ComboBox('#Item_SalesAccountCode', {
+                disabled: true,
+                placeholder: "Sales Account Code",
+                itemsSource: accounts,
+                displayMemberPath: "AccountCode",
+                isEditable: false,
+                selectedValuePath: "AccountCode",
+                selectedValue: cboArticleGroupForItem.selectedItem["SalesAccountCode"].toString()
+            });
+
+            cboCostAccountCode.dispose();
+            cboCostAccountCode = new wijmo.input.ComboBox('#Item_CostAccountCode', {
+                disabled: true,
+                placeholder: "Cost Account Code",
+                itemsSource: accounts,
+                displayMemberPath: "AccountCode",
+                isEditable: false,
+                selectedValuePath: "AccountCode",
+                selectedValue: cboArticleGroupForItem.selectedItem["CostAccountCode"].toString()
+            });
+
+            cboAccumDepAccountCode.dispose();
+            cboAccumDepAccountCode = new wijmo.input.ComboBox('#Item_AccumDepAccountCode', {
+                disabled: true,
+                placeholder: "Accum Dep Account Code",
+                itemsSource: accounts,
+                displayMemberPath: "AccountCode",
+                isEditable: false,
+                selectedValuePath: "AccountCode",
+                selectedValue: cboArticleGroupForItem.selectedItem["AssetAccountCode"].toString()
+            });
+
+            cboExpenseAccountCode.dispose();
+            cboExpenseAccountCode = new wijmo.input.ComboBox('#Item_ExpenseAccountCode', {
+                disabled: true,
+                placeholder: "Accum Dep Account Code",
+                itemsSource: accounts,
+                displayMemberPath: "AccountCode",
+                isEditable: false,
+                selectedValuePath: "AccountCode",
+                selectedValue: cboArticleGroupForItem.selectedItem["ExpenseAccountCode"].toString()
             });
         }
 
@@ -1250,10 +1328,15 @@
             cboArticleInputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_inputTax');
             cboArticleOutputTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_outputTax');
             cboArticleWithholdingTaxTypeForItem = new wijmo.input.ComboBox('#articleItem_withholdingTax');
+            cboAccountCode = new wijmo.input.ComboBox('#Item_AccountCode');
             cboAccount = new wijmo.input.ComboBox('#Item_Account');
+            cboSaleAccountCode = new wijmo.input.ComboBox('#Item_SalesAccountCode');
             cboSaleAccount = new wijmo.input.ComboBox('#Item_SalesAccount');
+            cboCostAccountCode = new wijmo.input.ComboBox('#Item_CostAccountCode');
             cboCostAccount = new wijmo.input.ComboBox('#Item_CostAccount');
+            cboAccumDepAccountCode = new wijmo.input.ComboBox('#Item_AccumDepAccountCode');
             cboAccumDepAccount = new wijmo.input.ComboBox('#Item_AccumDepAccount');
+            cboExpenseAccountCode = new wijmo.input.ComboBox('#Item_ExpenseAccountCode');
             cboExpenseAccount = new wijmo.input.ComboBox('#Item_ExpenseAccount');
             dateAcquired = new wijmo.input.InputDate('#Item_DateAcquired', {
                 format: 'MM/dd/yyyy',

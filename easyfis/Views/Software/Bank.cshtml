@@ -107,9 +107,11 @@
                             </dd>
                             <dt>Account</dt>
                             <dd>
-                                <div id="bank_Account" class="comboBox-wide"></div>
+                                <div id="bank_AccountCode" class="input-30"></div>
+                                <div id="bank_Account" class="input-68"></div>
 
                                 <input type="hidden" class="requiredBank" id="bank_Account_data" />
+                                <input type="hidden" id="bank_AccountCode_selectedValue" />
                                 <input type="hidden" id="bank_Account_selectedValue" />
                                 <input type="hidden" id="bank_SalesAccountId" />
                                 <input type="hidden" id="bank_CostAccountId" />
@@ -183,6 +185,7 @@
         var bankGrid;
         var bankAccounts;
         var bankArticleGroups;
+        var cboBankForAccountCode;
         var cboBankForAccount;
         var cboArticleGroup;
         var btnFirstPageGrid;
@@ -220,6 +223,7 @@
                                     ArticleGroupId: Results[i]["ArticleGroupId"],
                                     ArticleGroup: Results[i]["ArticleGroup"],
                                     AccountId: Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account: Results[i]["Account"],
                                     SalesAccountId: Results[i]["SalesAccountId"],
                                     CostAccountId: Results[i]["CostAccountId"],
@@ -265,6 +269,7 @@
                                     ArticleGroupId: Results[i]["ArticleGroupId"],
                                     ArticleGroup: Results[i]["ArticleGroup"],
                                     AccountId: Results[i]["AccountId"],
+                                    AccountCode: Results[i]["AccountCode"],
                                     Account: Results[i]["Account"],
                                     SalesAccountId: Results[i]["SalesAccountId"],
                                     CostAccountId: Results[i]["CostAccountId"],
@@ -338,6 +343,7 @@
                                 ArticleGroupAccount: results[i]["Account"],
                                 ArticleGroupSalesAccountId: results[i]["SalesAccountId"],
                                 ArticleGroupSalesAccount: results[i]["SalesAccount"],
+                                ArticleGroupSalesAccountCode: results[i]["SalesAccountCode"],
                                 ArticleGroupCostAccountId: results[i]["CostAccountId"],
                                 ArticleGroupCostAccount: results[i]["CostAccount"],
                                 ArticleGroupAssetAccountId: results[i]["AssetAccountId"],
@@ -381,6 +387,7 @@
                     $("#bank_BankGroup_data").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupId);
                     $("#bank_Account_data").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupAccountId);
                     $("#bank_Account_selectedValue").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupAccount);
+                    $("#bank_AccountCode_selectedValue").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupSalesAccountCode);
                     $("#bank_SalesAccountId").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupSalesAccountId);
                     $("#bank_CostAccountId").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupCostAccountId);
                     $("#bank_AssetAccountId").val(bankArticleGroupCollection.items[this.selectedIndex].ArticleGroupAssetAccountId);
@@ -402,25 +409,8 @@
                                     });
                                 }
 
-                                var accountCollection = new wijmo.collections.CollectionView(accounts);
-                                var accountList = new Array();
-                                for (var i = 0; i < accountCollection.items.length; i++) {
-                                    accountList.push(accountCollection.items[i].AccountAccount);
-                                }
-
-                                cboBankForAccount.dispose();
-                                cboBankForAccount = new wijmo.input.ComboBox('#bank_Account', {
-                                    disabled: true,
-                                    placeholder: "Select Account",
-                                    itemsSource: accountList,
-                                    isEditable: false,
-                                    required: false,
-                                    selectedValue: document.getElementById('bank_Account_selectedValue').value.toString(),
-                                    onSelectedIndexChanged: function () {
-                                        $("#bank_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
-                                    }
-                                });
-
+                                createCboForBankAccountCode(bankAccounts);
+                                createCboForBankAccount(bankAccounts);
                             }
                         }
                     });
@@ -444,14 +434,41 @@
                         for (i = 0; i < results.length; i++) {
                             bankAccounts.push({
                                 AccountId: results[i]["Id"],
+                                AccountCode: results[i]["AccountCode"],
                                 AccountAccount: results[i]["Account"]
                             });
                         }
+                        createCboForBankAccountCode(bankAccounts);
                         createCboForBankAccount(bankAccounts);
                     }
                 }
             });
         }
+
+        // ====================
+        // CBO for Account Code
+        // ====================
+        function createCboForBankAccountCode(bankAccounts) {
+            var accountCollection = new wijmo.collections.CollectionView(bankAccounts);
+            var accountList = new Array();
+            for (var i = 0; i < accountCollection.items.length; i++) {
+                accountList.push(accountCollection.items[i].AccountCode);
+            }
+
+            cboBankForAccountCode.dispose();
+            cboBankForAccountCode = new wijmo.input.ComboBox('#bank_AccountCode', {
+                disabled: true,
+                placeholder: "Select Account Code",
+                itemsSource: accountList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('bank_AccountCode_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#bank_Account_data").val(accountCollection.items[this.selectedIndex].AccountId);
+                }
+            });
+        }
+
 
         // ===============
         // CBO for Account
@@ -606,6 +623,7 @@
             document.getElementById('bank_BankGroup_selectedValue').value = bank.ArticleGroup ? bank.ArticleGroup : '';
             document.getElementById('bank_Account_data').value = bank.AccountId ? bank.AccountId : '';
             document.getElementById('bank_Account_selectedValue').value = bank.Account ? bank.Account : '';
+            document.getElementById('bank_AccountCode_selectedValue').value = bank.AccountCode ? bank.AccountCode : '';
 
             document.getElementById('bank_SalesAccountId').value = bank.SalesAccountId ? bank.SalesAccountId : '';
             document.getElementById('bank_CostAccountId').value = bank.CostAccountId ? bank.CostAccountId : '';
@@ -927,6 +945,7 @@
                 }
             });
 
+            cboBankForAccountCode = new wijmo.input.ComboBox('#bank_AccountCode');
             cboBankForAccount = new wijmo.input.ComboBox('#bank_Account');
             cboArticleGroup = new wijmo.input.ComboBox('#bank_BankGroup');
 

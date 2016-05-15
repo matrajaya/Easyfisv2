@@ -50,7 +50,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Code</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_code" placeholder="Code" />
+                                                <input type="text" class="form-control input-30 input-sm requiredSupplier" id="artcileSupplier_code" placeholder="Code" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -62,19 +62,20 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Supplier Group</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="artcileSupplier_SupplierGroup"></div>
+                                                <div class="input-70" id="artcileSupplier_SupplierGroup"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Account</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="artcileSupplier_Account"></div>
+                                                <div class="input-30" id="artcileSupplier_AccountCode"></div>
+                                                <div class="input-68" id="artcileSupplier_Account"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Term</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="artcileSupplier_Term"></div>
+                                                <div class="input-70" id="artcileSupplier_Term"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -213,6 +214,7 @@
         var accounts;
         var terms;
         var cboArticleGroup;
+        var cboForAccountCode;
         var cboForAccount;
         var cboForTerm;
         var supplierGroupSelectedValue = "";
@@ -348,6 +350,7 @@
                                 ArticleGroupId: articleSupplierGroupResults[i]["Id"],
                                 ArticleGroup: articleSupplierGroupResults[i]["ArticleGroup"],
                                 AccountId: articleSupplierGroupResults[i]["AccountId"],
+                                AccountCode: articleSupplierGroupResults[i]["AccountCode"],
                                 Account: articleSupplierGroupResults[i]["Account"],
                                 SalesAccountId: articleSupplierGroupResults[i]["SalesAccountId"],
                                 SalesAccount: articleSupplierGroupResults[i]["SalesAccount"],
@@ -404,14 +407,33 @@
                         for (i = 0; i < accountResults.length; i++) {
                             accounts.push({
                                 AccountId: accountResults[i]["Id"],
+                                AccountCode: accountResults[i]["AccountCode"],
                                 Account: accountResults[i]["Account"]
                             });
                         }
+                        createCboForAccountCode(accounts);
                         createCboForAccount(accounts);
                     } else {
+                        createCboForAccountCode(accounts);
                         createCboForAccount(accounts);
                     }
                 }
+            });
+        }
+
+        // ====================
+        // CBO for Account Code
+        // ====================
+        function createCboForAccountCode(accounts) {
+            cboForAccountCode.dispose();
+            cboForAccountCode = new wijmo.input.ComboBox('#artcileSupplier_AccountCode', {
+                disabled: true,
+                placeholder: "Account Code",
+                itemsSource: accounts,
+                displayMemberPath: "AccountCode",
+                isEditable: false,
+                selectedValuePath: "AccountCode",
+                selectedValue: cboArticleGroup.selectedItem["AccountCode"].toString(),
             });
         }
 
@@ -427,7 +449,7 @@
                 displayMemberPath: "Account",
                 isEditable: false,
                 selectedValuePath: "Account",
-                selectedValue: cboArticleGroup.selectedItem["Account"].toString()
+                selectedValue: cboArticleGroup.selectedItem["Account"].toString(),
             });
         }
 
@@ -768,6 +790,7 @@
         $(document).ready(function () {
             // combo box wijmo
             cboArticleGroup = new wijmo.input.ComboBox('#artcileSupplier_SupplierGroup');
+            cboForAccountCode = new wijmo.input.ComboBox('#artcileSupplier_AccountCode');
             cboForAccount = new wijmo.input.ComboBox('#artcileSupplier_Account');
             cboForTerm = new wijmo.input.ComboBox('#artcileSupplier_Term');
 

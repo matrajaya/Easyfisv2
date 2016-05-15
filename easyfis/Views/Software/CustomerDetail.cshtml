@@ -52,7 +52,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Code</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_code" placeholder="Code" />
+                                                <input type="text" class="form-control input-30 input-sm requiredCustomer" id="artcileCustomer_code" placeholder="Code" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -64,25 +64,26 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Customer Group</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="artcileCustomer_customerGroup"></div>
+                                                <div class="input-70" id="artcileCustomer_customerGroup"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Account</label>
                                             <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="artcileCustomer_account"></div>
+                                                <div class="input-30" id="artcileCustomer_accountCode"></div>
+                                                <div class="input-68" id="artcileCustomer_account"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Term</label>
                                             <div class="col-sm-8">
-                                                <div type="text" class="comboBox-wide" id="artcileCustomer_term"></div>
+                                                <div type="text" class="input-70" id="artcileCustomer_term"></div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Credit Limit</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredCustomer" id="artcileCustomer_creditLimit" placeholder="Credit Limit">
+                                                <input type="text" class="form-control input-50 numberField input-sm requiredcustomer" id="artcileCustomer_creditLimit" placeholder="Credit Limit">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -221,6 +222,7 @@
         var accounts;
         var terms;
         var cboArticleGroupForCustomer;
+        var cboForAccountCode;
         var cboForAccount;
         var cboForTerm;
         var customerGroupSelectedValue = "";
@@ -379,6 +381,7 @@
                                 ArticleGroupId: articleCustomerGroupResults[i]["Id"],
                                 ArticleGroup: articleCustomerGroupResults[i]["ArticleGroup"],
                                 AccountId: articleCustomerGroupResults[i]["AccountId"],
+                                AccountCode: articleCustomerGroupResults[i]["AccountCode"],
                                 Account: articleCustomerGroupResults[i]["Account"],
                                 SalesAccountId: articleCustomerGroupResults[i]["SalesAccountId"],
                                 SalesAccount: articleCustomerGroupResults[i]["SalesAccount"],
@@ -435,14 +438,33 @@
                         for (i = 0; i < accountResults.length; i++) {
                             accounts.push({
                                 AccountId: accountResults[i]["Id"],
+                                AccountCode: accountResults[i]["AccountCode"],
                                 Account: accountResults[i]["Account"]
                             });
                         }
+                        createCboForAccountCode(accounts);
                         createCboForAccount(accounts);
                     } else {
+                        createCboForAccountCode(accounts);
                         createCboForAccount(accounts);
                     }
                 }
+            });
+        }
+
+        // ====================
+        // CBO for Account Code
+        // ====================
+        function createCboForAccountCode(accounts) {
+            cboForAccountCode.dispose();
+            cboForAccountCode = new wijmo.input.ComboBox('#artcileCustomer_accountCode', {
+                disabled: true,
+                placeholder: "Account Code",
+                itemsSource: accounts,
+                displayMemberPath: "AccountCode",
+                isEditable: false,
+                selectedValuePath: "AccountCode",
+                selectedValue: cboArticleGroupForCustomer.selectedItem["AccountCode"].toString()
             });
         }
 
@@ -781,6 +803,7 @@
         $(document).ready(function () {
             // combo box
             cboArticleGroupForCustomer = new wijmo.input.ComboBox('#artcileCustomer_customerGroup');
+            cboForAccountCode = new wijmo.input.ComboBox('#artcileCustomer_accountCode');
             cboForAccount = new wijmo.input.ComboBox('#artcileCustomer_account');
             cboForTerm = new wijmo.input.ComboBox('#artcileCustomer_term');
 

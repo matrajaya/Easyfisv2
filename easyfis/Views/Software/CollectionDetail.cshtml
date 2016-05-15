@@ -77,7 +77,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Manual OR Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredCollection" id="collection_ManualORNumber" placeholder="Manual OR Number"/>
+                                                <input type="text" class="form-control input-sm requiredCollection" id="collection_ManualORNumber" placeholder="Manual OR Number" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -90,7 +90,7 @@
                                                     <input type="hidden" id="collection_Customer_selectedValue" />
                                                     <div class="input-group-btn">
                                                         <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
-                                                        @*<button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>*@
+                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -176,7 +176,7 @@
 
     <!-- Sales for Collection Modal -->
     <div class="modal fade" id="SalesStatus" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -184,7 +184,36 @@
                     <h4 class="modal-title" id="POStatusModalLabel">Sales Invoice Status</h4>
                 </div>
                 <div class="modal-body">
-
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form id="">
+                                <dl class="dl-horizontal">
+                                    <dt>Customer</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="SIStatusCustomer"></div>
+                                    </dd>
+                                </dl>
+                            </form>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-lg-6"></div>
+                        <div class="col-lg-6" align="right">
+                            <button class="btn btn-primary btn-sm" id="btnIdApplyAllSI" onclick="btnOnclickApplyAllSI()"><i class="fa fa-check"></i> Apply all</button>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="salesInvoiceStatusGrid" class="grid" align="left"></div>
+                        </div>
+                        <center>
+                            <h4>
+                                <span id="loadingSIStatus"></span>
+                            </h4>
+                        </center>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
@@ -277,7 +306,7 @@
                                 <input type="hidden" class="requiredCollectionLine" id="collectionLine_checkDate_data" />
                             </dd>
                             <dt>Check Bank</dt>
-                            <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkBank" placeholder="Check Bank"/></dd>
+                            <dd><input type="text" class="form-control input-sm requiredCollectionLine" id="collectionLine_checkBank" placeholder="Check Bank" /></dd>
                             <dt>Depository Bank</dt>
                             <dd>
                                 <div class="comboBox-wide" id="collectionLine_depositoryBank"></div>
@@ -422,6 +451,125 @@
         var cboCollectionArticleBank;
 
         var CheckedDate;
+
+        var cboSIStatusSupplier;
+        var SIStatusGrid;
+
+        // =============================
+        // Receiving Receipt Status Grid
+        // =============================
+        function getReceivingStatusGrid() {
+            document.getElementById("loadingSIStatus").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            $('#loadingSIStatus').show();
+            $('#btnIdApplyAllSI').hide();
+
+            setTimeout(function () {
+                $('#loadingSIStatus').hide();
+                $('#btnIdApplyAllSI').show();
+                // Flex Grid for Purchase Disbursement Line
+                SIStatusGrid = new wijmo.grid.FlexGrid('#salesInvoiceStatusGrid');
+                SIStatusGrid.initialize({
+                    columns: [
+                                {
+                                    "header": "Pick",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                },
+                                {
+                                    "header": "Date",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                },
+                                {
+                                    "header": "SI Number",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Particulars",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "SI Amount",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Payments",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Adjustments",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Balance",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                }
+                    ],
+                    autoGenerateColumns: false,
+                    //itemsSource: disbursementLines,
+                    isReadOnly: true,
+                    autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                    allowDragging: wijmo.grid.AllowDragging.None,
+                    selectionMode: wijmo.grid.SelectionMode.Row
+                });
+
+                SIStatusGrid.trackChanges = true;
+
+                // Merge column Headers
+                var hr = new wijmo.grid.Row();
+                SIStatusGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+                SIStatusGrid.columnHeaders.rows.push(hr);
+                SIStatusGrid.columnHeaders.rows[0].allowMerging = true;
+
+                SIStatusGrid.columnHeaders.columns[0].allowMerging = true;
+                SIStatusGrid.columnHeaders.setCellData(0, 0, 'Pick');
+
+                SIStatusGrid.columnHeaders.columns[1].allowMerging = true;
+                SIStatusGrid.columnHeaders.setCellData(0, 1, 'Date');
+
+                SIStatusGrid.columnHeaders.columns[2].allowMerging = true;
+                SIStatusGrid.columnHeaders.setCellData(0, 2, 'SI Number');
+
+                SIStatusGrid.columnHeaders.columns[3].allowMerging = true;
+                SIStatusGrid.columnHeaders.setCellData(0, 3, 'Particulars');
+
+                for (var columnQuantityTopAssigned = 4; columnQuantityTopAssigned <= 7; columnQuantityTopAssigned++) {
+                    SIStatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Amount');
+                }
+            }, 1000);
+        }
+
+        function createCboCustomerSIStatusGrid(customers) {
+            var customerCollection = new wijmo.collections.CollectionView(customers);
+            var customerList = new Array();
+            for (var i = 0; i < customerCollection.items.length; i++) {
+                customerList.push(customerCollection.items[i].Customer);
+            }
+
+            cboSIStatusSupplier.dispose();
+            cboSIStatusSupplier = new wijmo.input.ComboBox('#SIStatusCustomer', {
+                disabled: true,
+                placeholder: "Select Customer",
+                itemsSource: customerList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collection_Customer_selectedValue').value.toString()
+            });
+        }
 
         // =======================
         // Get URL Parameter Value
@@ -681,6 +829,7 @@
                                 Customer: results[i]["Article"]
                             });
                         }
+                        createCboCustomerSIStatusGrid(customers);
                         createCboCustomer(customers);
                     }
                 }
@@ -2313,6 +2462,31 @@
             };
         });
 
+        // ==
+        // AR
+        // ==
+        function collectionAR_OnClick() {
+            $('#SalesStatus').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            getReceivingStatusGrid();
+            window.getReceivingStatusGrid = function () {
+                return true;
+            };
+        }
+
+        // ========
+        // Advances
+        // ========
+        function collectionAdvances_OnClick() {
+            $('#customerAdvances').modal({
+                show: true,
+                backdrop: 'static'
+            });
+        }
+
         // ===========
         // OnLoad Page
         // ===========
@@ -2339,6 +2513,7 @@
             cboCollectionLineAccount = new wijmo.input.ComboBox('#collectionLine_account');
             cboCollectionLineArticle = new wijmo.input.ComboBox('#collectionLine_article');
             cboCollectionArticleBank = new wijmo.input.ComboBox('#collectionLine_depositoryBank');
+            cboSIStatusSupplier = new wijmo.input.ComboBox('#SIStatusCustomer');
 
             var d = new Date();
             document.getElementById("collectionLine_checkDate_data").value = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join('/');
@@ -2349,20 +2524,6 @@
                 onValueChanged: function () {
                     document.getElementById('collectionLine_checkDate_data').value = this.value.toLocaleDateString();
                 }
-            });
-
-            $('#cmdAR').click(function () {
-                $('#SalesStatus').modal({
-                    show: true,
-                    backdrop: 'static'
-                });
-            });
-
-            $('#cmdAdvances').click(function () {
-                $('#customerAdvances').modal({
-                    show: true,
-                    backdrop: 'static'
-                });
             });
 
             document.getElementById('collection_ORNumber_Display').disabled = true;
