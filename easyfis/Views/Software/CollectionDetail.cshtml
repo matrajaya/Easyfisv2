@@ -42,7 +42,7 @@
                                 <button class="btn btn-primary btn-sm" id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                                 <button class="btn btn-primary btn-sm" id="cmdCollectionEdit" onclick="btnCollectionEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
                                 <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="btnCollectionPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button onclick="window.location.href = '@Url.Action("Collection", "Software")'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
+                                <button onclick="window.location.href = '/Software/Collection'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
@@ -225,7 +225,7 @@
 
     <!-- customer Advances for Collection Modal -->
     <div class="modal fade" id="customerAdvances" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -233,7 +233,29 @@
                     <h4 class="modal-title" id="POStatusModalLabel">Customer Advances</h4>
                 </div>
                 <div class="modal-body">
-
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form id="">
+                                <dl class="dl-horizontal">
+                                    <dt>Customer</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="SIAdvancesCustomer"></div>
+                                    </dd>
+                                </dl>
+                            </form>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="SIAdvancesGrid" class="grid" align="left"></div>
+                        </div>
+                        <center>
+                            <h4>
+                                <span id="loadingSIAdvances"></span>
+                            </h4>
+                        </center>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
@@ -413,16 +435,12 @@
         // Global Variables
         // ================
         var collections;
-
         var branches;
         var customers;
-
         var ORDate;
-
         var cboBranch;
         var cboCustomer;
         var cboPreparedBy;
-
         var collectionLines;
         var collectionLineGrid;
         var btnFirstPageGridCollectionGrid;
@@ -430,30 +448,62 @@
         var btnNextPageGridCollectionGrid;
         var btnLastPageGridCollectionGrid;
         var btnCurrentPageGridCollectionGrid;
-
         var collectionLineBranches;
         var cboCollectionBranch;
-
         var collectionLinePayTypes;
         var cboCollectionLinePayType;
-
         var collectionLineSales;
         var cboCollectionLineSI;
-
         var collectionLineAccounts;
         var cboCollectionLineAccountCode;
         var cboCollectionLineAccount;
-
         var collectionLineArticles;
         var cboCollectionLineArticle;
-
         var collectionArticleBanks;
         var cboCollectionArticleBank;
-
         var CheckedDate;
-
-        var cboSIStatusSupplier;
+        var cboSIStatusCustomer;
         var SIStatusGrid;
+        var cboSIAdvancesCustomer;
+        var SIAdvancesGrid;
+
+        function getSalesInvoiceBySupplierByBalance() {
+            var saleInvoices = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/salesInvoiceByCustomerIdByBalance/' + document.getElementById("collection_Customer_data").value,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (saleInvoiceResults) {
+                    if (saleInvoiceResults.length > 0) {
+                        for (i = 0; i < saleInvoiceResults.length; i++) {
+                            saleInvoices.push({
+                                Pick: "<button class='btn btn-primary btn-xs'> <i class='fa fa-edit'></i> Pick</button>",
+                                Id: saleInvoiceResults[i]["Id"],
+                                BranchId: saleInvoiceResults[i]["BranchId"],
+                                Branch: saleInvoiceResults[i]["Branch"],
+                                SINumber: saleInvoiceResults[i]["SINumber"],
+                                SIDate: saleInvoiceResults[i]["SIDate"],
+                                CustomerId: saleInvoiceResults[i]["CustomerId"],
+                                Customer: saleInvoiceResults[i]["Customer"],
+                                TermId: saleInvoiceResults[i]["TermId"],
+                                Term: saleInvoiceResults[i]["Term"],
+                                DocumentReference: saleInvoiceResults[i]["DocumentReference"],
+                                ManualSINumber: saleInvoiceResults[i]["ManualSINumber"],
+                                Remarks: saleInvoiceResults[i]["Remarks"],
+                                Amount: saleInvoiceResults[i]["Amount"],
+                                PaidAmount: saleInvoiceResults[i]["PaidAmount"],
+                                AdjustmentAmount: saleInvoiceResults[i]["AdjustmentAmount"],
+                                BalanceAmount: saleInvoiceResults[i]["BalanceAmount"]
+                            });
+                        }
+                    }
+                }
+            });
+            return saleInvoices;
+        }
+
 
         // =============================
         // Receiving Receipt Status Grid
@@ -466,37 +516,43 @@
             setTimeout(function () {
                 $('#loadingSIStatus').hide();
                 $('#btnIdApplyAllSI').show();
+                var saleInvoices = new wijmo.collections.CollectionView(getSalesInvoiceBySupplierByBalance());
+
                 // Flex Grid for Purchase Disbursement Line
                 SIStatusGrid = new wijmo.grid.FlexGrid('#salesInvoiceStatusGrid');
                 SIStatusGrid.initialize({
                     columns: [
                                 {
                                     "header": "Pick",
-                                    "binding": "",
+                                    "binding": "Pick",
                                     "allowSorting": true,
                                     "width": "2*",
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
                                 },
                                 {
                                     "header": "Date",
-                                    "binding": "",
+                                    "binding": "SIDate",
                                     "allowSorting": true,
                                     "width": "2*",
                                 },
                                 {
                                     "header": "SI Number",
-                                    "binding": "",
+                                    "binding": "SINumber",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
                                 {
                                     "header": "Particulars",
-                                    "binding": "",
+                                    "binding": "DocumentReference",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
                                 {
                                     "header": "SI Amount",
-                                    "binding": "",
+                                    "binding": "Amount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
@@ -508,19 +564,19 @@
                                 },
                                 {
                                     "header": "Adjustments",
-                                    "binding": "",
+                                    "binding": "AdjustmentAmount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
                                 {
                                     "header": "Balance",
-                                    "binding": "",
+                                    "binding": "BalanceAmount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 }
                     ],
                     autoGenerateColumns: false,
-                    //itemsSource: disbursementLines,
+                    itemsSource: saleInvoices,
                     isReadOnly: true,
                     autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                     allowDragging: wijmo.grid.AllowDragging.None,
@@ -553,15 +609,139 @@
             }, 1000);
         }
 
-        function createCboCustomerSIStatusGrid(customers) {
+        function createCboCustomerSIStatus(customers) {
             var customerCollection = new wijmo.collections.CollectionView(customers);
             var customerList = new Array();
             for (var i = 0; i < customerCollection.items.length; i++) {
                 customerList.push(customerCollection.items[i].Customer);
             }
 
-            cboSIStatusSupplier.dispose();
-            cboSIStatusSupplier = new wijmo.input.ComboBox('#SIStatusCustomer', {
+            cboSIStatusCustomer.dispose();
+            cboSIStatusCustomer = new wijmo.input.ComboBox('#SIStatusCustomer', {
+                disabled: true,
+                placeholder: "Select Customer",
+                itemsSource: customerList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('collection_Customer_selectedValue').value.toString()
+            });
+        }
+
+        function getJournalByArticleId() {
+            var journals = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listJournalByArticleId/' + document.getElementById("collection_Customer_data").value,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (journalResults) {
+                    if (journalResults.length > 0) {
+                        for (i = 0; i < journalResults.length; i++) {
+                            journals.push({
+                                Id: journalResults[i]["Id"],
+                                JournalDate: journalResults[i]["JournalDate"],
+                                BranchId: journalResults[i]["BranchId"],
+                                Branch: journalResults[i]["Branch"],
+                                AccountId: journalResults[i]["AccountId"],
+                                Account: journalResults[i]["Account"],
+                                AccountCode: journalResults[i]["AccountCode"],
+                                ArticleId: journalResults[i]["ArticleId"],
+                                Article: journalResults[i]["Article"],
+                                Particulars: journalResults[i]["Particulars"],
+                                DebitAmount: journalResults[i]["DebitAmount"],
+                                CreditAmount: journalResults[i]["CreditAmount"],
+                                ORId: journalResults[i]["ORId"],
+                                CVId: journalResults[i]["CVId"],
+                                JVId: journalResults[i]["JVId"],
+                                RRId: journalResults[i]["RRId"],
+                                SIId: journalResults[i]["SIId"],
+                                INId: journalResults[i]["INId"],
+                                OTId: journalResults[i]["OTId"],
+                                STId: journalResults[i]["STId"],
+                                DocumentReference: journalResults[i]["DocumentReference"],
+                                APRRId: journalResults[i]["APRRId"],
+                                ARSIId: journalResults[i]["ARSIId"]
+                            });
+                        }
+                    }
+                }
+            });
+            return journals;
+        }
+
+        // ================
+        // SI Advances Grid
+        // ================
+        function getSIAdvancesGrid() {
+            document.getElementById("loadingSIAdvances").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            $('#loadingSIAdvances').show();
+            setTimeout(function () {
+                $('#loadingSIAdvances').hide();
+                var journals = new wijmo.collections.CollectionView(getJournalByArticleId());
+
+                // Flex Grid for Purchase Disbursement Line
+                SIAdvancesGrid = new wijmo.grid.FlexGrid('#SIAdvancesGrid');
+                SIAdvancesGrid.initialize({
+                    columns: [
+                                {
+                                    "header": "Code",
+                                    "binding": "AccountCode",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                },
+                                {
+                                    "header": "Account",
+                                    "binding": "Account",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Article",
+                                    "binding": "Article",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Debit",
+                                    "binding": "DebitAmount",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Credit",
+                                    "binding": "CreditAmount",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Balance",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                }
+                    ],
+                    autoGenerateColumns: false,
+                    itemsSource: journals,
+                    isReadOnly: true,
+                    autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                    allowDragging: wijmo.grid.AllowDragging.None,
+                    selectionMode: wijmo.grid.SelectionMode.Row
+                });
+
+                SIAdvancesGrid.trackChanges = true;
+            }, 1000);
+        }
+
+        function createCboCustomerSIAdvances(customers) {
+            var customerCollection = new wijmo.collections.CollectionView(customers);
+            var customerList = new Array();
+            for (var i = 0; i < customerCollection.items.length; i++) {
+                customerList.push(customerCollection.items[i].Customer);
+            }
+
+            cboSIAdvancesCustomer.dispose();
+            cboSIAdvancesCustomer = new wijmo.input.ComboBox('#SIAdvancesCustomer', {
                 disabled: true,
                 placeholder: "Select Customer",
                 itemsSource: customerList,
@@ -829,7 +1009,9 @@
                                 Customer: results[i]["Article"]
                             });
                         }
-                        createCboCustomerSIStatusGrid(customers);
+                        
+                        createCboCustomerSIStatus(customers);
+                        createCboCustomerSIAdvances(customers);
                         createCboCustomer(customers);
                     }
                 }
@@ -2485,6 +2667,11 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            getSIAdvancesGrid();
+            window.getSIAdvancesGrid = function () {
+                return true;
+            };
         }
 
         // ===========
@@ -2513,7 +2700,8 @@
             cboCollectionLineAccount = new wijmo.input.ComboBox('#collectionLine_account');
             cboCollectionLineArticle = new wijmo.input.ComboBox('#collectionLine_article');
             cboCollectionArticleBank = new wijmo.input.ComboBox('#collectionLine_depositoryBank');
-            cboSIStatusSupplier = new wijmo.input.ComboBox('#SIStatusCustomer');
+            cboSIStatusCustomer = new wijmo.input.ComboBox('#SIStatusCustomer');
+            cboSIAdvancesCustomer = new wijmo.input.ComboBox('#SIAdvancesCustomer');
 
             var d = new Date();
             document.getElementById("collectionLine_checkDate_data").value = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join('/');
@@ -2555,7 +2743,8 @@
                 getCustomerForComboBox();
                 getUsersForComboBox();
                 document.getElementById('cmdAR').disabled = true;
-
+                document.getElementById('cmdAdvances').disabled = true;
+                
                 if (document.getElementById('collection_ORNumber').value == 0) {
                     document.getElementById('collection_ORNumber_Display').value = "0000000001";
                 }

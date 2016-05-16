@@ -229,7 +229,7 @@
 
     <!-- RR status -->
     <div class="modal fade" id="RRStatus" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-wide">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -238,7 +238,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-5">
                             <form id="">
                                 <dl class="dl-horizontal">
                                     <dt>Supplier</dt>
@@ -248,6 +248,7 @@
                                 </dl>
                             </form>
                         </div>
+                        <div class="col-md-7"></div>
                     </div>
                     <hr />
                     <div class="row">
@@ -278,7 +279,7 @@
 
     <!-- Spplier Advances -->
     <div class="modal fade" id="SupplierAdvances" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -286,7 +287,29 @@
                     <h4 class="modal-title" id="SupplierAdvancesModalLabel">Spplier Advances</h4>
                 </div>
                 <div class="modal-body">
-
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form id="">
+                                <dl class="dl-horizontal">
+                                    <dt>Supplier</dt>
+                                    <dd>
+                                        <div class="comboBox-wide" id="RRAdvancesSupplier"></div>
+                                    </dd>
+                                </dl>
+                            </form>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row" align="left">
+                        <div class="col-lg-12">
+                            <div id="RRAdvancesGrid" class="grid"></div>
+                        </div>
+                        <center>
+                            <h4>
+                                <span id="loadingRRAdvances"></span>
+                            </h4>
+                        </center>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
@@ -454,7 +477,6 @@
         var cboPreparedBy;
         var cboCheckedBy;
         var cboApprovedBy;
-
         var disbursementLines;
         var disbursementGrid;
         var btnFirstPageGridDisbursementLine;
@@ -462,22 +484,59 @@
         var btnNextPageGridDisbursementLine;
         var btnLastPageGridDisbursementLine;
         var btnCurrentPageGridDisbursementLine;
-
         var disbursementBranches;
         var cboDisbursementBranch;
-
         var disbursementLineAccounts;
         var cboDisbursementLineAccountCode;
         var cboDisbursementLineAccount;
-
         var disbursementLineArticles;
         var cboDisbursementLineArticle;
-
         var disbursementReceivingReceipts;
         var cboDisbursementLineRR;
-
         var cboRRStatusSupplier;
         var receivingStatusGrid;
+        var cboRRAdvancesSupplier;
+        var RRAdvancesGrid;
+
+        function getReceivingReceiptBySupplierByBalance() {
+            var receivingReceipts = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/receivingReceiptBySupplierIdByBalance/' + document.getElementById("disbursement_Supplier_data").value,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (receivingReceiptResults) {
+                    if (receivingReceiptResults.length > 0) {
+                        for (i = 0; i < receivingReceiptResults.length; i++) {
+                            receivingReceipts.push({
+                                Pick: "<button class='btn btn-primary btn-xs'> <i class='fa fa-edit'></i> Pick</button>",
+                                Id: receivingReceiptResults[i]["Id"],
+                                BranchId: receivingReceiptResults[i]["BranchId"],
+                                Branch: receivingReceiptResults[i]["Branch"],
+                                RRDate: receivingReceiptResults[i]["RRDate"],
+                                RRNumber: receivingReceiptResults[i]["RRNumber"],
+                                SupplierId: receivingReceiptResults[i]["SupplierId"],
+                                Supplier: receivingReceiptResults[i]["Supplier"],
+                                TermId: receivingReceiptResults[i]["TermId"],
+                                Term: receivingReceiptResults[i]["Term"],
+                                DocumentReference: receivingReceiptResults[i]["DocumentReference"],
+                                ManualRRNumber: receivingReceiptResults[i]["ManualRRNumber"],
+                                Remarks: receivingReceiptResults[i]["Remarks"],
+                                Amount: receivingReceiptResults[i]["Amount"],
+                                WTaxAmount: receivingReceiptResults[i]["WTaxAmount"],
+                                PaidAmount: receivingReceiptResults[i]["PaidAmount"],
+                                AdjustmentAmount: receivingReceiptResults[i]["AdjustmentAmount"],
+                                Amount: receivingReceiptResults[i]["Amount"],
+                                BalanceAmount: receivingReceiptResults[i]["BalanceAmount"]
+                            });
+                        }
+                    }
+                }
+            });
+
+            return receivingReceipts;
+        }
 
         // =============================
         // Receiving Receipt Status Grid
@@ -490,31 +549,37 @@
             setTimeout(function () {
                 $('#loadingRRStatus').hide();
                 $('#btnIdApplyAllRR').show();
+                var receivingReceipts = new wijmo.collections.CollectionView(getReceivingReceiptBySupplierByBalance());
+
                 // Flex Grid for Purchase Disbursement Line
                 receivingStatusGrid = new wijmo.grid.FlexGrid('#receivingStatusGrid');
                 receivingStatusGrid.initialize({
                     columns: [
                                 {
                                     "header": "Pick",
-                                    "binding": "",
+                                    "binding": "Pick",
                                     "allowSorting": true,
-                                    "width": "2*",
+                                    "width": "1.5*",
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
                                 },
                                 {
                                     "header": "Date",
-                                    "binding": "",
+                                    "binding": "RRDate",
                                     "allowSorting": true,
                                     "width": "2*",
                                 },
                                 {
                                     "header": "RR / AP Number",
-                                    "binding": "",
+                                    "binding": "RRNumber",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
                                 {
                                     "header": "Particulars",
-                                    "binding": "",
+                                    "binding": "DocumentReference",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
@@ -526,7 +591,7 @@
                                 },
                                 {
                                     "header": "Withholding",
-                                    "binding": "",
+                                    "binding": "WTaxAmount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
@@ -538,25 +603,25 @@
                                 },
                                 {
                                     "header": "Adjustments",
-                                    "binding": "",
+                                    "binding": "AdjustmentAmount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
                                 {
                                     "header": "Balance",
-                                    "binding": "",
+                                    "binding": "BalanceAmount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
                                 {
                                     "header": "Amount",
-                                    "binding": "",
+                                    "binding": "Amount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 }
                     ],
                     autoGenerateColumns: false,
-                    //itemsSource: disbursementLines,
+                    itemsSource: receivingReceipts,
                     isReadOnly: true,
                     autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                     allowDragging: wijmo.grid.AllowDragging.None,
@@ -601,6 +666,133 @@
 
             cboRRStatusSupplier.dispose();
             cboRRStatusSupplier = new wijmo.input.ComboBox('#RRStatusSupplier', {
+                disabled: true,
+                placeholder: "Select Supplier",
+                itemsSource: supplierList,
+                isEditable: false,
+                required: false,
+                selectedValue: document.getElementById('disbursement_Supplier_selectedValue').value.toString(),
+            });
+        }
+
+        function getJournalByArticleId() {
+            var journals = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/listJournalByArticleId/' + document.getElementById("disbursement_Supplier_data").value,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (journalResults) {
+                    if (journalResults.length > 0) {
+                        for (i = 0; i < journalResults.length; i++) {
+                            journals.push({
+                                Id: journalResults[i]["Id"],
+                                JournalDate: journalResults[i]["JournalDate"],
+                                BranchId: journalResults[i]["BranchId"],
+                                Branch: journalResults[i]["Branch"],
+                                AccountId: journalResults[i]["AccountId"],
+                                Account: journalResults[i]["Account"],
+                                AccountCode: journalResults[i]["AccountCode"],
+                                ArticleId: journalResults[i]["ArticleId"],
+                                Article: journalResults[i]["Article"],
+                                Particulars: journalResults[i]["Particulars"],
+                                DebitAmount: journalResults[i]["DebitAmount"],
+                                CreditAmount: journalResults[i]["CreditAmount"],
+                                ORId: journalResults[i]["ORId"],
+                                CVId: journalResults[i]["CVId"],
+                                JVId: journalResults[i]["JVId"],
+                                RRId: journalResults[i]["RRId"],
+                                SIId: journalResults[i]["SIId"],
+                                INId: journalResults[i]["INId"],
+                                OTId: journalResults[i]["OTId"],
+                                STId: journalResults[i]["STId"],
+                                DocumentReference: journalResults[i]["DocumentReference"],
+                                APRRId: journalResults[i]["APRRId"],
+                                ARSIId: journalResults[i]["ARSIId"]
+                            });
+                        }
+                    }
+                }
+            });
+            return journals;
+        }
+
+        // ===============================
+        // Receiving Receipt Advances Grid
+        // ===============================
+        function getReceivingAdvancesGrid() {
+            document.getElementById("loadingRRAdvances").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            $('#loadingRRAdvances').show();
+            setTimeout(function () {
+                $('#loadingRRAdvances').hide();
+                var journals = new wijmo.collections.CollectionView(getJournalByArticleId());
+
+                // Flex Grid for Purchase Disbursement Line
+                RRAdvancesGrid = new wijmo.grid.FlexGrid('#RRAdvancesGrid');
+                RRAdvancesGrid.initialize({
+                    columns: [
+                                {
+                                    "header": "Code",
+                                    "binding": "AccountCode",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                },
+                                {
+                                    "header": "Account",
+                                    "binding": "Account",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Article",
+                                    "binding": "Article",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Debit",
+                                    "binding": "DebitAmount",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Credit",
+                                    "binding": "CreditAmount",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                },
+                                {
+                                    "header": "Balance",
+                                    "binding": "",
+                                    "allowSorting": true,
+                                    "width": "2*"
+                                }
+                    ],
+                    autoGenerateColumns: false,
+                    itemsSource: journals,
+                    isReadOnly: true,
+                    autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                    allowDragging: wijmo.grid.AllowDragging.None,
+                    selectionMode: wijmo.grid.SelectionMode.Row
+                });
+
+                RRAdvancesGrid.trackChanges = true;
+            }, 1000);
+        }
+
+        // ========================================
+        // Receiving Receipt Advances Grid Supplier
+        // ========================================
+        function createCBOSupplierRRAdvances(suppliers) {
+            var supplierCollection = new wijmo.collections.CollectionView(suppliers);
+            var supplierList = new Array();
+            for (var i = 0; i < supplierCollection.items.length; i++) {
+                supplierList.push(supplierCollection.items[i].Supplier);
+            }
+
+            cboRRAdvancesSupplier.dispose();
+            cboRRAdvancesSupplier = new wijmo.input.ComboBox('#RRAdvancesSupplier', {
                 disabled: true,
                 placeholder: "Select Supplier",
                 itemsSource: supplierList,
@@ -926,6 +1118,7 @@
                             });
                         }
                         createCBOSupplierRRStatus(suppliers);
+                        createCBOSupplierRRAdvances(suppliers);
                         createCbosupplier(suppliers);
                     }
                 }
@@ -2613,7 +2806,6 @@
             window.getReceivingStatusGrid = function () {
                 return true;
             };
-
         }
 
         // ========
@@ -2624,6 +2816,11 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            getReceivingAdvancesGrid();
+            window.getReceivingAdvancesGrid = function () {
+                return true;
+            };
         }
 
         // ===========
@@ -2681,6 +2878,7 @@
                 }
             });
             cboRRStatusSupplier = new wijmo.input.ComboBox('#RRStatusSupplier');
+            cboRRAdvancesSupplier = new wijmo.input.ComboBox('#RRAdvancesSupplier');
             cboSupplier = new wijmo.input.ComboBox('#disbursement_Supplier');
             cboPayType = new wijmo.input.ComboBox('#disbursement_PayType');
             cboBank = new wijmo.input.ComboBox('#disbursement_Bank');
