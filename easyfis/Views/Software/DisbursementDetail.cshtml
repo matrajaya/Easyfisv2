@@ -556,16 +556,6 @@
                 receivingStatusGrid.initialize({
                     columns: [
                                 {
-                                    "header": "Pick",
-                                    "binding": "Pick",
-                                    "allowSorting": true,
-                                    "width": "1.5*",
-                                    "align": "center",
-                                    "allowResizing": false,
-                                    "allowSorting": false,
-                                    "isContentHtml": true
-                                },
-                                {
                                     "header": "Date",
                                     "binding": "RRDate",
                                     "allowSorting": true,
@@ -585,7 +575,7 @@
                                 },
                                 {
                                     "header": "RR Amount",
-                                    "binding": "",
+                                    "binding": "Amount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
@@ -597,7 +587,7 @@
                                 },
                                 {
                                     "header": "Payments",
-                                    "binding": "",
+                                    "binding": "PaidAmount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
@@ -614,11 +604,15 @@
                                     "width": "2*"
                                 },
                                 {
-                                    "header": "Amount",
-                                    "binding": "Amount",
+                                    "header": "Pick",
+                                    "binding": "Pick",
                                     "allowSorting": true,
-                                    "width": "2*"
-                                }
+                                    "width": "1.5*",
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
                     ],
                     autoGenerateColumns: false,
                     itemsSource: receivingReceipts,
@@ -637,20 +631,21 @@
                 receivingStatusGrid.columnHeaders.rows[0].allowMerging = true;
 
                 receivingStatusGrid.columnHeaders.columns[0].allowMerging = true;
-                receivingStatusGrid.columnHeaders.setCellData(0, 0, 'Pick');
+                receivingStatusGrid.columnHeaders.setCellData(0, 0, 'Date');
 
                 receivingStatusGrid.columnHeaders.columns[1].allowMerging = true;
-                receivingStatusGrid.columnHeaders.setCellData(0, 1, 'Date');
+                receivingStatusGrid.columnHeaders.setCellData(0, 1, 'RR / AP Number');
 
                 receivingStatusGrid.columnHeaders.columns[2].allowMerging = true;
-                receivingStatusGrid.columnHeaders.setCellData(0, 2, 'RR / AP Number');
+                receivingStatusGrid.columnHeaders.setCellData(0, 2, 'Particulars');
 
-                receivingStatusGrid.columnHeaders.columns[3].allowMerging = true;
-                receivingStatusGrid.columnHeaders.setCellData(0, 3, 'Particulars');
-
-                for (var columnQuantityTopAssigned = 4; columnQuantityTopAssigned <= 8; columnQuantityTopAssigned++) {
+                for (var columnQuantityTopAssigned = 3; columnQuantityTopAssigned <= 7; columnQuantityTopAssigned++) {
                     receivingStatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Amount');
                 }
+                
+                receivingStatusGrid.columnHeaders.columns[8].allowMerging = true;
+                receivingStatusGrid.columnHeaders.setCellData(0, 8, 'Pick')
+
             }, 1000);
         }
 
@@ -709,7 +704,8 @@
                                 STId: journalResults[i]["STId"],
                                 DocumentReference: journalResults[i]["DocumentReference"],
                                 APRRId: journalResults[i]["APRRId"],
-                                ARSIId: journalResults[i]["ARSIId"]
+                                ARSIId: journalResults[i]["ARSIId"],
+                                Apply: "<button class='btn btn-primary btn-xs'><i class='fa fa-check'></i> Apply </button>"
                             });
                         }
                     }
@@ -767,7 +763,17 @@
                                     "binding": "",
                                     "allowSorting": true,
                                     "width": "2*"
-                                }
+                                },
+                                {
+                                    "header": "Apply",
+                                    "binding": "Apply",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
                     ],
                     autoGenerateColumns: false,
                     itemsSource: journals,

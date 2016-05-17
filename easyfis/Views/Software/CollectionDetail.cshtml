@@ -523,16 +523,6 @@
                 SIStatusGrid.initialize({
                     columns: [
                                 {
-                                    "header": "Pick",
-                                    "binding": "Pick",
-                                    "allowSorting": true,
-                                    "width": "2*",
-                                    "align": "center",
-                                    "allowResizing": false,
-                                    "allowSorting": false,
-                                    "isContentHtml": true
-                                },
-                                {
                                     "header": "Date",
                                     "binding": "SIDate",
                                     "allowSorting": true,
@@ -558,7 +548,7 @@
                                 },
                                 {
                                     "header": "Payments",
-                                    "binding": "",
+                                    "binding": "PaidAmount",
                                     "allowSorting": true,
                                     "width": "2*"
                                 },
@@ -573,7 +563,17 @@
                                     "binding": "BalanceAmount",
                                     "allowSorting": true,
                                     "width": "2*"
-                                }
+                                },
+                                {
+                                    "header": "Pick",
+                                    "binding": "Pick",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
                     ],
                     autoGenerateColumns: false,
                     itemsSource: saleInvoices,
@@ -592,20 +592,21 @@
                 SIStatusGrid.columnHeaders.rows[0].allowMerging = true;
 
                 SIStatusGrid.columnHeaders.columns[0].allowMerging = true;
-                SIStatusGrid.columnHeaders.setCellData(0, 0, 'Pick');
+                SIStatusGrid.columnHeaders.setCellData(0, 0, 'Date');
 
                 SIStatusGrid.columnHeaders.columns[1].allowMerging = true;
-                SIStatusGrid.columnHeaders.setCellData(0, 1, 'Date');
+                SIStatusGrid.columnHeaders.setCellData(0, 1, 'SI Number');
 
                 SIStatusGrid.columnHeaders.columns[2].allowMerging = true;
-                SIStatusGrid.columnHeaders.setCellData(0, 2, 'SI Number');
+                SIStatusGrid.columnHeaders.setCellData(0, 2, 'Particulars');
 
-                SIStatusGrid.columnHeaders.columns[3].allowMerging = true;
-                SIStatusGrid.columnHeaders.setCellData(0, 3, 'Particulars');
-
-                for (var columnQuantityTopAssigned = 4; columnQuantityTopAssigned <= 7; columnQuantityTopAssigned++) {
+                for (var columnQuantityTopAssigned = 3; columnQuantityTopAssigned <= 6; columnQuantityTopAssigned++) {
                     SIStatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Amount');
                 }
+
+                SIStatusGrid.columnHeaders.columns[7].allowMerging = true;
+                SIStatusGrid.columnHeaders.setCellData(0, 7, 'Pick');
+
             }, 1000);
         }
 
@@ -661,7 +662,8 @@
                                 STId: journalResults[i]["STId"],
                                 DocumentReference: journalResults[i]["DocumentReference"],
                                 APRRId: journalResults[i]["APRRId"],
-                                ARSIId: journalResults[i]["ARSIId"]
+                                ARSIId: journalResults[i]["ARSIId"],
+                                Apply: "<button class='btn btn-primary btn-xs'><i class='fa fa-check'></i> Apply </button>"
                             });
                         }
                     }
@@ -719,7 +721,17 @@
                                     "binding": "",
                                     "allowSorting": true,
                                     "width": "2*"
-                                }
+                                },
+                                {
+                                    "header": "Apply",
+                                    "binding": "Apply",
+                                    "allowSorting": true,
+                                    "width": "2*",
+                                    "align": "center",
+                                    "allowResizing": false,
+                                    "allowSorting": false,
+                                    "isContentHtml": true
+                                },
                     ],
                     autoGenerateColumns: false,
                     itemsSource: journals,
