@@ -1094,7 +1094,7 @@
                                 document.getElementById('disbursement_CheckDate_data').value = this.value.toLocaleDateString();
                             }
                         });
-                        document.getElementById('disbursement_Amount').value = Results.Amount;
+                        document.getElementById('disbursement_Amount').value = Results.Amount.toLocaleString();
                         document.getElementById('disbursement_CrossCheck').checked = Results.IsCrossCheck;
                         document.getElementById('disbursement_PreparedBy_data').value = Results.PreparedById;
                         document.getElementById('disbursement_PreparedBy_selectedValue').value = Results.PreparedBy;
