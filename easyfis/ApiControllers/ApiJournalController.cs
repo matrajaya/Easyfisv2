@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
@@ -355,11 +356,56 @@ namespace easyfis.Controllers
         // =============================
         // LIST TrnJournal By Article Id
         // =============================
-        [Route("api/listJournalByArticleId/{ArticleId}")]
-        public List<Models.TrnJournal> GetJournalByArticleId(String ArticleId)
+        [Route("api/listJournalBySupplierAdvancesAccountIdByArticleId/{ArticleId}")]
+        public List<Models.TrnJournal> GetJournalBySupplierAdvancesAccountIdByArticleId(String ArticleId)
         {
+            var identityUserId = User.Identity.GetUserId();
+            var SupplierAdvancesAccountId = (from d in db.MstUsers where d.UserId == identityUserId select d.SupplierAdvancesAccountId).SingleOrDefault();
+
             var journals = from d in db.TrnJournals
                            where d.ArticleId == Convert.ToInt32(ArticleId)
+                           && d.AccountId == SupplierAdvancesAccountId
+                           select new Models.TrnJournal
+                           {
+                               Id = d.Id,
+                               JournalDate = d.JournalDate.ToShortDateString(),
+                               BranchId = d.BranchId,
+                               Branch = d.MstBranch.Branch,
+                               AccountId = d.AccountId,
+                               Account = d.MstAccount.Account,
+                               AccountCode = d.MstAccount.AccountCode,
+                               ArticleId = d.ArticleId,
+                               Article = d.MstArticle.Article,
+                               Particulars = d.Particulars,
+                               DebitAmount = d.DebitAmount,
+                               CreditAmount = d.CreditAmount,
+                               ORId = d.ORId,
+                               CVId = d.CVId,
+                               JVId = d.JVId,
+                               RRId = d.RRId,
+                               SIId = d.SIId,
+                               INId = d.INId,
+                               OTId = d.OTId,
+                               STId = d.STId,
+                               DocumentReference = d.DocumentReference,
+                               APRRId = d.APRRId,
+                               ARSIId = d.ARSIId,
+                           };
+            return journals.ToList();
+        }
+
+        // =============================
+        // LIST TrnJournal By Article Id
+        // =============================
+        [Route("api/listJournalByCustomerAdvancesAccountIdByArticleId/{ArticleId}")]
+        public List<Models.TrnJournal> GetJournalByCustomerAdvancesAccountIdByArticleId(String ArticleId)
+        {
+            var identityUserId = User.Identity.GetUserId();
+            var CustomerAdvancesAccountId = (from d in db.MstUsers where d.UserId == identityUserId select d.CustomerAdvancesAccountId).SingleOrDefault();
+
+            var journals = from d in db.TrnJournals
+                           where d.ArticleId == Convert.ToInt32(ArticleId)
+                           && d.AccountId == CustomerAdvancesAccountId
                            select new Models.TrnJournal
                            {
                                Id = d.Id,

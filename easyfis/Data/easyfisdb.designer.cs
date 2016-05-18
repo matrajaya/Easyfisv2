@@ -32972,6 +32972,10 @@ namespace easyfis.Data
 		
 		private int _BranchId;
 		
+		private System.Nullable<int> _SupplierAdvancesAccountId;
+		
+		private System.Nullable<int> _CustomerAdvancesAccountId;
+		
 		private EntitySet<MstAccount> _MstAccounts;
 		
 		private EntitySet<MstAccount> _MstAccounts1;
@@ -33170,6 +33174,10 @@ namespace easyfis.Data
     partial void OnIncomeAccountIdChanged();
     partial void OnBranchIdChanging(int value);
     partial void OnBranchIdChanged();
+    partial void OnSupplierAdvancesAccountIdChanging(System.Nullable<int> value);
+    partial void OnSupplierAdvancesAccountIdChanged();
+    partial void OnCustomerAdvancesAccountIdChanging(System.Nullable<int> value);
+    partial void OnCustomerAdvancesAccountIdChanged();
     #endregion
 		
 		public MstUser()
@@ -33506,6 +33514,46 @@ namespace easyfis.Data
 					this._BranchId = value;
 					this.SendPropertyChanged("BranchId");
 					this.OnBranchIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SupplierAdvancesAccountId", DbType="Int")]
+		public System.Nullable<int> SupplierAdvancesAccountId
+		{
+			get
+			{
+				return this._SupplierAdvancesAccountId;
+			}
+			set
+			{
+				if ((this._SupplierAdvancesAccountId != value))
+				{
+					this.OnSupplierAdvancesAccountIdChanging(value);
+					this.SendPropertyChanging();
+					this._SupplierAdvancesAccountId = value;
+					this.SendPropertyChanged("SupplierAdvancesAccountId");
+					this.OnSupplierAdvancesAccountIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomerAdvancesAccountId", DbType="Int")]
+		public System.Nullable<int> CustomerAdvancesAccountId
+		{
+			get
+			{
+				return this._CustomerAdvancesAccountId;
+			}
+			set
+			{
+				if ((this._CustomerAdvancesAccountId != value))
+				{
+					this.OnCustomerAdvancesAccountIdChanging(value);
+					this.SendPropertyChanging();
+					this._CustomerAdvancesAccountId = value;
+					this.SendPropertyChanged("CustomerAdvancesAccountId");
+					this.OnCustomerAdvancesAccountIdChanged();
 				}
 			}
 		}

@@ -364,36 +364,6 @@ namespace easyfis.Controllers
 
                 if (disbursements.Any())
                 {
-                    // disbursement Lines total Amount
-                    var disbursementLinesTotalAmount = from d in db.TrnDisbursementLines
-                                                       where d.CVId == disbursement_Id
-                                                       group d by new
-                                                       {
-                                                           BranchId = d.BranchId,
-                                                           AccountId = d.AccountId,
-                                                           ArticleId = d.ArticleId
-                                                       } into g
-                                                       select new Models.TrnDisbursementLine
-                                                       {
-                                                           BranchId = g.Key.BranchId,
-                                                           AccountId = g.Key.AccountId,
-                                                           ArticleId = g.Key.ArticleId,
-                                                           Amount = g.Sum(d => d.Amount)
-                                                       };
-
-                    Decimal Amount = 0;
-                    if (disbursementLinesTotalAmount.Any())
-                    {
-                        foreach (var disbursementLinesAmount in disbursementLinesTotalAmount)
-                        {
-                            Amount = disbursementLinesAmount.Amount;
-                        }
-                    }
-                    else
-                    {
-                        Amount = 0;
-                    }
-
                     var updateDisbursement = disbursements.FirstOrDefault();
 
                     updateDisbursement.BranchId = disbursement.BranchId;
@@ -408,7 +378,7 @@ namespace easyfis.Controllers
                     updateDisbursement.CheckNumber = disbursement.CheckNumber;
                     updateDisbursement.CheckDate = Convert.ToDateTime(disbursement.CheckDate);
                     //updateDisbursement.Amount = disbursement.Amount;
-                    updateDisbursement.Amount = Amount;
+                    updateDisbursement.Amount = updateDisbursement.TrnDisbursementLines.Sum(d => d.Amount);
                     updateDisbursement.IsCrossCheck = disbursement.IsCrossCheck;
                     updateDisbursement.IsClear = disbursement.IsClear;
                     updateDisbursement.PreparedById = disbursement.PreparedById;

@@ -1332,6 +1332,8 @@
       <Column Name="UserId" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
       <Column Name="IncomeAccountId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="BranchId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierAdvancesAccountId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CustomerAdvancesAccountId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="MstUser_MstAccount" Member="MstAccounts" ThisKey="Id" OtherKey="CreatedById" Type="MstAccount" />
       <Association Name="MstUser_MstAccount1" Member="MstAccounts1" ThisKey="Id" OtherKey="UpdatedById" Type="MstAccount" />
       <Association Name="MstUser_MstAccountCashFlow" Member="MstAccountCashFlows" ThisKey="Id" OtherKey="CreatedById" Type="MstAccountCashFlow" />
