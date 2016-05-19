@@ -218,6 +218,7 @@ namespace easyfis.Controllers
             var receivingReceipts = from d in db.TrnReceivingReceipts
                                     where d.SupplierId == receivingReceipt_SupplierId
                                     && d.BalanceAmount > 0
+                                    && d.IsLocked == true
                                     select new Models.TrnReceivingReceipt
                                     {
                                         Id = d.Id,

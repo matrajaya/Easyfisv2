@@ -116,6 +116,7 @@ namespace easyfis.Controllers
                 var receivingReceipts = from d in db.TrnReceivingReceipts
                                         where d.SupplierId == Convert.ToInt32(SupplierId)
                                         && d.BalanceAmount > 0
+                                        && d.IsLocked == true
                                         select new Models.TrnReceivingReceipt
                                         {
                                             Id = d.Id,
@@ -218,7 +219,7 @@ namespace easyfis.Controllers
                     newDisbursementLine.AccountId = journal.AccountId;
                     newDisbursementLine.ArticleId = journal.ArticleId;
                     newDisbursementLine.RRId = journal.RRId;
-                    newDisbursementLine.Particulars = journal.Particulars;
+                    newDisbursementLine.Particulars = "Supplier Advances";
                     newDisbursementLine.Amount = journal.CreditAmount - journal.DebitAmount;
                 }
 

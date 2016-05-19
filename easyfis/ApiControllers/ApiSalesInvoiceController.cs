@@ -213,6 +213,7 @@ namespace easyfis.Controllers
             var salesInvoices = from d in db.TrnSalesInvoices
                                 where d.CustomerId == sales_customerId
                                 && d.BalanceAmount > 0
+                                && d.IsLocked == true
                                 select new Models.TrnSalesInvoice
                                 {
                                     Id = d.Id,

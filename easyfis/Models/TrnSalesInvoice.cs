@@ -51,5 +51,6 @@ namespace easyfis.Models
         public Decimal Age90Amount { get; set; }
         public Decimal Age120Amount { get; set; }
 
+        public Int32 AccountId { get; set; }
     }
 }
