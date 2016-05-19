@@ -427,7 +427,7 @@ namespace easyfis.Controllers
                     newCollectionLine.BranchId = Convert.ToInt32(BranchId);
                     newCollectionLine.AccountId = accountId;
                     newCollectionLine.ArticleId = journal.ArticleId;
-                    newCollectionLine.SIId = journal.SIId;
+                    newCollectionLine.SIId = (from d in db.TrnSalesInvoices select d.Id).FirstOrDefault();
                     newCollectionLine.Particulars = "Customer Advances";
                     newCollectionLine.Amount = journal.CreditAmount - journal.DebitAmount;
                     newCollectionLine.PayTypeId = (from d in db.MstPayTypes where d.AccountId == journal.AccountId select d.Id).FirstOrDefault();

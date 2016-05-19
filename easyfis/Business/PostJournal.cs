@@ -57,10 +57,10 @@ namespace easyfis.Business
             // stock transfer items
             var stockTransferItems = from d in db.TrnStockTransferItems
                                      where d.STId == STId
-                                     group d by new 
+                                     group d by new
                                      {
-                                        AccountId = d.MstArticle.AccountId,
-                                        STId = d.STId
+                                         AccountId = d.MstArticle.AccountId,
+                                         STId = d.STId
                                      } into g
                                      select new Models.TrnStockTransferItem
                                      {
@@ -646,6 +646,41 @@ namespace easyfis.Business
                                       IsClear = d.IsClear,
                                   };
 
+
+            // Debit 
+            var collectionDebits = from d in db.TrnCollectionLines
+                                   where d.ORId == ORId
+                                   group d by new
+                                   {
+                                       BranchId = d.BranchId,
+                                       AccountId = d.MstPayType.AccountId,
+                                       ArticleId = d.ArticleId
+                                   } into g
+                                   select new Models.TrnCollectionLine
+                                   {
+                                       BranchId = g.Key.BranchId,
+                                       AccountId = g.Key.AccountId,
+                                       ArticleId = g.Key.ArticleId,
+                                       Amount = g.Sum(d => d.Amount)
+                                   };
+
+            // Credit
+            var collectionCredits = from d in db.TrnCollectionLines
+                                    where d.ORId == ORId
+                                    group d by new
+                                    {
+                                        BranchId = d.BranchId,
+                                        AccountId = d.AccountId,
+                                        ArticleId = d.ArticleId
+                                    } into g
+                                    select new Models.TrnCollectionLine
+                                    {
+                                        BranchId = g.Key.BranchId,
+                                        AccountId = g.Key.AccountId,
+                                        ArticleId = g.Key.ArticleId,
+                                        Amount = g.Sum(d => d.Amount)
+                                    };
+
             try
             {
                 if (collectionHeader.Any())
@@ -660,109 +695,161 @@ namespace easyfis.Business
                         ORNumber = collection.ORNumber;
                     }
 
+                    foreach (var collectionDebit in collectionDebits)
+                    {
+                        Data.TrnJournal newORJournalForPayment = new Data.TrnJournal();
+
+                        newORJournalForPayment.JournalDate = Convert.ToDateTime(JournalDate);
+                        newORJournalForPayment.BranchId = collectionDebit.BranchId;
+                        newORJournalForPayment.AccountId = collectionDebit.AccountId;
+                        newORJournalForPayment.ArticleId = collectionDebit.ArticleId;
+                        newORJournalForPayment.Particulars = "Payments";
+                        newORJournalForPayment.DebitAmount = collectionDebit.Amount;
+                        newORJournalForPayment.CreditAmount = 0;
+                        newORJournalForPayment.ORId = ORId;
+                        newORJournalForPayment.CVId = null;
+                        newORJournalForPayment.JVId = null;
+                        newORJournalForPayment.RRId = null;
+                        newORJournalForPayment.SIId = null;
+                        newORJournalForPayment.INId = null;
+                        newORJournalForPayment.OTId = null;
+                        newORJournalForPayment.STId = null;
+                        newORJournalForPayment.DocumentReference = "OR-" + BranchCode + "-" + ORNumber;
+                        newORJournalForPayment.APRRId = null;
+                        newORJournalForPayment.ARSIId = null;
+
+                        db.TrnJournals.InsertOnSubmit(newORJournalForPayment);
+                    }
+
+                    foreach (var collectionCredit in collectionCredits)
+                    {
+                        Data.TrnJournal newORJournalForPayment = new Data.TrnJournal();
+
+                        newORJournalForPayment.JournalDate = Convert.ToDateTime(JournalDate);
+                        newORJournalForPayment.BranchId = collectionCredit.BranchId;
+                        newORJournalForPayment.AccountId = collectionCredit.AccountId;
+                        newORJournalForPayment.ArticleId = collectionCredit.ArticleId;
+                        newORJournalForPayment.Particulars = "Payments";
+                        newORJournalForPayment.DebitAmount = 0;
+                        newORJournalForPayment.CreditAmount = collectionCredit.Amount;
+                        newORJournalForPayment.ORId = ORId;
+                        newORJournalForPayment.CVId = null;
+                        newORJournalForPayment.JVId = null;
+                        newORJournalForPayment.RRId = null;
+                        newORJournalForPayment.SIId = null;
+                        newORJournalForPayment.INId = null;
+                        newORJournalForPayment.OTId = null;
+                        newORJournalForPayment.STId = null;
+                        newORJournalForPayment.DocumentReference = "OR-" + BranchCode + "-" + ORNumber;
+                        newORJournalForPayment.APRRId = null;
+                        newORJournalForPayment.ARSIId = null;
+
+                        db.TrnJournals.InsertOnSubmit(newORJournalForPayment);
+                    }
+
                     if (collectionLinesTotalAmount.Any())
                     {
-                        // payment cash and credit card
-                        foreach (var collectionLineForTotalAmount in collectionLinesTotalAmount)
-                        {
-                            PayTypeAccountId = (from d in db.MstPayTypes where d.Id == collectionLineForTotalAmount.PayTypeId select d.AccountId).SingleOrDefault();
+                        //// payment cash and credit card
+                        //foreach (var collectionLineForTotalAmount in collectionLinesTotalAmount)
+                        //{
+                        //    PayTypeAccountId = (from d in db.MstPayTypes where d.Id == collectionLineForTotalAmount.PayTypeId select d.AccountId).SingleOrDefault();
 
-                            Int32 DepositoryBankArticleId = 0;
-                            if (collectionLineForTotalAmount.DepositoryBankId != null)
-                            {
-                                DepositoryBankArticleId = Convert.ToInt32(collectionLineForTotalAmount.DepositoryBankId);
-                            }
-                            else
-                            {
-                                DepositoryBankArticleId = collectionLineForTotalAmount.ArticleId;
-                            }
+                        //    Int32 DepositoryBankArticleId = 0;
+                        //    if (collectionLineForTotalAmount.DepositoryBankId != null)
+                        //    {
+                        //        DepositoryBankArticleId = Convert.ToInt32(collectionLineForTotalAmount.DepositoryBankId);
+                        //    }
+                        //    else
+                        //    {
+                        //        DepositoryBankArticleId = collectionLineForTotalAmount.ArticleId;
+                        //    }
 
-                            if (collectionLineForTotalAmount.Amount > 0)
-                            {
-                                Data.TrnJournal newORJournalForPayment = new Data.TrnJournal();
+                        //    if (collectionLineForTotalAmount.Amount > 0)
+                        //    {
+                        //        Data.TrnJournal newORJournalForPayment = new Data.TrnJournal();
 
-                                newORJournalForPayment.JournalDate = Convert.ToDateTime(JournalDate);
-                                newORJournalForPayment.BranchId = collectionLineForTotalAmount.BranchId;
-                                newORJournalForPayment.AccountId = PayTypeAccountId;
-                                newORJournalForPayment.ArticleId = DepositoryBankArticleId;
-                                newORJournalForPayment.Particulars = "Payments";
-                                newORJournalForPayment.DebitAmount = collectionLineForTotalAmount.Amount;
-                                newORJournalForPayment.CreditAmount = 0;
-                                newORJournalForPayment.ORId = ORId;
-                                newORJournalForPayment.CVId = null;
-                                newORJournalForPayment.JVId = null;
-                                newORJournalForPayment.RRId = null;
-                                newORJournalForPayment.SIId = null;
-                                newORJournalForPayment.INId = null;
-                                newORJournalForPayment.OTId = null;
-                                newORJournalForPayment.STId = null;
-                                newORJournalForPayment.DocumentReference = "OR-" + BranchCode + "-" + ORNumber;
-                                newORJournalForPayment.APRRId = null;
-                                newORJournalForPayment.ARSIId = null;
+                        //        newORJournalForPayment.JournalDate = Convert.ToDateTime(JournalDate);
+                        //        newORJournalForPayment.BranchId = collectionLineForTotalAmount.BranchId;
+                        //        newORJournalForPayment.AccountId = PayTypeAccountId;
+                        //        newORJournalForPayment.ArticleId = DepositoryBankArticleId;
+                        //        newORJournalForPayment.Particulars = "Payments";
+                        //        newORJournalForPayment.DebitAmount = collectionLineForTotalAmount.Amount;
+                        //        newORJournalForPayment.CreditAmount = 0;
+                        //        newORJournalForPayment.ORId = ORId;
+                        //        newORJournalForPayment.CVId = null;
+                        //        newORJournalForPayment.JVId = null;
+                        //        newORJournalForPayment.RRId = null;
+                        //        newORJournalForPayment.SIId = null;
+                        //        newORJournalForPayment.INId = null;
+                        //        newORJournalForPayment.OTId = null;
+                        //        newORJournalForPayment.STId = null;
+                        //        newORJournalForPayment.DocumentReference = "OR-" + BranchCode + "-" + ORNumber;
+                        //        newORJournalForPayment.APRRId = null;
+                        //        newORJournalForPayment.ARSIId = null;
 
-                                db.TrnJournals.InsertOnSubmit(newORJournalForPayment);
-                            }
-                            else
-                            {
-                                Data.TrnJournal newORJournalForPayment = new Data.TrnJournal();
+                        //        db.TrnJournals.InsertOnSubmit(newORJournalForPayment);
+                        //    }
+                        //    else
+                        //    {
+                        //        Data.TrnJournal newORJournalForPayment = new Data.TrnJournal();
 
-                                newORJournalForPayment.JournalDate = Convert.ToDateTime(JournalDate);
-                                newORJournalForPayment.BranchId = collectionLineForTotalAmount.BranchId;
-                                newORJournalForPayment.AccountId = PayTypeAccountId;
-                                newORJournalForPayment.ArticleId = DepositoryBankArticleId;
-                                newORJournalForPayment.Particulars = "Payments";
-                                newORJournalForPayment.DebitAmount = 0;
-                                newORJournalForPayment.CreditAmount = collectionLineForTotalAmount.Amount * -1;
-                                newORJournalForPayment.ORId = ORId;
-                                newORJournalForPayment.CVId = null;
-                                newORJournalForPayment.JVId = null;
-                                newORJournalForPayment.RRId = null;
-                                newORJournalForPayment.SIId = null;
-                                newORJournalForPayment.INId = null;
-                                newORJournalForPayment.OTId = null;
-                                newORJournalForPayment.STId = null;
-                                newORJournalForPayment.DocumentReference = "OR-" + BranchCode + "-" + ORNumber;
-                                newORJournalForPayment.APRRId = null;
-                                newORJournalForPayment.ARSIId = null;
+                        //        newORJournalForPayment.JournalDate = Convert.ToDateTime(JournalDate);
+                        //        newORJournalForPayment.BranchId = collectionLineForTotalAmount.BranchId;
+                        //        newORJournalForPayment.AccountId = PayTypeAccountId;
+                        //        newORJournalForPayment.ArticleId = DepositoryBankArticleId;
+                        //        newORJournalForPayment.Particulars = "Payments";
+                        //        newORJournalForPayment.DebitAmount = 0;
+                        //        newORJournalForPayment.CreditAmount = collectionLineForTotalAmount.Amount * -1;
+                        //        newORJournalForPayment.ORId = ORId;
+                        //        newORJournalForPayment.CVId = null;
+                        //        newORJournalForPayment.JVId = null;
+                        //        newORJournalForPayment.RRId = null;
+                        //        newORJournalForPayment.SIId = null;
+                        //        newORJournalForPayment.INId = null;
+                        //        newORJournalForPayment.OTId = null;
+                        //        newORJournalForPayment.STId = null;
+                        //        newORJournalForPayment.DocumentReference = "OR-" + BranchCode + "-" + ORNumber;
+                        //        newORJournalForPayment.APRRId = null;
+                        //        newORJournalForPayment.ARSIId = null;
 
-                                db.TrnJournals.InsertOnSubmit(newORJournalForPayment);
-                            }
-                        }
+                        //        db.TrnJournals.InsertOnSubmit(newORJournalForPayment);
+                        //    }
+                        //}
 
-                        foreach (var collectionLine in collectionLines)
-                        {
-                            Decimal TotalAmountInCollectionLine = 0;
-                            foreach (var totalAmountInCollectionLines in collectionLinesTotalAmount)
-                            {
-                                TotalAmountInCollectionLine = totalAmountInCollectionLines.Amount;
-                            }
+                        //foreach (var collectionLine in collectionLines)
+                        //{
+                        //    Decimal TotalAmountInCollectionLine = 0;
+                        //    foreach (var totalAmountInCollectionLines in collectionLinesTotalAmount)
+                        //    {
+                        //        TotalAmountInCollectionLine = totalAmountInCollectionLines.Amount;
+                        //    }
 
-                            // Accounts Receivable
-                            if (TotalAmountInCollectionLine > 0)
-                            {
-                                Data.TrnJournal newORJournalForAccountsReceivable = new Data.TrnJournal();
+                        //    // Accounts Receivable
+                        //    if (TotalAmountInCollectionLine > 0)
+                        //    {
+                        //        Data.TrnJournal newORJournalForAccountsReceivable = new Data.TrnJournal();
 
-                                newORJournalForAccountsReceivable.JournalDate = Convert.ToDateTime(JournalDate);
-                                newORJournalForAccountsReceivable.BranchId = collectionLine.BranchId;
-                                newORJournalForAccountsReceivable.AccountId = collectionLine.AccountId;
-                                newORJournalForAccountsReceivable.ArticleId = collectionLine.ArticleId;
-                                newORJournalForAccountsReceivable.Particulars = "Collection";
-                                newORJournalForAccountsReceivable.DebitAmount = 0;
-                                newORJournalForAccountsReceivable.CreditAmount = collectionLine.Amount;
-                                newORJournalForAccountsReceivable.ORId = ORId;
-                                newORJournalForAccountsReceivable.CVId = null;
-                                newORJournalForAccountsReceivable.JVId = null;
-                                newORJournalForAccountsReceivable.RRId = null;
-                                newORJournalForAccountsReceivable.SIId = null;
-                                newORJournalForAccountsReceivable.INId = null;
-                                newORJournalForAccountsReceivable.OTId = null;
-                                newORJournalForAccountsReceivable.STId = null;
-                                newORJournalForAccountsReceivable.DocumentReference = "OR-" + BranchCode + "-" + ORNumber;
-                                newORJournalForAccountsReceivable.APRRId = null;
-                                newORJournalForAccountsReceivable.ARSIId = null;
-                                db.TrnJournals.InsertOnSubmit(newORJournalForAccountsReceivable);
-                            }
-                        }
+                        //        newORJournalForAccountsReceivable.JournalDate = Convert.ToDateTime(JournalDate);
+                        //        newORJournalForAccountsReceivable.BranchId = collectionLine.BranchId;
+                        //        newORJournalForAccountsReceivable.AccountId = collectionLine.AccountId;
+                        //        newORJournalForAccountsReceivable.ArticleId = collectionLine.ArticleId;
+                        //        newORJournalForAccountsReceivable.Particulars = "Collection";
+                        //        newORJournalForAccountsReceivable.DebitAmount = 0;
+                        //        newORJournalForAccountsReceivable.CreditAmount = collectionLine.Amount;
+                        //        newORJournalForAccountsReceivable.ORId = ORId;
+                        //        newORJournalForAccountsReceivable.CVId = null;
+                        //        newORJournalForAccountsReceivable.JVId = null;
+                        //        newORJournalForAccountsReceivable.RRId = null;
+                        //        newORJournalForAccountsReceivable.SIId = null;
+                        //        newORJournalForAccountsReceivable.INId = null;
+                        //        newORJournalForAccountsReceivable.OTId = null;
+                        //        newORJournalForAccountsReceivable.STId = null;
+                        //        newORJournalForAccountsReceivable.DocumentReference = "OR-" + BranchCode + "-" + ORNumber;
+                        //        newORJournalForAccountsReceivable.APRRId = null;
+                        //        newORJournalForAccountsReceivable.ARSIId = null;
+                        //        db.TrnJournals.InsertOnSubmit(newORJournalForAccountsReceivable);
+                        //    }
+                        //}
 
                         db.SubmitChanges();
                     }
