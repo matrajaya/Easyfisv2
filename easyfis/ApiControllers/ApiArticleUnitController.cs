@@ -107,7 +107,6 @@ namespace easyfis.Controllers
         {
             try
             {
-
                 Data.MstArticleUnit newUnit = new Data.MstArticleUnit();
 
                 newUnit.ArticleId = unit.ArticleId;

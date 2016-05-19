@@ -304,17 +304,17 @@
                 </div>
                 <div class="modal-body">
                     <form id="unitConversionDetailForm">
-                        <input type="hidden" id="unitConversion_Id" />
+                        <input type="text" id="unitConversion_Id" />
                         <dl class="dl-horizontal">
                             <dt>Multiplier </dt>
-                            <dd><input type="text" class="form-control input-sm requiredUnitConversion" id="unitConversion_multiplier" placeholder="Multiplier" /></dd>
+                            <dd><input type="text" class="form-control input-30 numberField input-sm requiredUnitConversion" id="unitConversion_multiplier" placeholder="0.00" /></dd>
                             <dt>Unit</dt>
                             <dd>
-                                <div class="comboBox-wide" id="unitConversion_unit"></div>
+                                <div class="comboBox-wide input-50" id="unitConversion_unit"></div>
                             </dd>
                             <dt>Base Unit</dt>
                             <dd>
-                                <div class="comboBox-wide" id="unitConversion_baseUnit"></div>
+                                <div class="comboBox-wide input-50" id="unitConversion_baseUnit"></div>
                             </dd>
                             <dt>Count Unit</dt>
                             <dd><input type="checkbox" id="unitConversion_countUnit" /></dd>
@@ -362,24 +362,21 @@
                     <form id="componentDetailForm">
                         <input type="hidden" id="component_Id" />
                         <dl class="dl-horizontal">
-                            <dt>Manual Code: </dt>
-                            <dd>
-                                <div class="comboBox-wide" id="component_ManualCode"></div>
-                            </dd>
                             <dt>Component</dt>
                             <dd>
-                                <div class="comboBox-wide" id="component_Component"></div>
+                                <div class="input-30" id="component_ManualCode"></div>
+                                <div class="input-68" id="component_Component"></div>
                             </dd>
                             <dt>Quantity</dt>
-                            <dd><input type="text" class="form-control input-sm requiredUnitConversion" id="component_Quantity" placeholder="Quantity" /></dd>
+                            <dd><input type="text" class="form-control input-50 numberField input-sm" id="component_Quantity" placeholder="0.00" /></dd>
                             <dt>Unit</dt>
                             <dd>
-                                <div class="comboBox-wide" id="component_unit"></div>
+                                <div class="input-50" id="component_unit"></div>
                             </dd>
                             <dt>Cost</dt>
-                            <dd><input type="text" class="form-control input-sm requiredComponent" id="component_cost" placeholder="Cost" /></dd>
+                            <dd><input type="text" class="form-control input-50 numberField input-sm requiredComponent" id="component_cost" placeholder="0.00" /></dd>
                             <dt>Amount</dt>
-                            <dd><input type="text" class="form-control input-sm requiredComponent" id="component_amount" placeholder="Amount" /></dd>
+                            <dd><input type="text" class="form-control input-50 numberField input-sm requiredComponent" id="component_amount" placeholder="0.00" /></dd>
                             <dt>Particulars</dt>
                             <dd><textarea class="form-control textarea-custom requiredComponent" id="component_particulars" placeholder="Particulars"></textarea></dd>
                         </dl>
@@ -1423,6 +1420,7 @@
                                             Equals: "=",
                                             Multiplier: unitConversionResults[i]["Multiplier"],
                                             IsCountUnit: unitConversionResults[i]["IsCountUnit"],
+                                            BaseUnit: itemUnitSelectedValue.toString()
                                         });
                                     }
                                 }
@@ -1531,6 +1529,164 @@
                 show: true,
                 backdrop: 'static'
             });
+        }
+        // confirm delete Unit Conversion
+        function cmdUnitConversionConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            $('#cmdConfirmDeleteUnitConversion').prop('disabled', true);
+            $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', true);
+
+            unitConversions.editItem(unitConversions.currentItem);
+            var unitConversionId = unitConversions.currentEditItem.Id;
+            $.ajax({
+                url: '/api/deleteArticleUnit/' + unitConversionId,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
+                        $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
+                        toastr.success("Successfully deleted");
+                        $('#deleteUnitConversionConfirm').modal('hide');
+                        refreshUnitConversions();
+                    },
+                    404: function () {
+                        document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
+                        $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
+                        $('#deleteUnitConversionConfirm').modal('hide');
+                        toastr.error("Delete request not found");
+                    },
+                    400: function () {
+                        document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
+                        $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
+                        $('#deleteUnitConversionConfirm').modal('hide');
+                        toastr.error("Cannot delete record");
+                    }
+                }
+            });
+        }
+
+        // ================================
+        // Unit Conversion entry Validation
+        // ================================
+        function unitConversionEntryValidation() {
+            var isValid = true;
+            $('.requiredUnitConversion').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            return isValid;
+        }
+
+        // ====================
+        // Save Unit Conversion
+        // ====================
+        function cmdUnitConversionSaveButton_OnClick() {
+            var unitConversionObject = new Object();
+            unitConversionObject.ArticleId = itemId;
+            unitConversionObject.UnitId = cboUnitConversionUnit.selectedItem["UnitId"];
+            unitConversionObject.Multiplier = document.getElementById("unitConversion_multiplier").value.toLocaleString();
+            unitConversionObject.IsCountUnit = document.getElementById("unitConversion_countUnit").checked;
+            var data = JSON.stringify(unitConversionObject);
+
+            if (unitConversionEntryValidation() == false) {
+                toastr.error("Invalid Entry");
+            } else {
+                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                $('#cmdSaveUnitConversionButton').prop('disabled', true);
+                $('#cmdUnitConversionDetailCloseButton').prop('disabled', true);
+
+                var unitConversionId = document.getElementById('unitConversion_Id').value;
+                if (unitConversionId == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addArticleUnit',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
+                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+                                toastr.success("Successfully saved");
+                                $('#unitConversionEdit').modal('hide');
+                                refreshUnitConversions();
+                            },
+                            404: function () {
+                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
+                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save request not found");
+                                $('#unitConversionEdit').modal('hide');
+                            },
+                            400: function () {
+                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
+                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+                                toastr.error("Cannot save new record");
+                                $('#unitConversionEdit').modal('hide');
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateArticleUnit/' + unitConversionId,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
+                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+                                toastr.success("Successfully updated");
+                                $('#unitConversionEdit').modal('hide');
+                                refreshUnitConversions();
+                            },
+                            404: function () {
+                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
+                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+                                toastr.error("Update request not found");
+                                $('#unitConversionEdit').modal('hide');
+                            },
+                            400: function () {
+                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
+                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
+                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
+                                toastr.error("Cannot update record");
+                                $('#unitConversionEdit').modal('hide');
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // =======================
+        // Refresh Unit Conversion
+        // =======================
+        function refreshUnitConversions() {
+            unitConversions = new wijmo.collections.CollectionView(getUnitConversion());
+
+            // Flex Grid for Unit Conversion
+            unitConversionGrid.itemsSource = unitConversions;
+            unitConversionGrid.trackChanges = true;
         }
 
         // ================
@@ -1956,7 +2112,7 @@
                     success: function (priceResults) {
                         if (priceResults.length > 0) {
                             $.ajax({
-                                url: '/api/article/' + articleId,
+                                url: '/api/article/' + itemId,
                                 cache: false,
                                 type: 'GET',
                                 contentType: 'application/json; charset=utf-8',
