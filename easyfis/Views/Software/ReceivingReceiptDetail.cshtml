@@ -990,7 +990,7 @@
                                         document.getElementById('RRPreparedBy_data').value = mstUserResults.Id;
                                         document.getElementById('RRCheckedBy_data').value = mstUserResults.Id;
                                         document.getElementById('RRApprovedBy_data').value = mstUserResults.Id;
-                                        
+
                                         document.getElementById('RRReceivedBy_selectedValue').value = mstUserResults.FullName;
                                         document.getElementById('RRPreparedBy_selectedValue').value = mstUserResults.FullName;
                                         document.getElementById('RRCheckedBy_selectedValue').value = mstUserResults.FullName;
@@ -2378,7 +2378,6 @@
         // GET PO Items for PO for Combo Box
         // =================================
         function getPOItemForComboBox() {
-
             POItems = new wijmo.collections.ObservableArray();
             var RRLinePOId = document.getElementById('RRLine_PONo_data').value;
             if (RRLinePOId == 0) {
@@ -2402,11 +2401,11 @@
                             }
                             createCboPOItemCode(POItems);
                             createCboPOIteDescription(POItems);
-                            getUnitForComboBox();
+                            //getUnitForComboBox();
                         } else {
                             createCboPOItemCode(POItems);
                             createCboPOIteDescription(POItems);
-                            getUnitForComboBox();
+                            //getUnitForComboBox();
                         }
                     }
                 });
@@ -2437,11 +2436,11 @@
                             }
                             createCboPOItemCode(POItems);
                             createCboPOIteDescription(POItems);
-                            getUnitForComboBox();
+                            //getUnitForComboBox();
                         } else {
                             createCboPOItemCode(POItems);
                             createCboPOIteDescription(POItems);
-                            getUnitForComboBox();
+                            //getUnitForComboBox();
                         }
                     }
                 });
@@ -2489,7 +2488,7 @@
                     $("#RRLine_BUCQuantity").val(POItemCollection.items[this.selectedIndex].Quantity);
 
                     createCboPOIteDescription(POItems);
-                    getUnitForComboBox();
+                    getUnitForComboBox(POItemCollection.items[this.selectedIndex].ItemId);
 
                     document.getElementById('RRLine_BUCUnit_data').value = POItemCollection.items[this.selectedIndex].UnitId;
                     document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
@@ -2575,95 +2574,105 @@
                 }
             });
 
-            document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemCode.selectedIndex].ItemId;
-            document.getElementById('RRLine_ItemDescription_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].ItemDescription;
-            document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemCode.selectedIndex].UnitId;
-            document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].Unit;
-            document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemCode.selectedIndex].Particulars;
-            document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
-            //document.getElementById('RRLine_Cost').value = POItemCollection.items[cboItemCode.selectedIndex].Cost;
-            document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemCode.selectedIndex].Amount;
-            document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
+            if (POItems == 0) {
+                document.getElementById('RRLine_ItemId_data').value = "";
+                document.getElementById('RRLine_ItemDescription_selectedValue').value = "";
+                document.getElementById('RRLine_Unit_data').value = "";
+                document.getElementById('RRLine_Unit_selectedValue').value = "";
+                document.getElementById('RRLine_Particulars').value = "";
+                document.getElementById('RRLine_Quantity').value = "";
+                document.getElementById('RRLine_Amount').value = "";
+                document.getElementById('RRLine_BUCQuantity').value = "";
+            } else {
+                document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemCode.selectedIndex].ItemId;
+                document.getElementById('RRLine_ItemDescription_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].ItemDescription;
+                document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemCode.selectedIndex].UnitId;
+                document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].Unit;
+                document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemCode.selectedIndex].Particulars;
+                document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
+                document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemCode.selectedIndex].Amount;
+                document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
 
+                getUnitForComboBox(POItemCollection.items[cboItemCode.selectedIndex].ItemId);
 
+                var items = new wijmo.collections.ObservableArray;
+                var articleId = document.getElementById('RRLine_ItemId_data').value;
+                $.ajax({
+                    url: '/api/article/' + articleId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (Results) {
+                        NProgress.done();
+                        if (Results.length > 0) {
+                            items.push({
+                                Id: Results.Id,
+                                OutputTaxId: Results.OutputTaxId,
+                                OutputTax: Results.OutputTax,
+                                InputTaxId: Results.InputTaxId,
+                                InputTax: Results.InputTax,
+                                WTaxTypeId: Results.WTaxTypeId,
+                                WTaxType: Results.WTaxType
+                            });
+                        }
 
-            var items = new wijmo.collections.ObservableArray;
-            var articleId = document.getElementById('RRLine_ItemId_data').value;
-            $.ajax({
-                url: '/api/article/' + articleId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    NProgress.done();
-                    if (Results.length > 0) {
-                        items.push({
-                            Id: Results.Id,
-                            OutputTaxId: Results.OutputTaxId,
-                            OutputTax: Results.OutputTax,
-                            InputTaxId: Results.InputTaxId,
-                            InputTax: Results.InputTax,
-                            WTaxTypeId: Results.WTaxTypeId,
-                            WTaxType: Results.WTaxType
+                        document.getElementById('RRLine_VAT_data').value = Results.InputTaxId;
+                        document.getElementById('RRLine_VAT_selectedValue').value = Results.InputTax;
+                        document.getElementById('RRLine_WTAX_data').value = Results.WTaxTypeId;
+                        document.getElementById('RRLine_WTAX_selectedValue').value = Results.WTaxType;
+
+                        var taxTypesVAT = new wijmo.collections.ObservableArray();
+                        var taxTypeVATId = Results.InputTaxId;
+                        $.ajax({
+                            url: '/api/taxType/' + taxTypeVATId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (results) {
+                                if (results.length > 0) {
+                                    taxTypesVAT.push({
+                                        TaxTypeId: results.Id,
+                                        TaxType: results.TaxType,
+                                        TaxRate: results.TaxRate,
+                                        IsInclusive: results.IsInclusive
+                                    });
+                                }
+
+                                document.getElementById('RRLine_VATRate').value = results.TaxRate;
+                                document.getElementById('RRLine_TAXInclusive').value = results.IsInclusive;
+
+                                computeTAX();
+                            }
                         });
+
+                        var taxTypesWTAX = new wijmo.collections.ObservableArray();
+                        var taxTypeWTAXId = Results.WTaxTypeId;
+                        $.ajax({
+                            url: '/api/taxType/' + taxTypeWTAXId,
+                            cache: false,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            data: {},
+                            success: function (results) {
+                                if (results.length > 0) {
+                                    taxTypesWTAX.push({
+                                        TaxTypeId: results.Id,
+                                        TaxType: results.TaxType,
+                                        TaxRate: results.TaxRate,
+                                        IsInclusive: results.IsInclusive
+                                    });
+                                }
+
+                                document.getElementById('RRLine_WTAXRate').value = results.TaxRate;
+                            }
+                        });
+
+                        getTaxTypeForComboBox();
                     }
-
-                    document.getElementById('RRLine_VAT_data').value = Results.InputTaxId;
-                    document.getElementById('RRLine_VAT_selectedValue').value = Results.InputTax;
-                    document.getElementById('RRLine_WTAX_data').value = Results.WTaxTypeId;
-                    document.getElementById('RRLine_WTAX_selectedValue').value = Results.WTaxType;
-
-                    var taxTypesVAT = new wijmo.collections.ObservableArray();
-                    var taxTypeVATId = Results.InputTaxId;
-                    $.ajax({
-                        url: '/api/taxType/' + taxTypeVATId,
-                        cache: false,
-                        type: 'GET',
-                        contentType: 'application/json; charset=utf-8',
-                        data: {},
-                        success: function (results) {
-                            if (results.length > 0) {
-                                taxTypesVAT.push({
-                                    TaxTypeId: results.Id,
-                                    TaxType: results.TaxType,
-                                    TaxRate: results.TaxRate,
-                                    IsInclusive: results.IsInclusive
-                                });
-                            }
-
-                            document.getElementById('RRLine_VATRate').value = results.TaxRate;
-                            document.getElementById('RRLine_TAXInclusive').value = results.IsInclusive;
-
-                            computeTAX();
-                        }
-                    });
-
-                    var taxTypesWTAX = new wijmo.collections.ObservableArray();
-                    var taxTypeWTAXId = Results.WTaxTypeId;
-                    $.ajax({
-                        url: '/api/taxType/' + taxTypeWTAXId,
-                        cache: false,
-                        type: 'GET',
-                        contentType: 'application/json; charset=utf-8',
-                        data: {},
-                        success: function (results) {
-                            if (results.length > 0) {
-                                taxTypesWTAX.push({
-                                    TaxTypeId: results.Id,
-                                    TaxType: results.TaxType,
-                                    TaxRate: results.TaxRate,
-                                    IsInclusive: results.IsInclusive
-                                });
-                            }
-
-                            document.getElementById('RRLine_WTAXRate').value = results.TaxRate;
-                        }
-                    });
-
-                    getTaxTypeForComboBox();
-                }
-            });
+                });
+            }
 
         }
 
@@ -2707,7 +2716,7 @@
                     $("#RRLine_BUCQuantity").val(POItemCollection.items[this.selectedIndex].Quantity);
 
                     createCboPOItemCode(POItems);
-                    getUnitForComboBox();
+                    getUnitForComboBox(POItemCollection.items[this.selectedIndex].ItemId);
 
                     document.getElementById('RRLine_BUCUnit_data').value = POItemCollection.items[this.selectedIndex].UnitId;
                     document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
@@ -2797,25 +2806,34 @@
                 }
             });
 
-            document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemId;
-            document.getElementById('RRLine_ItemCode_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemCode;
-            document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemDescription.selectedIndex].UnitId;
-            document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].Unit;
-            document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemDescription.selectedIndex].Particulars;
-            document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
-            //document.getElementById('RRLine_Cost').value = POItemCollection.items[cboItemDescription.selectedIndex].Cost;
-            document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemDescription.selectedIndex].Amount;
-            document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
-
+            if (POItems == 0) {
+                document.getElementById('RRLine_ItemId_data').value = "";
+                document.getElementById('RRLine_ItemCode_selectedValue').value = "";
+                document.getElementById('RRLine_Unit_data').value = "";
+                document.getElementById('RRLine_Unit_selectedValue').value = "";
+                document.getElementById('RRLine_Particulars').value = "";
+                document.getElementById('RRLine_Quantity').value = "";
+                document.getElementById('RRLine_Amount').value = "";
+                document.getElementById('RRLine_BUCQuantity').value = "";
+            } else {
+                document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemId;
+                document.getElementById('RRLine_ItemCode_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemCode;
+                document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemDescription.selectedIndex].UnitId;
+                document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].Unit;
+                document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemDescription.selectedIndex].Particulars;
+                document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
+                document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemDescription.selectedIndex].Amount;
+                document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
+            }
         }
 
         // =============
         // Get Item Unit
         // =============
-        function getUnitForComboBox() {
+        function getUnitForComboBox(itemId) {
             units = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listUnit',
+                url: '/api/listArticleUnitByArticleId/' + itemId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -2873,7 +2891,12 @@
                 }
             });
 
-            document.getElementById('RRLine_Unit_data').value = itemUnitCollection.items[cboUnit.selectedIndex].UnitId;
+            if (units == 0) {
+                document.getElementById('RRLine_Unit_data').value = "";
+            } else {
+                document.getElementById('RRLine_Unit_data').value = itemUnitCollection.items[cboUnit.selectedIndex].UnitId;
+            }
+            
         }
 
 
@@ -3271,7 +3294,7 @@
 
             getPOForComboBox();
             //getPOItemForComboBox();
-            getUnitForComboBox();
+            getUnitForComboBox(0);
             getBranchesPOItemForComboBox();
             //getTaxTypeForComboBox();
             getBUCUnitForComboBox();
@@ -3374,7 +3397,7 @@
             });
 
             //getPOItemForComboBox();
-            getUnitForComboBox();
+            getUnitForComboBox(item.ItemId);
             getBranchesPOItemForComboBox();
             //getTaxTypeForComboBox();
             getBUCUnitForComboBox();
