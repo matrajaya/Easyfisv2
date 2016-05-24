@@ -10,7 +10,7 @@ namespace easyfis.Controllers
 {
     public class RepReceivingReceiptDetailReportController : Controller
     {
-         // Easyfis data context
+        // Easyfis data context
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         // current branch Id
@@ -63,7 +63,7 @@ namespace easyfis.Controllers
             tableHeaderPage.AddCell(new PdfPCell(new Phrase("Printed " + DateTime.Now.ToLongDateString() + " " + DateTime.Now.ToString("hh:mm:ss tt"), fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2 });
             document.Add(tableHeaderPage);
             document.Add(line);
-            
+
             // receiving receipt Items
             var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
                                         where d.TrnReceivingReceipt.BranchId == currentBranchId()
@@ -124,7 +124,7 @@ namespace easyfis.Controllers
                     tableRRItemData.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Quantity.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableRRItemData.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Branch, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableRRItemData.AddCell(new PdfPCell(new Phrase(receivingReceiptItem.Amount.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    
+
                     total = total + receivingReceiptItem.Amount;
                 }
 

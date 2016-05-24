@@ -21,7 +21,7 @@
             <section class="content-header">
                 <h1>
                     Inventory Report
-                    <small><i class="fa fa-building"></i> <span id="currentCompanyName"></span> / <span id="currentBranchName"></span></small>
+                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
@@ -986,39 +986,39 @@
                 branchId = 0;
             } else {
                 branchId = document.getElementById('FixedAssetReport_Branch_data').value;
-            }
 
-            $.ajax({
-                url: '/api/stockCount/listByBranchId/' + branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            stockCounts.push({
-                                Id: results[i]["Id"],
-                                BranchId: results[i]["BranchId"],
-                                Branch: results[i]["Branch"],
-                                SCNumber: results[i]["SCNumber"],
-                                SCDate: results[i]["SCDate"],
-                                Particulars: results[i]["Particulars"],
-                                PreparedBy: results[i]["PreparedBy"],
-                                PreparedById: results[i]["PreparedById"],
-                                CheckedBy: results[i]["CheckedBy"],
-                                CheckedById: results[i]["CheckedById"],
-                                ApprovedBy: results[i]["ApprovedBy"],
-                                ApprovedById: results[i]["ApprovedById"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
+                $.ajax({
+                    url: '/api/stockCount/listByBranchId/' + branchId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                stockCounts.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    Branch: results[i]["Branch"],
+                                    SCNumber: results[i]["SCNumber"],
+                                    SCDate: results[i]["SCDate"],
+                                    Particulars: results[i]["Particulars"],
+                                    PreparedBy: results[i]["PreparedBy"],
+                                    PreparedById: results[i]["PreparedById"],
+                                    CheckedBy: results[i]["CheckedBy"],
+                                    CheckedById: results[i]["CheckedById"],
+                                    ApprovedBy: results[i]["ApprovedBy"],
+                                    ApprovedById: results[i]["ApprovedById"],
+                                    IsLocked: results[i]["IsLocked"]
+                                });
+                            }
+                            createCboStockCountForFixedAssetReportFilterByBranch(stockCounts);
+                        } else {
+                            createCboStockCountForFixedAssetReportFilterByBranch(stockCounts);
                         }
-                        createCboStockCountForFixedAssetReportFilterByBranch(stockCounts);
-                    } else {
-                        createCboStockCountForFixedAssetReportFilterByBranch(stockCounts);
                     }
-                }
-            });
+                });
+            }
             return stockCounts;
         }
 
@@ -1103,39 +1103,40 @@
                 branchId = 0;
             } else {
                 branchId = document.getElementById('Inventory_Branch_data').value;
+
+                $.ajax({
+                    url: '/api/stockCount/listByBranchId/' + branchId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                stockCounts.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    Branch: results[i]["Branch"],
+                                    SCNumber: results[i]["SCNumber"],
+                                    SCDate: results[i]["SCDate"],
+                                    Particulars: results[i]["Particulars"],
+                                    PreparedBy: results[i]["PreparedBy"],
+                                    PreparedById: results[i]["PreparedById"],
+                                    CheckedBy: results[i]["CheckedBy"],
+                                    CheckedById: results[i]["CheckedById"],
+                                    ApprovedBy: results[i]["ApprovedBy"],
+                                    ApprovedById: results[i]["ApprovedById"],
+                                    IsLocked: results[i]["IsLocked"]
+                                });
+                            }
+                            createCboStockCountForInventoryFilterByBranch(stockCounts);
+                        } else {
+                            createCboStockCountForInventoryFilterByBranch(stockCounts);
+                        }
+                    }
+                });
             }
 
-            $.ajax({
-                url: '/api/stockCount/listByBranchId/' + branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            stockCounts.push({
-                                Id: results[i]["Id"],
-                                BranchId: results[i]["BranchId"],
-                                Branch: results[i]["Branch"],
-                                SCNumber: results[i]["SCNumber"],
-                                SCDate: results[i]["SCDate"],
-                                Particulars: results[i]["Particulars"],
-                                PreparedBy: results[i]["PreparedBy"],
-                                PreparedById: results[i]["PreparedById"],
-                                CheckedBy: results[i]["CheckedBy"],
-                                CheckedById: results[i]["CheckedById"],
-                                ApprovedBy: results[i]["ApprovedBy"],
-                                ApprovedById: results[i]["ApprovedById"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboStockCountForInventoryFilterByBranch(stockCounts);
-                    } else {
-                        createCboStockCountForInventoryFilterByBranch(stockCounts);
-                    }
-                }
-            });
             return stockCounts;
         }
 
@@ -1271,39 +1272,40 @@
                 branchId = 0;
             } else {
                 branchId = document.getElementById('StockCard_Branch_data').value;
+
+                $.ajax({
+                    url: '/api/stockCount/listByBranchId/' + branchId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                stockCounts.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    Branch: results[i]["Branch"],
+                                    SCNumber: results[i]["SCNumber"],
+                                    SCDate: results[i]["SCDate"],
+                                    Particulars: results[i]["Particulars"],
+                                    PreparedBy: results[i]["PreparedBy"],
+                                    PreparedById: results[i]["PreparedById"],
+                                    CheckedBy: results[i]["CheckedBy"],
+                                    CheckedById: results[i]["CheckedById"],
+                                    ApprovedBy: results[i]["ApprovedBy"],
+                                    ApprovedById: results[i]["ApprovedById"],
+                                    IsLocked: results[i]["IsLocked"]
+                                });
+                            }
+                            createCboStockCountForStockCardFilterByBranch(stockCounts);
+                        } else {
+                            createCboStockCountForStockCardFilterByBranch(stockCounts);
+                        }
+                    }
+                });
             }
 
-            $.ajax({
-                url: '/api/stockCount/listByBranchId/' + branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            stockCounts.push({
-                                Id: results[i]["Id"],
-                                BranchId: results[i]["BranchId"],
-                                Branch: results[i]["Branch"],
-                                SCNumber: results[i]["SCNumber"],
-                                SCDate: results[i]["SCDate"],
-                                Particulars: results[i]["Particulars"],
-                                PreparedBy: results[i]["PreparedBy"],
-                                PreparedById: results[i]["PreparedById"],
-                                CheckedBy: results[i]["CheckedBy"],
-                                CheckedById: results[i]["CheckedById"],
-                                ApprovedBy: results[i]["ApprovedBy"],
-                                ApprovedById: results[i]["ApprovedById"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboStockCountForStockCardFilterByBranch(stockCounts);
-                    } else {
-                        createCboStockCountForStockCardFilterByBranch(stockCounts);
-                    }
-                }
-            });
             return stockCounts;
         }
 
@@ -1388,39 +1390,40 @@
                 branchId = 0;
             } else {
                 branchId = document.getElementById('StockIn_Branch_data').value;
+
+                $.ajax({
+                    url: '/api/stockCount/listByBranchId/' + branchId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                stockCounts.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    Branch: results[i]["Branch"],
+                                    SCNumber: results[i]["SCNumber"],
+                                    SCDate: results[i]["SCDate"],
+                                    Particulars: results[i]["Particulars"],
+                                    PreparedBy: results[i]["PreparedBy"],
+                                    PreparedById: results[i]["PreparedById"],
+                                    CheckedBy: results[i]["CheckedBy"],
+                                    CheckedById: results[i]["CheckedById"],
+                                    ApprovedBy: results[i]["ApprovedBy"],
+                                    ApprovedById: results[i]["ApprovedById"],
+                                    IsLocked: results[i]["IsLocked"]
+                                });
+                            }
+                            createCboStockCountForStockInFilterByBranch(stockCounts);
+                        } else {
+                            createCboStockCountForStockInFilterByBranch(stockCounts);
+                        }
+                    }
+                });
             }
 
-            $.ajax({
-                url: '/api/stockCount/listByBranchId/' + branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            stockCounts.push({
-                                Id: results[i]["Id"],
-                                BranchId: results[i]["BranchId"],
-                                Branch: results[i]["Branch"],
-                                SCNumber: results[i]["SCNumber"],
-                                SCDate: results[i]["SCDate"],
-                                Particulars: results[i]["Particulars"],
-                                PreparedBy: results[i]["PreparedBy"],
-                                PreparedById: results[i]["PreparedById"],
-                                CheckedBy: results[i]["CheckedBy"],
-                                CheckedById: results[i]["CheckedById"],
-                                ApprovedBy: results[i]["ApprovedBy"],
-                                ApprovedById: results[i]["ApprovedById"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboStockCountForStockInFilterByBranch(stockCounts);
-                    } else {
-                        createCboStockCountForStockInFilterByBranch(stockCounts);
-                    }
-                }
-            });
             return stockCounts;
         }
 
@@ -1505,39 +1508,40 @@
                 branchId = 0;
             } else {
                 branchId = document.getElementById('StockOut_Branch_data').value;
+
+                $.ajax({
+                    url: '/api/stockCount/listByBranchId/' + branchId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                stockCounts.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    Branch: results[i]["Branch"],
+                                    SCNumber: results[i]["SCNumber"],
+                                    SCDate: results[i]["SCDate"],
+                                    Particulars: results[i]["Particulars"],
+                                    PreparedBy: results[i]["PreparedBy"],
+                                    PreparedById: results[i]["PreparedById"],
+                                    CheckedBy: results[i]["CheckedBy"],
+                                    CheckedById: results[i]["CheckedById"],
+                                    ApprovedBy: results[i]["ApprovedBy"],
+                                    ApprovedById: results[i]["ApprovedById"],
+                                    IsLocked: results[i]["IsLocked"]
+                                });
+                            }
+                            createCboStockCountForStockOutFilterByBranch(stockCounts);
+                        } else {
+                            createCboStockCountForStockOutFilterByBranch(stockCounts);
+                        }
+                    }
+                });
             }
 
-            $.ajax({
-                url: '/api/stockCount/listByBranchId/' + branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            stockCounts.push({
-                                Id: results[i]["Id"],
-                                BranchId: results[i]["BranchId"],
-                                Branch: results[i]["Branch"],
-                                SCNumber: results[i]["SCNumber"],
-                                SCDate: results[i]["SCDate"],
-                                Particulars: results[i]["Particulars"],
-                                PreparedBy: results[i]["PreparedBy"],
-                                PreparedById: results[i]["PreparedById"],
-                                CheckedBy: results[i]["CheckedBy"],
-                                CheckedById: results[i]["CheckedById"],
-                                ApprovedBy: results[i]["ApprovedBy"],
-                                ApprovedById: results[i]["ApprovedById"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboStockCountForStockOutFilterByBranch(stockCounts);
-                    } else {
-                        createCboStockCountForStockOutFilterByBranch(stockCounts);
-                    }
-                }
-            });
             return stockCounts;
         }
 
@@ -1622,39 +1626,40 @@
                 branchId = 0;
             } else {
                 branchId = document.getElementById('StockTransfer_Branch_data').value;
+
+                $.ajax({
+                    url: '/api/stockCount/listByBranchId/' + branchId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (results) {
+                        if (results.length > 0) {
+                            for (i = 0; i < results.length; i++) {
+                                stockCounts.push({
+                                    Id: results[i]["Id"],
+                                    BranchId: results[i]["BranchId"],
+                                    Branch: results[i]["Branch"],
+                                    SCNumber: results[i]["SCNumber"],
+                                    SCDate: results[i]["SCDate"],
+                                    Particulars: results[i]["Particulars"],
+                                    PreparedBy: results[i]["PreparedBy"],
+                                    PreparedById: results[i]["PreparedById"],
+                                    CheckedBy: results[i]["CheckedBy"],
+                                    CheckedById: results[i]["CheckedById"],
+                                    ApprovedBy: results[i]["ApprovedBy"],
+                                    ApprovedById: results[i]["ApprovedById"],
+                                    IsLocked: results[i]["IsLocked"]
+                                });
+                            }
+                            createCboStockCountForStockTransferFilterByBranch(stockCounts);
+                        } else {
+                            createCboStockCountForStockTransferFilterByBranch(stockCounts);
+                        }
+                    }
+                });
             }
 
-            $.ajax({
-                url: '/api/stockCount/listByBranchId/' + branchId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            stockCounts.push({
-                                Id: results[i]["Id"],
-                                BranchId: results[i]["BranchId"],
-                                Branch: results[i]["Branch"],
-                                SCNumber: results[i]["SCNumber"],
-                                SCDate: results[i]["SCDate"],
-                                Particulars: results[i]["Particulars"],
-                                PreparedBy: results[i]["PreparedBy"],
-                                PreparedById: results[i]["PreparedById"],
-                                CheckedBy: results[i]["CheckedBy"],
-                                CheckedById: results[i]["CheckedById"],
-                                ApprovedBy: results[i]["ApprovedBy"],
-                                ApprovedById: results[i]["ApprovedById"],
-                                IsLocked: results[i]["IsLocked"]
-                            });
-                        }
-                        createCboStockCountForStockTransferFilterByBranch(stockCounts);
-                    } else {
-                        createCboStockCountForStockTransferFilterByBranch(stockCounts);
-                    }
-                }
-            });
             return stockCounts;
         }
 
@@ -2180,7 +2185,7 @@
             } else {
                 companyId = document.getElementById('Inventory_Company_data').value;
                 document.getElementById('Inventory_Company').style.border = " ";
-                window.location.href = '/Software/InventoryReportPDF?StartDate=' + inventoryReportStartDate + '&EndDate=' + inventoryReportEndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + inventoryReportStartDate + '&EndDate=' + inventoryReportEndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2206,7 +2211,7 @@
 
                 document.getElementById('StockCard_Branch').style.border = " ";
                 document.getElementById('Items_Item').style.border = " ";
-                window.location.href = '/Software/InventoryReportStockCardPDF?StartDate=' + inventoryReportStockCardStartDate + '&EndDate=' + inventoryReportStockCardEndDate + '&BranchId=' + branchId + '&ItemId=' + itemId;
+                window.location.href = '/RepStockCard/StockCard?StartDate=' + inventoryReportStockCardStartDate + '&EndDate=' + inventoryReportStockCardEndDate + '&BranchId=' + branchId + '&ItemId=' + itemId;
             }
         }
 
@@ -2222,7 +2227,7 @@
             } else {
                 branchId = document.getElementById('StockIn_Branch_data').value;
                 document.getElementById('StockIn_Branch').style.border = " ";
-                window.location.href = '/Software/InventoryReportStockInDetailPDF?StartDate=' + inventoryReportStockInDetailStartDate + '&EndDate=' + inventoryReportStockInDetailEndDate + '&BranchId=' + branchId;
+                window.location.href = '/RepStockInDetailReport/StockInDetailReport?StartDate=' + inventoryReportStockInDetailStartDate + '&EndDate=' + inventoryReportStockInDetailEndDate + '&BranchId=' + branchId;
             }
         }
 
@@ -2238,7 +2243,7 @@
             } else {
                 branchId = document.getElementById('StockOut_Branch_data').value;
                 document.getElementById('StockOut_Branch').style.border = " ";
-                window.location.href = '/Software/InventoryReportStockOutDetailPDF?StartDate=' + inventoryReportStockOutDetailStartDate + '&EndDate=' + inventoryReportStockOutDetailEndDate + '&BranchId=' + branchId;
+                window.location.href = '/RepStockOutDetailReport/StockOutDetailReport?StartDate=' + inventoryReportStockOutDetailStartDate + '&EndDate=' + inventoryReportStockOutDetailEndDate + '&BranchId=' + branchId;
             }
         }
 
@@ -2254,7 +2259,7 @@
             } else {
                 branchId = document.getElementById('StockTransfer_Branch_data').value;
                 document.getElementById('StockTransfer_Branch').style.border = " ";
-                window.location.href = '/Software/InventoryReportStockTransferDetailPDF?StartDate=' + inventoryReportStockTransferDetailStartDate + '&EndDate=' + inventoryReportStockTransferDetailEndDate + '&BranchId=' + branchId;
+                window.location.href = '/RepStockTransferDetailReport/StockTransferDetailReport?StartDate=' + inventoryReportStockTransferDetailStartDate + '&EndDate=' + inventoryReportStockTransferDetailEndDate + '&BranchId=' + branchId;
             }
         }
 
@@ -2267,20 +2272,7 @@
             } else {
                 ItemGroupId = document.getElementById('ItemGroup_Item_data').value;
                 document.getElementById('ItemGroup_Item').style.border = "";
-                window.location.href = '/Software/InventoryReportItemListPDF?ItemGroupId=' + ItemGroupId;
-            }
-        }
-
-        function InventoryReportPhysicalCountSheetPDF_OnClick() {
-            var ItemGroupId;
-            if (document.getElementById('ItemGroup_PhysicalCountSheet_data').value == "") {
-                branchId = 0;
-                document.getElementById('ItemGroup_PhysicalCountSheet').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                ItemGroupId = document.getElementById('ItemGroup_PhysicalCountSheet_data').value;
-                document.getElementById('ItemGroup_PhysicalCountSheet').style.border = "";
-                window.location.href = '/Software/InventoryReportPhysicalCountSheetPDF?ItemGroupId=' + ItemGroupId;
+                window.location.href = '/RepItemList/ItemList?ItemGroupId=' + ItemGroupId;
             }
         }
 
@@ -2293,10 +2285,22 @@
             } else {
                 ItemGroupId = document.getElementById('ItemGroup_ItemComponent_data').value;
                 document.getElementById('ItemGroup_ItemComponent').style.border = "";
-                window.location.href = '/Software/InventoryReportItemComponentListPDF?ItemGroupId=' + ItemGroupId;
+                window.location.href = '/RepItemComponentList/ItemComponentList?ItemGroupId=' + ItemGroupId;
             }
         }
 
+        function InventoryReportPhysicalCountSheetPDF_OnClick() {
+            var ItemGroupId;
+            if (document.getElementById('ItemGroup_PhysicalCountSheet_data').value == "") {
+                branchId = 0;
+                document.getElementById('ItemGroup_PhysicalCountSheet').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                ItemGroupId = document.getElementById('ItemGroup_PhysicalCountSheet_data').value;
+                document.getElementById('ItemGroup_PhysicalCountSheet').style.border = "";
+                window.location.href = '/RepPhysicalCountSheet/PhysicalCountSheet?ItemGroupId=' + ItemGroupId;
+            }
+        }
 
         function InventoryReportFixedAssetsPDF_OnClick() {
             var inventoryReportFixedAssetsStartDate = document.getElementById('fixedAssetReport_StartDate_data').value;
@@ -2310,7 +2314,7 @@
             } else {
                 companyId = document.getElementById('fixedAssetReport_Company_data').value;
                 document.getElementById('fixedAssetReport_Company').style.border = " ";
-                window.location.href = '/Software/InventoryReportFixedAssetsPDF?StartDate=' + inventoryReportFixedAssetsStartDate + '&EndDate=' + inventoryReportFixedAssetsEndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepFixedAssets/FixedAssets?StartDate=' + inventoryReportFixedAssetsStartDate + '&EndDate=' + inventoryReportFixedAssetsEndDate + '&CompanyId=' + companyId;
             }
         }
 

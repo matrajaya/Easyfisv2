@@ -63,45 +63,6 @@
         var branches;
         var cboBranch;
 
-        // =============
-        // Create Cookie
-        // =============
-        function createCookie(name, value, days) {
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                var expires = "; expires=" + date.toGMTString();
-            } else {
-                var expires = "";
-            }
-            document.cookie = name + "=" + value + expires + "; path=/";
-        }
-
-        // ===========
-        // read Cookie
-        // ===========
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
-                }
-            }
-            return null;
-        }
-
-        // =============
-        // Delete Cookie
-        // =============
-        function eraseCookie(name) {
-            createCookie(name, "", -1);
-        }
-
         // =================
         // Modal User Detail
         // =================
@@ -250,14 +211,6 @@
         function cmdLaunchSoftware_OnClick() {
             document.getElementById('LaunchSoftware').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Launching Software..."
             document.getElementById('LaunchSoftware').disabled = true;
-
-            createCookie("null", "null", -1);
-            createCookie("company", cboBranch.selectedItem["Company"], 365);
-            createCookie("branchId", cboBranch.selectedItem["BranchId"], 365);
-            createCookie("branch", cboBranch.selectedItem["Branch"], 365);
-
-            //alert(cboBranch.selectedItem["Company"]);
-
             window.location = '/Software';
         }
 

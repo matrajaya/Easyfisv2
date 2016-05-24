@@ -17,14 +17,22 @@ namespace easyfis.Controllers
                 {
                     var user = context.Users.SingleOrDefault(u => u.UserName == username);
                     string fullName = string.Concat(new string[] { user.FullName });
-                    string id = string.Concat(new string[] { user.Id });
+                    string userId = string.Concat(new string[] { user.Id });
                     string email = string.Concat(new string[] { user.Email });
                     string userName = string.Concat(new string[] { user.UserName });
 
-                    ViewData.Add("UserId", id);
+                    Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+                    string branch = string.Concat((from d in db.MstUsers where d.UserId == userId select d.MstBranch.Branch).SingleOrDefault());
+                    string company = string.Concat((from d in db.MstUsers where d.UserId == userId select d.MstBranch.MstCompany.Company).SingleOrDefault());
+
+                    ViewData.Add("UserId", userId);
                     ViewData.Add("FullName", fullName);
                     ViewData.Add("Email", email);
                     ViewData.Add("UserName", userName);
+
+                    ViewData.Add("Branch", branch);
+                    ViewData.Add("Company", company);
+
                 }
             }
             base.OnActionExecuted(filterContext);
