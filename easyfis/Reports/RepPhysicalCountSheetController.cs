@@ -154,9 +154,9 @@ namespace easyfis.Reports
 
                     foreach (var item in items)
                     {
-                        tableItems.AddCell(new PdfPCell(new Phrase(item.ManualArticleCode, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableItems.AddCell(new PdfPCell(new Phrase(item.Article, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableItems.AddCell(new PdfPCell(new Phrase(item.Unit, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableItems.AddCell(new PdfPCell(new Phrase(item.ManualArticleCode, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableItems.AddCell(new PdfPCell(new Phrase(item.Article, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableItems.AddCell(new PdfPCell(new Phrase(item.Unit, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                         tableItems.AddCell(new PdfPCell(new Phrase("", fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
                     }
 

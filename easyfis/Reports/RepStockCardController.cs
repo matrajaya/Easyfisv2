@@ -173,13 +173,13 @@ namespace easyfis.Reports
                         InventoryCodeDocument = "";
                     }
 
-                    tableData.AddCell(new PdfPCell(new Phrase(inventory.InventoryDate, fontArial9)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableData.AddCell(new PdfPCell(new Phrase(InventoryCodeDocument, fontArial9)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableData.AddCell(new PdfPCell(new Phrase(inventory.InventoryDate, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableData.AddCell(new PdfPCell(new Phrase(InventoryCodeDocument, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableData.AddCell(new PdfPCell(new Phrase("0.00", fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableData.AddCell(new PdfPCell(new Phrase(inventory.QuantityIn.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableData.AddCell(new PdfPCell(new Phrase(inventory.QuantityOut.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableData.AddCell(new PdfPCell(new Phrase(inventory.Quantity.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableData.AddCell(new PdfPCell(new Phrase(inventory.Unit, fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableData.AddCell(new PdfPCell(new Phrase(inventory.Unit, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableData.AddCell(new PdfPCell(new Phrase(Convert.ToInt32(inventory.Cost).ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableData.AddCell(new PdfPCell(new Phrase(inventory.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 

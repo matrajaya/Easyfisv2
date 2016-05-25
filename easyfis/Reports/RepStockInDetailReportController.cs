@@ -122,11 +122,11 @@ namespace easyfis.Reports
 
                 foreach (var stockInItem in stockInItems)
                 {
-                    tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.IN, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.INDate, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.Item, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.IN, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.INDate, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.Item, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.Quantity.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.Unit, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.Unit, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.Cost.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableINItems.AddCell(new PdfPCell(new Phrase(stockInItem.Amount.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     total = total + stockInItem.Amount;

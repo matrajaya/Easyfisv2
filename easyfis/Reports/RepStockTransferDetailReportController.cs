@@ -116,7 +116,6 @@ namespace easyfis.Reports
                     tableSTItems.AddCell(new PdfPCell(new Phrase("Cost", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
                     tableSTItems.AddCell(new PdfPCell(new Phrase("Amount", fontArial11Bold)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f, BackgroundColor = BaseColor.LIGHT_GRAY });
 
-
                     var stockTransferItems = from d in db.TrnStockTransferItems
                                              where d.TrnStockTransfer.MstBranch1.Branch == stockTransfer.ToBranch
                                              select new Models.TrnStockTransferItem
@@ -145,11 +144,11 @@ namespace easyfis.Reports
 
                     foreach (var stockTransferItem in stockTransferItems)
                     {
-                        tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.ST, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.STDate, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.Item, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.ST, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.STDate, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.Item, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                         tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.Quantity.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.Unit, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.Unit, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                         tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.Cost.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         tableSTItems.AddCell(new PdfPCell(new Phrase(stockTransferItem.Amount.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         Subtotal = Subtotal + stockTransferItem.Amount;

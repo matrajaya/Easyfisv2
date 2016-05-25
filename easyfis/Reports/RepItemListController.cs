@@ -156,10 +156,10 @@ namespace easyfis.Reports
 
                     foreach (var item in items)
                     {
-                        tableItems.AddCell(new PdfPCell(new Phrase(item.ArticleCode, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableItems.AddCell(new PdfPCell(new Phrase(item.ManualArticleCode, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableItems.AddCell(new PdfPCell(new Phrase(item.Article, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                        tableItems.AddCell(new PdfPCell(new Phrase(item.Unit, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableItems.AddCell(new PdfPCell(new Phrase(item.ArticleCode, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableItems.AddCell(new PdfPCell(new Phrase(item.ManualArticleCode, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableItems.AddCell(new PdfPCell(new Phrase(item.Article, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                        tableItems.AddCell(new PdfPCell(new Phrase(item.Unit, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                         tableItems.AddCell(new PdfPCell(new Phrase(Convert.ToDecimal(item.Cost).ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                         tableItems.AddCell(new PdfPCell(new Phrase(item.Price.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     }

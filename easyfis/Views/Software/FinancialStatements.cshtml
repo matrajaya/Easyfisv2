@@ -49,8 +49,8 @@
                                     <li><a data-toggle="pill" href="#DB">Disbursement Book</a></li>
                                     <li><a data-toggle="pill" href="#SB">Sales Book</a></li>
                                     <li><a data-toggle="pill" href="#CB">Collection Book</a></li>
-                                    <li><a data-toggle="pill" href="#SIB">Stock-in Book</a></li>
-                                    <li><a data-toggle="pill" href="#SOB">Stock-out Book</a></li>
+                                    <li><a data-toggle="pill" href="#SIB">Stock-In Book</a></li>
+                                    <li><a data-toggle="pill" href="#SOB">Stock-Out Book</a></li>
                                     <li><a data-toggle="pill" href="#STB">Stock Transfer Book</a></li>
                                     <li><a data-toggle="pill" href="#JVB">Journal Voucher Book</a></li>
                                     <li><a data-toggle="pill" href="#COA">Chart of Accounts</a></li>
@@ -2727,23 +2727,7 @@
             } else {
                 companyId = document.getElementById('FinancialStatementBalanceSheet_Company_data').value;
                 document.getElementById('FinancialStatementBalanceSheet_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementBalanceSheetPDF?DateAsOf=' + financialStatementBalanceSheetDateAsOf + '&CompanyId=' + companyId;
-            }
-        }
-
-        function FinancialStatementTrialBalancePDF_OnClick() {
-            var financialStatementTrialBalance_StartDate = document.getElementById('FinancialStatementTrialBalance_StartDate_data').value;
-            var financialStatementTrialBalance_EndDate = document.getElementById('FinancialStatementTrialBalance_EndDate_data').value;
-
-            var companyId;
-            if (document.getElementById('FinancialStatementTrialBalance_Company_data').value == "") {
-                companyId = 0;
-                document.getElementById('FinancialStatementTrialBalance_Company').style.border = "1px solid red";
-                toastr.error("Lacking Information");
-            } else {
-                companyId = document.getElementById('FinancialStatementTrialBalance_Company_data').value;
-                document.getElementById('FinancialStatementTrialBalance_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementTrialBalancePDF?StartDate=' + financialStatementTrialBalance_StartDate + '&EndDate=' + financialStatementTrialBalance_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepBalanceSheet/BalanceSheet?DateAsOf=' + financialStatementBalanceSheetDateAsOf + '&CompanyId=' + companyId;
             }
         }
 
@@ -2759,7 +2743,7 @@
             } else {
                 companyId = document.getElementById('FinancialStatementIncomeStatement_Company_data').value;
                 document.getElementById('FinancialStatementIncomeStatement_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementIncomeStatementPDF?StartDate=' + financialStatementIncomeStatement_StartDate + '&EndDate=' + financialStatementIncomeStatement_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepIncomeStatement/IncomeStatement?StartDate=' + financialStatementIncomeStatement_StartDate + '&EndDate=' + financialStatementIncomeStatement_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2775,7 +2759,23 @@
             } else {
                 companyId = document.getElementById('FinancialStatementCashFlow_Company_data').value;
                 document.getElementById('FinancialStatementCashFlow_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementCashFlowIndirectPDF?StartDate=' + financialStatementCashFlowInderect_StartDate + '&EndDate=' + financialStatementCashFlowInderect_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepCashFlowIndirect/CashFlowIndirect?StartDate=' + financialStatementCashFlowInderect_StartDate + '&EndDate=' + financialStatementCashFlowInderect_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementTrialBalancePDF_OnClick() {
+            var financialStatementTrialBalance_StartDate = document.getElementById('FinancialStatementTrialBalance_StartDate_data').value;
+            var financialStatementTrialBalance_EndDate = document.getElementById('FinancialStatementTrialBalance_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementTrialBalance_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementTrialBalance_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementTrialBalance_Company_data').value;
+                document.getElementById('FinancialStatementTrialBalance_Company').style.border = " ";
+                window.location.href = '/RepTrialBalance/TrialBalance?StartDate=' + financialStatementTrialBalance_StartDate + '&EndDate=' + financialStatementTrialBalance_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2797,7 +2797,7 @@
                 companyId = document.getElementById('FinancialStatementAccountLedger_Company_data').value;
                 accountId = document.getElementById('FinancialStatementAccountLedger_Account_data').value;
                 document.getElementById('FinancialStatementTrialBalance_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementAccountLedgerPDF?StartDate=' + financialStatementAccountLedger_StartDate + '&EndDate=' + financialStatementAccountLedger_EndDate + '&CompanyId=' + companyId + '&AccountId=' + accountId;
+                window.location.href = '/RepAccountLedger/AccountLedger?StartDate=' + financialStatementAccountLedger_StartDate + '&EndDate=' + financialStatementAccountLedger_EndDate + '&CompanyId=' + companyId + '&AccountId=' + accountId;
             }
         }
 
@@ -2813,7 +2813,7 @@
             } else {
                 companyId = document.getElementById('FinancialReceivingReceiptBook_Company_data').value;
                 document.getElementById('FinancialReceivingReceiptBook_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementReceivingReceiptBookPDF?StartDate=' + financialStatementReceivingReceiptBook_StartDate + '&EndDate=' + financialStatementReceivingReceiptBook_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepReceivingReceiptBook/ReceivingReceiptBook?StartDate=' + financialStatementReceivingReceiptBook_StartDate + '&EndDate=' + financialStatementReceivingReceiptBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2829,7 +2829,7 @@
             } else {
                 companyId = document.getElementById('FinancialStatementDisbursementBook_Company_data').value;
                 document.getElementById('FinancialStatementDisbursementBook_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementDisbursementBookPDF?StartDate=' + financialStatementDisbursementBook_StartDate + '&EndDate=' + financialStatementDisbursementBook_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepDisbursementBook/DisbursementBook?StartDate=' + financialStatementDisbursementBook_StartDate + '&EndDate=' + financialStatementDisbursementBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2845,7 +2845,7 @@
             } else {
                 companyId = document.getElementById('FinancialStatementSalesBook_Company_data').value;
                 document.getElementById('FinancialStatementSalesBook_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementSalesBookPDF?StartDate=' + financialStatementSalesBook_StartDate + '&EndDate=' + financialStatementSalesBook_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepSalesBook/SalesBook?StartDate=' + financialStatementSalesBook_StartDate + '&EndDate=' + financialStatementSalesBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2861,7 +2861,7 @@
             } else {
                 companyId = document.getElementById('FinancialStatementCollectionBook_Company_data').value;
                 document.getElementById('FinancialStatementCollectionBook_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementCollectionBookPDF?StartDate=' + financialStatementCollectionBook_StartDate + '&EndDate=' + financialStatementCollectionBook_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepCollectionBook/CollectionBook?StartDate=' + financialStatementCollectionBook_StartDate + '&EndDate=' + financialStatementCollectionBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2877,7 +2877,7 @@
             } else {
                 companyId = document.getElementById('FinancialStatementStockInBook_Company_data').value;
                 document.getElementById('FinancialStatementStockInBook_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementStockInBookPDF?StartDate=' + financialStatementStockInBook_StartDate + '&EndDate=' + financialStatementStockInBook_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepStockInBook/StockInBook?StartDate=' + financialStatementStockInBook_StartDate + '&EndDate=' + financialStatementStockInBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2893,7 +2893,7 @@
             } else {
                 companyId = document.getElementById('FinancialStatementStockOutBook_Company_data').value;
                 document.getElementById('FinancialStatementStockOutBook_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementStockOutBookPDF?StartDate=' + financialStatementStockOutBook_StartDate + '&EndDate=' + financialStatementStockOutBook_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepStockOutBook/StockOutBook?StartDate=' + financialStatementStockOutBook_StartDate + '&EndDate=' + financialStatementStockOutBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2909,7 +2909,7 @@
             } else {
                 companyId = document.getElementById('FinancialStatementStockTransferBook_Company_data').value;
                 document.getElementById('FinancialStatementStockTransferBook_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementStockTransferBookPDF?StartDate=' + financialStatementStockTransferBook_StartDate + '&EndDate=' + financialStatementStockTransferBook_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepStockTransferBook/StockTransferBook?StartDate=' + financialStatementStockTransferBook_StartDate + '&EndDate=' + financialStatementStockTransferBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -2925,12 +2925,12 @@
             } else {
                 companyId = document.getElementById('FinancialStatementJournalVoucherBook_Company_data').value;
                 document.getElementById('FinancialStatementJournalVoucherBook_Company').style.border = " ";
-                window.location.href = '/Software/FinancialStatementJournalVoucherBookPDF?StartDate=' + financialStatementJournalVoucherBook_StartDate + '&EndDate=' + financialStatementJournalVoucherBook_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/RepJournalVoucherBook/JournalVoucherBook?StartDate=' + financialStatementJournalVoucherBook_StartDate + '&EndDate=' + financialStatementJournalVoucherBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
         function FinancialStatementChartOfAccountsPDF_OnClick() {
-            window.location.href = '/Software/FinancialStatementChartOfAccountsBookPDF';
+            window.location.href = '/RepChartOfAccounts/ChartOfAccounts';
         }
 
         // ============

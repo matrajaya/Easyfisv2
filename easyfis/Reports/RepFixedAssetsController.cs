@@ -125,13 +125,13 @@ namespace easyfis.Reports
                 Decimal totalAdjustedTotalAmount = 0;
                 foreach (var item in articleInventories)
                 {
-                    tableItems.AddCell(new PdfPCell(new Phrase(item.ManualArticleCode, fontArial9)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableItems.AddCell(new PdfPCell(new Phrase(item.Article, fontArial9)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableItems.AddCell(new PdfPCell(new Phrase(item.Unit, fontArial9)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableItems.AddCell(new PdfPCell(new Phrase(item.ManualArticleCode, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableItems.AddCell(new PdfPCell(new Phrase(item.Article, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableItems.AddCell(new PdfPCell(new Phrase(item.Unit, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableItems.AddCell(new PdfPCell(new Phrase(item.Cost.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableItems.AddCell(new PdfPCell(new Phrase(item.Quantity.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableItems.AddCell(new PdfPCell(new Phrase(item.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableItems.AddCell(new PdfPCell(new Phrase(item.DateAquired, fontArial9)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableItems.AddCell(new PdfPCell(new Phrase(item.DateAquired, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableItems.AddCell(new PdfPCell(new Phrase(item.NoOfYears.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableItems.AddCell(new PdfPCell(new Phrase(item.SalvageValue.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableItems.AddCell(new PdfPCell(new Phrase(item.AccumulatedDepreciation.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });

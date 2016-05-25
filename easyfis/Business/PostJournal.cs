@@ -564,7 +564,7 @@ namespace easyfis.Business
             //Int32 BankId = 0;
             String ORNumber = "";
             //Decimal Amount;
-            Int32 PayTypeAccountId = 0;
+            //Int32 PayTypeAccountId = 0;
 
             // collection Header
             var collectionHeader = from d in db.TrnCollections

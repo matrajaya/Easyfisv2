@@ -124,11 +124,11 @@ namespace easyfis.Reports
 
                 foreach (var stockOutItem in stockOutItems)
                 {
-                    tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.OT, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.OTDate, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.Item, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.OT, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.OTDate, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.Item, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.Quantity.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.Unit, fontArial10)) { HorizontalAlignment = 1, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.Unit, fontArial10)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.Cost.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableOTItems.AddCell(new PdfPCell(new Phrase(stockOutItem.Amount.ToString("#,##0.00"), fontArial10)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     total = total + stockOutItem.Amount;
