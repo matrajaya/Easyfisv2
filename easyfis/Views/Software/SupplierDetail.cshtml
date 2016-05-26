@@ -311,6 +311,13 @@
                 getArticleSupplierGroupForComboBox();
                 getArticleTermForComboBox();
 
+                document.getElementById('artcileSupplier_Supplier').value = "NA";
+                document.getElementById('artcileSupplier_Address').value = "NA";
+                document.getElementById('artcileSupplier_Particulars').value = "NA";
+                document.getElementById('artcileSupplier_TIN').value = "NA";
+                document.getElementById('artcileSupplier_ContactNo').value = "NA";
+                document.getElementById('artcileSupplier_ContactPerson').value = "NA";
+
                 NProgress.done();
             }
         }
@@ -590,7 +597,7 @@
             if (supplierEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $('#supplier_SaveButton').prop('disabled', true);
                 $('#supplier_LockButton').prop('disabled', true);
                 $('#supplier_UnlockButton').prop('disabled', true);
@@ -604,7 +611,7 @@
                     data: dataSupplierObject(),
                     statusCode: {
                         200: function () {
-                            document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                            document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                             $('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', true);
                             $('#supplier_UnlockButton').prop('disabled', true);
@@ -641,7 +648,7 @@
             if (supplierEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking...";
+                document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
                 $('#supplier_SaveButton').prop('disabled', true);
                 $('#supplier_LockButton').prop('disabled', true);
                 $('#supplier_UnlockButton').prop('disabled', true);
@@ -655,7 +662,7 @@
                     data: dataSupplierObject(),
                     statusCode: {
                         200: function () {
-                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking...";
+                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
                             $('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', true);
                             $('#supplier_UnlockButton').prop('disabled', true);
@@ -690,7 +697,7 @@
         // Unlock Supplier Button
         // ======================
         function supplierUnlockButton_OnClick() {
-            document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking...";
+            document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
             $('#supplier_SaveButton').prop('disabled', true);
             $('#supplier_LockButton').prop('disabled', true);
             $('#supplier_UnlockButton').prop('disabled', true);
@@ -704,7 +711,7 @@
                 data: {},
                 statusCode: {
                     200: function () {
-                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking...";
+                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
                         $('#supplier_SaveButton').prop('disabled', true);
                         $('#supplier_LockButton').prop('disabled', true);
                         $('#supplier_UnlockButton').prop('disabled', true);
@@ -952,51 +959,55 @@
         function getContactInformation() {
             var contactInformations = new wijmo.collections.ObservableArray;
             NProgress.start();
-            $.ajax({
-                url: '/api/listArticleContactByArticleId/' + supplierId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (contactInformationResults) {
-                    if (contactInformationResults.length > 0) {
-                        $.ajax({
-                            url: '/api/article/' + supplierId,
-                            cache: false,
-                            type: 'GET',
-                            contentType: 'application/json; charset=utf-8',
-                            data: {},
-                            success: function (supplierResults) {
-                                var btnEditId;
-                                var btnDeleteId;
-                                if (supplierResults.IsLocked == true) {
-                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
-                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
-                                } else {
-                                    btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
-                                    btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
-                                }
+            if (document.location.search.length > 0) {
+                $.ajax({
+                    url: '/api/listArticleContactByArticleId/' + supplierId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (contactInformationResults) {
+                        if (contactInformationResults.length > 0) {
+                            $.ajax({
+                                url: '/api/article/' + supplierId,
+                                cache: false,
+                                type: 'GET',
+                                contentType: 'application/json; charset=utf-8',
+                                data: {},
+                                success: function (supplierResults) {
+                                    var btnEditId;
+                                    var btnDeleteId;
+                                    if (supplierResults.IsLocked == true) {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                    } else {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                    }
 
-                                for (i = 0; i < contactInformationResults.length; i++) {
-                                    contactInformations.push({
-                                        EditId: btnEditId,
-                                        DeleteId: btnDeleteId,
-                                        Id: contactInformationResults[i]["Id"],
-                                        ArticleId: contactInformationResults[i]["ArticleId"],
-                                        Article: contactInformationResults[i]["Article"],
-                                        ContactPerson: contactInformationResults[i]["ContactPerson"],
-                                        ContactNumber: contactInformationResults[i]["ContactNumber"],
-                                        Remarks: contactInformationResults[i]["Remarks"]
-                                    });
+                                    for (i = 0; i < contactInformationResults.length; i++) {
+                                        contactInformations.push({
+                                            EditId: btnEditId,
+                                            DeleteId: btnDeleteId,
+                                            Id: contactInformationResults[i]["Id"],
+                                            ArticleId: contactInformationResults[i]["ArticleId"],
+                                            Article: contactInformationResults[i]["Article"],
+                                            ContactPerson: contactInformationResults[i]["ContactPerson"],
+                                            ContactNumber: contactInformationResults[i]["ContactNumber"],
+                                            Remarks: contactInformationResults[i]["Remarks"]
+                                        });
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        NProgress.done();
                     }
-                    NProgress.done();
-                }
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
+                }).fail(function (xhr, textStatus, err) {
+                    alert(err);
+                });
+            } else {
+                NProgress.done();
+            }
             return contactInformations;
         }
 
@@ -1020,9 +1031,9 @@
             $('#cmdContactDetailCloseButton').prop('disabled', false);
 
             document.getElementById('contact_Id').value = 0;
-            document.getElementById('contact_contactPerson').value = '';
-            document.getElementById('contact_contactNumber').value = '';
-            document.getElementById('contact_Remarks').value = '';
+            document.getElementById('contact_contactPerson').value = "NA";
+            document.getElementById('contact_contactNumber').value = "NA";
+            document.getElementById('contact_Remarks').value = "NA";
         }
 
         // ===========
@@ -1097,7 +1108,7 @@
             if (contactInformationEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $('#cmdSaveContactButton').prop('disabled', true);
                 $('#cmdContactDetailCloseButton').prop('disabled', true);
 
@@ -1110,7 +1121,7 @@
                         data: contactData,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $('#cmdSaveContactButton').prop('disabled', true);
                                 $('#cmdContactDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -1140,7 +1151,7 @@
                         data: contactData,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating...";
+                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
                                 $('#cmdSaveContactButton').prop('disabled', true);
                                 $('#cmdContactDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully updated");
@@ -1180,7 +1191,7 @@
         }
         // Contact Confirm Delete
         function cmdContactConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteContact').prop('disabled', true);
             $('#cmdConfirmDeleteContactCloseButton').prop('disabled', true);
 
@@ -1193,7 +1204,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $('#cmdConfirmDeleteContact').prop('disabled', true);
                         $('#cmdConfirmDeleteContactCloseButton').prop('disabled', true);
                         toastr.success("Successfully deleted");

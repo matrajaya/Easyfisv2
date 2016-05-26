@@ -350,6 +350,10 @@
             NProgress.start();
             var PurchaseOrderId = getParam('PurchaseOrderId');
             if (document.location.search.length == 0) {
+                document.getElementById('PO_ManualPONumber').value = "NA";
+                document.getElementById('PO_Remarks').value = "NA";
+                document.getElementById('PO_RequestNumber').value = "NA";
+
                 NProgress.done();
             } else {
                 $.ajax({
@@ -1677,7 +1681,7 @@
             document.getElementById('POLine_ItemCode_selectedValue').value = '';
             document.getElementById('POLine_ItemDescription_data').value = '';
             document.getElementById('POLine_ItemDescription_selectedValue').value = '';
-            document.getElementById('POLine_Particulars').value = '';
+            document.getElementById('POLine_Particulars').value = "NA";
             document.getElementById('POLine_Quantity').value = 0;
             document.getElementById('POLine_Unit_data').value = '';
             document.getElementById('POLine_Unit_selectedValue').value = '';

@@ -404,6 +404,9 @@
             var stockTransferId = getParam("StockTransferId");
             NProgress.start();
             if (document.location.search.length == 0) {
+                document.getElementById('stockTransfer_Particulars').value = "NA";
+                document.getElementById('stockTransfer_ManualSTNumber').value = "NA";
+
                 NProgress.done();
             } else {
                 $.ajax({

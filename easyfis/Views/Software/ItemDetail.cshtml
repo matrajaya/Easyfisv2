@@ -617,6 +617,16 @@
                 getArticleItemUnitForComboBox();
                 getArticleTaxTypeForComboBox();
 
+                document.getElementById('Item_UsefulLife').value = "0";
+                document.getElementById('Item_SalvageValue').value = "0";
+                document.getElementById('articleItem_manualCode').value = "NA";
+                document.getElementById('articleItem_item').value = "NA";
+                document.getElementById('articleItem_category').value = "NA";
+                document.getElementById('articleItem_price').value = 0;
+                document.getElementById('articleItem_particulars').value = "NA";
+                document.getElementById('articleItem_oldManualCode').value = "NA";
+                document.getElementById('articleItem_manualCost').value = "0";
+
                 NProgress.done();
             }
             return items;
@@ -1121,7 +1131,7 @@
             if (itemEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $('#item_SaveButton').prop('disabled', true);
                 $('#item_LockButton').prop('disabled', true);
                 $('#item_UnlockButton').prop('disabled', true);
@@ -1135,7 +1145,7 @@
                     data: itemDataObject(),
                     statusCode: {
                         200: function () {
-                            document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                            document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                             $('#item_SaveButton').prop('disabled', true);
                             $('#item_LockButton').prop('disabled', true);
                             $('#item_UnlockButton').prop('disabled', true);
@@ -1172,7 +1182,7 @@
             if (itemEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking...";
+                document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
                 $('#item_SaveButton').prop('disabled', true);
                 $('#item_LockButton').prop('disabled', true);
                 $('#item_UnlockButton').prop('disabled', true);
@@ -1186,7 +1196,7 @@
                     data: itemDataObject(),
                     statusCode: {
                         200: function () {
-                            document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking...";
+                            document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
                             $('#item_SaveButton').prop('disabled', true);
                             $('#item_LockButton').prop('disabled', true);
                             $('#item_UnlockButton').prop('disabled', true);
@@ -1221,7 +1231,7 @@
         // Unlock Item
         // ===========
         function itemUnlockButton_OnClick() {
-            document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking...";
+            document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
             $('#item_SaveButton').prop('disabled', true);
             $('#item_LockButton').prop('disabled', true);
             $('#item_UnlockButton').prop('disabled', true);
@@ -1235,7 +1245,7 @@
                 data: {},
                 statusCode: {
                     200: function () {
-                        document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking...";
+                        document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
                         $('#item_SaveButton').prop('disabled', true);
                         $('#item_LockButton').prop('disabled', true);
                         $('#item_UnlockButton').prop('disabled', true);
@@ -1495,7 +1505,7 @@
             });
 
             document.getElementById('unitConversion_Id').value = 0;
-            document.getElementById('unitConversion_multiplier').value = '';
+            document.getElementById('unitConversion_multiplier').value = 0;
             document.getElementById('unitConversion_countUnit').checked = false;
 
             unitConversionUnitSelectedValue = '';
@@ -1532,7 +1542,7 @@
         }
         // confirm delete Unit Conversion
         function cmdUnitConversionConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteUnitConversion').prop('disabled', true);
             $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', true);
 
@@ -1605,7 +1615,7 @@
             if (unitConversionEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $('#cmdSaveUnitConversionButton').prop('disabled', true);
                 $('#cmdUnitConversionDetailCloseButton').prop('disabled', true);
 
@@ -1963,10 +1973,11 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('component_Quantity').value = 0;
             document.getElementById('component_Id').value = 0;
-            document.getElementById('component_cost').value = '';
-            document.getElementById('component_amount').value = '';
-            document.getElementById('component_particulars').value = '';
+            document.getElementById('component_cost').value = 0;
+            document.getElementById('component_amount').value = 0;
+            document.getElementById('component_particulars').value = 'NA';
             getArticleItemForManualCodeAndComponent();
         }
 
@@ -2187,9 +2198,9 @@
             $('#cmdPriceDetailCloseButton').prop('disabled', false);
 
             document.getElementById('price_Id').value = 0;
-            document.getElementById('price_PriceDescription').value = '';
-            document.getElementById('price_Price').value = '';
-            document.getElementById('price_Remarks').value = '';
+            document.getElementById('price_PriceDescription').value = "NA";
+            document.getElementById('price_Price').value = 0;
+            document.getElementById('price_Remarks').value = "NA";
         }
 
         // ==========
@@ -2239,7 +2250,7 @@
         }
         // confirm delete price
         function cmdPriceConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeletePrice').prop('disabled', true);
             $('#cmdConfirmDeletePriceCloseButton').prop('disabled', true);
 
@@ -2252,7 +2263,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $('#cmdConfirmDeletePrice').prop('disabled', true);
                         $('#cmdConfirmDeletePriceCloseButton').prop('disabled', true);
                         toastr.success("Successfully deleted");
@@ -2292,7 +2303,7 @@
             if (priceEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $('#cmdSavePriceButton').prop('disabled', true);
                 $('#cmdPriceDetailCloseButton').prop('disabled', true);
 
@@ -2305,7 +2316,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $('#cmdSavePriceButton').prop('disabled', true);
                                 $('#cmdPriceDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -2337,7 +2348,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating...";
+                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
                                 $('#cmdSavePriceButton').prop('disabled', true);
                                 $('#cmdPriceDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully updated");

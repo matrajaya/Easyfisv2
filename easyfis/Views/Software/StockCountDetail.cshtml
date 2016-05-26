@@ -300,6 +300,8 @@
 
                 $("#btnIdStockCountItemAdd").prop("disabled", true);
 
+                document.getElementById("txtAreaStockCountDetailParticulars").value = "NA";
+
                 NProgress.done();
             }
         }
@@ -711,8 +713,8 @@
             stockCountItemId = 0;
             itemSelectedValue = "";
             itemCodeSelectedValue = "";
-            document.getElementById("txtAreaIdStockCountItemParticulars").value = "";
-            document.getElementById("inputIdStockCountItemQuantity").value = "";
+            document.getElementById("txtAreaIdStockCountItemParticulars").value = "NA";
+            document.getElementById("inputIdStockCountItemQuantity").value = "0";
             itemUnitSelectedValue = "";
             getItemForComboBox();
         }

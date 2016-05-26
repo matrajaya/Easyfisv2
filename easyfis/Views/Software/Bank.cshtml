@@ -97,7 +97,7 @@
                             <dt>Code</dt>
                             <dd><input type="text" class="form-control input-30 input-sm requiredBank" id="bank_code" readonly /></dd>
                             <dt>Bank</dt>
-                            <dd><input type="text" class="form-control input-sm requiredBank" id="bank_bank" /></dd>
+                            <dd><input type="text" class="form-control input-sm requiredBank" id="bank_bank" placeholder="Bank" /></dd>
                             <dt>Bank Group</dt>
                             <dd>
                                 <div id="bank_BankGroup" class="comboBox-wide"></div>
@@ -119,11 +119,11 @@
                                 <input type="hidden" id="bank_ExpenseAccountId" />
                             </dd>
                             <dt>Address</dt>
-                            <dd><textarea class="form-control textarea-custom requiredBank" id="bank_Address"></textarea></dd>
+                            <dd><textarea class="form-control textarea-custom requiredBank" id="bank_Address" placeholder="Address"></textarea></dd>
                             <dt>Contact Number</dt>
-                            <dd><input type="text" class="form-control input-sm requiredBank" id="bank_ContactNumber" /></dd>
+                            <dd><input type="text" class="form-control input-sm requiredBank" id="bank_ContactNumber" placeholder="Contact Number" /></dd>
                             <dt>Contect Person</dt>
-                            <dd><input type="text" class="form-control input-sm requiredBank" id="branch_ContactPerson" /></dd>
+                            <dd><input type="text" class="form-control input-sm requiredBank" id="branch_ContactPerson" placeholder="Contect Person" /></dd>
                             <dt>Lock (Edit)</dt>
                             <dd><input type="checkbox" id="bank_Lock" /></dd>
                         </dl>
@@ -558,20 +558,20 @@
                 }
             });
 
-            document.getElementById('bank_bank').value = '';
-            document.getElementById('bank_BankGroup_data').value = '';
-            document.getElementById('bank_BankGroup_selectedValue').value = '';
-            document.getElementById('bank_Account_data').value = '';
+            document.getElementById('bank_bank').value = "NA";
+            document.getElementById('bank_BankGroup_data').value = "";
+            document.getElementById('bank_BankGroup_selectedValue').value = "";
+            document.getElementById('bank_Account_data').value = "";
 
-            document.getElementById('bank_SalesAccountId').value = '';
-            document.getElementById('bank_CostAccountId').value = '';
-            document.getElementById('bank_AssetAccountId').value = '';
-            document.getElementById('bank_ExpenseAccountId').value = '';
+            document.getElementById('bank_SalesAccountId').value = "";
+            document.getElementById('bank_CostAccountId').value = "";
+            document.getElementById('bank_AssetAccountId').value = "";
+            document.getElementById('bank_ExpenseAccountId').value = "";
 
-            document.getElementById('bank_Account_selectedValue').value = '';
-            document.getElementById('bank_Address').value = '';
-            document.getElementById('bank_ContactNumber').value = '';
-            document.getElementById('branch_ContactPerson').value = '';
+            document.getElementById('bank_Account_selectedValue').value = "";
+            document.getElementById('bank_Address').value = "NA";
+            document.getElementById('bank_ContactNumber').value = "NA";
+            document.getElementById('branch_ContactPerson').value = "NA";
 
             document.getElementById('bank_Lock').checked = false
             if (document.getElementById('bank_Lock').checked == true) {

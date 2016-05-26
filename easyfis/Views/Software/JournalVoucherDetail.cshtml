@@ -451,6 +451,9 @@
             var journalVoucherId = getParam("JournalVoucherId");
             NProgress.start();
             if (document.location.search.length == 0) {
+                document.getElementById('manual_JournalVoucher_No').value = "NA";
+                document.getElementById('journalVoucher_Particulars').value = "NA";
+
                 NProgress.done();
             } else {
                 $.ajax({
@@ -1849,7 +1852,7 @@
             document.getElementById('JVL_Account_Id_selectedValue').value = '';
             document.getElementById('JVL_Aritcle_Id_Data').value = '';
             document.getElementById('JVL_Aritcle_Id_selectedValue').value = '';
-            document.getElementById('JVL_Particulars').value = '';
+            document.getElementById('JVL_Particulars').value = 'NA';
             document.getElementById('JVL_DebitAmount').value = '0';
             document.getElementById('JVL_CreditAmount').value = '0';
             document.getElementById('JVL_APRRId_data').value = '';

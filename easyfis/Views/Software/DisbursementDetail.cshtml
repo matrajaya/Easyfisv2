@@ -1047,6 +1047,11 @@
             var disbursementId = getParam("DisbursementId");
             NProgress.start();
             if (document.location.search.length == 0) {
+                document.getElementById('disbursement_ManualCVNumber').value = "NA";
+                document.getElementById('disbursement_Payee').value = "NA";
+                document.getElementById('disbursement_Particulars').value = "NA";
+                document.getElementById('disbursement_CheckNumber').value = "NA";
+
                 NProgress.done();
             } else {
                 $.ajax({
@@ -2613,7 +2618,7 @@
             document.getElementById('disbursementLine_account_selectedValue').value = '';
             document.getElementById('disbursementLine_article_data').value = '';
             document.getElementById('disbursementLine_article_selectedValue').value = '';
-            document.getElementById('disbursementLine_Particulars').value = '';
+            document.getElementById('disbursementLine_Particulars').value = 'NA';
             document.getElementById('disbursementLine_RRNo_data').value = '';
             document.getElementById('disbursementLine_RRNo_selectedValue').value = '';
             document.getElementById('disbursementLine_Amount').value = '0';

@@ -288,7 +288,7 @@
         }
         // Item Confirm Delete Button
         function cmdItemConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteItem').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
 
@@ -301,7 +301,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeleteItem').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $('#cmdConfirmDeleteItem').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
                         toastr.success("Successfully Deleted");

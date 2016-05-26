@@ -461,6 +461,10 @@
         function getSalesById() {
             var salesId = getParam('SalesId');
             if (document.location.search.length == 0) {
+                document.getElementById('SI_DocReference').value = "NA";
+                document.getElementById('SI_SIRemarks').value = "NA";
+                document.getElementById('SI_ManualSINumber').value = "NA";
+
                 NProgress.done();
             } else {
                 NProgress.start();

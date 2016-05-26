@@ -414,6 +414,9 @@
             NProgress.start();
             var stockInId = getParam("StockInId");
             if (document.location.search.length == 0) {
+                document.getElementById('StockIn_Particulars').value = "NA";
+                document.getElementById('StockIn_ManualINNumber').value = "NA";
+               
                 NProgress.done();
             } else {
                 $.ajax({

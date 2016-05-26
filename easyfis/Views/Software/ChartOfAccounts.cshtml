@@ -807,8 +807,8 @@
             $('#cmdEditUnLockAccountButton').prop('disabled', true);
 
             document.getElementById('account_id').value = 0;
-            document.getElementById('account_code').value = "";
-            document.getElementById('account_account').value = "";
+            document.getElementById('account_code').value = "NA";
+            document.getElementById('account_account').value = "NA";
 
             getAccountTypeForComboBox();
             getAccountCashFlowForComboBox();
@@ -866,7 +866,7 @@
                 getAccountCashFlowForComboBox();
             }
 
-            document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+            document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading';
             $('#loadingAccountArtitleType').show();
             $('#AccountArticleTypeGrid').hide();
             $('#accountArticleTypeDiv').hide();
@@ -877,7 +877,7 @@
                 $('#accountArticleTypeDiv').show();
                 $('#hrAccountArticleType').show();
                 refreshAccountArticleTypeFlexgrid();
-            }, 500);
+            }, 1000);
         }
 
         // ========================
@@ -935,7 +935,7 @@
             if (accountEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSaveAccountButton").prop("disabled", true);
                 $("#cmdAccountDetailCloseButton").prop("disabled", true);
 
@@ -948,7 +948,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveAccountButton").prop("disabled", true);
                                 $("#cmdAccountDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully saved");
@@ -978,7 +978,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating...";
+                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
                                 $("#cmdSaveAccountButton").prop("disabled", true);
                                 $("#cmdAccountDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully updated");
@@ -1018,7 +1018,7 @@
         }
         // Account Confirm Delete Button
         function cmdAccountConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteAccount").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", true);
 
@@ -1031,7 +1031,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $("#cmdConfirmDeleteAccount").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", true);
                         toastr.success("Successfully deleted");
@@ -1290,7 +1290,7 @@
         }
         // Account ArticleType Confirm Delete Button
         function cmdAccountArticleTypeConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteAccountArticleType").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", true);
 
@@ -1303,7 +1303,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $("#cmdConfirmDeleteAccountArticleType").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", true);
                         toastr.success("Successfully deleted");
@@ -1369,7 +1369,7 @@
             if (accountArticleTypeEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSaveaccountArticleTypeButton").prop("disabled", true);
                 $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", true);
                 if (accountArticleType_id == 0) {
@@ -1381,7 +1381,7 @@
                         data: accountArticleTypeData,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveaccountArticleTypeButton").prop("disabled", true);
                                 $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully saved");
@@ -1413,7 +1413,7 @@
                         data: accountArticleTypeData,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating...";
+                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
                                 $("#cmdSaveaccountArticleTypeButton").prop("disabled", true);
                                 $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully updated");
@@ -1811,9 +1811,9 @@
             Islocked = false;
 
             document.getElementById('accountType_id').value = 0;
-            document.getElementById('accountType_code').value = "";
-            document.getElementById('accountType_accountType').value = "";
-            document.getElementById('accountType_SubCategoryDescription').value = "";
+            document.getElementById('accountType_code').value = "NA";
+            document.getElementById('accountType_accountType').value = "NA";
+            document.getElementById('accountType_SubCategoryDescription').value = "NA";
             document.getElementById('accountTypeEdit_IsLocked').checked = false;
 
             if (document.getElementById('accountTypeEdit_IsLocked').checked == true) {
@@ -1902,7 +1902,7 @@
             if (accountTypeEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSaveAccountTypeButton").prop("disabled", true);
                 $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
 
@@ -1915,7 +1915,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveAccountTypeButton").prop("disabled", true);
                                 $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
                                 $('#accountTypeEdit').modal('hide');
@@ -1947,7 +1947,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating...";
+                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
                                 $("#cmdSaveAccountTypeButton").prop("disabled", true);
                                 $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
                                 $('#accountTypeEdit').modal('hide');
@@ -1996,7 +1996,7 @@
         }
         // Account Type Confirm Delete Button
         function cmdAccountTypeConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteAccountType").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
 
@@ -2009,7 +2009,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $("#cmdConfirmDeleteAccountType").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
                         $('#deleteAccountTypeConfirm').modal('hide');
@@ -2331,8 +2331,8 @@
             $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
 
             document.getElementById('accountCashFlow_Id').value = 0;
-            document.getElementById('accountCashFlow_Code').value = "";
-            document.getElementById('accountCashFlow_CashFlow').value = "";
+            document.getElementById('accountCashFlow_Code').value = "NA";
+            document.getElementById('accountCashFlow_CashFlow').value = "NA";
             document.getElementById('accountCashFlowEdit_IsLocked').checked = false;
 
             if (document.getElementById('accountCashFlowEdit_IsLocked').checked == true) {
@@ -2361,7 +2361,7 @@
             if (accountCashFlowEntryValidation() == false) {
                 toastr.error("Invalid Entry");
             } else {
-                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
                 $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
 
@@ -2374,7 +2374,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
                                 $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully saved");
@@ -2406,7 +2406,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating...";
+                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
                                 $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
                                 $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully updated");
@@ -2492,7 +2492,7 @@
         }
         // Account Cash Flow Confirm Delete Button
         function cmdAccountCashFlowConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", true);
 
@@ -2505,7 +2505,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", true);
                         toastr.success("Successfully Deleted");
@@ -2812,8 +2812,8 @@
             $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
 
             document.getElementById('accountCategory_Id').value = 0;
-            document.getElementById('accountCategory_Code').value = "";
-            document.getElementById('accountCategory_Category').value = "";
+            document.getElementById('accountCategory_Code').value = "NA";
+            document.getElementById('accountCategory_Category').value = "NA";
             document.getElementById('accountCategoryEdit_IsLocked').checked = false;
 
             if (document.getElementById('accountCategoryEdit_IsLocked').checked == true) {
@@ -2881,7 +2881,7 @@
                 toastr.error("Invalid Entry");
             }
             else {
-                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSaveAccountCategoryButton").prop("disabled", true);
                 $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
 
@@ -2894,7 +2894,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving...";
+                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveAccountCategoryButton").prop("disabled", true);
                                 $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully saved");
@@ -2926,7 +2926,7 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating...";
+                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
                                 $("#cmdSaveAccountCategoryButton").prop("disabled", true);
                                 $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully updated");
@@ -2975,7 +2975,7 @@
         }
         // Account Category Confirm Delete Button
         function cmdAccountCategoryConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteAccountCategory").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", true);
 
@@ -2988,7 +2988,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $("#cmdConfirmDeleteAccountCategory").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", true);
                         $('#deleteAccountCategoryConfirm').modal('hide');
@@ -3171,6 +3171,7 @@
                 return true;
             };
         });
+
         $('#accountTypeTabId').click(function () {
             $('#Account').hide();
             $('#AccountType').show();
@@ -3181,6 +3182,7 @@
                 return true;
             };
         });
+
         $('#accountCashFlowTabId').click(function () {
             $('#Account').hide();
             $('#AccountType').hide();
@@ -3191,6 +3193,7 @@
                 return true;
             };
         });
+
         $('#accountCategoryTabId').click(function () {
             $('#Account').hide();
             $('#AccountType').hide();
@@ -3207,7 +3210,6 @@
             $('#AccountType').hide();
             $('#AccountCashFlow').hide();
             $('#AccountCategory').hide();
-
             accountTab();
 
             $(document).on('show.bs.modal', '.modal', function (event) {
@@ -3289,7 +3291,7 @@
                         accountTypeSelectedValue = cboAccountType.selectedItem["AccountType"].toString();
                         accountCashFlowSelectedValue = cboAccountCashFlow.selectedItem["AccountCashFlow"].toString();
                         document.getElementById("accountLockAndUnLock").innerHTML = '<i class="fa fa-lock"></i>';
-                        document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+                        document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading';
                         $('#loadingAccountArtitleType').show();
                         $('#AccountArticleTypeGrid').hide();
                         $('#accountArticleTypeDiv').hide();
@@ -3318,7 +3320,7 @@
                         document.getElementById('account_account').disabled = false;
                         $('#btnAddACcountArticleType').prop('disabled', false);
                         document.getElementById("accountLockAndUnLock").innerHTML = '<i class="fa fa-unlock"></i>';
-                        document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+                        document.getElementById("loadingAccountArtitleType").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading';
                         $('#loadingAccountArtitleType').show();
                         $('#AccountArticleTypeGrid').hide();
                         $('#accountArticleTypeDiv').hide();

@@ -577,6 +577,10 @@
             var ReceivingReceiptId = getParam('ReceivingReceiptId');
             NProgress.start();
             if (document.location.search.length == 0) {
+                document.getElementById('RRDocReference').value = "NA";
+                document.getElementById('RRRemarks').value = "NA";
+                document.getElementById('RRManualRRNumber').value = "NA";
+
                 NProgress.done();
             } else {
                 $.ajax({

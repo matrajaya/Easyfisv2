@@ -435,6 +435,9 @@
             var stockOutId = getParam("StockOutId");
             NProgress.start();
             if(document.location.search.length == 0) {
+                document.getElementById('StockOut_Particulars').value = "NA";
+                document.getElementById('StockOUt_ManualOTNumber').value = "NA";
+
                 NProgress.done();
             } else {
                 $.ajax({

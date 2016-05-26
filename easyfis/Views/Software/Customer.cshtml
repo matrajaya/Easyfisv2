@@ -286,7 +286,7 @@
         }
         // Customer Confirm Delete Button
         function cmdCustomerConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteCustomer').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
 
@@ -299,7 +299,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeleteCustomer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $('#cmdConfirmDeleteCustomer').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
                         toastr.success("Successfully deleted");

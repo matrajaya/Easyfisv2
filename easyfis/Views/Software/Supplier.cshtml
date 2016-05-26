@@ -285,7 +285,7 @@
         }
         // Supplier Confirm Delete Button
         function cmdSupplierConfirmDeleteButton_OnClick() {
-            document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+            document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $('#cmdConfirmDeleteSupplier').prop('disabled', true);
             $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
 
@@ -298,7 +298,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting...";
+                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
                         $('#cmdConfirmDeleteSupplier').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
                         toastr.success("Successfully deleted");
