@@ -93,6 +93,7 @@ namespace easyfis.Reports
             Decimal totalCurrentAsset = 0;
             Decimal totalCurrentLiabilities = 0;
             Decimal totalStockHoldersEquity = 0;
+            Decimal balanceEquityCashflowAmount = 0;
 
             if (accountTypeSubCategory_Journal_Assets.Any())
             {
@@ -311,6 +312,151 @@ namespace easyfis.Reports
                 }
             }
 
+            var accountSubCategoryDescriptions = from d in db.MstAccountTypes
+                                                 where d.AccountCategoryId == 4
+                                                 group d by new
+                                                 {
+                                                     SubCategoryDescription = d.SubCategoryDescription
+                                                 } into g
+                                                 select new Models.TrnJournal
+                                                 {
+                                                     SubCategoryDescription = g.Key.SubCategoryDescription
+                                                 };
+
+
+            foreach (var accountSubCategoryDescription in accountSubCategoryDescriptions)
+            {
+                // table Balance Sheet Equity
+                PdfPTable tableBalanceSheetHeader = new PdfPTable(3);
+                float[] widthCellsTableBalanceSheetHeader = new float[] { 50f, 100f, 50f };
+                tableBalanceSheetHeader.SetWidths(widthCellsTableBalanceSheetHeader);
+                tableBalanceSheetHeader.WidthPercentage = 100;
+
+                document.Add(line);
+
+                PdfPCell headerSubCategoryColspan = (new PdfPCell(new Phrase(accountSubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                headerSubCategoryColspan.Colspan = 3;
+                tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
+
+                document.Add(tableBalanceSheetHeader);
+                //totalStockHoldersEquity = accountTypeSubCategory_JournalEquity.CreditAmount;
+            }
+
+            var identityUserId = User.Identity.GetUserId();
+            var mstUserId = from d in db.MstUsers where d.UserId == identityUserId select d;
+            var incomeAccount = from d in db.MstAccounts where d.Id == mstUserId.FirstOrDefault().IncomeAccountId select d;
+
+            var cashFlowIncome = from d in db.TrnJournals
+                                 where d.MstBranch.CompanyId == CompanyId
+                                 && d.JournalDate <= Convert.ToDateTime(DateAsOf)
+                                 && (d.MstAccount.MstAccountType.AccountCategoryId == 5 || d.MstAccount.MstAccountType.AccountCategoryId == 6)
+                                 select new Models.TrnJournal
+                                 {
+                                     AccountCashFlowCode = d.MstAccount.MstAccountCashFlow.AccountCashFlowCode,
+                                     AccountCashFlow = d.MstAccount.MstAccountCashFlow.AccountCashFlow,
+                                     AccountTypeCode = d.MstAccount.MstAccountType.AccountTypeCode,
+                                     AccountType = d.MstAccount.MstAccountType.AccountType,
+                                     AccountCode = d.MstAccount.AccountCode,
+                                     Account = d.MstAccount.Account,
+                                     SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription,
+                                     DebitAmount = d.DebitAmount,
+                                     CreditAmount = d.CreditAmount
+                                 };
+
+            var cashFlowBalanceSheet = from d in db.TrnJournals
+                                       where d.MstBranch.CompanyId == CompanyId
+                                       && d.JournalDate <= Convert.ToDateTime(DateAsOf)
+                                       && d.MstAccount.MstAccountType.AccountCategoryId < 5
+                                       && (d.MstAccount.AccountCashFlowId == null ? 4 : d.MstAccount.AccountCashFlowId) <= 3
+                                        && d.MstAccount.MstAccountType.Id == incomeAccount.FirstOrDefault().Id
+                                       select new Models.TrnJournal
+                                       {
+                                           AccountCashFlowCode = d.MstAccount.MstAccountCashFlow.AccountCashFlowCode,
+                                           AccountCashFlow = d.MstAccount.MstAccountCashFlow.AccountCashFlow,
+                                           AccountTypeCode = d.MstAccount.MstAccountType.AccountTypeCode,
+                                           AccountType = d.MstAccount.MstAccountType.AccountType,
+                                           AccountCode = d.MstAccount.AccountCode,
+                                           Account = d.MstAccount.Account,
+                                           SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription,
+                                           DebitAmount = d.DebitAmount,
+                                           CreditAmount = d.CreditAmount
+                                       };
+
+            var accountCashFlowGroupFromCashFlowIncome = from d in cashFlowIncome
+                                                         group d by new
+                                                         {
+                                                             AccountCashFlowCode = d.AccountCashFlowCode,
+                                                             AccountCashFlow = d.AccountCashFlow,
+                                                             AccountTypeCode = incomeAccount.FirstOrDefault().MstAccountType.AccountTypeCode,
+                                                             AccountType = incomeAccount.FirstOrDefault().MstAccountType.AccountType,
+                                                             AccountCode = "0000",
+                                                             Account = incomeAccount.FirstOrDefault().Account,
+                                                         } into g
+                                                         select new Models.TrnJournal
+                                                         {
+                                                             AccountCashFlowCode = g.Key.AccountCashFlowCode,
+                                                             AccountCashFlow = g.Key.AccountCashFlow,
+                                                             AccountTypeCode = g.Key.AccountTypeCode,
+                                                             AccountType = g.Key.AccountType,
+                                                             AccountCode = g.Key.AccountCode,
+                                                             Account = g.Key.Account,
+                                                             DebitAmount = g.Sum(d => d.DebitAmount),
+                                                             CreditAmount = g.Sum(d => d.CreditAmount),
+                                                             Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                         };
+
+            var accountCashFlowGroupFromCashFlowBalanceSheet = from d in cashFlowBalanceSheet
+                                                               group d by new
+                                                               {
+                                                                   AccountCashFlowCode = d.AccountCashFlowCode,
+                                                                   AccountCashFlow = d.AccountCashFlow,
+                                                                   AccountTypeCode = d.AccountTypeCode,
+                                                                   AccountType = d.AccountType,
+                                                                   AccountCode = d.AccountCode,
+                                                                   Account = d.Account
+                                                               } into g
+                                                               select new Models.TrnJournal
+                                                               {
+                                                                   AccountCashFlowCode = g.Key.AccountCashFlowCode,
+                                                                   AccountCashFlow = g.Key.AccountCashFlow,
+                                                                   AccountTypeCode = g.Key.AccountTypeCode,
+                                                                   AccountType = g.Key.AccountType,
+                                                                   AccountCode = g.Key.AccountCode,
+                                                                   Account = g.Key.Account,
+                                                                   DebitAmount = g.Sum(d => d.DebitAmount),
+                                                                   CreditAmount = g.Sum(d => d.CreditAmount),
+                                                                   Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
+                                                               };
+
+            var unionAccountCashFlowGroups = accountCashFlowGroupFromCashFlowIncome.Union(accountCashFlowGroupFromCashFlowBalanceSheet).OrderBy(d => d.AccountCashFlowCode);
+
+
+            foreach (var accountCashFlowGroupFromCashFlowIncomes in accountCashFlowGroupFromCashFlowIncome)
+            {
+                balanceEquityCashflowAmount = accountCashFlowGroupFromCashFlowIncomes.Balance;
+
+                // table Balance Sheet Equity
+                PdfPTable tableBalanceSheetEquityAccounts = new PdfPTable(3);
+                float[] widthCellsTableBalanceSheetEquityAccounts = new float[] { 50f, 100f, 50f };
+                tableBalanceSheetEquityAccounts.SetWidths(widthCellsTableBalanceSheetEquityAccounts);
+                tableBalanceSheetEquityAccounts.WidthPercentage = 100;
+                tableBalanceSheetEquityAccounts.AddCell(new PdfPCell(new Phrase(accountCashFlowGroupFromCashFlowIncomes.AccountType, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                tableBalanceSheetEquityAccounts.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                tableBalanceSheetEquityAccounts.AddCell(new PdfPCell(new Phrase(accountCashFlowGroupFromCashFlowIncomes.Balance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+
+                foreach (var unionAccountCashFlowGroup in unionAccountCashFlowGroups)
+                {
+                   // Decimal balanceEquityAmountForAccounts = accounts_JournalEquity.CreditAmount - accounts_JournalEquity.DebitAmount;
+
+                    tableBalanceSheetEquityAccounts.AddCell(new PdfPCell(new Phrase(unionAccountCashFlowGroup.AccountCode, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                    tableBalanceSheetEquityAccounts.AddCell(new PdfPCell(new Phrase(unionAccountCashFlowGroup.Account, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                    tableBalanceSheetEquityAccounts.AddCell(new PdfPCell(new Phrase(unionAccountCashFlowGroup.Balance.ToString("#,##0.00"), fontArial10)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                }
+
+                document.Add(tableBalanceSheetEquityAccounts);
+            }
+
+
             // retrieve account sub category journal Equity
             var accountTypeSubCategory_JournalEquities = from d in db.TrnJournals
                                                          where d.JournalDate <= Convert.ToDateTime(DateAsOf)
@@ -349,23 +495,23 @@ namespace easyfis.Reports
             {
                 if (accountTypeJournal_Equities.Any())
                 {
-                    foreach (var accountTypeSubCategory_JournalEquity in accountTypeSubCategory_JournalEquities)
-                    {
-                        // table Balance Sheet Equity
-                        PdfPTable tableBalanceSheetHeader = new PdfPTable(3);
-                        float[] widthCellsTableBalanceSheetHeader = new float[] { 50f, 100f, 50f };
-                        tableBalanceSheetHeader.SetWidths(widthCellsTableBalanceSheetHeader);
-                        tableBalanceSheetHeader.WidthPercentage = 100;
+                    //foreach (var accountTypeSubCategory_JournalEquity in accountTypeSubCategory_JournalEquities)
+                    //{
+                    //    // table Balance Sheet Equity
+                    //    PdfPTable tableBalanceSheetHeader = new PdfPTable(3);
+                    //    float[] widthCellsTableBalanceSheetHeader = new float[] { 50f, 100f, 50f };
+                    //    tableBalanceSheetHeader.SetWidths(widthCellsTableBalanceSheetHeader);
+                    //    tableBalanceSheetHeader.WidthPercentage = 100;
 
-                        document.Add(line);
+                    //    document.Add(line);
 
-                        PdfPCell headerSubCategoryColspan = (new PdfPCell(new Phrase(accountTypeSubCategory_JournalEquity.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
-                        headerSubCategoryColspan.Colspan = 3;
-                        tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
+                    //    PdfPCell headerSubCategoryColspan = (new PdfPCell(new Phrase(accountTypeSubCategory_JournalEquity.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                    //    headerSubCategoryColspan.Colspan = 3;
+                    //    tableBalanceSheetHeader.AddCell(headerSubCategoryColspan);
 
-                        document.Add(tableBalanceSheetHeader);
-                        //totalStockHoldersEquity = accountTypeSubCategory_JournalEquity.CreditAmount;
-                    }
+                    //    document.Add(tableBalanceSheetHeader);
+                    //    //totalStockHoldersEquity = accountTypeSubCategory_JournalEquity.CreditAmount;
+                    //}
 
                     foreach (var accountTypeJournal_Equity in accountTypeJournal_Equities)
                     {
@@ -438,8 +584,8 @@ namespace easyfis.Reports
 
             document.Add(line);
 
-            Decimal totalLiabilityAndEquity = totalCurrentLiabilities + totalStockHoldersEquity;
-            Decimal totalBalance = totalCurrentAsset - totalCurrentLiabilities - totalStockHoldersEquity;
+            Decimal totalLiabilityAndEquity = totalCurrentLiabilities + totalStockHoldersEquity - balanceEquityCashflowAmount;
+            Decimal totalBalance = totalCurrentAsset - totalCurrentLiabilities - totalStockHoldersEquity - balanceEquityCashflowAmount;
 
             // table Balance Sheet
             PdfPTable tableBalanceSheetFooterTotalLiabilityAndEquity = new PdfPTable(4);

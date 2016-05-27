@@ -1739,10 +1739,10 @@
                     $("#stockInItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
                     $("#stockInItem_ItemCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
                     $("#stockInItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
-                    $("#stockInItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
-                    $("#stockInItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
-                    $("#stockInItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
-                    $("#stockInItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    //$("#stockInItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    //$("#stockInItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    //$("#stockInItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    //$("#stockInItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
                     $("#stockInItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
 
                     stockIns = new wijmo.collections.ObservableArray;
@@ -1805,7 +1805,6 @@
                     });
 
                     createCboForItemDescription(articleItems);
-                    getStockInItemUnitForComboBox();
                 }
             });
 
@@ -1822,13 +1821,11 @@
                 document.getElementById('stockInItem_ItemId_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId;
                 document.getElementById('stockInItem_ItemCode_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemCode;
                 document.getElementById('stockInItem_ItemDescription_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemDescription;
-                document.getElementById('stockInItem_Unit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
-                document.getElementById('stockInItem_Unit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
-                document.getElementById('stockInItem_BUCUnit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
-                document.getElementById('stockInItem_BUCUnit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
+                //document.getElementById('stockInItem_Unit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
+                //document.getElementById('stockInItem_Unit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
+                //document.getElementById('stockInItem_BUCUnit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
+                //document.getElementById('stockInItem_BUCUnit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
                 document.getElementById('stockInItem_Particulars').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Particulars;
-
-                getStockInItemUnitForComboBox();
             }
         }
 
@@ -1864,11 +1861,13 @@
                     $("#stockInItem_ItemId_data").val(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
                     $("#stockInItem_ItemCode_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemCode);
                     $("#stockInItem_ItemDescription_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemDescription);
-                    $("#stockInItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
-                    $("#stockInItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
-                    $("#stockInItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
-                    $("#stockInItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+                    //$("#stockInItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    //$("#stockInItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+                    //$("#stockInItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    //$("#stockInItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
                     $("#stockInItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
+                    
+                    getStockInItemUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
 
                     stockIns = new wijmo.collections.ObservableArray;
                     var stockInId = getParam("StockInId");
@@ -1929,7 +1928,6 @@
                     });
 
                     createCboForManualCode(articleItems);
-                    getStockInItemUnitForComboBox();
                 }
             });
 
@@ -1946,21 +1944,23 @@
                 document.getElementById('stockInItem_ItemId_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId;
                 document.getElementById('stockInItem_ItemCode_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemCode;
                 document.getElementById('stockInItem_ItemDescription_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemDescription;
-                document.getElementById('stockInItem_Unit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
-                document.getElementById('stockInItem_Unit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
-                document.getElementById('stockInItem_BUCUnit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
-                document.getElementById('stockInItem_BUCUnit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
+                //document.getElementById('stockInItem_Unit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
+                //document.getElementById('stockInItem_Unit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
+                //document.getElementById('stockInItem_BUCUnit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
+                //document.getElementById('stockInItem_BUCUnit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
                 document.getElementById('stockInItem_Particulars').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Particulars;
+            
+                getStockInItemUnitForComboBox(ItemDescriptionCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
             }
         }
 
         // =============
         // Get Item Unit
         // =============
-        function getStockInItemUnitForComboBox() {
-            stockInUnits = new wijmo.collections.ObservableArray();
+        function getStockInItemUnitForComboBox(itemId) {
+            var stockInUnits = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listUnit',
+                url: '/api/listArticleUnitByArticleId/' + itemId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1969,7 +1969,7 @@
                     if (results.length > 0) {
                         for (i = 0; i < results.length; i++) {
                             stockInUnits.push({
-                                UnitId: results[i]["Id"],
+                                UnitId: results[i]["UnitId"],
                                 Unit: results[i]["Unit"]
                             });
                         }
@@ -1981,6 +1981,8 @@
                     }
                 }
             });
+
+            return stockInUnits;
         }
 
         // =====================
@@ -1998,7 +2000,6 @@
                 placeholder: "Select Unit",
                 itemsSource: StockInUnitList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockInItem_Unit_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockInItem_Unit_data").val(StockInUnitCollection.items[this.selectedIndex].UnitId);
@@ -2009,6 +2010,19 @@
                     createCboForStockInBaseUnit(stockInUnits);
                 }
             });
+                        
+            if(stockInUnits > 0) {
+                document.getElementById('stockInItem_Unit_data').value = StockInUnitCollection.items[cboStockInUnit.selectedIndex].UnitId;
+                document.getElementById('stockInItem_Unit_selectedValue').value = StockInUnitCollection.items[cboStockInUnit.selectedIndex].Unit;
+                document.getElementById('stockInItem_BUCUnit_data').value = StockInUnitCollection.items[cboStockInUnit.selectedIndex].UnitId;
+                document.getElementById('stockInItem_BUCUnit_selectedValue').value = StockInUnitCollection.items[cboStockInUnit.selectedIndex].Unit;
+            } else {
+                document.getElementById('stockInItem_Unit_data').value = 0;
+                document.getElementById('stockInItem_Unit_selectedValue').value = 0;
+                document.getElementById('stockInItem_BUCUnit_data').value = 0;
+                document.getElementById('stockInItem_BUCUnit_selectedValue').value = 0;
+            }
+
         }
 
         // ==========================
@@ -2067,8 +2081,8 @@
             document.getElementById('stockInItem_ItemDescription_selectedValue').value = '';
             document.getElementById('stockInItem_Particulars').value = '';
             document.getElementById('stockInItem_Quantity').value = 0;
-            document.getElementById('stockInItem_Unit_data').value = '';
-            document.getElementById('stockInItem_Unit_selectedValue').value = '';
+            //document.getElementById('stockInItem_Unit_data').value = cboStockInUnit.selectedItem["UnitId"];
+            //document.getElementById('stockInItem_Unit_selectedValue').value = '';
             document.getElementById('stockInItem_Cost').value = 0;
             document.getElementById('stockInItem_Amount').value = 0;
             document.getElementById('stockInItem_BUCUnit_data').value = '';

@@ -260,7 +260,10 @@
                                         <input type="hidden" id="saleItem_Unit_selectedValue" />
                                     </dd>
                                     <dt>Price</dt>
-                                    <dd><input type="text" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_PriceExVAT" placeholder="0.00" /></dd>
+                                    <dd>
+                                        <div class="input-50" id="saleItem_Price"></div>
+                                        <input type="hidden" class="form-control input-50 numberField input-sm requiredSaleItem" id="saleItem_PriceExVAT" placeholder="0.00" />
+                                    </dd>
                                     <dt>Discount</dt>
                                     <dd>
                                         <div class="comboBox-wide" id="saleItem_Discont"></div>
@@ -1553,6 +1556,9 @@
 
         var salesItemUnits;
         var cboSalesItemUnit;
+        var cboSalesItemPrice;
+        var priceSelectedValue = "";
+        
 
         var inventories;
         var cboInventoryCode;
@@ -1709,12 +1715,12 @@
                         }
                         createCboForManualCode(articleItems);
                         createCboForItemDescription(articleItems);
-                        getSalesItemUnitForComboBox();
+                        //getSalesItemUnitForComboBox();
                         getTaxTypeForComboBox();
                     } else {
                         createCboForManualCode(articleItems);
                         createCboForItemDescription(articleItems);
-                        getSalesItemUnitForComboBox();
+                        //getSalesItemUnitForComboBox();
                         getTaxTypeForComboBox();
                     }
                 }
@@ -1753,16 +1759,15 @@
                     $("#saleItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
                     $("#saleItem_ItemCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemCode);
                     $("#saleItem_ItemDescription_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].ItemDescription);
-                    $("#saleItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
-                    $("#saleItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
-                    $("#saleItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
-                    $("#saleItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    //$("#saleItem_Unit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    //$("#saleItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
+                    //$("#saleItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
+                    //$("#saleItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
                     $("#saleItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
-                    $("#saleItem_PriceExVAT").val(ManualCodeCollections.items[this.selectedIndex].Price);
+                    //$("#saleItem_PriceExVAT").val(ManualCodeCollections.items[this.selectedIndex].Price);
 
                     createCboForItemDescription(articleItems);
-                    getSalesItemUnitForComboBox();
-
+                   
                     var articleId = ManualCodeCollections.items[this.selectedIndex].ItemId;
                     getTaxTyoeValues(articleId);
 
@@ -1826,17 +1831,17 @@
                 document.getElementById('saleItem_BUCUnit_data').value = "";
                 document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
                 document.getElementById('saleItem_Particulars').value = "";
-                document.getElementById('saleItem_PriceExVAT').value = "";
+                //document.getElementById('saleItem_PriceExVAT').value = "";
             } else {
                 document.getElementById('saleItem_ItemId_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId;
                 document.getElementById('saleItem_ItemCode_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemCode;
                 document.getElementById('saleItem_ItemDescription_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemDescription;
-                document.getElementById('saleItem_Unit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
-                document.getElementById('saleItem_Unit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
-                document.getElementById('saleItem_BUCUnit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
-                document.getElementById('saleItem_BUCUnit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
+                //document.getElementById('saleItem_Unit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
+                //document.getElementById('saleItem_Unit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
+                //document.getElementById('saleItem_BUCUnit_data').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].UnitId;
+                //document.getElementById('saleItem_BUCUnit_selectedValue').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Unit;
                 document.getElementById('saleItem_Particulars').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Particulars;
-                document.getElementById('saleItem_PriceExVAT').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Price;
+                //document.getElementById('saleItem_PriceExVAT').value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Price;
 
                 getTaxTyoeValues(ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
             }
@@ -1859,8 +1864,8 @@
                         document.getElementById('saleItem_InventoryCode_data').value = results.Id;
                         document.getElementById('saleItem_InventoryCode_selectedValue').value = results.InventoryCode;
 
-                        console.log(results.Id);
-                        console.log(results.InventoryCode);
+                        //console.log(results.Id);
+                        //console.log(results.InventoryCode);
                     }
 
                     getItemInventoryCodeForComboBox();
@@ -1901,15 +1906,16 @@
                     $("#saleItem_ItemId_data").val(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
                     $("#saleItem_ItemDescription_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemDescription);
                     $("#saleItem_ItemCode_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].ItemCode);
-                    $("#saleItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
-                    $("#saleItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
-                    $("#saleItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
-                    $("#saleItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+                    //$("#saleItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    //$("#saleItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
+                    //$("#saleItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
+                    //$("#saleItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
                     $("#saleItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
-                    $("#saleItem_PriceExVAT").val(ItemDescriptionCollections.items[this.selectedIndex].Price);
+                    //$("#saleItem_PriceExVAT").val(ItemDescriptionCollections.items[this.selectedIndex].Price);
 
                     createCboForManualCode(articleItems);
-                    getSalesItemUnitForComboBox();
+                    getSalesItemUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
+                    getSalesItemPriceForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
 
                     var articleId = ItemDescriptionCollections.items[this.selectedIndex].ItemId;
                     getTaxTyoeValues(articleId);
@@ -1969,18 +1975,24 @@
                 document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
                 document.getElementById('saleItem_Particulars').value = "";
                 document.getElementById('saleItem_PriceExVAT').value = "";
+                
+                getSalesItemUnitForComboBox(0);
+                getSalesItemPriceForComboBox(0);
             } else {
                 document.getElementById('saleItem_ItemId_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId;
                 document.getElementById('saleItem_ItemDescription_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemDescription;
                 document.getElementById('saleItem_ItemCode_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemCode;
-                document.getElementById('saleItem_Unit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
-                document.getElementById('saleItem_Unit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
-                document.getElementById('saleItem_BUCUnit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
-                document.getElementById('saleItem_BUCUnit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
+                //document.getElementById('saleItem_Unit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
+                //document.getElementById('saleItem_Unit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
+                //document.getElementById('saleItem_BUCUnit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
+                //document.getElementById('saleItem_BUCUnit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
                 document.getElementById('saleItem_Particulars').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Particulars;
-                document.getElementById('saleItem_PriceExVAT').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Price;
+                //document.getElementById('saleItem_PriceExVAT').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Price;
 
                 getTaxTyoeValues(ItemDescriptionCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
+
+                getSalesItemUnitForComboBox(ItemDescriptionCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
+                getSalesItemPriceForComboBox(ItemDescriptionCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
             }
         }
 
@@ -2038,14 +2050,72 @@
                 }
             });
         }
+        
+        // ==============
+        // Get Item Price
+        // ==============
+        function getSalesItemPriceForComboBox(itemId) {
+            var salesItemPrice = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticlePrice/' + itemId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            salesItemPrice.push({
+                                Id: results[i]["Id"],
+                                ArticleId: results[i]["ArticleId"],
+                                Article: results[i]["Article"],
+                                PriceDescription: results[i]["PriceDescription"],
+                                Price: results[i]["Price"],
+                                Remarks: results[i]["Remarks"]
+                            });
+                        }
+                        createCboForSalesItemPrice(salesItemPrice);
+                    } else {
+                        createCboForSalesItemPrice(salesItemPrice);
+                    }
+                }
+            });
+        }
+
+        // ===============
+        // CBO for Account
+        // ===============
+        function createCboForSalesItemPrice(salesItemPrice) {
+            var disabled = false
+            if(salesItemPrice == 0) {
+                disabled = true;
+            }
+
+            cboSalesItemPrice.dispose();
+            cboSalesItemPrice = new wijmo.input.ComboBox('#saleItem_Price', {
+                disabled: disabled,
+                placeholder: "Price",
+                itemsSource: salesItemPrice,
+                displayMemberPath: "Price",
+                isEditable: false,
+                selectedValuePath: "Price",
+                selectedValue: priceSelectedValue.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#saleItem_PriceExVAT").val(this.selectedItem.Price);
+                }
+            });
+
+            document.getElementById("saleItem_PriceExVAT").value = cboSalesItemPrice.selectedItem.Price;
+        }
+
 
         // =============
         // Get Item Unit
         // =============
-        function getSalesItemUnitForComboBox() {
+        function getSalesItemUnitForComboBox(itemId) {
             salesItemUnits = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listUnit',
+                url: '/api/listArticleUnitByArticleId/' + itemId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -2054,7 +2124,7 @@
                     if (results.length > 0) {
                         for (i = 0; i < results.length; i++) {
                             salesItemUnits.push({
-                                UnitId: results[i]["Id"],
+                                UnitId: results[i]["UnitId"],
                                 Unit: results[i]["Unit"]
                             });
                         }
@@ -2614,6 +2684,7 @@
             document.getElementById('saleItem_Quantity').value = item.Quantity;
             document.getElementById('saleItem_Unit_data').value = item.UnitId;
             document.getElementById('saleItem_Unit_selectedValue').value = item.Unit;
+            priceSelectedValue = item.Price;
             document.getElementById('saleItem_PriceExVAT').value = item.Price;
             document.getElementById('saleItem_Discont_data').value = item.DiscountId;
             document.getElementById('saleItem_Discont_selectedValue').value = item.Discount;
@@ -2858,6 +2929,7 @@
             cboManualCodeArticleItems = new wijmo.input.ComboBox('#saleItem_ItemCode');
             cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#saleItem_ItemDescription');
             cboSalesItemUnit = new wijmo.input.ComboBox('#saleItem_Unit');
+            cboSalesItemPrice = new wijmo.input.ComboBox('#saleItem_Price');
             cboInventoryCode = new wijmo.input.ComboBox('#saleItem_InventoryCode');
             cboDiscount = new wijmo.input.ComboBox('#saleItem_Discont');
             cboForVATTaxType = new wijmo.input.ComboBox('#saleItem_VAT');

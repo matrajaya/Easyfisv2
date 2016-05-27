@@ -2483,8 +2483,8 @@
                 onSelectedIndexChanged: function () {
                     $("#RRLine_ItemId_data").val(POItemCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemDescription_selectedValue").val(POItemCollection.items[this.selectedIndex].ItemDescription);
-                    $("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].UnitId);
-                    $("#RRLine_Unit_selectedValue").val(POItemCollection.items[this.selectedIndex].Unit);
+                    //$("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].UnitId);
+                    //$("#RRLine_Unit_selectedValue").val(POItemCollection.items[this.selectedIndex].Unit);
                     $("#RRLine_Particulars").val(POItemCollection.items[this.selectedIndex].Particulars);
                     $("#RRLine_Quantity").val(POItemCollection.items[this.selectedIndex].Quantity);
                     //$("#RRLine_Cost").val(POItemCollection.items[this.selectedIndex].Cost);
@@ -2492,11 +2492,11 @@
                     $("#RRLine_BUCQuantity").val(POItemCollection.items[this.selectedIndex].Quantity);
 
                     createCboPOIteDescription(POItems);
-                    getUnitForComboBox(POItemCollection.items[this.selectedIndex].ItemId);
+                    //getUnitForComboBox(POItemCollection.items[this.selectedIndex].ItemId);
 
-                    document.getElementById('RRLine_BUCUnit_data').value = POItemCollection.items[this.selectedIndex].UnitId;
-                    document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
-                    getBUCUnitForComboBox();
+                    //document.getElementById('RRLine_BUCUnit_data').value = POItemCollection.items[this.selectedIndex].UnitId;
+                    //document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
+                    //getBUCUnitForComboBox();
 
                     var items = new wijmo.collections.ObservableArray;
                     var articleId = POItemCollection.items[this.selectedIndex].ItemId;
@@ -2590,14 +2590,14 @@
             } else {
                 document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemCode.selectedIndex].ItemId;
                 document.getElementById('RRLine_ItemDescription_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].ItemDescription;
-                document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemCode.selectedIndex].UnitId;
-                document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].Unit;
+                //document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemCode.selectedIndex].UnitId;
+                //document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].Unit;
                 document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemCode.selectedIndex].Particulars;
                 document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
                 document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemCode.selectedIndex].Amount;
                 document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
 
-                getUnitForComboBox(POItemCollection.items[cboItemCode.selectedIndex].ItemId);
+                //getUnitForComboBox(POItemCollection.items[cboItemCode.selectedIndex].ItemId);
 
                 var items = new wijmo.collections.ObservableArray;
                 var articleId = document.getElementById('RRLine_ItemId_data').value;
@@ -2711,8 +2711,8 @@
                 onSelectedIndexChanged: function () {
                     $("#RRLine_ItemId_data").val(POItemCollection.items[this.selectedIndex].ItemId);
                     $("#RRLine_ItemCode_selectedValue").val(POItemCollection.items[this.selectedIndex].ItemCode);
-                    $("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].UnitId);
-                    $("#RRLine_Unit_selectedValue").val(POItemCollection.items[this.selectedIndex].Unit);
+                    //$("#RRLine_Unit_data").val(POItemCollection.items[this.selectedIndex].UnitId);
+                    //$("#RRLine_Unit_selectedValue").val(POItemCollection.items[this.selectedIndex].Unit);
                     $("#RRLine_Particulars").val(POItemCollection.items[this.selectedIndex].Particulars);
                     $("#RRLine_Quantity").val(POItemCollection.items[this.selectedIndex].Quantity);
                     //$("#RRLine_Cost").val(POItemCollection.items[this.selectedIndex].Cost);
@@ -2722,8 +2722,8 @@
                     createCboPOItemCode(POItems);
                     getUnitForComboBox(POItemCollection.items[this.selectedIndex].ItemId);
 
-                    document.getElementById('RRLine_BUCUnit_data').value = POItemCollection.items[this.selectedIndex].UnitId;
-                    document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
+                    //document.getElementById('RRLine_BUCUnit_data').value = POItemCollection.items[this.selectedIndex].UnitId;
+                    //document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
                     getBUCUnitForComboBox();
 
                     var items = new wijmo.collections.ObservableArray;
@@ -2819,15 +2819,19 @@
                 document.getElementById('RRLine_Quantity').value = "";
                 document.getElementById('RRLine_Amount').value = "";
                 document.getElementById('RRLine_BUCQuantity').value = "";
+
+                getUnitForComboBox(0);
             } else {
                 document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemId;
                 document.getElementById('RRLine_ItemCode_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].ItemCode;
-                document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemDescription.selectedIndex].UnitId;
-                document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].Unit;
+                //document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemDescription.selectedIndex].UnitId;
+                //document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].Unit;
                 document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemDescription.selectedIndex].Particulars;
                 document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
                 document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemDescription.selectedIndex].Amount;
                 document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
+
+                getUnitForComboBox(POItemCollection.items[cboItemDescription.selectedIndex].ItemId);
             }
         }
 
