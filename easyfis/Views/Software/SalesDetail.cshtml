@@ -877,7 +877,7 @@
                                     document.getElementById('SI_PreparedBy_data').value = results.Id;
                                     document.getElementById('SI_CheckedBy_data').value = results.Id;
                                     document.getElementById('SI_ApprovedBy_data').value = results.Id;
-                                        
+
                                     document.getElementById('SI_SoldBy_selectedValue').value = results.FullName;
                                     document.getElementById('SI_PreparedBy_selectedValue').value = results.FullName;
                                     document.getElementById('SI_CheckedBy_selectedValue').value = results.FullName;
@@ -1464,6 +1464,9 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var salesId = getParam('SalesId');
             if (document.location.search.length == 0) {
                 $('#cmdSalesJournal').hide();

@@ -703,7 +703,7 @@
                         createCboForAccountCode(accounts);
                         createCboForAccount(accounts);
                     }
-                    
+
                     var accountCollection = new wijmo.collections.CollectionView(accounts);
                     if(accounts == 0) {
                         document.getElementById('StockOut_Account_data').value = "";
@@ -722,7 +722,7 @@
             );
         }
 
-        
+
         // ====================
         // CBO for Account Code
         // ====================
@@ -962,7 +962,7 @@
                                     document.getElementById('StockOut_PreparedBy_data').value = results.Id;
                                     document.getElementById('StockOut_CheckedBy_data').value = results.Id;
                                     document.getElementById('StockOut_ApprovedBy_data').value = results.Id;
-                                        
+
                                     document.getElementById('StockOut_PreparedBy_selectedValue').value = results.FullName;
                                     document.getElementById('StockOut_CheckedBy_selectedValue').value = results.FullName;
                                     document.getElementById('StockOut_ApprovedBy_selectedValue').value = results.FullName;
@@ -1498,6 +1498,9 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var stockOutId = getParam("StockOutId");
             if(document.location.search.length == 0) {
                 $('#cmdStockOutJournal').hide();
@@ -1528,7 +1531,7 @@
                     document.getElementById('StockOut_OTDate_data').value = this.value.toLocaleDateString();
                 }
             });
-            
+
             cboForAccountCode = new wijmo.input.ComboBox('#StockOut_AccountCode');
             cboForAccount = new wijmo.input.ComboBox('#StockOut_Account');
             cboArticle = new wijmo.input.ComboBox('#StockOut_Article');

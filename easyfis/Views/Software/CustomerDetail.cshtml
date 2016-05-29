@@ -809,6 +809,9 @@
         // Onload Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             // combo box
             cboArticleGroupForCustomer = new wijmo.input.ComboBox('#artcileCustomer_customerGroup');
             cboForAccountCode = new wijmo.input.ComboBox('#artcileCustomer_accountCode');

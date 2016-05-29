@@ -416,7 +416,7 @@
             if (document.location.search.length == 0) {
                 document.getElementById('StockIn_Particulars').value = "NA";
                 document.getElementById('StockIn_ManualINNumber').value = "NA";
-               
+
                 NProgress.done();
             } else {
                 $.ajax({
@@ -448,7 +448,7 @@
                             document.getElementById('StockIn_Account_data').value = Results.AccountId;
                             document.getElementById('StockIn_Account_selectedValue').value = Results.Account;
                             document.getElementById('StockIn_AccountCode_selectedValue').value = Results.Account;
-                            
+
 
                             document.getElementById('StockIn_Article_data').value = Results.ArticleId;
                             document.getElementById('StockIn_Article_selectedValue').value = Results.Article;
@@ -677,7 +677,7 @@
                         createCboForAccountCode(accounts);
                         createCboForAccount(accounts);
                     }
-                    
+
                     var accountCollection = new wijmo.collections.CollectionView(accounts);
                     if (accounts == 0) {
                         document.getElementById('StockIn_Account_data').value = "";
@@ -952,7 +952,7 @@
                                     document.getElementById('StockIn_PreparedBy_data').value = results.Id;
                                     document.getElementById('StockIn_CheckedBy_data').value = results.Id;
                                     document.getElementById('StockIn_ApprovedBy_data').value = results.Id;
-                                        
+
                                     document.getElementById('StockIn_PreparedBy_selectedValue').value = results.FullName;
                                     document.getElementById('StockIn_CheckedBy_selectedValue').value = results.FullName;
                                     document.getElementById('StockIn_ApprovedBy_selectedValue').value = results.FullName;
@@ -1478,6 +1478,9 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var stockInId = getParam("StockInId");
             if (document.location.search.length == 0) {
                 $('#cmdStockInJournal').hide();

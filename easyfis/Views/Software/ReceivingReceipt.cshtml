@@ -394,6 +394,9 @@
         // Onload Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var RRDateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [RRDateFilter_Date.getMonth() + 1, RRDateFilter_Date.getDate(), RRDateFilter_Date.getFullYear()].join('-');
 

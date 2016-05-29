@@ -373,6 +373,9 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var STDateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [STDateFilter_Date.getMonth() + 1, STDateFilter_Date.getDate(), STDateFilter_Date.getFullYear()].join('-');
 

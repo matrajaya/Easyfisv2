@@ -1232,6 +1232,9 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var stockTransferId = getParam("StockTransferId");
             if (document.location.search.length == 0) {
                 $('#cmdStockTransferJournal').hide();

@@ -691,7 +691,7 @@
                                     document.getElementById('preparedByUserId_Data').value = results.Id;
                                     document.getElementById('checkedByUserId_Data').value = results.Id;
                                     document.getElementById('approvedByUserId_Data').value = results.Id;
-                                        
+
                                     document.getElementById('preparedByUserId_selectedValue').value = results.FullName;
                                     document.getElementById('checkedByUserId_selectedValue').value = results.FullName;
                                     document.getElementById('approvedByUserId_selectedValue').value = results.FullName;
@@ -1492,7 +1492,7 @@
             });
         }
 
-        
+
         // ===================================================
         // Combo Box for Account Codes in Journal Voucher Line
         // ===================================================
@@ -1513,7 +1513,7 @@
                     disabled = false;
                 }
             }
-            
+
             cboAccountCodeJVL.dispose();
             cboAccountCodeJVL = new wijmo.input.ComboBox('#JVL_AccountCode_Id', {
                 disabled: disabled,
@@ -1539,7 +1539,7 @@
             for (var i = 0; i < accountCollections.items.length; i++) {
                 accountList.push(accountCollections.items[i].AccountAccount);
             }
-          
+
             var disabled;
             if (accounts == 0) {
                 disabled = true;
@@ -2255,6 +2255,9 @@
         // On load Page
         // ============
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             // =========================
             // GET Journal Voucher by Id
             // =========================

@@ -2322,6 +2322,9 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             // Inventory Dates
             document.getElementById('inventory_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('inventory_EndDate_data').value = new Date().toLocaleDateString();

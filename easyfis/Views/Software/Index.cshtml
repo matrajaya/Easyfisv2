@@ -537,6 +537,9 @@
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             NProgress.start();
             NProgress.done();
         });

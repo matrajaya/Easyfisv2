@@ -1,3 +1,55 @@
+function btnNoRightsOnclick() {
+    window.history.back();
+}
+
+function rightsAccessValidation(userId) {
+    var path = window.location.pathname;
+    var currentPage = path.split("/").pop();
+
+    $.ajax({
+        url: '/api/listByMstUserId/' + userId,
+        cache: false,
+        type: 'GET',
+        contentType: 'application/json; charset=utf-8',
+        success: function (userResults) {
+
+            var userForms = new Array();
+
+            $.ajax({
+                url: '/api/listUserFormByUserId/' + userResults.Id,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (userFormResults) {
+                    if (userFormResults.length > 0) {
+                        var currentObject;
+                        for (i = 0; i < userFormResults.length; i++) {
+                            userForms.push({
+                                Form: userFormResults[i]["Form"],
+                            });
+
+                            currentObject = userFormResults[i].Form.indexOf(currentPage) >= 0;
+
+                            if (currentObject == true) {
+                                break;
+                            }
+
+                        }
+
+                        if (currentObject == false) {
+                            $("#noRights").modal({
+                                show: true,
+                                backdrop: 'static'
+                            });
+                        }
+                    }
+                }
+            })
+        }
+    });
+}
+
+
 $(document).ready(function () {
     // number fields
     function RemoveRougeChar(convertString) {

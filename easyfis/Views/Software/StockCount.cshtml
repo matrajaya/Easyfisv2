@@ -330,6 +330,9 @@
 
         // On load page
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var date = new Date();
             stockCountSCDateValue = [date.getMonth() + 1, date.getDate(), date.getFullYear()].join('-');
 

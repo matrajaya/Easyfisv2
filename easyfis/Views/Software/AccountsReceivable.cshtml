@@ -677,6 +677,9 @@
         // On Load Page
         // ============
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             accountReceivableCboCompany = new wijmo.input.ComboBox('#accountReceivableReport_Company');
             accountReceivableSummaryCboCompany = new wijmo.input.ComboBox('#accountReceivableSummaryReport_Company');
             StatementOfTheAccountCboCompany = new wijmo.input.ComboBox('#StatementOfTheAccount_Company');

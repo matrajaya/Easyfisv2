@@ -418,7 +418,7 @@
                             document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
                             document.getElementById('PO_IsLocked').value = Results.IsLocked;
-                            
+
                             NProgress.done();
                             if (document.getElementById('PO_IsLocked').value == 'true') {
                                 document.getElementById('PO_PONumber_Display').disabled = true;
@@ -780,7 +780,7 @@
                                         document.getElementById('PreparedBy_data').value = mstUserResults.Id;
                                         document.getElementById('CheckedBy_data').value = mstUserResults.Id;
                                         document.getElementById('ApprovedBy_data').value = mstUserResults.Id;
-                                        
+
                                         document.getElementById('RequestedBy_selectedValue').value = mstUserResults.FullName;
                                         document.getElementById('PreparedBy_selectedValue').value = mstUserResults.FullName;
                                         document.getElementById('CheckedBy_selectedValue').value = mstUserResults.FullName;
@@ -1868,6 +1868,9 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var PurchaseOrderId = getParam('PurchaseOrderId');
             if (document.location.search.length == 0) {
                 $('#cmdSaveLockPO').hide();

@@ -390,6 +390,9 @@
         // Onload Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var SIDateFilter_Date = new Date();
             document.getElementById("filterDate_data").value = [SIDateFilter_Date.getMonth() + 1, SIDateFilter_Date.getDate(), SIDateFilter_Date.getFullYear()].join('-');
 

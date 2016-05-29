@@ -2042,6 +2042,9 @@
         // OnLoad Function
         // ===============
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var ReceivingReceiptId = getParam('ReceivingReceiptId');
             if (document.location.search.length == 0) {
                 $('#cmdRRJournal').hide();

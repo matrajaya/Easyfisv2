@@ -15,6 +15,7 @@ namespace easyfis.Models
         public String User { get; set; }
         public Int32 FormId { get; set; }
         public String Form { get; set; }
+        public String Particulars { get; set; }
         public Boolean CanAdd { get; set; }
         public Boolean CanEdit { get; set; }
         public Boolean CanDelete { get; set; }

@@ -275,6 +275,7 @@
                                     User: userFormResults[i]["User"],
                                     FormId: userFormResults[i]["FormId"],
                                     Form: userFormResults[i]["Form"],
+                                    Particulars: userFormResults[i]["Particulars"],
                                     CanAdd: userFormResults[i]["CanAdd"],
                                     CanEdit: userFormResults[i]["CanEdit"],
                                     CanDelete: userFormResults[i]["CanDelete"],
@@ -426,9 +427,9 @@
             cboForForm = new wijmo.input.ComboBox('#userForm_FormName', {
                 placeholder: "Form Name",
                 itemsSource: forms,
-                displayMemberPath: "FormName",
+                displayMemberPath: "Particulars",
                 isEditable: false,
-                selectedValuePath: "FormName",
+                selectedValuePath: "Particulars",
                 selectedValue: formSelectedValue.toString()
             });
         }
@@ -631,6 +632,9 @@
         // On Load Page
         // ============
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             getUserByUserId();
             cboForForm = new wijmo.input.ComboBox('#userForm_FormName');
 
@@ -660,7 +664,7 @@
                             },
                             {
                                 "header": "Form",
-                                "binding": "Form",
+                                "binding": "Particulars",
                                 "width": "3*",
                                 "allowResizing": false,
                                 "allowSorting": false,

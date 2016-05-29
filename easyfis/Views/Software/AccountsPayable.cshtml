@@ -1113,6 +1113,9 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             // Input Vat Summary Dates
             document.getElementById('InputVATReport_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('InputVATReport_EndDate_data').value = new Date().toLocaleDateString();

@@ -2937,6 +2937,9 @@
         // On Load Page
         // ============
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             // Financial Statement Balance Sheet Date As Of ..
             accountsPayableReportDateAsOf = new wijmo.input.InputDate('#FinancialStatementBalanceSheet_DateAsOf', {
                 format: 'MM/dd/yyyy',

@@ -3206,6 +3206,9 @@
         });
 
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             $('#Account').show();
             $('#AccountType').hide();
             $('#AccountCashFlow').hide();

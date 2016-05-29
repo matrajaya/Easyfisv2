@@ -1004,6 +1004,9 @@
         // On Page Load
         // ============
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var companyId = getParam("CompanyId");
             if (document.location.search.length == 0) {
                 $('#cmdSaveUpdateCompany').hide();

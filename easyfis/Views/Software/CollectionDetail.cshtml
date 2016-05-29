@@ -2931,6 +2931,9 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             var collectonId = getParam("CollectonId");
             if (document.location.search.length == 0) {
                 $('#cmdCollectionJournal').hide();

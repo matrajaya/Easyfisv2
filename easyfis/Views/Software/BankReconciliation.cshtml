@@ -804,6 +804,9 @@
         // On load page
         // ============
         $(document).ready(function () {
+            var userId = '@ViewData["UserId"]';
+            rightsAccessValidation(userId);
+
             document.getElementById("bankReconciliationTotalDepositInTransit").disabled = true;
             document.getElementById("bankReconciliationTotalOutstandingWithdrawals").disabled = true;
             document.getElementById("bankReconciliationTotalAdjustments").disabled = true;
