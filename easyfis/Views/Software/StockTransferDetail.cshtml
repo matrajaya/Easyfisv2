@@ -45,7 +45,7 @@
                                 <button class="btn btn-primary btn-sm" id="cmdStockTransferSave" onclick="btnStockTransferSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                                 <button class="btn btn-primary btn-sm" id="cmdStockTransferEdit" onclick="btnStockTransferEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
                                 <button class="btn btn-primary btn-sm" id="cmdStockTransferPrint" onclick="btnStockTransferPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button onclick="window.location.href = '@Url.Action("StockTransfer", "Software")'" class="btn btn-danger btn-sm" id="cmdStockTransferClose"><i class="fa fa-times"></i> Close</button>
+                                <button onclick="window.location.href = '/Software/StockTransfer'" class="btn btn-danger btn-sm" id="cmdStockTransferClose"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
@@ -388,6 +388,8 @@
             if (document.location.search.length == 0) {
                 document.getElementById('stockTransfer_Particulars').value = "NA";
                 document.getElementById('stockTransfer_ManualSTNumber').value = "NA";
+                document.getElementById('stockTransfer_ToBranch_data').value = '@ViewData["BranchId"]';
+                document.getElementById('stockTransfer_ToBranch_selectedValue').value = '@ViewData["Branch"]';
 
                 NProgress.done();
             } else {
@@ -597,45 +599,30 @@
                 branchList.push(branchCollections.items[i].BranchBranch);
             }
 
-            if (document.getElementById('StockTransfer_IsLocked').value == 'true') {
-                cboToBranch.dispose();
-                cboToBranch = new wijmo.input.ComboBox('#stockTransfer_ToBranch', {
-                    disabled: true,
-                    placeholder: "Select Branch",
-                    itemsSource: branchList,
-                    isEditable: true,
-                    required: false,
-                    selectedValue: document.getElementById('stockTransfer_ToBranch_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#stockTransfer_ToBranch_data").val(branchCollections.items[this.selectedIndex].BranchId);
-                    }
-                });
-            } else if (document.getElementById('StockTransfer_IsLocked').value == 'false') {
-                cboToBranch.dispose();
-                cboToBranch = new wijmo.input.ComboBox('#stockTransfer_ToBranch', {
-                    disabled: false,
-                    placeholder: "Select Branch",
-                    itemsSource: branchList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('stockTransfer_ToBranch_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#stockTransfer_ToBranch_data").val(branchCollections.items[this.selectedIndex].BranchId);
-                    }
-                });
+            var disabled;
+            if (branches == 0) {
+                disabled = true;
             } else {
-                cboToBranch.dispose();
-                cboToBranch = new wijmo.input.ComboBox('#stockTransfer_ToBranch', {
-                    placeholder: "Select Branch",
-                    itemsSource: branchList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('stockTransfer_ToBranch_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#stockTransfer_ToBranch_data").val(branchCollections.items[this.selectedIndex].BranchId);
-                    }
-                });
+                if (document.getElementById('StockTransfer_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
+
+            cboToBranch.dispose();
+            cboToBranch = new wijmo.input.ComboBox('#stockTransfer_ToBranch', {
+                disabled: disabled,
+                placeholder: "Select Branch",
+                itemsSource: branchList,
+                isEditable: true,
+                selectedValue: document.getElementById('stockTransfer_ToBranch_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#stockTransfer_ToBranch_data").val(branchCollections.items[this.selectedIndex].BranchId);
+                }
+            });
+
+            document.getElementById("stockTransfer_ToBranch_data").value = branchCollections.items[cboToBranch.selectedIndex].BranchId
         }
 
         // =======================
@@ -1510,13 +1497,18 @@
             for (var i = 0; i < ManualCodeCollections.items.length; i++) {
                 ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
             }
+        
+            var disabled = false;
+            if (articleItems == 0) {
+                disabled = true;
+            }
 
             cboManualCodeArticleItems.dispose();
             cboManualCodeArticleItems = new wijmo.input.ComboBox('#stockTransferItem_ItemCode', {
+                disabled: disabled,
                 placeholder: "Select Manual Code",
                 itemsSource: ManualCodeList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockTransferItem_ItemCode_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockTransferItem_ItemId_data").val(ManualCodeCollections.items[this.selectedIndex].ItemId);
@@ -1580,6 +1572,14 @@
                     }
                 }
             });
+
+            document.getElementById("stockTransferItem_ItemId_data").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId;
+            document.getElementById("stockTransferItem_ItemCode_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemCode;
+            document.getElementById("stockTransferItem_ItemDescription_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemDescription;
+            document.getElementById("stockTransferItem_Particulars").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Particulars;
+            document.getElementById("stockTransferItem_ItemInventoryCode_data").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Id;
+            document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].InventoryCode;
+            document.getElementById("stockTransferItem_Cost").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Cost;
         }
 
         // ====================
@@ -1591,13 +1591,18 @@
             for (var i = 0; i < ItemDescriptionCollections.items.length; i++) {
                 ItemDescriptionList.push(ItemDescriptionCollections.items[i].ItemDescription);
             }
+            
+            var disabled = false;
+            if (articleItems == 0) {
+                disabled = true;
+            }
 
             cboItemDescriptionArticleItems.dispose();
             cboItemDescriptionArticleItems = new wijmo.input.ComboBox('#stockTransferItem_ItemDescription', {
+                disabled: disabled,
                 placeholder: "Select Item Description",
                 itemsSource: ItemDescriptionList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockTransferItem_ItemDescription_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockTransferItem_ItemId_data").val(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
@@ -1669,6 +1674,13 @@
                 getStockTransferItemUnitForComboBox(0);
             }
 
+            document.getElementById("stockTransferItem_ItemId_data").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId;
+            document.getElementById("stockTransferItem_ItemCode_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemCode;
+            document.getElementById("stockTransferItem_ItemDescription_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemDescription;
+            document.getElementById("stockTransferItem_Particulars").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Particulars;
+            document.getElementById("stockTransferItem_ItemInventoryCode_data").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Id;
+            document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].InventoryCode;
+            document.getElementById("stockTransferItem_Cost").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Cost;
 
             //$("#stockTransferItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
             //$("#stockTransferItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
@@ -1697,13 +1709,18 @@
             for (var i = 0; i < InventoryCodeCollection.items.length; i++) {
                 InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
             }
+            
+            var disabled = false;
+            if (inventories == 0) {
+                disabled = true;
+            }
 
             cboInventoryCode.dispose();
             cboInventoryCode = new wijmo.input.ComboBox('#stockTransferItem_ItemInventoryCode', {
+                disabled: disabled,
                 placeholder: "Select Inventory Code",
                 itemsSource: InventoryCodeList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockTransferItem_ItemId_data").val(InventoryCodeCollection.items[this.selectedIndex].ItemId);
@@ -1735,6 +1752,14 @@
                     }
                 }
             });
+
+            document.getElementById("stockTransferItem_ItemId_data").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemId;
+            document.getElementById("stockTransferItem_ItemCode_selectedValue").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemCode;
+            document.getElementById("stockTransferItem_ItemDescription_selectedValue").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemDescription;
+            document.getElementById("stockTransferItem_Particulars").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Particulars;
+            document.getElementById("stockTransferItem_ItemInventoryCode_data").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Id;
+            document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].InventoryCode;
+            document.getElementById("stockTransferItem_Cost").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Cost;
         }
 
         var stockTransferUnits;
@@ -1791,7 +1816,6 @@
                 placeholder: "Select Unit",
                 itemsSource: StockTransferUnitList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('stockTransferItem_Unit_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#stockTransferItem_Unit_data").val(StockTransferUnitCollection.items[this.selectedIndex].UnitId);
@@ -1802,6 +1826,11 @@
                     createCboForStockTransferBaseUnit(stockTransferUnits);
                 }
             });
+
+            document.getElementById("stockTransferItem_Unit_data").value = StockTransferUnitCollection.items[cboStockTransferUnit.selectedIndex].UnitId;
+            document.getElementById("stockTransferItem_Unit_selectedValue").value = StockTransferUnitCollection.items[cboStockTransferUnit.selectedIndex].Unit;
+            document.getElementById("stockTransferItem_BUCUnit_data").value = StockTransferUnitCollection.items[cboStockTransferUnit.selectedIndex].UnitId;
+            document.getElementById("stockTransferItem_BUCUnit_selectedValue").value = StockTransferUnitCollection.items[cboStockTransferUnit.selectedIndex].Unit;
         }
 
         // ================================

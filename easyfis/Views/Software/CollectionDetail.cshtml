@@ -1155,7 +1155,7 @@
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             }
-                );
+                    );
 
             return branches;
         }
@@ -1228,54 +1228,36 @@
                 customerList.push(customerCollection.items[i].Customer);
             }
 
-            if (document.getElementById('collection_IsLocked').value == 'true') {
-                cboCustomer.dispose();
-                cboCustomer = new wijmo.input.ComboBox('#collection_Customer', {
-                    disabled: true,
-                    placeholder: "Select Customer",
-                    itemsSource: customerList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('collection_Customer_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#collection_Customer_data").val(customerCollection.items[this.selectedIndex].CustomerId);
-                        $("#collection_Customer_selectedValue").val(customerCollection.items[this.selectedIndex].Customer);
-                        createCboCustomerSIStatus(customers);
-                        createCboCustomerSIAdvances(customers);
-                    }
-                });
-            } else if (document.getElementById('collection_IsLocked').value == 'false') {
-                cboCustomer.dispose();
-                cboCustomer = new wijmo.input.ComboBox('#collection_Customer', {
-                    disabled: false,
-                    placeholder: "Select Customer",
-                    itemsSource: customerList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('collection_Customer_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#collection_Customer_data").val(customerCollection.items[this.selectedIndex].CustomerId);
-                        $("#collection_Customer_selectedValue").val(customerCollection.items[this.selectedIndex].Customer);
-                        createCboCustomerSIStatus(customers);
-                        createCboCustomerSIAdvances(customers);
-                    }
-                });
+            var disabled;
+            if (customers == 0) {
+                disabled = true;
             } else {
-                cboCustomer.dispose();
-                cboCustomer = new wijmo.input.ComboBox('#collection_Customer', {
-                    placeholder: "Select Customer",
-                    itemsSource: customerList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('collection_Customer_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#collection_Customer_data").val(customerCollection.items[this.selectedIndex].CustomerId);
-                        $("#collection_Customer_selectedValue").val(customerCollection.items[this.selectedIndex].Customer);
-                        createCboCustomerSIStatus(customers);
-                        createCboCustomerSIAdvances(customers);
-                    }
-                });
+                if (document.getElementById('collection_IsLocked').value == 'true') {
+                    disabled = true;
+                } else {
+                    disabled = false;
+                }
             }
+
+            cboCustomer.dispose();
+            cboCustomer = new wijmo.input.ComboBox('#collection_Customer', {
+                disabled: disabled,
+                placeholder: "Select Customer",
+                itemsSource: customerList,
+                isEditable: false,
+                selectedValue: document.getElementById('collection_Customer_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collection_Customer_data").val(customerCollection.items[this.selectedIndex].CustomerId);
+                    $("#collection_Customer_selectedValue").val(customerCollection.items[this.selectedIndex].Customer);
+                    createCboCustomerSIStatus(customers);
+                    createCboCustomerSIAdvances(customers);
+                }
+            });
+
+            document.getElementById('collection_Customer_data').value = customerCollection.items[cboCustomer.selectedIndex].CustomerId;
+            document.getElementById('collection_Customer_selectedValue').value = customerCollection.items[cboCustomer.selectedIndex].Customer;
+            createCboCustomerSIStatus(customers);
+            createCboCustomerSIAdvances(customers);
         }
 
         // =======================
@@ -2032,17 +2014,24 @@
                 collectionPayTypeList.push(collectionPayTypeCollections.items[i].PayType);
             }
 
+            var disabled = false;
+            if (collectionLinePayTypes == 0) {
+                disabled = true;
+            }
+
             cboCollectionLinePayType.dispose();
             cboCollectionLinePayType = new wijmo.input.ComboBox('#collectionLine_payType', {
+                disabled: disabled,
                 placeholder: "Select Pay Type",
                 itemsSource: collectionPayTypeList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('collectionLine_payType_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#collectionLine_payType_data").val(collectionPayTypeCollections.items[this.selectedIndex].PayTypeId);
                 }
             });
+
+            document.getElementById("collectionLine_payType_data").value = collectionPayTypeCollections.items[cboCollectionLinePayType.selectedIndex].PayTypeId
         }
 
         // ==============================================
@@ -2088,36 +2077,28 @@
                 SIList.push(SICollections.items[i].SINumber);
             }
 
+            var disabled = false;
             if (collectionLineSales == 0) {
                 document.getElementById('collectionLine_SINo_data').value = "";
+                disabled = true;
+            }
 
-                cboCollectionLineSI.dispose();
-                cboCollectionLineSI = new wijmo.input.ComboBox('#collectionLine_SINo', {
-                    disabled: true,
-                    placeholder: "Select SI Number",
-                    itemsSource: SIList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('collectionLine_SINo_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#collectionLine_SINo_data").val(SICollections.items[this.selectedIndex].SIId);
-                        $("#collectionLine_amount").val(SICollections.items[this.selectedIndex].Amount);
-                    }
-                });
-            } else {
-                cboCollectionLineSI.dispose();
-                cboCollectionLineSI = new wijmo.input.ComboBox('#collectionLine_SINo', {
-                    disabled: false,
-                    placeholder: "Select SI Number",
-                    itemsSource: SIList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('collectionLine_SINo_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#collectionLine_SINo_data").val(SICollections.items[this.selectedIndex].SIId);
-                        $("#collectionLine_amount").val(SICollections.items[this.selectedIndex].Amount);
-                    }
-                });
+            cboCollectionLineSI.dispose();
+            cboCollectionLineSI = new wijmo.input.ComboBox('#collectionLine_SINo', {
+                disabled: disabled,
+                placeholder: "Select SI Number",
+                itemsSource: SIList,
+                isEditable: false,
+                selectedValue: document.getElementById('collectionLine_SINo_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collectionLine_SINo_data").val(SICollections.items[this.selectedIndex].SIId);
+                    $("#collectionLine_amount").val(SICollections.items[this.selectedIndex].Amount);
+                }
+            });
+
+            if(collectionLineSales > 0) {
+                document.getElementById("collectionLine_SINo_data").value = SICollections.items[cboCollectionLineSI.selectedIndex].SIId;
+                document.getElementById("collectionLine_amount").value = SICollections.items[cboCollectionLineSI.selectedIndex].Amount;
             }
         }
 
@@ -2160,13 +2141,17 @@
                 collectionLineAccountList.push(collectionLineAccountCollection.items[i].AccountCode);
             }
 
+            var disabled = false;
+            if (collectionLineAccounts == 0) {
+                disabled = true;
+            }
+
             cboCollectionLineAccountCode.dispose();
             cboCollectionLineAccountCode = new wijmo.input.ComboBox('#collectionLine_accountCode', {
-                disabled: false,
+                disabled: disabled,
                 placeholder: "Select Account Code",
                 itemsSource: collectionLineAccountList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('collectionLine_accountCode_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#collectionLine_account_data").val(collectionLineAccountCollection.items[this.selectedIndex].AccountId);
@@ -2175,6 +2160,9 @@
                     createCollectionLineCboForAccount(collectionLineAccounts);
                 }
             });
+
+            document.getElementById('collectionLine_account_data').value = collectionLineAccountCollection.items[cboCollectionLineAccountCode.selectedIndex].AccountId;
+            document.getElementById('collectionLine_account_selectedValue').value = collectionLineAccountCollection.items[cboCollectionLineAccountCode.selectedIndex].AccountAccount;
         }
 
         // ===============
@@ -2187,13 +2175,17 @@
                 collectionLineAccountList.push(collectionLineAccountCollection.items[i].AccountAccount);
             }
 
+            var disabled = false;
+            if (collectionLineAccounts == 0) {
+                disabled = true;
+            }
+
             cboCollectionLineAccount.dispose();
             cboCollectionLineAccount = new wijmo.input.ComboBox('#collectionLine_account', {
-                disabled: false,
+                disabled: disabled,
                 placeholder: "Select Account",
                 itemsSource: collectionLineAccountList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('collectionLine_account_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#collectionLine_account_data").val(collectionLineAccountCollection.items[this.selectedIndex].AccountId);
@@ -2202,6 +2194,10 @@
                     createCollectionLineCboForAccountCode(collectionLineAccounts);
                 }
             });
+
+            document.getElementById('collectionLine_account_data').value = collectionLineAccountCollection.items[cboCollectionLineAccount.selectedIndex].AccountId;
+            document.getElementById('collectionLine_accountCode_selectedValue').value = collectionLineAccountCollection.items[cboCollectionLineAccount.selectedIndex].AccountCode;
+            getCollectionArticlesForComboBox();
         }
 
         // ==========================================
@@ -2295,35 +2291,25 @@
                 collectiontLineArticleList.push(collectionLineArticleCollections.items[i].ArticleArticle);
             }
 
+            var disabled = false;
             if (collectionLineArticles == 0) {
                 document.getElementById('collectionLine_article_data').value = "";
-                cboCollectionLineArticle.dispose();
-                cboCollectionLineArticle = new wijmo.input.ComboBox('#collectionLine_article', {
-                    disabled: true,
-                    placeholder: "Select Article",
-                    itemsSource: collectiontLineArticleList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('collectionLine_article_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#collectionLine_article_data").val(collectionLineArticleCollections.items[this.selectedIndex].ArticleId);
-                    }
-                });
+                disabled = true;
             }
-            else {
-                cboCollectionLineArticle.dispose();
-                cboCollectionLineArticle = new wijmo.input.ComboBox('#collectionLine_article', {
-                    disabled: false,
-                    placeholder: "Select Article",
-                    itemsSource: collectiontLineArticleList,
-                    isEditable: false,
-                    required: false,
-                    selectedValue: document.getElementById('collectionLine_article_selectedValue').value.toString(),
-                    onSelectedIndexChanged: function () {
-                        $("#collectionLine_article_data").val(collectionLineArticleCollections.items[this.selectedIndex].ArticleId);
-                    }
-                });
-            }
+
+            cboCollectionLineArticle.dispose();
+            cboCollectionLineArticle = new wijmo.input.ComboBox('#collectionLine_article', {
+                disabled: disabled,
+                placeholder: "Select Article",
+                itemsSource: collectiontLineArticleList,
+                isEditable: false,
+                selectedValue: document.getElementById('collectionLine_article_selectedValue').value.toString(),
+                onSelectedIndexChanged: function () {
+                    $("#collectionLine_article_data").val(collectionLineArticleCollections.items[this.selectedIndex].ArticleId);
+                }
+            });
+
+            document.getElementById("collectionLine_article_data").value = collectionLineArticleCollections.items[cboCollectionLineArticle.selectedIndex].ArticleId
         }
 
         // ===============================================
@@ -2362,18 +2348,25 @@
             for (var i = 0; i < collectionLineArticlBankeCollections.items.length; i++) {
                 collectiontLineArticleBankList.push(collectionLineArticlBankeCollections.items[i].ArticleArticle);
             }
+            
+            var disabled = false;
+            if (collectionArticleBanks == 0) {
+                disabled = true;
+            }
 
             cboCollectionArticleBank.dispose();
             cboCollectionArticleBank = new wijmo.input.ComboBox('#collectionLine_depositoryBank', {
+                disabled: disabled,
                 placeholder: "Select Article",
                 itemsSource: collectiontLineArticleBankList,
                 isEditable: false,
-                required: false,
                 selectedValue: document.getElementById('collectionLine_depositoryBank_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#collectionLine_depositoryBank_data").val(collectionLineArticlBankeCollections.items[this.selectedIndex].ArticleId);
                 }
             });
+
+            document.getElementById("collectionLine_depositoryBank_data").value = collectionLineArticlBankeCollections.items[cboCollectionArticleBank.selectedIndex].ArticleId;
         }
 
         // ===================
@@ -2407,11 +2400,11 @@
             });
 
             document.getElementById('collectionLine_Id').value = 0;
-            document.getElementById('collectionLine_branch_data').value = '';
-            document.getElementById('collectionLine_branch_selectedValue').value = '';
+            document.getElementById('collectionLine_branch_data').value = '@ViewData["BranchId"]';
+            document.getElementById('collectionLine_branch_selectedValue').value = '@ViewData["Branch"]';
             document.getElementById('collectionLine_payType_data').value = '';
             document.getElementById('collectionLine_payType_selectedValue').value = '';
-            document.getElementById('collectionLine_Particulars').value = '';
+            document.getElementById('collectionLine_Particulars').value = 'NA';
             document.getElementById('collectionLine_SINo_data').value = '';
             document.getElementById('collectionLine_SINo_selectedValue').value = '';
             document.getElementById('collectionLine_amount').value = '0';
@@ -2419,8 +2412,8 @@
             document.getElementById('collectionLine_account_selectedValue').value = '';
             document.getElementById('collectionLine_article_data').value = '';
             document.getElementById('collectionLine_article_selectedValue').value = '';
-            document.getElementById('collectionLine_checkNo').value = '';
-            document.getElementById('collectionLine_checkBank').value = '';
+            document.getElementById('collectionLine_checkNo').value = 'NA';
+            document.getElementById('collectionLine_checkBank').value = 'NA';
             document.getElementById('collectionLine_depositoryBank_data').value = '';
             document.getElementById('collectionLine_depositoryBank_selectedValue').value = '';
             document.getElementById('collectionLine_Clear').checked = false;
