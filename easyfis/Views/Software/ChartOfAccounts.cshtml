@@ -3170,6 +3170,29 @@
             window.accountTab = function () {
                 return true;
             };
+
+            accounts = new wijmo.collections.CollectionView(getAccount());
+            accounts.canFilter = true;
+            accounts.pageSize = 15;
+
+            var filterTextAccount = '';
+            $('#InputFilterAccount').keyup(function () {
+                filterTextAccount = this.value.toLowerCase();
+                accounts.refresh();
+            });
+            accounts.filter = function (item) {
+                return !filterTextAccount || (item.Account.toLowerCase().indexOf(filterTextAccount) > -1);
+            }
+            accounts.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccount();
+            });
+            accounts.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccount();
+            });
+
+            // Flex Grid for account
+            accountGrid.itemsSource = accounts;
+            accountGrid.trackChanges = true;
         });
 
         $('#accountTypeTabId').click(function () {
@@ -3181,6 +3204,29 @@
             window.accountTypeTab = function () {
                 return true;
             };
+
+            accountTypes = new wijmo.collections.CollectionView(getAccountType());
+            accountTypes.canFilter = true;
+            accountTypes.pageSize = 15;
+
+            var filterTextAccountType = '';
+            $('#InputFilterAccountType').keyup(function () {
+                filterTextAccountType = this.value.toLowerCase();
+                accountTypes.refresh();
+            });
+            accountTypes.filter = function (item) {
+                return !filterTextAccountType || (item.AccountType.toLowerCase().indexOf(filterTextAccountType) > -1);
+            }
+            accountTypes.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountType();
+            });
+            accountTypes.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccountType();
+            });
+
+            // Flex Grid for account type
+            accountTypeGrid.itemsSource = accountTypes;
+            accountTypeGrid.trackChanges = true;
         });
 
         $('#accountCashFlowTabId').click(function () {
@@ -3192,6 +3238,29 @@
             window.accountCashFlowTab = function () {
                 return true;
             };
+
+            accountCashFlows = new wijmo.collections.CollectionView(getAccountCashFlow());
+            accountCashFlows.canFilter = true;
+            accountCashFlows.pageSize = 15;
+
+            var filterTextAccountCashFlow = '';
+            $('#InputFilterAccountCashFlow').keyup(function () {
+                filterTextAccountCashFlow = this.value.toLowerCase();
+                accountCashFlows.refresh();
+            });
+            accountCashFlows.filter = function (item) {
+                return !filterTextAccountCashFlow || (item.AccountCashFlow.toLowerCase().indexOf(filterTextAccountCashFlow) > -1);
+            }
+            accountCashFlows.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountCashFlow();
+            });
+            accountCashFlows.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccountCashFlow();
+            });
+
+            // Flex Grid for Account Cash Flow
+            accountCashFlowGrid.itemsSource = accountCashFlows;
+            accountCashFlowGrid.trackChanges = true;
         });
 
         $('#accountCategoryTabId').click(function () {
@@ -3203,6 +3272,29 @@
             window.accountCategoryTab = function () {
                 return true;
             };
+
+            accountCategories = new wijmo.collections.CollectionView(getAccountCategory());
+            accountCategories.canFilter = true;
+            accountCategories.pageSize = 15;
+
+            var filterTextAccountCategory = '';
+            $('#InputFilterAccountCategory').keyup(function () {
+                filterTextAccountCategory = this.value.toLowerCase();
+                accountCategories.refresh();
+            });
+            accountCategories.filter = function (item) {
+                return !filterTextAccountCategory || (item.AccountCategory.toLowerCase().indexOf(filterTextAccountCategory) > -1);
+            }
+            accountCategories.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsAccountCategory();
+            });
+            accountCategories.currentChanged.addHandler(function (sender, args) {
+                updateDetailsAccountCategory();
+            });
+
+            // Flex Grid for Account Category
+            accountCategoryGrid.itemsSource = accountCategories;
+            accountCategoryGrid.trackChanges = true;
         });
 
         $(document).ready(function () {

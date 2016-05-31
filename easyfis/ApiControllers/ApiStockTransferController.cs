@@ -14,15 +14,21 @@ namespace easyfis.Controllers
         private Business.Inventory inventory = new Business.Inventory();
         private Business.PostJournal journal = new Business.PostJournal();
 
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            var identityUserId = User.Identity.GetUserId();
+            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+        }
+
         // ===================
         // LIST Stock Transfer
         // ===================
         [Route("api/listStockTransfer")]
         public List<Models.TrnStockTransfer> Get()
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockTransfer = from d in db.TrnStockTransfers
-                                where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                                where d.BranchId == currentBranchId()
                                 select new Models.TrnStockTransfer
                                 {
                                     Id = d.Id,
@@ -94,11 +100,10 @@ namespace easyfis.Controllers
         [Route("api/listStockTransferFilterBySTDate/{STDate}")]
         public List<Models.TrnStockTransfer> GetStockTransferFilterBySTDate(String STDate)
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockTransfer_STDate = Convert.ToDateTime(STDate);
             var stockTransfer = from d in db.TrnStockTransfers
                                 where d.STDate == stockTransfer_STDate
-                                && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                                && d.BranchId == currentBranchId()
                                 select new Models.TrnStockTransfer
                                 {
                                     Id = d.Id,

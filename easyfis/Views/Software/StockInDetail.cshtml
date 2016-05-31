@@ -230,7 +230,7 @@
                                         <div class="input-68" id="stockInItem_ItemDescription"></div>
 
                                         <input type="hidden" id="stockInItem_ItemId_data" class="requiredStockInItem">
-                                        <input type="hidden" id="stockInItem_ItemCode_selectedValue" /> 
+                                        <input type="hidden" id="stockInItem_ItemCode_selectedValue" />
                                         <input type="hidden" id="stockInItem_ItemDescription_selectedValue" />
                                     </dd>
                                     <dt>Particulars</dt>
@@ -387,24 +387,6 @@
                 return "";
             else
                 return results[1];
-        }
-
-        // ===========
-        // read Cookie
-        // ===========
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
-                }
-            }
-            return null;
         }
 
         // ================
@@ -580,7 +562,7 @@
                         }
 
                         var stockInId = getParam("StockInId");
-                        var branchId = readCookie("branchId");
+                        var branchId = @ViewData["BranchId"];
                         if (document.location.search.length == 0) {
                             $.ajax({
                                 url: '/api/listBranchById/' + branchId,
@@ -1869,7 +1851,7 @@
                     //$("#stockInItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
                     //$("#stockInItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
                     $("#stockInItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
-                    
+
                     getStockInItemUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
 
                     stockIns = new wijmo.collections.ObservableArray;
@@ -1952,7 +1934,7 @@
                 //document.getElementById('stockInItem_BUCUnit_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].UnitId;
                 //document.getElementById('stockInItem_BUCUnit_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Unit;
                 document.getElementById('stockInItem_Particulars').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Particulars;
-            
+
                 getStockInItemUnitForComboBox(ItemDescriptionCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
             }
         }
@@ -2013,7 +1995,7 @@
                     createCboForStockInBaseUnit(stockInUnits);
                 }
             });
-                        
+
             if(stockInUnits > 0) {
                 document.getElementById('stockInItem_Unit_data').value = StockInUnitCollection.items[cboStockInUnit.selectedIndex].UnitId;
                 document.getElementById('stockInItem_Unit_selectedValue').value = StockInUnitCollection.items[cboStockInUnit.selectedIndex].Unit;

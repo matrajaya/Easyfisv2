@@ -14,15 +14,21 @@ namespace easyfis.Controllers
         private Business.Inventory inventory = new Business.Inventory();
         private Business.PostJournal journal = new Business.PostJournal();
 
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            var identityUserId = User.Identity.GetUserId();
+            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+        }
+
         // =============
         // LIST Stock In
         // =============
         [Route("api/listStockIn")]
         public List<Models.TrnStockIn> Get()
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockIns = from d in db.TrnStockIns
-                           where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                           where d.BranchId == currentBranchId()
                            select new Models.TrnStockIn
                            {
                                Id = d.Id,
@@ -102,11 +108,10 @@ namespace easyfis.Controllers
         [Route("api/listStockInFilterByINDate/{INDate}")]
         public List<Models.TrnStockIn> GetStockInFilterByINDate(String INDate)
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockIn_INDate = Convert.ToDateTime(INDate);
             var stockIns = from d in db.TrnStockIns
                            where d.INDate == stockIn_INDate
-                           && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                           && d.BranchId == currentBranchId()
                            select new Models.TrnStockIn
                            {
                                Id = d.Id,

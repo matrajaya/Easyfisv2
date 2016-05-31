@@ -13,15 +13,21 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            var identityUserId = User.Identity.GetUserId();
+            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+        }
+
         // ===================
         // LIST Purchase Order
         // ===================
         [Route("api/listPurchaseOrder")]
         public List<Models.TrnPurchaseOrder> Get()
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var purchaseOrders = from d in db.TrnPurchaseOrders
-                                 where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                                 where d.BranchId == currentBranchId()
                                  select new Models.TrnPurchaseOrder
                                  {
                                      Id = d.Id,
@@ -144,11 +150,10 @@ namespace easyfis.Controllers
         [Route("api/listPurchaseOrderFilterByPODate/{PODate}")]
         public List<Models.TrnPurchaseOrder> GetPurchaseOrderFilterByPODate(String PODate)
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var purchaseOrder_PODate = Convert.ToDateTime(PODate);
             var purchaseOrders = from d in db.TrnPurchaseOrders
                                  where d.PODate == purchaseOrder_PODate
-                                 && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                                 && d.BranchId == currentBranchId()
                                  select new Models.TrnPurchaseOrder
                                  {
                                      Id = d.Id,

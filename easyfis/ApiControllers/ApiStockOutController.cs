@@ -14,15 +14,21 @@ namespace easyfis.Controllers
         private Business.Inventory inventory = new Business.Inventory();
         private Business.PostJournal journal = new Business.PostJournal();
 
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            var identityUserId = User.Identity.GetUserId();
+            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+        }
+
         // ==============
         // LIST Stock Out
         // ==============
         [Route("api/listStockOut")]
         public List<Models.TrnStockOut> Get()
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockOuts = from d in db.TrnStockOuts
-                            where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                            where d.BranchId == currentBranchId()
                             select new Models.TrnStockOut
                             {
                                 Id = d.Id,
@@ -59,11 +65,10 @@ namespace easyfis.Controllers
         [Route("api/listStockOutFilterByOTDate/{OTDate}")]
         public List<Models.TrnStockOut> GetStockOutFilterByOTDate(String OTDate)
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockOut_OTDate = Convert.ToDateTime(OTDate);
             var stockOuts = from d in db.TrnStockOuts
                             where d.OTDate == stockOut_OTDate
-                            && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                            && d.BranchId == currentBranchId()
                             select new Models.TrnStockOut
                             {
                                 Id = d.Id,

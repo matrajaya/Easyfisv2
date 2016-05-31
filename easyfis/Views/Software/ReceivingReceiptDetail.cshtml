@@ -552,24 +552,6 @@
                 return results[1];
         }
 
-        // ===========
-        // read Cookie
-        // ===========
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
-                }
-            }
-            return null;
-        }
-
         // =================
         // GET RR List By Id
         // =================
@@ -741,7 +723,7 @@
                         }
 
                         var ReceivingReceiptId = getParam('ReceivingReceiptId');
-                        var branchId = readCookie("branchId")
+                        var branchId = @ViewData["BranchId"];
                         if (document.location.search.length == 0) {
                             $.ajax({
                                 url: '/api/listBranchById/' + branchId,
@@ -979,7 +961,7 @@
                         }
 
                         var ReceivingReceiptId = getParam('ReceivingReceiptId');
-                        var branchId = readCookie("branchId");
+                        var branchId = @ViewData["BranchId"];
                         if (document.location.search.length == 0) {
                             var userId = document.getElementById('userId_data').value;
                             $.ajax({
@@ -2907,7 +2889,7 @@
             } else {
                 document.getElementById('RRLine_Unit_data').value = itemUnitCollection.items[cboUnit.selectedIndex].UnitId;
             }
-            
+
         }
 
 
@@ -2931,7 +2913,7 @@
                             });
                         }
 
-                        var branchId = readCookie("branchId")
+                        var branchId = @ViewData["BranchId"];
                         var RRLineId = document.getElementById('RRLine_Id').value;
                         if (RRLineId == 0) {
                             $.ajax({

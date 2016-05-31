@@ -43,7 +43,7 @@
                                 <button class="btn btn-primary btn-sm" id="cmdSalesSave" onclick="btnSalesSave_OnClick()"><i class="fa fa-save"></i> Save</button>
                                 <button class="btn btn-primary btn-sm" id="cmdSalesEdit" onclick="btnSalesEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
                                 <button class="btn btn-primary btn-sm" id="cmdSalesPrint" onclick="btnSalesPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button onclick="window.location.href = '@Url.Action("Sales", "Software" )'" class="btn btn-danger btn-sm" id="cmdSalesClose"><i class="fa fa-times"></i> Close</button>
+                                <button onclick="window.location.href = '/Software/Sales'" class="btn btn-danger btn-sm" id="cmdSalesClose"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
@@ -440,24 +440,6 @@
                 return results[1];
         }
 
-        // ===========
-        // read Cookie
-        // ===========
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
-                }
-            }
-            return null;
-        }
-
         // ====================
         // GET Sales List By Id
         // ====================
@@ -634,7 +616,7 @@
                         }
 
                         var salesId = getParam('SalesId');
-                        var branchId = readCookie('branchId');
+                        var branchId = @ViewData["BranchId"];
                         if (document.location.search.length == 0) {
                             $.ajax({
                                 url: '/api/listBranchById/' + branchId,
@@ -856,7 +838,7 @@
                         }
 
                         var salesId = getParam('SalesId');
-                        var branchId = readCookie('branchId');
+                        var branchId = @ViewData["BranchId"];
                         if (document.location.search.length == 0) {
                             var userId = document.getElementById('userId_data').value;
                             $.ajax({
@@ -1561,7 +1543,7 @@
         var cboSalesItemUnit;
         var cboSalesItemPrice;
         var priceSelectedValue = "";
-        
+
 
         var inventories;
         var cboInventoryCode;
@@ -1770,7 +1752,7 @@
                     //$("#saleItem_PriceExVAT").val(ManualCodeCollections.items[this.selectedIndex].Price);
 
                     createCboForItemDescription(articleItems);
-                   
+
                     var articleId = ManualCodeCollections.items[this.selectedIndex].ItemId;
                     getTaxTyoeValues(articleId);
 
@@ -1978,7 +1960,7 @@
                 document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
                 document.getElementById('saleItem_Particulars').value = "";
                 document.getElementById('saleItem_PriceExVAT').value = "";
-                
+
                 getSalesItemUnitForComboBox(0);
                 getSalesItemPriceForComboBox(0);
             } else {
@@ -2053,7 +2035,7 @@
                 }
             });
         }
-        
+
         // ==============
         // Get Item Price
         // ==============

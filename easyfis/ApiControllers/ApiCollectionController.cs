@@ -14,15 +14,21 @@ namespace easyfis.Controllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
         private Business.PostJournal journal = new Business.PostJournal();
 
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            var identityUserId = User.Identity.GetUserId();
+            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+        }
+
         // ===============
         // LIST Collection
         // ===============
         [Route("api/listCollection")]
         public List<Models.TrnCollection> Get()
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var collections = from d in db.TrnCollections
-                              where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                              where d.BranchId == currentBranchId()
                               select new Models.TrnCollection
                               {
                                   Id = d.Id,
@@ -94,11 +100,10 @@ namespace easyfis.Controllers
         [Route("api/listCollectionFilterByORDate/{ORDate}")]
         public List<Models.TrnCollection> GetCollectionFilterByORDate(String ORDate)
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var collection_ORDate = Convert.ToDateTime(ORDate);
             var collections = from d in db.TrnCollections
                               where d.ORDate == collection_ORDate
-                              && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                              && d.BranchId == currentBranchId()
                               select new Models.TrnCollection
                               {
                                   Id = d.Id,

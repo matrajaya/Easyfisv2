@@ -32968,9 +32968,9 @@ namespace easyfis.Data
 		
 		private string _UserId;
 		
-		private System.Nullable<int> _IncomeAccountId;
-		
 		private int _BranchId;
+		
+		private System.Nullable<int> _IncomeAccountId;
 		
 		private System.Nullable<int> _SupplierAdvancesAccountId;
 		
@@ -33170,10 +33170,10 @@ namespace easyfis.Data
     partial void OnUpdatedDateTimeChanged();
     partial void OnUserIdChanging(string value);
     partial void OnUserIdChanged();
-    partial void OnIncomeAccountIdChanging(System.Nullable<int> value);
-    partial void OnIncomeAccountIdChanged();
     partial void OnBranchIdChanging(int value);
     partial void OnBranchIdChanged();
+    partial void OnIncomeAccountIdChanging(System.Nullable<int> value);
+    partial void OnIncomeAccountIdChanged();
     partial void OnSupplierAdvancesAccountIdChanging(System.Nullable<int> value);
     partial void OnSupplierAdvancesAccountIdChanged();
     partial void OnCustomerAdvancesAccountIdChanging(System.Nullable<int> value);
@@ -33474,26 +33474,6 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IncomeAccountId", DbType="Int")]
-		public System.Nullable<int> IncomeAccountId
-		{
-			get
-			{
-				return this._IncomeAccountId;
-			}
-			set
-			{
-				if ((this._IncomeAccountId != value))
-				{
-					this.OnIncomeAccountIdChanging(value);
-					this.SendPropertyChanging();
-					this._IncomeAccountId = value;
-					this.SendPropertyChanged("IncomeAccountId");
-					this.OnIncomeAccountIdChanged();
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BranchId", DbType="Int NOT NULL")]
 		public int BranchId
 		{
@@ -33514,6 +33494,26 @@ namespace easyfis.Data
 					this._BranchId = value;
 					this.SendPropertyChanged("BranchId");
 					this.OnBranchIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IncomeAccountId", DbType="Int")]
+		public System.Nullable<int> IncomeAccountId
+		{
+			get
+			{
+				return this._IncomeAccountId;
+			}
+			set
+			{
+				if ((this._IncomeAccountId != value))
+				{
+					this.OnIncomeAccountIdChanging(value);
+					this.SendPropertyChanging();
+					this._IncomeAccountId = value;
+					this.SendPropertyChanged("IncomeAccountId");
+					this.OnIncomeAccountIdChanged();
 				}
 			}
 		}

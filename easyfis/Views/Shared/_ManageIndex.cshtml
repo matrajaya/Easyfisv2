@@ -4,72 +4,130 @@
 @if (Request.IsAuthenticated)
 {
     <!-- Section -->
-    <section>
-        <br /><br />
-        <div class="jumbotron">
-            <div class="container">
-                <h2><b>@ViewData["FullName"]</b></h2>
-                <br /><br />
-                <button class="btn btn-primary btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
+    <section class="secStyle">
+        <br /><br /><br />
+        <div class="container-fluid">
+            <div class="box box-default">
+                <div class="row">
+                    <div class="col-md-3">
+                        <ul class="nav nav-pills nav-stacked pill-custom" role="tablist" id="myTab">
+                            <li class="active"><a data-toggle="pill" href="#UI"><i class="fa fa-user"></i> User Information</a></li>
+                            <li class="manageDivider"></li>
+                            <li><a data-toggle="pill" href="#ST"><i class="fa fa-gears"></i> Settings</a></li>
+                            <li><a data-toggle="pill" href="#UT"><i class="fa fa-wrench"></i> Utilities</a></li>
+                        </ul>
+                        <br />
+                        <button class="btn btn-primary" id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()"><i class=" fa fa-rocket"></i> Launch Software</button>
+                        <br /><br />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="tab-content">
+                            <div id="UI" class="tab-pane fade in active">
+                                <div class="well">
+                                    <h3><b>@ViewData["FullName"]</b></h3>
+                                    <br />
+                                    <button class="btn btn-primary btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
+                                </div>
+                            </div>
+                            <div id="ST" class="tab-pane fade in">
+                                <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                                    <li role="presentation" class="active"><a data-toggle="tab" href="#Sys">System</a></li>
+                                    <li role="presentation"><a data-toggle="tab" href="#DF">Defaults</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="Sys" class="tab-pane fade in active">
+                                        <br />
+                                        <div class="well">
+
+                                        </div>
+                                    </div>
+                                    <div id="DF" class="tab-pane fade in">
+                                        <br />
+                                        <div class="well">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="UT" class="tab-pane fade in">
+                                <ul class="nav nav-tabs pill-custom" role="tablist" id="myTab">
+                                    <li role="presentation" class="active"><a data-toggle="tab" href="#DAT">Delete All Transaction</a></li>
+                                    <li role="presentation"><a data-toggle="tab" href="#AT">Audit Trail</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="DAT" class="tab-pane fade in active">
+                                        <br />
+                                        <div class="well">
+                                            <button class="btn btn-danger" id="btnDeleteAllTransaction" onclick="btnDeleteAllTransactionOnclick()"><i class="fa fa-trash"></i> Delete</button>
+                                        </div>
+                                    </div>
+                                    <div id="AT" class="tab-pane fade in">
+                                        <br />
+                                        <div class="well">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="jumbotron">
+    </section>
+    @*<div class="jumbotron">
             <div class="container">
                 <div class="form-group">
                     <label>Choose branch to launch the application</label>
                     <br /><br />
                     <div class="input-group col-sm-6">
                         <div id="branch_Id" class="comboBox-wide"></div>
-                        <div class="input-group-btn">
-                            <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    @*<div class="cover-login-photo-custom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">You Login as: </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="well">
+                                            <h1>@ViewData["FullName"]</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
+                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default btn-sm"> Change Your Password</a>
+                                <p class="change-password-success">@ViewBag.StatusMessage</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Choose your branch to launch the application</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="branch_Id" class="comboBox-wide"></div>
+                                        <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12" align="right">
+                                        <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        @*<div class="cover-login-photo-custom">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="panel panel-info">
-                                <div class="panel-heading">You Login as: </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="well">
-                                                <h1>@ViewData["FullName"]</h1>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-default btn-sm" onclick="cmdEditProfileDetails_OnClickButton()"> Edit</button>
-                                    <a href="@Url.Action("ChangePassword", "Manage")" class="btn btn-default btn-sm"> Change Your Password</a>
-                                    <p class="change-password-success">@ViewBag.StatusMessage</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="panel panel-info">
-                                <div class="panel-heading">Choose your branch to launch the application</div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div id="branch_Id" class="comboBox-wide"></div>
-                                            <input type="hidden" id="branch_Id_Data" class="requiredJournalVoucherLine" />
-                                        </div>
-                                    </div>
-                                    <br />
-                                    <div class="row">
-                                        <div class="col-md-12" align="right">
-                                            <button id="LaunchSoftware" onclick="cmdLaunchSoftware_OnClick()" class="btn btn-primary btn-sm">Launch Software</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>*@
-    </section>
+        </div>*@
 }
 else
 {

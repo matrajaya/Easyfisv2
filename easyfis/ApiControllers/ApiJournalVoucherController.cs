@@ -201,6 +201,40 @@ namespace easyfis.Controllers
             return journalVouchers.ToList();
         }
 
+        // ===============================
+        // LIST Journal Voucher by JV Date
+        // ===============================
+        [Route("api/listJournalVoucherByJVDate/{JVDate}")]
+        public List<Models.TrnJournalVoucher> GetJournalVoucherByJVDate(String JVDate)
+        {
+            var journalVouchers = from d in db.TrnJournalVouchers
+                                  where d.JVDate == Convert.ToDateTime(JVDate)
+                                  select new Models.TrnJournalVoucher
+                                  {
+                                      Id = d.Id,
+                                      BranchId = d.BranchId,
+                                      Branch = d.MstBranch.Branch,
+                                      JVNumber = d.JVNumber,
+                                      JVDate = d.JVDate.ToShortDateString(),
+                                      Particulars = d.Particulars,
+                                      ManualJVNumber = d.ManualJVNumber,
+                                      PreparedById = d.PreparedById,
+                                      PreparedBy = d.MstUser.FullName,
+                                      CheckedById = d.CheckedById,
+                                      CheckedBy = d.MstUser1.FullName,
+                                      ApprovedById = d.ApprovedById,
+                                      ApprovedBy = d.MstUser2.FullName,
+                                      IsLocked = d.IsLocked,
+                                      CreatedById = d.CreatedById,
+                                      CreatedBy = d.MstUser3.FullName,
+                                      CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                      UpdatedById = d.UpdatedById,
+                                      UpdatedBy = d.MstUser4.FullName,
+                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                  };
+            return journalVouchers.ToList();
+        }
+
         // ===================
         // ADD Journal Voucher
         // ===================

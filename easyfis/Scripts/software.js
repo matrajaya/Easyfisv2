@@ -1,5 +1,9 @@
 function btnNoRightsOnclick() {
-    window.history.back();
+    if (history.length > 0) {
+        window.history.back();
+    } else {
+        window.location = '/Manage';
+    }
 }
 
 function rightsAccessValidation(userId) {
@@ -21,8 +25,8 @@ function rightsAccessValidation(userId) {
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 success: function (userFormResults) {
+                    var currentObject;
                     if (userFormResults.length > 0) {
-                        var currentObject;
                         for (i = 0; i < userFormResults.length; i++) {
                             userForms.push({
                                 Form: userFormResults[i]["Form"],
@@ -42,6 +46,11 @@ function rightsAccessValidation(userId) {
                                 backdrop: 'static'
                             });
                         }
+                    } else {
+                        $("#noRights").modal({
+                            show: true,
+                            backdrop: 'static'
+                        });
                     }
                 }
             })

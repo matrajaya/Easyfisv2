@@ -22,6 +22,7 @@ namespace easyfis.Controllers
                     string userName = string.Concat(new string[] { user.UserName });
 
                     Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+                    string branchId = string.Concat((from d in db.MstUsers where d.UserId == userId select d.BranchId).SingleOrDefault());
                     string branch = string.Concat((from d in db.MstUsers where d.UserId == userId select d.MstBranch.Branch).SingleOrDefault());
                     string company = string.Concat((from d in db.MstUsers where d.UserId == userId select d.MstBranch.MstCompany.Company).SingleOrDefault());
 
@@ -30,6 +31,7 @@ namespace easyfis.Controllers
                     ViewData.Add("Email", email);
                     ViewData.Add("UserName", userName);
 
+                    ViewData.Add("BranchId", branchId);
                     ViewData.Add("Branch", branch);
                     ViewData.Add("Company", company);
 

@@ -76,7 +76,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-4">Manual JV Number</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="manual_JournalVoucher_No" class="form-control input-sm requiredJournalVoucher"  placeholder="Manual JV Number"/>
+                                                <input type="text" id="manual_JournalVoucher_No" class="form-control input-sm requiredJournalVoucher" placeholder="Manual JV Number" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -379,24 +379,6 @@
                 return results[1];
         }
 
-        // ===========
-        // read Cookie
-        // ===========
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) == 0) {
-                        return c.substring(nameEQ.length, c.length);
-                    }
-                }
-            }
-            return null;
-        }
-
         // =========================
         // GET Journal Voucher by Id
         // =========================
@@ -577,7 +559,7 @@
                         }
 
                         var journalVoucherId = getParam("JournalVoucherId");
-                        var branchId = readCookie("branchId");
+                        var branchId = @ViewData["BranchId"];
                         if (document.location.search.length == 0) {
                             $.ajax({
                                 url: '/api/listBranchById/' + branchId,
@@ -605,7 +587,7 @@
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             }
-                );
+                    );
 
             return branches;
         }
@@ -1382,7 +1364,7 @@
                             });
                         }
 
-                        var branchId = readCookie("branchId")
+                        var branchId = @ViewData["BranchId"];
                         $.ajax({
                             url: '/api/listBranchById/' + branchId,
                             cache: false,
@@ -2281,7 +2263,7 @@
             $("#journalVoucher_No_Display").prop("disabled", true);
             $("#journalVoucher_No").prop("disabled", true);
 
-            var branchId = readCookie("branchId");
+            var branchId = @ViewData["BranchId"];
             document.getElementById('isLocked_Status').disabled = true;
 
             $('#cmdJournalJournalVoucher').click(function () {

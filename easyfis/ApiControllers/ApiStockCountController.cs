@@ -28,9 +28,8 @@ namespace easyfis.Controllers
         [Route("api/stockCount/list")]
         public List<Models.TrnStockCount> listStockCount()
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockCounts = from d in db.TrnStockCounts
-                              where d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                              where d.BranchId == currentUserId()
                               select new Models.TrnStockCount
                               {
                                   Id = d.Id,
@@ -61,10 +60,9 @@ namespace easyfis.Controllers
         [Route("api/stockCount/listBySCDateByBranchId/{SCDate}")]
         public List<Models.TrnStockCount> listStockCountBySCDate(String SCDate)
         {
-            var branchIdCookie = Request.Headers.GetCookies("branchId").SingleOrDefault();
             var stockCounts = from d in db.TrnStockCounts
                               where d.SCDate == Convert.ToDateTime(SCDate)
-                              && d.BranchId == Convert.ToInt32(branchIdCookie["branchId"].Value)
+                              && d.BranchId == currentUserId()
                               select new Models.TrnStockCount
                               {
                                   Id = d.Id,
