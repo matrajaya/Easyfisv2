@@ -23,6 +23,13 @@ namespace easyfis.Controllers
             return mstUserId;
         }
 
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            var identityUserId = User.Identity.GetUserId();
+            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+        }
+
         // LIST Stock Count
         [HttpGet]
         [Route("api/stockCount/list")]
@@ -62,7 +69,7 @@ namespace easyfis.Controllers
         {
             var stockCounts = from d in db.TrnStockCounts
                               where d.SCDate == Convert.ToDateTime(SCDate)
-                              && d.BranchId == currentUserId()
+                              && d.BranchId == currentBranchId()
                               select new Models.TrnStockCount
                               {
                                   Id = d.Id,
