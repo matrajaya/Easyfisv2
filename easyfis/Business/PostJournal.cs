@@ -1182,7 +1182,7 @@ namespace easyfis.Business
                                              {
                                                  SIId = g.Key.SIId,
                                                  CostAccountId = g.Key.CostAccountId,
-                                                 Amount = g.Sum(d => d.Quantity * d.MstArticleInventory.Cost)
+                                                 Amount = g.Sum(d => d.BaseQuantity * d.MstArticleInventory.Cost)
                                              };
 
             // SI Items - Inventory
@@ -1197,7 +1197,7 @@ namespace easyfis.Business
                                                 {
                                                     SIId = g.Key.SIId,
                                                     AccountId = g.Key.AccountId,
-                                                    Amount = g.Sum(d => d.Quantity * d.MstArticleInventory.Cost)
+                                                    Amount = g.Sum(d => d.BaseQuantity * d.MstArticleInventory.Cost)
                                                 };
 
             try

@@ -73,7 +73,7 @@ namespace easyfis.Controllers
                                         ItemInventory = d.MstArticleInventory.InventoryCode,
                                         Particulars = d.Particulars,
                                         UnitId = d.UnitId,
-                                        Unit = d.MstUnit.Unit,
+                                        Unit = d.MstUnit1.Unit,
                                         Quantity = d.Quantity,
                                         Price = d.Price,
                                         DiscountId = d.DiscountId,
@@ -87,7 +87,7 @@ namespace easyfis.Controllers
                                         VATPercentage = d.VATPercentage,
                                         VATAmount = d.VATAmount,
                                         BaseUnitId = d.BaseUnitId,
-                                        BaseUnit = d.MstUnit1.Unit,
+                                        BaseUnit = d.MstUnit.Unit,
                                         BaseQuantity = d.BaseQuantity,
                                         BasePrice = d.BasePrice
                                     };
@@ -108,6 +108,7 @@ namespace easyfis.Controllers
                 newSaleItem.ItemId = saleItem.ItemId;
                 newSaleItem.ItemInventoryId = saleItem.ItemInventoryId;
                 newSaleItem.Particulars = saleItem.Particulars;
+                Debug.WriteLine(saleItem.UnitId);
                 newSaleItem.UnitId = saleItem.UnitId;
                 newSaleItem.Quantity = saleItem.Quantity;
                 newSaleItem.Price = saleItem.Price;
@@ -119,9 +120,15 @@ namespace easyfis.Controllers
                 newSaleItem.VATId = saleItem.VATId;
                 newSaleItem.VATPercentage = saleItem.VATPercentage;
                 newSaleItem.VATAmount = saleItem.VATAmount;
-                newSaleItem.BaseUnitId = saleItem.BaseUnitId;
-                newSaleItem.BaseQuantity = saleItem.BaseQuantity;
-                newSaleItem.BasePrice = saleItem.BasePrice;
+
+                var item = from d in db.MstArticleInventories where d.Id == saleItem.ItemInventoryId select d;
+
+                newSaleItem.BaseUnitId = item.First().MstArticle.UnitId;
+
+                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
+
+                newSaleItem.BaseQuantity = (1 / conversionUnit.First().Multiplier) * saleItem.Quantity;
+                newSaleItem.BasePrice = saleItem.Amount / newSaleItem.BaseQuantity;
 
                 db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleItem);
                 db.SubmitChanges();

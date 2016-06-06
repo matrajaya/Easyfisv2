@@ -1901,6 +1901,7 @@
                     createCboForManualCode(articleItems);
                     getSalesItemUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
                     getSalesItemPriceForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
+                    getSalesItemUnitsForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
 
                     var articleId = ItemDescriptionCollections.items[this.selectedIndex].ItemId;
                     getTaxTyoeValues(articleId);
@@ -1963,6 +1964,7 @@
 
                 getSalesItemUnitForComboBox(0);
                 getSalesItemPriceForComboBox(0);
+                getSalesItemUnitsForComboBox(0);
             } else {
                 document.getElementById('saleItem_ItemId_data').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId;
                 document.getElementById('saleItem_ItemDescription_selectedValue').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemDescription;
@@ -1978,6 +1980,8 @@
 
                 getSalesItemUnitForComboBox(ItemDescriptionCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
                 getSalesItemPriceForComboBox(ItemDescriptionCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
+                
+                getSalesItemUnitsForComboBox(ItemDescriptionCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId);
             }
         }
 
@@ -2087,6 +2091,15 @@
                 selectedValue: priceSelectedValue.toString(),
                 onSelectedIndexChanged: function () {
                     $("#saleItem_PriceExVAT").val(this.selectedItem.Price);
+
+                    var price = document.getElementById('saleItem_PriceExVAT').value;
+                    var discount = document.getElementById('saleItem_DiscountAmount').value;
+
+                    document.getElementById("saleItem_NetPrice").value = price - discount;
+                    var netPrice = document.getElementById("saleItem_NetPrice").value;
+
+                    document.getElementById("saleItem_Amount").value = netPrice * document.getElementById("saleItem_Quantity").value;
+
                 }
             });
 
@@ -2114,10 +2127,8 @@
                             });
                         }
                         createCboForSalesItemUnit(salesItemUnits);
-                        createCboForSalesItemBaseUnit(salesItemUnits);
                     } else {
                         createCboForSalesItemUnit(salesItemUnits);
-                        createCboForSalesItemBaseUnit(salesItemUnits);
                     }
                 }
             });
@@ -2154,31 +2165,51 @@
                 onSelectedIndexChanged: function () {
                     $("#saleItem_Unit_data").val(SalesItemUnitCollection.items[this.selectedIndex].UnitId);
                     $("#saleItem_Unit_selectedValue").val(SalesItemUnitCollection.items[this.selectedIndex].Unit);
-                    $("#saleItem_BUCUnit_data").val(SalesItemUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#saleItem_BUCUnit_selectedValue").val(SalesItemUnitCollection.items[this.selectedIndex].Unit);
-
-                    createCboForSalesItemBaseUnit(salesItemUnits);
                 }
             });
 
             if (salesItemUnits == 0) {
                 document.getElementById('saleItem_Unit_data').value = "";
                 document.getElementById('saleItem_Unit_selectedValue').value = "";
-                document.getElementById('saleItem_BUCUnit_data').value = "";
-                document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
             } else {
                 document.getElementById('saleItem_Unit_data').value = SalesItemUnitCollection.items[cboSalesItemUnit.selectedIndex].UnitId;
                 document.getElementById('saleItem_Unit_selectedValue').value = SalesItemUnitCollection.items[cboSalesItemUnit.selectedIndex].Unit;
-                document.getElementById('saleItem_BUCUnit_data').value = SalesItemUnitCollection.items[cboSalesItemUnit.selectedIndex].UnitId;
-                document.getElementById('saleItem_BUCUnit_selectedValue').value = SalesItemUnitCollection.items[cboSalesItemUnit.selectedIndex].Unit;
             }
         }
+
+        // =============
+        // Get Item Unit
+        // =============
+        function getSalesItemUnitsForComboBox(itemId) {
+            var ItemUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            ItemUnits.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForSalesItemBaseUnit(ItemUnits,itemId);
+                    } else {
+                        createCboForSalesItemBaseUnit(ItemUnits,itemId);
+                    }
+                }
+            });
+        }
+
 
         // ============================
         // CBO for Sales Item Base Unit
         // ============================
-        function createCboForSalesItemBaseUnit(salesItemUnits) {
-            var SalesItemBaseUnitCollection = new wijmo.collections.CollectionView(salesItemUnits);
+        function createCboForSalesItemBaseUnit(ItemUnits,itemId) {
+            var SalesItemBaseUnitCollection = new wijmo.collections.CollectionView(ItemUnits);
             var SalesItemBaseUnitList = new Array();
             for (var i = 0; i < SalesItemBaseUnitCollection.items.length; i++) {
                 SalesItemBaseUnitList.push(SalesItemBaseUnitCollection.items[i].Unit);
@@ -2195,35 +2226,44 @@
                 }
             }
 
-            cboBaseUnit.dispose();
-            cboBaseUnit = new wijmo.input.ComboBox('#saleItem_BUCUnit', {
-                disabled: true,
-                placeholder: "Select Unit",
-                itemsSource: SalesItemBaseUnitList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('saleItem_BUCUnit_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#saleItem_BUCUnit_data").val(SalesItemBaseUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#saleItem_BUCUnit_selectedValue").val(SalesItemBaseUnitCollection.items[this.selectedIndex].Unit);
-                    $("#saleItem_Unit_data").val(SalesItemBaseUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#saleItem_Unit_selectedValue").val(SalesItemBaseUnitCollection.items[this.selectedIndex].Unit);
+            var salesItemBaseUnits = new wijmo.collections.ObservableArray();
+            var Unit = "";
+            var UnitId;
+            $.ajax({
+                url: '/api/article/' + itemId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    UnitId = results.UnitId;
+                    Unit = results.Unit;
 
-                    createCboForSalesItemUnit(salesItemUnits);
+                    cboBaseUnit.dispose();
+                    cboBaseUnit = new wijmo.input.ComboBox('#saleItem_BUCUnit', {
+                        disabled: true,
+                        placeholder: "Select Base Unit",
+                        itemsSource: SalesItemBaseUnitList,
+                        isEditable: false,
+                        required: false,
+                        selectedValue: Unit.toString(),
+                        onSelectedIndexChanged: function () {
+                            $("#saleItem_BUCUnit_data").val(SalesItemBaseUnitCollection.items[this.selectedIndex].UnitId);
+                            $("#saleItem_BUCUnit_selectedValue").val(SalesItemBaseUnitCollection.items[this.selectedIndex].Unit);
+
+                            //createCboForSalesItemUnit(salesItemUnits);
+                        }
+                    });
+
+                    if (salesItemUnits == 0) {
+                        document.getElementById('saleItem_BUCUnit_data').value = "";
+                        document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
+                    } else {
+                        document.getElementById('saleItem_BUCUnit_data').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].UnitId;
+                        document.getElementById('saleItem_BUCUnit_selectedValue').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].Unit;
+                    }
                 }
             });
-
-            if (salesItemUnits == 0) {
-                document.getElementById('saleItem_BUCUnit_data').value = "";
-                document.getElementById('saleItem_BUCUnit_selectedValue').value = "";
-                document.getElementById('saleItem_Unit_data').value = "";
-                document.getElementById('saleItem_Unit_selectedValue').value = "";
-            } else {
-                document.getElementById('saleItem_BUCUnit_data').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].UnitId;
-                document.getElementById('saleItem_BUCUnit_selectedValue').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].Unit;
-                document.getElementById('saleItem_Unit_data').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].UnitId;
-                document.getElementById('saleItem_Unit_selectedValue').value = SalesItemBaseUnitCollection.items[cboBaseUnit.selectedIndex].Unit;
-            }
         }
 
         // =======================
