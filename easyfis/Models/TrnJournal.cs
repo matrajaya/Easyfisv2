@@ -35,6 +35,7 @@ namespace easyfis.Models
         public Int32? ARSIId { get; set; }
 
         public Int32 AccountCategoryId { get; set; }
+        public String AccountCategoryCode { get; set; }
         public String AccountCategory { get; set; }
         public String SubCategoryDescription { get; set; }
         public String AccountTypeCode { get; set; }
