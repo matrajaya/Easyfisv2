@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using Microsoft.AspNet.Identity;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -58,21 +59,22 @@ namespace easyfis.Reports
 
             var assets = from d in db.TrnJournals
                          where d.JournalDate <= Convert.ToDateTime(DateAsOf) &&
-                         d.MstAccount.MstAccountType.MstAccountCategory.Id == 1 &&
-                         d.MstBranch.CompanyId == CompanyId
+                                d.MstAccount.MstAccountType.MstAccountCategory.Id == 1 &&
+                                d.MstBranch.CompanyId == CompanyId
+                         group d by d.MstAccount into g
                          select new Models.TrnJournal
                          {
                              DocumentReference = "1 - Asset",
-                             AccountCategoryCode = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategoryCode,
-                             AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
-                             SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription,
-                             AccountTypeCode = d.MstAccount.MstAccountType.AccountTypeCode,
-                             AccountType = d.MstAccount.MstAccountType.AccountType,
-                             AccountCode = d.MstAccount.AccountCode,
-                             Account = d.MstAccount.Account,
-                             DebitAmount = d.DebitAmount,
-                             CreditAmount = d.CreditAmount,
-                             Balance = d.DebitAmount - d.CreditAmount
+                             AccountCategoryCode = g.Key.MstAccountType.MstAccountCategory.AccountCategoryCode,
+                             AccountCategory = g.Key.MstAccountType.MstAccountCategory.AccountCategory,
+                             SubCategoryDescription = g.Key.MstAccountType.SubCategoryDescription,
+                             AccountTypeCode = g.Key.MstAccountType.AccountTypeCode,
+                             AccountType = g.Key.MstAccountType.AccountType,
+                             AccountCode = g.Key.AccountCode,
+                             Account = g.Key.Account,
+                             DebitAmount = g.Sum(d => d.DebitAmount),
+                             CreditAmount = g.Sum(d => d.CreditAmount),
+                             Balance = g.Sum(d => d.DebitAmount - d.CreditAmount)
                          };
 
 
@@ -80,38 +82,40 @@ namespace easyfis.Reports
                               where d.JournalDate <= Convert.ToDateTime(DateAsOf) &&
                               d.MstAccount.MstAccountType.MstAccountCategory.Id == 2 &&
                               d.MstBranch.CompanyId == CompanyId
+                              group d by d.MstAccount into g
                               select new Models.TrnJournal
                               {
                                   DocumentReference = "2 - Liability",
-                                  AccountCategoryCode = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategoryCode,
-                                  AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
-                                  SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription,
-                                  AccountTypeCode = d.MstAccount.MstAccountType.AccountTypeCode,
-                                  AccountType = d.MstAccount.MstAccountType.AccountType,
-                                  AccountCode = d.MstAccount.AccountCode,
-                                  Account = d.MstAccount.Account,
-                                  DebitAmount = d.DebitAmount,
-                                  CreditAmount = d.CreditAmount,
-                                  Balance = d.CreditAmount - d.DebitAmount
+                                  AccountCategoryCode = g.Key.MstAccountType.MstAccountCategory.AccountCategoryCode,
+                                  AccountCategory = g.Key.MstAccountType.MstAccountCategory.AccountCategory,
+                                  SubCategoryDescription = g.Key.MstAccountType.SubCategoryDescription,
+                                  AccountTypeCode = g.Key.MstAccountType.AccountTypeCode,
+                                  AccountType = g.Key.MstAccountType.AccountType,
+                                  AccountCode = g.Key.AccountCode,
+                                  Account = g.Key.Account,
+                                  DebitAmount = g.Sum(d => d.DebitAmount),
+                                  CreditAmount = g.Sum(d => d.CreditAmount),
+                                  Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                               };
 
             var profitAndLoss = from d in db.TrnJournals
-                                where d.JournalDate <= Convert.ToDateTime(DateAsOf) 
-                                && d.MstAccount.MstAccountType.MstAccountCategory.Id == 5 || d.MstAccount.MstAccountType.MstAccountCategory.Id == 6 
+                                where d.JournalDate <= Convert.ToDateTime(DateAsOf)
+                                && d.MstAccount.MstAccountType.MstAccountCategory.Id == 5 || d.MstAccount.MstAccountType.MstAccountCategory.Id == 6
                                 && d.MstBranch.CompanyId == CompanyId
+                                group d by d.MstAccount into g
                                 select new Models.TrnJournal
                                 {
                                     DocumentReference = "ProfitAndLoss",
-                                    AccountCategoryCode = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategoryCode,
-                                    AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
-                                    SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription,
-                                    AccountTypeCode = d.MstAccount.MstAccountType.AccountTypeCode,
-                                    AccountType = d.MstAccount.MstAccountType.AccountType,
-                                    AccountCode = d.MstAccount.AccountCode,
-                                    Account = d.MstAccount.Account,
-                                    DebitAmount = d.DebitAmount,
-                                    CreditAmount = d.CreditAmount,
-                                    Balance = d.CreditAmount - d.DebitAmount
+                                    AccountCategoryCode = g.Key.MstAccountType.MstAccountCategory.AccountCategoryCode,
+                                    AccountCategory = g.Key.MstAccountType.MstAccountCategory.AccountCategory,
+                                    SubCategoryDescription = g.Key.MstAccountType.SubCategoryDescription,
+                                    AccountTypeCode = g.Key.MstAccountType.AccountTypeCode,
+                                    AccountType = g.Key.MstAccountType.AccountType,
+                                    AccountCode = g.Key.AccountCode,
+                                    Account = g.Key.Account,
+                                    DebitAmount = g.Sum(d => d.DebitAmount),
+                                    CreditAmount = g.Sum(d => d.CreditAmount),
+                                    Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                                 };
 
             var identityUserId = User.Identity.GetUserId();
@@ -122,19 +126,20 @@ namespace easyfis.Reports
                            where d.JournalDate <= Convert.ToDateTime(DateAsOf)
                            && d.MstAccount.MstAccountType.MstAccountCategory.Id == 4
                            && d.MstBranch.CompanyId == CompanyId
+                           group d by d.MstAccount into g
                            select new Models.TrnJournal
                            {
                                DocumentReference = "3 - Equity",
-                               AccountCategoryCode = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategoryCode,
-                               AccountCategory = d.MstAccount.MstAccountType.MstAccountCategory.AccountCategory,
-                               SubCategoryDescription = d.MstAccount.MstAccountType.SubCategoryDescription,
-                               AccountTypeCode = d.MstAccount.MstAccountType.AccountTypeCode,
-                               AccountType = d.MstAccount.MstAccountType.AccountType,
-                               AccountCode = d.MstAccount.AccountCode,
-                               Account = d.MstAccount.Account,
-                               DebitAmount = d.DebitAmount,
-                               CreditAmount = d.CreditAmount,
-                               Balance = d.CreditAmount - d.DebitAmount
+                               AccountCategoryCode = g.Key.MstAccountType.MstAccountCategory.AccountCategoryCode,
+                               AccountCategory = g.Key.MstAccountType.MstAccountCategory.AccountCategory,
+                               SubCategoryDescription = g.Key.MstAccountType.SubCategoryDescription,
+                               AccountTypeCode = g.Key.MstAccountType.AccountTypeCode,
+                               AccountType = g.Key.MstAccountType.AccountType,
+                               AccountCode = g.Key.AccountCode,
+                               Account = g.Key.Account,
+                               DebitAmount = g.Sum(d => d.DebitAmount),
+                               CreditAmount = g.Sum(d => d.CreditAmount),
+                               Balance = g.Sum(d => d.CreditAmount - d.DebitAmount)
                            };
 
             var retainedEarnings = from d in profitAndLoss
@@ -302,6 +307,128 @@ namespace easyfis.Reports
             tableBalance.AddCell(new PdfPCell(new Phrase("Balance", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
             tableBalance.AddCell(new PdfPCell(new Phrase(Balance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
             document.Add(tableBalance);
+
+            if (assets.Any())
+            {
+                String subCategoryDescription = "";
+                Boolean subCategoryDescriptionSame = false;
+                Decimal totalOverAllAssets = 0;
+                foreach (var assetSubCategoryDescription in assets)
+                {
+                    if (subCategoryDescriptionSame == false)
+                    {
+                        if (subCategoryDescription.Equals(assetSubCategoryDescription.SubCategoryDescription) == false)
+                        {
+                            Decimal totalAllAssets = 0;
+                            subCategoryDescription = assetSubCategoryDescription.SubCategoryDescription;
+                            PdfPTable tableSubCategoryDescriptionAsset = new PdfPTable(1);
+                            float[] widthSubCategoryDescriptionAssetCells = new float[] { 100f };
+                            tableSubCategoryDescriptionAsset.SetWidths(widthSubCategoryDescriptionAssetCells);
+                            tableSubCategoryDescriptionAsset.WidthPercentage = 100;
+                            document.Add(line);
+                            tableSubCategoryDescriptionAsset.AddCell(new PdfPCell(new Phrase(assetSubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 6f, BackgroundColor = BaseColor.LIGHT_GRAY });
+                            document.Add(tableSubCategoryDescriptionAsset);
+
+                            String accountType = "";
+                            Boolean accountTypeSame = false;
+                            foreach (var assetAccountTypes in assets)
+                            {
+                                if (accountTypeSame == false)
+                                {
+                                    if (accountType.Equals(assetAccountTypes.AccountType) == false)
+                                    {
+                                        accountType = assetAccountTypes.AccountType;
+                                        if (assetAccountTypes.SubCategoryDescription.Equals(subCategoryDescription) == true)
+                                        {
+                                            PdfPTable tableAccountTypes = new PdfPTable(3);
+                                            float[] widthCellsAccountTypes = new float[] { 50f, 100f, 50f };
+                                            tableAccountTypes.SetWidths(widthCellsAccountTypes);
+                                            tableAccountTypes.WidthPercentage = 100;
+                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase(assetAccountTypes.AccountType, fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f, PaddingLeft = 25f });
+                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 10f, PaddingBottom = 5f });
+                                            tableAccountTypes.AddCell(new PdfPCell(new Phrase(assetAccountTypes.Balance.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 10f, PaddingBottom = 5f });
+                                            document.Add(tableAccountTypes);
+
+                                            String account = "";
+                                            Boolean accountSame = false;
+                                            foreach (var assetAccounts in assets)
+                                            {
+                                                if (accountSame == false)
+                                                {
+                                                    if (account.Equals(assetAccounts.Account) == false)
+                                                    {
+                                                        account = assetAccounts.Account;
+                                                        if (assetAccounts.AccountType.Equals(accountType) == true)
+                                                        {
+                                                            PdfPTable tableAccounts = new PdfPTable(3);
+                                                            float[] widthCellsAccounts = new float[] { 50f, 100f, 50f };
+                                                            tableAccounts.SetWidths(widthCellsAccounts);
+                                                            tableAccounts.WidthPercentage = 100;
+                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(assetAccounts.AccountCode, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 50f });
+                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(assetAccounts.Account, fontArial10)) { Border = 0, HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f, PaddingLeft = 20f });
+                                                            tableAccounts.AddCell(new PdfPCell(new Phrase(assetAccounts.Balance.ToString("#,##0.00"), fontArial10)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                                                            document.Add(tableAccounts);
+
+                                                            totalAllAssets = totalAllAssets + assetAccounts.Balance;
+
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    accountSame = false;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        accountTypeSame = true;
+                                    }
+                                }
+                                else
+                                {
+                                    accountTypeSame = false;
+                                }
+                            }
+
+                            document.Add(line);
+                            PdfPTable tableTotalAllAssets = new PdfPTable(5);
+                            float[] widthTotalTotalAllAssetsCells = new float[] { 50f, 70f, 100f, 100f, 60f };
+                            tableTotalAllAssets.SetWidths(widthTotalTotalAllAssetsCells);
+                            tableTotalAllAssets.WidthPercentage = 100;
+                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase("Total " + assetSubCategoryDescription.SubCategoryDescription, fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            tableTotalAllAssets.AddCell(new PdfPCell(new Phrase(totalAllAssets.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                            document.Add(tableTotalAllAssets);
+
+                            totalOverAllAssets = totalOverAllAssets + totalAllAssets;
+                        }
+                        else
+                        {
+                            subCategoryDescriptionSame = true;
+                        }
+                    }
+                    else
+                    {
+                        subCategoryDescriptionSame = false;
+                    }
+                }
+
+                document.Add(line);
+                PdfPTable tableTotalOverAllAssets = new PdfPTable(5);
+                float[] widthTotalTotalOverAllAssetsCells = new float[] { 50f, 70f, 100f, 100f, 60f };
+                tableTotalOverAllAssets.SetWidths(widthTotalTotalOverAllAssetsCells);
+                tableTotalOverAllAssets.WidthPercentage = 100;
+                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase("", fontArial10Bold)) { Border = 0, HorizontalAlignment = 1, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase("Total Asset", fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                tableTotalOverAllAssets.AddCell(new PdfPCell(new Phrase(totalOverAllAssets.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, Rowspan = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                document.Add(tableTotalOverAllAssets);
+            }
 
             //// retrieve account sub category journal for Asset
             //var accountTypeSubCategory_Journal_Assets = from d in db.TrnJournals
