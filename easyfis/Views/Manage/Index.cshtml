@@ -97,6 +97,7 @@
         // ================
         var branches;
         var cboBranch;
+        var cboDefaultBranch;
 
         // =================
         // Modal User Detail
@@ -298,12 +299,78 @@
             });
         }
 
+        function getBranch() {
+            var branches = new Array();
+            $.ajax({
+                url: '/api/listBranch',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (resultsBranch) {
+                    if (resultsBranch.length > 0) {
+                        for (i = 0; i < resultsBranch.length; i++) {
+                            branches.push({
+                                Id: resultsBranch[i]["Id"],
+                                Branch: resultsBranch[i]["Branch"]
+                            });
+                        }
+
+                        var defaultBranch = "@ViewData["Branch"]";
+                        cboDefaultBranch.dispose();
+                        cboDefaultBranch = new wijmo.input.ComboBox('#defaultBranch', {
+                            placeholder: "Select Branch",
+                            itemsSource: branches,
+                            displayMemberPath: "Branch",
+                            selectedValuePath: "Branch",
+                            selectedValue: defaultBranch.toString()
+                        });
+                    }
+                }
+            });
+        }
+
+        function btnOnclickSaveDefaults() {
+            document.getElementById('btnIdSaveDefaults').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+            $("#btnIdSaveDefaults").prop("disabled", true);
+            
+            var userDefaultObject = new Object();
+            userDefaultObject.BranchId = cboDefaultBranch.selectedItem["Id"];
+            var userDefaultData = JSON.stringify(userDefaultObject);
+
+            var userId = "@ViewData["UserId"]";
+            $.ajax({
+                type: "PUT",
+                url: '/api/user/updateUserDefaults/byUserId/' + userId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: userDefaultData,
+                statusCode: {
+                    200: function () {
+                        document.getElementById('btnIdSaveDefaults').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+                        $("#btnIdSaveDefaults").prop("disabled", true);
+                        toastr.success("Updated");
+                        window.setTimeout(function () {
+                            location.reload()
+                        }, 1000);
+                    },
+                    404: function () {
+                        document.getElementById('btnIdSaveDefaults').innerHTML = "<i class='fa fa-spinner fa-save'></i> Save";
+                        toastr.error("Not found");
+                    },
+                    400: function () {
+                        document.getElementById('btnIdSaveDefaults').innerHTML = "<i class='fa fa-spinner fa-save'></i> Save";
+                        toastr.error("Bad Request");
+                    }
+                }
+            });
+        }
+
         // =======
         // On Load
         // =======
         $(document).ready(function () {
-
-           
+            cboDefaultBranch = new wijmo.input.ComboBox('#defaultBranch');
+            getBranch();
             //getBranchesForComboBox();
         });
     </script>

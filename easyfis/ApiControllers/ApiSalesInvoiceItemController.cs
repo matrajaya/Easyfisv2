@@ -121,13 +121,13 @@ namespace easyfis.Controllers
                 newSaleItem.VATPercentage = saleItem.VATPercentage;
                 newSaleItem.VATAmount = saleItem.VATAmount;
 
-                var item = from d in db.MstArticleInventories where d.Id == saleItem.ItemInventoryId select d;
+                var item = from d in db.MstArticles where d.Id == saleItem.ItemId select d;
 
-                newSaleItem.BaseUnitId = item.First().MstArticle.UnitId;
+                newSaleItem.BaseUnitId = item.First().UnitId;
 
                 var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
 
-                newSaleItem.BaseQuantity = (1 / conversionUnit.First().Multiplier) * saleItem.Quantity;
+                newSaleItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
                 newSaleItem.BasePrice = saleItem.Amount / newSaleItem.BaseQuantity;
 
                 db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleItem);

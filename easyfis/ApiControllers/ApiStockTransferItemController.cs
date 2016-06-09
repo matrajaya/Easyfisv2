@@ -30,12 +30,12 @@ namespace easyfis.Controllers
                                          ItemInventory = d.MstArticleInventory.InventoryCode,
                                          Particulars = d.Particulars,
                                          UnitId = d.UnitId,
-                                         Unit = d.MstUnit.Unit,
+                                         Unit = d.MstUnit1.Unit,
                                          Quantity = d.Quantity,
                                          Cost = d.Cost,
                                          Amount = d.Amount,
                                          BaseUnitId = d.BaseUnitId,
-                                         BaseUnit = d.MstUnit1.Unit,
+                                         BaseUnit = d.MstUnit.Unit,
                                          BaseQuantity = d.BaseQuantity,
                                          BaseCost = d.BaseCost
                                      };
@@ -63,12 +63,12 @@ namespace easyfis.Controllers
                                          ItemInventory = d.MstArticleInventory.InventoryCode,
                                          Particulars = d.Particulars,
                                          UnitId = d.UnitId,
-                                         Unit = d.MstUnit.Unit,
+                                         Unit = d.MstUnit1.Unit,
                                          Quantity = d.Quantity,
                                          Cost = d.Cost,
                                          Amount = d.Amount,
                                          BaseUnitId = d.BaseUnitId,
-                                         BaseUnit = d.MstUnit1.Unit,
+                                         BaseUnit = d.MstUnit.Unit,
                                          BaseQuantity = d.BaseQuantity,
                                          BaseCost = d.BaseCost
                                      };
@@ -94,8 +94,11 @@ namespace easyfis.Controllers
                 newStockTransferItem.Cost = stockTransferItem.Cost;
                 newStockTransferItem.Amount = stockTransferItem.Amount;
                 newStockTransferItem.BaseUnitId = stockTransferItem.BaseUnitId;
-                newStockTransferItem.BaseQuantity = stockTransferItem.BaseQuantity;
-                newStockTransferItem.BaseCost = stockTransferItem.BaseCost;
+
+                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == stockTransferItem.ItemId && d.UnitId == stockTransferItem.UnitId select d;
+                newStockTransferItem.BaseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                var baseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                newStockTransferItem.BaseCost = stockTransferItem.Amount / baseQuantity;
 
                 db.TrnStockTransferItems.InsertOnSubmit(newStockTransferItem);
                 db.SubmitChanges();

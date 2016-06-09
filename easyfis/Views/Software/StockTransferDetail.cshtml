@@ -1424,68 +1424,18 @@
                                 UnitId: articleInventoryResults[i]["UnitId"]
 
                             });
-
-                            //articleItems = new wijmo.collections.ObservableArray();
-                            //$.ajax({
-                            //    url: '/api/article/' + articleInventoryResults[i]["ArticleId"],
-                            //    cache: false,
-                            //    type: 'GET',
-                            //    contentType: 'application/json; charset=utf-8',
-                            //    data: {},
-                            //    success: function (results) {
-                            //        if (results.length > 0) {
-                            //            for (i = 0; i < results.length; i++) {
-                            //                articleItems.push({
-                            //                    ItemId: results[i]["Id"],
-                            //                    ItemCode: results[i]["ManualArticleCode"],
-                            //                    ItemDescription: results[i]["Article"],
-                            //                    UnitId: results[i]["UnitId"],
-                            //                    Unit: results[i]["Unit"],
-                            //                    Particulars: results[i]["Particulars"]
-                            //                });
-                            //            }
-                            //            createCboForManualCode(articleItems);
-                            //            createCboForItemDescription(articleItems);
-                            //        }
-                            //    }
-                            //});
-
                         }
 
                         createCboForManualCode(articleInventories);
                         createCboForItemDescription(articleInventories);
                         createCboForInventoryCode(articleInventories);
-                        //createCboForManualCode(articleInventories);
-                        //createCboForItemDescription(articleInventories);
-                        //createCboForInventoryCode(articleInventories);
+                    } else {
+                        createCboForManualCode(articleInventories);
+                        createCboForItemDescription(articleInventories);
+                        createCboForInventoryCode(articleInventories);
                     }
                 }
             });
-
-            //articleItems = new wijmo.collections.ObservableArray();
-            //$.ajax({
-            //    url: '/api/listArticleByArticleTypeId/1',
-            //    cache: false,
-            //    type: 'GET',
-            //    contentType: 'application/json; charset=utf-8',
-            //    data: {},
-            //    success: function (results) {
-            //        if (results.length > 0) {
-            //            for (i = 0; i < results.length; i++) {
-            //                articleItems.push({
-            //                    ItemId: results[i]["Id"],
-            //                    ItemCode: results[i]["ManualArticleCode"],
-            //                    ItemDescription: results[i]["Article"],
-            //                    UnitId: results[i]["UnitId"],
-            //                    Unit: results[i]["Unit"],
-            //                    Particulars: results[i]["Particulars"]
-            //                });
-            //            }
-            //            createCboForManualCode(articleItems);
-            //            createCboForItemDescription(articleItems);
-            //        }
-            //    }
-            //});
         }
 
         // ===============
@@ -1654,7 +1604,7 @@
                     //});
 
                     getStockTransferItemUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
-
+                    getBUCUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
                     var stockTransfer_Quantity = document.getElementById('stockTransferItem_Quantity').value;
                     var stockTransfer_Cost = document.getElementById('stockTransferItem_Cost').value;
 
@@ -1670,8 +1620,10 @@
             var disabled = false;
             if (document.getElementById("stockTransferItem_ItemId_data").value != "") {
                 getStockTransferItemUnitForComboBox(ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId);
+                getBUCUnitForComboBox(ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId);
             } else {
                 getStockTransferItemUnitForComboBox(0);
+                getBUCUnitForComboBox(0);
             }
 
             document.getElementById("stockTransferItem_ItemId_data").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId;
@@ -1782,14 +1734,13 @@
                         for (i = 0; i < results.length; i++) {
                             stockTransferUnits.push({
                                 UnitId: results[i]["UnitId"],
-                                Unit: results[i]["Unit"]
+                                Unit: results[i]["Unit"],
+                                Multiplier: results[i]["Multiplier"]
                             });
                         }
                         createCboForStockTransferUnit(stockTransferUnits);
-                        createCboForStockTransferBaseUnit(stockTransferUnits);
                     } else {
                         createCboForStockTransferUnit(stockTransferUnits);
-                        createCboForStockTransferBaseUnit(stockTransferUnits);
                     }
                 }
             });
@@ -1820,44 +1771,98 @@
                 onSelectedIndexChanged: function () {
                     $("#stockTransferItem_Unit_data").val(StockTransferUnitCollection.items[this.selectedIndex].UnitId);
                     $("#stockTransferItem_Unit_selectedValue").val(StockTransferUnitCollection.items[this.selectedIndex].Unit);
-                    $("#stockTransferItem_BUCUnit_data").val(StockTransferUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#stockTransferItem_BUCUnit_selectedValue").val(StockTransferUnitCollection.items[this.selectedIndex].Unit);
 
-                    createCboForStockTransferBaseUnit(stockTransferUnits);
+                    getArticleItemForManualCodeAndComponent();
+
+                    cboInventoryCode.selectedItem["Cost"];
+
+                    var quantity = document.getElementById("stockTransferItem_Quantity").value.replace(/\,/g, '');;
+                    var cost = document.getElementById("stockTransferItem_Cost").value.replace(/\,/g, '');;
+
+                    document.getElementById("stockTransferItem_Cost").value = Math.round((cost / StockTransferUnitCollection.items[this.selectedIndex].Multiplier) * 100) / 100;
+                    document.getElementById('stockTransferItem_Amount').value =  Math.round((quantity * document.getElementById("stockTransferItem_Cost").value) * 100) / 100;
                 }
             });
 
             document.getElementById("stockTransferItem_Unit_data").value = StockTransferUnitCollection.items[cboStockTransferUnit.selectedIndex].UnitId;
             document.getElementById("stockTransferItem_Unit_selectedValue").value = StockTransferUnitCollection.items[cboStockTransferUnit.selectedIndex].Unit;
-            document.getElementById("stockTransferItem_BUCUnit_data").value = StockTransferUnitCollection.items[cboStockTransferUnit.selectedIndex].UnitId;
-            document.getElementById("stockTransferItem_BUCUnit_selectedValue").value = StockTransferUnitCollection.items[cboStockTransferUnit.selectedIndex].Unit;
+
+            var quantity = document.getElementById("stockTransferItem_Quantity").value.replace(/\,/g, '');;
+            var cost = document.getElementById("stockTransferItem_Cost").value.replace(/\,/g, '');;
+
+            document.getElementById("stockTransferItem_Cost").value = Math.round((cost / StockTransferUnitCollection.items[cboStockTransferUnit.selectedIndex].Multiplier) * 100) / 100;
+            document.getElementById('stockTransferItem_Amount').value =  Math.round((quantity * document.getElementById("stockTransferItem_Cost").value) * 100) / 100;
+        }
+
+        // =======================================
+        // Get Item Unit for Basic Unit Conversion
+        // =======================================
+        function getBUCUnitForComboBox(itemId) {
+            BUCUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            BUCUnits.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForStockTransferBaseUnit(BUCUnits, itemId);
+                    } else {
+                        createCboForStockTransferBaseUnit(BUCUnits, itemId);
+                    }
+                }
+            });
         }
 
         // ================================
         // CBO for STock Transfer Base Unit
         // =================================
-        function createCboForStockTransferBaseUnit(stockTransferUnits) {
-            var StockTransferBaseUnitCollection = new wijmo.collections.CollectionView(stockTransferUnits);
+        function createCboForStockTransferBaseUnit(BUCUnits, itemId) {
+            var StockTransferBaseUnitCollection = new wijmo.collections.CollectionView(BUCUnits);
             var StockTransferBaseUnitList = new Array();
             for (var i = 0; i < StockTransferBaseUnitCollection.items.length; i++) {
                 StockTransferBaseUnitList.push(StockTransferBaseUnitCollection.items[i].Unit);
             }
 
-            cboStockTransferBaseUnit.dispose();
-            cboStockTransferBaseUnit = new wijmo.input.ComboBox('#stockTransferItem_BUCUnit', {
-                disabled: true,
-                placeholder: "Select Unit",
-                itemsSource: StockTransferBaseUnitList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('stockTransferItem_BUCUnit_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#stockTransferItem_BUCUnit_data").val(StockTransferBaseUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#stockTransferItem_BUCUnit_selectedValue").val(StockTransferBaseUnitCollection.items[this.selectedIndex].Unit);
-                    $("#stockTransferItem_Unit_data").val(StockTransferBaseUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#stockTransferItem_Unit_selectedValue").val(StockTransferBaseUnitCollection.items[this.selectedIndex].Unit);
+            var Unit = "";
+            var UnitId;
+            $.ajax({
+                url: '/api/article/' + itemId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    UnitId = results.UnitId;
+                    Unit = results.Unit;
+                    
+                    document.getElementById('stockTransferItem_BUCUnit_data').value = results.UnitId;
+                    cboStockTransferBaseUnit.dispose();
+                    cboStockTransferBaseUnit = new wijmo.input.ComboBox('#stockTransferItem_BUCUnit', {
+                        disabled: true,
+                        placeholder: "Select Base Unit",
+                        itemsSource: StockTransferBaseUnitList,
+                        isEditable: false,
+                        required: false,
+                        selectedValue: Unit.toString(),
+                        onSelectedIndexChanged: function () {
+                            $("#stockTransferItem_BUCUnit_data").val(StockTransferBaseUnitCollection.items[this.selectedIndex].UnitId);
+                        }
+                    });
 
-                    createCboForStockTransferUnit(stockTransferUnits);
+                    if (BUCUnits == 0) {
+                        document.getElementById('stockTransferItem_BUCUnit_data').value =  "";
+                    } else {
+                        document.getElementById('stockTransferItem_BUCUnit_data').value = StockTransferBaseUnitCollection.items[cboStockTransferBaseUnit.selectedIndex].UnitId;
+                    }
+
                 }
             });
         }

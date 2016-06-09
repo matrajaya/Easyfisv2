@@ -239,5 +239,34 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
+
+        // update defaults
+        [Route("api/user/updateUserDefaults/byUserId/{userId}")]
+        public HttpResponseMessage PutUserDefaults(String userId, Models.MstUser mstUser)
+        {
+            try
+            {
+                var userDefaults = from d in db.MstUsers where d.UserId == userId select d;
+                if (userDefaults.Any())
+                {
+                    var updateUserDefaults = userDefaults.FirstOrDefault();
+
+                    updateUserDefaults.BranchId = mstUser.BranchId;
+
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
     }
 }

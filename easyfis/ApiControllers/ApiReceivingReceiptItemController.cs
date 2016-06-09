@@ -155,7 +155,7 @@ namespace easyfis.Controllers
                                             ItemCode = d.MstArticle.ManualArticleCode,
                                             Particulars = d.Particulars,
                                             UnitId = d.UnitId,
-                                            Unit = d.MstUnit.Unit,
+                                            Unit = d.MstUnit1.Unit,
                                             Quantity = d.Quantity,
                                             Cost = d.Cost,
                                             Amount = d.Amount,
@@ -170,7 +170,7 @@ namespace easyfis.Controllers
                                             BranchId = d.BranchId,
                                             Branch = d.MstBranch.Branch,
                                             BaseUnitId = d.BaseUnitId,
-                                            BaseUnit = d.MstUnit1.Unit,
+                                            BaseUnit = d.MstUnit.Unit,
                                             BaseQuantity = d.BaseQuantity,
                                             BaseCost = d.BaseCost
                                         };
@@ -317,10 +317,31 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.WTAXPercentage = POItems.WTAXPercentage;
                 newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.WTAXPercentage, POItems.WTAXIsInclusive);
                 newReceivingReceiptItem.BranchId = POItems.BranchId;
-                newReceivingReceiptItem.BaseUnitId = POItems.BaseUnitId;
-                newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
-                //newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.VATIsInclusive);
-                newReceivingReceiptItem.BaseCost = POItems.Cost;
+
+                var mstArticleUnit = from d in db.MstArticles where d.Id == POItems.ItemId select d;
+                newReceivingReceiptItem.BaseUnitId = mstArticleUnit.First().UnitId;
+
+                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId select d;
+
+                if (conversionUnit.First().Multiplier > 0)
+                {
+                    newReceivingReceiptItem.BaseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
+                }
+                else
+                {
+                    newReceivingReceiptItem.BaseQuantity = POItems.Quantity * 1;
+                }
+
+                var baseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                if (baseQuantity > 0)
+                {
+                    newReceivingReceiptItem.BaseCost = (POItems.Amount - POItems.VATAmount) / baseQuantity;
+                }
+                else
+                {
+                    newReceivingReceiptItem.BaseCost = POItems.Amount - POItems.VATAmount;
+                }
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }
@@ -452,10 +473,31 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.WTAXPercentage = POItems.WTAXPercentage;
                 newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.WTAXPercentage, POItems.WTAXIsInclusive);
                 newReceivingReceiptItem.BranchId = POItems.BranchId;
-                newReceivingReceiptItem.BaseUnitId = POItems.BaseUnitId;
-                newReceivingReceiptItem.BaseQuantity = POItems.BaseQuantity;
-                //newReceivingReceiptItem.BaseCost = computeBaseCost(POItems.Amount, POItems.VATPercentage, computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive), POItems.WTAXPercentage, POItems.Quantity, convertMultiplier, POItems.VATIsInclusive);
-                newReceivingReceiptItem.BaseCost = POItems.Cost;
+
+                var mstArticleUnit = from d in db.MstArticles where d.Id == POItems.ItemId select d;
+                newReceivingReceiptItem.BaseUnitId = mstArticleUnit.First().UnitId;
+
+                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId select d;
+
+                if (conversionUnit.First().Multiplier > 0)
+                {
+                    newReceivingReceiptItem.BaseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
+                }
+                else
+                {
+                    newReceivingReceiptItem.BaseQuantity = POItems.Quantity * 1;
+                }
+
+                var baseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                if (baseQuantity > 0)
+                {
+                    newReceivingReceiptItem.BaseCost = (POItems.Amount - POItems.VATAmount) / baseQuantity;
+                }
+                else
+                {
+                    newReceivingReceiptItem.BaseCost = POItems.Amount - POItems.VATAmount;
+                }
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
             }
@@ -519,8 +561,11 @@ namespace easyfis.Controllers
                 newReceivingReceiptItem.WTAXAmount = receivingReceiptItem.WTAXAmount;
                 newReceivingReceiptItem.BranchId = receivingReceiptItem.BranchId;
                 newReceivingReceiptItem.BaseUnitId = receivingReceiptItem.BaseUnitId;
-                newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.BaseQuantity;
-                newReceivingReceiptItem.BaseCost = receivingReceiptItem.BaseCost;
+
+                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == receivingReceiptItem.ItemId && d.UnitId == receivingReceiptItem.UnitId select d;
+                newReceivingReceiptItem.BaseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                var baseQuantity = receivingReceiptItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                newReceivingReceiptItem.BaseCost = (receivingReceiptItem.Amount - receivingReceiptItem.VATAmount) / baseQuantity;
 
                 db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
                 db.SubmitChanges();

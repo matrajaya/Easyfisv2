@@ -994,9 +994,9 @@ namespace easyfis.Business
                             newInventory.OTId = null;
                             newInventory.STId = null;
                             newInventory.QuantityIn = 0;
-                            newInventory.QuantityOut = SIItems.Quantity;
-                            newInventory.Quantity = SIItems.Quantity * -1;
-                            newInventory.Amount = SIItems.Cost * SIItems.Quantity * -1;
+                            newInventory.QuantityOut = SIItems.BaseQuantity;
+                            newInventory.Quantity = SIItems.BaseQuantity * -1;
+                            newInventory.Amount = SIItems.Cost * SIItems.BaseQuantity * -1;
                             newInventory.Particulars = "Sold Items";
 
                             db.TrnInventories.InsertOnSubmit(newInventory);

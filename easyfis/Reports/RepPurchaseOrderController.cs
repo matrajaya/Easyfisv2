@@ -182,7 +182,7 @@ namespace easyfis.Reports
                     tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Unit, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Item, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Particulars, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Price.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
+                    tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Cost.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tablePOLines.AddCell(new PdfPCell(new Phrase(purchaseOrderItem.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     TotalAmount = TotalAmount + purchaseOrderItem.Amount;
@@ -213,16 +213,20 @@ namespace easyfis.Reports
                 document.Add(Chunk.NEWLINE);
 
                 // Table for Footer
-                PdfPTable tableFooter = new PdfPTable(5);
+                PdfPTable tableFooter = new PdfPTable(7);
                 tableFooter.WidthPercentage = 100;
-                float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f };
+                float[] widthsCells2 = new float[] { 100f, 20f, 100f, 20f, 100f, 20f, 100f };
                 tableFooter.SetWidths(widthsCells2);
                 tableFooter.AddCell(new PdfPCell(new Phrase("Prepared by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
                 tableFooter.AddCell(new PdfPCell(new Phrase("Checked by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
                 tableFooter.AddCell(new PdfPCell(new Phrase("Approved by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
+                tableFooter.AddCell(new PdfPCell(new Phrase("Received by:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
 
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingTop = 10f, PaddingBottom = 10f });
@@ -234,6 +238,8 @@ namespace easyfis.Reports
                 tableFooter.AddCell(new PdfPCell(new Phrase(CheckedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
                 tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
                 tableFooter.AddCell(new PdfPCell(new Phrase(ApprovedBy)) { Border = 1, HorizontalAlignment = 1, PaddingBottom = 5f });
+                tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0, PaddingBottom = 5f });
+                tableFooter.AddCell(new PdfPCell(new Phrase("Date Received: ", fontArial11Bold)) { Border = 1, HorizontalAlignment = 0, PaddingBottom = 5f });
                 document.Add(tableFooter);
             }
 
