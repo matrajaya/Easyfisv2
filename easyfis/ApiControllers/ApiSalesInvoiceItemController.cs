@@ -122,13 +122,29 @@ namespace easyfis.Controllers
                 newSaleItem.VATAmount = saleItem.VATAmount;
 
                 var item = from d in db.MstArticles where d.Id == saleItem.ItemId select d;
-
                 newSaleItem.BaseUnitId = item.First().UnitId;
 
                 var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
 
-                newSaleItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
-                newSaleItem.BasePrice = saleItem.Amount / newSaleItem.BaseQuantity;
+                if (conversionUnit.First().Multiplier > 0)
+                {
+                    newSaleItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                }
+                else
+                {
+                    newSaleItem.BaseQuantity = saleItem.Quantity * 1;
+                }
+
+                var baseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                if (baseQuantity > 0)
+                {
+                    newSaleItem.BasePrice = saleItem.Amount / baseQuantity;
+                }
+                else
+                {
+                    newSaleItem.BasePrice = saleItem.Amount;
+                }
 
                 db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleItem);
                 db.SubmitChanges();
@@ -200,9 +216,31 @@ namespace easyfis.Controllers
                     updateSalesInvoiceItem.VATId = saleItem.VATId;
                     updateSalesInvoiceItem.VATPercentage = saleItem.VATPercentage;
                     updateSalesInvoiceItem.VATAmount = saleItem.VATAmount;
-                    updateSalesInvoiceItem.BaseUnitId = saleItem.BaseUnitId;
-                    updateSalesInvoiceItem.BaseQuantity = saleItem.BaseQuantity;
-                    updateSalesInvoiceItem.BasePrice = saleItem.BasePrice;
+
+                    var item = from d in db.MstArticles where d.Id == saleItem.ItemId select d;
+                    updateSalesInvoiceItem.BaseUnitId = item.First().UnitId;
+
+                    var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
+
+                    if (conversionUnit.First().Multiplier > 0)
+                    {
+                        updateSalesInvoiceItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                    }
+                    else
+                    {
+                        updateSalesInvoiceItem.BaseQuantity = saleItem.Quantity * 1;
+                    }
+
+                    var baseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                    if (baseQuantity > 0)
+                    {
+                        updateSalesInvoiceItem.BasePrice = saleItem.Amount / baseQuantity;
+                    }
+                    else
+                    {
+                        updateSalesInvoiceItem.BasePrice = saleItem.Amount;
+                    }
 
                     db.SubmitChanges();
 

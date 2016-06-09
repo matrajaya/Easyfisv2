@@ -95,10 +95,30 @@ namespace easyfis.Controllers
                 newStockTransferItem.Amount = stockTransferItem.Amount;
                 newStockTransferItem.BaseUnitId = stockTransferItem.BaseUnitId;
 
+                var item = from d in db.MstArticles where d.Id == stockTransferItem.ItemId select d;
+                newStockTransferItem.BaseUnitId = item.First().UnitId;
+
                 var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == stockTransferItem.ItemId && d.UnitId == stockTransferItem.UnitId select d;
-                newStockTransferItem.BaseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                if (conversionUnit.First().Multiplier > 0)
+                {
+                    newStockTransferItem.BaseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                }
+                else
+                {
+                    newStockTransferItem.BaseQuantity = stockTransferItem.Quantity * 1;
+                }
+
                 var baseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
-                newStockTransferItem.BaseCost = stockTransferItem.Amount / baseQuantity;
+
+                if (baseQuantity > 0)
+                {
+                    newStockTransferItem.BaseCost = stockTransferItem.Amount / baseQuantity;
+                }
+                else
+                {
+                    newStockTransferItem.BaseCost = stockTransferItem.Amount;
+                }
 
                 db.TrnStockTransferItems.InsertOnSubmit(newStockTransferItem);
                 db.SubmitChanges();
@@ -135,9 +155,31 @@ namespace easyfis.Controllers
                     updateStockTransferItem.Quantity = stockTransferItem.Quantity;
                     updateStockTransferItem.Cost = stockTransferItem.Cost;
                     updateStockTransferItem.Amount = stockTransferItem.Amount;
-                    updateStockTransferItem.BaseUnitId = stockTransferItem.BaseUnitId;
-                    updateStockTransferItem.BaseQuantity = stockTransferItem.BaseQuantity;
-                    updateStockTransferItem.BaseCost = stockTransferItem.BaseCost;
+
+                    var item = from d in db.MstArticles where d.Id == stockTransferItem.ItemId select d;
+                    updateStockTransferItem.BaseUnitId = item.First().UnitId;
+
+                    var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == stockTransferItem.ItemId && d.UnitId == stockTransferItem.UnitId select d;
+
+                    if (conversionUnit.First().Multiplier > 0)
+                    {
+                        updateStockTransferItem.BaseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                    }
+                    else
+                    {
+                        updateStockTransferItem.BaseQuantity = stockTransferItem.Quantity * 1;
+                    }
+
+                    var baseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                    if (baseQuantity > 0)
+                    {
+                        updateStockTransferItem.BaseCost = stockTransferItem.Amount / baseQuantity;
+                    }
+                    else
+                    {
+                        updateStockTransferItem.BaseCost = stockTransferItem.Amount;
+                    }
 
                     db.SubmitChanges();
 

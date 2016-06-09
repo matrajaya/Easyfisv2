@@ -28,12 +28,12 @@ namespace easyfis.Controllers
                                    Item = d.MstArticle.Article,
                                    Particulars = d.Particulars,
                                    UnitId = d.UnitId,
-                                   Unit = d.MstUnit.Unit,
+                                   Unit = d.MstUnit1.Unit,
                                    Quantity = d.Quantity,
                                    Cost = d.Cost,
                                    Amount = d.Amount,
                                    BaseUnitId = d.BaseUnitId,
-                                   BaseUnit = d.MstUnit1.Unit,
+                                   BaseUnit = d.MstUnit.Unit,
                                    BaseQuantity = d.BaseQuantity,
                                    BaseCost = d.BaseCost
                                };
@@ -59,12 +59,12 @@ namespace easyfis.Controllers
                                    Item = d.MstArticle.Article,
                                    Particulars = d.Particulars,
                                    UnitId = d.UnitId,
-                                   Unit = d.MstUnit.Unit,
+                                   Unit = d.MstUnit1.Unit,
                                    Quantity = d.Quantity,
                                    Cost = d.Cost,
                                    Amount = d.Amount,
                                    BaseUnitId = d.BaseUnitId,
-                                   BaseUnit = d.MstUnit1.Unit,
+                                   BaseUnit = d.MstUnit.Unit,
                                    BaseQuantity = d.BaseQuantity,
                                    BaseCost = d.BaseCost
                                };
@@ -88,15 +88,36 @@ namespace easyfis.Controllers
                 newStockInItem.Quantity = stockInItem.Quantity;
                 newStockInItem.Cost = stockInItem.Cost;
                 newStockInItem.Amount = stockInItem.Amount;
-                newStockInItem.BaseUnitId = stockInItem.BaseUnitId;
-                newStockInItem.BaseQuantity = stockInItem.BaseQuantity;
-                newStockInItem.BaseCost = stockInItem.BaseCost;
+
+                var item = from d in db.MstArticles where d.Id == stockInItem.ItemId select d;
+                newStockInItem.BaseUnitId = item.First().UnitId;
+
+                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == stockInItem.ItemId && d.UnitId == stockInItem.UnitId select d;
+
+                if (conversionUnit.First().Multiplier > 0)
+                {
+                    newStockInItem.BaseQuantity = stockInItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                }
+                else
+                {
+                    newStockInItem.BaseQuantity = stockInItem.Quantity * 1;
+                }
+
+                var baseQuantity = stockInItem.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                if (baseQuantity > 0)
+                {
+                    newStockInItem.BaseCost = stockInItem.Amount / baseQuantity;
+                }
+                else
+                {
+                    newStockInItem.BaseCost = stockInItem.Amount;
+                }
 
                 db.TrnStockInItems.InsertOnSubmit(newStockInItem);
                 db.SubmitChanges();
 
                 return newStockInItem.Id;
-
             }
             catch
             {
@@ -126,9 +147,31 @@ namespace easyfis.Controllers
                     updateStockInItem.Quantity = stockInItem.Quantity;
                     updateStockInItem.Cost = stockInItem.Cost;
                     updateStockInItem.Amount = stockInItem.Amount;
-                    updateStockInItem.BaseUnitId = stockInItem.BaseUnitId;
-                    updateStockInItem.BaseQuantity = stockInItem.BaseQuantity;
-                    updateStockInItem.BaseCost = stockInItem.BaseCost;
+
+                    var item = from d in db.MstArticles where d.Id == stockInItem.ItemId select d;
+                    updateStockInItem.BaseUnitId = item.First().UnitId;
+
+                    var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == stockInItem.ItemId && d.UnitId == stockInItem.UnitId select d;
+
+                    if (conversionUnit.First().Multiplier > 0)
+                    {
+                        updateStockInItem.BaseQuantity = stockInItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                    }
+                    else
+                    {
+                        updateStockInItem.BaseQuantity = stockInItem.Quantity * 1;
+                    }
+
+                    var baseQuantity = stockInItem.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                    if (baseQuantity > 0)
+                    {
+                        updateStockInItem.BaseCost = stockInItem.Amount / baseQuantity;
+                    }
+                    else
+                    {
+                        updateStockInItem.BaseCost = stockInItem.Amount;
+                    }
 
                     db.SubmitChanges();
 

@@ -217,8 +217,8 @@
                     <form id="stockOutItemsDetailForm">
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
                             <li role="presentation" class="active"><a data-toggle="tab" href="#OTItem" id="OTItemTabId">Items</a></li>
-                            <li role="presentation"><a data-toggle="tab" href="#OTBUC" id="OTBUCTabId">Basic Unit Conversion</a></li>
                             <li role="presentation"><a data-toggle="tab" href="#OTExpenseAccount" id="OTExpenseAccountTabId">Expense Account</a></li>
+                            <li role="presentation"><a data-toggle="tab" href="#OTBUC" id="OTBUCTabId">Basic Unit Conversion</a></li>
                         </ul>
                         <br />
                         <div class="tab-content">
@@ -258,6 +258,19 @@
                                     <dd><input type="text" class="form-control input-50 numberField input-sm requiredStockOutItem" id="stockOutItem_Amount" placeholder="0.00" /></dd>
                                 </dl>
                             </div>
+                            <div id="OTExpenseAccount" class="tab-pane fade in">
+                                <dl class="dl-horizontal">
+                                    <dt>Expense Account</dt>
+                                    <dd>
+                                        <div class="input-30" id="stockOutItem_ExpenseAccountCode"></div>
+                                        <div class="input-68" id="stockOutItem_ExpenseAccount"></div>
+
+                                        <input type="hidden" id="stockOutItem_ExpenseAccount_data" class="requiredStockOutItem">
+                                        <input type="hidden" id="stockOutItem_ExpenseAccount_selectedValue" />
+                                        <input type="hidden" id="stockOutItem_ExpenseAccountCode_selectedValue" />
+                                    </dd>
+                                </dl>
+                            </div>
                             <div id="OTBUC" class="tab-pane fade in">
                                 <dl class="dl-horizontal">
                                     <dt>Unit</dt>
@@ -271,19 +284,6 @@
                                     <dd><input type="text" class="form-control input-50 numberField input-sm requiredStockOutItem" id="stockOutItem_BUCQuantity" placeholder="0.00" /></dd>
                                     <dt>Cost</dt>
                                     <dd><input type="text" class="form-control input-50 numberField input-sm requiredStockOutItem" id="stockOutItem_BUCCost" placeholder="0.00" /></dd>
-                                </dl>
-                            </div>
-                            <div id="OTExpenseAccount" class="tab-pane fade in">
-                                <dl class="dl-horizontal">
-                                    <dt>Expense Account</dt>
-                                    <dd>
-                                        <div class="input-30" id="stockOutItem_ExpenseAccountCode"></div>
-                                        <div class="input-68" id="stockOutItem_ExpenseAccount"></div>
-
-                                        <input type="hidden" id="stockOutItem_ExpenseAccount_data" class="requiredStockOutItem">
-                                        <input type="hidden" id="stockOutItem_ExpenseAccount_selectedValue" />
-                                        <input type="hidden" id="stockOutItem_ExpenseAccountCode_selectedValue" />
-                                    </dd>
                                 </dl>
                             </div>
                         </div>
@@ -1831,8 +1831,8 @@
                 document.getElementById('stockOutItem_ItemDescription_selectedValue').value = "";
                 document.getElementById('stockOutItem_Unit_data').value = "";
                 document.getElementById('stockOutItem_Unit_selectedValue').value = "";
-                document.getElementById('stockOutItem_BUCUnit_data').value = "";
-                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+                //document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                //document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
                 document.getElementById('stockOutItem_Particulars').value = "";
                 document.getElementById('stockOutItem_ItemInventoryCode_data').value = "";
                 document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
@@ -1899,6 +1899,7 @@
                     createCboForInventoryCode(articleItems);
 
                     getStockOutItemUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
+                    getBUCUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
 
                     var stockOut_Quantity = document.getElementById('stockOutItem_Quantity').value;
                     var stockOut_Cost = document.getElementById('stockOutItem_Cost').value;
@@ -1918,8 +1919,8 @@
                 document.getElementById('stockOutItem_ItemDescription_selectedValue').value = "";
                 document.getElementById('stockOutItem_Unit_data').value = "";
                 document.getElementById('stockOutItem_Unit_selectedValue').value = "";
-                document.getElementById('stockOutItem_BUCUnit_data').value = "";
-                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+                //document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                //document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
                 document.getElementById('stockOutItem_Particulars').value = "";
                 document.getElementById('stockOutItem_ItemInventoryCode_data').value = "";
                 document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
@@ -1938,6 +1939,7 @@
                 document.getElementById('stockOutItem_Cost').value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Cost;
 
                 getStockOutItemUnitForComboBox(ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId);
+                getBUCUnitForComboBox(ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId);
             }
         }
 
@@ -2005,8 +2007,8 @@
                 document.getElementById('stockOutItem_ItemDescription_selectedValue').value = "";
                 document.getElementById('stockOutItem_Unit_data').value = "";
                 document.getElementById('stockOutItem_Unit_selectedValue').value = "";
-                document.getElementById('stockOutItem_BUCUnit_data').value = "";
-                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+                //document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                //document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
                 document.getElementById('stockOutItem_Particulars').value = "";
                 document.getElementById('stockOutItem_ItemInventoryCode_data').value = "";
                 document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
@@ -2042,14 +2044,13 @@
                         for (i = 0; i < results.length; i++) {
                             stockOutUnits.push({
                                 UnitId: results[i]["UnitId"],
-                                Unit: results[i]["Unit"]
+                                Unit: results[i]["Unit"],
+                                Multiplier: results[i]["Multiplier"]
                             });
                         }
                         createCboForStockOutUnit(stockOutUnits);
-                        createCboForStockOutBaseUnit(stockOutUnits);
                     } else {
                         createCboForStockOutUnit(stockOutUnits);
-                        createCboForStockOutBaseUnit(stockOutUnits);
                     }
                 }
             });
@@ -2086,31 +2087,68 @@
                 onSelectedIndexChanged: function () {
                     $("#stockOutItem_Unit_data").val(StockOutUnitCollection.items[this.selectedIndex].UnitId);
                     $("#stockOutItem_Unit_selectedValue").val(StockOutUnitCollection.items[this.selectedIndex].Unit);
-                    $("#stockOutItem_BUCUnit_data").val(StockOutUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#stockOutItem_BUCUnit_selectedValue").val(StockOutUnitCollection.items[this.selectedIndex].Unit);
+                    //$("#stockOutItem_BUCUnit_data").val(StockOutUnitCollection.items[this.selectedIndex].UnitId);
+                    //$("#stockOutItem_BUCUnit_selectedValue").val(StockOutUnitCollection.items[this.selectedIndex].Unit);
+                    getArticleItemForManualCodeAndComponent();
+                    var quantity = document.getElementById("stockOutItem_Quantity").value.replace(/\,/g, '');;
+                    var cost = document.getElementById("stockOutItem_Cost").value.replace(/\,/g, '');;
 
-                    createCboForStockOutBaseUnit(stockOutUnits);
+                    document.getElementById("stockOutItem_Cost").value = Math.round((cost / StockOutUnitCollection.items[this.selectedIndex].Multiplier) * 100) / 100;
+                    document.getElementById('stockOutItem_Amount').value =  Math.round((quantity * document.getElementById("stockOutItem_Cost").value) * 100) / 100;
                 }
             });
 
             if(stockOutUnits == 0) {
                 document.getElementById('stockOutItem_Unit_data').value = "";
                 document.getElementById('stockOutItem_Unit_selectedValue').value = "";
-                document.getElementById('stockOutItem_BUCUnit_data').value = "";
-                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+                //document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                //document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
             } else {
                 document.getElementById('stockOutItem_Unit_data').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].UnitId;
                 document.getElementById('stockOutItem_Unit_selectedValue').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].Unit;
-                document.getElementById('stockOutItem_BUCUnit_data').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].UnitId;
-                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].Unit;
+                //document.getElementById('stockOutItem_BUCUnit_data').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].UnitId;
+                //document.getElementById('stockOutItem_BUCUnit_selectedValue').value = StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].Unit;
             }
+
+            var quantity = document.getElementById("stockOutItem_Quantity").value.replace(/\,/g, '');;
+            var cost = document.getElementById("stockOutItem_Cost").value.replace(/\,/g, '');;
+
+            document.getElementById("stockOutItem_Cost").value = Math.round((cost / StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].Multiplier) * 100) / 100;
+            document.getElementById('stockOutItem_Amount').value =  Math.round((quantity * document.getElementById("stockOutItem_Cost").value) * 100) / 100;
+        }
+        
+        // =======================================
+        // Get Item Unit for Basic Unit Conversion
+        // =======================================
+        function getBUCUnitForComboBox(itemId) {
+            BUCUnits = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listUnit',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            BUCUnits.push({
+                                UnitId: results[i]["Id"],
+                                Unit: results[i]["Unit"]
+                            });
+                        }
+                        createCboForStockOutBaseUnit(BUCUnits, itemId);
+                    } else {
+                        createCboForStockOutBaseUnit(BUCUnits, itemId);
+                    }
+                }
+            });
         }
 
         // ===========================
         // CBO for STock Out Base Unit
         // ===========================
-        function createCboForStockOutBaseUnit(stockOutUnits) {
-            var StockOutBaseUnitCollection = new wijmo.collections.CollectionView(stockOutUnits);
+        function createCboForStockOutBaseUnit(BUCUnits, itemId) {
+            var StockOutBaseUnitCollection = new wijmo.collections.CollectionView(BUCUnits);
             var StockOutBaseUnitList = new Array();
             for (var i = 0; i < StockOutBaseUnitCollection.items.length; i++) {
                 StockOutBaseUnitList.push(StockOutBaseUnitCollection.items[i].Unit);
@@ -2127,35 +2165,41 @@
                 }
             }
 
-            cboBaseUnit.dispose();
-            cboBaseUnit = new wijmo.input.ComboBox('#stockOutItem_BUCUnit', {
-                disabled: true,
-                placeholder: "Select Unit",
-                itemsSource: StockOutBaseUnitList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('stockOutItem_BUCUnit_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#stockOutItem_BUCUnit_data").val(StockOutBaseUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#stockOutItem_BUCUnit_selectedValue").val(StockOutBaseUnitCollection.items[this.selectedIndex].Unit);
-                    $("#stockOutItem_Unit_data").val(StockOutBaseUnitCollection.items[this.selectedIndex].UnitId);
-                    $("#stockOutItem_Unit_selectedValue").val(StockOutBaseUnitCollection.items[this.selectedIndex].Unit);
-
-                    createCboForStockOutUnit(stockOutUnits);
+            var Unit = "";
+            var UnitId;
+            $.ajax({
+                url: '/api/article/' + itemId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    UnitId = results.UnitId;
+                    Unit = results.Unit;
+                    
+                    cboBaseUnit.dispose();
+                    cboBaseUnit = new wijmo.input.ComboBox('#stockOutItem_BUCUnit', {
+                        disabled: true,
+                        placeholder: "Select Base Unit",
+                        itemsSource: StockOutBaseUnitList,
+                        isEditable: false,
+                        required: false,
+                        selectedValue: Unit.toString(),
+                        onSelectedIndexChanged: function () {
+                            $("#stockOutItem_BUCUnit_data").val(StockOutBaseUnitCollection.items[this.selectedIndex].UnitId);
+                            //$("#stockOutItem_BUCUnit_selectedValue").val(StockOutBaseUnitCollection.items[this.selectedIndex].Unit);
+                            //$("#stockOutItem_Unit_data").val(StockOutBaseUnitCollection.items[this.selectedIndex].UnitId);
+                            //$("#stockOutItem_Unit_selectedValue").val(StockOutBaseUnitCollection.items[this.selectedIndex].Unit);
+                        }
+                    });
+                    
+                    if (stockOutUnits == 0) {
+                        document.getElementById('stockOutItem_BUCUnit_data').value =  "";
+                    } else {
+                        document.getElementById('stockOutItem_BUCUnit_data').value = StockOutBaseUnitCollection.items[cboBaseUnit.selectedIndex].UnitId;
+                    }
                 }
             });
-
-            if(stockOutUnits == 0) {
-                document.getElementById('stockOutItem_BUCUnit_data').value = "";
-                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
-                document.getElementById('stockOutItem_Unit_data').value = "";
-                document.getElementById('stockOutItem_Unit_selectedValue').value = "";
-            } else {
-                document.getElementById('stockOutItem_BUCUnit_data').value = StockOutBaseUnitCollection.items[cboStockOutUnit.selectedIndex].UnitId;
-                document.getElementById('stockOutItem_BUCUnit_selectedValue').value = StockOutBaseUnitCollection.items[cboStockOutUnit.selectedIndex].Unit;
-                document.getElementById('stockOutItem_Unit_data').value = StockOutBaseUnitCollection.items[cboStockOutUnit.selectedIndex].UnitId;
-                document.getElementById('stockOutItem_Unit_selectedValue').value = StockOutBaseUnitCollection.items[cboStockOutUnit.selectedIndex].Unit;
-            }
         }
 
         // =====================
@@ -2463,9 +2507,9 @@
             stockOutItemObject.Quantity = document.getElementById('stockOutItem_Quantity').value;
             stockOutItemObject.Cost = document.getElementById('stockOutItem_Cost').value;
             stockOutItemObject.Amount = document.getElementById('stockOutItem_Amount').value;
-            stockOutItemObject.BaseUnitId = document.getElementById('stockOutItem_BUCUnit_data').value;
-            stockOutItemObject.BaseQuantity = document.getElementById('stockOutItem_BUCQuantity').value;
-            stockOutItemObject.BaseCost = document.getElementById('stockOutItem_BUCCost').value;
+            //stockOutItemObject.BaseUnitId = document.getElementById('stockOutItem_BUCUnit_data').value;
+            //stockOutItemObject.BaseQuantity = document.getElementById('stockOutItem_BUCQuantity').value;
+            //stockOutItemObject.BaseCost = document.getElementById('stockOutItem_BUCCost').value;
             var stockOutItemData = JSON.stringify(stockOutItemObject);
 
             if( document.getElementById('stockOutItem_ExpenseAccount_data').value == '') {

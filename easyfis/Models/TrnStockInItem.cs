@@ -9,7 +9,6 @@ namespace easyfis.Models
     public class TrnStockInItem
     {
         [Key]
-
         public Int32 Id { get; set; }
         public Int32 INId { get; set; }
         public String IN { get; set; }

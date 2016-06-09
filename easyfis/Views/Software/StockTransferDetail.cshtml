@@ -1774,8 +1774,6 @@
 
                     getArticleItemForManualCodeAndComponent();
 
-                    cboInventoryCode.selectedItem["Cost"];
-
                     var quantity = document.getElementById("stockTransferItem_Quantity").value.replace(/\,/g, '');;
                     var cost = document.getElementById("stockTransferItem_Cost").value.replace(/\,/g, '');;
 
@@ -2017,9 +2015,9 @@
             stockTransferItemObject.Quantity = document.getElementById('stockTransferItem_Quantity').value;
             stockTransferItemObject.Cost = document.getElementById('stockTransferItem_Cost').value;
             stockTransferItemObject.Amount = document.getElementById('stockTransferItem_Amount').value;
-            stockTransferItemObject.BaseUnitId = document.getElementById('stockTransferItem_BUCUnit_data').value;
-            stockTransferItemObject.BaseQuantity = document.getElementById('stockTransferItem_BUCQuantity').value;
-            stockTransferItemObject.BaseCost = document.getElementById('stockTransferItem_BUCCost').value;
+            //stockTransferItemObject.BaseUnitId = document.getElementById('stockTransferItem_BUCUnit_data').value;
+            //stockTransferItemObject.BaseQuantity = document.getElementById('stockTransferItem_BUCQuantity').value;
+            //stockTransferItemObject.BaseCost = document.getElementById('stockTransferItem_BUCCost').value;
             var stockTransferItemData = JSON.stringify(stockTransferItemObject);
 
             if (document.getElementById('stockTransferItem_ItemId_data').value == '') {
