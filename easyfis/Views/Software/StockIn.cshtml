@@ -36,15 +36,6 @@
                     <div class="box-body">
                         <!-- Stock In List -->
                         <div id="stockInList">
-                            <label>IN date </label>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div id="filterDate"></div>
-                                    <input type="hidden" id="filterDate_data" />
-                                </div>
-                                <div class="col-lg-8"></div>
-                            </div>
-                            <br />
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="input-group input-group-sm">
@@ -52,7 +43,11 @@
                                         <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
+                                <div class="col-lg-2">
+                                    <div id="filterDate"></div>
+                                    <input type="hidden" id="filterDate_data" />
+                                </div>
+                                <div class="col-lg-6" align="right">
                                     <button class="btn btn-primary btn-sm" onclick="btnAddStockIn_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                     <button class="btn btn-danger btn-sm" onclick="btnCloseStockIn_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                 </div>

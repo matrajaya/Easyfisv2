@@ -30,21 +30,10 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-
-                    </div>
+                    <div class="box-header"></div>
                     <div class="box-body">
                         <!-- Journal Voucher List -->
                         <div id="journalVoucherList">
-                            <label>JV date </label>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div id="filterDate"></div>
-                                    <input type="hidden" id="filterDate_data" />
-                                </div>
-                                <div class="col-lg-8"></div>
-                            </div>
-                            <br />
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="input-group input-group-sm">
@@ -52,7 +41,11 @@
                                         <input type="text" class="form-control input-sm" id="InputFilterJournalVoucher" placeholder="Search">
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
+                                <div class="col-lg-2">
+                                    <div id="filterDate"></div>
+                                    <input type="hidden" id="filterDate_data" />
+                                </div>
+                                <div class="col-lg-6" align="right">
                                     <button class="btn btn-primary btn-sm" onclick="btnAddJournalVoucher_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                     <button class="btn btn-danger btn-sm" onclick="btnCloseJournalVoucher_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                 </div>
