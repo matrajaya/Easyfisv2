@@ -3045,19 +3045,15 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        if (Results.length > 0) {
-                            disbursements.push({
-                                Id: Results.Id,
-                                CVNumber: Results.CVNumber
-                            });
-                        }
-                        var CV_Number = parseInt(Results.CVNumber);
-                        var CV_Number_PlusOne = 0000000001;
-                        var CV_Num_Results = CV_Number + CV_Number_PlusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+                        if(Results != null) {
+                            var CV_Number = parseInt(Results.CVNumber);
+                            var CV_Number_PlusOne = 0000000001;
+                            var CV_Num_Results = CV_Number + CV_Number_PlusOne;
+                            //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
 
-                        document.getElementById('disbursement_CVNumber').value = zerofill(CV_Num_Results, 10);
-                        document.getElementById('disbursement_CVNumber_Display').value = zerofill(CV_Num_Results, 10);
+                            document.getElementById('disbursement_CVNumber').value = zerofill(CV_Num_Results, 10);
+                            document.getElementById('disbursement_CVNumber_Display').value = zerofill(CV_Num_Results, 10);
+                        }
                     }
                 });
             }

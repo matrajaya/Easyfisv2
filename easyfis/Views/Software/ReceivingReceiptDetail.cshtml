@@ -2047,13 +2047,15 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        var RR_Number = parseInt(Results.RRNumber);
-                        var RR_Number_PlusOne = 0000000001;
-                        var RR_Num_Results = RR_Number + RR_Number_PlusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+                        if(Results != null) {
+                            var RR_Number = parseInt(Results.RRNumber);
+                            var RR_Number_PlusOne = 0000000001;
+                            var RR_Num_Results = RR_Number + RR_Number_PlusOne;
+                            //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
 
-                        document.getElementById('RRRRNumber').value = zerofill(RR_Num_Results, 10);
-                        document.getElementById('RRRRNumber_Display').value = zerofill(RR_Num_Results, 10);
+                            document.getElementById('RRRRNumber').value = zerofill(RR_Num_Results, 10);
+                            document.getElementById('RRRRNumber_Display').value = zerofill(RR_Num_Results, 10);
+                        }
                     }
                 });
             }

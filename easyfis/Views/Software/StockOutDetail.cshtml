@@ -1485,19 +1485,16 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {},
                     success: function (Results) {
-                        if (Results.length > 0) {
-                            stockOuts.push({
-                                Id: Results.Id,
-                                OTNumber: Results.OTNumber
-                            });
-                        }
-                        var OT_Number = parseInt(Results.OTNumber);
-                        var OT_Number_PlusOne = 0000000001;
-                        var OT_Num_Results = OT_Number + OT_Number_PlusOne;
-                        //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
+                        if(Results != null) {
+                            var OT_Number = parseInt(Results.OTNumber);
+                            var OT_Number_PlusOne = 0000000001;
+                            var OT_Num_Results = OT_Number + OT_Number_PlusOne;
+                            //var JV_Number_Display = JV_Num_Results.toString().replace(/(\d{3})(\d+)/, '$1-$2');
 
-                        document.getElementById('StockOut_OTNumber').value = zerofill(OT_Num_Results, 10);
-                        document.getElementById('StockOut_OTNumber_Display').value = zerofill(OT_Num_Results, 10);
+                            document.getElementById('StockOut_OTNumber').value = zerofill(OT_Num_Results, 10);
+                            document.getElementById('StockOut_OTNumber_Display').value = zerofill(OT_Num_Results, 10);
+                        }
+                       
                     }
                 });
             }
