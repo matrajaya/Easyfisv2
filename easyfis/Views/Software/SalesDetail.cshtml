@@ -576,25 +576,6 @@
             }
         }
 
-        // =================
-        // GET Sales Last Id
-        // ========-========
-        function getSalesLastInsertedId() {
-            var sales = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/salesInvoiceLastId',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    window.location = '/Software/SalesDetail?SalesId=' + Results.Id;
-                    window.setTimeout(function () { location.reload() }, 1000);
-                }
-            });
-            return sales;
-        }
-
         // ========================
         // GET Branch for Combo Box
         // ========================
@@ -1148,8 +1129,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdSalesJournal").prop("disabled", true);
                                 $("#cmdSalesSaveLock").prop("disabled", true);
                                 $("#cmdSalesSave").prop("disabled", true);
@@ -1157,25 +1138,9 @@
                                 $("#cmdSalesPrint").prop("disabled", true);
                                 $("#cmdSalesClose").prop("disabled", true);
                                 toastr.success("Successfully Saved");
-                                setTimeout(getSalesLastInsertedId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdSalesJournal").prop("disabled", false);
-                                $("#cmdSalesSaveLock").prop("disabled", false);
-                                $("#cmdSalesSave").prop("disabled", false);
-                                $("#cmdSalesEdit").prop("disabled", false);
-                                $("#cmdSalesPrint").prop("disabled", false);
-                                $("#cmdSalesClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdSalesJournal").prop("disabled", false);
-                                $("#cmdSalesSaveLock").prop("disabled", false);
-                                $("#cmdSalesSave").prop("disabled", false);
-                                $("#cmdSalesEdit").prop("disabled", false);
-                                $("#cmdSalesPrint").prop("disabled", false);
-                                $("#cmdSalesClose").prop("disabled", false);
+                                window.location = '/Software/SalesDetail?SalesId=' + id;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1310,8 +1275,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdSalesJournal").prop("disabled", true);
                                 $("#cmdSalesSaveLock").prop("disabled", true);
                                 $("#cmdSalesSave").prop("disabled", true);
@@ -1319,25 +1284,9 @@
                                 $("#cmdSalesPrint").prop("disabled", true);
                                 $("#cmdSalesClose").prop("disabled", true);
                                 toastr.success("Successfully Saved");
-                                setTimeout(getSalesLastInsertedId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdSalesJournal").prop("disabled", false);
-                                $("#cmdSalesSaveLock").prop("disabled", false);
-                                $("#cmdSalesSave").prop("disabled", false);
-                                $("#cmdSalesEdit").prop("disabled", false);
-                                $("#cmdSalesPrint").prop("disabled", false);
-                                $("#cmdSalesClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdSalesJournal").prop("disabled", false);
-                                $("#cmdSalesSaveLock").prop("disabled", false);
-                                $("#cmdSalesSave").prop("disabled", false);
-                                $("#cmdSalesEdit").prop("disabled", false);
-                                $("#cmdSalesPrint").prop("disabled", false);
-                                $("#cmdSalesClose").prop("disabled", false);
+                                window.location = '/Software/SalesDetail?SalesId=' + salesInvoiceId;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1560,9 +1509,9 @@
         function getItem() {
             var items = new wijmo.collections.ObservableArray;
             var salesId = getParam('SalesId');
-            NProgress.start();
 
             if (document.location.search.length > 0) {
+                NProgress.start();
                 $.ajax({
                     url: '/api/listSalesInvoiceItemBySIId/' + salesId,
                     cache: false,
@@ -2880,8 +2829,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: saleItemData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdSaveSaleItemsButton").prop("disabled", true);
                                 $("#cmdSaleItemsDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
@@ -2893,18 +2842,10 @@
                                 // Flex Grid for Items
                                 itemGrid.itemsSource = items;
                                 itemGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $('#saleItemsEdit').modal('hide');
+                            } else {
                                 $("#cmdSaveSaleItemsButton").prop("disabled", false);
                                 $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $('#saleItemsEdit').modal('hide');
-                                $("#cmdSaveSaleItemsButton").prop("disabled", false);
-                                $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -3523,6 +3464,15 @@
             $('#Items').show();
             $('#InventoryEntries').hide();
             itemTab();
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    btnSalesSave_OnClick();
+                    window.btnSalesSave_OnClick = function () {
+                        return true;
+                    }
+                }
+            });
         });
     </script>
 </body>

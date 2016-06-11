@@ -250,8 +250,8 @@
         // Get Article for Customer by its ID
         // ==================================
         function getArticleCustomerById() {
-            NProgress.start();
             if (document.location.search.length > 0) {
+                NProgress.start();
                 $.ajax({
                     url: '/api/article/' + customerId,
                     cache: false,
@@ -349,26 +349,6 @@
                 }
             }
             return disabled;
-        }
-
-        // ==================================
-        // Get Last Id for Customer by its ID
-        // ==================================
-        function getLastInsertedIdCustomerByArticleTypeId() {
-            $.ajax({
-                url: '/api/articleLastIdByArticleTypeId/2',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (lastCustomerResults) {
-                    if (lastCustomerResults != null) {
-                        window.setTimeout(function () {
-                            window.location = '/Software/CustomerDetail?CustomerId=' + lastCustomerResults.Id;
-                        }, 1000);
-                    }
-                }
-            });
         }
 
         // =========================
@@ -622,31 +602,16 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: dataCustomerObject(),
-                    statusCode: {
-                        200: function () {
+                    success: function (id) {
+                        if (id > 0) {
+                            window.location = '/Software/CustomerDetail?CustomerId=' + id;
                             document.getElementById('customer_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                             $('#customer_SaveButton').prop('disabled', true);
                             $('#customer_LockButton').prop('disabled', true);
                             $('#customer_UnlockButton').prop('disabled', true);
                             $('#customer_CloseButton').prop('disabled', true);
-                            toastr.success("Successfully saved");
-                            setTimeout(getLastInsertedIdCustomerByArticleTypeId, 1000);
-                        },
-                        404: function () {
-                            document.getElementById('customer_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                            $('#customer_SaveButton').prop('disabled', false);
-                            $('#customer_LockButton').prop('disabled', true);
-                            $('#customer_UnlockButton').prop('disabled', true);
-                            $('#customer_CloseButton').prop('disabled', false);
-                            toastr.error("Save request not found");
-                        },
-                        400: function () {
-                            document.getElementById('customer_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                            $('#customer_SaveButton').prop('disabled', false);
-                            $('#customer_LockButton').prop('disabled', true);
-                            $('#customer_UnlockButton').prop('disabled', true);
-                            $('#customer_CloseButton').prop('disabled', false);
-                            toastr.error("Cannot save new record");
+                        } else {
+                            window.history.back();
                         }
                     }
                 });
@@ -836,6 +801,15 @@
             $('#JournalLedger').show();
             $('#ContactInformation').hide();
             journalLedgerTab();
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    customerSaveButton_OnClick();
+                    window.customerSaveButton_OnClick = function () {
+                        return true;
+                    }
+                }
+            });
         });
     </script>
 
@@ -1141,23 +1115,18 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: contactData,
-                        statusCode: {
-                            200: function () {
+                        success: function (id) {
+                            if (id > 0) {
                                 $('#cmdSaveContactButton').prop('disabled', true);
                                 $('#cmdContactDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
                                 $('#contactEdit').modal('hide');
                                 refreshMoreContactInformation();
-                            },
-                            404: function () {
+                            } else {
+                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#cmdSaveContactButton').prop('disabled', false);
                                 $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save request not found");
-                            },
-                            400: function () {
-                                $('#cmdSaveContactButton').prop('disabled', false);
-                                $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Cannot save new record");
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });

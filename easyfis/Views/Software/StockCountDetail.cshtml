@@ -220,9 +220,9 @@
         // GET Stock Count by Id
         function getStockCountById() {
             document.getElementById("inputIdStockCountDetailSCNumber").disabled = true;
-            NProgress.start();
             if (document.location.search.length > 0) {
                 $("#btnIdStockCountDetailSave").hide();
+                NProgress.start();
                 $.ajax({
                     url: '/api/stockCount/getById/' + getParameterValue("Id"),
                     cache: false,
@@ -453,20 +453,6 @@
             });
         }
 
-        // Get last inserted Stock Count
-        function getLastInsertedStockCount() {
-            $.ajax({
-                url: '/api/stockCount/getLast',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (lastStockCountResults) {
-                    window.location = '/Software/StockCountDetail?Id=' + lastStockCountResults.Id;
-                    window.setTimeout(function () { location.reload() }, 1000);
-                }
-            });
-        }
-
         // Form Validation
         function stockCountValidation() {
             var isValid = true;
@@ -514,28 +500,12 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: stockCountData(),
-                    statusCode: {
-                        200: function () {
+                    success: function(id){
+                        if(id > 0) {
                             toastr.success("Successfully Saved");
-                            setTimeout(getLastInsertedStockCount, 1000);
-                        },
-                        404: function () {
-                            $("#btnIdStockCountDetailSave").prop("disabled", false);
-                            $("#btnIdStockCountDetailLock").prop("disabled", true);
-                            $("#btnIdStockCountDetailUnlock").prop("disabled", true);
-                            $("#btnIdStockCountDetailPrint").prop("disabled", true);
-                            $("#btnIdStockCountDetailClose").prop("disabled", false);
-                            document.getElementById("btnIdStockCountDetailSave").innerHTML = "<i class='fa fa-save'></i> Save";
-                            toastr.error("Not Found");
-                        },
-                        400: function () {
-                            $("#btnIdStockCountDetailSave").prop("disabled", false);
-                            $("#btnIdStockCountDetailLock").prop("disabled", true);
-                            $("#btnIdStockCountDetailUnlock").prop("disabled", true);
-                            $("#btnIdStockCountDetailPrint").prop("disabled", true);
-                            $("#btnIdStockCountDetailClose").prop("disabled", false);
-                            document.getElementById("btnIdStockCountDetailSave").innerHTML = "<i class='fa fa-save'></i> Save";
-                            toastr.error("Bad Request");
+                            window.location = '/Software/StockCountDetail?Id=' + id;
+                        } else {
+                            window.history.back();
                         }
                     }
                 });
@@ -638,9 +608,9 @@
 
         // Get Stock Count Item by SCId
         function getStockCountItemBySCId() {
-            NProgress.start();
             var stockCountItems = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
+                NProgress.start();
                 $.ajax({
                     url: '/api/stockCountItem/listBySCId/' + getParameterValue("Id"),
                     cache: false,
@@ -778,24 +748,17 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: stockCountItemData(),
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 toastr.success("Successfully Saved");
                                 $('#divIdStockCountItemFormModal').modal('hide');
 
                                 refreshStockCountItemFlexGrid();
-                            },
-                            404: function () {
+                            } else {
                                 $("#btnIdStockCountItemSave").prop("disabled", false);
                                 $("#btnIdStockCountItemClose").prop("disabled", false);
                                 document.getElementById("btnIdStockCountItemSave").innerHTML = "<i class='fa fa-save'></i> Save";
-                                toastr.error("Not Found");
-                            },
-                            400: function () {
-                                $("#btnIdStockCountItemSave").prop("disabled", false);
-                                $("#btnIdStockCountItemClose").prop("disabled", false);
-                                document.getElementById("btnIdStockCountItemSave").innerHTML = "<i class='fa fa-save'></i> Save";
-                                toastr.error("Bad Request");
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -1091,6 +1054,15 @@
             cboItemCode = new wijmo.input.ComboBox('#divIdStockCountItemCode');
             cboItem = new wijmo.input.ComboBox('#divIdStockCountItem');
             cboItemUnit = new wijmo.input.ComboBox('#divIdStockCountItemUnit');
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    btnOnclickStockCountDetailSave();
+                    window.btnOnclickStockCountDetailSave = function () {
+                        return true;
+                    }
+                }
+            });
         });
     </script>
 </body>

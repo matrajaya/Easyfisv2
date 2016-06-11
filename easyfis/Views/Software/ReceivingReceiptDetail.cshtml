@@ -557,7 +557,6 @@
         // =================
         function getRRById() {
             var ReceivingReceiptId = getParam('ReceivingReceiptId');
-            NProgress.start();
             if (document.location.search.length == 0) {
                 document.getElementById('RRDocReference').value = "NA";
                 document.getElementById('RRRemarks').value = "NA";
@@ -565,6 +564,7 @@
 
                 NProgress.done();
             } else {
+                NProgress.start();
                 $.ajax({
                     url: '/api/receivingReceipt/' + ReceivingReceiptId,
                     cache: false,
@@ -683,23 +683,6 @@
                     alert(err);
                 });
             }
-        }
-
-        // ==============
-        // GET RR Last Id
-        // ========-======
-        function getRRLastInsertedIdById() {
-            $.ajax({
-                url: '/api/receivingReceiptLastId',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + Results.Id;
-                    window.setTimeout(function () { location.reload() }, 1000);
-                }
-            });
         }
 
         // ========================
@@ -1257,34 +1240,17 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $("#cmdRRJournal").prop("disabled", true);
                                 $("#cmdSaveRRSave").prop("disabled", true);
                                 $("#cmdRRSave").prop("disabled", true);
                                 $("#cmdRREdit").prop("disabled", true);
                                 $("#cmdRRPrint").prop("disabled", true);
                                 $("#cmdRRClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getRRLastInsertedIdById, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdRRJournal").prop("disabled", false);
-                                $("#cmdSaveRRSave").prop("disabled", false);
-                                $("#cmdRRSave").prop("disabled", false);
-                                $("#cmdRREdit").prop("disabled", false);
-                                $("#cmdRRPrint").prop("disabled", false);
-                                $("#cmdRRClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdRRJournal").prop("disabled", false);
-                                $("#cmdSaveRRSave").prop("disabled", false);
-                                $("#cmdRRSave").prop("disabled", false);
-                                $("#cmdRREdit").prop("disabled", false);
-                                $("#cmdRRPrint").prop("disabled", false);
-                                $("#cmdRRClose").prop("disabled", false);
+                                window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + id;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1426,34 +1392,17 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $("#cmdRRJournal").prop("disabled", true);
                                 $("#cmdSaveRRSave").prop("disabled", true);
                                 $("#cmdRRSave").prop("disabled", true);
                                 $("#cmdRREdit").prop("disabled", true);
                                 $("#cmdRRPrint").prop("disabled", true);
                                 $("#cmdRRClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getRRLastInsertedIdById, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdRRJournal").prop("disabled", false);
-                                $("#cmdSaveRRSave").prop("disabled", false);
-                                $("#cmdRRSave").prop("disabled", false);
-                                $("#cmdRREdit").prop("disabled", false);
-                                $("#cmdRRPrint").prop("disabled", false);
-                                $("#cmdRRClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdRRJournal").prop("disabled", false);
-                                $("#cmdSaveRRSave").prop("disabled", false);
-                                $("#cmdRRSave").prop("disabled", false);
-                                $("#cmdRREdit").prop("disabled", false);
-                                $("#cmdRRPrint").prop("disabled", false);
-                                $("#cmdRRClose").prop("disabled", false);
+                                window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + id;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -2109,6 +2058,14 @@
                 });
             }
 
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    RRSaveSaveButton_OnClick();
+                    window.RRSaveSaveButton_OnClick = function () {
+                        return true;
+                    }
+                }
+            });
         });
     </script>
 
@@ -3521,8 +3478,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: RRLineData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $("#cmdSaveRRLinesButton").prop("disabled", true);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
@@ -3533,18 +3490,10 @@
                                 // Flex Grid for Item
                                 itemGrid.itemsSource = items;
                                 itemGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $('#RRLinesEdit').modal('hide');
+                            } else {
                                 $("#cmdSaveRRLinesButton").prop("disabled", false);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $('#RRLinesEdit').modal('hide');
-                                $("#cmdSaveRRLinesButton").prop("disabled", false);
-                                $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });

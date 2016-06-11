@@ -1040,7 +1040,6 @@
         function getDisbursementById() {
             disbursements = new wijmo.collections.ObservableArray;
             var disbursementId = getParam("DisbursementId");
-            NProgress.start();
             if (document.location.search.length == 0) {
                 document.getElementById('disbursement_ManualCVNumber').value = "NA";
                 document.getElementById('disbursement_Payee').value = "NA";
@@ -1049,6 +1048,7 @@
 
                 NProgress.done();
             } else {
+                NProgress.start();
                 $.ajax({
                     url: '/api/disbursement/' + disbursementId,
                     cache: false,
@@ -1207,25 +1207,6 @@
                     alert(err);
                 });
             }
-        }
-
-        // =========================
-        // GET Disbursements Last Id
-        // =========================
-        function getDisbursementLastInsertedId() {
-            var disbursements = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/disbursementLastId',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    window.location = '/Software/DisbursementDetail?DisbursementId=' + Results.Id;
-                    window.setTimeout(function () { location.reload() }, 1000);
-                }
-            });
-            return disbursements;
         }
 
         // ========================
@@ -1804,34 +1785,17 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $("#cmdDisbursementJournal").prop("disabled", true);
                                 $("#cmdDisbursementSaveLock").prop("disabled", true);
                                 $("#cmdDisbursementSave").prop("disabled", true);
                                 $("#cmdDisbursementEdit").prop("disabled", true);
                                 $("#cmdDisbursementPrint").prop("disabled", true);
                                 $("#cmdDisbursementClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getDisbursementLastInsertedId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdDisbursementJournal").prop("disabled", false);
-                                $("#cmdDisbursementSaveLock").prop("disabled", false);
-                                $("#cmdDisbursementSave").prop("disabled", false);
-                                $("#cmdDisbursementEdit").prop("disabled", false);
-                                $("#cmdDisbursementPrint").prop("disabled", false);
-                                $("#cmdDisbursementClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdDisbursementJournal").prop("disabled", false);
-                                $("#cmdDisbursementSaveLock").prop("disabled", false);
-                                $("#cmdDisbursementSave").prop("disabled", false);
-                                $("#cmdDisbursementEdit").prop("disabled", false);
-                                $("#cmdDisbursementPrint").prop("disabled", false);
-                                $("#cmdDisbursementClose").prop("disabled", false);
+                                window.location = '/Software/DisbursementDetail?DisbursementId=' + id;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1986,34 +1950,17 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $("#cmdDisbursementJournal").prop("disabled", true);
                                 $("#cmdDisbursementSaveLock").prop("disabled", true);
                                 $("#cmdDisbursementSave").prop("disabled", true);
                                 $("#cmdDisbursementEdit").prop("disabled", true);
                                 $("#cmdDisbursementPrint").prop("disabled", true);
                                 $("#cmdDisbursementClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getDisbursementLastInsertedId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdDisbursementJournal").prop("disabled", false);
-                                $("#cmdDisbursementSaveLock").prop("disabled", false);
-                                $("#cmdDisbursementSave").prop("disabled", false);
-                                $("#cmdDisbursementEdit").prop("disabled", false);
-                                $("#cmdDisbursementPrint").prop("disabled", false);
-                                $("#cmdDisbursementClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdDisbursementJournal").prop("disabled", false);
-                                $("#cmdDisbursementSaveLock").prop("disabled", false);
-                                $("#cmdDisbursementSave").prop("disabled", false);
-                                $("#cmdDisbursementEdit").prop("disabled", false);
-                                $("#cmdDisbursementPrint").prop("disabled", false);
-                                $("#cmdDisbursementClose").prop("disabled", false);
+                                window.location = '/Software/DisbursementDetail?DisbursementId=' + id;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -2737,8 +2684,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: disbursementLineData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $("#cmdSaveDisbursementLineButton").prop("disabled", true);
                                 $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
@@ -2750,18 +2697,10 @@
                                 // Flex Grid for disbursement Line
                                 disbursementGrid.itemsSource = disbursementLines;
                                 disbursementGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $('#disbursementLineEdit').modal('hide');
+                            } else {
                                 $("#cmdSaveDisbursementLineButton").prop("disabled", false);
                                 $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $('#disbursementLineEdit').modal('hide');
-                                $("#cmdSaveDisbursementLineButton").prop("disabled", false);
-                                $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -3204,6 +3143,15 @@
 
             $(document).on('hidden.bs.modal', '.modal', function () {
                 $('.modal:visible').length && $(document.body).addClass('modal-open');
+            });
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    btnDisbursementSave_OnClick();
+                    window.btnDisbursementSave_OnClick = function () {
+                        return true;
+                    }
+                }
             });
         });
     </script>

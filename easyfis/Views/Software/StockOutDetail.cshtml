@@ -415,13 +415,13 @@
         // ==================
         function getStockOutById() {
             var stockOutId = getParam("StockOutId");
-            NProgress.start();
             if(document.location.search.length == 0) {
                 document.getElementById('StockOut_Particulars').value = "NA";
                 document.getElementById('StockOUt_ManualOTNumber').value = "NA";
 
                 NProgress.done();
             } else {
+                NProgress.start();
                 $.ajax({
                     url: '/api/stockOut/' + stockOutId,
                     cache: false,
@@ -531,31 +531,6 @@
                     alert(err);
                 });
             }
-            return stockOuts;
-        }
-
-        // =====================
-        // GET Stock Out Last Id
-        // =====================
-        function getStockOutLastId() {
-            stockOuts = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/stockOutLastId',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        stockOuts.push({
-                            Id: Results.Id,
-                            OTNumber: Results.OTNumber
-                        });
-                    }
-                    window.location = '/Software/StockOutDetail?StockOutId=' + Results.Id;
-                    window.setTimeout(function () { location.reload() }, 1000);
-                }
-            });
             return stockOuts;
         }
 
@@ -1187,34 +1162,17 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdStockOutJournal").prop("disabled", true);
                                 $("#cmdStockOutSaveLock").prop("disabled", true);
                                 $("#cmdStockOutSave").prop("disabled", true);
                                 $("#cmdStockOutEdit").prop("disabled", true);
                                 $("#cmdStockOutPrint").prop("disabled", true);
                                 $("#cmdStockOutClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getStockOutLastId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdStockOutJournal").prop("disabled", false);
-                                $("#cmdStockOutSaveLock").prop("disabled", false);
-                                $("#cmdStockOutSave").prop("disabled", false);
-                                $("#cmdStockOutEdit").prop("disabled", false);
-                                $("#cmdStockOutPrint").prop("disabled", false);
-                                $("#cmdStockOutClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdStockOutJournal").prop("disabled", false);
-                                $("#cmdStockOutSaveLock").prop("disabled", false);
-                                $("#cmdStockOutSave").prop("disabled", false);
-                                $("#cmdStockOutEdit").prop("disabled", false);
-                                $("#cmdStockOutPrint").prop("disabled", false);
-                                $("#cmdStockOutClose").prop("disabled", false);
+                                window.location = '/Software/StockOutDetail?StockOutId=' + id;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1344,34 +1302,17 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdStockOutJournal").prop("disabled", true);
                                 $("#cmdStockOutSaveLock").prop("disabled", true);
                                 $("#cmdStockOutSave").prop("disabled", true);
                                 $("#cmdStockOutEdit").prop("disabled", true);
                                 $("#cmdStockOutPrint").prop("disabled", true);
                                 $("#cmdStockOutClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getStockOutLastId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdStockOutJournal").prop("disabled", false);
-                                $("#cmdStockOutSaveLock").prop("disabled", false);
-                                $("#cmdStockOutSave").prop("disabled", false);
-                                $("#cmdStockOutEdit").prop("disabled", false);
-                                $("#cmdStockOutPrint").prop("disabled", false);
-                                $("#cmdStockOutClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdStockOutJournal").prop("disabled", false);
-                                $("#cmdStockOutSaveLock").prop("disabled", false);
-                                $("#cmdStockOutSave").prop("disabled", false);
-                                $("#cmdStockOutEdit").prop("disabled", false);
-                                $("#cmdStockOutPrint").prop("disabled", false);
-                                $("#cmdStockOutClose").prop("disabled", false);
+                                window.location = '/Software/StockOutDetail?StockOutId=' + stockOutId;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1560,6 +1501,15 @@
                     }
                 });
             }
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    btnStockOutSave_OnClick();
+                    window.btnStockOutSave_OnClick = function () {
+                        return true;
+                    }
+                }
+            });
         });
     </script>
 
@@ -1599,10 +1549,10 @@
         function getItem() {
             var items = new wijmo.collections.ObservableArray;
             var stockOutId = getParam("StockOutId");
-            NProgress.start();
             if (document.location.search.length == 0) {
                 NProgress.done();
             } else {
+                NProgress.start();
                 $.ajax({
                     url: '/api/listStockOutItemByOTId/' + stockOutId,
                     cache: false,
@@ -2565,8 +2515,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: stockOutItemData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdSaveStockOutItemButton").prop("disabled", true);
                                 $("#cmdStockOutItemDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
@@ -2578,18 +2528,10 @@
                                 // Flex Grid for Items
                                 itemGrid.itemsSource = items;
                                 itemGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $('#stockOutItemsEdit').modal('hide');
+                            } else {
                                 $("#cmdSaveStockOutItemButton").prop("disabled", false);
                                 $("#cmdStockOutItemDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $('#stockOutItemsEdit').modal('hide');
-                                $("#cmdSaveStockOutItemButton").prop("disabled", false);
-                                $("#cmdStockOutItemDetailCloseButton").prop("disabled", false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });

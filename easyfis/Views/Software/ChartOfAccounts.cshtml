@@ -946,26 +946,19 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if (id > 0) {
                                 document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveAccountButton").prop("disabled", true);
                                 $("#cmdAccountDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully saved");
                                 $('#accountEdit').modal('hide');
                                 refreshAccoungFlexgrid();
-                            },
-                            404: function () {
+                            } else {
                                 document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountButton").prop("disabled", false);
                                 $("#cmdAccountDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save request not found");
-                            },
-                            400: function () {
-                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountButton").prop("disabled", false);
-                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
-                                toastr.error("Cannot save new record");
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -1379,28 +1372,19 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: accountArticleTypeData,
-                        statusCode: {
-                            200: function () {
+                        success: function (id) {
+                            if (id > 0) {
                                 document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveaccountArticleTypeButton").prop("disabled", true);
                                 $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully saved");
                                 $('#accountArticleTypeModal').modal('hide');
                                 refreshAccountArticleTypeFlexgrid();
-                            },
-                            404: function () {
+                            } else {
                                 document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
                                 $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
-                                $('#accountArticleTypeModal').modal('hide');
-                                toastr.error("Save request not found");
-                            },
-                            400: function () {
-                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
-                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
-                                $('#accountArticleTypeModal').modal('hide');
-                                toastr.error("Cannot save new record");
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -1913,28 +1897,19 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function (id) {
+                            if (id > 0) {
                                 document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveAccountTypeButton").prop("disabled", true);
                                 $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
                                 $('#accountTypeEdit').modal('hide');
                                 toastr.success("Successfully saved");
                                 refreshAccountTypeFlexgrid();
-                            },
-                            404: function () {
+                            } else {
                                 document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountTypeButton").prop("disabled", false);
                                 $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
-                                $('#accountTypeEdit').modal('hide');
-                                toastr.error("Save request not found");
-                            },
-                            400: function () {
-                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
-                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
-                                $('#accountTypeEdit').modal('hide');
-                                toastr.error("Cannot save new record");
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -2372,28 +2347,20 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function (id) {
+                            if (id > 0) {
                                 document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
                                 $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully saved");
                                 $('#accountCashFlowEdit').modal('hide');
                                 refreshAccountCashFlowFlexgrid();
-                            },
-                            404: function () {
+                            } else {
                                 document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
                                 $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
-                                $('#accountCashFlowEdit').modal('hide');
-                                toastr.error("Save request not found");
-                            },
-                            400: function () {
-                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
-                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
-                                $('#accountCashFlowEdit').modal('hide');
-                                toastr.error("Cannot save new record");
+
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -2892,28 +2859,19 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function (id) {
+                            if (id > 0) {
                                 document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $("#cmdSaveAccountCategoryButton").prop("disabled", true);
                                 $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully saved");
                                 $('#accountCategoryEdit').modal('hide');
                                 refreshAccountCategoryFlexgrid();
-                            },
-                            404: function () {
+                            } else {
                                 document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $("#cmdSaveAccountCategoryButton").prop("disabled", false);
                                 $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
-                                $('#accountCategoryEdit').modal('hide');
-                                toastr.error("Save request not found");
-                            },
-                            400: function () {
-                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
-                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
-                                $('#accountCategoryEdit').modal('hide');
-                                toastr.error("Cannot save new record");
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });

@@ -329,7 +329,6 @@
         // GET Purchase by Id
         // ==================
         function getPOById() {
-            NProgress.start();
             var PurchaseOrderId = getParam('PurchaseOrderId');
             if (document.location.search.length == 0) {
                 document.getElementById('PO_ManualPONumber').value = "NA";
@@ -338,6 +337,7 @@
 
                 NProgress.done();
             } else {
+                NProgress.start();
                 $.ajax({
                     url: '/api/purchaseOrder/' + PurchaseOrderId,
                     cache: false,
@@ -487,31 +487,6 @@
                     alert(err);
                 });
             }
-        }
-
-        // ==========================
-        // GET Purchase Order Last Id
-        // ==========================
-        function getPOLastInsertedId() {
-            var POs = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/purchaseOrderLastId',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        POs.push({
-                            Id: Results.Id,
-                            PONumber: Results.PONumber
-                        });
-                    }
-                    window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + Results.Id;
-                    window.setTimeout(function () { location.reload() }, 1000);
-                }
-            });
-            return POs;
         }
 
         // ========================
@@ -1034,31 +1009,16 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdSaveLockPO").prop("disabled", true);
                                 $("#cmdSavePO").prop("disabled", true);
                                 $("#cmdEditPO").prop("disabled", true);
                                 $("#cmdPrintPO").prop("disabled", true);
                                 $("#cmdClosePO").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getPOLastInsertedId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdSaveLockPO").prop("disabled", false);
-                                $("#cmdSavePO").prop("disabled", false);
-                                $("#cmdEditPO").prop("disabled", false);
-                                $("#cmdPrintPO").prop("disabled", false);
-                                $("#cmdClosePO").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdSaveLockPO").prop("disabled", false);
-                                $("#cmdSavePO").prop("disabled", false);
-                                $("#cmdEditPO").prop("disabled", false);
-                                $("#cmdPrintPO").prop("disabled", false);
-                                $("#cmdClosePO").prop("disabled", false);
+                                window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + purchaseOrderId;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1188,31 +1148,16 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdSaveLockPO").prop("disabled", true);
                                 $("#cmdSavePO").prop("disabled", true);
                                 $("#cmdEditPO").prop("disabled", true);
                                 $("#cmdPrintPO").prop("disabled", true);
                                 $("#cmdClosePO").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getPOLastInsertedId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdSaveLockPO").prop("disabled", false);
-                                $("#cmdSavePO").prop("disabled", false);
-                                $("#cmdEditPO").prop("disabled", false);
-                                $("#cmdPrintPO").prop("disabled", false);
-                                $("#cmdClosePO").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdSaveLockPO").prop("disabled", false);
-                                $("#cmdSavePO").prop("disabled", false);
-                                $("#cmdEditPO").prop("disabled", false);
-                                $("#cmdPrintPO").prop("disabled", false);
-                                $("#cmdClosePO").prop("disabled", false);
+                                window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + id;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1786,8 +1731,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: POItemData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdSavePOLinesButton").prop("disabled", true);
                                 $("#cmdPOLinesDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
@@ -1798,16 +1743,10 @@
                                 // Flex Grid for Purchase Order Line
                                 POLineGrid.itemsSource = POLines;
                                 POLineGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
+                            } else {
                                 $("#cmdSavePOLinesButton").prop("disabled", false);
                                 $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdSavePOLinesButton").prop("disabled", false);
-                                $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -2046,6 +1985,15 @@
             });
 
             POLineGrid.trackChanges = true;
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    btnSavePO_OnClick();
+                    window.btnSavePO_OnClick = function () {
+                        return true;
+                    }
+                }
+            });
         });
     </script>
 </body>

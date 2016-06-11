@@ -31,7 +31,7 @@
                     <li> Journal Voucher Detail </li>
                 </ol>
             </section>
-
+           
             <section class="content">
                 <div class="box box-default">
                     <div class="box-header">
@@ -382,62 +382,16 @@
         // =========================
         // GET Journal Voucher by Id
         // =========================
-        function getJournalVoucherLastInsertedId() {
-            var journalVouchers = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/journalVoucherLastId',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    if (Results.length > 0) {
-                        journalVouchers.push({
-                            Id: Results.Id,
-                            BranchId: Results.BranchId,
-                            Branch: Results.Branch,
-                            JVNumber: Results.JVNumber,
-                            ManualJVNumber: Results.ManualJVNumber,
-                            JVDate: Results.JVDate,
-                            Particulars: Results.Particulars,
-                            PreparedById: Results.PreparedById,
-                            PreparedBy: Results.PreparedBy,
-                            CheckedById: Results.CheckedById,
-                            CheckedBy: Results.CheckedBy,
-                            ApprovedById: Results.ApprovedById,
-                            ApprovedBy: Results.ApprovedBy,
-                            IsLocked: Results.IsLocked,
-                            CreatedById: Results.CreatedById,
-                            CreatedBy: Results.CreatedBy,
-                            CreatedDateTime: Results.CreatedDateTime,
-                            UpdatedById: Results.UpdatedById,
-                            UpdatedBy: Results.UpdatedBy,
-                            UpdatedDateTime: Results.UpdatedDateTime
-                        });
-                    }
-                    window.location = '/Software/JournalVoucherDetail?JournalVoucherId=' + Results.Id;
-                    window.setTimeout(function () { location.reload() }, 1000);
-                }
-
-            }).fail(function (xhr, textStatus, err) {
-                alert(err);
-            });
-            return journalVouchers;
-        }
-
-        // =========================
-        // GET Journal Voucher by Id
-        // =========================
         function getJournalVoucherById() {
             var journalVouchers = new wijmo.collections.ObservableArray;
             var journalVoucherId = getParam("JournalVoucherId");
-            NProgress.start();
             if (document.location.search.length == 0) {
                 document.getElementById('manual_JournalVoucher_No').value = "NA";
                 document.getElementById('journalVoucher_Particulars').value = "NA";
 
                 NProgress.done();
             } else {
+                NProgress.start();
                 $.ajax({
                     url: '/api/journalVoucher/' + journalVoucherId,
                     cache: false,
@@ -896,8 +850,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: dataJVAdd,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $("#cmdJournalJournalVoucher").prop("disabled", true);
                                 $("#cmdSaveAndLockJournalVoucher").prop("disabled", true);
                                 $("#cmdSaveJournalVoucher").prop("disabled", true);
@@ -907,32 +861,9 @@
                                 $("#cmdCloseJournalVoucher").prop("disabled", true);
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getJournalVoucherLastInsertedId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdJournalJournalVoucher").prop("disabled", false);
-                                $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                                $("#cmdSaveJournalVoucher").prop("disabled", false);
-                                $("#cmdEditJournalVoucher").prop("disabled", false);
-                                $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                                $("#cmdDownloadJournalVoucher").prop("disabled", false);
-                                $("#cmdCloseJournalVoucher").prop("disabled", false);
-                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
-                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdJournalJournalVoucher").prop("disabled", false);
-                                $("#cmdSaveAndLockJournalVoucher").prop("disabled", false);
-                                $("#cmdSaveJournalVoucher").prop("disabled", false);
-                                $("#cmdEditJournalVoucher").prop("disabled", false);
-                                $("#cmdPreviewJournalVoucher").prop("disabled", false);
-                                $("#cmdDownloadJournalVoucher").prop("disabled", false);
-                                $("#cmdCloseJournalVoucher").prop("disabled", false);
-                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
-                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
+                                window.location = '/Software/JournalVoucherDetail?JournalVoucherId=' + id;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1957,8 +1888,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", true);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
@@ -1970,18 +1901,10 @@
                                 // Flex Grid
                                 journalVoucherLineGrid.itemsSource = journalVoucherLines;
                                 journalVoucherLineGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $('#journalVoucherLineEdit').modal('hide');
+                            } else {
                                 $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
                                 $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $('#journalVoucherLineEdit').modal('hide');
-                                $("#cmdSaveJournalVoucherLineButton").prop("disabled", false);
-                                $("#cmdJournalVoucherLineDetailCloseButton").prop("disabled", false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -2444,6 +2367,15 @@
             });
 
             journalVoucherLineGrid.trackChanges = true;
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    cmdJournalVoucherSaveButton_OnClick();
+                    window.cmdJournalVoucherSaveButton_OnClick = function () {
+                        return true;
+                    }
+                }
+            });
         });
     </script>
 </body>

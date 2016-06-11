@@ -518,9 +518,9 @@
         // Get Article for item by its ID
         // ==============================
         function getArticleItemById() {
-            NProgress.start();
             var items = new wijmo.collections.ObservableArray;
             if (document.location.search.length > 0) {
+                NProgress.start();
                 $.ajax({
                     url: '/api/article/' + itemId,
                     cache: false,
@@ -661,24 +661,6 @@
                 mask: '99/99/9999'
             });
             return dateAcquired.value;
-        }
-
-        // ==============================
-        // Get Last Id for Item by its ID
-        // ==============================
-        function getLastInsertedIdItemByArticleTypeId() {
-            $.ajax({
-                url: '/api/articleLastIdByArticleTypeId/1',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (lastItemResults) {
-                    window.setTimeout(function () {
-                        window.location = '/Software/ItemDetail?ItemId=' + lastItemResults.Id;
-                    }, 1000);
-                }
-            });
         }
 
         // =====================
@@ -1143,31 +1125,16 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: itemDataObject(),
-                    statusCode: {
-                        200: function () {
+                    success: function (id) {
+                        if (id > 0) {
                             document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                             $('#item_SaveButton').prop('disabled', true);
                             $('#item_LockButton').prop('disabled', true);
                             $('#item_UnlockButton').prop('disabled', true);
                             $('#item_CloseButton').prop('disabled', true);
-                            toastr.success("Successfully saved");
-                            setTimeout(getLastInsertedIdItemByArticleTypeId, 1000);
-                        },
-                        404: function () {
-                            document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                            $('#item_SaveButton').prop('disabled', false);
-                            $('#item_LockButton').prop('disabled', true);
-                            $('#item_UnlockButton').prop('disabled', true);
-                            $('#item_CloseButton').prop('disabled', false);
-                            toastr.error("Save request not found");
-                        },
-                        400: function () {
-                            document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                            $('#item_SaveButton').prop('disabled', false);
-                            $('#item_LockButton').prop('disabled', true);
-                            $('#item_UnlockButton').prop('disabled', true);
-                            $('#item_CloseButton').prop('disabled', false);
-                            toastr.error("Cannot save new record");
+                            window.location = '/Software/ItemDetail?ItemId=' + id;
+                        } else {
+                            window.history.back();
                         }
                     }
                 });
@@ -1372,6 +1339,15 @@
                 $('#btnAddPrice').prop('disabled', false);
                 $('#btnAddComponent').prop('disabled', false);
             }
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    itemSaveButton_OnClick();
+                    window.itemSaveButton_OnClick = function () {
+                        return true;
+                    }
+                }
+            });
         });
     </script>
 
@@ -1630,28 +1606,19 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function (id) {
+                            if (id > 0) {
                                 document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#cmdSaveUnitConversionButton').prop('disabled', false);
                                 $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
                                 toastr.success("Successfully saved");
                                 $('#unitConversionEdit').modal('hide');
                                 refreshUnitConversions();
-                            },
-                            404: function () {
+                            } else {
                                 document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#cmdSaveUnitConversionButton').prop('disabled', false);
                                 $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save request not found");
-                                $('#unitConversionEdit').modal('hide');
-                            },
-                            400: function () {
-                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
-                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
-                                toastr.error("Cannot save new record");
-                                $('#unitConversionEdit').modal('hide');
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -2317,28 +2284,19 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function (id) {
+                            if (id > 0) {
                                 document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $('#cmdSavePriceButton').prop('disabled', true);
                                 $('#cmdPriceDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
                                 $('#priceEdit').modal('hide');
                                 refreshPriceFlexgrid();
-                            },
-                            404: function () {
+                            } else {
                                 document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#cmdSavePriceButton').prop('disabled', false);
                                 $('#cmdPriceDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save request not found");
-                                $('#priceEdit').modal('hide');
-                            },
-                            400: function () {
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSavePriceButton').prop('disabled', false);
-                                $('#cmdPriceDetailCloseButton').prop('disabled', false);
-                                toastr.error("Cannot save new record");
-                                $('#priceEdit').modal('hide');
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });

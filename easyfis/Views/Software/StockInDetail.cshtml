@@ -393,7 +393,6 @@
         // GET Stock In List
         // ================
         function getStockInById() {
-            NProgress.start();
             var stockInId = getParam("StockInId");
             if (document.location.search.length == 0) {
                 document.getElementById('StockIn_Particulars').value = "NA";
@@ -401,6 +400,7 @@
 
                 NProgress.done();
             } else {
+                NProgress.start();
                 $.ajax({
                     url: '/api/stockIn/' + stockInId,
                     cache: false,
@@ -520,25 +520,6 @@
                     alert(err);
                 });
             }
-        }
-
-        // ====================
-        // GET Stock In Last Id
-        // ====================
-        function getStockInLastId() {
-            stockIns = new wijmo.collections.ObservableArray;
-            $.ajax({
-                url: '/api/stockInLastId',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (Results) {
-                    window.location = '/Software/StockInDetail?StockInId=' + Results.Id;
-                    window.setTimeout(function () { location.reload() }, 1000);
-                }
-            });
-            return stockIns;
         }
 
         // ========================
@@ -1171,34 +1152,17 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdStockInJournal").prop("disabled", true);
                                 $("#cmdStockInSaveLock").prop("disabled", true);
                                 $("#cmdStockInSave").prop("disabled", true);
                                 $("#cmdStockInEdit").prop("disabled", true);
                                 $("#cmdStockInPrint").prop("disabled", true);
                                 $("#cmdStockInClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getStockInLastId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdStockInJournal").prop("disabled", false);
-                                $("#cmdStockInSaveLock").prop("disabled", false);
-                                $("#cmdStockInSave").prop("disabled", false);
-                                $("#cmdStockInEdit").prop("disabled", false);
-                                $("#cmdStockInPrint").prop("disabled", false);
-                                $("#cmdStockInClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdStockInJournal").prop("disabled", false);
-                                $("#cmdStockInSaveLock").prop("disabled", false);
-                                $("#cmdStockInSave").prop("disabled", false);
-                                $("#cmdStockInEdit").prop("disabled", false);
-                                $("#cmdStockInPrint").prop("disabled", false);
-                                $("#cmdStockInClose").prop("disabled", false);
+                                window.location = '/Software/StockInDetail?StockInId=' + id;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1323,34 +1287,17 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdStockInJournal").prop("disabled", true);
                                 $("#cmdStockInSaveLock").prop("disabled", true);
                                 $("#cmdStockInSave").prop("disabled", true);
                                 $("#cmdStockInEdit").prop("disabled", true);
                                 $("#cmdStockInPrint").prop("disabled", true);
                                 $("#cmdStockInClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                setTimeout(getStockInLastId, 1000)
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdStockInJournal").prop("disabled", false);
-                                $("#cmdStockInSaveLock").prop("disabled", false);
-                                $("#cmdStockInSave").prop("disabled", false);
-                                $("#cmdStockInEdit").prop("disabled", false);
-                                $("#cmdStockInPrint").prop("disabled", false);
-                                $("#cmdStockInClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdStockInJournal").prop("disabled", false);
-                                $("#cmdStockInSaveLock").prop("disabled", false);
-                                $("#cmdStockInSave").prop("disabled", false);
-                                $("#cmdStockInEdit").prop("disabled", false);
-                                $("#cmdStockInPrint").prop("disabled", false);
-                                $("#cmdStockInClose").prop("disabled", false);
+                                window.location = '/Software/StockInDetail?StockInId=' + stockInId;
+                            } else {
+                                window.history.back();
                             }
                         }
                     });
@@ -1572,8 +1519,8 @@
         function getItem() {
             var items = new wijmo.collections.ObservableArray;
             var stockInId = getParam("StockInId");
-            NProgress.start();
             if (document.location.search.length > 0) {
+                NProgress.start();
                 $.ajax({
                     url: '/api/listStockInItemByINId/' + stockInId,
                     cache: false,
@@ -2271,8 +2218,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: stockInItemData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id) {
+                            if(id > 0) {
                                 $("#cmdSaveStockInItemButton").prop("disabled", true);
                                 $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
                                 toastr.success("Successfully Saved");
@@ -2284,18 +2231,10 @@
                                 // Flex Grid for Items
                                 itemGrid.itemsSource = items;
                                 itemGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $('#stockInItemsEdit').modal('hide');
+                            } else {
                                 $("#cmdSaveStockInItemButton").prop("disabled", false);
                                 $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $('#stockInItemsEdit').modal('hide');
-                                $("#cmdSaveStockInItemButton").prop("disabled", false);
-                                $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -2844,6 +2783,15 @@
             $('#Items').show();
             $('#InventoryEntries').hide();
             itemTab();
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    btnStockInSave_OnClick();
+                    window.btnStockInSave_OnClick = function () {
+                        return true;
+                    }
+                }
+            });
         });
     </script>
 </body>

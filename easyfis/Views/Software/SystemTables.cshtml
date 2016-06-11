@@ -1352,8 +1352,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: discountData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $('#cmdSaveDiscountButton').prop('disable', true);
                                 $('#cmdDiscountDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -1361,16 +1361,10 @@
                                 $('#discountEdit').modal('hide');
 
                                 refreshDiscountFlexgrid();
-                            },
-                            404: function () {
-                                toastr.error("Save request not found");
+                            } else {
                                 $('#cmdSaveDiscountButton').prop('disable', false);
                                 $('#cmdDiscountDetailCloseButton').prop('disabled', false);
-                            },
-                            400: function () {
-                                toastr.error("Cannot save new record");
-                                $('#cmdSaveDiscountButton').prop('disable', false);
-                                $('#cmdDiscountDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -1960,8 +1954,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: payTypeData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $('#cmdSavePayTypeButton').prop('disabled', true);
                                 $('#cmdPayTypeDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -1969,16 +1963,10 @@
                                 $('#payTypeEdit').modal('hide');
 
                                 refreshPayTypeFlexgrid();
-                            },
-                            404: function () {
-                                toastr.error("Save request not found");
+                            } else {
                                 $('#cmdSavePayTypeButton').prop('disabled', false);
                                 $('#cmdPayTypeDetailCloseButton').prop('disabled', false);
-                            },
-                            400: function () {
-                                toastr.error("Cannot save new record");
-                                $('#cmdSavePayTypeButton').prop('disabled', false);
-                                $('#cmdPayTypeDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -2563,8 +2551,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: taxData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $('#cmdSaveTaxTypeButton').prop('disabled', true);
                                 $('#cmdTaxTypeDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -2572,16 +2560,10 @@
                                 $('#taxEdit').modal('hide');
 
                                 refreshTaxTypeFlexgrid();
-                            },
-                            404: function () {
-                                toastr.error("Save request not found");
+                            } else {
                                 $('#cmdSaveTaxTypeButton').prop('disabled', false);
                                 $('#cmdTaxTypeDetailCloseButton').prop('disabled', false);
-                            },
-                            400: function () {
-                                toastr.error("Cannot save new record");
-                                $('#cmdSaveTaxTypeButton').prop('disabled', false);
-                                $('#cmdTaxTypeDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -3025,8 +3007,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: unitData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $('#cmdSaveUnitButton').prop('disabled', true);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -3034,16 +3016,10 @@
                                 $('#unitEdit').modal('hide');
 
                                 refreshUnitFlexgrid();
-                            },
-                            404: function () {
-                                toastr.error("Save request not found");
+                            } else {
                                 $('#cmdSaveUnitButton').prop('disabled', false);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', false);
-                            },
-                            400: function () {
-                                toastr.error("Cannot save new record");
-                                $('#cmdSaveUnitButton').prop('disabled', false);
-                                $('#cmdUnitDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -3477,8 +3453,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: termData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $('#cmdSaveTermButton').prop('disabled', true);
                                 $('#cmdTermDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -3486,16 +3462,10 @@
                                 $('#termEdit').modal('hide');
 
                                 refreshTermFlexgrid();
-                            },
-                            404: function () {
-                                toastr.error("Save request not found");
+                            } else {
                                 $('#cmdSaveTermButton').prop('disabled', false);
                                 $('#cmdTermDetailCloseButton').prop('disabled', false);
-                            },
-                            400: function () {
-                                toastr.error("Cannot save new record");
-                                $('#cmdSaveTermButton').prop('disabled', false);
-                                $('#cmdTermDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -4141,8 +4111,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: employeeData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $('#cmdSaveEmployeeButton').prop('disabled', true);
                                 $('#cmdEmployeeDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -4150,16 +4120,10 @@
                                 $('#employeeEdit').modal('hide');
 
                                 refreshEmployeeFlexgrid();
-                            },
-                            404: function () {
-                                toastr.error("Save request not found");
+                            } else {
                                 $('#cmdSaveEmployeeButton').prop('disabled', false);
                                 $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
-                            },
-                            400: function () {
-                                toastr.error("Cannot save new record");
-                                $('#cmdSaveEmployeeButton').prop('disabled', false);
-                                $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -5061,8 +5025,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: articleGroupData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $('#cmdSaveArticleGroupButton').prop('disabled', true);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -5070,16 +5034,10 @@
                                 $('#articleGroupEdit').modal('hide');
 
                                 refreshArticleGroupFlexgrid();
-                            },
-                            404: function () {
-                                toastr.error("Save request not found");
+                            } else {
                                 $('#cmdSaveArticleGroupButton').prop('disabled', false);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
-                            },
-                            400: function () {
-                                toastr.error("Cannot save new record");
-                                $('#cmdSaveArticleGroupButton').prop('disabled', false);
-                                $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
@@ -5739,8 +5697,8 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: otherArticleData,
-                        statusCode: {
-                            200: function () {
+                        success: function(id){
+                            if(id > 0) {
                                 $('#cmdSaveArticleButton').prop('disabled', true);
                                 $('#cmdArticleDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
@@ -5748,16 +5706,10 @@
                                 $('#articleEdit').modal('hide');
 
                                 refreshOtherArticleFlexgrid();
-                            },
-                            404: function () {
-                                toastr.error("Save request not found");
+                            } else {
                                 $('#cmdSaveArticleButton').prop('disabled', false);
                                 $('#cmdArticleDetailCloseButton').prop('disabled', false);
-                            },
-                            400: function () {
-                                toastr.error("Cannot save new record");
-                                $('#cmdSaveArticleButton').prop('disabled', false);
-                                $('#cmdArticleDetailCloseButton').prop('disabled', false);
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });

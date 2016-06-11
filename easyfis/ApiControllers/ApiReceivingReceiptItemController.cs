@@ -228,311 +228,342 @@ namespace easyfis.Controllers
         // APPLY all PO to Receving Receipt Item
         // =====================================
         [Route("api/applyAllPOItemToReceivingReceiptItem/{RRId}/{BranchId}/{POId}")]
-        public int PostPOItemsToRRItems(String RRId, String BranchId, String POId)
+        public HttpResponseMessage PostPOItemsToRRItems(String RRId, String BranchId, String POId)
         {
-            var RRItem_Id = Convert.ToInt32(RRId);
-            var RRItem_BranchId = Convert.ToInt32(BranchId);
-            var RRItem_POId = Convert.ToInt32(POId);
-            var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
-                                     where d.POId == RRItem_POId
-                                     select new Models.TrnPurchaseOrderItem
-                                     {
-                                         Id = d.Id,
-                                         POId = d.POId,
-                                         PO = d.TrnPurchaseOrder.PONumber,
-                                         ItemId = d.ItemId,
-                                         Item = d.MstArticle.Article,
-                                         ItemCode = d.MstArticle.ManualArticleCode,
-                                         Particulars = d.Particulars,
-                                         UnitId = d.UnitId,
-                                         Unit = d.MstUnit.Unit,
-                                         Quantity = computeQuantity(d.Quantity, getReceived(RRItem_POId, d.ItemId)),
-                                         Cost = d.Cost,
-                                         Amount = d.Amount,
-                                         VATId = d.MstArticle.InputTaxId,
-                                         VATPercentage = d.MstArticle.MstTaxType1.TaxRate,
-                                         VATIsInclusive = d.MstArticle.MstTaxType1.IsInclusive,
-                                         VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType1.TaxRate, d.MstArticle.MstTaxType1.IsInclusive),
-                                         WTAXId = d.MstArticle.WTaxTypeId,
-                                         WTAXPercentage = d.MstArticle.MstTaxType2.TaxRate,
-                                         WTAXIsInclusive = d.MstArticle.MstTaxType2.IsInclusive,
-                                         WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.IsInclusive),
-                                         BranchId = RRItem_BranchId,
-                                         BaseUnitId = d.MstUnit.Id,
-                                         BaseQuantity = d.Quantity,
-                                     };
-
-            Data.TrnReceivingReceiptItem newReceivingReceiptItem = new Data.TrnReceivingReceiptItem(); ;
-
-
-            var multipier = 0;
-            var convertMultiplier = Convert.ToDecimal(multipier);
-
-            foreach (var POItems in PurchaseOrderItems)
+            try
             {
-                var mutlipliers = from d in db.MstArticleUnits
-                                  where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId
-                                  select new Models.MstArticleUnit
-                                  {
-                                      Id = d.Id,
-                                      ArticleId = d.ArticleId,
-                                      Article = d.MstArticle.Article,
-                                      UnitId = d.UnitId,
-                                      Unit = d.MstUnit.Unit,
-                                      Multiplier = d.Multiplier,
-                                      IsCountUnit = d.IsCountUnit
-                                  };
+                var RRItem_Id = Convert.ToInt32(RRId);
+                var RRItem_BranchId = Convert.ToInt32(BranchId);
+                var RRItem_POId = Convert.ToInt32(POId);
+                var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
+                                         where d.POId == RRItem_POId
+                                         select new Models.TrnPurchaseOrderItem
+                                         {
+                                             Id = d.Id,
+                                             POId = d.POId,
+                                             PO = d.TrnPurchaseOrder.PONumber,
+                                             ItemId = d.ItemId,
+                                             Item = d.MstArticle.Article,
+                                             ItemCode = d.MstArticle.ManualArticleCode,
+                                             Particulars = d.Particulars,
+                                             UnitId = d.UnitId,
+                                             Unit = d.MstUnit.Unit,
+                                             Quantity = computeQuantity(d.Quantity, getReceived(RRItem_POId, d.ItemId)),
+                                             Cost = d.Cost,
+                                             Amount = d.Amount,
+                                             VATId = d.MstArticle.InputTaxId,
+                                             VATPercentage = d.MstArticle.MstTaxType1.TaxRate,
+                                             VATIsInclusive = d.MstArticle.MstTaxType1.IsInclusive,
+                                             VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType1.TaxRate, d.MstArticle.MstTaxType1.IsInclusive),
+                                             WTAXId = d.MstArticle.WTaxTypeId,
+                                             WTAXPercentage = d.MstArticle.MstTaxType2.TaxRate,
+                                             WTAXIsInclusive = d.MstArticle.MstTaxType2.IsInclusive,
+                                             WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.IsInclusive),
+                                             BranchId = RRItem_BranchId,
+                                             BaseUnitId = d.MstUnit.Id,
+                                             BaseQuantity = d.Quantity,
+                                         };
 
-                if (!mutlipliers.Any())
+                if (PurchaseOrderItems.Any())
                 {
-                    convertMultiplier = 0;
-                }
-                else
-                {
-                    foreach (var m in mutlipliers)
+                    Data.TrnReceivingReceiptItem newReceivingReceiptItem = new Data.TrnReceivingReceiptItem(); ;
+
+
+                    var multipier = 0;
+                    var convertMultiplier = Convert.ToDecimal(multipier);
+
+                    foreach (var POItems in PurchaseOrderItems)
                     {
-                        convertMultiplier = m.Multiplier;
-                        break;
+                        var mutlipliers = from d in db.MstArticleUnits
+                                          where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId
+                                          select new Models.MstArticleUnit
+                                          {
+                                              Id = d.Id,
+                                              ArticleId = d.ArticleId,
+                                              Article = d.MstArticle.Article,
+                                              UnitId = d.UnitId,
+                                              Unit = d.MstUnit.Unit,
+                                              Multiplier = d.Multiplier,
+                                              IsCountUnit = d.IsCountUnit
+                                          };
+
+                        if (!mutlipliers.Any())
+                        {
+                            convertMultiplier = 0;
+                        }
+                        else
+                        {
+                            foreach (var m in mutlipliers)
+                            {
+                                convertMultiplier = m.Multiplier;
+                                break;
+                            }
+                        }
                     }
+
+
+                    foreach (var POItems in PurchaseOrderItems)
+                    {
+                        newReceivingReceiptItem = new Data.TrnReceivingReceiptItem();
+
+                        newReceivingReceiptItem.RRId = RRItem_Id;
+                        newReceivingReceiptItem.POId = POItems.POId;
+                        newReceivingReceiptItem.ItemId = POItems.ItemId;
+                        newReceivingReceiptItem.Particulars = POItems.Particulars;
+                        newReceivingReceiptItem.UnitId = POItems.UnitId;
+                        newReceivingReceiptItem.Quantity = POItems.Quantity;
+                        newReceivingReceiptItem.Cost = POItems.Cost;
+                        newReceivingReceiptItem.Amount = POItems.Quantity * POItems.Cost;
+                        newReceivingReceiptItem.VATId = POItems.VATId;
+                        newReceivingReceiptItem.VATPercentage = POItems.VATPercentage;
+                        newReceivingReceiptItem.VATAmount = computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive);
+                        newReceivingReceiptItem.WTAXId = POItems.WTAXId;
+                        newReceivingReceiptItem.WTAXPercentage = POItems.WTAXPercentage;
+                        newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.WTAXPercentage, POItems.WTAXIsInclusive);
+                        newReceivingReceiptItem.BranchId = POItems.BranchId;
+
+                        var mstArticleUnit = from d in db.MstArticles where d.Id == POItems.ItemId select d;
+                        newReceivingReceiptItem.BaseUnitId = mstArticleUnit.First().UnitId;
+
+                        var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId select d;
+
+                        if (conversionUnit.First().Multiplier > 0)
+                        {
+                            newReceivingReceiptItem.BaseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
+                        }
+                        else
+                        {
+                            newReceivingReceiptItem.BaseQuantity = POItems.Quantity * 1;
+                        }
+
+                        var baseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                        if (baseQuantity > 0)
+                        {
+                            newReceivingReceiptItem.BaseCost = (POItems.Amount - POItems.VATAmount) / baseQuantity;
+                        }
+                        else
+                        {
+                            newReceivingReceiptItem.BaseCost = POItems.Amount - POItems.VATAmount;
+                        }
+
+                        db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
+                    }
+
+                    db.SubmitChanges();
+
+                    var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == RRItem_Id select d;
+                    if (receivingReceipts.Any())
+                    {
+                        var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                                                    where d.RRId == RRItem_Id
+                                                    select new Models.TrnReceivingReceiptItem
+                                                    {
+                                                        Id = d.Id,
+                                                        RRId = d.RRId,
+                                                        Amount = d.Amount
+                                                    };
+
+                        Decimal amount;
+                        if (!receivingReceiptItems.Any())
+                        {
+                            amount = 0;
+                        }
+                        else
+                        {
+                            amount = receivingReceiptItems.Sum(d => d.Amount);
+                        }
+
+                        var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
+
+                        updatereceivingReceipt.Amount = amount;
+                        db.SubmitChanges();
+                    }
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
             }
-
-
-            foreach (var POItems in PurchaseOrderItems)
+            catch
             {
-                newReceivingReceiptItem = new Data.TrnReceivingReceiptItem();
-
-                newReceivingReceiptItem.RRId = RRItem_Id;
-                newReceivingReceiptItem.POId = POItems.POId;
-                newReceivingReceiptItem.ItemId = POItems.ItemId;
-                newReceivingReceiptItem.Particulars = POItems.Particulars;
-                newReceivingReceiptItem.UnitId = POItems.UnitId;
-                newReceivingReceiptItem.Quantity = POItems.Quantity;
-                newReceivingReceiptItem.Cost = POItems.Cost;
-                newReceivingReceiptItem.Amount = POItems.Quantity * POItems.Cost;
-                newReceivingReceiptItem.VATId = POItems.VATId;
-                newReceivingReceiptItem.VATPercentage = POItems.VATPercentage;
-                newReceivingReceiptItem.VATAmount = computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive);
-                newReceivingReceiptItem.WTAXId = POItems.WTAXId;
-                newReceivingReceiptItem.WTAXPercentage = POItems.WTAXPercentage;
-                newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.WTAXPercentage, POItems.WTAXIsInclusive);
-                newReceivingReceiptItem.BranchId = POItems.BranchId;
-
-                var mstArticleUnit = from d in db.MstArticles where d.Id == POItems.ItemId select d;
-                newReceivingReceiptItem.BaseUnitId = mstArticleUnit.First().UnitId;
-
-                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId select d;
-
-                if (conversionUnit.First().Multiplier > 0)
-                {
-                    newReceivingReceiptItem.BaseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
-                }
-                else
-                {
-                    newReceivingReceiptItem.BaseQuantity = POItems.Quantity * 1;
-                }
-
-                var baseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
-
-                if (baseQuantity > 0)
-                {
-                    newReceivingReceiptItem.BaseCost = (POItems.Amount - POItems.VATAmount) / baseQuantity;
-                }
-                else
-                {
-                    newReceivingReceiptItem.BaseCost = POItems.Amount - POItems.VATAmount;
-                }
-
-                db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
-
-            db.SubmitChanges();
-
-            var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == RRItem_Id select d;
-            if (receivingReceipts.Any())
-            {
-                var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
-                                            where d.RRId == RRItem_Id
-                                            select new Models.TrnReceivingReceiptItem
-                                            {
-                                                Id = d.Id,
-                                                RRId = d.RRId,
-                                                Amount = d.Amount
-                                            };
-
-                Decimal amount;
-                if (!receivingReceiptItems.Any())
-                {
-                    amount = 0;
-                }
-                else
-                {
-                    amount = receivingReceiptItems.Sum(d => d.Amount);
-                }
-
-                var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
-
-                updatereceivingReceipt.Amount = amount;
-                db.SubmitChanges();
-            }
-
-            return newReceivingReceiptItem.Id;
         }
 
         // =====================================
         // APPLY all PO to Receving Receipt Item
         // =====================================
         [Route("api/applyPOItemToReceivingReceiptItem/{RRId}/{BranchId}/{POId}/{POStatusId}")]
-        public int PostPOItemsToRRItems(String RRId, String BranchId, String POId, String POStatusId)
+        public HttpResponseMessage PostPOItemsToRRItems(String RRId, String BranchId, String POId, String POStatusId)
         {
-            var RRItem_Id = Convert.ToInt32(RRId);
-            var RRItem_BranchId = Convert.ToInt32(BranchId);
-            var RRItem_POId = Convert.ToInt32(POId);
-            var RRItem_POStatusId = Convert.ToInt32(POStatusId);
-            var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
-                                     where d.Id == RRItem_POStatusId
-                                     select new Models.TrnPurchaseOrderItem
-                                     {
-                                         Id = d.Id,
-                                         POId = d.POId,
-                                         PO = d.TrnPurchaseOrder.PONumber,
-                                         ItemId = d.ItemId,
-                                         Item = d.MstArticle.Article,
-                                         ItemCode = d.MstArticle.ManualArticleCode,
-                                         Particulars = d.Particulars,
-                                         UnitId = d.UnitId,
-                                         Unit = d.MstUnit.Unit,
-                                         Quantity = computeQuantity(d.Quantity, getReceived(RRItem_POId, d.ItemId)),
-                                         Cost = d.Cost,
-                                         Amount = d.Amount,
-                                         VATId = d.MstArticle.InputTaxId,
-                                         VATPercentage = d.MstArticle.MstTaxType1.TaxRate,
-                                         VATIsInclusive = d.MstArticle.MstTaxType1.IsInclusive,
-                                         VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType1.TaxRate, d.MstArticle.MstTaxType1.IsInclusive),
-                                         WTAXId = d.MstArticle.WTaxTypeId,
-                                         WTAXPercentage = d.MstArticle.MstTaxType2.TaxRate,
-                                         WTAXIsInclusive = d.MstArticle.MstTaxType2.IsInclusive,
-                                         WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.IsInclusive),
-                                         BranchId = RRItem_BranchId,
-                                         BaseUnitId = d.MstUnit.Id,
-                                         BaseQuantity = d.Quantity,
-                                     };
-
-            Data.TrnReceivingReceiptItem newReceivingReceiptItem = new Data.TrnReceivingReceiptItem(); ;
-
-
-            var multipier = 0;
-            var convertMultiplier = Convert.ToDecimal(multipier);
-
-            foreach (var POItems in PurchaseOrderItems)
+            try
             {
-                var mutlipliers = from d in db.MstArticleUnits
-                                  where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId
-                                  select new Models.MstArticleUnit
-                                  {
-                                      Id = d.Id,
-                                      ArticleId = d.ArticleId,
-                                      Article = d.MstArticle.Article,
-                                      UnitId = d.UnitId,
-                                      Unit = d.MstUnit.Unit,
-                                      Multiplier = d.Multiplier,
-                                      IsCountUnit = d.IsCountUnit
-                                  };
+                var RRItem_Id = Convert.ToInt32(RRId);
+                var RRItem_BranchId = Convert.ToInt32(BranchId);
+                var RRItem_POId = Convert.ToInt32(POId);
+                var RRItem_POStatusId = Convert.ToInt32(POStatusId);
+                var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
+                                         where d.Id == RRItem_POStatusId
+                                         select new Models.TrnPurchaseOrderItem
+                                         {
+                                             Id = d.Id,
+                                             POId = d.POId,
+                                             PO = d.TrnPurchaseOrder.PONumber,
+                                             ItemId = d.ItemId,
+                                             Item = d.MstArticle.Article,
+                                             ItemCode = d.MstArticle.ManualArticleCode,
+                                             Particulars = d.Particulars,
+                                             UnitId = d.UnitId,
+                                             Unit = d.MstUnit.Unit,
+                                             Quantity = computeQuantity(d.Quantity, getReceived(RRItem_POId, d.ItemId)),
+                                             Cost = d.Cost,
+                                             Amount = d.Amount,
+                                             VATId = d.MstArticle.InputTaxId,
+                                             VATPercentage = d.MstArticle.MstTaxType1.TaxRate,
+                                             VATIsInclusive = d.MstArticle.MstTaxType1.IsInclusive,
+                                             VATAmount = computeVATAmount(d.Amount, d.MstArticle.MstTaxType1.TaxRate, d.MstArticle.MstTaxType1.IsInclusive),
+                                             WTAXId = d.MstArticle.WTaxTypeId,
+                                             WTAXPercentage = d.MstArticle.MstTaxType2.TaxRate,
+                                             WTAXIsInclusive = d.MstArticle.MstTaxType2.IsInclusive,
+                                             WTAXAmount = computeWTAXAmount(d.Amount, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.TaxRate, d.MstArticle.MstTaxType2.IsInclusive),
+                                             BranchId = RRItem_BranchId,
+                                             BaseUnitId = d.MstUnit.Id,
+                                             BaseQuantity = d.Quantity,
+                                         };
 
-                if (!mutlipliers.Any())
+
+                if (PurchaseOrderItems.Any())
                 {
-                    convertMultiplier = 0;
-                }
-                else
-                {
-                    foreach (var m in mutlipliers)
+                    Data.TrnReceivingReceiptItem newReceivingReceiptItem = new Data.TrnReceivingReceiptItem(); ;
+
+
+                    var multipier = 0;
+                    var convertMultiplier = Convert.ToDecimal(multipier);
+
+                    foreach (var POItems in PurchaseOrderItems)
                     {
-                        convertMultiplier = m.Multiplier;
-                        break;
+                        var mutlipliers = from d in db.MstArticleUnits
+                                          where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId
+                                          select new Models.MstArticleUnit
+                                          {
+                                              Id = d.Id,
+                                              ArticleId = d.ArticleId,
+                                              Article = d.MstArticle.Article,
+                                              UnitId = d.UnitId,
+                                              Unit = d.MstUnit.Unit,
+                                              Multiplier = d.Multiplier,
+                                              IsCountUnit = d.IsCountUnit
+                                          };
+
+                        if (!mutlipliers.Any())
+                        {
+                            convertMultiplier = 0;
+                        }
+                        else
+                        {
+                            foreach (var m in mutlipliers)
+                            {
+                                convertMultiplier = m.Multiplier;
+                                break;
+                            }
+                        }
                     }
+
+
+                    foreach (var POItems in PurchaseOrderItems)
+                    {
+                        newReceivingReceiptItem = new Data.TrnReceivingReceiptItem();
+
+                        newReceivingReceiptItem.RRId = RRItem_Id;
+                        newReceivingReceiptItem.POId = POItems.POId;
+                        newReceivingReceiptItem.ItemId = POItems.ItemId;
+                        newReceivingReceiptItem.Particulars = POItems.Particulars;
+                        newReceivingReceiptItem.UnitId = POItems.UnitId;
+                        newReceivingReceiptItem.Quantity = POItems.Quantity;
+                        newReceivingReceiptItem.Cost = POItems.Cost;
+                        newReceivingReceiptItem.Amount = POItems.Quantity * POItems.Cost;
+                        newReceivingReceiptItem.VATId = POItems.VATId;
+                        newReceivingReceiptItem.VATPercentage = POItems.VATPercentage;
+                        newReceivingReceiptItem.VATAmount = computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive);
+                        newReceivingReceiptItem.WTAXId = POItems.WTAXId;
+                        newReceivingReceiptItem.WTAXPercentage = POItems.WTAXPercentage;
+                        newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.WTAXPercentage, POItems.WTAXIsInclusive);
+                        newReceivingReceiptItem.BranchId = POItems.BranchId;
+
+                        var mstArticleUnit = from d in db.MstArticles where d.Id == POItems.ItemId select d;
+                        newReceivingReceiptItem.BaseUnitId = mstArticleUnit.First().UnitId;
+
+                        var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId select d;
+
+                        if (conversionUnit.First().Multiplier > 0)
+                        {
+                            newReceivingReceiptItem.BaseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
+                        }
+                        else
+                        {
+                            newReceivingReceiptItem.BaseQuantity = POItems.Quantity * 1;
+                        }
+
+                        var baseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
+
+                        if (baseQuantity > 0)
+                        {
+                            newReceivingReceiptItem.BaseCost = (POItems.Amount - POItems.VATAmount) / baseQuantity;
+                        }
+                        else
+                        {
+                            newReceivingReceiptItem.BaseCost = POItems.Amount - POItems.VATAmount;
+                        }
+
+                        db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
+                    }
+
+                    db.SubmitChanges();
+
+                    var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == RRItem_Id select d;
+                    if (receivingReceipts.Any())
+                    {
+                        var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
+                                                    where d.RRId == RRItem_Id
+                                                    select new Models.TrnReceivingReceiptItem
+                                                    {
+                                                        Id = d.Id,
+                                                        RRId = d.RRId,
+                                                        Amount = d.Amount
+                                                    };
+
+                        Decimal amount;
+                        if (!receivingReceiptItems.Any())
+                        {
+                            amount = 0;
+                        }
+                        else
+                        {
+                            amount = receivingReceiptItems.Sum(d => d.Amount);
+                        }
+
+                        var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
+
+                        updatereceivingReceipt.Amount = amount;
+                        db.SubmitChanges();
+                    }
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+
             }
-
-
-            foreach (var POItems in PurchaseOrderItems)
+            catch
             {
-                newReceivingReceiptItem = new Data.TrnReceivingReceiptItem();
-
-                newReceivingReceiptItem.RRId = RRItem_Id;
-                newReceivingReceiptItem.POId = POItems.POId;
-                newReceivingReceiptItem.ItemId = POItems.ItemId;
-                newReceivingReceiptItem.Particulars = POItems.Particulars;
-                newReceivingReceiptItem.UnitId = POItems.UnitId;
-                newReceivingReceiptItem.Quantity = POItems.Quantity;
-                newReceivingReceiptItem.Cost = POItems.Cost;
-                newReceivingReceiptItem.Amount = POItems.Quantity * POItems.Cost;
-                newReceivingReceiptItem.VATId = POItems.VATId;
-                newReceivingReceiptItem.VATPercentage = POItems.VATPercentage;
-                newReceivingReceiptItem.VATAmount = computeVATAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.VATIsInclusive);
-                newReceivingReceiptItem.WTAXId = POItems.WTAXId;
-                newReceivingReceiptItem.WTAXPercentage = POItems.WTAXPercentage;
-                newReceivingReceiptItem.WTAXAmount = computeWTAXAmount(POItems.Quantity * POItems.Cost, POItems.VATPercentage, POItems.WTAXPercentage, POItems.WTAXIsInclusive);
-                newReceivingReceiptItem.BranchId = POItems.BranchId;
-
-                var mstArticleUnit = from d in db.MstArticles where d.Id == POItems.ItemId select d;
-                newReceivingReceiptItem.BaseUnitId = mstArticleUnit.First().UnitId;
-
-                var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == POItems.ItemId && d.UnitId == POItems.UnitId select d;
-
-                if (conversionUnit.First().Multiplier > 0)
-                {
-                    newReceivingReceiptItem.BaseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
-                }
-                else
-                {
-                    newReceivingReceiptItem.BaseQuantity = POItems.Quantity * 1;
-                }
-
-                var baseQuantity = POItems.Quantity * (1 / conversionUnit.First().Multiplier);
-
-                if (baseQuantity > 0)
-                {
-                    newReceivingReceiptItem.BaseCost = (POItems.Amount - POItems.VATAmount) / baseQuantity;
-                }
-                else
-                {
-                    newReceivingReceiptItem.BaseCost = POItems.Amount - POItems.VATAmount;
-                }
-
-                db.TrnReceivingReceiptItems.InsertOnSubmit(newReceivingReceiptItem);
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
-
-            db.SubmitChanges();
-
-            var receivingReceipts = from d in db.TrnReceivingReceipts where d.Id == RRItem_Id select d;
-            if (receivingReceipts.Any())
-            {
-                var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
-                                            where d.RRId == RRItem_Id
-                                            select new Models.TrnReceivingReceiptItem
-                                            {
-                                                Id = d.Id,
-                                                RRId = d.RRId,
-                                                Amount = d.Amount
-                                            };
-
-                Decimal amount;
-                if (!receivingReceiptItems.Any())
-                {
-                    amount = 0;
-                }
-                else
-                {
-                    amount = receivingReceiptItems.Sum(d => d.Amount);
-                }
-
-                var updatereceivingReceipt = receivingReceipts.FirstOrDefault();
-
-                updatereceivingReceipt.Amount = amount;
-                db.SubmitChanges();
-            }
-
-            return newReceivingReceiptItem.Id;
         }
 
         // ==========================
@@ -593,13 +624,13 @@ namespace easyfis.Controllers
                 if (receivingReceipts.Any())
                 {
                     var rrItems = from d in db.TrnReceivingReceiptItems
-                                                where d.RRId == receivingReceiptItem.RRId
-                                                select new Models.TrnReceivingReceiptItem
-                                                {
-                                                    Id = d.Id,
-                                                    RRId = d.RRId,
-                                                    Amount = d.Amount
-                                                };
+                                  where d.RRId == receivingReceiptItem.RRId
+                                  select new Models.TrnReceivingReceiptItem
+                                  {
+                                      Id = d.Id,
+                                      RRId = d.RRId,
+                                      Amount = d.Amount
+                                  };
 
                     // get Disbursement Line for Paid Amount
                     var disbursementLines = from d in db.TrnDisbursementLines

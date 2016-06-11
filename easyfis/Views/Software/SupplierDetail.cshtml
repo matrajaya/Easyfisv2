@@ -242,8 +242,8 @@
         // Get Article for supplier by its ID
         // ==================================
         function getArticleSupplierById() {
-            NProgress.start();
             if (document.location.search.length > 0) {
+                NProgress.start();
                 $.ajax({
                     url: '/api/article/' + supplierId,
                     cache: false,
@@ -503,26 +503,6 @@
             });
         }
 
-        // ==================================
-        // Get Last Id for supplier by its ID
-        // ==================================
-        function getLastInsertedIdSupplierByArticleTypeId() {
-            $.ajax({
-                url: '/api/articleLastIdByArticleTypeId/3',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (lastSupplierResults) {
-                    if (lastSupplierResults != null) {
-                        window.setTimeout(function () {
-                            window.location = '/Software/SupplierDetail?SupplierId=' + lastSupplierResults.Id;
-                        }, 1000);
-                    }
-                }
-            });
-        }
-
         // =========================
         // Supplier Entry Validation
         // =========================
@@ -609,31 +589,16 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     data: dataSupplierObject(),
-                    statusCode: {
-                        200: function () {
+                    success: function (id) {
+                        if (id > 0) {
+                            window.location = '/Software/SupplierDetail?SupplierId=' + id;
                             document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                             $('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', true);
                             $('#supplier_UnlockButton').prop('disabled', true);
                             $('#supplier_CloseButton').prop('disabled', true);
-                            toastr.success("Successfully saved");
-                            setTimeout(getLastInsertedIdSupplierByArticleTypeId, 1000);
-                        },
-                        404: function () {
-                            document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                            $('#supplier_SaveButton').prop('disabled', false);
-                            $('#supplier_LockButton').prop('disabled', true);
-                            $('#supplier_UnlockButton').prop('disabled', true);
-                            $('#supplier_CloseButton').prop('disabled', false);
-                            toastr.error("Save request not found");
-                        },
-                        400: function () {
-                            document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                            $('#supplier_SaveButton').prop('disabled', false);
-                            $('#supplier_LockButton').prop('disabled', true);
-                            $('#supplier_UnlockButton').prop('disabled', true);
-                            $('#supplier_CloseButton').prop('disabled', false);
-                            toastr.error("Cannot save new record");
+                        } else {
+                            window.history.back();
                         }
                     }
                 });
@@ -812,6 +777,8 @@
                 $('#supplier_LockButton').hide();
                 $('#supplier_UnlockButton').hide();
                 $('#btnAddMoreContactInformation').prop('disabled', true);
+
+                
             } else {
                 $('#supplier_SaveButton').hide();
                 $('#supplier_LockButton').show();
@@ -821,7 +788,18 @@
             $('#JournalLedger').show();
             $('#ContactInformation').hide();
             journalLedgerTab();
+
+            $(document).ajaxStop(function () {
+                if (document.location.search.length == 0) {
+                    supplierSaveButton_OnClick();
+                    window.supplierSaveButton_OnClick = function () {
+                        return true;
+                    }
+                }
+            });
         });
+
+       
     </script>
 
     <!-- ====================== -->
@@ -1122,26 +1100,19 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: contactData,
-                        statusCode: {
-                            200: function () {
+                        success: function (id) {
+                            if (id > 0) {
                                 document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                                 $('#cmdSaveContactButton').prop('disabled', true);
                                 $('#cmdContactDetailCloseButton').prop('disabled', true);
                                 toastr.success("Successfully saved");
                                 $('#contactEdit').modal('hide');
                                 refreshMoreContactInformation();
-                            },
-                            404: function () {
+                            } else {
                                 document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
                                 $('#cmdSaveContactButton').prop('disabled', false);
                                 $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save request not found");
-                            },
-                            400: function () {
-                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveContactButton').prop('disabled', false);
-                                $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Cannot save new record");
+                                toastr.error("Save unsuccessful");
                             }
                         }
                     });
