@@ -6,10 +6,15 @@ body {
     font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
 }
 
-    html.home-html-height,
-    body.home-body-height {
-        height: 100%;
-    }
+#gmap_canvas img {
+    max-width: none !important;
+    background: none !important;
+}
+
+html.home-html-height,
+body.home-body-height {
+    height: 100%;
+}
 
 html.account-html-custom {
     position: relative;
@@ -177,11 +182,13 @@ header.homeHeader {
 }
 
 .contact-section {
-    padding-top: 150px;
-    padding-bottom: 200px;
-    height: 650px;
+    padding-top: 27px;
+    padding-bottom: 27px;
     background-color: #112540;
-    color: white;
+}
+
+.text-white {
+    color: #fff;
 }
 
 .section-pad-a {
@@ -289,6 +296,16 @@ dd {
 }
 
 .modal-header {
-    background-color: #3783c6;
-    color: #ffffff;
+    background-color: #f2f2f2;
+    box-shadow: 0px 4px 10px -8px #000;
+}
+
+.popover-ol {
+    display: block; 
+    padding-left: 15px;
+}
+
+
+.popover-ol > li {
+    padding-top: 10px;
 }

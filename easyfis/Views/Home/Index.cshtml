@@ -13,7 +13,7 @@
 </head>
 <body id="page-top" class="home-body-height">
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
+        <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -43,9 +43,7 @@
         </div>
     </header>
 
-    <section class="bg-primary" id="about">
-
-    </section>
+    <section class="bg-primary" id="about"></section>
 
     <section id="features">
         <div class=" section-pad-a">
@@ -54,7 +52,19 @@
                     <div class="col-lg-5 col-sm-6">
                         <h2 class="section-heading"><i class="fa fa-bar-chart"></i> Sales</h2><br />
                         <p class="feature-item">You can perform customer orders and invoices of products and services in the cloud. You are provided with the list of products with its on-hand inventory in real-time. Automated posting of Accounts Receivable (AR), Journal Entries and Inventory. In-line tax computation and comprehensive discounting.</p>
-                        <button class="btn btn-success btn-lg"><i class="fa fa-book fa-fw"></i> Learn More</button>
+                        <button class="btn btn-info btn-lg" data-placement="right" data-toggle="popover" data-title="More About Sales" data-container="body" data-trigger="focus" data-html="true">
+                            <i class="fa fa-info-circle fa-fw"></i> Learn More
+                        </button>
+                        <div id="popover-content" class="hide">
+                            <ol class="popover-ol">
+                                <li>Creates invoices and manages customer orders in the cloud.</li>
+                                <li>Unlimited item with multiple prices and discounts.</li>
+                                <li>Automated posting of Accounts Receivable and Inventory.</li>
+                                <li>Automated journal entries on sales accounts.</li>
+                                <li>In-line tax computation, e.g., VAT.</li>
+                            </ol>
+                        </div>
+                        <br />
                     </div>
                     <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                         <img class="img-responsive" src="~/Images/sectionImages/dog.png" alt="">
@@ -122,24 +132,47 @@
                 </div>
             </div>
         </div>
-</section>
+    </section>
 
     <section id="contact" class="contact-section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">Contact Us!</h2>
-                    <br />
-                    <p>Ready to subscribe with us? That's great! Give us a call or send us an email and we will get back to you as soon as possible!</p>
-                    <br /><br /><br />
+                <div class="col-md-4">
+                    <div class="text-white">
+                        <h2 class="">Contact Us!</h2>
+                        <br />
+                        <p>
+                            Ready to subscribe with us? That's great! Give us a call or send us an email and we will get back to you as soon as possible!
+                        </p>
+                        <br /><br />
+                        <p><i class="fa fa-phone fa-fw"></i> (032) 266 3773</p>
+                        <p><i class="fa fa-envelope-o fa-fw" data-wow-delay=".1s"></i> info@innosoft.ph</p>
+                        <br />
+                        For More Information: <br />
+                        <a href="http://www.innosoft.ph" target="_blank"><span class="label label-info"><i class="fa fa-info fa-fw"></i> Innosft</span></a>
+                        <a href="#" target="_blank"><span class="label label-info"><i class="fa fa-twitter fa-fw"></i> Twiiter</span></a>
+                        <a href="#" target="_blank"><span class="label label-info"><i class="fa fa-linkedin fa-fw"></i>Linked-In</span></a>
+                    </div>
                 </div>
-                <div class="col-lg-4 col-lg-offset-2 text-center">
-                    <i class="fa fa-phone fa-3x wow bounceIn"></i>
-                    <p>(032) 266 3773</p>
-                </div>
-                <div class="col-lg-4 text-center">
-                    <i class="fa fa-envelope-o fa-3x wow bounceIn" data-wow-delay=".1s"></i>
-                    <p>info@innosoft.ph</p>
+                <div class="col-md-8">
+                    <script src='https://maps.googleapis.com/maps/api/js?v=3.exp'></script>
+                    <div class="img-responsive img-thumbnail" style='overflow: hidden; height: 440px; width: 100%;'>
+                        <div id='gmap_canvas' style='height: 440px; width: 100%;'></div>
+                        <div>
+                            <small>
+                                <a href="http://embedgooglemaps.com">
+                                    embed google maps
+                                </a>
+                            </small>
+                        </div>
+                        <div>
+                            <small>
+                                <a href="https://privacypolicygenerator.info">
+                                    privacy policy generator
+                                </a>
+                            </small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -182,5 +215,40 @@
     </div>
 
     @Scripts.Render("~/Scripts/Home-js")
+    <script type='text/javascript'>
+        function init_map() {
+            var myOptions = {
+                zoom: 17,
+                center: new google.maps.LatLng(10.315699199999994, 123.88543660000008),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);
+            marker = new google.maps.Marker({
+                map: map,
+                position: new google.maps.LatLng(10.315699199999994, 123.88543660000008)
+            });
+
+            infowindow = new google.maps.InfoWindow({
+                content: '<strong>Google map</strong><br>Cebu Innosoft Solution<br>'
+            });
+
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+
+            infowindow.open(map, marker);
+        }
+
+        google.maps.event.addDomListener(window, 'load', init_map);
+
+        $("[data-toggle=popover]").popover({
+            html: true,
+            content: function () {
+                return $('#popover-content').html();
+            }
+        });
+
+    </script>
 </body>
 </html>
