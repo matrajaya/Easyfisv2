@@ -49,6 +49,12 @@ p {
     line-height: 1.5;
 }
 
+
+section.aboutSection {
+    padding: 50px 0;
+}
+
+
 .bg-primary {
     background-color: #474748;
 }
@@ -77,125 +83,72 @@ aside {
 .navbar-default {
     border-color: rgba(34,34,34,.05);
     font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
-    background-color: #142d49;
+    background-color: #d7d7d7;
     -webkit-transition: all .35s;
     -moz-transition: all .35s;
     transition: all .35s;
+    box-shadow: 0px 0px 5px 1px;
+    border-bottom: 0px !important;
+}
+
+
+.navbar-brand > img {
+  height: 40px;
+  width: 150px;
 }
 
     .navbar-default .navbar-header .navbar-brand {
         font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif;
-        font-weight: 700;
         color: #fff;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
-
-        .navbar-default .navbar-header .navbar-brand:hover,
-        .navbar-default .navbar-header .navbar-brand:focus {
-            color: #fff;
-        }
 
     .navbar-default .nav > li > a,
     .navbar-default .nav > li > a:focus {
         font-size: 14px;
         font-weight: 700;
-        color: #cacaca;
+        color: #383838;
     }
 
         .navbar-default .nav > li > a:hover,
         .navbar-default .nav > li > a:focus:hover {
-            color: #fff;
+            color: #383838;
+            background-color: #b3b3b4;
         }
 
-    .navbar-default .nav > li.active > a,
-    .navbar-default .nav > li.active > a:focus {
-        color: #fff !important;
-        background-color: transparent;
-    }
-
-        .navbar-default .nav > li.active > a:hover,
-        .navbar-default .nav > li.active > a:focus:hover {
-            background-color: transparent;
+        .homeFrontLogo {
+            height: 200px;
+            margin-bottom: 30px;
         }
 
 @media screen and (max-width: 768px) {
     .navbar-default .navbar-nav .open .dropdown-menu > li > a,
     .navbar-default .navbar-nav .open .dropdown-menu {
-        color: #cccccc;
+        color: #383838;
     }
 
         .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
-        .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus,
         .navbar-default .navbar-nav .open .dropdown-menu {
-            color: #fff;
+            background-color: transparent;
         }
 }
 
-
-@media(min-width:768px) {
-    .navbar-default {
-        border-color: rgba(255,255,255,.3);
-        background-color: transparent;
-    }
-
-        .navbar-default .navbar-header .navbar-brand {
-            color: rgba(255,255,255,.7);
-        }
-
-            .navbar-default .navbar-header .navbar-brand:hover,
-            .navbar-default .navbar-header .navbar-brand:focus {
-                color: #fff;
-            }
-
-        .navbar-default .nav > li > a,
-        .navbar-default .nav > li > a:focus {
-            color: rgba(255,255,255,.7);
-        }
-
-            .navbar-default .nav > li > a:hover,
-            .navbar-default .nav > li > a:focus:hover {
-                color: #fff;
-            }
-
-        .navbar-default.affix {
-            border-color: rgba(34,34,34,.05);
-            background-color: #142d49;
-        }
-
-            .navbar-default.affix .navbar-header .navbar-brand {
-                font-size: 15px;
-                color: #fff;
-            }
-
-                .navbar-default.affix .navbar-header .navbar-brand:hover,
-                .navbar-default.affix .navbar-header .navbar-brand:focus {
-                    color: #fff;
-                }
-
-            .navbar-default.affix .nav > li > a,
-            .navbar-default.affix .nav > li > a:focus {
-                color: #cacaca;
-            }
-
-                .navbar-default.affix .nav > li > a:hover,
-                .navbar-default.affix .nav > li > a:focus:hover {
-                    color: #fff;
-                }
-}
 
 .navbar .nav li.dropdown.open > .dropdown-toggle,
 .navbar .nav li.dropdown.active > .dropdown-toggle {
-    background-color: transparent;
-    color: #FFFFFF;
+    background-color: #b3b3b4;
 }
 
 .navbar-default .navbar-toggle {
-    border-color: transparent;
+    border-color: #112540;
+        background-color: #112540;
 }
 
     .navbar-default .navbar-toggle:focus,
     .navbar-default .navbar-toggle:hover {
-        border-color: transparent;
-        background-color: transparent;
+        border-color: #112540;
+        background-color: #112540;
     }
 
     .navbar-default .navbar-toggle .icon-bar {
@@ -205,32 +158,6 @@ aside {
     .navbar-default .navbar-toggle:hover .icon-bar {
         background-color: #ffffff;
     }
-
-
-.navbar-default.userAuthentication {
-    border-color: rgba(34,34,34,.05);
-    background-color: #142d49;
-}
-
-    .navbar-default.userAuthentication .navbar-header .navbar-brand {
-        font-size: 15px;
-        color: #fff;
-    }
-
-        .navbar-default.userAuthentication .navbar-header .navbar-brand:hover,
-        .navbar-default.userAuthentication .navbar-header .navbar-brand:focus {
-            color: #fff;
-        }
-
-    .navbar-default.userAuthentication .nav > li > a,
-    .navbar-default.userAuthentication .nav > li > a:focus {
-        color: #cacaca;
-    }
-
-        .navbar-default.userAuthentication .nav > li > a:hover,
-        .navbar-default.userAuthentication .nav > li > a:focus:hover {
-            color: #fff;
-        }
 
 header.homeHeader {
     position: relative;
@@ -255,6 +182,7 @@ header.homeHeader {
         header.homeHeader .header-content .header-content-inner h1 {
             margin-top: 0;
             margin-bottom: 0;
+            font-size: 500%;
             text-transform: uppercase;
             font-weight: 700;
         }
@@ -316,14 +244,14 @@ header.homeHeader {
 }
 
 .footer-custom {
-    background-color: #142d49;
+    background-color: #d7d7d7;
     padding: 20px;
-    color: #fff;
+    color: #383838;
 }
 
 .footer-custom-userAuthentication {
-    background-color: #142d49;
-    color: #fff;
+    background-color: #d7d7d7;
+    color: #383838;
     position: absolute;
     left: 0;
     bottom: 0;
@@ -365,6 +293,7 @@ header.homeHeader {
     padding-top: 200px;
     padding-bottom: 200px;
     height: 680px;
+    border-top: 1px solid #cacaca;
 }
 
 .manageDivider {
@@ -490,4 +419,8 @@ dd {
 .modal-header {
     background-color: #3783c6;
     color: #ffffff;
+}
+
+.feature-item {
+    text-align: justify;
 }

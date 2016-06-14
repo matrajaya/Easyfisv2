@@ -17,7 +17,7 @@ namespace easyfis.Models
         [Route("api/listForm")]
         public List<Models.SysForm> Get()
         {
-            var forms = from d in db.SysForms
+            var forms = from d in db.SysForms.OrderBy(d => d.FormName)
                         select new Models.SysForm
                         {
                             Id = d.Id,

@@ -2,9 +2,9 @@
 @if (Request.IsAuthenticated)
 {
     @Html.AntiForgeryToken()
-    @*<a href="@Url.Action("Index", "Manage")" class="btn btn-primary btn-lg btn-fill btn-round">Start</a>*@
+    <a href="@Url.Action("Index", "Manage")" class="btn btn-primary btn-lg btn-xl">Get Started</a>
 }
 else
 {
-    @*<a href="@Url.Action("Register", "Account")" class="btn btn-success btn-lg btn-fill btn-round">Sign up for free!</a>*@
+    <a href="@Url.Action("Login", "Account")" class="btn btn-primary btn-lg btn-xl">Get Started</a>
 }

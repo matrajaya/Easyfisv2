@@ -31,11 +31,7 @@ namespace easyfis
                         "~/wijmo/controls/wijmo.input.min.js",
                         "~/wijmo/controls/wijmo.grid.min.js",
                         "~/wijmo/controls/wijmo.chart.min.js",
-                        "~/Scripts/nprogress.js",
-                        "~/Scripts/jquery.easing.min.js",
-                        "~/Scripts/jquery.fittext.js",
-                        "~/Scripts/wow.min.js",
-                        "~/Scripts/creative.js"));
+                        "~/Scripts/nprogress.js"));
 
             // ==============
             // Software - css
