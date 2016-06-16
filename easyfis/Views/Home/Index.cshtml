@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Title of the Page -->
+    <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
     <title>EasyFIS</title>
 
     <!-- CSS StyleSheets-->
     @Styles.Render("~/Content/Home-css")
 </head>
 <body id="page-top" class="home-body-height">
-    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+    <nav id="nav" class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -25,7 +26,6 @@
                     <img src="~/Images/logo/easyfislogo.png" />
                 </a>
             </div>
-
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 @Html.Partial("_LoginPartial")
             </div>
@@ -43,28 +43,18 @@
         </div>
     </header>
 
-    <section class="bg-primary" id="about"></section>
-
     <section id="features">
         <div class=" section-pad-a">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5 col-sm-6">
-                        <h2 class="section-heading"><i class="fa fa-bar-chart"></i> Sales</h2><br />
-                        <p class="feature-item">You can perform customer orders and invoices of products and services in the cloud. You are provided with the list of products with its on-hand inventory in real-time. Automated posting of Accounts Receivable (AR), Journal Entries and Inventory. In-line tax computation and comprehensive discounting.</p>
-                        <button class="btn btn-info btn-lg" data-placement="right" data-toggle="popover" data-title="More About Sales" data-container="body" data-trigger="focus" data-html="true">
-                            <i class="fa fa-info-circle fa-fw"></i> Learn More
-                        </button>
-                        <div id="popover-content" class="hide">
-                            <ol class="popover-ol">
-                                <li>Creates invoices and manages customer orders in the cloud.</li>
-                                <li>Unlimited item with multiple prices and discounts.</li>
-                                <li>Automated posting of Accounts Receivable and Inventory.</li>
-                                <li>Automated journal entries on sales accounts.</li>
-                                <li>In-line tax computation, e.g., VAT.</li>
-                            </ol>
+                        <div class="panel panel-theme">
+                            <i class="fa fa-tags fa-fw fa-4x"></i> 
+                            <h4>Sales</h4>
                         </div>
-                        <br />
+                        <p class="feature-item">
+                            Sell your products and services using the cloud.  Manage your receivables and collection online.
+                        </p>
                     </div>
                     <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                         <img class="img-responsive" src="~/Images/sectionImages/dog.png" alt="">
@@ -77,9 +67,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-                        <h2 class="section-heading"><i class="fa fa-shopping-cart"></i> Purchases</h2><br />
-                        <p class="feature-item">You can perform supplier orders and invoices of your expenses in the cloud. Automated posting of Accounts Payable (AP), Journal Entries and Inventory. Automated inventory batch cost posting of products. In-line tax computation. Provides you with an order status report.</p>
-                        <button class="btn btn-success btn-lg"><i class="fa fa-book fa-fw"></i> Learn More</button>
+                        <div class="panel panel-theme">
+                            <h3><i class="fa fa-clipboard fa-fw"></i> Purchases and Expenses</h3>
+                        </div>
+                        <p class="feature-item">
+                            Make purchases and pay expenses using the cloud.  Manage your payables and disbursement online.
+                        </p>
                     </div>
                     <div class="col-lg-5 col-sm-pull-6  col-sm-6">
                         <img class="img-responsive" src="~/Images/sectionImages/dog.png" alt="">
@@ -92,9 +85,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5 col-sm-6">
-                        <h2 class="section-heading"><i class="fa fa-cubes"></i> Inventory</h2><br />
-                        <p class="feature-item">Unlimited warehouse or branch creation. You can perform stock in and out as well as transfer of products from one warehouse or branch to another. You can perform consignment procedures.</p>
-                        <button class="btn btn-success btn-lg"><i class="fa fa-book fa-fw"></i> Learn More</button>
+                        <div class="panel panel-theme">
+                            <h3><i class="fa fa-print fa-fw"></i> Inventory</h3>
+                        </div>
+                        <p class="feature-item">
+                            Manage product inventory on multiple branches and warehouse locations.  Setup multiple units per products for easier transactions.
+                        </p>
                     </div>
                     <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                         <img class="img-responsive" src="~/Images/sectionImages/dog.png" alt="">
@@ -107,9 +103,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-                        <h2 class="section-heading"><i class="fa fa-money"></i> Financials</h2><br />
-                        <p class="feature-item">Real-time Balance Sheet and Income Statement report per branch or consolidated. Drill down report from Trial Balance to Ledger and then to the transaction itself. You can perform comprehensive account adjustments through Journal Voucher.</p>
-                        <button class="btn btn-success btn-lg"><i class="fa fa-book fa-fw"></i> Learn More</button>
+                        <div class="panel panel-theme">
+                            <h3><i class="fa fa-print fa-fw"></i> Finance</h3>
+                        </div>
+                        <p class="feature-item">
+                            Show real-time financial statements with supporting ledgers in the cloud.  Automated bookeeping process for all transactions.
+                        </p>
                     </div>
                     <div class="col-lg-5 col-sm-pull-6  col-sm-6">
                         <img class="img-responsive" src="~/Images/sectionImages/dog.png" alt="">
@@ -122,9 +121,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5 col-sm-6">
-                        <h2 class="section-heading"><i class="fa fa-users"></i> Mutli-user Setup</h2><br />
-                        <p class="feature-item">If you have multiple user and staff, you can give rights and access to your company. Unlimited user registration. Automated transaction tagging of user, e.g., who first created the transaction and who last updated it.</p>
-                        <button class="btn btn-success btn-lg"><i class="fa fa-book fa-fw"></i> Learn More</button>
+                        <div class="panel panel-theme">
+                            <h3><i class="fa fa-building fa-fw"></i> Multiple Company and Branches</h3>
+                        </div>
+                        <p class="feature-item">
+                            Setup unlimited company with corressponding branches.
+                        </p>
                     </div>
                     <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                         <img class="img-responsive" src="~/Images/sectionImages/dog.png" alt="">
@@ -132,6 +134,233 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="aboutSection" id="about">
+        <div class="container">
+            <h2>About our Clients</h2>
+            <p>30 and growing</p>
+        </div>
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/asiatemp.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/davinci.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/dreambuilders.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/matutum.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/mixandmagic.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/nutech.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/orangebrutus.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/reyken.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/saintpaul.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/seacrest.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/sonnet.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/subzero.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/asiatemp.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/davinci.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/dreambuilders.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/matutum.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/mixandmagic.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/nutech.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/orangebrutus.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/reyken.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/saintpaul.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/seacrest.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/sonnet.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                            <div class="col-lg-1">
+                                <center>
+                                    <a href="#">
+                                        <img src="~/Images/clientlogos/subzero.png" class="filter" height="60" alt="">
+                                    </a>
+                                </center>
+                                <br /><br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" align="center">
+            <!-- Left and right controls -->
+            <a class="left btn btn-default" href="#myCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            </a>
+            <a class="right btn btn-default" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            </a>
+        </div>
+        <br /><br />
     </section>
 
     <section id="contact" class="contact-section">
@@ -152,6 +381,7 @@
                         <a href="http://www.innosoft.ph" target="_blank"><span class="label label-info"><i class="fa fa-info fa-fw"></i> Innosft</span></a>
                         <a href="#" target="_blank"><span class="label label-info"><i class="fa fa-twitter fa-fw"></i> Twiiter</span></a>
                         <a href="#" target="_blank"><span class="label label-info"><i class="fa fa-linkedin fa-fw"></i>Linked-In</span></a>
+                        <br /><br />
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -230,7 +460,7 @@
             });
 
             infowindow = new google.maps.InfoWindow({
-                content: '<strong>Google map</strong><br>Cebu Innosoft Solution<br>'
+                content: '<strong>Cebu Innosoft Solutions Inc.</strong><br>Innosoft Bldg. Corner V. Rama Avenue & R. Duterte St. Guadalupe, Cebu City<br>'
             });
 
             google.maps.event.addListener(marker, 'click', function () {
@@ -242,13 +472,40 @@
 
         google.maps.event.addDomListener(window, 'load', init_map);
 
-        $("[data-toggle=popover]").popover({
+        $("#btnMoreInfoSales").popover({
             html: true,
             content: function () {
-                return $('#popover-content').html();
+                return $('#popover-content-sales').html();
             }
         });
 
+        $("#btnMoreInfoPurchases").popover({
+            html: true,
+            content: function () {
+                return $('#popover-content-purchases').html();
+            }
+        });
+
+        $("#btnMoreInfoInventory").popover({
+            html: true,
+            content: function () {
+                return $('#popover-content-inventory').html();
+            }
+        });
+
+        $("#btnMoreInfoFinancials").popover({
+            html: true,
+            content: function () {
+                return $('#popover-content-financials').html();
+            }
+        });
+
+        $("#btnMoreInfoUserSetup").popover({
+            html: true,
+            content: function () {
+                return $('#popover-content-usersetup').html();
+            }
+        });
     </script>
 </body>
 </html>

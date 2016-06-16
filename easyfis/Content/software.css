@@ -506,7 +506,6 @@ a {
 }
 
 .skin-blue .main-header .navbar {
-    background-color: #d7d7d7;
     box-shadow: 4.5px 0px 5px 1px;
 }
 
@@ -563,20 +562,20 @@ a {
 .skin-blue .wrapper,
 .skin-blue .main-sidebar,
 .skin-blue .left-side {
-    background-color: rgb(30, 30, 30);
+    background-color: #112540;
 }
 
 .skin-blue .sidebar-menu > li > a {
     border-left: 3px solid transparent;
     color: #fff;
+    font-weight: 700;
 }
 
 .skin-blue .sidebar-menu > li:hover > a,
 .skin-blue .sidebar-menu > li.active > a {
     color: #fff;
-    background: #ededed;
-    border-left-color: #3c8dbc;
-    background: #383838;
+    background-color: #961415;
+    border-left-color: #d7d7d7;
 }
 
 .skin-blue .sidebar-menu > li > .treeview-menu {
@@ -593,6 +592,7 @@ a {
 
 .skin-blue .treeview-menu > li > a {
     color: #8aa4af;
+    font-weight: 500;
 }
 
     .skin-blue .treeview-menu > li.active > a,
@@ -600,13 +600,35 @@ a {
         color: #ffffff;
     }
 
+/* Changes 6:40pm */
 .panel-theme {
     background-color: #112540;
     color: #ffffff;
     font-weight: bold;
     font-size: 14px;
     transition: all 0.1s ease;
+    text-align: center;
+    padding: 15px;
 }
+
+.panel-theme-sales {
+    background-color: #112540;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.1s ease;
+    text-align: center;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 85px;
+    padding-bottom: 92.2px;
+}
+/* == */
+
+    .panel-theme-sales:hover {
+        background-color: #961415;
+    }
+
 
 .panel-theme-footer {
     color: #112540;
@@ -640,7 +662,7 @@ a {
 }
 
 .panel-sales-custom-footer {
-    margin-top: 163px;
+    margin-top: 167px;
 }
 
 .panel-orange {
@@ -762,8 +784,10 @@ dd {
 }
 
 .modal-header {
-    background-color: #3783c6;
-    color: #ffffff;
+    background-color: #f2f2f2;
+    box-shadow: 0px 4px 10px -8px #000;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 .reportDivider {
@@ -798,57 +822,6 @@ dd {
 input.checkbox_custom {
     margin-top: 11px;
 }
-
-.dropdown-menu:before {
-    border-bottom: 11px solid rgba(0, 0, 0, 0.2);
-    border-left: 11px solid rgba(0, 0, 0, 0);
-    border-right: 11px solid rgba(0, 0, 0, 0);
-    content: "";
-    display: inline-block;
-    position: absolute;
-    left: 240px;
-    margin-left: -60%;
-    top: -10px;
-}
-
-.dropdown-menu:after {
-    border-bottom: 11px solid #FFFFFF;
-    border-left: 11px solid rgba(0, 0, 0, 0);
-    border-right: 11px solid rgba(0, 0, 0, 0);
-    content: "";
-    display: inline-block;
-    position: absolute;
-    left: 240px;
-    margin-left: -60%;
-    top: -10px;
-}
-
-@media screen and (min-width: 768px) {
-    .dropdown-menu:before {
-        border-bottom: 11px solid rgba(0, 0, 0, 0.2);
-        border-left: 11px solid rgba(0, 0, 0, 0);
-        border-right: 11px solid rgba(0, 0, 0, 0);
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: 222px;
-        margin-left: -60%;
-        top: -10px;
-    }
-
-    .dropdown-menu:after {
-        border-bottom: 11px solid #FFFFFF;
-        border-left: 11px solid rgba(0, 0, 0, 0);
-        border-right: 11px solid rgba(0, 0, 0, 0);
-        content: "";
-        display: inline-block;
-        position: absolute;
-        left: 222px;
-        margin-left: -60%;
-        top: -10px;
-    }
-}
-
 
 .well {
     padding-left: 20px;
@@ -924,4 +897,3 @@ input.numberField {
     margin: 0px;
     height: 30px;
 }
-

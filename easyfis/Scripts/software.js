@@ -58,7 +58,6 @@ function rightsAccessValidation(userId) {
     });
 }
 
-
 $(document).ready(function () {
     // number fields
     function RemoveRougeChar(convertString) {
