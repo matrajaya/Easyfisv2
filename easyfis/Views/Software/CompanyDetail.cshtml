@@ -24,7 +24,7 @@
                     <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="/Software"> Dashboard</a></li>
                     <li><a href="/Software/Company"> Company</a></li>
                     <li> Company Detail </li>
                 </ol>
@@ -36,8 +36,8 @@
                         <div class="row">
                             <div class="col-md-12" align="right">
                                 <button class="btn btn-primary btn-sm" id="cmdSaveCompany" onclick="cmdCompanySaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="cmdSaveUpdateCompany" onclick="cmdCompanySaveUpdateButton_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
-                                <button class="btn btn-primary btn-sm" id="cmdEditCompany" onclick="cmdCompanyEditButton_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdSaveUpdateCompany" onclick="cmdCompanySaveUpdateButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                <button class="btn btn-primary btn-sm" id="cmdEditCompany" onclick="cmdCompanyEditButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
                                 <button onclick="window.location.href ='@Url.Action("CompanyPDF", "Software")'" cla class="btn btn-primary btn-sm" id="cmdPrintCompany"><i class="fa fa-print"></i> Print</button>
                                 <button onclick="window.location.href = '@Url.Action("Company", "Software")'" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</button>
                             </div>

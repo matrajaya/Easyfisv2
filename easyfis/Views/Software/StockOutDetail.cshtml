@@ -27,7 +27,7 @@
                     <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="/Software"> Dashboard</a></li>
                     <li><a href="/Software/StockOut">Stock Out </a></li>
                     <li> Stock Out Detail </li>
                 </ol>
@@ -40,9 +40,9 @@
                             <div class="col-md-6"></div>
                             <div class="col-md-6" align="right">
                                 <button class="btn btn-primary btn-sm" id="cmdStockOutJournal" onclick="stockOutJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                <button class="btn btn-primary btn-sm" id="cmdStockOutSaveLock" onclick="btnStockOutSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockOutSaveLock" onclick="btnStockOutSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
                                 <button class="btn btn-primary btn-sm" id="cmdStockOutSave" onclick="btnStockOutSave_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="cmdStockOutEdit" onclick="btnStockOutEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockOutEdit" onclick="btnStockOutEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
                                 <button class="btn btn-primary btn-sm" id="cmdStockOutPrint" onclick="btnStockOutPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
                                 <button onclick="window.location.href = '@Url.Action("StockOut", "Software")'" class="btn btn-danger btn-sm" id="cmdStockOutClose"><i class="fa fa-times"></i> Close</button>
                             </div>

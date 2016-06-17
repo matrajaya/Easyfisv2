@@ -27,7 +27,7 @@
                     <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="/Software"> Dashboard</a></li>
                     <li><a href="/Software/ReceivingReceipt"> Receiving Receipt</a></li>
                     <li> Receiving Receipt Detail </li>
                 </ol>
@@ -40,9 +40,9 @@
                             <div class="col-md-6"> </div>
                             <div class="col-md-6" align="right">
                                 <button class="btn btn-primary btn-sm" id="cmdRRJournal" onclick="RRJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                <button class="btn btn-primary btn-sm" id="cmdSaveRRSave" onclick="RRSaveSaveButton_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdSaveRRSave" onclick="RRSaveSaveButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
                                 <button class="btn btn-primary btn-sm" id="cmdRRSave" onclick="RRSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="cmdRREdit" onclick="RREditButton_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdRREdit" onclick="RREditButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
                                 <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="RRPrintButton_OnClick()"><i class="fa fa-print"></i> Print</button>
                                 <button id="cmdRRClose" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software")'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
                             </div>

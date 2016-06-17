@@ -215,7 +215,7 @@ namespace easyfis.Reports
                     totalVarianceForFooter = totalVarianceForFooter + totalVarianceAmount;
 
                     PdfPTable tableFooter = new PdfPTable(12);
-                    float[] widthscellsfooter = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 12f, 20f, 16f, 16f, 16f, 16f };
+                    float[] widthscellsfooter = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 12f, 16f, 20f, 16f, 12f, 20f };
                     tableFooter.SetWidths(widthscellsfooter);
                     tableFooter.WidthPercentage = 100;
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
@@ -225,11 +225,11 @@ namespace easyfis.Reports
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                    tableFooter.AddCell(new PdfPCell(new Phrase("Sub Total", fontArial11Bold)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
-                    tableFooter.AddCell(new PdfPCell(new Phrase(totalTotalAmount.ToString("#,##0.00"), fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 11f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase("Sub Total", fontArial10Bold)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(totalTotalAmount.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 11f });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
                     tableFooter.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-                    tableFooter.AddCell(new PdfPCell(new Phrase(totalVarianceAmount.ToString("#,##0.00"), fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 11f });
+                    tableFooter.AddCell(new PdfPCell(new Phrase(totalVarianceAmount.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 11f });
                     document.Add(tableFooter);
                 }
             }
@@ -237,7 +237,7 @@ namespace easyfis.Reports
             document.Add(line);
 
             PdfPTable tableFooterForTotal = new PdfPTable(12);
-            float[] widthscellsfooterForTotal = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f, 16f };
+            float[] widthscellsfooterForTotal = new float[] { 20f, 30f, 15f, 16f, 16f, 16f, 12f, 16f, 20f, 16f, 12f, 20f };
             tableFooterForTotal.SetWidths(widthscellsfooterForTotal);
             tableFooterForTotal.WidthPercentage = 100;
             tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
@@ -247,11 +247,11 @@ namespace easyfis.Reports
             tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooterForTotal.AddCell(new PdfPCell(new Phrase("Total", fontArial11Bold)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
-            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(totalAmountForFooter.ToString("#,##0.00"), fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 11f });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase("Total", fontArial10Bold)) { HorizontalAlignment = 2, Border = 0, PaddingTop = 10f });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(totalAmountForFooter.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 11f });
             tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
             tableFooterForTotal.AddCell(new PdfPCell(new Phrase(" ")) { Border = 0 });
-            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(totalVarianceForFooter.ToString("#,##0.00"), fontArial11Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 11f });
+            tableFooterForTotal.AddCell(new PdfPCell(new Phrase(totalVarianceForFooter.ToString("#,##0.00"), fontArial10Bold)) { Border = 0, HorizontalAlignment = 2, PaddingTop = 11f });
             document.Add(tableFooterForTotal);
 
             // Document End

@@ -27,7 +27,7 @@
                     <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
                 </h1>
                 <ol class="breadcrumb">
-                    <li><a href="/Software"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="/Software"> Dashboard</a></li>
                     <li><a href="/Software/StockTransfer"> Stock Transfer </a></li>
                     <li>Stock Transfer Detail</li>
                 </ol>
@@ -42,9 +42,9 @@
                             </div>
                             <div class="col-md-6" align="right">
                                 <button class="btn btn-primary btn-sm" id="cmdStockTransferJournal" onclick="stockTransferJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                <button class="btn btn-primary btn-sm" id="cmdStockTransferSaveLock" onclick="btnStockTransferSaveLock_OnClick()"><i class="fa fa-save"></i> Save (Lock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockTransferSaveLock" onclick="btnStockTransferSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
                                 <button class="btn btn-primary btn-sm" id="cmdStockTransferSave" onclick="btnStockTransferSave_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="cmdStockTransferEdit" onclick="btnStockTransferEdit_OnClick()"><i class="fa fa-edit"></i> Edit (Unlock)</button>
+                                <button class="btn btn-primary btn-sm" id="cmdStockTransferEdit" onclick="btnStockTransferEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
                                 <button class="btn btn-primary btn-sm" id="cmdStockTransferPrint" onclick="btnStockTransferPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
                                 <button onclick="window.location.href = '/Software/StockTransfer'" class="btn btn-danger btn-sm" id="cmdStockTransferClose"><i class="fa fa-times"></i> Close</button>
                             </div>
@@ -1429,10 +1429,10 @@
                     //$("#stockTransferItem_Unit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
                     //$("#stockTransferItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
                     //$("#stockTransferItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
-                    $("#stockTransferItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
+                    //$("#stockTransferItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
                     $("#stockTransferItem_ItemInventoryCode_data").val(ManualCodeCollections.items[this.selectedIndex].Id);
                     $("#stockTransferItem_ItemInventoryCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].InventoryCode);
-                    $("#stockTransferItem_Cost").val(ManualCodeCollections.items[this.selectedIndex].Cost);
+                    //$("#stockTransferItem_Cost").val(ManualCodeCollections.items[this.selectedIndex].Cost);
 
                     createCboForItemDescription(articleItems);
 
@@ -1487,10 +1487,10 @@
             document.getElementById("stockTransferItem_ItemId_data").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemId;
             document.getElementById("stockTransferItem_ItemCode_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemCode;
             document.getElementById("stockTransferItem_ItemDescription_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemDescription;
-            document.getElementById("stockTransferItem_Particulars").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Particulars;
+            //document.getElementById("stockTransferItem_Particulars").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Particulars;
             document.getElementById("stockTransferItem_ItemInventoryCode_data").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Id;
             document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].InventoryCode;
-            document.getElementById("stockTransferItem_Cost").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Cost;
+            //document.getElementById("stockTransferItem_Cost").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Cost;
         }
 
         // ====================
@@ -1523,10 +1523,10 @@
                     //$("#stockTransferItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
                     //$("#stockTransferItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
                     //$("#stockTransferItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
-                    $("#stockTransferItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
+                    //$("#stockTransferItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
                     $("#stockTransferItem_ItemInventoryCode_data").val(ItemDescriptionCollections.items[this.selectedIndex].Id);
                     $("#stockTransferItem_ItemInventoryCode_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].InventoryCode);
-                    $("#stockTransferItem_Cost").val(ItemDescriptionCollections.items[this.selectedIndex].Cost);
+                    //$("#stockTransferItem_Cost").val(ItemDescriptionCollections.items[this.selectedIndex].Cost);
 
                     createCboForManualCode(articleItems);
 
@@ -1590,10 +1590,10 @@
             document.getElementById("stockTransferItem_ItemId_data").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId;
             document.getElementById("stockTransferItem_ItemCode_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemCode;
             document.getElementById("stockTransferItem_ItemDescription_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemDescription;
-            document.getElementById("stockTransferItem_Particulars").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Particulars;
+            //document.getElementById("stockTransferItem_Particulars").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Particulars;
             document.getElementById("stockTransferItem_ItemInventoryCode_data").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Id;
             document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].InventoryCode;
-            document.getElementById("stockTransferItem_Cost").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Cost;
+            //document.getElementById("stockTransferItem_Cost").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Cost;
 
             //$("#stockTransferItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
             //$("#stockTransferItem_Unit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
@@ -1643,11 +1643,11 @@
                     //$("#stockTransferItem_Unit_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].Unit);
                     //$("#stockTransferItem_BUCUnit_data").val(InventoryCodeCollection.items[this.selectedIndex].UnitId);
                     //$("#stockTransferItem_BUCUnit_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].Unit);
-                    $("#stockTransferItem_Particulars").val(InventoryCodeCollection.items[this.selectedIndex].Particulars);
+                    //$("#stockTransferItem_Particulars").val(InventoryCodeCollection.items[this.selectedIndex].Particulars);
                     $("#stockTransferItem_ItemInventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
                     $("#stockTransferItem_ItemInventoryCode_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].InventoryCode);
                     $("#stockTransferItem_Cost").val(InventoryCodeCollection.items[this.selectedIndex].Cost);
-
+                    //console.log(InventoryCodeCollection.items[this.selectedIndex].Cost);
 
                     createCboForManualCode(inventories);
                     createCboForItemDescription(inventories);
@@ -1669,7 +1669,7 @@
             document.getElementById("stockTransferItem_ItemId_data").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemId;
             document.getElementById("stockTransferItem_ItemCode_selectedValue").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemCode;
             document.getElementById("stockTransferItem_ItemDescription_selectedValue").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemDescription;
-            document.getElementById("stockTransferItem_Particulars").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Particulars;
+            //document.getElementById("stockTransferItem_Particulars").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Particulars;
             document.getElementById("stockTransferItem_ItemInventoryCode_data").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Id;
             document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].InventoryCode;
             document.getElementById("stockTransferItem_Cost").value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Cost;
@@ -1851,7 +1851,7 @@
             document.getElementById('stockTransferItem_ItemId_data').value = '';
             document.getElementById('stockTransferItem_ItemCode_selectedValue').value = '';
             document.getElementById('stockTransferItem_ItemDescription_selectedValue').value = '';
-            document.getElementById('stockTransferItem_Particulars').value = '';
+            document.getElementById('stockTransferItem_Particulars').value = 'NA';
             document.getElementById('stockTransferItem_ItemInventoryCode_data').value = '';
             document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = '';
             document.getElementById('stockTransferItem_Quantity').value = 0;

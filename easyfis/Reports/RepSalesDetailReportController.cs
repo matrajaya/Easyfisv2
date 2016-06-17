@@ -79,6 +79,7 @@ namespace easyfis.Reports
                                         Unit = d.MstUnit.Unit,
                                         Quantity = d.Quantity,
                                         Amount = d.Amount,
+                                        Price = d.Price
                                     };
 
             Decimal total = 0;

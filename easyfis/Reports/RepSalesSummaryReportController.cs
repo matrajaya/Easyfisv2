@@ -78,6 +78,7 @@ namespace easyfis.Reports
                                           Customer = d.MstArticle.Article,
                                           Remarks = d.Remarks,
                                           SoldBy = d.MstUser4.FullName,
+                                          Amount = d.Amount
                                       };
 
             Decimal total = 0;
