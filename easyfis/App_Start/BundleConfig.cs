@@ -14,7 +14,7 @@ namespace easyfis
             bundles.Add(new StyleBundle("~/Content/Home-css").Include(
                         "~/Content/bootstrap.min.css",
                         "~/Content/toastr.css",
-                        "~/fonts/font-awesome/css/font-awesome.min.css",
+                        "~/Content/font-awesome.min.css",
                         "~/wijmo/styles/wijmo.min.css",
                         "~/Content/nprogress.css",
                         "~/Content/home.css"));
@@ -39,7 +39,7 @@ namespace easyfis
             bundles.Add(new StyleBundle("~/Content/Software-css").Include(
                       "~/Content/bootstrap.min.css",
                       "~/Content/toastr.css",
-                      "~/fonts/font-awesome/css/font-awesome.min.css",
+                      "~/Content/font-awesome.min.css",
                       "~/wijmo/styles/wijmo.min.css",
                       "~/Content/nprogress.css",
                       "~/Content/software.css"));

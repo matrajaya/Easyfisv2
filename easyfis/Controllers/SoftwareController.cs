@@ -223,6 +223,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult AccountLedger()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult Users()
         {
             return View();
