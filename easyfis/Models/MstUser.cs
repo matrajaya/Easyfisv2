@@ -13,7 +13,6 @@ namespace easyfis.Models
         public String UserName { get; set; }
         public String Password { get; set; }
         public String FullName { get; set; }
-        public String UserId { get; set; }
         public Boolean IsLocked { get; set; }
         public Int32? CreatedById { get; set; }
         public String CreatedBy { get; set; }
@@ -21,7 +20,18 @@ namespace easyfis.Models
         public Int32? UpdatedById { get; set; }
         public String UpdatedBy { get; set; }
         public String UpdatedDateTime { get; set; }
-        public Int32 IncomeAccountId { get; set; }
+
+        // user defaults
+        public String UserId { get; set; }
+        public Int32 CompanyId { get; set; }
+        public String Company { get; set; }
         public Int32 BranchId { get; set; }
+        public String Branch { get; set; }
+        public Int32 IncomeAccountId { get; set; }
+        public String IncomeAccount { get; set; }
+        public Int32 SupplierAdvancesAccountId { get; set; }
+        public String SupplierAdvancesAccount { get; set; }
+        public Int32 CustomerAdvancesAccountId { get; set; }
+        public String CustomerAdvancesAccount { get; set; }
     }
 }

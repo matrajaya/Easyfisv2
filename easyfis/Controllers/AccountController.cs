@@ -173,6 +173,10 @@ namespace easyfis.Controllers
 
                     Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+                    var company = from d in db.MstCompanies select d;
+                    var branch = from d in db.MstBranches where d.CompanyId == company.FirstOrDefault().Id select d;
+                    var account = from d in db.MstAccounts select d;
+
                     Data.MstUser newMstUser = new Data.MstUser();
                     newMstUser.UserName = model.UserName;
                     newMstUser.Password = model.Password;
@@ -183,19 +187,23 @@ namespace easyfis.Controllers
                     newMstUser.UpdatedById = 0;
                     newMstUser.UpdatedDateTime = DateTime.Now;
                     newMstUser.UserId = user.Id;
-                    newMstUser.IncomeAccountId = 0;
-                    newMstUser.BranchId = db.MstBranches.FirstOrDefault().Id;
+                    newMstUser.CompanyId = company.FirstOrDefault().Id;
+                    newMstUser.BranchId = branch.FirstOrDefault().Id;
+                    newMstUser.IncomeAccountId = account.FirstOrDefault().Id;
+                    newMstUser.SupplierAdvancesAccountId = account.FirstOrDefault().Id;
+                    newMstUser.CustomerAdvancesAccountId = account.FirstOrDefault().Id;
+
                     db.MstUsers.InsertOnSubmit(newMstUser);
                     db.SubmitChanges();
 
                     var mstUsersData = from d in db.MstUsers where d.UserId == user.Id select d;
                     if (mstUsersData.Any())
                     {
-                        var mstUserLastInsertedId = (from d in db.MstUsers.OrderByDescending(d => d.Id) where d.UserId == user.Id select d.Id).FirstOrDefault();
+                        var mstUserId = (from d in db.MstUsers.OrderByDescending(d => d.Id) where d.UserId == user.Id select d.Id).FirstOrDefault();
 
                         var updateMstUsersData = mstUsersData.FirstOrDefault();
-                        updateMstUsersData.CreatedById = mstUserLastInsertedId;
-                        updateMstUsersData.UpdatedById = mstUserLastInsertedId;
+                        updateMstUsersData.CreatedById = mstUserId;
+                        updateMstUsersData.UpdatedById = mstUserId;
 
                         db.SubmitChanges();
                     }

@@ -68,6 +68,16 @@ namespace easyfis.Controllers
                             UserName = d.UserName,
                             IsLocked = d.IsLocked,
                             UserId = d.UserId,
+                            CompanyId = d.CompanyId,
+                            Company = d.MstCompany.Company,
+                            BranchId = d.BranchId,
+                            Branch = d.MstBranch.Branch,
+                            IncomeAccountId = d.IncomeAccountId,
+                            IncomeAccount = d.MstAccount.Account,
+                            SupplierAdvancesAccountId = d.SupplierAdvancesAccountId,
+                            SupplierAdvancesAccount = d.MstAccount1.Account,
+                            CustomerAdvancesAccountId = d.CustomerAdvancesAccountId,
+                            CustomerAdvancesAccount = d.MstAccount2.Account,
                             //CreatedById = d.CreatedById,
                             //CreatedBy = d.MstUser1.FullName,
                             //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
@@ -186,6 +196,11 @@ namespace easyfis.Controllers
 
                     updateMstUsers.FullName = mstUser.FullName;
                     updateMstUsers.IsLocked = isLocked;
+                    updateMstUsers.CompanyId = mstUser.CompanyId;
+                    updateMstUsers.BranchId = mstUser.BranchId;
+                    updateMstUsers.IncomeAccountId = mstUser.IncomeAccountId;
+                    updateMstUsers.SupplierAdvancesAccountId = mstUser.SupplierAdvancesAccountId;
+                    updateMstUsers.CustomerAdvancesAccountId = mstUser.CustomerAdvancesAccountId;
 
                     db.SubmitChanges();
                     if (aspUsers.Any())
