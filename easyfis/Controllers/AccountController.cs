@@ -9,9 +9,20 @@ using easyfis.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Diagnostics;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace easyfis.Controllers
 {
+    public class CaptchaVerificationResult
+    {
+        [JsonProperty("success")]
+        public bool Success { get; set; }
+
+        [JsonProperty("error-codes")]
+        public List<string> ErrorCodes { get; set; }
+    }
+
     [Authorize]
     public class AccountController : UserAccountController
     {
@@ -151,68 +162,81 @@ namespace easyfis.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+
+            var response = HttpContext.Request.Form["g-recaptcha-response"];
+            string secretKey = "6LeNBiMTAAAAAMZUdKMa_Q4_XRGLjOEjpVP96fge";
+            var client = new System.Net.WebClient();
+            var verificationResultJson = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var verificationResult = JsonConvert.DeserializeObject<CaptchaVerificationResult>(verificationResultJson);
+
+            if (!verificationResult.Success)
             {
-                var user = new ApplicationUser
-                {
-                    UserName = model.UserName,
-                    FullName = model.FullName,
-                };
-
-                //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-
-                    var company = from d in db.MstCompanies select d;
-                    var branch = from d in db.MstBranches where d.CompanyId == company.FirstOrDefault().Id select d;
-                    var account = from d in db.MstAccounts select d;
-
-                    Data.MstUser newMstUser = new Data.MstUser();
-                    newMstUser.UserName = model.UserName;
-                    newMstUser.Password = model.Password;
-                    newMstUser.FullName = model.FullName;
-                    newMstUser.IsLocked = true;
-                    newMstUser.CreatedById = 0;
-                    newMstUser.CreatedDateTime = DateTime.Now;
-                    newMstUser.UpdatedById = 0;
-                    newMstUser.UpdatedDateTime = DateTime.Now;
-                    newMstUser.UserId = user.Id;
-                    newMstUser.CompanyId = company.FirstOrDefault().Id;
-                    newMstUser.BranchId = branch.FirstOrDefault().Id;
-                    newMstUser.IncomeAccountId = account.FirstOrDefault().Id;
-                    newMstUser.SupplierAdvancesAccountId = account.FirstOrDefault().Id;
-                    newMstUser.CustomerAdvancesAccountId = account.FirstOrDefault().Id;
-
-                    db.MstUsers.InsertOnSubmit(newMstUser);
-                    db.SubmitChanges();
-
-                    var mstUsersData = from d in db.MstUsers where d.UserId == user.Id select d;
-                    if (mstUsersData.Any())
-                    {
-                        var mstUserId = (from d in db.MstUsers.OrderByDescending(d => d.Id) where d.UserId == user.Id select d.Id).FirstOrDefault();
-
-                        var updateMstUsersData = mstUsersData.FirstOrDefault();
-                        updateMstUsersData.CreatedById = mstUserId;
-                        updateMstUsersData.UpdatedById = mstUserId;
-
-                        db.SubmitChanges();
-                    }
-
-                    return RedirectToAction("Register", "Account");
-                }
-                //AddErrors(result);
+                ModelState.AddModelError("CaptiaError", "ERROR: Invalid recaptcha challenge.");
             }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.UserName,
+                        FullName = model.FullName,
+                    };
 
+                    //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                        // Send an email with this link
+                        // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                        Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
+                        var company = from d in db.MstCompanies select d;
+                        var branch = from d in db.MstBranches where d.CompanyId == company.FirstOrDefault().Id select d;
+                        var account = from d in db.MstAccounts select d;
+
+                        Data.MstUser newMstUser = new Data.MstUser();
+                        newMstUser.UserName = model.UserName;
+                        newMstUser.Password = model.Password;
+                        newMstUser.FullName = model.FullName;
+                        newMstUser.IsLocked = true;
+                        newMstUser.CreatedById = 0;
+                        newMstUser.CreatedDateTime = DateTime.Now;
+                        newMstUser.UpdatedById = 0;
+                        newMstUser.UpdatedDateTime = DateTime.Now;
+                        newMstUser.UserId = user.Id;
+                        newMstUser.CompanyId = company.FirstOrDefault().Id;
+                        newMstUser.BranchId = branch.FirstOrDefault().Id;
+                        newMstUser.IncomeAccountId = account.FirstOrDefault().Id;
+                        newMstUser.SupplierAdvancesAccountId = account.FirstOrDefault().Id;
+                        newMstUser.CustomerAdvancesAccountId = account.FirstOrDefault().Id;
+
+                        db.MstUsers.InsertOnSubmit(newMstUser);
+                        db.SubmitChanges();
+
+                        var mstUsersData = from d in db.MstUsers where d.UserId == user.Id select d;
+                        if (mstUsersData.Any())
+                        {
+                            var mstUserId = (from d in db.MstUsers.OrderByDescending(d => d.Id) where d.UserId == user.Id select d.Id).FirstOrDefault();
+
+                            var updateMstUsersData = mstUsersData.FirstOrDefault();
+                            updateMstUsersData.CreatedById = mstUserId;
+                            updateMstUsersData.UpdatedById = mstUserId;
+
+                            db.SubmitChanges();
+                        }
+
+                        return RedirectToAction("Register", "Account");
+                    }
+                    //AddErrors(result);
+                }
+            }
             // If we got this far, something failed, redisplay form
             return View(model);
         }
