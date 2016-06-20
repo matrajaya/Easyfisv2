@@ -12,13 +12,48 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        public Int32 getUserDefaultCompanyId()
+        {
+            var identityUserId = User.Identity.GetUserId();
+            var users = from d in db.MstUsers where d.UserId == identityUserId select d;
+
+            return users.FirstOrDefault().CompanyId;
+        }
+
+        // ============
+        // LIST Company
+        // ============
+        [Route("api/company/list")]
+        public List<Models.MstCompany> Get()
+        {
+            var companies = from d in db.MstCompanies
+                            select new Models.MstCompany
+                            {
+                                Id = d.Id,
+                                Company = d.Company,
+                                Address = d.Address,
+                                ContactNumber = d.ContactNumber,
+                                TaxNumber = d.TaxNumber,
+                                IsLocked = d.IsLocked,
+                                CreatedById = d.CreatedById,
+                                CreatedBy = d.MstUser.FullName,
+                                CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                UpdatedById = d.UpdatedById,
+                                UpdatedBy = d.MstUser1.FullName,
+                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                            };
+            return companies.ToList();
+        }
+
+
         // ============
         // LIST Company
         // ============
         [Route("api/listCompany")]
-        public List<Models.MstCompany> Get()
+        public List<Models.MstCompany> GetList()
         {
             var companies = from d in db.MstCompanies
+                            where d.Id == getUserDefaultCompanyId()
                             select new Models.MstCompany
                                 {
                                     Id = d.Id,

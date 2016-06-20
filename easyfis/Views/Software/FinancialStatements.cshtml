@@ -264,6 +264,7 @@
                                     </div>
                                     <div id="TB" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="FinancialStatementTrialBalancePreview_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="FinancialStatementTrialBalancePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -2382,12 +2383,13 @@
         function getFinancialStatementTrialBalanceStartDate() {
             FinancialStatementTrialBalanceStartDate.dispose();
             FinancialStatementTrialBalanceStartDate = new wijmo.input.InputDate('#FinancialStatementTrialBalance_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementTrialBalance_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementTrialBalance_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementTrialBalance_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementTrialBalance_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementTrialBalanceEndDate();
                     }, 50);
@@ -2399,12 +2401,13 @@
         function getFinancialStatementTrialBalanceEndDate() {
             FinancialStatementTrialBalanceEndDate.dispose();
             FinancialStatementTrialBalanceEndDate = new wijmo.input.InputDate('#FinancialStatementTrialBalance_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementTrialBalance_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementTrialBalance_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementTrialBalance_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementTrialBalance_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementTrialBalanceStartDate();
                     }, 50);
@@ -2783,6 +2786,22 @@
             }
         }
 
+        function FinancialStatementTrialBalancePreview_OnClick() {
+            var financialStatementTrialBalance_StartDate = document.getElementById('FinancialStatementTrialBalance_StartDate_data').value;
+            var financialStatementTrialBalance_EndDate = document.getElementById('FinancialStatementTrialBalance_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementTrialBalance_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementTrialBalance_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementTrialBalance_Company_data').value;
+                document.getElementById('FinancialStatementTrialBalance_Company').style.border = " ";
+                window.location.href = '/Software/TrialBalance?StartDate=' + financialStatementTrialBalance_StartDate + '&EndDate=' + financialStatementTrialBalance_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
         function FinancialStatementAccountLedgerPDF_OnClick() {
             var financialStatementAccountLedger_StartDate = document.getElementById('FinancialStatementAccountLedger_StartDate_data').value;
             var financialStatementAccountLedger_EndDate = document.getElementById('FinancialStatementAccountLedger_EndDate_data').value;
@@ -3141,9 +3160,12 @@
             getFinancialStatementCashFlowStartDate();
             getFinancialStatementCashFlowEndDate();
 
+            var newDate = new Date();
+            var defaultDate = [newDate.getMonth() + 1, newDate.getDate(), newDate.getFullYear()].join('-');
+
             // Financial Statement Trial Balance Dates
-            document.getElementById('FinancialStatementTrialBalance_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementTrialBalance_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('FinancialStatementTrialBalance_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialStatementTrialBalance_EndDate_data').value = defaultDate;
 
             FinancialStatementTrialBalanceStartDate = new wijmo.input.InputDate('#FinancialStatementTrialBalance_StartDate');
             FinancialStatementTrialBalanceEndDate = new wijmo.input.InputDate('#FinancialStatementTrialBalance_EndDate');
@@ -3152,11 +3174,8 @@
             getFinancialStatementTrialBalanceEndDate();
 
             // Financial Statement Account Ledger Dates
-            var newDate = new Date();
-            var accountLedgerDate = [newDate.getMonth() + 1, newDate.getDate(), newDate.getFullYear()].join('-');
-
-            document.getElementById('FinancialStatementAccountLedger_StartDate_data').value = accountLedgerDate;
-            document.getElementById('FinancialStatementAccountLedger_EndDate_data').value = accountLedgerDate;
+            document.getElementById('FinancialStatementAccountLedger_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialStatementAccountLedger_EndDate_data').value = defaultDate;
 
             FinancialStatementAccountLedgerStartDate = new wijmo.input.InputDate('#FinancialStatementAccountLedger_StartDate');
             FinancialStatementAccountLedgerEndDate = new wijmo.input.InputDate('#FinancialStatementAccountLedger_EndDate');

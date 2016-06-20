@@ -41,7 +41,8 @@ namespace easyfis.ApiControllers
                                    SIId = d.SIId,
                                    INId = d.INId,
                                    OTId = d.OTId,
-                                   STId = d.STId
+                                   STId = d.STId,
+                                   Company = d.MstBranch.MstCompany.Company
                                };
 
                 return journals.ToList();

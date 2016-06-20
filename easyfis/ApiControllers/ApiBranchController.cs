@@ -29,6 +29,14 @@ namespace easyfis.Controllers
             return maxJVNo;
         }
 
+        public Int32 getUserDefaultCompanyId()
+        {
+            var identityUserId = User.Identity.GetUserId();
+            var users = from d in db.MstUsers where d.UserId == identityUserId select d;
+
+            return users.FirstOrDefault().CompanyId;
+        }
+
         // ===========
         // LIST Branch
         // ===========
@@ -36,6 +44,7 @@ namespace easyfis.Controllers
         public List<Models.MstBranch> Get()
         {
             var branches = from d in db.MstBranches
+                           where d.CompanyId == getUserDefaultCompanyId()
                            select new Models.MstBranch
                                {
                                    Id = d.Id,

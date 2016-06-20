@@ -223,6 +223,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult TrialBalance()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult AccountLedger()
         {
             return View();

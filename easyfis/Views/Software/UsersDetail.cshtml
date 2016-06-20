@@ -283,6 +283,8 @@
                             }
 
                             getForm();
+                            getCompany();
+                            getAccount();
 
                         } else {
                             confirm("No Data");
@@ -728,7 +730,7 @@
         function getCompany() {
             var companies = new wijmo.collections.ObservableArray;
             $.ajax({
-                url: '/api/listCompany',
+                url: '/api/company/list',
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1011,9 +1013,6 @@
             cboIncomeAccount = new wijmo.input.ComboBox('#defaultIncomeAccount');
             cboSupplierAvancesAccount = new wijmo.input.ComboBox('#defaultSupplierAdvancesAccount');
             cboCustomerAdvancesAccount = new wijmo.input.ComboBox('#defaultCustomerAdvancesAccount');
-
-            getCompany();
-            getAccount();
 
             $('#userForm').click(function () {
                 $("#UserDefaults").hide();

@@ -45,5 +45,7 @@ namespace easyfis.Models
         public Int32 AccountCashFlowId { get; set; }
         public String AccountCashFlowCode { get; set; }
         public String AccountCashFlow { get; set; }
+
+        public String Company { get; set; }
     }
 }
