@@ -163,6 +163,18 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult Inventory()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult StockCard()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult StockTransfer()
         {
             return View();

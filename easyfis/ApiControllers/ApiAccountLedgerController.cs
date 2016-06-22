@@ -13,16 +13,16 @@ namespace easyfis.ApiControllers
 
         // account ledger list
         [HttpGet]
-        [Route("api/accountLedger/list/{StartDate}/{EndDate}/{CompanyId}/{AccountId}")]
-        public List<Models.TrnJournal> accountLedgerList(String StartDate, String EndDate, String CompanyId, String AccountId)
+        [Route("api/accountLedger/list/{startDate}/{endDate}/{companyId}/{accountId}")]
+        public List<Models.TrnJournal> accountLedgerList(String startDate, String endDate, String companyId, String accountId)
         {
             try
             {
                 var journals = from d in db.TrnJournals
-                               where d.JournalDate >= Convert.ToDateTime(StartDate)
-                               && d.JournalDate <= Convert.ToDateTime(EndDate)
-                               && d.MstBranch.CompanyId == Convert.ToInt32(CompanyId)
-                               && d.AccountId == Convert.ToInt32(AccountId)
+                               where d.JournalDate >= Convert.ToDateTime(startDate)
+                               && d.JournalDate <= Convert.ToDateTime(endDate)
+                               && d.MstBranch.CompanyId == Convert.ToInt32(companyId)
+                               && d.AccountId == Convert.ToInt32(accountId)
                                select new Models.TrnJournal
                                {
                                    AccountId = d.AccountId,

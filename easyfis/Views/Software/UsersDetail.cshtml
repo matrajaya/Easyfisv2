@@ -261,12 +261,6 @@
                             defaultSupplierAdvancesAccountSelectedValue = userResults.SupplierAdvancesAccount;
                             defaultcustomerAdvancesAccountSelectedValue = userResults.CustomerAdvancesAccount;
 
-                            console.log(defaultCompanySelectedValue);
-                            console.log(defaultBranchSelectedValue);
-                            console.log(defaultIncomeAccountSelectedValue);
-                            console.log(defaultSupplierAdvancesAccountSelectedValue);
-                            console.log(defaultcustomerAdvancesAccountSelectedValue);
-
                             document.getElementById("userDetail_Username").value = userResults.UserName;
                             document.getElementById("userDetail_Fullname").value = userResults.FullName;
                             NProgress.done();
@@ -282,7 +276,7 @@
                                 IsLocked = false;
                             }
 
-                            getForm();
+                            getUserForm();
                             getCompany();
                             getAccount();
 
@@ -777,7 +771,6 @@
                         onSelectedIndexChanged: function () {
                             var companyId = this.selectedItem["Id"];
                             getBranch(companyId);
-                            console.log(companyId);
                         }
                     });
 
@@ -918,7 +911,7 @@
             });
         }
 
-        function getForm() {
+        function getUserForm() {
             userForms = new wijmo.collections.CollectionView(getUserFormByUserId());
             // Flex Grid for Contact Information
             userFormGrid = new wijmo.grid.FlexGrid('#userDetailUserFormGrid');

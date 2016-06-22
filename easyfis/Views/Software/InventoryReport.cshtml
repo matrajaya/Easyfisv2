@@ -57,6 +57,7 @@
                                 <div class="tab-content">
                                     <div id="Inventory" class="tab-pane fade in active">
                                         <div align="right">
+                                            <button onclick="InventoryReportView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="InventoryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -145,6 +146,7 @@
                                     </div>
                                     <div id="SC" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="InventoryReportStockCardView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="InventoryReportStockCardPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -1963,12 +1965,13 @@
             // Input Inventory Start Date
             inventoryStartDate.dispose();
             inventoryStartDate = new wijmo.input.InputDate('#inventory_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('inventory_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('inventory_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('inventory_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('inventory_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getInventoryEndDate();
                     }, 50);
@@ -1981,12 +1984,13 @@
             // Input Inventory End Date
             inventoryEndDate.dispose();
             inventoryEndDate = new wijmo.input.InputDate('#inventory_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('inventory_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('inventory_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('inventory_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('inventory_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getInventoryStartDate();
                     }, 50);
@@ -1999,12 +2003,13 @@
             // Input Stock Card Start Date
             stockCardStartDate.dispose();
             stockCardStartDate = new wijmo.input.InputDate('#stockCard_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('stockCard_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('stockCard_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('stockCard_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('stockCard_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getStockCardEndDate();
                     }, 50);
@@ -2017,12 +2022,13 @@
             // Input Stock Card End Date
             stockCardEndDate.dispose();
             stockCardEndDate = new wijmo.input.InputDate('#stockCard_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('stockCard_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('stockCard_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('stockCard_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('stockCard_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getStockCardStartDate();
                     }, 50);
@@ -2190,6 +2196,22 @@
             }
         }
 
+        function InventoryReportView_OnClick() {
+            var inventoryReportStartDate = document.getElementById('inventory_StartDate_data').value;
+            var inventoryReportEndDate = document.getElementById('inventory_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('Inventory_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('Inventory_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('Inventory_Company_data').value;
+                document.getElementById('Inventory_Company').style.border = " ";
+                window.location.href = '/Software/Inventory?StartDate=' + inventoryReportStartDate + '&EndDate=' + inventoryReportEndDate + '&CompanyId=' + companyId;
+            }
+        }
+
         function InventoryReportStockCardPDF_OnClick() {
             var inventoryReportStockCardStartDate = document.getElementById('stockCard_StartDate_data').value;
             var inventoryReportStockCardEndDate = document.getElementById('stockCard_EndDate_data').value;
@@ -2213,6 +2235,32 @@
                 document.getElementById('StockCard_Branch').style.border = " ";
                 document.getElementById('Items_Item').style.border = " ";
                 window.location.href = '/RepStockCard/StockCard?StartDate=' + inventoryReportStockCardStartDate + '&EndDate=' + inventoryReportStockCardEndDate + '&BranchId=' + branchId + '&ItemId=' + itemId;
+            }
+        }
+
+        function InventoryReportStockCardView_OnClick() {
+            var inventoryReportStockCardStartDate = document.getElementById('stockCard_StartDate_data').value;
+            var inventoryReportStockCardEndDate = document.getElementById('stockCard_EndDate_data').value;
+
+            var branchId;
+            var itemId;
+            if (document.getElementById('StockCard_Branch_data').value == "") {
+                branchId = 0;
+                document.getElementById('StockCard_Branch').style.border = "1px solid red";
+                document.getElementById('Items_Item').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else if (document.getElementById("Items_Item_data").value == "") {
+                itemId = 0;
+                document.getElementById('StockCard_Branch').style.border = "1px solid red";
+                document.getElementById('Items_Item').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                branchId = document.getElementById('StockCard_Branch_data').value;
+                itemId = document.getElementById("Items_Item_data").value;
+
+                document.getElementById('StockCard_Branch').style.border = " ";
+                document.getElementById('Items_Item').style.border = " ";
+                window.location.href = '/Software/StockCard?StartDate=' + inventoryReportStockCardStartDate + '&EndDate=' + inventoryReportStockCardEndDate + '&BranchId=' + branchId + '&ItemId=' + itemId;
             }
         }
 
@@ -2326,9 +2374,12 @@
             var userId = '@ViewData["UserId"]';
             rightsAccessValidation(userId);
 
+            var newDate = new Date();
+            var defaultDate = [newDate.getMonth() + 1, newDate.getDate(), newDate.getFullYear()].join('-');
+
             // Inventory Dates
-            document.getElementById('inventory_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('inventory_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('inventory_StartDate_data').value = defaultDate;
+            document.getElementById('inventory_EndDate_data').value = defaultDate;
 
             inventoryStartDate = new wijmo.input.InputDate('#inventory_StartDate');
             inventoryEndDate = new wijmo.input.InputDate('#inventory_EndDate');
@@ -2337,8 +2388,8 @@
             getInventoryEndDate();
 
             // Stock Card Dates
-            document.getElementById('stockCard_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('stockCard_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('stockCard_StartDate_data').value = defaultDate;
+            document.getElementById('stockCard_EndDate_data').value = defaultDate;
 
             stockCardStartDate = new wijmo.input.InputDate('#stockCard_StartDate');
             stockCardEndDate = new wijmo.input.InputDate('#stockCard_EndDate');

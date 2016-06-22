@@ -1,0 +1,345 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- Title of the Page -->
+    <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
+    <title>Inventory</title>
+
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Content/Software-css")
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
+        @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
+
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Inventory
+                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"> Dashboard</a></li>
+                    <li> <a href="/Software/InventoryReport"> Inventory Report </a></li>
+                    <li> Inventory </li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>
+                                    <span id="companyname"></span>
+                                    <small>
+                                        <i class="fa fa-calendar fa-fw"></i> <span id="inventoryDate"></span>
+                                    </small>
+                                </h4>
+                            </div>
+                            <div class="col-md-6" align="right">
+                                <button onclick="inventoryReportInventoryPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                <a href="/Software/InventoryReport" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        @*<h5>
+                                <b><span id="branchTitle">branch</span></b>
+                            </h5>*@
+                        <div id="appendGrid">
+                            @*<div id="inventoryGrid" class="grid"></div>*@
+                        </div>
+                        <br /><br /><br />
+                        <div align="right">
+                            @*<table>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Total Debit: </b>
+                                        </td>
+                                        <td style="padding-left: 50px"></td>
+                                        <td align="right">
+                                            <span id="totalDebit"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <b>Total Credit: </b>
+                                        </td>
+                                        <td style="padding-left: 50px"></td>
+                                        <td align="right">
+                                            <span id="totalCredit"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-top: 50px" align="right">
+                                            <b>Balance: </b>
+                                        </td>
+                                        <td style="padding-left: 50px; padding-top: 50px"></td>
+                                        <td align="right" style="padding-top: 50px">
+                                            <span id="totalBalance"></span>
+                                        </td>
+                                    </tr>
+                                </table>*@
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        @Html.Partial("_SoftwareFooter")
+    </div>
+
+    @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        var inventoryGrid;
+
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+
+        var subTotal = 0;
+
+        function getInventoriesByBranch(branchId) {
+            var inventories = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/inventoryReport/list/' + getParam("StartDate") + "/" + getParam("EndDate") + "/" + getParam("CompanyId") + "/" + branchId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (inventoryResults) {
+                    if (inventoryResults.length > 0) {
+                        for (i = 0; i < inventoryResults.length; i++) {
+                            var totalAmount = inventoryResults[i]["Cost"] * inventoryResults[i]["EndQuantity"];
+                            var quantityVariance = inventoryResults[i]["EndQuantity"] - 0;
+                            var varianceAmount = inventoryResults[i]["Cost"] * quantityVariance;
+
+                            subTotal = subTotal + totalAmount;
+
+                            articleLink = '/Software/StockCard?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&BranchId=' + branchId + '&ItemId=' + inventoryResults[i]["ArticleId"];
+
+                            inventories.push({
+                                ArticleId: inventoryResults[i]["ArticleId"],
+                                Article: "<a href='" + articleLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left;'>" + inventoryResults[i]["Article"] + "</a>",
+                                InventoryCode: inventoryResults[i]["InventoryCode"],
+                                Cost: inventoryResults[i]["Cost"],
+                                UnitId: inventoryResults[i]["UnitId"],
+                                Unit: inventoryResults[i]["Unit"],
+                                BegQuantity: inventoryResults[i]["BegQuantity"],
+                                InQuantity: inventoryResults[i]["InQuantity"],
+                                OutQuantity: inventoryResults[i]["OutQuantity"],
+                                EndQuantity: inventoryResults[i]["EndQuantity"],
+                                Amount: inventoryResults[i]["Amount"],
+                                TotalAmount: totalAmount,
+                                QuantityVariance: quantityVariance,
+                                VarianceAmount: varianceAmount,
+                                Count: "0.00"
+                            });
+                        }
+                    }
+                }
+            });
+
+            return inventories;
+        }
+
+        function getSubTotal() {
+            return subTotal;
+        }
+
+        function getInventory() {
+            NProgress.start();
+            document.getElementById("inventoryDate").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+
+            $.ajax({
+                url: '/api/listBranch',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (branchResults) {
+                    if (branchResults.length > 0) {
+                        var appendGrid = $('#appendGrid');
+
+                        for (b = 0; b < branchResults.length; b++) {
+                            appendGrid.append('<h5>' + branchResults[b]["Branch"] + '</h5>');
+                            appendGrid.append('<div id="inventoryGrid' + b + '" class="grid"></div>');
+
+                            appendGrid.append('<br />');
+                            appendGrid.append('<br />');
+                            appendGrid.append("<div align='right'><table><tr><td align='right'><b>Total Amount: </b></td><td style='padding-left: 50px'></td><td align='right'><span id='totalDebit'></span></td></tr></table></div>");
+                            appendGrid.append("<div align='right'><table><tr><td align='right'><b>Total Variance amount: </b></td><td style='padding-left: 50px'></td><td align='right'><span id='totalDebit'></span></td></tr></table></div>");
+
+                            appendGrid.append('<br />');
+
+                            var inventoryCollections = new wijmo.collections.CollectionView(getInventoriesByBranch(branchResults[b]["Id"]));
+
+                            // Flex Grid
+                            inventoryGrid = new wijmo.grid.FlexGrid('#inventoryGrid' + b + '');
+                            inventoryGrid.initialize({
+                                columns: [
+                                            {
+                                                "header": "Code",
+                                                "binding": "InventoryCode",
+                                                "allowSorting": true,
+                                                "width": 150,
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Item",
+                                                "binding": "Article",
+                                                "allowSorting": true,
+                                                "width": 200,
+                                                "allowResizing": false,
+                                                "allowSorting": false,
+                                                "isContentHtml": true
+                                            },
+                                            {
+                                                "header": "Unit",
+                                                "binding": "Unit",
+                                                "allowSorting": true,
+                                                "width": 70
+                                            },
+                                            {
+                                                "header": "Cost",
+                                                "binding": "Cost",
+                                                "allowSorting": true,
+                                                "width": 110
+                                            },
+                                            {
+                                                "header": "Beg",
+                                                "binding": "BegQuantity",
+                                                "allowSorting": true,
+                                                "width": 110
+                                            },
+                                            {
+                                                "header": "In",
+                                                "binding": "InQuantity",
+                                                "allowSorting": true,
+                                                "width": 110
+                                            },
+                                            {
+                                                "header": "Out",
+                                                "binding": "OutQuantity",
+                                                "allowSorting": true,
+                                                "width": 110
+                                            },
+                                            {
+                                                "header": "End",
+                                                "binding": "EndQuantity",
+                                                "allowSorting": true,
+                                                "width": 110
+                                            },
+                                            {
+                                                "header": "Total Amount",
+                                                "binding": "TotalAmount",
+                                                "allowSorting": true,
+                                                "width": 110
+                                            },
+                                            {
+                                                "header": "Count",
+                                                "binding": "Count",
+                                                "allowSorting": true,
+                                                "width": 110
+                                            },
+                                            {
+                                                "header": "Variance",
+                                                "binding": "QuantityVariance",
+                                                "allowSorting": true,
+                                                "width": 110
+                                            },
+                                            {
+                                                "header": "Variance Amount",
+                                                "binding": "VarianceAmount",
+                                                "allowSorting": true,
+                                                "width": 130
+                                            }
+                                ],
+                                autoGenerateColumns: false,
+                                itemsSource: inventoryCollections,
+                                isReadOnly: true,
+                                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                                allowDragging: wijmo.grid.AllowDragging.None,
+                                selectionMode: wijmo.grid.SelectionMode.Row
+                            });
+
+                            inventoryGrid.trackChanges = true;
+
+                            var hr = new wijmo.grid.Row();
+                            inventoryGrid.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
+                            inventoryGrid.columnHeaders.rows.push(hr);
+                            inventoryGrid.columnHeaders.rows[0].allowMerging = true;
+
+                            inventoryGrid.columnHeaders.columns[0].allowMerging = true;
+                            inventoryGrid.columnHeaders.setCellData(0, 0, 'Code');
+
+                            inventoryGrid.columnHeaders.columns[1].allowMerging = true;
+                            inventoryGrid.columnHeaders.setCellData(0, 1, 'Item');
+
+                            inventoryGrid.columnHeaders.columns[2].allowMerging = true;
+                            inventoryGrid.columnHeaders.setCellData(0, 2, 'Unit');
+
+                            inventoryGrid.columnHeaders.columns[3].allowMerging = true;
+                            inventoryGrid.columnHeaders.setCellData(0, 3, 'Cost');
+
+                            for (var columnBasicUnitConversion = 4; columnBasicUnitConversion <= 7; columnBasicUnitConversion++) {
+                                inventoryGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Quantity');
+                            }
+
+                            inventoryGrid.columnHeaders.columns[8].allowMerging = true;
+                            inventoryGrid.columnHeaders.setCellData(0, 8, 'Total Amount');
+
+                            for (var columnBasicUnitConversion = 9; columnBasicUnitConversion <= 10; columnBasicUnitConversion++) {
+                                inventoryGrid.columnHeaders.setCellData(0, columnBasicUnitConversion, 'Quantity');
+                            }
+
+                            inventoryGrid.columnHeaders.columns[11].allowMerging = true;
+                            inventoryGrid.columnHeaders.setCellData(0, 11, 'Variance Amount');
+
+                            NProgress.done();
+                        }
+
+                        appendGrid.append('<hr />');
+                        appendGrid.append('<br />');
+                        appendGrid.append("<div align='right'><table><tr><td align='right'><b>Overall Total Amount: </b></td><td style='padding-left: 50px'></td><td align='right'><span id='totalDebit'></span></td></tr></table></div>");
+                        appendGrid.append("<div align='right'><table><tr><td align='right'><b>Overall Total Variance Amount: </b></td><td style='padding-left: 50px'></td><td align='right'><span id='totalDebit'></span></td></tr></table></div>");
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+        }
+
+        function inventoryReportInventoryPDF_OnClick() {
+            window.location.href = '/RepInventoryReport/InventoryReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&CompanyId=' + getParam("CompanyId");
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                url: '/api/company/' + getParam("CompanyId"),
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (companyResults) {
+                    document.getElementById("companyname").innerHTML = companyResults.Company;
+                }
+            });
+
+            getInventory();
+        });
+    </script>
+</body>
+</html>
