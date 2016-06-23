@@ -111,7 +111,7 @@
                         var totalIn = 0;
                         var totalOut = 0;
                         var totalEnd = 0;
-                        var totalAmount = 0;
+                        var totalAllAmount = 0;
                         var totalVarianceAmount = 0;
 
                         for (i = 0; i < inventoryResults.length; i++) {
@@ -122,6 +122,11 @@
                             var branchId = inventoryResults[i]["BranchId"],
 
                             articleLink = '/Software/StockCard?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&BranchId=' + branchId + '&ItemId=' + inventoryResults[i]["ArticleId"];
+
+                            totalAllAmount = totalAllAmount + totalAmount;
+                            totalVarianceAmount = totalVarianceAmount + varianceAmount;
+
+                            document.getElementById("totalAmount").innerHTML = (Math.round(totalAllAmount * 100) / 100).toLocaleString();
 
                             inventories.push({
                                 Branch: inventoryResults[i]["Branch"],
@@ -141,12 +146,6 @@
                                 VarianceAmount: varianceAmount,
                                 Count: "0.00"
                             });
-
-                            totalAmount = totalAmount + totalAmount;
-                            totalVarianceAmount = totalVarianceAmount + varianceAmount;
-
-                            document.getElementById("totalAmount").innerHTML = Math.round(totalAmount * 100) / 100;
-
                         }
 
                         NProgress.done();
