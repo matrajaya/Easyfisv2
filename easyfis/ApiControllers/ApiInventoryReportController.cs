@@ -14,21 +14,22 @@ namespace easyfis.ApiControllers
 
         // inventory report list
         [HttpGet]
-        [Route("api/inventoryReport/list/{startDate}/{endDate}/{companyId}/{branchId}")]
-        public List<Models.MstArticleInventory> inventoryReportList(String startDate, String endDate, String companyId, String branchId)
+        [Route("api/inventoryReport/list/{startDate}/{endDate}/{companyId}")]
+        public List<Models.MstArticleInventory> inventoryReportList(String startDate, String endDate, String companyId)
         {
             try
             {
                 // union inventories
                 var unionInventories = (from d in db.TrnInventories
                                         where d.InventoryDate < Convert.ToDateTime(startDate)
-                                        && d.MstArticleInventory.MstBranch.Id == Convert.ToInt32(branchId)
                                         && d.MstArticleInventory.MstBranch.CompanyId == Convert.ToInt32(companyId)
                                         && d.MstArticleInventory.MstArticle.IsInventory == true
                                         select new Models.MstArticleInventory
                                         {
                                             Id = d.Id,
                                             Document = "Beginning Balance",
+                                            BranchId = d.BranchId,
+                                            Branch = d.MstBranch.Branch,
                                             ArticleId = d.MstArticleInventory.ArticleId,
                                             Article = d.MstArticleInventory.MstArticle.Article,
                                             InventoryCode = d.MstArticleInventory.InventoryCode,
@@ -44,13 +45,14 @@ namespace easyfis.ApiControllers
                                         }).Union(from d in db.TrnInventories
                                                  where d.InventoryDate >= Convert.ToDateTime(startDate)
                                                  && d.InventoryDate <= Convert.ToDateTime(endDate)
-                                                 && d.MstArticleInventory.MstBranch.Id == Convert.ToInt32(branchId)
                                                  && d.MstArticleInventory.MstBranch.CompanyId == Convert.ToInt32(companyId)
                                                  && d.MstArticleInventory.MstArticle.IsInventory == true
                                                  select new Models.MstArticleInventory
                                                  {
                                                      Id = d.Id,
                                                      Document = "Current",
+                                                     BranchId = d.BranchId,
+                                                     Branch = d.MstBranch.Branch,
                                                      ArticleId = d.MstArticleInventory.ArticleId,
                                                      Article = d.MstArticleInventory.MstArticle.Article,
                                                      InventoryCode = d.MstArticleInventory.InventoryCode,
@@ -69,6 +71,8 @@ namespace easyfis.ApiControllers
                 var inventories = from d in unionInventories
                                   group d by new
                                   {
+                                      BranchId = d.BranchId,
+                                      Branch = d.Branch,
                                       ArticleId = d.ArticleId,
                                       Article = d.Article,
                                       InventoryCode = d.InventoryCode,
@@ -78,6 +82,8 @@ namespace easyfis.ApiControllers
                                   } into g
                                   select new Models.MstArticleInventory
                                   {
+                                      BranchId = g.Key.BranchId,
+                                      Branch = g.Key.Branch,
                                       ArticleId = g.Key.ArticleId,
                                       Article = g.Key.Article,
                                       InventoryCode = g.Key.InventoryCode,
