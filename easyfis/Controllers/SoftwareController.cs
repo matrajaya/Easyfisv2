@@ -55,6 +55,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult AccountsPayableReport()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult Disbursement()
         {
             return View();
@@ -98,6 +104,12 @@ namespace easyfis.Controllers
       
         [Authorize]
         public ActionResult AccountsReceivable()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public ActionResult AccountsReceivableReport()
         {
             return View();
         }

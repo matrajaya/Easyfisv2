@@ -54,6 +54,7 @@
                                 <div class="tab-content">
                                     <div id="AP" class="tab-pane fade in active">
                                         <div align="right">
+                                            <button onclick="AccountsPayableView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="AccountsPayablePDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -858,6 +859,21 @@
             }
         }
 
+        function AccountsPayableView_OnClick() {
+            var accountsPaybleReportDateAsOf = document.getElementById('accountsPaybleReport_DateAsOf_data').value;
+
+            var companyId;
+            if (document.getElementById('accountsPaybleReport_Comapny_data').value == "") {
+                companyId = 0;
+                document.getElementById('accountsPaybleReport_Comapny').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('accountsPaybleReport_Comapny_data').value;
+                document.getElementById('accountsPaybleReport_Comapny').style.border = " ";
+                window.location.href = '/Software/AccountsPayableReport?DateAsOf=' + accountsPaybleReportDateAsOf + '&CompanyId=' + companyId;
+            }
+        }
+
         // get Purchase Summary Report Start Date
         function getPurchaseSummaryReportStartDate() {
             purchaseSummaryReportStartDate.dispose();
@@ -1199,15 +1215,19 @@
 
             // accounts payable date as of..
             accountsPayableReportDateAsOf = new wijmo.input.InputDate('#accountsPaybleReport_DateAsOf', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 onValueChanged: function () {
-                    document.getElementById('accountsPaybleReport_DateAsOf_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('accountsPaybleReport_DateAsOf_data').value = thisDateValue;
                 }
             });
 
-            document.getElementById('accountsPaybleReport_DateAsOf_data').value = new Date().toLocaleDateString();
+            var newDate = new Date();
+            var defaultDate = [newDate.getMonth() + 1, newDate.getDate(), newDate.getFullYear()].join('-');
+
+            document.getElementById('accountsPaybleReport_DateAsOf_data').value = defaultDate;
             document.getElementById('accountsPaybleReport_Comapny_data').value = "";
 
             getCompanies();

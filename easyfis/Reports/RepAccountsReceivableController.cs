@@ -116,7 +116,7 @@ namespace easyfis.Controllers
                                            AccountCode = d.MstArticle.MstAccount.AccountCode,
                                            Account = d.MstArticle.MstAccount.Account
                                        } into g
-                                       select new Models.TrnReceivingReceipt
+                                       select new Models.TrnSalesInvoice
                                        {
                                            AccountId = g.Key.AccountId,
                                            AccountCode = g.Key.AccountCode,

@@ -55,35 +55,38 @@
                         <div id="accountLedgerGrid" class="grid"></div>
                         <br /><br /><br />
                         <div align="right">
-                            <table>
-                                <tr>
-                                    <td align="right">
-                                        <b>Total Debit: </b>
-                                    </td>
-                                    <td style="padding-left: 50px"></td>
-                                    <td align="right">
-                                        <span id="totalDebit"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="right">
-                                        <b>Total Credit: </b>
-                                    </td>
-                                    <td style="padding-left: 50px"></td>
-                                    <td align="right">
-                                        <span id="totalCredit"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-top: 50px" align="right">
-                                        <b>Balance: </b>
-                                    </td>
-                                    <td style="padding-left: 50px; padding-top: 50px"></td>
-                                    <td align="right" style="padding-top: 50px">
-                                        <span id="totalBalance"></span>
-                                    </td>
-                                </tr>
-                            </table>
+                            <div class="row">
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4">
+                                    <table class="table table-responsive table-bordered">
+                                        <tr>
+                                            <td align="right">
+                                                <b>Total Debit: </b>
+                                            </td>
+                                            <td style="padding-left: 10px" align="right">
+                                                <span id="totalDebit">NA</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">
+                                                <b>Total Credit: </b>
+                                            </td>
+                                            <td style="padding-left: 10px" align="right">
+                                                <span id="totalCredit">NA</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">
+                                                <b>Balance: </b>
+                                            </td>
+                                            <td style="padding-left: 10px" align="right">
+                                                <span id="totalBalance">NA</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <hr />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -136,7 +139,7 @@
 
                         for (i = 0; i < Results.length; i++) {
                             document.getElementById("accountTitle").innerHTML = Results[i]["AccountCode"] + " - " + Results[i]["Account"];
-                            
+
                             var docRefLink;
                             if (Results[i]["ORId"] != null) {
                                 docRefLink = "/Software/CollectionDetail?CollectonId=" + Results[i]["ORId"];
