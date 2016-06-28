@@ -37,6 +37,9 @@ namespace easyfis.Models
         public Decimal SalvageValue { get; set; }
         public Decimal AccumulatedDepreciation { get; set; }
         public Decimal AdjustedTotalAmount { get; set; }
+
+        public Boolean Inventory { get; set; }
+        public Decimal Price { get; set; }
         
     }
 }

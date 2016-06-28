@@ -114,10 +114,12 @@ namespace easyfis.Controllers
             var articleInventory_branchId = Convert.ToInt32(branchId);
             var articleInventories = from d in db.MstArticleInventories
                                      where d.BranchId == articleInventory_branchId
+                                     && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,
                                          BranchId = d.BranchId,
+                                         Branch = d.MstBranch.Branch,
                                          ArticleId = d.ArticleId,
                                          Article = d.MstArticle.Article,
                                          InventoryCode = d.InventoryCode,
@@ -127,7 +129,9 @@ namespace easyfis.Controllers
                                          Particulars = d.Particulars,
                                          ManualArticleCode = d.MstArticle.ManualArticleCode,
                                          UnitId = d.MstArticle.UnitId,
-                                         Unit = d.MstArticle.MstUnit.Unit
+                                         Unit = d.MstArticle.MstUnit.Unit,
+                                         Inventory = d.MstArticle.IsInventory,
+                                         Price = d.MstArticle.Price
                                      };
             return articleInventories.ToList();
         }
