@@ -12,11 +12,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =======================
-        // LIST Sales Invoice Item
-        // =======================
+        // list sales invoice item
+        [Authorize]
+        [HttpGet]
         [Route("api/listSalesInvoiceItem")]
-        public List<Models.TrnSalesInvoiceItem> Get()
+        public List<Models.TrnSalesInvoiceItem> listSalesInvoiceItem()
         {
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                     select new Models.TrnSalesInvoiceItem
@@ -49,18 +49,18 @@ namespace easyfis.Controllers
                                         BaseQuantity = d.BaseQuantity,
                                         BasePrice = d.BasePrice
                                     };
+
             return salesInvoiceItems.ToList();
         }
 
-        // ================================
-        // LIST Sales Invoice Item By SI Id
-        // ================================
+        // list sales invoice item by SIId
+        [Authorize]
+        [HttpGet]
         [Route("api/listSalesInvoiceItemBySIId/{SIId}")]
-        public List<Models.TrnSalesInvoiceItem> GetSalesInvoiceBySIId(String SIId)
+        public List<Models.TrnSalesInvoiceItem> listSalesInvoiceBySIId(String SIId)
         {
-            var salesInvoiceItem_SIId = Convert.ToInt32(SIId);
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
-                                    where d.SIId == salesInvoiceItem_SIId
+                                    where d.SIId == Convert.ToInt32(SIId)
                                     select new Models.TrnSalesInvoiceItem
                                     {
                                         Id = d.Id,
@@ -91,94 +91,78 @@ namespace easyfis.Controllers
                                         BaseQuantity = d.BaseQuantity,
                                         BasePrice = d.BasePrice
                                     };
+
             return salesInvoiceItems.ToList();
         }
 
-        // ======================
-        // ADD Sales Invoice Item
-        // ======================
+        // add sales invoice item
+        [Authorize]
+        [HttpPost]
         [Route("api/addSalesInvoiceItem")]
-        public int Post(Models.TrnSalesInvoiceItem saleItem)
+        public Int32 insertSalesInvoiceItem(Models.TrnSalesInvoiceItem saleItem)
         {
             try
             {
-                Data.TrnSalesInvoiceItem newSaleItem = new Data.TrnSalesInvoiceItem();
-                
-                newSaleItem.SIId = saleItem.SIId;
-                newSaleItem.ItemId = saleItem.ItemId;
-                newSaleItem.ItemInventoryId = saleItem.ItemInventoryId;
-                newSaleItem.Particulars = saleItem.Particulars;
-                Debug.WriteLine(saleItem.UnitId);
-                newSaleItem.UnitId = saleItem.UnitId;
-                newSaleItem.Quantity = saleItem.Quantity;
-                newSaleItem.Price = saleItem.Price;
-                newSaleItem.DiscountId = saleItem.DiscountId;
-                newSaleItem.DiscountRate = saleItem.DiscountRate;
-                newSaleItem.DiscountAmount = saleItem.DiscountAmount;
-                newSaleItem.NetPrice = saleItem.NetPrice;
-                newSaleItem.Amount = saleItem.Amount;
-                newSaleItem.VATId = saleItem.VATId;
-                newSaleItem.VATPercentage = saleItem.VATPercentage;
-                newSaleItem.VATAmount = saleItem.VATAmount;
+                Data.TrnSalesInvoiceItem newSaleInvoiceItem = new Data.TrnSalesInvoiceItem();
+                newSaleInvoiceItem.SIId = saleItem.SIId;
+                newSaleInvoiceItem.ItemId = saleItem.ItemId;
+                newSaleInvoiceItem.ItemInventoryId = saleItem.ItemInventoryId;
+                newSaleInvoiceItem.Particulars = saleItem.Particulars;
+                newSaleInvoiceItem.UnitId = saleItem.UnitId;
+                newSaleInvoiceItem.Quantity = saleItem.Quantity;
+                newSaleInvoiceItem.Price = saleItem.Price;
+                newSaleInvoiceItem.DiscountId = saleItem.DiscountId;
+                newSaleInvoiceItem.DiscountRate = saleItem.DiscountRate;
+                newSaleInvoiceItem.DiscountAmount = saleItem.DiscountAmount;
+                newSaleInvoiceItem.NetPrice = saleItem.NetPrice;
+                newSaleInvoiceItem.Amount = saleItem.Amount;
+                newSaleInvoiceItem.VATId = saleItem.VATId;
+                newSaleInvoiceItem.VATPercentage = saleItem.VATPercentage;
+                newSaleInvoiceItem.VATAmount = saleItem.VATAmount;
 
                 var item = from d in db.MstArticles where d.Id == saleItem.ItemId select d;
-                newSaleItem.BaseUnitId = item.First().UnitId;
+                newSaleInvoiceItem.BaseUnitId = item.First().UnitId;
 
                 var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
-
                 if (conversionUnit.First().Multiplier > 0)
                 {
-                    newSaleItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
+                    newSaleInvoiceItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
                 }
                 else
                 {
-                    newSaleItem.BaseQuantity = saleItem.Quantity * 1;
+                    newSaleInvoiceItem.BaseQuantity = saleItem.Quantity * 1;
                 }
 
                 var baseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
-
                 if (baseQuantity > 0)
                 {
-                    newSaleItem.BasePrice = saleItem.Amount / baseQuantity;
+                    newSaleInvoiceItem.BasePrice = saleItem.Amount / baseQuantity;
                 }
                 else
                 {
-                    newSaleItem.BasePrice = saleItem.Amount;
+                    newSaleInvoiceItem.BasePrice = saleItem.Amount;
                 }
 
-                db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleItem);
+                db.TrnSalesInvoiceItems.InsertOnSubmit(newSaleInvoiceItem);
                 db.SubmitChanges();
 
                 var salesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItem.SIId select d;
                 if (salesInvoces.Any())
                 {
-                    var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
-                                            where d.SIId == saleItem.SIId
-                                            select new Models.TrnSalesInvoiceItem
-                                            {
-                                                Id = d.Id,
-                                                SIId = d.SIId,
-                                                Amount = d.Amount,
-                                                VATAmount = d.VATAmount
-                                            };
+                    var salesInvoiceItems = from d in db.TrnSalesInvoiceItems where d.SIId == saleItem.SIId select d;
 
-                    Decimal amount;
-                    if (!salesInvoiceItems.Any())
-                    {
-                        amount = 0;
-                    }
-                    else
+                    Decimal amount = 0;
+                    if (salesInvoiceItems.Any())
                     {
                         amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
                     }
 
-                    var updateSales = salesInvoces.FirstOrDefault();
-                    updateSales.Amount = amount;
+                    var updateSalesInvoice = salesInvoces.FirstOrDefault();
+                    updateSalesInvoice.Amount = amount;
                     db.SubmitChanges();
                 }
 
-                return newSaleItem.Id;
-
+                return newSaleInvoiceItem.Id;
             }
             catch
             {
@@ -186,17 +170,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // =========================
-        // UPDATE Sales Invoice Item
-        // =========================
+        // update sales invoice item
+        [Authorize]
+        [HttpPut]
         [Route("api/updateSalesInvoiceItem/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnSalesInvoiceItem saleItem)
+        public HttpResponseMessage updateSalesInvoiceItem(String id, Models.TrnSalesInvoiceItem saleItem)
         {
             try
             {
-                var saleItemId = Convert.ToInt32(id);
-                var saleItems = from d in db.TrnSalesInvoiceItems where d.Id == saleItemId select d;
-
+                var saleItems = from d in db.TrnSalesInvoiceItems where d.Id == Convert.ToInt32(id) select d;
                 if (saleItems.Any())
                 {
                     var updateSalesInvoiceItem = saleItems.FirstOrDefault();
@@ -221,7 +203,6 @@ namespace easyfis.Controllers
                     updateSalesInvoiceItem.BaseUnitId = item.First().UnitId;
 
                     var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == saleItem.ItemId && d.UnitId == saleItem.UnitId select d;
-
                     if (conversionUnit.First().Multiplier > 0)
                     {
                         updateSalesInvoiceItem.BaseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
@@ -232,7 +213,6 @@ namespace easyfis.Controllers
                     }
 
                     var baseQuantity = saleItem.Quantity * (1 / conversionUnit.First().Multiplier);
-
                     if (baseQuantity > 0)
                     {
                         updateSalesInvoiceItem.BasePrice = saleItem.Amount / baseQuantity;
@@ -247,28 +227,16 @@ namespace easyfis.Controllers
                     var salesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItem.SIId select d;
                     if (salesInvoces.Any())
                     {
-                        var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
-                                                where d.SIId == saleItem.SIId
-                                                select new Models.TrnSalesInvoiceItem
-                                                {
-                                                    Id = d.Id,
-                                                    SIId = d.SIId,
-                                                    Amount = d.Amount,
-                                                    VATAmount = d.VATAmount
-                                                };
+                        var salesInvoiceItems = from d in db.TrnSalesInvoiceItems where d.SIId == saleItem.SIId select d;
 
-                        Decimal amount;
-                        if (!salesInvoiceItems.Any())
-                        {
-                            amount = 0;
-                        }
-                        else
+                        Decimal amount = 0;
+                        if (salesInvoiceItems.Any())
                         {
                             amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
                         }
 
-                        var updateSales = salesInvoces.FirstOrDefault();
-                        updateSales.Amount = amount;
+                        var updateSalesInvoice = salesInvoces.FirstOrDefault();
+                        updateSalesInvoice.Amount = amount;
                         db.SubmitChanges();
                     }
 
@@ -278,57 +246,40 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
-            catch(Exception e)
+            catch
             {
-                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
 
-        // =========================
-        // DELETE Sales Invoice Item
-        // =========================
+        // delete sales invoice item
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteSalesInvoiceItem/{id}/{SIId}")]
-        public HttpResponseMessage Delete(String id, String SIId)
+        public HttpResponseMessage deleteSalesInvoiceItem(String id, String SIId)
         {
             try
             {
-                var saleItemId = Convert.ToInt32(id);
-                var saleItemSIId = Convert.ToInt32(SIId);
-                var saleItems = from d in db.TrnSalesInvoiceItems where d.Id == saleItemId select d;
-
-                if (saleItems.Any())
+                var salesInvoiceItems = from d in db.TrnSalesInvoiceItems where d.Id == Convert.ToInt32(id) select d;
+                if (salesInvoiceItems.Any())
                 {
-                    db.TrnSalesInvoiceItems.DeleteOnSubmit(saleItems.First());
+                    db.TrnSalesInvoiceItems.DeleteOnSubmit(salesInvoiceItems.First());
                     db.SubmitChanges();
 
-                    var salesInvoces = from d in db.TrnSalesInvoices where d.Id == saleItemSIId select d;
+                    var salesInvoces = from d in db.TrnSalesInvoices where d.Id == Convert.ToInt32(SIId) select d;
                     if (salesInvoces.Any())
                     {
-                        var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
-                                                where d.SIId == saleItemSIId
-                                                select new Models.TrnSalesInvoiceItem
-                                                {
-                                                    Id = d.Id,
-                                                    SIId = d.SIId,
-                                                    Amount = d.Amount,
-                                                    VATAmount = d.VATAmount
-                                                };
+                        var salesInvoiceItemsBySIId = from d in db.TrnSalesInvoiceItems where d.SIId == Convert.ToInt32(SIId) select d;
 
-                        Decimal amount;
-                        if (!salesInvoiceItems.Any())
+                        Decimal amount = 0;
+                        if (salesInvoiceItems.Any())
                         {
-                            amount = 0;
-                        }
-                        else
-                        {
-                            amount = salesInvoiceItems.Sum(d => d.Amount + d.VATAmount);
+                            amount = salesInvoiceItemsBySIId.Sum(d => d.Amount + d.VATAmount);
                         }
 
-                        var updateSales = salesInvoces.FirstOrDefault();
-                        updateSales.Amount = amount;
+                        var updateSalesInvoce = salesInvoces.FirstOrDefault();
+                        updateSalesInvoce.Amount = amount;
                         db.SubmitChanges();
                     }
 
@@ -338,7 +289,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

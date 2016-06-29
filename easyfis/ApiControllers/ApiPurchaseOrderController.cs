@@ -16,17 +16,34 @@ namespace easyfis.Controllers
         // current branch Id
         public Int32 currentBranchId()
         {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
-        // ===================
-        // LIST Purchase Order
-        // ===================
-        [Route("api/listPurchaseOrder")]
-        public List<Models.TrnPurchaseOrder> Get()
+        // get purchase order amount by POId
+        public Decimal getPurchaseOrderAmountByPOId(Int32 POId)
         {
-            var purchaseOrders = from d in db.TrnPurchaseOrders
+            Decimal totalAmount;
+
+            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.POId == POId select d;
+            if (!purchaseOrderItems.Any())
+            {
+                totalAmount = 0;
+            }
+            else
+            {
+                totalAmount = purchaseOrderItems.Sum(d => d.Amount);
+            }
+
+            return totalAmount;
+        }
+
+        // list purchase order
+        [Authorize]
+        [HttpGet]
+        [Route("api/listPurchaseOrder")]
+        public List<Models.TrnPurchaseOrder> listPurchaseOrder()
+        {
+            var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.Id)
                                  where d.BranchId == currentBranchId()
                                  select new Models.TrnPurchaseOrder
                                  {
@@ -44,6 +61,7 @@ namespace easyfis.Controllers
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
+                                     Amount = getPurchaseOrderAmountByPOId(d.Id),
                                      RequestedById = d.RequestedById,
                                      RequestedBy = d.MstUser4.FullName,
                                      PreparedById = d.PreparedById,
@@ -60,54 +78,18 @@ namespace easyfis.Controllers
                                      UpdatedBy = d.MstUser5.FullName,
                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                  };
+
             return purchaseOrders.ToList();
         }
 
-        // ===================
-        // Get Amount By PO Id
-        // ===================
-        public Decimal getAmount(Int32 POId)
-        {
-            var PurchaseOrderItems = from d in db.TrnPurchaseOrderItems
-                                     where d.POId == POId
-                                     select new Models.TrnPurchaseOrderItem
-                                     {
-                                         Id = d.Id,
-                                         POId = d.POId,
-                                         PO = d.TrnPurchaseOrder.PONumber,
-                                         ItemId = d.ItemId,
-                                         Item = d.MstArticle.Article,
-                                         ItemCode = d.MstArticle.ManualArticleCode,
-                                         Particulars = d.Particulars,
-                                         UnitId = d.UnitId,
-                                         Unit = d.MstUnit.Unit,
-                                         Quantity = d.Quantity,
-                                         Cost = d.Cost,
-                                         Amount = d.Amount
-                                     };
-            Decimal amount;
-
-            if (!PurchaseOrderItems.Any())
-            {
-                amount = 0;
-            }
-            else 
-            {
-                amount = PurchaseOrderItems.Sum(d => d.Amount);
-            }
-
-            return amount;
-        }
-
-        // ========================
-        // GET Purchase Order by Id
-        // ========================
+        // get purchase order by Id
+        [Authorize]
+        [HttpGet]
         [Route("api/purchaseOrder/{id}")]
-        public Models.TrnPurchaseOrder GetPurchaseOrderById(String id)
+        public Models.TrnPurchaseOrder getPurchaseOrderById(String id)
         {
-            var purchaseOrder_Id = Convert.ToInt32(id);
             var purchaseOrders = from d in db.TrnPurchaseOrders
-                                 where d.Id == purchaseOrder_Id
+                                 where d.Id == Convert.ToInt32(id)
                                  select new Models.TrnPurchaseOrder
                                  {
                                      Id = d.Id,
@@ -124,7 +106,7 @@ namespace easyfis.Controllers
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
-                                     //Amount = getAmount(purchaseOrder_Id),
+                                     Amount = getPurchaseOrderAmountByPOId(d.Id),
                                      RequestedById = d.RequestedById,
                                      RequestedBy = d.MstUser4.FullName,
                                      PreparedById = d.PreparedById,
@@ -141,18 +123,18 @@ namespace easyfis.Controllers
                                      UpdatedBy = d.MstUser5.FullName,
                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                  };
+
             return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
         }
 
-        // =================================
-        // List Purchase Order filter by Date
-        // =================================
+        // list purchase order by PODate
+        [Authorize]
+        [HttpGet]
         [Route("api/listPurchaseOrderFilterByPODate/{PODate}")]
-        public List<Models.TrnPurchaseOrder> GetPurchaseOrderFilterByPODate(String PODate)
+        public List<Models.TrnPurchaseOrder> listPurchaseOrderByPODate(String PODate)
         {
-            var purchaseOrder_PODate = Convert.ToDateTime(PODate);
-            var purchaseOrders = from d in db.TrnPurchaseOrders
-                                 where d.PODate == purchaseOrder_PODate
+            var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.Id)
+                                 where d.PODate == Convert.ToDateTime(PODate)
                                  && d.BranchId == currentBranchId()
                                  select new Models.TrnPurchaseOrder
                                  {
@@ -170,7 +152,7 @@ namespace easyfis.Controllers
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
-                                     Amount = getAmount(d.Id),
+                                     Amount = getPurchaseOrderAmountByPOId(d.Id),
                                      RequestedById = d.RequestedById,
                                      RequestedBy = d.MstUser4.FullName,
                                      PreparedById = d.PreparedById,
@@ -187,18 +169,18 @@ namespace easyfis.Controllers
                                      UpdatedBy = d.MstUser5.FullName,
                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                  };
+
             return purchaseOrders.ToList();
         }
 
-        // ==================================
-        // List Purchase Order By Supplier Id
-        // ==================================
-        [Route("api/listPurchaseOrderBySupplierId/{SupplierId}")]
-        public List<Models.TrnPurchaseOrder> GetPurchaseOrderBySupplierId(String SupplierId)
+        // list purchase order by supplier Id
+        [Authorize]
+        [HttpGet]
+        [Route("api/listPurchaseOrderBySupplierId/{supplierId}")]
+        public List<Models.TrnPurchaseOrder> listPurchaseOrderBySupplierId(String supplierId)
         {
-            var purchaseOrder_SupplierId = Convert.ToInt32(SupplierId);
             var purchaseOrders = from d in db.TrnPurchaseOrders
-                                 where d.SupplierId == purchaseOrder_SupplierId
+                                 where d.SupplierId == Convert.ToInt32(supplierId)
                                  && d.IsLocked == true
                                  select new Models.TrnPurchaseOrder
                                  {
@@ -216,7 +198,7 @@ namespace easyfis.Controllers
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
-                                     //Amount = getAmount(d.Id),
+                                     Amount = getPurchaseOrderAmountByPOId(d.Id),
                                      RequestedById = d.RequestedById,
                                      RequestedBy = d.MstUser4.FullName,
                                      PreparedById = d.PreparedById,
@@ -233,14 +215,15 @@ namespace easyfis.Controllers
                                      UpdatedBy = d.MstUser5.FullName,
                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                  };
+
             return purchaseOrders.ToList();
         }
 
-        // ===================================
-        // GET last PONumber in Purchase Order 
-        // ===================================
+        // get last purchase order PONumber
+        [Authorize]
+        [HttpGet]
         [Route("api/purchaseOrderLastPONumber")]
-        public Models.TrnPurchaseOrder GetLastPONumber()
+        public Models.TrnPurchaseOrder getPurchaseOrderLastPONumber()
         {
             var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.PONumber)
                                  select new Models.TrnPurchaseOrder
@@ -259,7 +242,7 @@ namespace easyfis.Controllers
                                      DateNeeded = d.DateNeeded.ToShortDateString(),
                                      Remarks = d.Remarks,
                                      IsClose = d.IsClose,
-                                     //Amount = getAmount(d.Id),
+                                     Amount = getPurchaseOrderAmountByPOId(d.Id),
                                      RequestedById = d.RequestedById,
                                      RequestedBy = d.MstUser4.FullName,
                                      PreparedById = d.PreparedById,
@@ -276,139 +259,83 @@ namespace easyfis.Controllers
                                      UpdatedBy = d.MstUser5.FullName,
                                      UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                  };
+
             return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
         }
 
-        // =============================
-        // GET last Id in Purchase Order 
-        // =============================
-        [Route("api/purchaseOrderLastId")]
-        public Models.TrnPurchaseOrder GetLastId()
-        {
-            var purchaseOrders = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.Id)
-                                 select new Models.TrnPurchaseOrder
-                                 {
-                                     Id = d.Id,
-                                     BranchId = d.BranchId,
-                                     Branch = d.MstBranch.Branch,
-                                     PONumber = d.PONumber,
-                                     PODate = d.PODate.ToShortDateString(),
-                                     SupplierId = d.SupplierId,
-                                     Supplier = d.MstArticle.Article,
-                                     TermId = d.TermId,
-                                     Term = d.MstTerm.Term,
-                                     ManualRequestNumber = d.ManualRequestNumber,
-                                     ManualPONumber = d.ManualPONumber,
-                                     DateNeeded = d.DateNeeded.ToShortDateString(),
-                                     Remarks = d.Remarks,
-                                     IsClose = d.IsClose,
-                                     //Amount = getAmount(d.Id),
-                                     RequestedById = d.RequestedById,
-                                     RequestedBy = d.MstUser4.FullName,
-                                     PreparedById = d.PreparedById,
-                                     PreparedBy = d.MstUser3.FullName,
-                                     CheckedById = d.CheckedById,
-                                     CheckedBy = d.MstUser1.FullName,
-                                     ApprovedById = d.ApprovedById,
-                                     ApprovedBy = d.MstUser.FullName,
-                                     IsLocked = d.IsLocked,
-                                     CreatedById = d.CreatedById,
-                                     CreatedBy = d.MstUser2.FullName,
-                                     CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                     UpdatedById = d.UpdatedById,
-                                     UpdatedBy = d.MstUser5.FullName,
-                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                 };
-            return (Models.TrnPurchaseOrder)purchaseOrders.FirstOrDefault();
-        }
-
-        // ==================
-        // ADD Puschase Order
-        // ==================
+        // add purchase order
+        [Authorize]
+        [HttpPost]
         [Route("api/addPurchaseOrder")]
-        public int Post(Models.TrnPurchaseOrder purchaseOrder)
+        public Int32 insertPurchaseOrder(Models.TrnPurchaseOrder purchaseOrder)
         {
             try
             {
-                var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                Data.TrnPurchaseOrder newPO = new Data.TrnPurchaseOrder();
+                Data.TrnPurchaseOrder newPurchaseOrder = new Data.TrnPurchaseOrder();
+                newPurchaseOrder.BranchId = purchaseOrder.BranchId;
+                newPurchaseOrder.PONumber = purchaseOrder.PONumber;
+                newPurchaseOrder.PODate = Convert.ToDateTime(purchaseOrder.PODate);
+                newPurchaseOrder.SupplierId = purchaseOrder.SupplierId;
+                newPurchaseOrder.TermId = purchaseOrder.TermId;
+                newPurchaseOrder.ManualRequestNumber = purchaseOrder.ManualRequestNumber;
+                newPurchaseOrder.ManualPONumber = purchaseOrder.ManualPONumber;
+                newPurchaseOrder.DateNeeded = Convert.ToDateTime(purchaseOrder.DateNeeded);
+                newPurchaseOrder.Remarks = purchaseOrder.Remarks;
+                newPurchaseOrder.IsClose = purchaseOrder.IsClose;
+                newPurchaseOrder.RequestedById = purchaseOrder.RequestedById;
+                newPurchaseOrder.PreparedById = purchaseOrder.PreparedById;
+                newPurchaseOrder.CheckedById = purchaseOrder.CheckedById;
+                newPurchaseOrder.ApprovedById = purchaseOrder.ApprovedById;
+                newPurchaseOrder.IsLocked = false;
+                newPurchaseOrder.CreatedById = userId;
+                newPurchaseOrder.CreatedDateTime = DateTime.Now;
+                newPurchaseOrder.UpdatedById = userId;
+                newPurchaseOrder.UpdatedDateTime = DateTime.Now;
 
-                newPO.BranchId = purchaseOrder.BranchId;
-                newPO.PONumber = purchaseOrder.PONumber;
-                newPO.PODate = Convert.ToDateTime(purchaseOrder.PODate);
-                newPO.SupplierId = purchaseOrder.SupplierId;
-                newPO.TermId = purchaseOrder.TermId;
-                newPO.ManualRequestNumber = purchaseOrder.ManualRequestNumber;
-                newPO.ManualPONumber = purchaseOrder.ManualPONumber;
-                newPO.DateNeeded = Convert.ToDateTime(purchaseOrder.DateNeeded);
-                newPO.Remarks = purchaseOrder.Remarks;
-                newPO.IsClose = purchaseOrder.IsClose;
-                newPO.RequestedById = purchaseOrder.RequestedById;
-                newPO.PreparedById = purchaseOrder.PreparedById;
-                newPO.CheckedById = purchaseOrder.CheckedById;
-                newPO.ApprovedById = purchaseOrder.ApprovedById;
-
-                newPO.IsLocked = isLocked;
-                newPO.CreatedById = mstUserId;
-                newPO.CreatedDateTime = date;
-                newPO.UpdatedById = mstUserId;
-                newPO.UpdatedDateTime = date;
-
-                db.TrnPurchaseOrders.InsertOnSubmit(newPO);
+                db.TrnPurchaseOrders.InsertOnSubmit(newPurchaseOrder);
                 db.SubmitChanges();
 
-                return newPO.Id;
-
+                return newPurchaseOrder.Id;
             }
-            catch(Exception e)
+            catch
             {
-                Debug.WriteLine(e);
                 return 0;
             }
         }
 
-        // =====================
-        // Update Puschase Order
-        // =====================
+        // update purchase order
+        [Authorize]
+        [HttpPut]
         [Route("api/updatePurchaseOrder/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnPurchaseOrder purchaseOrder)
+        public HttpResponseMessage updatePurchaseOrder(String id, Models.TrnPurchaseOrder purchaseOrder)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var PO_Id = Convert.ToInt32(id);
-                var POs = from d in db.TrnPurchaseOrders where d.Id == PO_Id select d;
-
-                if (POs.Any())
+                var purchaseOrders = from d in db.TrnPurchaseOrders where d.Id == Convert.ToInt32(id) select d;
+                if (purchaseOrders.Any())
                 {
-                    var updatePO = POs.FirstOrDefault();
-
-                    updatePO.BranchId = purchaseOrder.BranchId;
-                    updatePO.PONumber = purchaseOrder.PONumber;
-                    updatePO.PODate = Convert.ToDateTime(purchaseOrder.PODate);
-                    updatePO.SupplierId = purchaseOrder.SupplierId;
-                    updatePO.TermId = purchaseOrder.TermId;
-                    updatePO.ManualRequestNumber = purchaseOrder.ManualRequestNumber;
-                    updatePO.ManualPONumber = purchaseOrder.ManualPONumber;
-                    updatePO.DateNeeded = Convert.ToDateTime(purchaseOrder.DateNeeded);
-                    updatePO.Remarks = purchaseOrder.Remarks;
-                    updatePO.IsClose = purchaseOrder.IsClose;
-                    updatePO.RequestedById = purchaseOrder.RequestedById;
-                    updatePO.PreparedById = purchaseOrder.PreparedById;
-                    updatePO.CheckedById = purchaseOrder.CheckedById;
-                    updatePO.ApprovedById = purchaseOrder.ApprovedById;
-
-                    updatePO.IsLocked = purchaseOrder.IsLocked;
-                    updatePO.UpdatedById = mstUserId;
-                    updatePO.UpdatedDateTime = date;
+                    var updatePurchaseOrder = purchaseOrders.FirstOrDefault();
+                    updatePurchaseOrder.BranchId = purchaseOrder.BranchId;
+                    updatePurchaseOrder.PONumber = purchaseOrder.PONumber;
+                    updatePurchaseOrder.PODate = Convert.ToDateTime(purchaseOrder.PODate);
+                    updatePurchaseOrder.SupplierId = purchaseOrder.SupplierId;
+                    updatePurchaseOrder.TermId = purchaseOrder.TermId;
+                    updatePurchaseOrder.ManualRequestNumber = purchaseOrder.ManualRequestNumber;
+                    updatePurchaseOrder.ManualPONumber = purchaseOrder.ManualPONumber;
+                    updatePurchaseOrder.DateNeeded = Convert.ToDateTime(purchaseOrder.DateNeeded);
+                    updatePurchaseOrder.Remarks = purchaseOrder.Remarks;
+                    updatePurchaseOrder.IsClose = purchaseOrder.IsClose;
+                    updatePurchaseOrder.RequestedById = purchaseOrder.RequestedById;
+                    updatePurchaseOrder.PreparedById = purchaseOrder.PreparedById;
+                    updatePurchaseOrder.CheckedById = purchaseOrder.CheckedById;
+                    updatePurchaseOrder.ApprovedById = purchaseOrder.ApprovedById;
+                    updatePurchaseOrder.IsLocked = true;
+                    updatePurchaseOrder.UpdatedById = userId;
+                    updatePurchaseOrder.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -418,7 +345,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -426,29 +352,23 @@ namespace easyfis.Controllers
             }
         }
 
-        // ================================
-        // Update Puschase Order - IsLocked
-        // ================================
+        // unlock purchase order
+        [Authorize]
+        [HttpPut]
         [Route("api/updatePurchaseOrderIsLocked/{id}")]
-        public HttpResponseMessage PutIsLocked(String id, Models.TrnPurchaseOrder purchaseOrder)
+        public HttpResponseMessage unlockPurchaseOrder(String id, Models.TrnPurchaseOrder purchaseOrder)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var PO_Id = Convert.ToInt32(id);
-                var POs = from d in db.TrnPurchaseOrders where d.Id == PO_Id select d;
-
-                if (POs.Any())
+                var purchaseOrders = from d in db.TrnPurchaseOrders where d.Id == Convert.ToInt32(id) select d;
+                if (purchaseOrders.Any())
                 {
-                    var updatePO = POs.FirstOrDefault();
-
-                    updatePO.IsLocked = purchaseOrder.IsLocked;
-                    updatePO.UpdatedById = mstUserId;
-                    updatePO.UpdatedDateTime = date;
+                    var unlockPurchaseOrder = purchaseOrders.FirstOrDefault();
+                    unlockPurchaseOrder.IsLocked = false;
+                    unlockPurchaseOrder.UpdatedById = userId;
+                    unlockPurchaseOrder.UpdatedDateTime = DateTime.Now; ;
 
                     db.SubmitChanges();
 
@@ -458,7 +378,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -466,18 +385,15 @@ namespace easyfis.Controllers
             }
         }
 
-
-        // =========
-        // DELETE PO
-        // =========
+        // delete purchase order
+        [Authorize]
+        [HttpDelete]
         [Route("api/deletePO/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deletePurchaseOrder(String id)
         {
             try
             {
-                var purchaseOrder_Id = Convert.ToInt32(id);
-                var purchaseOrders = from d in db.TrnPurchaseOrders where d.Id == purchaseOrder_Id select d;
-
+                var purchaseOrders = from d in db.TrnPurchaseOrders where d.Id == Convert.ToInt32(id) select d;
                 if (purchaseOrders.Any())
                 {
                     db.TrnPurchaseOrders.DeleteOnSubmit(purchaseOrders.First());
@@ -489,7 +405,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

@@ -2529,8 +2529,8 @@
                 //document.getElementById('RRLine_Unit_data').value = "";
                 //document.getElementById('RRLine_Unit_selectedValue').value = "";
                 document.getElementById('RRLine_Particulars').value = "";
-                document.getElementById('RRLine_Quantity').value = "";
-                document.getElementById('RRLine_Amount').value = "";
+                //document.getElementById('RRLine_Quantity').value = "";
+                //document.getElementById('RRLine_Amount').value = "";
                 document.getElementById('RRLine_BUCQuantity').value = "";
             } else {
                 document.getElementById('RRLine_ItemId_data').value = POItemCollection.items[cboItemCode.selectedIndex].ItemId;
@@ -2538,8 +2538,8 @@
                 //document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemCode.selectedIndex].UnitId;
                 //document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemCode.selectedIndex].Unit;
                 document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemCode.selectedIndex].Particulars;
-                document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
-                document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemCode.selectedIndex].Amount;
+                //document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
+                //document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemCode.selectedIndex].Amount;
                 document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemCode.selectedIndex].Quantity;
 
                 //getUnitForComboBox(POItemCollection.items[cboItemCode.selectedIndex].ItemId);
@@ -2764,8 +2764,8 @@
                 //document.getElementById('RRLine_Unit_data').value = "";
                 //document.getElementById('RRLine_Unit_selectedValue').value = "";
                 document.getElementById('RRLine_Particulars').value = "";
-                document.getElementById('RRLine_Quantity').value = "";
-                document.getElementById('RRLine_Amount').value = "";
+                //document.getElementById('RRLine_Quantity').value = "";
+                //document.getElementById('RRLine_Amount').value = "";
                 document.getElementById('RRLine_BUCQuantity').value = "";
 
                 getUnitForComboBox(0);
@@ -2775,8 +2775,13 @@
                 //document.getElementById('RRLine_Unit_data').value = POItemCollection.items[cboItemDescription.selectedIndex].UnitId;
                 //document.getElementById('RRLine_Unit_selectedValue').value = POItemCollection.items[cboItemDescription.selectedIndex].Unit;
                 document.getElementById('RRLine_Particulars').value = POItemCollection.items[cboItemDescription.selectedIndex].Particulars;
-                document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
-                document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemDescription.selectedIndex].Amount;
+
+                if(document.getElementById('RRLine_Id').value == 0) {
+                    document.getElementById('RRLine_Quantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
+                    document.getElementById('RRLine_Amount').value = POItemCollection.items[cboItemDescription.selectedIndex].Amount;
+                    document.getElementById('RRLine_Cost').value = POItemCollection.items[cboItemDescription.selectedIndex].Cost;
+                }
+
                 document.getElementById('RRLine_BUCQuantity').value = POItemCollection.items[cboItemDescription.selectedIndex].Quantity;
 
                 getUnitForComboBox(POItemCollection.items[cboItemDescription.selectedIndex].ItemId);
@@ -3300,6 +3305,34 @@
 
             $("#cmdSaveRRLinesButton").prop("disabled", false);
             $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
+            
+            var POSupplierId = document.getElementById('POStatus_Supplier_data').value;
+            POs = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listPurchaseOrderBySupplierId/' + POSupplierId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (results) {
+                    if (results.length > 0) {
+                        for (i = 0; i < results.length; i++) {
+                            POs.push({
+                                POId: results[i]["Id"],
+                                PONumber: results[i]["PONumber"],
+                                PODate: results[i]["PODate"]
+                            });
+                        }
+                        createCboPO(POs);
+                        getPOItemForComboBox();
+                        getTaxTypeForComboBox();
+                    } else {
+                        createCboPO(POs);
+                        getPOItemForComboBox();
+                        getTaxTypeForComboBox();
+                    }
+                }
+            });
 
             var item = items.currentEditItem;
             document.getElementById('RRLine_Id').value = item.Id;
@@ -3342,34 +3375,6 @@
                 $(this).css({
                     "border": "",
                 });
-            });
-
-            var POSupplierId = document.getElementById('POStatus_Supplier_data').value;
-            POs = new wijmo.collections.ObservableArray();
-            $.ajax({
-                url: '/api/listPurchaseOrderBySupplierId/' + POSupplierId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            POs.push({
-                                POId: results[i]["Id"],
-                                PONumber: results[i]["PONumber"],
-                                PODate: results[i]["PODate"]
-                            });
-                        }
-                        createCboPO(POs);
-                        getPOItemForComboBox();
-                        getTaxTypeForComboBox();
-                    } else {
-                        createCboPO(POs);
-                        getPOItemForComboBox();
-                        getTaxTypeForComboBox();
-                    }
-                }
             });
 
             //getPOItemForComboBox();

@@ -11,60 +11,23 @@ namespace easyfis.Controllers
     public class ApiSalesInvoiceController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
         private Business.Inventory inventory = new Business.Inventory();
         private Business.PostJournal journal = new Business.PostJournal();
 
         // current branch Id
         public Int32 currentBranchId()
         {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
-        // ===================
-        // Get Amount in Sales
-        // ===================
-        public Decimal getAmount(Int32 SIId)
+        // get amount in sales
+        public Decimal getAmountSalesInvoiceItem(Int32 SIId)
         {
-            var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
-                                    where d.SIId == SIId
-                                    select new Models.TrnSalesInvoiceItem
-                                    {
-                                        Id = d.Id,
-                                        SIId = d.SIId,
-                                        SI = d.TrnSalesInvoice.SINumber,
-                                        ItemId = d.ItemId,
-                                        ItemCode = d.MstArticle.ManualArticleCode,
-                                        Item = d.MstArticle.Article,
-                                        ItemInventoryId = d.ItemInventoryId,
-                                        ItemInventory = d.MstArticleInventory.InventoryCode,
-                                        Particulars = d.Particulars,
-                                        UnitId = d.UnitId,
-                                        Unit = d.MstUnit.Unit,
-                                        Quantity = d.Quantity,
-                                        Price = d.Price,
-                                        DiscountId = d.DiscountId,
-                                        Discount = d.MstDiscount.Discount,
-                                        DiscountRate = d.DiscountRate,
-                                        DiscountAmount = d.DiscountAmount,
-                                        NetPrice = d.NetPrice,
-                                        Amount = d.Amount,
-                                        VATId = d.VATId,
-                                        VAT = d.MstTaxType.TaxType,
-                                        VATPercentage = d.VATPercentage,
-                                        VATAmount = d.VATAmount,
-                                        BaseUnitId = d.BaseUnitId,
-                                        BaseUnit = d.MstUnit1.Unit,
-                                        BaseQuantity = d.BaseQuantity,
-                                        BasePrice = d.BasePrice
-                                    };
+            Decimal amount = 0;
 
-            Decimal amount;
-            if (!salesInvoiceItems.Any())
-            {
-                amount = 0;
-            }
-            else
+            var salesInvoiceItems = from d in db.TrnSalesInvoiceItems where d.SIId == SIId select d;
+            if (salesInvoiceItems.Any())
             {
                 amount = salesInvoiceItems.Sum(d => d.Amount);
             }
@@ -72,13 +35,13 @@ namespace easyfis.Controllers
             return amount;
         }
 
-        // ==================
-        // LIST Sales Invoice
-        // ==================
+        // list sales invoice
+        [Authorize]
+        [HttpGet]
         [Route("api/listSalesInvoice")]
-        public List<Models.TrnSalesInvoice> Get()
+        public List<Models.TrnSalesInvoice> listSalesInvoice()
         {
-            var salesInvoices = from d in db.TrnSalesInvoices
+            var salesInvoices = from d in db.TrnSalesInvoices.OrderByDescending(d => d.Id)
                                 where d.BranchId == currentBranchId()
                                 select new Models.TrnSalesInvoice
                                 {
@@ -114,18 +77,18 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser5.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return salesInvoices.ToList();
         }
 
-        // =======================
-        // GET Sales Invoice By Id
-        // =======================
+        // get sales invoice by id
+        [Authorize]
+        [HttpGet]
         [Route("api/salesInvoice/{id}")]
-        public Models.TrnSalesInvoice GetSalesById(String id)
+        public Models.TrnSalesInvoice getSalesInvoiceById(String id)
         {
-            var sales_Id = Convert.ToInt32(id);
             var salesInvoices = from d in db.TrnSalesInvoices
-                                where d.Id == sales_Id
+                                where d.Id == Convert.ToInt32(id)
                                 select new Models.TrnSalesInvoice
                                 {
                                     Id = d.Id,
@@ -160,18 +123,18 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser5.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return (Models.TrnSalesInvoice)salesInvoices.FirstOrDefault();
         }
 
-        // ================================
-        // GET Sales Invoice By Customer Id
-        // ================================
+        // list sales invoice by customerId
+        [Authorize]
+        [HttpGet]
         [Route("api/salesInvoiceByCustomerId/{customerId}")]
-        public List<Models.TrnSalesInvoice> GetSalesByCustomerId(String customerId)
+        public List<Models.TrnSalesInvoice> listSalesInvoiceByCustomerId(String customerId)
         {
-            var sales_customerId = Convert.ToInt32(customerId);
             var salesInvoices = from d in db.TrnSalesInvoices
-                                where d.CustomerId == sales_customerId
+                                where d.CustomerId == Convert.ToInt32(customerId)
                                 select new Models.TrnSalesInvoice
                                 {
                                     Id = d.Id,
@@ -206,18 +169,18 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser5.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return salesInvoices.ToList();
         }
 
-        // ===========================================
-        // GET Sales Invoice By Customer Id by Balance
-        // ===========================================
+        // list sales invoice by customer Id and by Balance > 0
+        [Authorize]
+        [HttpGet]
         [Route("api/salesInvoiceByCustomerIdByBalance/{customerId}")]
-        public List<Models.TrnSalesInvoice> GetSalesByCustomerIdByBalance(String customerId)
+        public List<Models.TrnSalesInvoice> listSalesInvoiceByCustomerIdByBalance(String customerId)
         {
-            var sales_customerId = Convert.ToInt32(customerId);
             var salesInvoices = from d in db.TrnSalesInvoices
-                                where d.CustomerId == sales_customerId
+                                where d.CustomerId == Convert.ToInt32(customerId)
                                 && d.BalanceAmount > 0
                                 && d.IsLocked == true
                                 select new Models.TrnSalesInvoice
@@ -254,18 +217,18 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser5.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return salesInvoices.ToList();
         }
 
-        // ===================================
-        // GET Sales Invoice Filter by SI Date
-        // ===================================
+        // list sales invoice by SIDate
+        [Authorize]
+        [HttpGet]
         [Route("api/listSalesInvoiceFilterBySIDate/{SIDate}")]
-        public List<Models.TrnSalesInvoice> GetSalesFilterBySIDate(String SIDate)
+        public List<Models.TrnSalesInvoice> listSalesInvoiceBySIDate(String SIDate)
         {
-            var sales_SIDate = Convert.ToDateTime(SIDate);
-            var salesInvoices = from d in db.TrnSalesInvoices
-                                where d.SIDate == sales_SIDate
+            var salesInvoices = from d in db.TrnSalesInvoices.OrderByDescending(d => d.Id)
+                                where d.SIDate == Convert.ToDateTime(SIDate)
                                 && d.BranchId == currentBranchId()
                                 select new Models.TrnSalesInvoice
                                 {
@@ -301,14 +264,15 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser5.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return salesInvoices.ToList();
         }
 
-        // =================================
-        // GET last SINumber in SalesInvoice
-        // =================================
+        // get sales invoice last SINumber
+        [Authorize]
+        [HttpGet]
         [Route("api/salesInvoiceLastSINumber")]
-        public Models.TrnSalesInvoice GetSalesLastSINumber()
+        public Models.TrnSalesInvoice getSalesInvoiceLastSINumber()
         {
             var salesInvoices = from d in db.TrnSalesInvoices.OrderByDescending(d => d.SINumber)
                                 select new Models.TrnSalesInvoice
@@ -345,96 +309,47 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser5.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return (Models.TrnSalesInvoice)salesInvoices.FirstOrDefault();
         }
 
-        // ====================
-        // GET last Id in Sales
-        // ====================
-        [Route("api/salesInvoiceLastId")]
-        public Models.TrnSalesInvoice GetSalesLastId()
-        {
-            var salesInvoices = from d in db.TrnSalesInvoices.OrderByDescending(d => d.Id)
-                                select new Models.TrnSalesInvoice
-                                {
-                                    Id = d.Id,
-                                    BranchId = d.BranchId,
-                                    Branch = d.MstBranch.Branch,
-                                    SINumber = d.SINumber,
-                                    SIDate = d.SIDate.ToShortDateString(),
-                                    CustomerId = d.CustomerId,
-                                    Customer = d.MstArticle.Article,
-                                    TermId = d.TermId,
-                                    Term = d.MstTerm.Term,
-                                    DocumentReference = d.DocumentReference,
-                                    ManualSINumber = d.ManualSINumber,
-                                    Remarks = d.Remarks,
-                                    Amount = d.Amount,
-                                    PaidAmount = d.PaidAmount,
-                                    AdjustmentAmount = d.AdjustmentAmount,
-                                    BalanceAmount = d.BalanceAmount,
-                                    SoldById = d.SoldById,
-                                    SoldBy = d.MstUser4.FullName,
-                                    PreparedById = d.PreparedById,
-                                    PreparedBy = d.MstUser3.FullName,
-                                    CheckedById = d.CheckedById,
-                                    CheckedBy = d.MstUser1.FullName,
-                                    ApprovedById = d.ApprovedById,
-                                    ApprovedBy = d.MstUser.FullName,
-                                    IsLocked = d.IsLocked,
-                                    CreatedById = d.CreatedById,
-                                    CreatedBy = d.MstUser2.FullName,
-                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                    UpdatedById = d.UpdatedById,
-                                    UpdatedBy = d.MstUser5.FullName,
-                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                };
-            return (Models.TrnSalesInvoice)salesInvoices.FirstOrDefault();
-        }
-
-
-        // =========
-        // ADD Sales
-        // =========
+        // add sales invoice
+        [Authorize]
+        [HttpPost]
         [Route("api/addSales")]
-        public int Post(Models.TrnSalesInvoice sales)
+        public Int32 insertSalesInvoice(Models.TrnSalesInvoice sales)
         {
             try
             {
-                var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+                
+                Data.TrnSalesInvoice newSalesInvoice = new Data.TrnSalesInvoice();
+                newSalesInvoice.BranchId = sales.BranchId;
+                newSalesInvoice.SINumber = sales.SINumber;
+                newSalesInvoice.SIDate = Convert.ToDateTime(sales.SIDate);
+                newSalesInvoice.CustomerId = sales.CustomerId;
+                newSalesInvoice.TermId = sales.TermId;
+                newSalesInvoice.DocumentReference = sales.DocumentReference;
+                newSalesInvoice.ManualSINumber = sales.ManualSINumber;
+                newSalesInvoice.Remarks = sales.Remarks;
+                newSalesInvoice.Amount = 0;
+                newSalesInvoice.PaidAmount = 0;
+                newSalesInvoice.AdjustmentAmount = 0;
+                newSalesInvoice.BalanceAmount = 0;
+                newSalesInvoice.SoldById = sales.SoldById;
+                newSalesInvoice.PreparedById = sales.PreparedById;
+                newSalesInvoice.CheckedById = sales.CheckedById;
+                newSalesInvoice.ApprovedById = sales.ApprovedById;
+                newSalesInvoice.IsLocked = false;
+                newSalesInvoice.CreatedById = userId;
+                newSalesInvoice.CreatedDateTime = DateTime.Now;
+                newSalesInvoice.UpdatedById = userId;
+                newSalesInvoice.UpdatedDateTime = DateTime.Now;
 
-                Data.TrnSalesInvoice newSales = new Data.TrnSalesInvoice();
-
-                newSales.BranchId = sales.BranchId;
-                newSales.SINumber = sales.SINumber;
-                newSales.SIDate = Convert.ToDateTime(sales.SIDate);
-                newSales.CustomerId = sales.CustomerId;
-                newSales.TermId = sales.TermId;
-                newSales.DocumentReference = sales.DocumentReference;
-                newSales.ManualSINumber = sales.ManualSINumber;
-                newSales.Remarks = sales.Remarks;
-                newSales.Amount = 0;
-                newSales.PaidAmount = 0;
-                newSales.AdjustmentAmount = 0;
-                newSales.BalanceAmount = 0;
-                newSales.SoldById = sales.SoldById;
-                newSales.PreparedById = sales.PreparedById;
-                newSales.CheckedById = sales.CheckedById;
-                newSales.ApprovedById = sales.ApprovedById;
-
-                newSales.IsLocked = isLocked;
-                newSales.CreatedById = mstUserId;
-                newSales.CreatedDateTime = date;
-                newSales.UpdatedById = mstUserId;
-                newSales.UpdatedDateTime = date;
-
-                db.TrnSalesInvoices.InsertOnSubmit(newSales);
+                db.TrnSalesInvoices.InsertOnSubmit(newSalesInvoice);
                 db.SubmitChanges();
 
-                return newSales.Id;
+                return newSalesInvoice.Id;
             }
             catch
             {
@@ -442,121 +357,67 @@ namespace easyfis.Controllers
             }
         }
 
-        // ============
-        // UPDATE Sales
-        // ============
+        // update sales invoice
+        [Authorize]
+        [HttpPut]
         [Route("api/updateSales/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnSalesInvoice sales)
+        public HttpResponseMessage updateSalesInvoice(String id, Models.TrnSalesInvoice sales)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
-
-                var sales_Id = Convert.ToInt32(id);
-                var salesInvoces = from d in db.TrnSalesInvoices where d.Id == sales_Id select d;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+                var salesInvoces = from d in db.TrnSalesInvoices where d.Id == Convert.ToInt32(id) select d;
 
                 if (salesInvoces.Any())
                 {
-                    var collectionLines = from d in db.TrnCollectionLines
-                                          where d.SIId == sales_Id
-                                          select new Models.TrnCollectionLine
-                                          {
-                                              Id = d.Id,
-                                              ORId = d.ORId,
-                                              OR = d.TrnCollection.ORNumber,
-                                              BranchId = d.BranchId,
-                                              Branch = d.MstBranch.Branch,
-                                              AccountId = d.AccountId,
-                                              Account = d.MstAccount.Account,
-                                              ArticleId = d.ArticleId,
-                                              Article = d.MstArticle.Article,
-                                              SIId = d.SIId,
-                                              SI = d.TrnSalesInvoice.SINumber,
-                                              Particulars = d.Particulars,
-                                              Amount = d.Amount,
-                                              PayTypeId = d.PayTypeId,
-                                              PayType = d.MstPayType.PayType,
-                                              CheckNumber = d.CheckNumber,
-                                              CheckDate = d.CheckDate.ToShortDateString(),
-                                              CheckBank = d.CheckBank,
-                                              DepositoryBankId = d.DepositoryBankId,
-                                              DepositoryBank = d.MstArticle1.Article,
-                                              IsClear = d.IsClear,
-                                          };
-
-                    var collectionLinesORIds = from d in db.TrnCollectionLines
-                                               where d.SIId == sales_Id
-                                               group d by new
-                                               {
-                                                   ORId = d.ORId
-                                               } into g
-                                               select new Models.TrnCollectionLine
-                                               {
-                                                   ORId = g.Key.ORId,
-                                               };
-
-                    Int32 ORId = 0;
-                    foreach (var collectionLinesORId in collectionLinesORIds)
-                    {
-                        ORId = collectionLinesORId.ORId;
-                    }
-
-                    Boolean collectionHeaderIsLocked = (from d in db.TrnCollections where d.Id == ORId select d.IsLocked).SingleOrDefault();
-
                     Decimal PaidAmount = 0;
-                    if (collectionLines.Any())
+
+                    var collectionLinesORId = from d in db.TrnCollectionLines where d.SIId == Convert.ToInt32(id) select d;
+                    if (collectionLinesORId.Any())
                     {
-                        if (collectionHeaderIsLocked == true)
+                        Boolean collectionHeaderIsLocked = (from d in db.TrnCollections where d.Id == collectionLinesORId.First().ORId select d.IsLocked).SingleOrDefault();
+                        var collectionLines = from d in db.TrnCollectionLines where d.SIId == Convert.ToInt32(id) select d;
+                        if (collectionLines.Any())
                         {
-                            PaidAmount = collectionLines.Sum(d => d.Amount);
-                        }
-                        else
-                        {
-                            PaidAmount = 0;
+                            if (collectionHeaderIsLocked == true)
+                            {
+                                PaidAmount = collectionLines.Sum(d => d.Amount);
+                            }
                         }
                     }
-                    else
-                    {
-                        PaidAmount = 0;
-                    }
 
-                    var updateSales = salesInvoces.FirstOrDefault();
-
-                    updateSales.BranchId = sales.BranchId;
-                    updateSales.SINumber = sales.SINumber;
-                    updateSales.SIDate = Convert.ToDateTime(sales.SIDate);
-                    updateSales.CustomerId = sales.CustomerId;
-                    updateSales.TermId = sales.TermId;
-                    updateSales.DocumentReference = sales.DocumentReference;
-                    updateSales.ManualSINumber = sales.ManualSINumber;
-                    updateSales.Remarks = sales.Remarks;
-                    updateSales.Amount = getAmount(sales_Id);
-                    updateSales.PaidAmount = PaidAmount;
-                    updateSales.AdjustmentAmount = 0;
-                    updateSales.BalanceAmount = getAmount(sales_Id) - PaidAmount;
-                    updateSales.SoldById = sales.SoldById;
-                    updateSales.PreparedById = sales.PreparedById;
-                    updateSales.CheckedById = sales.CheckedById;
-                    updateSales.ApprovedById = sales.ApprovedById;
-
-                    updateSales.IsLocked = sales.IsLocked;
-                    updateSales.UpdatedById = mstUserId;
-                    updateSales.UpdatedDateTime = date;
+                    var updateSalesInvoice = salesInvoces.FirstOrDefault();
+                    updateSalesInvoice.BranchId = sales.BranchId;
+                    updateSalesInvoice.SINumber = sales.SINumber;
+                    updateSalesInvoice.SIDate = Convert.ToDateTime(sales.SIDate);
+                    updateSalesInvoice.CustomerId = sales.CustomerId;
+                    updateSalesInvoice.TermId = sales.TermId;
+                    updateSalesInvoice.DocumentReference = sales.DocumentReference;
+                    updateSalesInvoice.ManualSINumber = sales.ManualSINumber;
+                    updateSalesInvoice.Remarks = sales.Remarks;
+                    updateSalesInvoice.Amount = getAmountSalesInvoiceItem(Convert.ToInt32(id));
+                    updateSalesInvoice.PaidAmount = PaidAmount;
+                    updateSalesInvoice.AdjustmentAmount = 0;
+                    updateSalesInvoice.BalanceAmount = getAmountSalesInvoiceItem(Convert.ToInt32(id)) - PaidAmount;
+                    updateSalesInvoice.SoldById = sales.SoldById;
+                    updateSalesInvoice.PreparedById = sales.PreparedById;
+                    updateSalesInvoice.CheckedById = sales.CheckedById;
+                    updateSalesInvoice.ApprovedById = sales.ApprovedById;
+                    updateSalesInvoice.IsLocked = true;
+                    updateSalesInvoice.UpdatedById = userId;
+                    updateSalesInvoice.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
-                    if (updateSales.IsLocked == true)
+                    if (updateSalesInvoice.IsLocked == true)
                     {
-                        inventory.InsertSIInventory(sales_Id);
-                        journal.insertSIJournal(sales_Id);
+                        inventory.InsertSIInventory(Convert.ToInt32(id));
+                        journal.insertSIJournal(Convert.ToInt32(id));
                     }
                     else
                     {
-                        inventory.deleteSIInventory(sales_Id);
-                        journal.deleteSIJournal(sales_Id);
+                        inventory.deleteSIInventory(Convert.ToInt32(id));
+                        journal.deleteSIJournal(Convert.ToInt32(id));
                     }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
@@ -565,7 +426,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -573,41 +433,36 @@ namespace easyfis.Controllers
             }
         }
 
-        // =======================
-        // UPDATE Sales - IsLocked
-        // =======================
+        // unlock sales invoice
+        [Authorize]
+        [HttpPut]
         [Route("api/updateSalesIsLocked/{id}")]
-        public HttpResponseMessage PutSalesIsLocked(String id, Models.TrnSalesInvoice sales)
+        public HttpResponseMessage unlockSalesInvoice(String id, Models.TrnSalesInvoice sales)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
-
-                var sales_Id = Convert.ToInt32(id);
-                var salesInvoces = from d in db.TrnSalesInvoices where d.Id == sales_Id select d;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+                var salesInvoces = from d in db.TrnSalesInvoices where d.Id == Convert.ToInt32(id) select d;
 
                 if (salesInvoces.Any())
                 {
-                    var updateSales = salesInvoces.FirstOrDefault();
+                    var updateSalesInvoice = salesInvoces.FirstOrDefault();
 
-                    updateSales.IsLocked = sales.IsLocked;
-                    updateSales.UpdatedById = mstUserId;
-                    updateSales.UpdatedDateTime = date;
+                    updateSalesInvoice.IsLocked = false;
+                    updateSalesInvoice.UpdatedById = userId;
+                    updateSalesInvoice.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
-                    if (updateSales.IsLocked == true)
+                    if (updateSalesInvoice.IsLocked == true)
                     {
-                        inventory.InsertSIInventory(sales_Id);
-                        journal.insertSIJournal(sales_Id);
+                        inventory.InsertSIInventory(Convert.ToInt32(id));
+                        journal.insertSIJournal(Convert.ToInt32(id));
                     }
                     else
                     {
-                        inventory.deleteSIInventory(sales_Id);
-                        journal.deleteSIJournal(sales_Id);
+                        inventory.deleteSIInventory(Convert.ToInt32(id));
+                        journal.deleteSIJournal(Convert.ToInt32(id));
                     }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
@@ -616,7 +471,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -624,17 +478,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ============
-        // DELETE Sales
-        // ============
+        // delete sales
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteSales/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteSalesInvoice(String id)
         {
             try
             {
-                var sales_Id = Convert.ToInt32(id);
-                var sales = from d in db.TrnSalesInvoices where d.Id == sales_Id select d;
-
+                var sales = from d in db.TrnSalesInvoices where d.Id == Convert.ToInt32(id) select d;
                 if (sales.Any())
                 {
                     db.TrnSalesInvoices.DeleteOnSubmit(sales.First());
@@ -646,7 +498,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
