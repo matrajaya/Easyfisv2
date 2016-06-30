@@ -13,6 +13,12 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
+        }
+
         // ===============
         // LIST TrnJournal
         // ===============
@@ -365,32 +371,31 @@ namespace easyfis.Controllers
             var journals = from d in db.TrnJournals
                            where d.ArticleId == Convert.ToInt32(ArticleId)
                            && d.AccountId == SupplierAdvancesAccountId
-                           select new Models.TrnJournal
+                           && d.BranchId == currentBranchId()
+                           group d by new
                            {
-                               Id = d.Id,
-                               JournalDate = d.JournalDate.ToShortDateString(),
                                BranchId = d.BranchId,
                                Branch = d.MstBranch.Branch,
                                AccountId = d.AccountId,
                                Account = d.MstAccount.Account,
                                AccountCode = d.MstAccount.AccountCode,
                                ArticleId = d.ArticleId,
-                               Article = d.MstArticle.Article,
-                               Particulars = d.Particulars,
-                               DebitAmount = d.DebitAmount,
-                               CreditAmount = d.CreditAmount,
-                               ORId = d.ORId,
-                               CVId = d.CVId,
-                               JVId = d.JVId,
-                               RRId = d.RRId,
-                               SIId = d.SIId,
-                               INId = d.INId,
-                               OTId = d.OTId,
-                               STId = d.STId,
-                               DocumentReference = d.DocumentReference,
-                               APRRId = d.APRRId,
-                               ARSIId = d.ARSIId,
+                               Article = d.MstArticle.Article
+                           } into g
+                           select new Models.TrnJournal
+                           {
+                               BranchId = g.Key.BranchId,
+                               Branch = g.Key.Branch,
+                               AccountId = g.Key.AccountId,
+                               Account = g.Key.Account,
+                               AccountCode = g.Key.AccountCode,
+                               ArticleId = g.Key.ArticleId,
+                               Article = g.Key.Article,
+                               DebitAmount = g.Sum(d => d.DebitAmount),
+                               CreditAmount = g.Sum(d => d.CreditAmount),
+                               Balance = g.Sum(d => d.DebitAmount) - g.Sum(d => d.CreditAmount)
                            };
+
             return journals.ToList();
         }
 

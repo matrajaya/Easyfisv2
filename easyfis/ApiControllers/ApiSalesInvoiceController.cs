@@ -127,7 +127,7 @@ namespace easyfis.Controllers
             return (Models.TrnSalesInvoice)salesInvoices.FirstOrDefault();
         }
 
-        // list sales invoice by customerId
+        // list sales invoice by customerId 
         [Authorize]
         [HttpGet]
         [Route("api/salesInvoiceByCustomerId/{customerId}")]
@@ -135,6 +135,8 @@ namespace easyfis.Controllers
         {
             var salesInvoices = from d in db.TrnSalesInvoices
                                 where d.CustomerId == Convert.ToInt32(customerId)
+                                && d.BranchId == currentBranchId()
+                                && d.IsLocked == true
                                 select new Models.TrnSalesInvoice
                                 {
                                     Id = d.Id,
@@ -322,7 +324,7 @@ namespace easyfis.Controllers
             try
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
-                
+
                 Data.TrnSalesInvoice newSalesInvoice = new Data.TrnSalesInvoice();
                 newSalesInvoice.BranchId = sales.BranchId;
                 newSalesInvoice.SINumber = sales.SINumber;

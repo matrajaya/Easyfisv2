@@ -21,6 +21,7 @@ namespace easyfis.Models
         public Int32 AccountId { get; set; }
         public String Particulars { get; set; }
         public String ManualORNumber { get; set; }
+        public Decimal? Amount { get; set; }
         public String PreparedBy { get; set; }
         public Int32 PreparedById { get; set; }
         public String CheckedBy { get; set; }

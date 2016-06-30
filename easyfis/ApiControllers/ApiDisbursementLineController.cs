@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
 
 namespace easyfis.Controllers
 {
@@ -12,11 +13,17 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ======================
-        // LIST Disbursement Line
-        // ======================
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
+        }
+
+        // list disbursement line
+        [Authorize]
+        [HttpGet]
         [Route("api/listDisbursementLine")]
-        public List<Models.TrnDisbursementLine> Get()
+        public List<Models.TrnDisbursementLine> listDisbursementLine()
         {
             var disbursementLines = from d in db.TrnDisbursementLines
                                     select new Models.TrnDisbursementLine
@@ -35,20 +42,21 @@ namespace easyfis.Controllers
                                         Particulars = d.Particulars,
                                         Amount = d.Amount
                                     };
+
             return disbursementLines.ToList();
         }
 
-        // ======
-        // ADD AP
-        // ======
+        // pick accounts payable from receiving receipts
+        [Authorize]
         [HttpPost]
-        [Route("api/disbursementLine/applyAP/ByRRId/{RRId}/{CVId}/{BranchId}")]
-        public int PostAP(Models.TrnDisbursementLine disbursementLine, String RRId, String CVId, String BranchId)
+        [Route("api/disbursementLine/applyAP/ByRRId/{RRId}/{CVId}")]
+        public HttpResponseMessage insertDisbursementLineAccountsPayable(Models.TrnDisbursementLine disbursementLine, String RRId, String CVId)
         {
             try
             {
                 var receivingReceipts = from d in db.TrnReceivingReceipts
-                                        where d.Id == Convert.ToInt32(RRId)
+                                        where d.BranchId == currentBranchId()
+                                        && d.Id == Convert.ToInt32(RRId)
                                         select new Models.TrnReceivingReceipt
                                         {
                                             Id = d.Id,
@@ -79,42 +87,48 @@ namespace easyfis.Controllers
                                             ApprovedBy = d.MstUser.FullName
                                         };
 
-
-                Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
-
-                foreach (var receivingReceipt in receivingReceipts)
+                if (receivingReceipts.Any())
                 {
-                    newDisbursementLine.CVId = Convert.ToInt32(CVId);
-                    newDisbursementLine.BranchId = Convert.ToInt32(BranchId);
-                    newDisbursementLine.AccountId = receivingReceipt.AccountId;
-                    newDisbursementLine.ArticleId = receivingReceipt.SupplierId;
-                    newDisbursementLine.RRId = Convert.ToInt32(RRId);
-                    newDisbursementLine.Particulars = receivingReceipt.DocumentReference;
-                    newDisbursementLine.Amount = receivingReceipt.Amount;
+                    Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
+
+                    foreach (var receivingReceipt in receivingReceipts)
+                    {
+                        newDisbursementLine.CVId = Convert.ToInt32(CVId);
+                        newDisbursementLine.BranchId = receivingReceipt.BranchId;
+                        newDisbursementLine.AccountId = receivingReceipt.AccountId;
+                        newDisbursementLine.ArticleId = receivingReceipt.SupplierId;
+                        newDisbursementLine.RRId = Convert.ToInt32(RRId);
+                        newDisbursementLine.Particulars = receivingReceipt.DocumentReference;
+                        newDisbursementLine.Amount = receivingReceipt.Amount;
+                    }
+
+                    db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
-
-                db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
-                db.SubmitChanges();
-
-                return newDisbursementLine.Id;
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
             }
             catch
             {
-                return 0;
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
 
-        // ==========
-        // ADD ALL AP
-        // ==========
+        // apply all accounts payable from receiving receipts
+        [Authorize]
         [HttpPost]
-        [Route("api/disbursementLine/applyAllAP/BySupplierId/{SupplierId}/{CVId}/{BranchId}")]
-        public HttpResponseMessage PostAllAP(Models.TrnDisbursementLine disbursementLine, String SupplierId, String CVId, String BranchId)
+        [Route("api/disbursementLine/applyAllAP/BySupplierId/{supplierId}/{CVId}")]
+        public HttpResponseMessage insertDisbursementLineAllAccountsPayable(Models.TrnDisbursementLine disbursementLine, String supplierId, String CVId)
         {
             try
             {
                 var receivingReceipts = from d in db.TrnReceivingReceipts
-                                        where d.SupplierId == Convert.ToInt32(SupplierId)
+                                        where d.BranchId == currentBranchId()
+                                        && d.SupplierId == Convert.ToInt32(supplierId)
                                         && d.BalanceAmount > 0
                                         && d.IsLocked == true
                                         select new Models.TrnReceivingReceipt
@@ -147,23 +161,30 @@ namespace easyfis.Controllers
                                             ApprovedBy = d.MstUser.FullName
                                         };
 
-                foreach (var receivingReceipt in receivingReceipts)
+                if (receivingReceipts.Any())
                 {
-                    Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
+                    foreach (var receivingReceipt in receivingReceipts)
+                    {
+                        Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
 
-                    newDisbursementLine.CVId = Convert.ToInt32(CVId);
-                    newDisbursementLine.BranchId = Convert.ToInt32(BranchId);
-                    newDisbursementLine.AccountId = receivingReceipt.AccountId;
-                    newDisbursementLine.ArticleId = receivingReceipt.SupplierId;
-                    newDisbursementLine.RRId = receivingReceipt.Id;
-                    newDisbursementLine.Particulars = receivingReceipt.DocumentReference;
-                    newDisbursementLine.Amount = receivingReceipt.Amount;
+                        newDisbursementLine.CVId = Convert.ToInt32(CVId);
+                        newDisbursementLine.BranchId = receivingReceipt.BranchId;
+                        newDisbursementLine.AccountId = receivingReceipt.AccountId;
+                        newDisbursementLine.ArticleId = receivingReceipt.SupplierId;
+                        newDisbursementLine.RRId = receivingReceipt.Id;
+                        newDisbursementLine.Particulars = receivingReceipt.DocumentReference;
+                        newDisbursementLine.Amount = receivingReceipt.Amount;
 
-                    db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
-                    db.SubmitChanges();
+                        db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
+                        db.SubmitChanges();
+                    }
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
-
-                return Request.CreateResponse(HttpStatusCode.OK);
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
             }
             catch
             {
@@ -171,21 +192,22 @@ namespace easyfis.Controllers
             }
         }
 
-        // ============
-        // ADD Advances
-        // ============
+        // pick advances from journals
+        [Authorize]
         [HttpPost]
-        [Route("api/disbursementLine/applyAdvances/ByJournalId/{JournalId}/{CVId}/{BranchId}")]
-        public int PostAdvances(Models.TrnDisbursementLine disbursementLine, String JournalId, String CVId, String BranchId)
+        [Route("api/disbursementLine/applyAdvances/ByArticleId/{articleId}/{CVId}")]
+        public HttpResponseMessage insertDisbursementLineAdvances(Models.TrnDisbursementLine disbursementLine, String articleId, String CVId)
         {
             try
             {
+                var SupplierAdvancesAccountId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.SupplierAdvancesAccountId).SingleOrDefault();
+
                 var journals = from d in db.TrnJournals
-                               where d.Id == Convert.ToInt32(JournalId)
-                               select new Models.TrnJournal
+                               where d.ArticleId == Convert.ToInt32(articleId)
+                               && d.AccountId == SupplierAdvancesAccountId
+                               && d.BranchId == currentBranchId()
+                               group d by new
                                {
-                                   Id = d.Id,
-                                   JournalDate = d.JournalDate.ToShortDateString(),
                                    BranchId = d.BranchId,
                                    Branch = d.MstBranch.Branch,
                                    AccountId = d.AccountId,
@@ -193,56 +215,62 @@ namespace easyfis.Controllers
                                    AccountCode = d.MstAccount.AccountCode,
                                    ArticleId = d.ArticleId,
                                    Article = d.MstArticle.Article,
-                                   Particulars = d.Particulars,
-                                   DebitAmount = d.DebitAmount,
-                                   CreditAmount = d.CreditAmount,
-                                   ORId = d.ORId,
-                                   CVId = d.CVId,
-                                   JVId = d.JVId,
-                                   RRId = d.RRId,
-                                   SIId = d.SIId,
-                                   INId = d.INId,
-                                   OTId = d.OTId,
-                                   STId = d.STId,
-                                   DocumentReference = d.DocumentReference,
-                                   APRRId = d.APRRId,
-                                   ARSIId = d.ARSIId,
+                                   RRId = d.RRId
+                               } into g
+                               select new Models.TrnJournal
+                               {
+                                   BranchId = g.Key.BranchId,
+                                   Branch = g.Key.Branch,
+                                   AccountId = g.Key.AccountId,
+                                   Account = g.Key.Account,
+                                   AccountCode = g.Key.AccountCode,
+                                   ArticleId = g.Key.ArticleId,
+                                   Article = g.Key.Article,
+                                   RRId = g.Key.RRId,
+                                   DebitAmount = g.Sum(d => d.DebitAmount),
+                                   CreditAmount = g.Sum(d => d.CreditAmount),
+                                   Balance = g.Sum(d => d.DebitAmount) - g.Sum(d => d.CreditAmount)
                                };
 
-                
-                Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
-
-                foreach (var journal in journals) 
+                if (journals.Any())
                 {
-                    newDisbursementLine.CVId = Convert.ToInt32(CVId);
-                    newDisbursementLine.BranchId = Convert.ToInt32(BranchId);
-                    newDisbursementLine.AccountId = journal.AccountId;
-                    newDisbursementLine.ArticleId = journal.ArticleId;
-                    newDisbursementLine.RRId = journal.RRId;
-                    newDisbursementLine.Particulars = "Supplier Advances";
-                    newDisbursementLine.Amount = journal.CreditAmount - journal.DebitAmount;
+                    Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
+
+                    foreach (var journal in journals)
+                    {
+                        newDisbursementLine.CVId = Convert.ToInt32(CVId);
+                        newDisbursementLine.BranchId = journal.BranchId;
+                        newDisbursementLine.AccountId = journal.AccountId;
+                        newDisbursementLine.ArticleId = journal.ArticleId;
+                        newDisbursementLine.RRId = journal.RRId;
+                        newDisbursementLine.Particulars = "Supplier Advances";
+                        newDisbursementLine.Amount = journal.Balance;
+                    }
+
+                    db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
+                    db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
-
-                db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
-                db.SubmitChanges();
-
-                return newDisbursementLine.Id;
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
             }
             catch
             {
-                return 0;
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
 
-        // ======================
-        // LIST Disbursement Line
-        // ======================
+        // list disbursement line by CVId
+        [Authorize]
+        [HttpGet]
         [Route("api/listDisbursementLineByCVId/{CVId}")]
-        public List<Models.TrnDisbursementLine> GetDisbursementByCVId(String CVId)
+        public List<Models.TrnDisbursementLine> listDisbursementLineByCVId(String CVId)
         {
-            var disbursementLine_CVId = Convert.ToInt32(CVId);
             var disbursementLines = from d in db.TrnDisbursementLines
-                                    where d.CVId == disbursementLine_CVId
+                                    where d.CVId == Convert.ToInt32(CVId)
                                     select new Models.TrnDisbursementLine
                                     {
                                         Id = d.Id,
@@ -259,14 +287,15 @@ namespace easyfis.Controllers
                                         Particulars = d.Particulars,
                                         Amount = d.Amount
                                     };
+
             return disbursementLines.ToList();
         }
 
-        // =====================
-        // ADD Disbursement Line
-        // =====================
+        // add disbursement line
+        [Authorize]
+        [HttpPost]
         [Route("api/addDisbursementLine")]
-        public int Post(Models.TrnDisbursementLine disbursementLine)
+        public Int32 insertDisbursementLine(Models.TrnDisbursementLine disbursementLine)
         {
             try
             {
@@ -291,21 +320,18 @@ namespace easyfis.Controllers
             }
         }
 
-        // ========================
-        // UPDATE Disbursement Line
-        // ========================
+        // update disbursement line
+        [Authorize]
+        [HttpPut]
         [Route("api/updateDisbursementLine/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnDisbursementLine disbursementLine)
+        public HttpResponseMessage updateDisbursementLine(String id, Models.TrnDisbursementLine disbursementLine)
         {
             try
             {
-                var disbursementLineId = Convert.ToInt32(id);
-                var disbursementLines = from d in db.TrnDisbursementLines where d.Id == disbursementLineId select d;
-
+                var disbursementLines = from d in db.TrnDisbursementLines where d.Id == Convert.ToInt32(id) select d;
                 if (disbursementLines.Any())
                 {
                     var updateDisbursementLine = disbursementLines.FirstOrDefault();
-
                     updateDisbursementLine.CVId = disbursementLine.CVId;
                     updateDisbursementLine.BranchId = disbursementLine.BranchId;
                     updateDisbursementLine.AccountId = disbursementLine.AccountId;
@@ -329,17 +355,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ========================
-        // DELETE Disbursement Line
-        // ========================
+        // delete disbursement line
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteDisbursementLine/{id}")]
         public HttpResponseMessage Delete(String id)
         {
             try
             {
-                var disbursementLineId = Convert.ToInt32(id);
-                var disbursementLines = from d in db.TrnDisbursementLines where d.Id == disbursementLineId select d;
-
+                var disbursementLines = from d in db.TrnDisbursementLines where d.Id == Convert.ToInt32(id) select d;
                 if (disbursementLines.Any())
                 {
                     db.TrnDisbursementLines.DeleteOnSubmit(disbursementLines.First());

@@ -186,22 +186,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-8">
-                            <form id="">
-                                <dl class="dl-horizontal">
-                                    <dt>Customer</dt>
-                                    <dd>
-                                        <div class="comboBox-wide" id="SIStatusCustomer"></div>
-                                    </dd>
-                                </dl>
-                            </form>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
                         <div class="col-lg-6"></div>
                         <div class="col-lg-6" align="right">
-                            <button class="btn btn-primary btn-sm" id="btnIdApplyAllSI" onclick="btnOnclickApplyAllSI()"><i class="fa fa-check"></i> Apply all</button>
+                            <button class="btn btn-primary btn-sm" id="btnIdApplyAllSI" onclick="btnOnclickApplyAllSI()"><i class="fa fa-check"></i> Apply</button>
                         </div>
                     </div>
                     <br />
@@ -218,7 +205,7 @@
                 </div>
                 <div class="modal-footer">
                     <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
-                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -234,19 +221,6 @@
                     <h4 class="modal-title" id="POStatusModalLabel">Customer Advances</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <form id="">
-                                <dl class="dl-horizontal">
-                                    <dt>Customer</dt>
-                                    <dd>
-                                        <div class="comboBox-wide" id="SIAdvancesCustomer"></div>
-                                    </dd>
-                                </dl>
-                            </form>
-                        </div>
-                    </div>
-                    <hr />
                     <div class="row" align="left">
                         <div class="col-lg-12">
                             <div id="SIAdvancesGrid" class="grid statusGrid" align="left"></div>
@@ -260,7 +234,7 @@
                 </div>
                 <div class="modal-footer">
                     <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
-                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -524,9 +498,7 @@
         var collectionArticleBanks;
         var cboCollectionArticleBank;
         var CheckedDate;
-        var cboSIStatusCustomer;
         var SIStatusGrid;
-        var cboSIAdvancesCustomer;
         var SIAdvancesGrid;
         var journalAdvances;
         var saleInvoiceStatus;
@@ -547,7 +519,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '/api/collectionLine/applyAR/BySalesId/' + saleInvoiceStatusId + '/' + getParam("CollectonId") + '/' + document.getElementById('collection_Branch_data').value,
+                url: '/api/collectionLine/applyAR/BySalesId/' + saleInvoiceStatusId + '/' + getParam("CollectonId"),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -600,7 +572,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '/api/collectionLine/applyAllAR/ByCustomerId/' + document.getElementById('collection_Customer_data').value + '/' + getParam("CollectonId") + '/' + document.getElementById('collection_Branch_data').value,
+                url: '/api/collectionLine/applyAllAR/ByCustomerId/' + document.getElementById('collection_Customer_data').value + '/' + getParam("CollectonId"),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -646,11 +618,11 @@
             $("#cmdCloseButtonApplyAdvances").prop("disabled", true);
 
             journalAdvances.editItem(journalAdvances.currentItem);
-            var JournalId = journalAdvances.currentEditItem.Id;
+            var ArticleId = journalAdvances.currentEditItem.ArticleId;
 
             $.ajax({
                 type: "POST",
-                url: '/api/collectionLine/applyAdvances/ByJournalId/' + JournalId + '/' + getParam("CollectonId") + '/' + document.getElementById('collection_Branch_data').value,
+                url: '/api/collectionLine/applyAdvances/ByArticleId/' + ArticleId + '/' + getParam("CollectonId"),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -719,7 +691,7 @@
                                 PaidAmount: saleInvoiceResults[i]["PaidAmount"],
                                 AdjustmentAmount: saleInvoiceResults[i]["AdjustmentAmount"],
                                 BalanceAmount: saleInvoiceResults[i]["BalanceAmount"],
-                                Apply: "<button class='btn btn-primary btn-xs' onclick='btnApplyAmountOnclick()'> <i class='fa fa-check-square-o'></i> Apply</button>",
+                                Pick: "<button class='btn btn-primary btn-xs' onclick='btnApplyAmountOnclick()'> <i class='fa fa-hand-o-right'></i> Pick</button>",
                             });
                         }
                     }
@@ -781,8 +753,8 @@
                                 "width": "2*"
                             },
                             {
-                                "header": "Apply",
-                                "binding": "Apply",
+                                "header": "Pick",
+                                "binding": "Pick",
                                 "allowSorting": true,
                                 "width": "2*",
                                 "align": "center",
@@ -821,26 +793,8 @@
             }
 
             SIStatusGrid.columnHeaders.columns[7].allowMerging = true;
-            SIStatusGrid.columnHeaders.setCellData(0, 7, 'Apply');
+            SIStatusGrid.columnHeaders.setCellData(0, 7, 'Pick');
 
-        }
-
-        function createCboCustomerSIStatus(customers) {
-            var customerCollection = new wijmo.collections.CollectionView(customers);
-            var customerList = new Array();
-            for (var i = 0; i < customerCollection.items.length; i++) {
-                customerList.push(customerCollection.items[i].Customer);
-            }
-
-            cboSIStatusCustomer.dispose();
-            cboSIStatusCustomer = new wijmo.input.ComboBox('#SIStatusCustomer', {
-                disabled: true,
-                placeholder: "Select Customer",
-                itemsSource: customerList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('collection_Customer_selectedValue').value.toString()
-            });
         }
 
         function getJournalByArticleId() {
@@ -879,7 +833,7 @@
                                 DocumentReference: journalResults[i]["DocumentReference"],
                                 APRRId: journalResults[i]["APRRId"],
                                 ARSIId: journalResults[i]["ARSIId"],
-                                Apply: "<button class='btn btn-primary btn-xs' onclick='btnApplyAdvancesOnclick()'><i class='fa fa-check'></i> Apply </button>"
+                                Pick: "<button class='btn btn-primary btn-xs' onclick='btnApplyAdvancesOnclick()'><i class='fa fa-hand-o-right'></i> Pick </button>"
                             });
                         }
                     }
@@ -935,8 +889,8 @@
                                 "width": "2*"
                             },
                             {
-                                "header": "Apply",
-                                "binding": "Apply",
+                                "header": "Pick",
+                                "binding": "Pick",
                                 "allowSorting": true,
                                 "width": "2*",
                                 "align": "center",
@@ -954,24 +908,6 @@
             });
 
             SIAdvancesGrid.trackChanges = true;
-        }
-
-        function createCboCustomerSIAdvances(customers) {
-            var customerCollection = new wijmo.collections.CollectionView(customers);
-            var customerList = new Array();
-            for (var i = 0; i < customerCollection.items.length; i++) {
-                customerList.push(customerCollection.items[i].Customer);
-            }
-
-            cboSIAdvancesCustomer.dispose();
-            cboSIAdvancesCustomer = new wijmo.input.ComboBox('#SIAdvancesCustomer', {
-                disabled: true,
-                placeholder: "Select Customer",
-                itemsSource: customerList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('collection_Customer_selectedValue').value.toString()
-            });
         }
 
         // =======================
@@ -1059,6 +995,8 @@
                             $("#cmdCollectionEdit").prop("disabled", false);
                             $("#cmdCollectionPrint").prop("disabled", false);
                             $("#btnAddCollectionLine").prop("disabled", true);
+                            $("#cmdAR").prop("disabled", true);
+                            $("#cmdAdvances").prop("disabled", true);
 
                         } else if (document.getElementById('collection_IsLocked').value == 'false') {
                             document.getElementById('collection_ManualORNumber').disabled = false;
@@ -1082,6 +1020,9 @@
                             $("#cmdCollectionEdit").prop("disabled", true);
                             $("#cmdCollectionPrint").prop("disabled", true);
                             $("#btnAddCollectionLine").prop("disabled", false);
+                            $("#cmdAR").prop("disabled", false);
+                            $("#cmdAdvances").prop("disabled", false);
+
 
                         } else {
                             console.log("Invalid IsLocked");
@@ -1196,9 +1137,6 @@
                                 Customer: results[i]["Article"]
                             });
                         }
-
-                        createCboCustomerSIStatus(customers);
-                        createCboCustomerSIAdvances(customers);
                         createCboCustomer(customers);
                     }
                 }
@@ -1241,15 +1179,11 @@
                 onSelectedIndexChanged: function () {
                     $("#collection_Customer_data").val(customerCollection.items[this.selectedIndex].CustomerId);
                     $("#collection_Customer_selectedValue").val(customerCollection.items[this.selectedIndex].Customer);
-                    createCboCustomerSIStatus(customers);
-                    createCboCustomerSIAdvances(customers);
                 }
             });
 
             document.getElementById('collection_Customer_data').value = customerCollection.items[cboCustomer.selectedIndex].CustomerId;
             document.getElementById('collection_Customer_selectedValue').value = customerCollection.items[cboCustomer.selectedIndex].Customer;
-            createCboCustomerSIStatus(customers);
-            createCboCustomerSIAdvances(customers);
         }
 
         // =======================
@@ -2883,8 +2817,6 @@
             cboCollectionLineAccount = new wijmo.input.ComboBox('#collectionLine_account');
             cboCollectionLineArticle = new wijmo.input.ComboBox('#collectionLine_article');
             cboCollectionArticleBank = new wijmo.input.ComboBox('#collectionLine_depositoryBank');
-            cboSIStatusCustomer = new wijmo.input.ComboBox('#SIStatusCustomer');
-            cboSIAdvancesCustomer = new wijmo.input.ComboBox('#SIAdvancesCustomer');
 
             var d = new Date();
             document.getElementById("collectionLine_checkDate_data").value = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join('/');
