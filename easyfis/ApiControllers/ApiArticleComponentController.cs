@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ======================
-        // LIST Article Component
-        // ======================
+        // list article component
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleComponent")]
-        public List<Models.MstArticleComponent> Get()
+        public List<Models.MstArticleComponent> listArticleComponent()
         {
             var articleComponents = from d in db.MstArticleComponents
                                     select new Models.MstArticleComponent
@@ -30,18 +30,18 @@ namespace easyfis.Controllers
                                         Cost = Convert.ToDecimal(d.MstArticle.Cost),
                                         Particulars = d.MstArticle.Particulars,
                                     };
+
             return articleComponents.ToList();
         }
 
-        // ===================================
-        // LIST Article Component by ArticleId
-        // ===================================
+        // list Article Component by ArticleId
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleComponent/{articleId}")]
-        public List<Models.MstArticleComponent> GetArticleComponentByArticleTypeId(String articleId)
+        public List<Models.MstArticleComponent> listArticleComponentByArticleId(String articleId)
         {
-            var articleComponents_articleId = Convert.ToInt32(articleId);
             var articleComponents = from d in db.MstArticleComponents
-                                    where d.ArticleId == articleComponents_articleId
+                                    where d.ArticleId == Convert.ToInt32(articleId)
                                     select new Models.MstArticleComponent
                                     {
                                         Id = d.Id,
@@ -54,18 +54,18 @@ namespace easyfis.Controllers
                                         Cost = Convert.ToDecimal(d.MstArticle.Cost),
                                         Particulars = d.MstArticle.Particulars,
                                     };
+
             return articleComponents.ToList();
         }
 
-        // =====================
-        // GET Article Component
-        // =====================
+        // get Article Component
+        [Authorize]
+        [HttpGet]
         [Route("api/articleComponent/{id}")]
-        public Models.MstArticleComponent GetArticleComponent(String id)
+        public Models.MstArticleComponent getArticleComponent(String id)
         {
-            var articleComponentId = Convert.ToInt32(id);
             var articleComponents = from d in db.MstArticleComponents
-                                    where d.Id == articleComponentId
+                                    where d.Id == Convert.ToInt32(id)
                                     select new Models.MstArticleComponent
                                     {
                                         Id = d.Id,
@@ -78,20 +78,19 @@ namespace easyfis.Controllers
                                         Cost = Convert.ToDecimal(d.MstArticle.Cost),
                                         Particulars = d.MstArticle.Particulars,
                                     };
+
             return (Models.MstArticleComponent)articleComponents.FirstOrDefault();
         }
 
-        // =====================
-        // ADD Article Component
-        // =====================
+        // add Article Component
+        [Authorize]
+        [HttpPost]
         [Route("api/addArticleComponent")]
-        public int Post(Models.MstArticleComponent component)
+        public Int32 insertArticleComponent(Models.MstArticleComponent component)
         {
             try
             {
-
                 Data.MstArticleComponent newComponent = new Data.MstArticleComponent();
-
                 newComponent.ArticleId = component.ArticleId;
                 newComponent.ComponentArticleId = component.ComponentArticleId;
                 newComponent.Quantity = component.Quantity;
@@ -108,21 +107,18 @@ namespace easyfis.Controllers
             }
         }
 
-        // ========================
-        // UPDATE Article Component
-        // ========================
+        // update Article Component
+        [Authorize]
+        [HttpPut]
         [Route("api/updateArticleComponent/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstArticleComponent component)
+        public HttpResponseMessage updateArticleComponent(String id, Models.MstArticleComponent component)
         {
             try
             {
-                var componentId = Convert.ToInt32(id);
-                var components = from d in db.MstArticleComponents where d.Id == componentId select d;
-
+                var components = from d in db.MstArticleComponents where d.Id == Convert.ToInt32(id) select d;
                 if (components.Any())
                 {
                     var updateComponent = components.FirstOrDefault();
-
                     updateComponent.ArticleId = component.ArticleId;
                     updateComponent.ComponentArticleId = component.ComponentArticleId;
                     updateComponent.Quantity = component.Quantity;
@@ -143,17 +139,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ========================
-        // DELETE Articke Component
-        // ========================
+        // delete Articke Component
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteArticleComponent/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteArticleComponent(String id)
         {
             try
             {
-                var componentId = Convert.ToInt32(id);
-                var components = from d in db.MstArticleComponents where d.Id == componentId select d;
-
+                var components = from d in db.MstArticleComponents where d.Id == Convert.ToInt32(id) select d;
                 if (components.Any())
                 {
                     db.MstArticleComponents.DeleteOnSubmit(components.First());
@@ -165,7 +159,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

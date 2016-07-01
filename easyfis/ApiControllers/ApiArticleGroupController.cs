@@ -12,13 +12,13 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ==================
-        // LIST Article Group
-        // ==================
+        // list article group
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleGroup")]
-        public List<Models.MstArticleGroup> Get()
+        public List<Models.MstArticleGroup> listArticleGroup()
         {
-            var articleGroups = from d in db.MstArticleGroups
+            var articleGroups = from d in db.MstArticleGroups.OrderBy(d => d.ArticleGroup)
                                 select new Models.MstArticleGroup
                                 {
                                     Id = d.Id,
@@ -29,17 +29,17 @@ namespace easyfis.Controllers
                                     AccountCode = d.MstAccount.AccountCode,
                                     Account = d.MstAccount.Account,
                                     SalesAccountId = d.SalesAccountId,
-                                    SalesAccountCode = d.MstAccount4.AccountCode,
-                                    SalesAccount = d.MstAccount4.Account,
+                                    SalesAccountCode = d.MstAccount1.AccountCode,
+                                    SalesAccount = d.MstAccount1.Account,
                                     CostAccountId = d.CostAccountId,
                                     CostAccountCode = d.MstAccount2.AccountCode,
                                     CostAccount = d.MstAccount2.Account,
                                     AssetAccountId = d.AssetAccountId,
-                                    AssetAccountCode = d.MstAccount1.AccountCode,
-                                    AssetAccount = d.MstAccount1.Account,
+                                    AssetAccountCode = d.MstAccount3.AccountCode,
+                                    AssetAccount = d.MstAccount3.Account,
                                     ExpenseAccountId = d.ExpenseAccountId,
-                                    ExpenseAccountCode = d.MstAccount3.AccountCode,
-                                    ExpenseAccount = d.MstAccount3.Account,
+                                    ExpenseAccountCode = d.MstAccount4.AccountCode,
+                                    ExpenseAccount = d.MstAccount4.Account,
                                     IsLocked = d.IsLocked,
                                     CreatedById = d.CreatedById,
                                     CreatedBy = d.MstUser.FullName,
@@ -48,18 +48,18 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser1.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return articleGroups.ToList();
         }
 
-        // =====================================
-        // List Article Group by Article Type Id
-        // =====================================
+        // list article group by ArticleTypeId
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleGroupByArticleTypeId/{articleTypeId}")]
-        public List<Models.MstArticleGroup> GetArticleGroupByArticleTypeId(String articleTypeId)
+        public List<Models.MstArticleGroup> listArticleGroupByArticleTypeId(String articleTypeId)
         {
-            var article_articleTypeId = Convert.ToInt32(articleTypeId);
-            var articleGroups = from d in db.MstArticleGroups
-                                where d.ArticleTypeId == article_articleTypeId
+            var articleGroups = from d in db.MstArticleGroups.OrderBy(d => d.ArticleGroup)
+                                where d.ArticleTypeId == Convert.ToInt32(articleTypeId)
                                 select new Models.MstArticleGroup
                                 {
                                     Id = d.Id,
@@ -70,17 +70,17 @@ namespace easyfis.Controllers
                                     AccountCode = d.MstAccount.AccountCode,
                                     Account = d.MstAccount.Account,
                                     SalesAccountId = d.SalesAccountId,
-                                    SalesAccountCode = d.MstAccount4.AccountCode,
-                                    SalesAccount = d.MstAccount4.Account,
+                                    SalesAccountCode = d.MstAccount1.AccountCode,
+                                    SalesAccount = d.MstAccount1.Account,
                                     CostAccountId = d.CostAccountId,
                                     CostAccountCode = d.MstAccount2.AccountCode,
                                     CostAccount = d.MstAccount2.Account,
                                     AssetAccountId = d.AssetAccountId,
-                                    AssetAccountCode = d.MstAccount1.AccountCode,
-                                    AssetAccount = d.MstAccount1.Account,
+                                    AssetAccountCode = d.MstAccount3.AccountCode,
+                                    AssetAccount = d.MstAccount3.Account,
                                     ExpenseAccountId = d.ExpenseAccountId,
-                                    ExpenseAccountCode = d.MstAccount3.AccountCode,
-                                    ExpenseAccount = d.MstAccount3.Account,
+                                    ExpenseAccountCode = d.MstAccount4.AccountCode,
+                                    ExpenseAccount = d.MstAccount4.Account,
                                     IsLocked = d.IsLocked,
                                     CreatedById = d.CreatedById,
                                     CreatedBy = d.MstUser.FullName,
@@ -89,24 +89,21 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser1.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return articleGroups.ToList();
         }
 
-        // =================
-        // ADD Article Group
-        // =================
+        // add Article Group
+        [Authorize]
+        [HttpPost]
         [Route("api/addArticleGroup")]
-        public int Post(Models.MstArticleGroup articleGroup)
+        public Int32 insertArticleGroup(Models.MstArticleGroup articleGroup)
         {
             try
             {
-                //var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstArticleGroup newArticleGroup = new Data.MstArticleGroup();
-
                 newArticleGroup.ArticleGroup = articleGroup.ArticleGroup;
                 newArticleGroup.ArticleTypeId = articleGroup.ArticleTypeId;
                 newArticleGroup.AccountId = articleGroup.AccountId;
@@ -115,10 +112,10 @@ namespace easyfis.Controllers
                 newArticleGroup.AssetAccountId = articleGroup.AssetAccountId;
                 newArticleGroup.ExpenseAccountId = articleGroup.ExpenseAccountId;
                 newArticleGroup.IsLocked = articleGroup.IsLocked;
-                newArticleGroup.CreatedById = mstUserId;
-                newArticleGroup.CreatedDateTime = date;
-                newArticleGroup.UpdatedById = mstUserId;
-                newArticleGroup.UpdatedDateTime = date;
+                newArticleGroup.CreatedById = userId;
+                newArticleGroup.CreatedDateTime = DateTime.Now;
+                newArticleGroup.UpdatedById = userId;
+                newArticleGroup.UpdatedDateTime = DateTime.Now;
 
                 db.MstArticleGroups.InsertOnSubmit(newArticleGroup);
                 db.SubmitChanges();
@@ -131,26 +128,20 @@ namespace easyfis.Controllers
             }
         }
 
-        // ====================
-        // UPDATE Article Group
-        // ====================
+        // update Article Group
+        [Authorize]
+        [HttpPut]
         [Route("api/updateArticleGroup/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstArticleGroup articleGroup)
+        public HttpResponseMessage updateArticleGroup(String id, Models.MstArticleGroup articleGroup)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var articleGroup_Id = Convert.ToInt32(id);
-                var articleGroups = from d in db.MstArticleGroups where d.Id == articleGroup_Id select d;
-
+                var articleGroups = from d in db.MstArticleGroups where d.Id == Convert.ToInt32(id) select d;
                 if (articleGroups.Any())
                 {
                     var updateArticleGroup = articleGroups.FirstOrDefault();
-
                     updateArticleGroup.ArticleGroup = articleGroup.ArticleGroup;
                     updateArticleGroup.ArticleTypeId = articleGroup.ArticleTypeId;
                     updateArticleGroup.AccountId = articleGroup.AccountId;
@@ -159,8 +150,8 @@ namespace easyfis.Controllers
                     updateArticleGroup.AssetAccountId = articleGroup.AssetAccountId;
                     updateArticleGroup.ExpenseAccountId = articleGroup.ExpenseAccountId;
                     updateArticleGroup.IsLocked = articleGroup.IsLocked;
-                    updateArticleGroup.UpdatedById = mstUserId;
-                    updateArticleGroup.UpdatedDateTime = date;
+                    updateArticleGroup.UpdatedById = userId;
+                    updateArticleGroup.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -177,17 +168,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ====================
-        // DELETE Article Group
-        // ====================
+        // delete article group
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteArticleGroup/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteArticleGroup(String id)
         {
             try
             {
-                var articleGroup_Id = Convert.ToInt32(id);
-                var articleGroups = from d in db.MstArticleGroups where d.Id == articleGroup_Id select d;
-
+                var articleGroups = from d in db.MstArticleGroups where d.Id == Convert.ToInt32(id) select d;
                 if (articleGroups.Any())
                 {
                     db.MstArticleGroups.DeleteOnSubmit(articleGroups.First());
@@ -199,7 +188,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

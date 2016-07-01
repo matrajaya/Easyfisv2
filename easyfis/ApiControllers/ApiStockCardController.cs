@@ -12,9 +12,10 @@ namespace easyfis.ApiControllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         // stock card list
+        [Authorize]
         [HttpGet]
         [Route("api/stockCard/list/{startDate}/{endDate}/{branchId}/{itemId}")]
-        public List<Models.TrnInventory> stockCardList(String startDate, String endDate, String branchId, String itemId)
+        public List<Models.TrnInventory> listStockCard(String startDate, String endDate, String branchId, String itemId)
         {
             try
             {

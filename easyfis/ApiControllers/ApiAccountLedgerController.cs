@@ -12,9 +12,10 @@ namespace easyfis.ApiControllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         // account ledger list
+        [Authorize]
         [HttpGet]
         [Route("api/accountLedger/list/{startDate}/{endDate}/{companyId}/{accountId}")]
-        public List<Models.TrnJournal> accountLedgerList(String startDate, String endDate, String companyId, String accountId)
+        public List<Models.TrnJournal> listAccountLedger(String startDate, String endDate, String companyId, String accountId)
         {
             try
             {

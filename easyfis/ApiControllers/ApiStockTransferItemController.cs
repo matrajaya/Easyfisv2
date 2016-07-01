@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ========================
-        // LIST Stock Transfer Item
-        // ========================
+        // list stock transfer item
+        [Authorize]
+        [HttpGet]
         [Route("api/listStockTransferItem")]
-        public List<Models.TrnStockTransferItem> Get()
+        public List<Models.TrnStockTransferItem> listStockTransferItem()
         {
             var stockTransferItems = from d in db.TrnStockTransferItems
                                      select new Models.TrnStockTransferItem
@@ -39,18 +39,18 @@ namespace easyfis.Controllers
                                          BaseQuantity = d.BaseQuantity,
                                          BaseCost = d.BaseCost
                                      };
+
             return stockTransferItems.ToList();
         }
 
-        // ================================
-        // LIST Stock Transfer Item By STId
-        // ================================
+        // list stock transfer item by STId
+        [Authorize]
+        [HttpGet]
         [Route("api/listStockTransferItemBySTId/{STId}")]
-        public List<Models.TrnStockTransferItem> GetStockTransferItemBySTId(String STId)
+        public List<Models.TrnStockTransferItem> listStockTransferItemBySTId(String STId)
         {
-            var stockTransferItem_STId = Convert.ToInt32(STId);
             var stockTransferItems = from d in db.TrnStockTransferItems
-                                     where d.STId == stockTransferItem_STId
+                                     where d.STId == Convert.ToInt32(STId)
                                      select new Models.TrnStockTransferItem
                                      {
                                          Id = d.Id,
@@ -72,19 +72,19 @@ namespace easyfis.Controllers
                                          BaseQuantity = d.BaseQuantity,
                                          BaseCost = d.BaseCost
                                      };
+
             return stockTransferItems.ToList();
         }
 
-        // =======================
-        // ADD Stock Transfer Item
-        // =======================
+        // add stock transfer item
+        [Authorize]
+        [HttpPost]
         [Route("api/addStockTransferItem")]
-        public int Post(Models.TrnStockTransferItem stockTransferItem)
+        public Int32 insertStockTransferItem(Models.TrnStockTransferItem stockTransferItem)
         {
             try
             {
                 Data.TrnStockTransferItem newStockTransferItem = new Data.TrnStockTransferItem();
-
                 newStockTransferItem.STId = stockTransferItem.STId;
                 newStockTransferItem.ItemId = stockTransferItem.ItemId;
                 newStockTransferItem.ItemInventoryId = stockTransferItem.ItemInventoryId;
@@ -99,7 +99,6 @@ namespace easyfis.Controllers
                 newStockTransferItem.BaseUnitId = item.First().UnitId;
 
                 var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == stockTransferItem.ItemId && d.UnitId == stockTransferItem.UnitId select d;
-
                 if (conversionUnit.First().Multiplier > 0)
                 {
                     newStockTransferItem.BaseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
@@ -110,7 +109,6 @@ namespace easyfis.Controllers
                 }
 
                 var baseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
-
                 if (baseQuantity > 0)
                 {
                     newStockTransferItem.BaseCost = stockTransferItem.Amount / baseQuantity;
@@ -124,7 +122,6 @@ namespace easyfis.Controllers
                 db.SubmitChanges();
 
                 return newStockTransferItem.Id;
-
             }
             catch
             {
@@ -132,21 +129,18 @@ namespace easyfis.Controllers
             }
         }
 
-        // ==========================
-        // UPDATE Stock Transfer Item
-        // ==========================
+        // update stock transfer item
+        [Authorize]
+        [HttpPut]
         [Route("api/updateStockTransferItem/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnStockTransferItem stockTransferItem)
+        public HttpResponseMessage updateStockTransferItem(String id, Models.TrnStockTransferItem stockTransferItem)
         {
             try
             {
-                var stockTransferItemId = Convert.ToInt32(id);
-                var stockTransferItems = from d in db.TrnStockTransferItems where d.Id == stockTransferItemId select d;
-
+                var stockTransferItems = from d in db.TrnStockTransferItems where d.Id == Convert.ToInt32(id) select d;
                 if (stockTransferItems.Any())
                 {
                     var updateStockTransferItem = stockTransferItems.FirstOrDefault();
-
                     updateStockTransferItem.STId = stockTransferItem.STId;
                     updateStockTransferItem.ItemId = stockTransferItem.ItemId;
                     updateStockTransferItem.ItemInventoryId = stockTransferItem.ItemInventoryId;
@@ -160,7 +154,6 @@ namespace easyfis.Controllers
                     updateStockTransferItem.BaseUnitId = item.First().UnitId;
 
                     var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == stockTransferItem.ItemId && d.UnitId == stockTransferItem.UnitId select d;
-
                     if (conversionUnit.First().Multiplier > 0)
                     {
                         updateStockTransferItem.BaseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
@@ -171,7 +164,6 @@ namespace easyfis.Controllers
                     }
 
                     var baseQuantity = stockTransferItem.Quantity * (1 / conversionUnit.First().Multiplier);
-
                     if (baseQuantity > 0)
                     {
                         updateStockTransferItem.BaseCost = stockTransferItem.Amount / baseQuantity;
@@ -189,7 +181,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -197,17 +188,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ==========================
-        // DELETE Stock Transfer Item
-        // ==========================
+        // delete stock transfter item 
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteStockTransferItem/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteStockTransferItem(String id)
         {
             try
             {
-                var stockTransferItemId = Convert.ToInt32(id);
-                var stockTransferItems = from d in db.TrnStockTransferItems where d.Id == stockTransferItemId select d;
-
+                var stockTransferItems = from d in db.TrnStockTransferItems where d.Id == Convert.ToInt32(id) select d;
                 if (stockTransferItems.Any())
                 {
                     db.TrnStockTransferItems.DeleteOnSubmit(stockTransferItems.First());
@@ -219,7 +208,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

@@ -175,7 +175,7 @@ namespace easyfis.Controllers
             return salesInvoices.ToList();
         }
 
-        // list sales invoice by customer Id and by Balance > 0
+        // list sales invoice by customer Id and by Balance > 0 for collection accounts receivable
         [Authorize]
         [HttpGet]
         [Route("api/salesInvoiceByCustomerIdByBalance/{customerId}")]

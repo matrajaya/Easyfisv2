@@ -12,13 +12,13 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =============
-        // LIST Pay Type
-        // =============
+        // list Pay Type
+        [Authorize]
+        [HttpGet]
         [Route("api/listPayType")]
-        public List<Models.MstPayType> Get()
+        public List<Models.MstPayType> listPayType()
         {
-            var payTypes = from d in db.MstPayTypes
+            var payTypes = from d in db.MstPayTypes.OrderBy(d => d.PayType)
                                 select new Models.MstPayType
                                 {
                                     Id = d.Id,
@@ -34,31 +34,28 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser1.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return payTypes.ToList();
         }
 
-        // ============
-        // ADD Pay Type
-        // ============
+        // add pay type
+        [Authorize]
+        [HttpPost]
         [Route("api/addPayType")]
-        public int Post(Models.MstPayType payType)
+        public Int32 insertPayType(Models.MstPayType payType)
         {
             try
             {
-                //var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstPayType newPayType = new Data.MstPayType();
-
                 newPayType.PayType = payType.PayType;
                 newPayType.AccountId = payType.AccountId;
                 newPayType.IsLocked = payType.IsLocked; ;
-                newPayType.CreatedById = mstUserId;
-                newPayType.CreatedDateTime = date;
-                newPayType.UpdatedById = mstUserId;
-                newPayType.UpdatedDateTime = date;
+                newPayType.CreatedById = userId;
+                newPayType.CreatedDateTime = DateTime.Now;
+                newPayType.UpdatedById = userId;
+                newPayType.UpdatedDateTime = DateTime.Now;
 
                 db.MstPayTypes.InsertOnSubmit(newPayType);
                 db.SubmitChanges();
@@ -71,22 +68,17 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===============
-        // UPDATE Pay Type
-        // ===============
+        // update pay type
+        [Authorize]
+        [HttpPut]
         [Route("api/updatePayType/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstPayType payType)
+        public HttpResponseMessage updatePayType(String id, Models.MstPayType payType)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var payType_Id = Convert.ToInt32(id);
-                var payTypes = from d in db.MstPayTypes where d.Id == payType_Id select d;
-
+                var payTypes = from d in db.MstPayTypes where d.Id == Convert.ToInt32(id) select d;
                 if (payTypes.Any())
                 {
                     var updatePayType = payTypes.FirstOrDefault();
@@ -94,8 +86,8 @@ namespace easyfis.Controllers
                     updatePayType.PayType = payType.PayType;
                     updatePayType.AccountId = payType.AccountId;
                     updatePayType.IsLocked = payType.IsLocked;
-                    updatePayType.UpdatedById = mstUserId;
-                    updatePayType.UpdatedDateTime = date;
+                    updatePayType.UpdatedById = userId;
+                    updatePayType.UpdatedDateTime = DateTime.Now; ;
 
                     db.SubmitChanges();
 
@@ -112,17 +104,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===============
-        // DELETE Pay Type
-        // ===============
+        // delete pay type
+        [Authorize]
+        [HttpDelete]
         [Route("api/deletePayType/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deletePayType(String id)
         {
             try
             {
-                var payType_Id = Convert.ToInt32(id);
-                var payTypes = from d in db.MstPayTypes where d.Id == payType_Id select d;
-
+                var payTypes = from d in db.MstPayTypes where d.Id == Convert.ToInt32(id) select d;
                 if (payTypes.Any())
                 {
                     db.MstPayTypes.DeleteOnSubmit(payTypes.First());
@@ -134,7 +124,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

@@ -13,86 +13,87 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =========================
-        // LIST Journal Voucher Line
-        // =========================
+        // list journal voucher line
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalVoucherLine")]
-        public List<Models.TrnJournalVoucherLine> Get()
+        public List<Models.TrnJournalVoucherLine> listJournalVoucherLine()
         {
             var journalVoucherLines = from d in db.TrnJournalVoucherLines
                                       select new Models.TrnJournalVoucherLine
-                                          {
-                                              Id = d.Id,
-                                              JVId = d.JVId,
-                                              JVNumber = d.TrnJournalVoucher.JVNumber,
-                                              JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
-                                              JVParticulars = d.TrnJournalVoucher.Particulars,
-                                              BranchId = d.BranchId,
-                                              Branch = d.MstBranch.Branch,
-                                              AccountId = d.AccountId,
-                                              Account = d.MstAccount.Account,
-                                              ArticleId = d.ArticleId,
-                                              Article = d.MstArticle.Article,
-                                              Particulars = d.Particulars,
-                                              DebitAmount = d.DebitAmount,
-                                              CreditAmount = d.CreditAmount,
-                                              APRRId = d.APRRId,
-                                              APRR = d.TrnReceivingReceipt.RRNumber,
-                                              APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
-                                              ARSIId = d.ARSIId,
-                                              ARSI = d.TrnSalesInvoice.SINumber,
-                                              ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
-                                              IsClear = d.IsClear
-                                          };
+                                        {
+                                            Id = d.Id,
+                                            JVId = d.JVId,
+                                            JVNumber = d.TrnJournalVoucher.JVNumber,
+                                            JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                            JVParticulars = d.TrnJournalVoucher.Particulars,
+                                            BranchId = d.BranchId,
+                                            Branch = d.MstBranch.Branch,
+                                            AccountId = d.AccountId,
+                                            Account = d.MstAccount.Account,
+                                            ArticleId = d.ArticleId,
+                                            Article = d.MstArticle.Article,
+                                            Particulars = d.Particulars,
+                                            DebitAmount = d.DebitAmount,
+                                            CreditAmount = d.CreditAmount,
+                                            APRRId = d.APRRId,
+                                            APRR = d.TrnReceivingReceipt.RRNumber,
+                                            APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
+                                            ARSIId = d.ARSIId,
+                                            ARSI = d.TrnSalesInvoice.SINumber,
+                                            ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
+                                            IsClear = d.IsClear
+                                        };
+
             return journalVoucherLines.ToList();
         }
 
-        // ==================================================
-        // LIST Journal Voucher Line by JV Date start and end
-        // ==================================================
+        // list journal voucher by JV Date start and end for bank reconciliation
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalVoucherLineByJVDate/{ArticleId}/{DateStart}/{DateEnd}")]
-        public List<Models.TrnJournalVoucherLine> GetJournalVoucherLineByJVDate(String ArticleId, String DateStart, String DateEnd)
+        public List<Models.TrnJournalVoucherLine> listtJournalVoucherLineByJVDate(String ArticleId, String DateStart, String DateEnd)
         {
             var journalVoucherLines = from d in db.TrnJournalVoucherLines
                                       where d.ArticleId == Convert.ToInt32(ArticleId)
-                                      where d.TrnJournalVoucher.JVDate >= Convert.ToDateTime(DateStart)
-                                      where d.TrnJournalVoucher.JVDate <= Convert.ToDateTime(DateEnd)
+                                      && d.TrnJournalVoucher.JVDate >= Convert.ToDateTime(DateStart)
+                                      && d.TrnJournalVoucher.JVDate <= Convert.ToDateTime(DateEnd)
                                       select new Models.TrnJournalVoucherLine
-                                          {
-                                              Id = d.Id,
-                                              JVId = d.JVId,
-                                              JVNumber = d.TrnJournalVoucher.JVNumber,
-                                              JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
-                                              JVParticulars = d.TrnJournalVoucher.Particulars,
-                                              BranchId = d.BranchId,
-                                              Branch = d.MstBranch.Branch,
-                                              AccountId = d.AccountId,
-                                              Account = d.MstAccount.Account,
-                                              ArticleId = d.ArticleId,
-                                              Article = d.MstArticle.Article,
-                                              Particulars = d.Particulars,
-                                              DebitAmount = d.DebitAmount,
-                                              CreditAmount = d.CreditAmount,
-                                              APRRId = d.APRRId,
-                                              APRR = d.TrnReceivingReceipt.RRNumber,
-                                              APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
-                                              ARSIId = d.ARSIId,
-                                              ARSI = d.TrnSalesInvoice.SINumber,
-                                              ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
-                                              IsClear = d.IsClear
-                                          };
+                                      {
+                                          Id = d.Id,
+                                          JVId = d.JVId,
+                                          JVNumber = d.TrnJournalVoucher.JVNumber,
+                                          JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                          JVParticulars = d.TrnJournalVoucher.Particulars,
+                                          BranchId = d.BranchId,
+                                          Branch = d.MstBranch.Branch,
+                                          AccountId = d.AccountId,
+                                          Account = d.MstAccount.Account,
+                                          ArticleId = d.ArticleId,
+                                          Article = d.MstArticle.Article,
+                                          Particulars = d.Particulars,
+                                          DebitAmount = d.DebitAmount,
+                                          CreditAmount = d.CreditAmount,
+                                          APRRId = d.APRRId,
+                                          APRR = d.TrnReceivingReceipt.RRNumber,
+                                          APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
+                                          ARSIId = d.ARSIId,
+                                          ARSI = d.TrnSalesInvoice.SINumber,
+                                          ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
+                                          IsClear = d.IsClear
+                                      };
+
             return journalVoucherLines.ToList();
         }
 
-        // ======================================
-        // LIST Journal Voucher Line by branch Id
-        // ======================================
+        // list journal voucher lune by JVId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalVoucherLineByJVId/{JVId}")]
-        public List<Models.TrnJournalVoucherLine> GetJournalVoucherLineById(String JVId)
+        public List<Models.TrnJournalVoucherLine> listJournalVoucherLineByJVId(String JVId)
         {
-            var journalVoucherLineJVId = Convert.ToInt32(JVId);
             var journalVoucherLines = from d in db.TrnJournalVoucherLines
-                                      where d.JVId == journalVoucherLineJVId
+                                      where d.JVId == Convert.ToInt32(JVId)
                                       select new Models.TrnJournalVoucherLine
                                           {
                                               Id = d.Id,
@@ -114,19 +115,19 @@ namespace easyfis.Controllers
                                               ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
                                               IsClear = d.IsClear
                                           };
+
             return journalVoucherLines.ToList();
         }
 
-        // ========================
-        // ADD Journal Voucher Line
-        // ========================
+        // add journal voucher line
+        [Authorize]
+        [HttpPost]
         [Route("api/addJournalVoucherLine")]
-        public int Post(Models.TrnJournalVoucherLine journalVoucherLine)
+        public Int32 insertJournalVoucherLine(Models.TrnJournalVoucherLine journalVoucherLine)
         {
             try
             {
                 Data.TrnJournalVoucherLine newJournalVoucherLine = new Data.TrnJournalVoucherLine();
-
                 newJournalVoucherLine.JVId = journalVoucherLine.JVId;
                 newJournalVoucherLine.BranchId = journalVoucherLine.BranchId;
                 newJournalVoucherLine.AccountId = journalVoucherLine.AccountId;
@@ -149,21 +150,18 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===========================
-        // UPDATE Journal Voucher Line
-        // ===========================
+        // update journal voucher line
+        [Authorize]
+        [HttpPut]
         [Route("api/updateJournalVoucherLine/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnJournalVoucherLine journalVoucherLine)
+        public HttpResponseMessage updateJournalVoucherLine(String id, Models.TrnJournalVoucherLine journalVoucherLine)
         {
             try
             {
-                var journalVoucherLineId = Convert.ToInt32(id);
-                var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.Id == journalVoucherLineId select d;
-
+                var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.Id == Convert.ToInt32(id) select d;
                 if (journalVoucherLines.Any())
                 {
                     var updatejournalVoucherLine = journalVoucherLines.FirstOrDefault();
-
                     updatejournalVoucherLine.JVId = journalVoucherLine.JVId;
                     updatejournalVoucherLine.BranchId = journalVoucherLine.BranchId;
                     updatejournalVoucherLine.AccountId = journalVoucherLine.AccountId;
@@ -183,26 +181,22 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
-            catch(Exception e)
+            catch 
             {
-                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
 
-        // ===========================
-        // DELETE Journal Voucher Line
-        // ===========================
+        // delete journal voucher line
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteJournalVoucherLine/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteJournalVoucherLine(String id)
         {
             try
             {
-                var journalVoucherLineId = Convert.ToInt32(id);
-                var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.Id == journalVoucherLineId select d;
-
+                var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.Id == Convert.ToInt32(id) select d;
                 if (journalVoucherLines.Any())
                 {
                     db.TrnJournalVoucherLines.DeleteOnSubmit(journalVoucherLines.First());
@@ -214,7 +208,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

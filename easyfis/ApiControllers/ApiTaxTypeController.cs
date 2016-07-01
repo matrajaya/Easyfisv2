@@ -12,13 +12,13 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =============
-        // LIST Tax Type
-        // =============
+        // list tax type
+        [Authorize]
+        [HttpGet]
         [Route("api/listTaxType")]
-        public List<Models.MstTaxType> Get()
+        public List<Models.MstTaxType> listTaxType()
         {
-            var taxTypes = from d in db.MstTaxTypes
+            var taxTypes = from d in db.MstTaxTypes.OrderBy(d => d.TaxType)
                            select new Models.MstTaxType
                            {
                                Id = d.Id,
@@ -36,18 +36,18 @@ namespace easyfis.Controllers
                                UpdatedBy = d.MstUser1.FullName,
                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                            };
+
             return taxTypes.ToList();
         }
 
-        // ============
-        // GET Tax Type
-        // ============
+        // get tax type
+        [Authorize]
+        [HttpGet]
         [Route("api/taxType/{id}")]
-        public Models.MstTaxType GetTaxTypeById(String id)
+        public Models.MstTaxType getTaxTypeById(String id)
         {
-            var taxTypeId = Convert.ToInt32(id);
             var taxTypes = from d in db.MstTaxTypes
-                           where d.Id == taxTypeId
+                           where d.Id == Convert.ToInt32(id)
                            select new Models.MstTaxType
                            {
                                Id = d.Id,
@@ -65,33 +65,30 @@ namespace easyfis.Controllers
                                UpdatedBy = d.MstUser1.FullName,
                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                            };
+
             return (Models.MstTaxType)taxTypes.FirstOrDefault();
         }
 
-        // ============
-        // ADD Tax Type
-        // ============
+        // add tax type
+        [Authorize]
+        [HttpPost]
         [Route("api/addTaxType")]
-        public int Post(Models.MstTaxType taxType)
+        public Int32 insertTaxType(Models.MstTaxType taxType)
         {
             try
             {
-                //var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstTaxType newTaxType = new Data.MstTaxType();
-                
                 newTaxType.TaxType = taxType.TaxType;
                 newTaxType.TaxRate = taxType.TaxRate;
                 newTaxType.IsInclusive = taxType.IsInclusive;
                 newTaxType.AccountId = taxType.AccountId;
                 newTaxType.IsLocked = taxType.IsLocked;
-                newTaxType.CreatedById = mstUserId;
-                newTaxType.CreatedDateTime = date;
-                newTaxType.UpdatedById = mstUserId;
-                newTaxType.UpdatedDateTime = date;
+                newTaxType.CreatedById = userId;
+                newTaxType.CreatedDateTime = DateTime.Now;
+                newTaxType.UpdatedById = userId;
+                newTaxType.UpdatedDateTime = DateTime.Now;
 
                 db.MstTaxTypes.InsertOnSubmit(newTaxType);
                 db.SubmitChanges();
@@ -104,33 +101,27 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===============
-        // UPDATE Tax Type
-        // ===============
+        // update tax type
+        [Authorize]
+        [HttpPut]
         [Route("api/updateTaxType/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstTaxType taxType)
+        public HttpResponseMessage updateTaxType(String id, Models.MstTaxType taxType)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var taxType_Id = Convert.ToInt32(id);
-                var taxTypes = from d in db.MstTaxTypes where d.Id == taxType_Id select d;
-
+                var taxTypes = from d in db.MstTaxTypes where d.Id ==  Convert.ToInt32(id) select d;
                 if (taxTypes.Any())
                 {
                     var updateTaxType = taxTypes.FirstOrDefault();
-
                     updateTaxType.TaxType = taxType.TaxType;
                     updateTaxType.TaxRate = taxType.TaxRate;
                     updateTaxType.IsInclusive = taxType.IsInclusive;
                     updateTaxType.AccountId = taxType.AccountId;
                     updateTaxType.IsLocked = taxType.IsLocked;
-                    updateTaxType.UpdatedById = mstUserId;
-                    updateTaxType.UpdatedDateTime = date;
+                    updateTaxType.UpdatedById = userId;
+                    updateTaxType.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -147,17 +138,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===============
-        // DELETE Tax Type
-        // ===============
+        // delete tax type
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteTaxType/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteTaxType(String id)
         {
             try
             {
-                var taxType_Id = Convert.ToInt32(id);
-                var taxTypes = from d in db.MstTaxTypes where d.Id == taxType_Id select d;
-
+                var taxTypes = from d in db.MstTaxTypes where d.Id == Convert.ToInt32(id) select d;
                 if (taxTypes.Any())
                 {
                     db.MstTaxTypes.DeleteOnSubmit(taxTypes.First());
@@ -169,7 +158,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

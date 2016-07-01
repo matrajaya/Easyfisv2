@@ -12,13 +12,13 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =====================
-        // LIST Account Category
-        // =====================
+        // list account category
+        [Authorize]
+        [HttpGet]
         [Route("api/listAccountCategory")]
-        public List<Models.MstAccountCategory> Get()
+        public List<Models.MstAccountCategory> listAccountCategory()
         {
-            var accountCategories = from d in db.MstAccountCategories
+            var accountCategories = from d in db.MstAccountCategories.OrderBy(d => d.AccountCategory)
                                     select new Models.MstAccountCategory
                                         {
                                             Id = d.Id,
@@ -32,31 +32,28 @@ namespace easyfis.Controllers
                                             UpdatedBy = d.MstUser1.FullName,
                                             UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                         };
+
             return accountCategories.ToList();
         }
 
-        // ====================
-        // ADD Account Category
-        // ====================
+        // add account category
+        [Authorize]
+        [HttpPost]
         [Route("api/addAccountCategory")]
-        public int Post(Models.MstAccountCategory accountCategory)
+        public Int32 insertAccountCategory(Models.MstAccountCategory accountCategory)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstAccountCategory newAccountCategory = new Data.MstAccountCategory();
-
                 newAccountCategory.AccountCategoryCode = accountCategory.AccountCategoryCode;
                 newAccountCategory.AccountCategory = accountCategory.AccountCategory;
                 newAccountCategory.IsLocked = accountCategory.IsLocked;
-                newAccountCategory.CreatedById = mstUserId;
-                newAccountCategory.CreatedDateTime = date;
-                newAccountCategory.UpdatedById = mstUserId;
-                newAccountCategory.UpdatedDateTime = date;
+                newAccountCategory.CreatedById = userId;
+                newAccountCategory.CreatedDateTime = DateTime.Now;
+                newAccountCategory.UpdatedById = userId;
+                newAccountCategory.UpdatedDateTime = DateTime.Now;
 
                 db.MstAccountCategories.InsertOnSubmit(newAccountCategory);
                 db.SubmitChanges();
@@ -69,31 +66,25 @@ namespace easyfis.Controllers
             }
         }
 
-        // =======================
-        // UPDATE Account Category
-        // =======================
+        // update account category
+        [Authorize]
+        [HttpPut]
         [Route("api/updateAccountCategory/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstAccountCategory accountCategory)
+        public HttpResponseMessage updateAccountCategory(String id, Models.MstAccountCategory accountCategory)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var accountCategoryId = Convert.ToInt32(id);
-                var accountCategories = from d in db.MstAccountCategories where d.Id == accountCategoryId select d;
-
+                var accountCategories = from d in db.MstAccountCategories where d.Id == Convert.ToInt32(id) select d;
                 if (accountCategories.Any())
                 {
                     var updateAccountCategory = accountCategories.FirstOrDefault();
-
                     updateAccountCategory.AccountCategoryCode = accountCategory.AccountCategoryCode;
                     updateAccountCategory.AccountCategory = accountCategory.AccountCategory;
                     updateAccountCategory.IsLocked = accountCategory.IsLocked;
-                    updateAccountCategory.UpdatedById = mstUserId;
-                    updateAccountCategory.UpdatedDateTime = date;
+                    updateAccountCategory.UpdatedById = userId;
+                    updateAccountCategory.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -103,7 +94,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -111,17 +101,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // =======================
-        // DELETE Account Category
-        // =======================
+        // delete account category
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteAccountCategory/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteAccountCategory(String id)
         {
             try
             {
-                var accountCategoryId = Convert.ToInt32(id);
-                var accountCategories = from d in db.MstAccountCategories where d.Id == accountCategoryId select d;
-
+                var accountCategories = from d in db.MstAccountCategories where d.Id == Convert.ToInt32(id) select d;
                 if (accountCategories.Any())
                 {
                     db.MstAccountCategories.DeleteOnSubmit(accountCategories.First());
@@ -133,7 +121,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

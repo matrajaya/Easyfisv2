@@ -13,9 +13,10 @@ namespace easyfis.ApiControllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         // inventory report list
+        [Authorize]
         [HttpGet]
         [Route("api/inventoryReport/list/{startDate}/{endDate}/{companyId}")]
-        public List<Models.MstArticleInventory> inventoryReportList(String startDate, String endDate, String companyId)
+        public List<Models.MstArticleInventory> listInventoryReport(String startDate, String endDate, String companyId)
         {
             try
             {

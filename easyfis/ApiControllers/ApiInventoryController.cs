@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ==============
-        // LIST Inventory
-        // ==============
+        // list inventory
+        [Authorize]
+        [HttpGet]
         [Route("api/listInventory")]
-        public List<Models.TrnInventory> Get()
+        public List<Models.TrnInventory> listInventory()
         {
             var inventories = from d in db.TrnInventories
                         select new Models.TrnInventory
@@ -37,18 +37,18 @@ namespace easyfis.Controllers
                             Amount = d.Amount,
                             Particulars = d.Particulars
                         };
+
             return inventories.ToList();
         }
 
-        // ======================
-        // LIST Inventory by RRId
-        // ======================
+        // list inventory by RRId
+        [Authorize]
+        [HttpGet]
         [Route("api/listInventoryByRRId/{RRId}")]
-        public List<Models.TrnInventory> GetInventoryByRRId(String RRId)
+        public List<Models.TrnInventory> listInventoryByRRId(String RRId)
         {
-            var inventories_RRId = Convert.ToUInt32(RRId);
             var inventories = from d in db.TrnInventories
-                              where d.RRId == inventories_RRId
+                              where d.RRId == Convert.ToUInt32(RRId)
                               select new Models.TrnInventory
                               {
                                   Id = d.Id,
@@ -71,18 +71,18 @@ namespace easyfis.Controllers
                                   Code = d.MstArticleInventory.InventoryCode,
                                   Unit = d.MstArticle.MstUnit.Unit
                               };
+
             return inventories.ToList();
         }
 
-        // ======================
-        // LIST Inventory by SIId
-        // ======================
+        // list Inventory by SIId
+        [Authorize]
+        [HttpGet]
         [Route("api/listInventoryBySIId/{SIId}")]
-        public List<Models.TrnInventory> GetInventoryBySIId(String SIId)
+        public List<Models.TrnInventory> listInventoryBySIId(String SIId)
         {
-            var inventories_SIId = Convert.ToUInt32(SIId);
             var inventories = from d in db.TrnInventories
-                              where d.SIId == inventories_SIId
+                              where d.SIId == Convert.ToUInt32(SIId)
                               select new Models.TrnInventory
                               {
                                   Id = d.Id,
@@ -105,18 +105,18 @@ namespace easyfis.Controllers
                                   Code = d.MstArticleInventory.InventoryCode,
                                   Unit = d.MstArticle.MstUnit.Unit
                               };
+
             return inventories.ToList();
         }
 
-        // ======================
-        // LIST Inventory by INId
-        // ======================
+        // list Inventory by INId
+        [Authorize]
+        [HttpGet]
         [Route("api/listInventoryByINId/{INId}")]
-        public List<Models.TrnInventory> GetInventoryByINId(String INId)
+        public List<Models.TrnInventory> listInventoryByINId(String INId)
         {
-            var inventories_INId = Convert.ToUInt32(INId);
             var inventories = from d in db.TrnInventories
-                              where d.INId == inventories_INId
+                              where d.INId == Convert.ToUInt32(INId)
                               select new Models.TrnInventory
                               {
                                   Id = d.Id,
@@ -139,18 +139,18 @@ namespace easyfis.Controllers
                                   Code = d.MstArticleInventory.InventoryCode,
                                   Unit = d.MstArticle.MstUnit.Unit
                               };
+
             return inventories.ToList();
         }
 
-        // ======================
-        // LIST Inventory by OTId
-        // ======================
+        // list Inventory by OTId
+        [Authorize]
+        [HttpGet]
         [Route("api/listInventoryByOTId/{OTId}")]
-        public List<Models.TrnInventory> GetInventoryByOTId(String OTId)
+        public List<Models.TrnInventory> listInventoryByOTId(String OTId)
         {
-            var inventories_OTId = Convert.ToUInt32(OTId);
             var inventories = from d in db.TrnInventories
-                              where d.OTId == inventories_OTId
+                              where d.OTId == Convert.ToUInt32(OTId)
                               select new Models.TrnInventory
                               {
                                   Id = d.Id,
@@ -173,18 +173,18 @@ namespace easyfis.Controllers
                                   Code = d.MstArticleInventory.InventoryCode,
                                   Unit = d.MstArticle.MstUnit.Unit
                               };
+
             return inventories.ToList();
         }
 
-        // ======================
-        // LIST Inventory by STId
-        // ======================
+        // list Inventory by STId
+        [Authorize]
+        [HttpGet]
         [Route("api/listInventoryBySTId/{STId}")]
-        public List<Models.TrnInventory> GetInventoryBySTId(String STId)
+        public List<Models.TrnInventory> listInventoryBySTId(String STId)
         {
-            var inventories_STId = Convert.ToUInt32(STId);
             var inventories = from d in db.TrnInventories
-                              where d.STId == inventories_STId
+                              where d.STId == Convert.ToUInt32(STId)
                               select new Models.TrnInventory
                               {
                                   Id = d.Id,
@@ -207,8 +207,8 @@ namespace easyfis.Controllers
                                   Code = d.MstArticleInventory.InventoryCode,
                                   Unit = d.MstArticle.MstUnit.Unit
                               };
+
             return inventories.ToList();
         }
-
     }
 }

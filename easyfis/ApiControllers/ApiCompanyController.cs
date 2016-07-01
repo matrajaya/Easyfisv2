@@ -14,17 +14,14 @@ namespace easyfis.Controllers
 
         public Int32 getUserDefaultCompanyId()
         {
-            var identityUserId = User.Identity.GetUserId();
-            var users = from d in db.MstUsers where d.UserId == identityUserId select d;
-
-            return users.FirstOrDefault().CompanyId;
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d).FirstOrDefault().CompanyId;
         }
 
-        // ============
-        // LIST Company
-        // ============
+        // list company
+        [Authorize]
+        [HttpGet]
         [Route("api/company/list")]
-        public List<Models.MstCompany> Get()
+        public List<Models.MstCompany> listCompany()
         {
             var companies = from d in db.MstCompanies
                             select new Models.MstCompany
@@ -42,15 +39,15 @@ namespace easyfis.Controllers
                                 UpdatedBy = d.MstUser1.FullName,
                                 UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                             };
+
             return companies.ToList();
         }
 
-
-        // ============
-        // LIST Company
-        // ============
+        // list company by default CompanyId
+        [Authorize]
+        [HttpGet]
         [Route("api/listCompany")]
-        public List<Models.MstCompany> GetList()
+        public List<Models.MstCompany> listCompanyByDefaultComapanyId()
         {
             var companies = from d in db.MstCompanies
                             where d.Id == getUserDefaultCompanyId()
@@ -69,18 +66,18 @@ namespace easyfis.Controllers
                                     UpdatedBy = d.MstUser1.FullName,
                                     UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                 };
+
             return companies.ToList();
         }
 
-        // ==================
-        // LIST Company by Id
-        // ==================
+        // get company
+        [Authorize]
+        [HttpGet]
         [Route("api/company/{id}")]
-        public Models.MstCompany GetCompany(String id)
+        public Models.MstCompany getCompany(String id)
         {
-            var companyId = Convert.ToInt32(id);
             var company = from d in db.MstCompanies
-                          where d.Id == companyId
+                          where d.Id == Convert.ToInt32(id)
                           select new Models.MstCompany
                               {
                                   Id = d.Id,
@@ -100,62 +97,31 @@ namespace easyfis.Controllers
             return (Models.MstCompany)company.FirstOrDefault();
         }
 
-        // ===================
-        // GET Company last Id
-        // ===================
-        [Route("api/companyLastId")]
-        public Models.MstCompany GetCompanyLastId()
-        {
-            var company = from d in db.MstCompanies.OrderByDescending(d => d.Id)
-                          select new Models.MstCompany
-                          {
-                              Id = d.Id,
-                              Company = d.Company,
-                              Address = d.Address,
-                              ContactNumber = d.ContactNumber,
-                              TaxNumber = d.TaxNumber,
-                              IsLocked = d.IsLocked,
-                              CreatedById = d.CreatedById,
-                              CreatedBy = d.MstUser.FullName,
-                              CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                              UpdatedById = d.UpdatedById,
-                              UpdatedBy = d.MstUser1.FullName,
-                              UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                          };
-
-            return (Models.MstCompany)company.FirstOrDefault();
-        }
-
-        // ===========
-        // ADD Company
-        // ===========
+        // add company
+        [Authorize]
+        [HttpPost]
         [Route("api/addCompany")]
-        public int Post(Models.MstCompany company)
+        public Int32 insertCompany(Models.MstCompany company)
         {
             try
             {
-                var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstCompany newCompany = new Data.MstCompany();
-
                 newCompany.Company = company.Company;
                 newCompany.Address = company.Address;
                 newCompany.ContactNumber = company.ContactNumber;
                 newCompany.TaxNumber = company.TaxNumber;
-                newCompany.IsLocked = isLocked;
-                newCompany.CreatedById = mstUserId;
-                newCompany.CreatedDateTime = date;
-                newCompany.UpdatedById = mstUserId;
-                newCompany.UpdatedDateTime = date;
+                newCompany.IsLocked = false;
+                newCompany.CreatedById = userId;
+                newCompany.CreatedDateTime = DateTime.Now;
+                newCompany.UpdatedById = userId;
+                newCompany.UpdatedDateTime = DateTime.Now;
 
                 db.MstCompanies.InsertOnSubmit(newCompany);
                 db.SubmitChanges();
 
                 return newCompany.Id;
-
             }
             catch
             {
@@ -163,34 +129,27 @@ namespace easyfis.Controllers
             }
         }
 
-        // ==============
-        // UPDATE Company
-        // ==============
+        // update company
+        [Authorize]
+        [HttpPut]
         [Route("api/updateCompany/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstCompany company)
+        public HttpResponseMessage updateCompany(String id, Models.MstCompany company)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var companyId = Convert.ToInt32(id);
-                var companies = from d in db.MstCompanies where d.Id == companyId select d;
-
+                var companies = from d in db.MstCompanies where d.Id == Convert.ToInt32(id) select d;
                 if (companies.Any())
                 {
                     var updateCompany = companies.FirstOrDefault();
-
                     updateCompany.Company = company.Company;
                     updateCompany.Address = company.Address;
                     updateCompany.ContactNumber = company.ContactNumber;
                     updateCompany.TaxNumber = company.TaxNumber;
-
-                    updateCompany.IsLocked = company.IsLocked;
-                    updateCompany.UpdatedById = mstUserId;
-                    updateCompany.UpdatedDateTime = date;
+                    updateCompany.IsLocked = true;
+                    updateCompany.UpdatedById = userId;
+                    updateCompany.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -200,7 +159,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -208,29 +166,24 @@ namespace easyfis.Controllers
             }
         }
 
-        // =======================
-        // UPDATE Company IsLocked
-        // =======================
+        // unlock company
+        [Authorize]
+        [HttpPut]
         [Route("api/updateCompanyIsLock/{id}")]
-        public HttpResponseMessage PutIslock(String id, Models.MstCompany company)
+        public HttpResponseMessage unlockCompany(String id, Models.MstCompany company)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var companyId = Convert.ToInt32(id);
-                var companies = from d in db.MstCompanies where d.Id == companyId select d;
-
+                var companies = from d in db.MstCompanies where d.Id == Convert.ToInt32(id) select d;
                 if (companies.Any())
                 {
                     var updateCompany = companies.FirstOrDefault();
 
-                    updateCompany.IsLocked = company.IsLocked;
-                    updateCompany.UpdatedById = mstUserId;
-                    updateCompany.UpdatedDateTime = date;
+                    updateCompany.IsLocked = false;
+                    updateCompany.UpdatedById = userId;
+                    updateCompany.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -240,7 +193,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -248,17 +200,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ==============
-        // DELETE Company
-        // ==============
+        // delete company
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteCompany/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteCompany(String id)
         {
             try
             {
-                var companyId = Convert.ToInt32(id);
-                var companies = from d in db.MstCompanies where d.Id == companyId select d;
-
+                var companies = from d in db.MstCompanies where d.Id == Convert.ToInt32(id) select d;
                 if (companies.Any())
                 {
                     db.MstCompanies.DeleteOnSubmit(companies.First());
@@ -270,7 +220,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

@@ -11,23 +11,23 @@ namespace easyfis.Controllers
     public class ApiStockOutController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
         private Business.Inventory inventory = new Business.Inventory();
         private Business.PostJournal journal = new Business.PostJournal();
 
         // current branch Id
         public Int32 currentBranchId()
         {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
-        // ==============
-        // LIST Stock Out
-        // ==============
+        // list stock out
+        [Authorize]
+        [HttpGet]
         [Route("api/listStockOut")]
-        public List<Models.TrnStockOut> Get()
+        public List<Models.TrnStockOut> listStockOut()
         {
-            var stockOuts = from d in db.TrnStockOuts
+            var stockOuts = from d in db.TrnStockOuts.OrderByDescending(d => d.Id)
                             where d.BranchId == currentBranchId()
                             select new Models.TrnStockOut
                             {
@@ -56,18 +56,18 @@ namespace easyfis.Controllers
                                 UpdatedBy = d.MstUser4.FullName,
                                 UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                             };
+
             return stockOuts.ToList();
         }
 
-        // ==============================
-        // GET Stock Out Filter by OTDate
-        // ==============================
+        // list stock out by OTDate
+        [Authorize]
+        [HttpGet]
         [Route("api/listStockOutFilterByOTDate/{OTDate}")]
-        public List<Models.TrnStockOut> GetStockOutFilterByOTDate(String OTDate)
+        public List<Models.TrnStockOut> listStockOutByOTDate(String OTDate)
         {
-            var stockOut_OTDate = Convert.ToDateTime(OTDate);
-            var stockOuts = from d in db.TrnStockOuts
-                            where d.OTDate == stockOut_OTDate
+            var stockOuts = from d in db.TrnStockOuts.OrderByDescending(d => d.Id)
+                            where d.OTDate == Convert.ToDateTime(OTDate)
                             && d.BranchId == currentBranchId()
                             select new Models.TrnStockOut
                             {
@@ -96,18 +96,18 @@ namespace easyfis.Controllers
                                 UpdatedBy = d.MstUser4.FullName,
                                 UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                             };
+
             return stockOuts.ToList();
         }
 
-        // ===================
-        // GET Stock Out by Id
-        // ===================
+        // get stock out by Id
+        [Authorize]
+        [HttpGet]
         [Route("api/stockOut/{id}")]
-        public Models.TrnStockOut GetStockOutById(String id)
+        public Models.TrnStockOut getStockOutById(String id)
         {
-            var stockOut_Id = Convert.ToInt32(id);
             var stockOuts = from d in db.TrnStockOuts
-                            where d.Id == stockOut_Id
+                            where d.Id == Convert.ToInt32(id)
                             select new Models.TrnStockOut
                             {
                                 Id = d.Id,
@@ -135,14 +135,15 @@ namespace easyfis.Controllers
                                 UpdatedBy = d.MstUser4.FullName,
                                 UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                             };
+
             return (Models.TrnStockOut)stockOuts.FirstOrDefault();
         }
 
-        // ==============================
-        // GET last OTNumber in Stock Out
-        // ==============================
+        // get stock out last OTNumber
+        [Authorize]
+        [HttpGet]
         [Route("api/stockOutLastOTNumber")]
-        public Models.TrnStockOut GetStockOutLastOTNumber()
+        public Models.TrnStockOut getStockOutLastOTNumber()
         {
             var stockOuts = from d in db.TrnStockOuts.OrderByDescending(d => d.OTNumber)
                             select new Models.TrnStockOut
@@ -172,61 +173,21 @@ namespace easyfis.Controllers
                                 UpdatedBy = d.MstUser4.FullName,
                                 UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                             };
+
             return (Models.TrnStockOut)stockOuts.FirstOrDefault();
         }
 
-        // ========================
-        // GET last Id in Stock Out
-        // ========================
-        [Route("api/stockOutLastId")]
-        public Models.TrnStockOut GetStockOutLastId()
-        {
-            var stockOuts = from d in db.TrnStockOuts.OrderByDescending(d => d.Id)
-                            select new Models.TrnStockOut
-                            {
-                                Id = d.Id,
-                                BranchId = d.BranchId,
-                                Branch = d.MstBranch.Branch,
-                                OTNumber = d.OTNumber,
-                                OTDate = d.OTDate.ToShortDateString(),
-                                AccountId = d.AccountId,
-                                Account = d.MstAccount.Account,
-                                ArticleId = d.ArticleId,
-                                Article = d.MstArticle.Article,
-                                Particulars = d.Particulars,
-                                ManualOTNumber = d.ManualOTNumber,
-                                PreparedById = d.PreparedById,
-                                PreparedBy = d.MstUser3.FullName,
-                                CheckedById = d.CheckedById,
-                                CheckedBy = d.MstUser1.FullName,
-                                ApprovedById = d.ApprovedById,
-                                ApprovedBy = d.MstUser.FullName,
-                                IsLocked = d.IsLocked,
-                                CreatedById = d.CreatedById,
-                                CreatedBy = d.MstUser2.FullName,
-                                CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                UpdatedById = d.UpdatedById,
-                                UpdatedBy = d.MstUser4.FullName,
-                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                            };
-            return (Models.TrnStockOut)stockOuts.FirstOrDefault();
-        }
-
-        // =============
-        // ADD Stock out
-        // =============
+        // add stock out
+        [Authorize]
+        [HttpPost]
         [Route("api/addStockOut")]
-        public int Post(Models.TrnStockOut stockOut)
+        public Int32 insertStockOut(Models.TrnStockOut stockOut)
         {
             try
             {
-                var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.TrnStockOut newStockOut = new Data.TrnStockOut();
-
                 newStockOut.BranchId = stockOut.BranchId;
                 newStockOut.OTNumber = stockOut.OTNumber;
                 newStockOut.OTDate = Convert.ToDateTime(stockOut.OTDate);
@@ -237,17 +198,16 @@ namespace easyfis.Controllers
                 newStockOut.PreparedById = stockOut.PreparedById;
                 newStockOut.CheckedById = stockOut.CheckedById;
                 newStockOut.ApprovedById = stockOut.ApprovedById;
-                newStockOut.IsLocked = isLocked;
-                newStockOut.CreatedById = mstUserId;
-                newStockOut.CreatedDateTime = date;
-                newStockOut.UpdatedById = mstUserId;
-                newStockOut.UpdatedDateTime = date;
+                newStockOut.IsLocked = false;
+                newStockOut.CreatedById = userId;
+                newStockOut.CreatedDateTime = DateTime.Now;
+                newStockOut.UpdatedById = userId;
+                newStockOut.UpdatedDateTime = DateTime.Now;
 
                 db.TrnStockOuts.InsertOnSubmit(newStockOut);
                 db.SubmitChanges();
 
                 return newStockOut.Id;
-
             }
             catch
             {
@@ -255,26 +215,20 @@ namespace easyfis.Controllers
             }
         }
 
-        // ================
-        // UPDATE Stock Out
-        // ================
+        // update stock out
+        [Authorize]
+        [HttpPut]
         [Route("api/updateStockOut/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnStockOut stockOut)
+        public HttpResponseMessage updateStockOut(String id, Models.TrnStockOut stockOut)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var stockOut_Id = Convert.ToInt32(id);
-                var stockOuts = from d in db.TrnStockOuts where d.Id == stockOut_Id select d;
-
+                var stockOuts = from d in db.TrnStockOuts where d.Id == Convert.ToInt32(id) select d;
                 if (stockOuts.Any())
                 {
                     var updateStockOut = stockOuts.FirstOrDefault();
-
                     updateStockOut.BranchId = stockOut.BranchId;
                     updateStockOut.OTNumber = stockOut.OTNumber;
                     updateStockOut.OTDate = Convert.ToDateTime(stockOut.OTDate);
@@ -285,22 +239,14 @@ namespace easyfis.Controllers
                     updateStockOut.PreparedById = stockOut.PreparedById;
                     updateStockOut.CheckedById = stockOut.CheckedById;
                     updateStockOut.ApprovedById = stockOut.ApprovedById;
-                    updateStockOut.IsLocked = stockOut.IsLocked;
-                    updateStockOut.UpdatedById = mstUserId;
-                    updateStockOut.UpdatedDateTime = date;
+                    updateStockOut.IsLocked = true;
+                    updateStockOut.UpdatedById = userId;
+                    updateStockOut.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
-                    if (updateStockOut.IsLocked == true)
-                    {
-                        inventory.InsertOTInventory(stockOut_Id);
-                        journal.insertOTJournal(stockOut_Id);
-                    }
-                    else
-                    {
-                        inventory.deleteOTInventory(stockOut_Id);
-                        journal.deleteOTJournal(stockOut_Id);
-                    }
+                    inventory.InsertOTInventory(Convert.ToInt32(id));
+                    journal.insertOTJournal(Convert.ToInt32(id));
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -308,7 +254,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -316,42 +261,29 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===========================
-        // UPDATE Stock Out - IsLocked
-        // ===========================
+        // unlock stock out
+        [Authorize]
+        [HttpPut]
         [Route("api/updateStockOutIsLocked/{id}")]
-        public HttpResponseMessage PutUpdateStockOutIsLocked(String id, Models.TrnStockOut stockOut)
+        public HttpResponseMessage unlockStockOut(String id, Models.TrnStockOut stockOut)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var stockOut_Id = Convert.ToInt32(id);
-                var stockOuts = from d in db.TrnStockOuts where d.Id == stockOut_Id select d;
-
+                var stockOuts = from d in db.TrnStockOuts where d.Id == Convert.ToInt32(id) select d;
                 if (stockOuts.Any())
                 {
                     var updateStockOut = stockOuts.FirstOrDefault();
 
-                    updateStockOut.IsLocked = stockOut.IsLocked;
-                    updateStockOut.UpdatedById = mstUserId;
-                    updateStockOut.UpdatedDateTime = date;
+                    updateStockOut.IsLocked = false;
+                    updateStockOut.UpdatedById = userId;
+                    updateStockOut.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
-                    if (updateStockOut.IsLocked == true)
-                    {
-                        inventory.InsertOTInventory(stockOut_Id);
-                        journal.insertOTJournal(stockOut_Id);
-                    }
-                    else
-                    {
-                        inventory.deleteOTInventory(stockOut_Id);
-                        journal.deleteOTJournal(stockOut_Id);
-                    }
+                    inventory.deleteOTInventory(Convert.ToInt32(id));
+                    journal.deleteOTJournal(Convert.ToInt32(id));
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -359,7 +291,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -367,17 +298,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ================
-        // DELETE Stock Out
-        // ================
+        // delete stock out
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteStockOut/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteStockOut(String id)
         {
             try
             {
-                var stockOut_Id = Convert.ToInt32(id);
-                var stockOuts = from d in db.TrnStockOuts where d.Id == stockOut_Id select d;
-
+                var stockOuts = from d in db.TrnStockOuts where d.Id == Convert.ToInt32(id) select d;
                 if (stockOuts.Any())
                 {
                     db.TrnStockOuts.DeleteOnSubmit(stockOuts.First());
@@ -389,7 +318,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

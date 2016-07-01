@@ -94,7 +94,7 @@ namespace easyfis.Controllers
             return collectionLines.ToList();
         }
 
-        // list collection line by depositoryBankId and by ORDate for bank recon
+        // list collection line by depositoryBankId and by ORDate for bank reconciliation
         [Authorize]
         [HttpGet]
         [Route("api/listCollectionLineByDepositoryBankIdByORDate/{depositoryBankId}/{dateStart}/{dateEnd}")]

@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =================
-        // LIST Article Type
-        // =================
+        // list article type
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleType")]
-        public List<Models.MstArticleType> Get()
+        public List<Models.MstArticleType> listArticleType()
         {
             var articleTypes = from d in db.MstArticleTypes
                                select new Models.MstArticleType
@@ -30,6 +30,7 @@ namespace easyfis.Controllers
                                    UpdatedBy = d.MstUser1.FullName,
                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                };
+
             return articleTypes.ToList();
         }
     }

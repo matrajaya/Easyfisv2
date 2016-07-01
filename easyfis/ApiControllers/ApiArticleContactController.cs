@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ====================
-        // LIST Article Contact
-        // ====================
+        // list article contact
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleContact")]
-        public List<Models.MstArticleContact> Get()
+        public List<Models.MstArticleContact> listArticleContact()
         {
             var articleContacts = from d in db.MstArticleContacts
                                   select new Models.MstArticleContact
@@ -27,18 +27,18 @@ namespace easyfis.Controllers
                                       ContactNumber = d.ContactNumber,
                                       Remarks = d.Remarks
                                   };
+
             return articleContacts.ToList();
         }
 
-        // ===================================
-        // LIST Article Contact By Ariticle Id
-        // ===================================
+        // list article contact By AriticleId
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleContactByArticleId/{articleId}")]
-        public List<Models.MstArticleContact> Get(String articleId)
+        public List<Models.MstArticleContact> listArticleContactByArticleId(String articleId)
         {
-            var articleContact_articleId = Convert.ToInt32(articleId);
             var articleContacts = from d in db.MstArticleContacts
-                                  where d.ArticleId == articleContact_articleId
+                                  where d.ArticleId == Convert.ToInt32(articleId)
                                   select new Models.MstArticleContact
                                   {
                                       Id = d.Id,
@@ -48,22 +48,20 @@ namespace easyfis.Controllers
                                       ContactNumber = d.ContactNumber,
                                       Remarks = d.Remarks
                                   };
+
             return articleContacts.ToList();
         }
 
-        // =================================
-        // ADD Article Contact by Article Id
-        // =================================
+        // add article contact by ArticleId
+        [Authorize]
+        [HttpPost]
         [Route("api/addArticleContact/{articleId}")]
-        public int Post(Models.MstArticleContact contact, String articleId)
+        public Int32 insertArticleContact(Models.MstArticleContact contact, String articleId)
         {
             try
             {
-                var contact_articleId = Convert.ToInt32(articleId);
-
                 Data.MstArticleContact newContact = new Data.MstArticleContact();
-
-                newContact.ArticleId = contact_articleId;
+                newContact.ArticleId = Convert.ToInt32(articleId);
                 newContact.ContactPerson = contact.ContactPerson;
                 newContact.ContactNumber = contact.ContactNumber;
                 newContact.Remarks = contact.Remarks;
@@ -79,21 +77,18 @@ namespace easyfis.Controllers
             }
         }
 
-        // ======================
-        // UPDATE Article Contact
-        // ======================
+        // update Article Contact
+        [Authorize]
+        [HttpPut]
         [Route("api/updateArticleContact/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstArticleContact contact)
+        public HttpResponseMessage updateArticleContact(String id, Models.MstArticleContact contact)
         {
             try
             {
-                var contactId = Convert.ToInt32(id);
-                var contacts = from d in db.MstArticleContacts where d.Id == contactId select d;
-
+                var contacts = from d in db.MstArticleContacts where d.Id == Convert.ToInt32(id) select d;
                 if (contacts.Any())
                 {
                     var updateArticleContact = contacts.FirstOrDefault();
-
                     updateArticleContact.ContactPerson = contact.ContactPerson;
                     updateArticleContact.ContactNumber = contact.ContactNumber;
                     updateArticleContact.Remarks = contact.Remarks;
@@ -113,17 +108,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ======================
-        // DELETE Article Contact
-        // ======================
+        // delete article contact
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteArticleContact/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteArticleContact(String id)
         {
             try
             {
-                var contactId = Convert.ToInt32(id);
-                var contacts = from d in db.MstArticleContacts where d.Id == contactId select d;
-
+                var contacts = from d in db.MstArticleContacts where d.Id == Convert.ToInt32(id) select d;
                 if (contacts.Any())
                 {
                     db.MstArticleContacts.DeleteOnSubmit(contacts.First());
@@ -135,13 +128,11 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
-
     }
 }

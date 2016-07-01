@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ================
-        // LIST Audit Trail
-        // ================
+        // list audit trail
+        [Authorize]
+        [HttpGet]
         [Route("api/listAuditTrail")]
-        public List<Models.SysAuditTrail> Get()
+        public List<Models.SysAuditTrail> listAuditTrail()
         {
             var auditTrails = from d in db.SysAuditTrails
                               select new Models.SysAuditTrail
@@ -29,6 +29,7 @@ namespace easyfis.Controllers
                                   FormInformation = d.FormInformation,
                                   ActionInformation = d.ActionInformation
                               };
+
             return auditTrails.ToList();
         }
     }

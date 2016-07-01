@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ==============
-        // LIST User Form
-        // ==============
+        // list user form
+        [Authorize]
+        [HttpGet]
         [Route("api/listUserForm")]
-        public List<Models.MstUserForm> Get()
+        public List<Models.MstUserForm> listUserForm()
         {
             var userForms = from d in db.MstUserForms
                             select new Models.MstUserForm
@@ -33,14 +33,15 @@ namespace easyfis.Controllers
                                 CanUnlock = d.CanUnlock,
                                 CanPrint = d.CanPrint
                             };
+
             return userForms.ToList();
         }
 
-        // =========================
-        // LIST User Form by User Id
-        // =========================
+        // list user form by UserId
+        [Authorize]
+        [HttpGet]
         [Route("api/listUserFormByUserId/{UserId}")]
-        public List<Models.MstUserForm> GetUserFormByUserId(String UserId)
+        public List<Models.MstUserForm> listUserFormByUserId(String UserId)
         {
             var userForms = from d in db.MstUserForms
                             where d.UserId == Convert.ToInt32(UserId)
@@ -59,19 +60,19 @@ namespace easyfis.Controllers
                                 CanUnlock = d.CanUnlock,
                                 CanPrint = d.CanPrint
                             };
+
             return userForms.ToList();
         }
         
-        // =============
-        // Add user form
-        // =============
+        // add user form
+        [Authorize]
+        [HttpPost]
         [Route("api/addUserForm")]
-        public int Post(Models.MstUserForm userForm)
+        public Int32 insertUserForm(Models.MstUserForm userForm)
         {
             try
             {
                 Data.MstUserForm newUserForm = new Data.MstUserForm();
-
                 newUserForm.UserId = userForm.UserId;
                 newUserForm.FormId = userForm.FormId;
                 newUserForm.CanAdd = userForm.CanAdd;
@@ -92,11 +93,11 @@ namespace easyfis.Controllers
             }
         }
 
-        // ================
-        // Update user form
-        // ================
+        // update user form
+        [Authorize]
+        [HttpPut]
         [Route("api/updateUserForm/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstUserForm userForm)
+        public HttpResponseMessage updateUserForm(String id, Models.MstUserForm userForm)
         {
             try
             {
@@ -104,7 +105,6 @@ namespace easyfis.Controllers
                 if (userForms.Any())
                 {
                     var updateUserForm = userForms.FirstOrDefault();
-
                     updateUserForm.UserId = userForm.UserId;
                     updateUserForm.FormId = userForm.FormId;
                     updateUserForm.CanAdd = userForm.CanAdd;
@@ -129,11 +129,11 @@ namespace easyfis.Controllers
             }
         }
 
-        // ================
-        // Delete user form
-        // ================
+        // delete user form
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteUserForm/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteUserForm(String id)
         {
             try
             {

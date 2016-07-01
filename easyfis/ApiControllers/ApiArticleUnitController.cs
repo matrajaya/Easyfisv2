@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =================
-        // LIST Article Unit
-        // =================
+        // list article unit
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleUnit")]
-        public List<Models.MstArticleUnit> Get()
+        public List<Models.MstArticleUnit> listArticleUnit()
         {
             var articleUnits = from d in db.MstArticleUnits
                                select new Models.MstArticleUnit
@@ -28,18 +28,18 @@ namespace easyfis.Controllers
                                    Multiplier = d.Multiplier,
                                    IsCountUnit = d.IsCountUnit
                                };
+
             return articleUnits.ToList();
         }
 
-        // ===============================
-        // LIST Article Unit By Article Id
-        // ===============================
+        // list article unit by ArticleId
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleUnitByArticleId/{articleId}")]
-        public List<Models.MstArticleUnit> GetArticleUnitByArticleTypeId(String articleId)
+        public List<Models.MstArticleUnit> listArticleUnitByArticleId(String articleId)
         {
-            var articleUnits_articleId = Convert.ToInt32(articleId);
             var articleUnits = from d in db.MstArticleUnits
-                               where d.ArticleId == articleUnits_articleId
+                               where d.ArticleId == Convert.ToInt32(articleId)
                                select new Models.MstArticleUnit
                                {
                                    Id = d.Id,
@@ -50,18 +50,18 @@ namespace easyfis.Controllers
                                    Multiplier = d.Multiplier,
                                    IsCountUnit = d.IsCountUnit
                                };
+
             return articleUnits.ToList();
         }
 
-        // ================
-        // GET Article Unit
-        // ================
+        // get article unit
+        [Authorize]
+        [HttpGet]
         [Route("api/articleUnit/{id}")]
-        public Models.MstArticleUnit GetArticleUnit(String id)
+        public Models.MstArticleUnit getArticleUnit(String id)
         {
-            var articleUnitId = Convert.ToInt32(id);
             var articleUnits = from d in db.MstArticleUnits
-                               where d.Id == articleUnitId
+                               where d.Id == Convert.ToInt32(id)
                                select new Models.MstArticleUnit
                                {
                                    Id = d.Id,
@@ -72,19 +72,19 @@ namespace easyfis.Controllers
                                    Multiplier = d.Multiplier,
                                    IsCountUnit = d.IsCountUnit
                                };
+
             return (Models.MstArticleUnit)articleUnits.FirstOrDefault();
         }
 
-        // ==========================================
-        // Get Article Unit By Article Id and Unit Id
-        // ==========================================
+        // get article unit by ArticleId and UnitId
+        [Authorize]
+        [HttpGet]
         [Route("api/articleUnit/{articleId}/{unitId}")]
-        public Models.MstArticleUnit GetArticleUnitByArticleId(String articleId, String unitId)
+        public Models.MstArticleUnit getArticleUnitByArticleIdByUnitId(String articleId, String unitId)
         {
-            var articleUnit_articleId = Convert.ToInt32(articleId);
-            var articleUnit_unitId = Convert.ToInt32(unitId);
             var articleUnits = from d in db.MstArticleUnits
-                               where d.ArticleId == articleUnit_articleId && d.UnitId == articleUnit_unitId
+                               where d.ArticleId == Convert.ToInt32(articleId)
+                               && d.UnitId == Convert.ToInt32(unitId)
                                select new Models.MstArticleUnit
                                {
                                    Id = d.Id,
@@ -95,20 +95,19 @@ namespace easyfis.Controllers
                                    Multiplier = d.Multiplier,
                                    IsCountUnit = d.IsCountUnit
                                };
+
             return (Models.MstArticleUnit)articleUnits.FirstOrDefault();
         }
 
-
-        // ================
-        // ADD Article Unit
-        // ================
+        // add article unit
+        [Authorize]
+        [HttpPost]
         [Route("api/addArticleUnit")]
-        public int Post(Models.MstArticleUnit unit)
+        public Int32 insertArticleUnit(Models.MstArticleUnit unit)
         {
             try
             {
                 Data.MstArticleUnit newUnit = new Data.MstArticleUnit();
-
                 newUnit.ArticleId = unit.ArticleId;
                 newUnit.UnitId = unit.UnitId;
                 newUnit.Multiplier = unit.Multiplier;
@@ -125,21 +124,18 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===================
-        // UPDATE Article Unit
-        // ===================
+        // update article unit
+        [Authorize]
+        [HttpPut]
         [Route("api/updateArticleUnit/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstArticleUnit unit)
+        public HttpResponseMessage updateArticleUnit(String id, Models.MstArticleUnit unit)
         {
             try
             {
-                var unitId = Convert.ToInt32(id);
-                var units = from d in db.MstArticleUnits where d.Id == unitId select d;
-
+                var units = from d in db.MstArticleUnits where d.Id == Convert.ToInt32(id) select d;
                 if (units.Any())
                 {
                     var updateUnit = units.FirstOrDefault();
-
                     updateUnit.ArticleId = unit.ArticleId;
                     updateUnit.UnitId = unit.UnitId;
                     updateUnit.Multiplier = unit.Multiplier;
@@ -160,17 +156,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===================
-        // DELETE Article Unit
-        // ===================
+        // delete article unit
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteArticleUnit/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteArticleUnit(String id)
         {
             try
             {
-                var unitId = Convert.ToInt32(id);
-                var units = from d in db.MstArticleUnits where d.Id == unitId select d;
-
+                var units = from d in db.MstArticleUnits where d.Id == Convert.ToInt32(id) select d;
                 if (units.Any())
                 {
                     db.MstArticleUnits.DeleteOnSubmit(units.First());
@@ -182,7 +176,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

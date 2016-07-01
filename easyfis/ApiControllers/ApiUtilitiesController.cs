@@ -12,6 +12,8 @@ namespace easyfis.ApiControllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         // DELETE All Transactions
+        [Authorize]
+        [HttpDelete]
         [Route("api/utilities/deleteAllTransactions")]
         public HttpResponseMessage deleteAllInventories()
         {

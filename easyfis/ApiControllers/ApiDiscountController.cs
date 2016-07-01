@@ -12,13 +12,13 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =============
-        // LIST Discount
-        // =============
+        // list discount
+        [Authorize]
+        [HttpGet]
         [Route("api/listDiscount")]
-        public List<Models.MstDiscount> Get()
+        public List<Models.MstDiscount> listDiscount()
         {
-            var discounts = from d in db.MstDiscounts
+            var discounts = from d in db.MstDiscounts.OrderBy(d => d.Discount)
                             select new Models.MstDiscount
                             {
                                 Id = d.Id,
@@ -36,34 +36,30 @@ namespace easyfis.Controllers
                                 UpdatedBy = d.MstUser1.FullName,
                                 UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                             };
+
             return discounts.ToList();
         }
 
-        // ============
-        // ADD Discount
-        // ============
+        // add discount
+        [Authorize]
+        [HttpPost]
         [Route("api/addDiscount")]
-        public int Post(Models.MstDiscount discount)
+        public Int32 insertDiscount(Models.MstDiscount discount)
         {
             try
             {
-                //var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstDiscount newDiscount = new Data.MstDiscount();
-
                 newDiscount.Discount = discount.Discount;
                 newDiscount.DiscountRate = discount.DiscountRate;
                 newDiscount.IsInclusive = discount.IsInclusive;
                 newDiscount.AccountId = discount.AccountId;
                 newDiscount.IsLocked = discount.IsLocked;
-                newDiscount.CreatedById = mstUserId;
-                newDiscount.CreatedDateTime = date;
-                newDiscount.UpdatedById = mstUserId;
-                newDiscount.UpdatedDateTime = date;
-
+                newDiscount.CreatedById = userId;
+                newDiscount.CreatedDateTime = DateTime.Now;
+                newDiscount.UpdatedById = userId;
+                newDiscount.UpdatedDateTime = DateTime.Now;
                 db.MstDiscounts.InsertOnSubmit(newDiscount);
                 db.SubmitChanges();
 
@@ -75,33 +71,27 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===============
-        // UPDATE Discount
-        // ===============
+        // update discount
+        [Authorize]
+        [HttpPut]
         [Route("api/updateDiscount/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstDiscount discount)
+        public HttpResponseMessage updateDiscount(String id, Models.MstDiscount discount)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var discount_Id = Convert.ToInt32(id);
-                var discounts = from d in db.MstDiscounts where d.Id == discount_Id select d;
-
+                var discounts = from d in db.MstDiscounts where d.Id == Convert.ToInt32(id) select d;
                 if (discounts.Any())
                 {
                     var updateDiscount = discounts.FirstOrDefault();
-
                     updateDiscount.Discount = discount.Discount;
                     updateDiscount.DiscountRate = discount.DiscountRate;
                     updateDiscount.IsInclusive = discount.IsInclusive;
                     updateDiscount.AccountId = discount.AccountId;
                     updateDiscount.IsLocked = discount.IsLocked;
-                    updateDiscount.UpdatedById = mstUserId;
-                    updateDiscount.UpdatedDateTime = date;
+                    updateDiscount.UpdatedById = userId;
+                    updateDiscount.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -118,17 +108,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===============
-        // DELETE Discount
-        // ===============
+        // delete discount
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteDiscount/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteDiscount(String id)
         {
             try
             {
-                var discount_Id = Convert.ToInt32(id);
-                var discounts = from d in db.MstDiscounts where d.Id == discount_Id select d;
-
+                var discounts = from d in db.MstDiscounts where d.Id == Convert.ToInt32(id) select d;
                 if (discounts.Any())
                 {
                     db.MstDiscounts.DeleteOnSubmit(discounts.First());
@@ -140,7 +128,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

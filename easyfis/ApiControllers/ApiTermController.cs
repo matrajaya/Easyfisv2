@@ -12,13 +12,13 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =========
-        // LIST Term
-        // =========
+        // list term
+        [Authorize]
+        [HttpGet]
         [Route("api/listTerm")]
-        public List<Models.MstTerm> Get()
+        public List<Models.MstTerm> listTerm()
         {
-            var terms = from d in db.MstTerms
+            var terms = from d in db.MstTerms.OrderBy(d => d.Term)
                         select new Models.MstTerm
                         {
                             Id = d.Id,
@@ -32,31 +32,28 @@ namespace easyfis.Controllers
                             UpdatedBy = d.MstUser1.FullName,
                             UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                         };
+
             return terms.ToList();
         }
 
-        // ========
-        // ADD Term
-        // ========
+        // add Term
+        [Authorize]
+        [HttpPost]
         [Route("api/addTerm")]
-        public int Post(Models.MstTerm term)
+        public Int32 insertTerm(Models.MstTerm term)
         {
             try
             {
-                //var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstTerm newTerm = new Data.MstTerm();
-
                 newTerm.Term = term.Term;
                 newTerm.NumberOfDays = term.NumberOfDays;
                 newTerm.IsLocked = term.IsLocked;
-                newTerm.CreatedById = mstUserId;
-                newTerm.CreatedDateTime = date;
-                newTerm.UpdatedById = mstUserId;
-                newTerm.UpdatedDateTime = date;
+                newTerm.CreatedById = userId;
+                newTerm.CreatedDateTime = DateTime.Now;
+                newTerm.UpdatedById = userId;
+                newTerm.UpdatedDateTime = DateTime.Now;
 
                 db.MstTerms.InsertOnSubmit(newTerm);
                 db.SubmitChanges();
@@ -69,22 +66,17 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===========
-        // UPDATE Term
-        // ===========
+        // update Term
+        [Authorize]
+        [HttpPut]
         [Route("api/updateTerm/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstTerm term)
+        public HttpResponseMessage updateTerm(String id, Models.MstTerm term)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var term_Id = Convert.ToInt32(id);
-                var terms = from d in db.MstTerms where d.Id == term_Id select d;
-
+                var terms = from d in db.MstTerms where d.Id == Convert.ToInt32(id) select d;
                 if (terms.Any())
                 {
                     var updateTerm = terms.FirstOrDefault();
@@ -92,8 +84,8 @@ namespace easyfis.Controllers
                     updateTerm.Term = term.Term;
                     updateTerm.NumberOfDays = term.NumberOfDays;
                     updateTerm.IsLocked = term.IsLocked;
-                    updateTerm.UpdatedById = mstUserId;
-                    updateTerm.UpdatedDateTime = date;
+                    updateTerm.UpdatedById = userId;
+                    updateTerm.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -110,17 +102,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===========
-        // DELETE Term
-        // ===========
+        // delete Term
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteTerm/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteTerm(String id)
         {
             try
             {
-                var term_Id = Convert.ToInt32(id);
-                var terms = from d in db.MstTerms where d.Id == term_Id select d;
-
+                var terms = from d in db.MstTerms where d.Id == Convert.ToInt32(id) select d;
                 if (terms.Any())
                 {
                     db.MstTerms.DeleteOnSubmit(terms.First());

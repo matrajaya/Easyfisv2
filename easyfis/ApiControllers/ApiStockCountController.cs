@@ -10,33 +10,22 @@ namespace easyfis.Controllers
 {
     public class ApiStockCountController : ApiController
     {
-        // Global Variable
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-        private DateTime date = DateTime.Now;
-
-        // GET Current User (Id)
-        public Int32 currentUserId()
-        {
-            var identityUserId = User.Identity.GetUserId();
-            var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-
-            return mstUserId;
-        }
 
         // current branch Id
         public Int32 currentBranchId()
         {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
-        // LIST Stock Count
+        // list stock count
+        [Authorize]
         [HttpGet]
         [Route("api/stockCount/list")]
         public List<Models.TrnStockCount> listStockCount()
         {
-            var stockCounts = from d in db.TrnStockCounts
-                              where d.BranchId == currentUserId()
+            var stockCounts = from d in db.TrnStockCounts.OrderByDescending(d => d.Id)
+                              where d.BranchId == currentBranchId()
                               select new Models.TrnStockCount
                               {
                                   Id = d.Id,
@@ -59,15 +48,17 @@ namespace easyfis.Controllers
                                   UpdatedBy = d.MstUser4.FullName,
                                   UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                               };
+
             return stockCounts.ToList();
         }
 
-        // LIST Stock Count by SCDate
+        // list stock count by SCDate
+        [Authorize]
         [HttpGet]
         [Route("api/stockCount/listBySCDateByBranchId/{SCDate}")]
         public List<Models.TrnStockCount> listStockCountBySCDate(String SCDate)
         {
-            var stockCounts = from d in db.TrnStockCounts
+            var stockCounts = from d in db.TrnStockCounts.OrderByDescending(d => d.Id)
                               where d.SCDate == Convert.ToDateTime(SCDate)
                               && d.BranchId == currentBranchId()
                               select new Models.TrnStockCount
@@ -92,10 +83,12 @@ namespace easyfis.Controllers
                                   UpdatedBy = d.MstUser4.FullName,
                                   UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                               };
+
             return stockCounts.ToList();
         }
 
-        // GET Stock Count by Id
+        // get stock count by Id
+        [Authorize]
         [HttpGet]
         [Route("api/stockCount/getById/{Id}")]
         public Models.TrnStockCount getStockCountById(String Id)
@@ -124,13 +117,15 @@ namespace easyfis.Controllers
                                   UpdatedBy = d.MstUser4.FullName,
                                   UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                               };
+
             return (Models.TrnStockCount)stockCounts.FirstOrDefault();
         }
 
-        // GET last Stock Count
+        // get last Stock Count
+        [Authorize]
         [HttpGet]
         [Route("api/stockCount/getLast")]
-        public Models.TrnStockCount getLastStockCount()
+        public Models.TrnStockCount getStockCountLast()
         {
             var stockCounts = from d in db.TrnStockCounts.OrderByDescending(d => d.Id)
                               select new Models.TrnStockCount
@@ -155,16 +150,20 @@ namespace easyfis.Controllers
                                   UpdatedBy = d.MstUser4.FullName,
                                   UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                               };
+
             return (Models.TrnStockCount)stockCounts.FirstOrDefault();
         }
 
-        // SAVE Stock Count
+        // add stock count
+        [Authorize]
         [HttpPost]
         [Route("api/stockCount/save")]
-        public int saveStockCount(Models.TrnStockCount stockCount)
+        public Int32 insertStockCount(Models.TrnStockCount stockCount)
         {
             try
             {
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+
                 Data.TrnStockCount newStockCount = new Data.TrnStockCount();
                 newStockCount.BranchId = stockCount.BranchId;
                 newStockCount.SCNumber = stockCount.SCNumber;
@@ -174,10 +173,10 @@ namespace easyfis.Controllers
                 newStockCount.CheckedById = stockCount.CheckedById;
                 newStockCount.ApprovedById = stockCount.ApprovedById;
                 newStockCount.IsLocked = false;
-                newStockCount.CreatedById = currentUserId();
-                newStockCount.CreatedDateTime = date;
-                newStockCount.UpdatedById = currentUserId();
-                newStockCount.UpdatedDateTime = date;
+                newStockCount.CreatedById = userId;
+                newStockCount.CreatedDateTime = DateTime.Now;
+                newStockCount.UpdatedById = userId;
+                newStockCount.UpdatedDateTime = DateTime.Now;
 
                 db.TrnStockCounts.InsertOnSubmit(newStockCount);
                 db.SubmitChanges();
@@ -190,18 +189,20 @@ namespace easyfis.Controllers
             }
         }
 
-        // LOCK Stock Count
+        // update stock count
+        [Authorize]
         [HttpPut]
         [Route("api/stockCount/lock/{id}")]
-        public HttpResponseMessage lockStockCount(String id, Models.TrnStockCount stockCount)
+        public HttpResponseMessage updateStockCount(String id, Models.TrnStockCount stockCount)
         {
             try
             {
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+
                 var stockCounts = from d in db.TrnStockCounts where d.Id == Convert.ToInt32(id) select d;
                 if (stockCounts.Any())
                 {
                     var updateStockCount = stockCounts.FirstOrDefault();
-
                     updateStockCount.BranchId = stockCount.BranchId;
                     updateStockCount.SCNumber = stockCount.SCNumber;
                     updateStockCount.SCDate = Convert.ToDateTime(stockCount.SCDate);
@@ -210,8 +211,8 @@ namespace easyfis.Controllers
                     updateStockCount.CheckedById = stockCount.CheckedById;
                     updateStockCount.ApprovedById = stockCount.ApprovedById;
                     updateStockCount.IsLocked = true;
-                    updateStockCount.UpdatedById = currentUserId();
-                    updateStockCount.UpdatedDateTime = date;
+                    updateStockCount.UpdatedById = userId;
+                    updateStockCount.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -228,21 +229,24 @@ namespace easyfis.Controllers
             }
         }
 
-        // UNLOCK Stock Count
+        // unlock stock count
+        [Authorize]
         [HttpPut]
         [Route("api/stockCount/unlock/{id}")]
         public HttpResponseMessage unlockStockCount(String id)
         {
             try
             {
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+
                 var stockCounts = from d in db.TrnStockCounts where d.Id == Convert.ToInt32(id) select d;
                 if (stockCounts.Any())
                 {
                     var updateStockCount = stockCounts.FirstOrDefault();
 
                     updateStockCount.IsLocked = false;
-                    updateStockCount.UpdatedById = currentUserId();
-                    updateStockCount.UpdatedDateTime = date;
+                    updateStockCount.UpdatedById = userId;
+                    updateStockCount.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -252,7 +256,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -260,7 +263,8 @@ namespace easyfis.Controllers
             }
         }
 
-        // DELETE Stock Count
+        // delete stock count
+        [Authorize]
         [HttpDelete]
         [Route("api/stockCount/delete/{id}")]
         public HttpResponseMessage deleteStockCount(String id)

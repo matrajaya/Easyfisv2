@@ -60,9 +60,10 @@ namespace easyfis.ApiControllers
         }
 
         // accounts payable list
+        [Authorize]
         [HttpGet]
         [Route("api/accountsPayable/list/{dateAsOf}/{companyId}/")]
-        public List<Models.TrnReceivingReceipt> accountsPayableList(String dateAsOf, String companyId)
+        public List<Models.TrnReceivingReceipt> listAccountsPayable(String dateAsOf, String companyId)
         {
             try
             {

@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =========================
-        // LIST Account Article Type
-        // =========================
+        // list account article type
+        [Authorize]
+        [HttpGet]
         [Route("api/listAccountArticleType")]
-        public List<Models.MstAccountArticleType> Get()
+        public List<Models.MstAccountArticleType> listAccountArticleType()
         {
             var accountArticleTypes = from d in db.MstAccountArticleTypes
                                       select new Models.MstAccountArticleType
@@ -26,18 +26,18 @@ namespace easyfis.Controllers
                                          ArticleTypeId = d.ArticleTypeId,
                                          ArticleType = d.MstArticleType.ArticleType
                                      };
+
             return accountArticleTypes.ToList();
         }
 
-        // =======================================
-        // LIST Account Article Type By Account Id
-        // =======================================
+        // list account article type By AccountId
+        [Authorize]
+        [HttpGet]
         [Route("api/listAccountArticleTypeByAccountId/{accountId}")]
-        public List<Models.MstAccountArticleType> GetAccountArticleTypeByAccountId(String accountId)
+        public List<Models.MstAccountArticleType> listAccountArticleTypeByAccountId(String accountId)
         {
-            var accountArticleType_accountId = Convert.ToInt32(accountId);
             var accountArticleTypes = from d in db.MstAccountArticleTypes
-                                      where d.AccountId == accountArticleType_accountId
+                                      where d.AccountId == Convert.ToInt32(accountId)
                                       select new Models.MstAccountArticleType
                                       {
                                           Id = d.Id,
@@ -46,19 +46,19 @@ namespace easyfis.Controllers
                                           ArticleTypeId = d.ArticleTypeId,
                                           ArticleType = d.MstArticleType.ArticleType
                                       };
+
             return accountArticleTypes.ToList();
         }
 
-        // ========================
-        // ADD Account Article Type 
-        // ========================
+        // add account article type 
+        [Authorize]
+        [HttpPost]
         [Route("api/addAccountArticleType")]
-        public int Post(Models.MstAccountArticleType accountArticleType)
+        public Int32 insertAccountArticleType(Models.MstAccountArticleType accountArticleType)
         {
             try
             {
                 Data.MstAccountArticleType newAccountArticleType = new Data.MstAccountArticleType();
-
                 newAccountArticleType.AccountId = accountArticleType.AccountId;
                 newAccountArticleType.ArticleTypeId = accountArticleType.ArticleTypeId;
 
@@ -66,7 +66,6 @@ namespace easyfis.Controllers
                 db.SubmitChanges();
 
                 return newAccountArticleType.Id;
-
             }
             catch
             {
@@ -74,21 +73,18 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===========================
-        // UPDATE Account Article Type 
-        // ===========================
+        // update account article type
+        [Authorize]
+        [HttpPut]
         [Route("api/updateAccountArticleType/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstAccountArticleType accountArticleType)
+        public HttpResponseMessage updateAccountArticleType(String id, Models.MstAccountArticleType accountArticleType)
         {
             try
             {
-                var accountArticleTypeId = Convert.ToInt32(id);
-                var accountArticleTypes = from d in db.MstAccountArticleTypes where d.Id == accountArticleTypeId select d;
-
+                var accountArticleTypes = from d in db.MstAccountArticleTypes where d.Id == Convert.ToInt32(id) select d;
                 if (accountArticleTypes.Any())
                 {
                     var updateAccountArticleTypes= accountArticleTypes.FirstOrDefault();
-
                     updateAccountArticleTypes.AccountId = accountArticleType.AccountId;
                     updateAccountArticleTypes.ArticleTypeId = accountArticleType.ArticleTypeId;
 
@@ -100,7 +96,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -108,17 +103,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===========================
-        // DELETE Account Article Type 
-        // ===========================
+        // delete account article type
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteAccountArticleType/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteAccountArticleType(String id)
         {
             try
             {
-                var accountArticleTypeId = Convert.ToInt32(id);
-                var accountArticleTypes = from d in db.MstAccountArticleTypes where d.Id == accountArticleTypeId select d;
-
+                var accountArticleTypes = from d in db.MstAccountArticleTypes where d.Id == Convert.ToInt32(id) select d;
                 if (accountArticleTypes.Any())
                 {
                     db.MstAccountArticleTypes.DeleteOnSubmit(accountArticleTypes.First());
@@ -130,7 +123,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

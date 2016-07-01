@@ -12,9 +12,10 @@ namespace easyfis.ApiControllers
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
         // trial balance list
+        [Authorize]
         [HttpGet]
         [Route("api/trialBalance/list/{StartDate}/{EndDate}/{CompanyId}")]
-        public List<Models.TrnJournal> trialBalanceList(String StartDate, String EndDate, String CompanyId)
+        public List<Models.TrnJournal> listTrialBalance(String StartDate, String EndDate, String CompanyId)
         {
             try
             {

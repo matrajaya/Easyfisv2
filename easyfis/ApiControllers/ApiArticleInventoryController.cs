@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ======================
-        // LIST Article Inventory
-        // ======================
+        // list article inventory
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleInventory")]
-        public List<Models.MstArticleInventory> Get()
+        public List<Models.MstArticleInventory> listArticleInventory()
         {
             var articleInventories = from d in db.MstArticleInventories
                                      select new Models.MstArticleInventory
@@ -29,18 +29,18 @@ namespace easyfis.Controllers
                                          Amount = d.Amount,
                                          Particulars = d.Particulars
                                      };
+
             return articleInventories.ToList();
         }
 
-        // ====================================
-        // LIST Article Inventory By Article Id
-        // ====================================
+        // list article inventory by ArticleId
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleInventoryByArticleId/{articleId}")]
-        public List<Models.MstArticleInventory> GetArticleInventoryByArticleId(String articleId)
+        public List<Models.MstArticleInventory> listArticleInventoryByArticleId(String articleId)
         {
-            var articleInventory_articleId = Convert.ToInt32(articleId);
             var articleInventories = from d in db.MstArticleInventories
-                                     where d.ArticleId == articleInventory_articleId
+                                     where d.ArticleId == Convert.ToInt32(articleId)
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,
@@ -54,19 +54,20 @@ namespace easyfis.Controllers
                                          Amount = d.Amount,
                                          Particulars = d.Particulars
                                      };
+
             return articleInventories.ToList();
         }
 
-        // ====================================
-        // LIST Article Inventory By Article Id
-        // ====================================
+        // list article inventory by BranchId and ArticleId
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleInventoryByBranchIdAndArticleId/{branchId}/{articleId}")]
-        public List<Models.MstArticleInventory> GetArticleInventoryByArticleId(String branchId, String articleId)
+        public List<Models.MstArticleInventory> listArticleInventoryByBranchIdAndArticleId(String branchId, String articleId)
         {
-            var articleInventory_branchId = Convert.ToInt32(branchId);
-            var articleInventory_articleId = Convert.ToInt32(articleId);
             var articleInventories = from d in db.MstArticleInventories
-                                     where d.BranchId == articleInventory_branchId && d.ArticleId == articleInventory_articleId && d.Quantity > 0
+                                     where d.BranchId == Convert.ToInt32(branchId)
+                                     && d.ArticleId == Convert.ToInt32(articleId) 
+                                     && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,
@@ -78,19 +79,20 @@ namespace easyfis.Controllers
                                          Amount = d.Amount,
                                          Particulars = d.Particulars
                                      };
+
             return articleInventories.ToList();
         }
 
-        // ===================================
-        // GET Article Inventory By Article Id
-        // ===================================
+        // get article inventory by ArticleId
+        [Authorize]
+        [HttpGet]
         [Route("api/getArticleInventoryByArticleId/{branchId}/{articleId}")]
-        public Models.MstArticleInventory GetArticleInventoryByBranchIdAndArticleId(String branchId, String articleId)
+        public Models.MstArticleInventory getArticleInventoryByArticleId(String branchId, String articleId)
         {
-            var articleInventory_branchId = Convert.ToInt32(branchId);
-            var articleInventory_articleId = Convert.ToInt32(articleId);
             var articleInventories = from d in db.MstArticleInventories
-                                     where d.BranchId == articleInventory_branchId && d.ArticleId == articleInventory_articleId && d.Quantity > 0
+                                     where d.BranchId == Convert.ToInt32(branchId)
+                                     && d.ArticleId == Convert.ToInt32(articleId) 
+                                     && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,
@@ -102,18 +104,18 @@ namespace easyfis.Controllers
                                          Amount = d.Amount,
                                          Particulars = d.Particulars
                                      };
+
             return (Models.MstArticleInventory)articleInventories.FirstOrDefault();
         }
 
-        // ==================================
-        // GET Article Inventory By branch Id
-        // ==================================
+        // list article inventory by BranchId
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticleInventoryBybranchId/{branchId}")]
-        public List<Models.MstArticleInventory> GetArticleInventoryByBranchId(String branchId)
+        public List<Models.MstArticleInventory> listArticleInventoryBybranchId(String branchId)
         {
-            var articleInventory_branchId = Convert.ToInt32(branchId);
             var articleInventories = from d in db.MstArticleInventories
-                                     where d.BranchId == articleInventory_branchId
+                                     where d.BranchId == Convert.ToInt32(branchId)
                                      && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
@@ -133,6 +135,7 @@ namespace easyfis.Controllers
                                          Inventory = d.MstArticle.IsInventory,
                                          Price = d.MstArticle.Price
                                      };
+
             return articleInventories.ToList();
         }
     }

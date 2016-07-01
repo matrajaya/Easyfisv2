@@ -19,51 +19,51 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
-        // ===============
-        // LIST TrnJournal
-        // ===============
+        // list journal
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournal")]
-        public List<Models.TrnJournal> Get()
+        public List<Models.TrnJournal> listJournal()
         {
             var journals = from d in db.TrnJournals
                            select new Models.TrnJournal
-                                    {
-                                        Id = d.Id,
-                                        JournalDate = d.JournalDate.ToShortDateString(),
-                                        BranchId = d.BranchId,
-                                        Branch = d.MstBranch.Branch,
-                                        AccountId = d.AccountId,
-                                        Account = d.MstAccount.Account,
-                                        AccountCode = d.MstAccount.AccountCode,
-                                        ArticleId = d.ArticleId,
-                                        Article = d.MstArticle.Article,
-                                        Particulars = d.Particulars,
-                                        DebitAmount = d.DebitAmount,
-                                        CreditAmount = d.CreditAmount,
-                                        ORId = d.ORId,
-                                        CVId = d.CVId,
-                                        JVId = d.JVId,
-                                        RRId = d.RRId,
-                                        SIId = d.SIId,
-                                        INId = d.INId,
-                                        OTId = d.OTId,
-                                        STId = d.STId,
-                                        DocumentReference = d.DocumentReference,
-                                        APRRId = d.APRRId,
-                                        ARSIId = d.ARSIId,
-                                    };
+                            {
+                                Id = d.Id,
+                                JournalDate = d.JournalDate.ToShortDateString(),
+                                BranchId = d.BranchId,
+                                Branch = d.MstBranch.Branch,
+                                AccountId = d.AccountId,
+                                Account = d.MstAccount.Account,
+                                AccountCode = d.MstAccount.AccountCode,
+                                ArticleId = d.ArticleId,
+                                Article = d.MstArticle.Article,
+                                Particulars = d.Particulars,
+                                DebitAmount = d.DebitAmount,
+                                CreditAmount = d.CreditAmount,
+                                ORId = d.ORId,
+                                CVId = d.CVId,
+                                JVId = d.JVId,
+                                RRId = d.RRId,
+                                SIId = d.SIId,
+                                INId = d.INId,
+                                OTId = d.OTId,
+                                STId = d.STId,
+                                DocumentReference = d.DocumentReference,
+                                APRRId = d.APRRId,
+                                ARSIId = d.ARSIId,
+                            };
+
             return journals.ToList();
         }
 
-        // =======================
-        // LIST TrnJournal By JVId
-        // =======================
+        // list journal by JVId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalByJVId/{JVId}")]
-        public List<Models.TrnJournal> GetJournalByJVId(String JVId)
+        public List<Models.TrnJournal> listJournalByJVId(String JVId)
         {
-            var journalJVId = Convert.ToInt32(JVId);
             var journals = from d in db.TrnJournals
-                           where d.JVId == journalJVId
+                           where d.JVId == Convert.ToInt32(JVId)
                            select new Models.TrnJournal
                            {
                                Id = d.Id,
@@ -90,18 +90,18 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+
             return journals.ToList();
         }
 
-        // =======================
-        // LIST TrnJournal By RRId
-        // =======================
+        // list journal by RRId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalByRRId/{RRId}")]
-        public List<Models.TrnJournal> GetJournalByRRId(String RRId)
+        public List<Models.TrnJournal> listJournalByRRId(String RRId)
         {
-            var journalRRId = Convert.ToInt32(RRId);
             var journals = from d in db.TrnJournals
-                           where d.RRId == journalRRId
+                           where d.RRId == Convert.ToInt32(RRId)
                            select new Models.TrnJournal
                            {
                                Id = d.Id,
@@ -128,18 +128,18 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+
             return journals.ToList();
         }
 
-        // =======================
-        // LIST TrnJournal By SIId
-        // =======================
+        // list journal by SIId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalBySIId/{SIId}")]
-        public List<Models.TrnJournal> GetJournalBySIId(String SIId)
+        public List<Models.TrnJournal> listJournalBySIId(String SIId)
         {
-            var journalSIId = Convert.ToInt32(SIId);
             var journals = from d in db.TrnJournals
-                           where d.SIId == journalSIId
+                           where d.SIId == Convert.ToInt32(SIId)
                            select new Models.TrnJournal
                            {
                                Id = d.Id,
@@ -166,18 +166,18 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+
             return journals.ToList();
         }
 
-        // =======================
-        // LIST TrnJournal By CVId
-        // =======================
+        // list journal by CVId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalByCVId/{CVId}")]
-        public List<Models.TrnJournal> GetJournalByCVId(String CVId)
+        public List<Models.TrnJournal> listJournalByCVId(String CVId)
         {
-            var journalCVId = Convert.ToInt32(CVId);
             var journals = from d in db.TrnJournals
-                           where d.CVId == journalCVId
+                           where d.CVId == Convert.ToInt32(CVId)
                            select new Models.TrnJournal
                            {
                                Id = d.Id,
@@ -204,18 +204,18 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+
             return journals.ToList();
         }
 
-        // =======================
-        // LIST TrnJournal By ORId
-        // =======================
+        // list journal by ORId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalByORId/{ORId}")]
-        public List<Models.TrnJournal> GetJournalByORId(String ORId)
+        public List<Models.TrnJournal> listJournalByORId(String ORId)
         {
-            var journalORId = Convert.ToInt32(ORId);
             var journals = from d in db.TrnJournals
-                           where d.ORId == journalORId
+                           where d.ORId == Convert.ToInt32(ORId)
                            select new Models.TrnJournal
                            {
                                Id = d.Id,
@@ -242,18 +242,18 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+
             return journals.ToList();
         }
 
-        // =======================
-        // LIST TrnJournal By INId
-        // =======================
+        // list journal by INId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalByINId/{INId}")]
-        public List<Models.TrnJournal> GetJournalByINId(String INId)
+        public List<Models.TrnJournal> listJournalByINId(String INId)
         {
-            var journalINId = Convert.ToInt32(INId);
             var journals = from d in db.TrnJournals
-                           where d.INId == journalINId
+                           where d.INId == Convert.ToInt32(INId)
                            select new Models.TrnJournal
                            {
                                Id = d.Id,
@@ -280,18 +280,18 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+
             return journals.ToList();
         }
 
-        // =======================
-        // LIST TrnJournal By OTId
-        // =======================
+        // list journal by OTId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalByOTId/{OTId}")]
-        public List<Models.TrnJournal> GetJournalByOTId(String OTId)
+        public List<Models.TrnJournal> listJournalByOTId(String OTId)
         {
-            var journalOTId = Convert.ToInt32(OTId);
             var journals = from d in db.TrnJournals
-                           where d.OTId == journalOTId
+                           where d.OTId == Convert.ToInt32(OTId)
                            select new Models.TrnJournal
                            {
                                Id = d.Id,
@@ -318,18 +318,18 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+
             return journals.ToList();
         }
 
-        // =======================
-        // LIST TrnJournal By STId
-        // =======================
+        // list journal by STId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalBySTId/{STId}")]
-        public List<Models.TrnJournal> GetJournalBySTId(String STId)
+        public List<Models.TrnJournal> listJournalBySTId(String STId)
         {
-            var journalSTId = Convert.ToInt32(STId);
             var journals = from d in db.TrnJournals
-                           where d.STId == journalSTId
+                           where d.STId == Convert.ToInt32(STId)
                            select new Models.TrnJournal
                            {
                                Id = d.Id,
@@ -356,17 +356,17 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+
             return journals.ToList();
         }
 
-        // =============================
-        // LIST TrnJournal By Article Id
-        // =============================
+        // list journal by supplier advances AccountId and ArticleId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalBySupplierAdvancesAccountIdByArticleId/{ArticleId}")]
-        public List<Models.TrnJournal> GetJournalBySupplierAdvancesAccountIdByArticleId(String ArticleId)
+        public List<Models.TrnJournal> listJournalBySupplierAdvancesAccountIdByArticleId(String ArticleId)
         {
-            var identityUserId = User.Identity.GetUserId();
-            var SupplierAdvancesAccountId = (from d in db.MstUsers where d.UserId == identityUserId select d.SupplierAdvancesAccountId).SingleOrDefault();
+            var SupplierAdvancesAccountId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.SupplierAdvancesAccountId).SingleOrDefault();
 
             var journals = from d in db.TrnJournals
                            where d.ArticleId == Convert.ToInt32(ArticleId)
@@ -399,14 +399,13 @@ namespace easyfis.Controllers
             return journals.ToList();
         }
 
-        // =============================
-        // LIST TrnJournal By Article Id
-        // =============================
+        // list journal by customer advances AccountId and ArticleId
+        [Authorize]
+        [HttpGet]
         [Route("api/listJournalByCustomerAdvancesAccountIdByArticleId/{ArticleId}")]
         public List<Models.TrnJournal> GetJournalByCustomerAdvancesAccountIdByArticleId(String ArticleId)
         {
-            var identityUserId = User.Identity.GetUserId();
-            var CustomerAdvancesAccountId = (from d in db.MstUsers where d.UserId == identityUserId select d.CustomerAdvancesAccountId).SingleOrDefault();
+            var CustomerAdvancesAccountId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.CustomerAdvancesAccountId).SingleOrDefault();
 
             var journals = from d in db.TrnJournals
                            where d.ArticleId == Convert.ToInt32(ArticleId)
@@ -437,6 +436,7 @@ namespace easyfis.Controllers
                                APRRId = d.APRRId,
                                ARSIId = d.ARSIId,
                            };
+
             return journals.ToList();
         }
     }

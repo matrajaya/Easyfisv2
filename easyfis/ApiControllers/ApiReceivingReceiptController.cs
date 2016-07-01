@@ -179,7 +179,7 @@ namespace easyfis.Controllers
             return receivingReceipts.ToList();
         }
 
-        // list receiving receipt by SupplierId and by Balances
+        // list receiving receipt by SupplierId and by Balance > 0 for disbursement accounts payable
         [Authorize]
         [HttpGet]
         [Route("api/receivingReceiptBySupplierIdByBalance/{supplierId}")]

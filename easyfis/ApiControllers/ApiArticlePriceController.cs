@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ==================
-        // LIST Article Price
-        // ==================
+        // list article price
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticlePrice")]
-        public List<Models.MstArticlePrice> Get()
+        public List<Models.MstArticlePrice> listArticlePrice()
         {
             var articlePrices = from d in db.MstArticlePrices
                                 select new Models.MstArticlePrice
@@ -27,18 +27,18 @@ namespace easyfis.Controllers
                                     Price = d.Price,
                                     Remarks = d.Remarks,
                                 };
+
             return articlePrices.ToList();
         }
 
-        // ================================
-        // LIST Article Price By Article Id
-        // ===========================-=====
+        // list article price by ArticleId
+        [Authorize]
+        [HttpGet]
         [Route("api/listArticlePrice/{articleId}")]
-        public List<Models.MstArticlePrice> GetByArticleId(String articleId)
+        public List<Models.MstArticlePrice> listArticlePriceByArticleId(String articleId)
         {
-            var articlePrices_articleId = Convert.ToInt32(articleId);
             var articlePrices = from d in db.MstArticlePrices
-                                where d.ArticleId == articlePrices_articleId
+                                where d.ArticleId == Convert.ToInt32(articleId)
                                 select new Models.MstArticlePrice
                                 {
                                     Id = d.Id,
@@ -48,18 +48,18 @@ namespace easyfis.Controllers
                                     Price = d.Price,
                                     Remarks = d.Remarks,
                                 };
+
             return articlePrices.ToList();
         }
 
-        // =================
-        // GET Article Price
-        // =================
+        // get article price
+        [Authorize]
+        [HttpGet]
         [Route("api/articlePrice/{id}")]
         public Models.MstArticlePrice GetPrice(String id)
         {
-            var articlePriceId = Convert.ToInt32(id);
             var articlePrices = from d in db.MstArticlePrices
-                                where d.Id == articlePriceId
+                                where d.Id == Convert.ToInt32(id)
                                 select new Models.MstArticlePrice
                                 {
                                     Id = d.Id,
@@ -69,20 +69,19 @@ namespace easyfis.Controllers
                                     Price = d.Price,
                                     Remarks = d.Remarks,
                                 };
+
             return (Models.MstArticlePrice)articlePrices.FirstOrDefault();
         }
 
-        // ==================
-        // ADD Article Price
-        // ==================
+        // add Article Price
+        [Authorize]
+        [HttpPost]
         [Route("api/addArticlePrice")]
-        public int Post(Models.MstArticlePrice price)
+        public Int32 insertArticlePrice(Models.MstArticlePrice price)
         {
             try
             {
-
                 Data.MstArticlePrice newPrice = new Data.MstArticlePrice();
-
                 newPrice.ArticleId = price.ArticleId;
                 newPrice.PriceDescription = price.PriceDescription;
                 newPrice.Price = price.Price;
@@ -99,21 +98,18 @@ namespace easyfis.Controllers
             }
         }
 
-        // ====================
-        // UPDATE Article Price
-        // ====================
+        // update article price
+        [Authorize]
+        [HttpPut]
         [Route("api/updateArticlePrice/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstArticlePrice price)
+        public HttpResponseMessage updateArticlePrice(String id, Models.MstArticlePrice price)
         {
             try
             {
-                var priceId = Convert.ToInt32(id);
-                var prices = from d in db.MstArticlePrices where d.Id == priceId select d;
-
+                var prices = from d in db.MstArticlePrices where d.Id == Convert.ToInt32(id) select d;
                 if (prices.Any())
                 {
                     var updatePrice = prices.FirstOrDefault();
-
                     updatePrice.ArticleId = price.ArticleId;
                     updatePrice.PriceDescription = price.PriceDescription;
                     updatePrice.Price = price.Price;
@@ -134,17 +130,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ====================
-        // DELETE Article Price
-        // ====================
+        // delete article price
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteArticlePrice/{id}")]
         public HttpResponseMessage Delete(String id)
         {
             try
             {
-                var priceId = Convert.ToInt32(id);
-                var prices = from d in db.MstArticlePrices where d.Id == priceId select d;
-
+                var prices = from d in db.MstArticlePrices where d.Id == Convert.ToInt32(id) select d;
                 if (prices.Any())
                 {
                     db.MstArticlePrices.DeleteOnSubmit(prices.First());
@@ -156,7 +150,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

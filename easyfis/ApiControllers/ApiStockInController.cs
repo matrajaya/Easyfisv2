@@ -11,23 +11,23 @@ namespace easyfis.Controllers
     public class ApiStockInController : ApiController
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
         private Business.Inventory inventory = new Business.Inventory();
         private Business.PostJournal journal = new Business.PostJournal();
 
         // current branch Id
         public Int32 currentBranchId()
         {
-            var identityUserId = User.Identity.GetUserId();
-            return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
-        // =============
-        // LIST Stock In
-        // =============
+        // list stock in
+        [Authorize]
+        [HttpGet]
         [Route("api/listStockIn")]
-        public List<Models.TrnStockIn> Get()
+        public List<Models.TrnStockIn> listStockIn()
         {
-            var stockIns = from d in db.TrnStockIns
+            var stockIns = from d in db.TrnStockIns.OrderByDescending(d => d.Id)
                            where d.BranchId == currentBranchId()
                            select new Models.TrnStockIn
                            {
@@ -58,18 +58,18 @@ namespace easyfis.Controllers
                                UpdatedBy = d.MstUser4.FullName,
                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                            };
+
             return stockIns.ToList();
         }
 
-        // ==================
-        // GET Stock In By Id
-        // ==================
+        // get stock in by Id
+        [Authorize]
+        [HttpGet]
         [Route("api/stockIn/{id}")]
-        public Models.TrnStockIn GetStockInById(String id)
+        public Models.TrnStockIn getStockInById(String id)
         {
-            var stockIn_Id = Convert.ToInt32(id);
             var stockIns = from d in db.TrnStockIns
-                           where d.Id == stockIn_Id
+                           where d.Id == Convert.ToInt32(id)
                            select new Models.TrnStockIn
                            {
                                Id = d.Id,
@@ -99,18 +99,18 @@ namespace easyfis.Controllers
                                UpdatedBy = d.MstUser4.FullName,
                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                            };
+
             return (Models.TrnStockIn)stockIns.FirstOrDefault();
         }
 
-        // ==============================
-        // GET Stock In Filter By IN Date
-        // ==============================
+        // list stock in by INDate
+        [Authorize]
+        [HttpGet]
         [Route("api/listStockInFilterByINDate/{INDate}")]
-        public List<Models.TrnStockIn> GetStockInFilterByINDate(String INDate)
+        public List<Models.TrnStockIn> listStockInByINDate(String INDate)
         {
-            var stockIn_INDate = Convert.ToDateTime(INDate);
-            var stockIns = from d in db.TrnStockIns
-                           where d.INDate == stockIn_INDate
+            var stockIns = from d in db.TrnStockIns.OrderByDescending(d => d.Id)
+                           where d.INDate == Convert.ToDateTime(INDate)
                            && d.BranchId == currentBranchId()
                            select new Models.TrnStockIn
                            {
@@ -141,14 +141,15 @@ namespace easyfis.Controllers
                                UpdatedBy = d.MstUser4.FullName,
                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                            };
+
             return stockIns.ToList();
         }
 
-        // ============================
-        // GET last INNumber in StockIn
-        // ============================
+        // get stock in last INNumber
+        [Authorize]
+        [HttpGet]
         [Route("api/stockInLastINNumber")]
-        public Models.TrnStockIn GetStockInLastINNumber()
+        public Models.TrnStockIn getStockInLastINNumber()
         {
             var stockIns = from d in db.TrnStockIns.OrderByDescending(d => d.INNumber)
                            select new Models.TrnStockIn
@@ -180,63 +181,21 @@ namespace easyfis.Controllers
                                UpdatedBy = d.MstUser4.FullName,
                                UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                            };
+
             return (Models.TrnStockIn)stockIns.FirstOrDefault();
         }
 
-        // ======================
-        // GET last Id in StockIn
-        // ======================
-        [Route("api/stockInLastId")]
-        public Models.TrnStockIn GetStockInLastId()
-        {
-            var stockIns = from d in db.TrnStockIns.OrderByDescending(d => d.Id)
-                           select new Models.TrnStockIn
-                           {
-                               Id = d.Id,
-                               BranchId = d.BranchId,
-                               Branch = d.MstBranch.Branch,
-                               INNumber = d.INNumber,
-                               INDate = d.INDate.ToShortDateString(),
-                               AccountId = d.AccountId,
-                               AccountCode = d.MstAccount.AccountCode,
-                               Account = d.MstAccount.Account,
-                               ArticleId = d.ArticleId,
-                               Article = d.MstArticle.Article,
-                               Particulars = d.Particulars,
-                               ManualINNumber = d.ManualINNumber,
-                               IsProduced = d.IsProduced,
-                               PreparedById = d.PreparedById,
-                               PreparedBy = d.MstUser3.FullName,
-                               CheckedById = d.CheckedById,
-                               CheckedBy = d.MstUser1.FullName,
-                               ApprovedById = d.ApprovedById,
-                               ApprovedBy = d.MstUser.FullName,
-                               IsLocked = d.IsLocked,
-                               CreatedById = d.CreatedById,
-                               CreatedBy = d.MstUser2.FullName,
-                               CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                               UpdatedById = d.UpdatedById,
-                               UpdatedBy = d.MstUser4.FullName,
-                               UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                           };
-            return (Models.TrnStockIn)stockIns.FirstOrDefault();
-        }
-
-        // ============
-        // ADD Stock In
-        // ============
+        // add stock in
+        [Authorize]
+        [HttpPost]
         [Route("api/addStockIn")]
-        public int Post(Models.TrnStockIn stockIn)
+        public Int32 insertStockIn(Models.TrnStockIn stockIn)
         {
             try
             {
-                var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.TrnStockIn newStockIn = new Data.TrnStockIn();
-
                 newStockIn.BranchId = stockIn.BranchId;
                 newStockIn.INNumber = stockIn.INNumber;
                 newStockIn.INDate = Convert.ToDateTime(stockIn.INDate);
@@ -248,18 +207,16 @@ namespace easyfis.Controllers
                 newStockIn.PreparedById = stockIn.PreparedById;
                 newStockIn.CheckedById = stockIn.CheckedById;
                 newStockIn.ApprovedById = stockIn.ApprovedById;
-
-                newStockIn.IsLocked = isLocked;
-                newStockIn.CreatedById = mstUserId;
-                newStockIn.CreatedDateTime = date;
-                newStockIn.UpdatedById = mstUserId;
-                newStockIn.UpdatedDateTime = date;
+                newStockIn.IsLocked = false;
+                newStockIn.CreatedById = userId;
+                newStockIn.CreatedDateTime = DateTime.Now;
+                newStockIn.UpdatedById = userId;
+                newStockIn.UpdatedDateTime = DateTime.Now;
 
                 db.TrnStockIns.InsertOnSubmit(newStockIn);
                 db.SubmitChanges();
 
                 return newStockIn.Id;
-
             }
             catch
             {
@@ -267,26 +224,20 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===============
-        // UPDATE Stock In
-        // ===============
+        // update stock in
+        [Authorize]
+        [HttpPut]
         [Route("api/updateStockIn/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnStockIn stockIn)
+        public HttpResponseMessage updateStockIn(String id, Models.TrnStockIn stockIn)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var stockIn_Id = Convert.ToInt32(id);
-                var stockIns = from d in db.TrnStockIns where d.Id == stockIn_Id select d;
-
+                var stockIns = from d in db.TrnStockIns where d.Id == Convert.ToInt32(id) select d;
                 if (stockIns.Any())
                 {
                     var updateStockIn = stockIns.FirstOrDefault();
-
                     updateStockIn.BranchId = stockIn.BranchId;
                     updateStockIn.INNumber = stockIn.INNumber;
                     updateStockIn.INDate = Convert.ToDateTime(stockIn.INDate);
@@ -298,23 +249,14 @@ namespace easyfis.Controllers
                     updateStockIn.PreparedById = stockIn.PreparedById;
                     updateStockIn.CheckedById = stockIn.CheckedById;
                     updateStockIn.ApprovedById = stockIn.ApprovedById;
-
-                    updateStockIn.IsLocked = stockIn.IsLocked;
-                    updateStockIn.UpdatedById = mstUserId;
-                    updateStockIn.UpdatedDateTime = date;
+                    updateStockIn.IsLocked = true;
+                    updateStockIn.UpdatedById = userId;
+                    updateStockIn.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
-                    if (updateStockIn.IsLocked == true)
-                    {
-                        inventory.insertINInventory(stockIn_Id);
-                        journal.insertINJournal(stockIn_Id);
-                    }
-                    else
-                    {
-                        inventory.deleteINInventory(stockIn_Id);
-                        journal.deleteINJournal(stockIn_Id);
-                    }
+                    inventory.insertINInventory(Convert.ToInt32(id));
+                    journal.insertINJournal(Convert.ToInt32(id));
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -322,7 +264,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -330,42 +271,29 @@ namespace easyfis.Controllers
             }
         }
 
-        // ==========================
-        // UPDATE Stock In - IsLocked
-        // ==========================
+        // unlock stock in
+        [Authorize]
+        [HttpPut]
         [Route("api/updateStockInIsLocked/{id}")]
-        public HttpResponseMessage PutUpdateStockInIsLocked(String id, Models.TrnStockIn stockIn)
+        public HttpResponseMessage unlockStockIn(String id, Models.TrnStockIn stockIn)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var stockIn_Id = Convert.ToInt32(id);
-                var stockIns = from d in db.TrnStockIns where d.Id == stockIn_Id select d;
-
+                var stockIns = from d in db.TrnStockIns where d.Id == Convert.ToInt32(id) select d;
                 if (stockIns.Any())
                 {
                     var updateStockIn = stockIns.FirstOrDefault();
 
-                    updateStockIn.IsLocked = stockIn.IsLocked;
-                    updateStockIn.UpdatedById = mstUserId;
-                    updateStockIn.UpdatedDateTime = date;
+                    updateStockIn.IsLocked = false;
+                    updateStockIn.UpdatedById = userId;
+                    updateStockIn.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
-                    if (updateStockIn.IsLocked == true)
-                    {
-                        inventory.insertINInventory(stockIn_Id);
-                        journal.insertINJournal(stockIn_Id);
-                    }
-                    else
-                    {
-                        inventory.deleteINInventory(stockIn_Id);
-                        journal.deleteINJournal(stockIn_Id);
-                    }
+                    inventory.deleteINInventory(Convert.ToInt32(id));
+                    journal.deleteINJournal(Convert.ToInt32(id));
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
@@ -373,7 +301,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -381,17 +308,13 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===============
-        // DELETE Stock In
-        // ===============
+        // delete stock in
         [Route("api/deleteStockIn/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteStockIn(String id)
         {
             try
             {
-                var stockIn_Id = Convert.ToInt32(id);
-                var stockIns = from d in db.TrnStockIns where d.Id == stockIn_Id select d;
-
+                var stockIns = from d in db.TrnStockIns where d.Id == Convert.ToInt32(id) select d;
                 if (stockIns.Any())
                 {
                     db.TrnStockIns.DeleteOnSubmit(stockIns.First());
@@ -403,7 +326,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

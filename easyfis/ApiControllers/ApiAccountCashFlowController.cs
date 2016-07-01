@@ -12,13 +12,13 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ======================
-        // LIST Account Cash Flow
-        // ======================
+        // list account cashflow
+        [Authorize]
+        [HttpGet]
         [Route("api/listAccountCashFlow")]
-        public List<Models.MstAccountCashFlow> Get()
+        public List<Models.MstAccountCashFlow> listAccountCashFlow()
         {
-            var accountCashFlows = from d in db.MstAccountCashFlows
+            var accountCashFlows = from d in db.MstAccountCashFlows.OrderBy(d => d.AccountCashFlow)
                                    select new Models.MstAccountCashFlow
                                        {
                                            Id = d.Id,
@@ -32,31 +32,28 @@ namespace easyfis.Controllers
                                            UpdatedBy = d.MstUser1.FullName,
                                            UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                                        };
+
             return accountCashFlows.ToList();
         }
 
-        // =====================
-        // ADD Account Cash Flow
-        // =====================
+        // add account cash flow
+        [Authorize]
+        [HttpPost]
         [Route("api/addAccountCashFlow")]
-        public int Post(Models.MstAccountCashFlow accountCashFlow)
+        public Int32 insertAccountCashFlow(Models.MstAccountCashFlow accountCashFlow)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstAccountCashFlow newAccountCashFlow = new Data.MstAccountCashFlow();
-
                 newAccountCashFlow.AccountCashFlowCode = accountCashFlow.AccountCashFlowCode;
                 newAccountCashFlow.AccountCashFlow = accountCashFlow.AccountCashFlow;
                 newAccountCashFlow.IsLocked = accountCashFlow.IsLocked;
-                newAccountCashFlow.CreatedById = mstUserId;
-                newAccountCashFlow.CreatedDateTime = date;
-                newAccountCashFlow.UpdatedById = mstUserId;
-                newAccountCashFlow.UpdatedDateTime = date;
+                newAccountCashFlow.CreatedById = userId;
+                newAccountCashFlow.CreatedDateTime = DateTime.Now;
+                newAccountCashFlow.UpdatedById = userId;
+                newAccountCashFlow.UpdatedDateTime = DateTime.Now;
 
                 db.MstAccountCashFlows.InsertOnSubmit(newAccountCashFlow);
                 db.SubmitChanges();
@@ -69,31 +66,25 @@ namespace easyfis.Controllers
             }
         }
 
-        // ========================
-        // UPDATE Account Cash Flow
-        // ========================
+        // update account cash flow
+        [Authorize]
+        [HttpPut]
         [Route("api/updateAccountCashFlow/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstAccountCashFlow accountCashFlow)
+        public HttpResponseMessage updateAccountCashFlow(String id, Models.MstAccountCashFlow accountCashFlow)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var accountCashFlowId = Convert.ToInt32(id);
-                var accountCashFlows = from d in db.MstAccountCashFlows where d.Id == accountCashFlowId select d;
-
+                var accountCashFlows = from d in db.MstAccountCashFlows where d.Id == Convert.ToInt32(id) select d;
                 if (accountCashFlows.Any())
                 {
                     var updateAccountCashFlow = accountCashFlows.FirstOrDefault();
-
                     updateAccountCashFlow.AccountCashFlowCode = accountCashFlow.AccountCashFlowCode;
                     updateAccountCashFlow.AccountCashFlow = accountCashFlow.AccountCashFlow;
                     updateAccountCashFlow.IsLocked = accountCashFlow.IsLocked;
-                    updateAccountCashFlow.UpdatedById = mstUserId;
-                    updateAccountCashFlow.UpdatedDateTime = date;
+                    updateAccountCashFlow.UpdatedById = userId;
+                    updateAccountCashFlow.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -103,7 +94,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -111,17 +101,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ========================
-        // DELETE Account Cash Flow
-        // ========================
+        // delete account cash flow
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteAccountCashFlow/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteAccountCashFlow(String id)
         {
             try
             {
-                var accountCashFlowId = Convert.ToInt32(id);
-                var accountCashFlows = from d in db.MstAccountCashFlows where d.Id == accountCashFlowId select d;
-
+                var accountCashFlows = from d in db.MstAccountCashFlows where d.Id == Convert.ToInt32(id) select d;
                 if (accountCashFlows.Any())
                 {
                     db.MstAccountCashFlows.DeleteOnSubmit(accountCashFlows.First());
@@ -133,7 +121,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

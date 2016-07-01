@@ -11,11 +11,11 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // ===================
-        // LIST Stock Out Item
-        // ===================
+        // list stock out item
+        [Authorize]
+        [HttpGet]
         [Route("api/listStockOutItem")]
-        public List<Models.TrnStockOutItem> Get()
+        public List<Models.TrnStockOutItem> listStockOutItem()
         {
             var stockOutItems = from d in db.TrnStockOutItems
                                 select new Models.TrnStockOutItem
@@ -42,18 +42,18 @@ namespace easyfis.Controllers
                                     BaseQuantity = d.BaseQuantity,
                                     BaseCost = d.BaseCost
                                 };
+
             return stockOutItems.ToList();
         }
 
-        // ============================
-        // LIST Stock Out Item by OT Id
-        // ============================
+        // list stock out by OTId
+        [Authorize]
+        [HttpGet]
         [Route("api/listStockOutItemByOTId/{OTId}")]
-        public List<Models.TrnStockOutItem> GetStockOutItemByOTId(String OTId)
+        public List<Models.TrnStockOutItem> listStockOutItemByOTId(String OTId)
         {
-            var stockOutItem_OTId = Convert.ToInt32(OTId);
             var stockOutItems = from d in db.TrnStockOutItems
-                                where d.OTId == stockOutItem_OTId
+                                where d.OTId == Convert.ToInt32(OTId)
                                 select new Models.TrnStockOutItem
                                 {
                                     Id = d.Id,
@@ -78,19 +78,19 @@ namespace easyfis.Controllers
                                     BaseQuantity = d.BaseQuantity,
                                     BaseCost = d.BaseCost
                                 };
+
             return stockOutItems.ToList();
         }
 
-        // ==================
-        // ADD Stock Out Item
-        // ==================
+        // add stock out item
+        [Authorize]
+        [HttpPost]
         [Route("api/addStockOutItem")]
-        public int Post(Models.TrnStockOutItem stockOutItem)
+        public Int32 insertStockOutItem(Models.TrnStockOutItem stockOutItem)
         {
             try
             {
                 Data.TrnStockOutItem newStockOutItems = new Data.TrnStockOutItem();
-
                 newStockOutItems.OTId = stockOutItem.OTId;
                 newStockOutItems.ExpenseAccountId = stockOutItem.ExpenseAccountId;
                 newStockOutItems.ItemId = stockOutItem.ItemId;
@@ -105,7 +105,6 @@ namespace easyfis.Controllers
                 newStockOutItems.BaseUnitId = item.First().UnitId;
 
                 var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == stockOutItem.ItemId && d.UnitId == stockOutItem.UnitId select d;
-
                 if (conversionUnit.First().Multiplier > 0)
                 {
                     newStockOutItems.BaseQuantity = stockOutItem.Quantity * (1 / conversionUnit.First().Multiplier);
@@ -116,7 +115,6 @@ namespace easyfis.Controllers
                 }
 
                 var baseQuantity = stockOutItem.Quantity * (1 / conversionUnit.First().Multiplier);
-
                 if (baseQuantity > 0)
                 {
                     newStockOutItems.BaseCost = stockOutItem.Amount / baseQuantity;
@@ -137,21 +135,18 @@ namespace easyfis.Controllers
             }
         }
 
-        // =====================
-        // UPDATE Stock Out Item
-        // =====================
+        // update stock out item
+        [Authorize]
+        [HttpPut]
         [Route("api/updateStockOutItem/{id}")]
-        public HttpResponseMessage Put(String id, Models.TrnStockOutItem stockOutItem)
+        public HttpResponseMessage updateStockOutItem(String id, Models.TrnStockOutItem stockOutItem)
         {
             try
             {
-                var stockOutItemId = Convert.ToInt32(id);
-                var stockOutItems = from d in db.TrnStockOutItems where d.Id == stockOutItemId select d;
-
+                var stockOutItems = from d in db.TrnStockOutItems where d.Id == Convert.ToInt32(id) select d;
                 if (stockOutItems.Any())
                 {
                     var updateStockOutItem = stockOutItems.FirstOrDefault();
-
                     updateStockOutItem.OTId = stockOutItem.OTId;
                     updateStockOutItem.ExpenseAccountId = stockOutItem.ExpenseAccountId;
                     updateStockOutItem.ItemId = stockOutItem.ItemId;
@@ -166,7 +161,6 @@ namespace easyfis.Controllers
                     updateStockOutItem.BaseUnitId = item.First().UnitId;
 
                     var conversionUnit = from d in db.MstArticleUnits where d.ArticleId == stockOutItem.ItemId && d.UnitId == stockOutItem.UnitId select d;
-
                     if (conversionUnit.First().Multiplier > 0)
                     {
                         updateStockOutItem.BaseQuantity = stockOutItem.Quantity * (1 / conversionUnit.First().Multiplier);
@@ -177,7 +171,6 @@ namespace easyfis.Controllers
                     }
 
                     var baseQuantity = stockOutItem.Quantity * (1 / conversionUnit.First().Multiplier);
-
                     if (baseQuantity > 0)
                     {
                         updateStockOutItem.BaseCost = stockOutItem.Amount / baseQuantity;
@@ -195,7 +188,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
@@ -203,17 +195,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // =====================
-        // DELETE Stock Out Item
-        // =====================
+        // delete stock out item
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteStockOutItem/{id}")]
         public HttpResponseMessage Delete(String id)
         {
             try
             {
-                var stockOutItemId = Convert.ToInt32(id);
-                var stockOutItems = from d in db.TrnStockOutItems where d.Id == stockOutItemId select d;
-
+                var stockOutItems = from d in db.TrnStockOutItems where d.Id == Convert.ToInt32(id) select d;
                 if (stockOutItems.Any())
                 {
                     db.TrnStockOutItems.DeleteOnSubmit(stockOutItems.First());
@@ -225,7 +215,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {

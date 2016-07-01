@@ -314,7 +314,7 @@ namespace easyfis.Controllers
             return (Models.TrnDisbursement)disbursements.FirstOrDefault();
         }
 
-        // list disbursement by BankId and by CVDate for Bank Recon
+        // list disbursement by BankId and by CVDate for Bank reconciliation
         [Authorize]
         [HttpGet]
         [Route("api/listDisbursementByBankIdByCVDate/{bankId}/{dateStart}/{dateEnd}")]

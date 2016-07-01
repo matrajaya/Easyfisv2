@@ -10,10 +10,10 @@ namespace easyfis.Controllers
 {
     public class ApiStockCountItemController : ApiController
     {
-        // Global Variable
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
-       
-        // LIST Stock Count Item
+
+        // list stock count item
+        [Authorize]
         [HttpGet]
         [Route("api/stockCountItem/list")]
         public List<Models.TrnStockCountItem> listStockCountItem()
@@ -30,13 +30,15 @@ namespace easyfis.Controllers
                                       Quantity = d.Quantity,
                                       Unit = d.MstArticle.MstUnit.Unit
                                   };
+
             return stockCountItems.ToList();
         }
 
-        // LIST Stock Count Item by SCId
+        // list stock count item by SCId
+        [Authorize]
         [HttpGet]
         [Route("api/stockCountItem/listBySCId/{SCId}")]
-        public List<Models.TrnStockCountItem> getStockCountItemBySCId(String SCId)
+        public List<Models.TrnStockCountItem> listStockCountItemBySCId(String SCId)
         {
             var stockCountItems = from d in db.TrnStockCountItems
                                   where d.SCId == Convert.ToInt32(SCId)
@@ -51,18 +53,19 @@ namespace easyfis.Controllers
                                       Quantity = d.Quantity,
                                       Unit = d.MstArticle.MstUnit.Unit
                                   };
+
             return stockCountItems.ToList();
         }
 
-        // ADD Stock Count Item
+        // add stock count item
+        [Authorize]
         [HttpPost]
         [Route("api/stockCountItem/add")]
-        public int addStockCountItem(Models.TrnStockCountItem stockCountItem)
+        public Int32 insertStockCountItem(Models.TrnStockCountItem stockCountItem)
         {
             try
             {
                 Data.TrnStockCountItem newStockCountItem = new Data.TrnStockCountItem();
-
                 newStockCountItem.SCId = stockCountItem.SCId;
                 newStockCountItem.ItemId = stockCountItem.ItemId;
                 newStockCountItem.Particulars = stockCountItem.Particulars;
@@ -79,7 +82,8 @@ namespace easyfis.Controllers
             }
         }
 
-        // UPDATE Stock Count Item
+        // update stock count item
+        [Authorize]
         [HttpPut]
         [Route("api/stockCountItem/update/{id}")]
         public HttpResponseMessage updateStockCountItem(String id, Models.TrnStockCountItem stockCountItem)
@@ -90,7 +94,6 @@ namespace easyfis.Controllers
                 if (stockCountItems.Any())
                 {
                     var updateStockCountItem = stockCountItems.FirstOrDefault();
-                    
                     updateStockCountItem.SCId = stockCountItem.SCId;
                     updateStockCountItem.ItemId = stockCountItem.ItemId;
                     updateStockCountItem.Particulars = stockCountItem.Particulars;
@@ -111,7 +114,8 @@ namespace easyfis.Controllers
             }
         }
 
-        // DELETE Stock Count Item
+        // delete stock count item
+        [Authorize]
         [HttpDelete]
         [Route("api/stockCountItem/delete/{id}")]
         public HttpResponseMessage deleteStockCountItem(String id)
@@ -136,6 +140,5 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
-
     }
 }

@@ -12,13 +12,13 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
-        // =========
-        // LIST Unit
-        // =========
+        // list Unit
+        [Authorize]
+        [HttpGet]
         [Route("api/listUnit")]
-        public List<Models.MstUnit> Get()
+        public List<Models.MstUnit> listUnit()
         {
-            var units = from d in db.MstUnits
+            var units = from d in db.MstUnits.OrderBy(d => d.Unit)
                         select new Models.MstUnit
                         {
                             Id = d.Id,
@@ -31,18 +31,18 @@ namespace easyfis.Controllers
                             UpdatedBy = d.MstUser1.FullName,
                             UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                         };
+
             return units.ToList();
         }
 
-        // ==============
-        // Get Unit by Id
-        // ==============
+        // get Unit by Id
+        [Authorize]
+        [HttpGet]
         [Route("api/unit/{Id}")]
-        public Models.MstUnit GetById(String Id)
+        public Models.MstUnit getUnitById(String Id)
         {
-            var unit_Id = Convert.ToInt32(Id);
             var units = from d in db.MstUnits
-                        where d.Id == unit_Id
+                        where d.Id == Convert.ToInt32(Id)
                         select new Models.MstUnit
                         {
                             Id = d.Id,
@@ -55,30 +55,27 @@ namespace easyfis.Controllers
                             UpdatedBy = d.MstUser1.FullName,
                             UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
                         };
+
             return (Models.MstUnit)units.FirstOrDefault();
         }
 
-        // ========
-        // ADD Unit
-        // ========
+        // add unit
+        [Authorize]
+        [HttpPost]
         [Route("api/addUnit")]
-        public int Post(Models.MstUnit unit)
+        public Int32 insertUnit(Models.MstUnit unit)
         {
             try
             {
-                //var isLocked = false;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstUnit newUnit = new Data.MstUnit();
-
                 newUnit.Unit = unit.Unit;
                 newUnit.IsLocked = unit.IsLocked;
-                newUnit.CreatedById = mstUserId;
-                newUnit.CreatedDateTime = date;
-                newUnit.UpdatedById = mstUserId;
-                newUnit.UpdatedDateTime = date;
+                newUnit.CreatedById = userId;
+                newUnit.CreatedDateTime = DateTime.Now;
+                newUnit.UpdatedById = userId;
+                newUnit.UpdatedDateTime = DateTime.Now;
 
                 db.MstUnits.InsertOnSubmit(newUnit);
                 db.SubmitChanges();
@@ -91,30 +88,25 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===========
-        // UPDATE Unit
-        // ===========
+        // update unit
+        [Authorize]
+        [HttpPut]
         [Route("api/updateUnit/{id}")]
-        public HttpResponseMessage Put(String id, Models.MstUnit unit)
+        public HttpResponseMessage updateUnit(String id, Models.MstUnit unit)
         {
             try
             {
-                //var isLocked = true;
-                var identityUserId = User.Identity.GetUserId();
-                var mstUserId = (from d in db.MstUsers where d.UserId == identityUserId select d.Id).SingleOrDefault();
-                var date = DateTime.Now;
+                var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
-                var unit_Id = Convert.ToInt32(id);
-                var units = from d in db.MstUnits where d.Id == unit_Id select d;
-
+                var units = from d in db.MstUnits where d.Id == Convert.ToInt32(id) select d;
                 if (units.Any())
                 {
                     var updateUnit = units.FirstOrDefault();
 
                     updateUnit.Unit = unit.Unit;
                     updateUnit.IsLocked = unit.IsLocked;
-                    updateUnit.UpdatedById = mstUserId;
-                    updateUnit.UpdatedDateTime = date;
+                    updateUnit.UpdatedById = userId;
+                    updateUnit.UpdatedDateTime = DateTime.Now;
 
                     db.SubmitChanges();
 
@@ -131,17 +123,15 @@ namespace easyfis.Controllers
             }
         }
 
-        // ===========
-        // DELETE Unit
-        // ===========
+        // delete unit
+        [Authorize]
+        [HttpDelete]
         [Route("api/deleteUnit/{id}")]
-        public HttpResponseMessage Delete(String id)
+        public HttpResponseMessage deleteUnit(String id)
         {
             try
             {
-                var unit_Id = Convert.ToInt32(id);
-                var units = from d in db.MstUnits where d.Id == unit_Id select d;
-
+                var units = from d in db.MstUnits where d.Id == Convert.ToInt32(id) select d;
                 if (units.Any())
                 {
                     db.MstUnits.DeleteOnSubmit(units.First());
@@ -153,7 +143,6 @@ namespace easyfis.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
             }
             catch
             {
