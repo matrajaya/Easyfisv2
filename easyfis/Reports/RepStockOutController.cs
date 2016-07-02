@@ -69,6 +69,7 @@ namespace easyfis.Reports
 
             var stockOuts = from d in db.TrnStockOuts
                             where d.Id == StockOutId
+                            && d.IsLocked == true
                             select new Models.TrnStockOut
                             {
                                 Id = d.Id,
@@ -133,6 +134,7 @@ namespace easyfis.Reports
 
                 var stockOutItems = from d in db.TrnStockOutItems
                                     where d.OTId == StockOutId
+                                    && d.TrnStockOut.IsLocked == true
                                     select new Models.TrnStockOutItem
                                     {
                                         Id = d.Id,

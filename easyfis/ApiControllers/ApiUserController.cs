@@ -80,6 +80,7 @@ namespace easyfis.Controllers
                             SupplierAdvancesAccount = d.MstAccount1.Account,
                             CustomerAdvancesAccountId = d.CustomerAdvancesAccountId,
                             CustomerAdvancesAccount = d.MstAccount2.Account,
+                            OfficialReceiptName = d.OfficialReceiptName,
                             //CreatedById = d.CreatedById,
                             //CreatedBy = d.MstUser1.FullName,
                             //CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
@@ -195,7 +196,8 @@ namespace easyfis.Controllers
                     updateMstUsers.IncomeAccountId = mstUser.IncomeAccountId;
                     updateMstUsers.SupplierAdvancesAccountId = mstUser.SupplierAdvancesAccountId;
                     updateMstUsers.CustomerAdvancesAccountId = mstUser.CustomerAdvancesAccountId;
-
+                    updateMstUsers.OfficialReceiptName = mstUser.OfficialReceiptName;
+                    
                     db.SubmitChanges();
 
                     if (aspUsers.Any())
@@ -261,6 +263,7 @@ namespace easyfis.Controllers
                 {
                     var updateUserDefaults = userDefaults.FirstOrDefault();
                     updateUserDefaults.BranchId = mstUser.BranchId;
+                    updateUserDefaults.OfficialReceiptName = mstUser.OfficialReceiptName;
 
                     db.SubmitChanges();
 

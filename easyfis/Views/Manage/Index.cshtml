@@ -325,6 +325,7 @@
                             selectedValuePath: "Branch",
                             selectedValue: defaultBranch.toString()
                         });
+                        document.getElementById("defaultOfficialReceiptName").value = "@ViewData["OfficialReceiptName"]";
                     }
                 }
             });
@@ -333,9 +334,10 @@
         function btnOnclickSaveDefaults() {
             document.getElementById('btnIdSaveDefaults').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
             $("#btnIdSaveDefaults").prop("disabled", true);
-            
+
             var userDefaultObject = new Object();
             userDefaultObject.BranchId = cboDefaultBranch.selectedItem["Id"];
+            userDefaultObject.OfficialReceiptName = document.getElementById("defaultOfficialReceiptName").value;
             var userDefaultData = JSON.stringify(userDefaultObject);
 
             var userId = "@ViewData["UserId"]";

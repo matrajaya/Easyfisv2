@@ -9,51 +9,40 @@ function btnNoRightsOnclick() {
 function rightsAccessValidation(userId) {
     var path = window.location.pathname;
     var currentPage = path.split("/").pop();
+    var userForms = new Array();
 
     $.ajax({
-        url: '/api/listByMstUserId/' + userId,
+        url: '/api/listUserFormByUserId/' + userId,
         cache: false,
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
-        success: function (userResults) {
+        success: function (userFormResults) {
+            if (userFormResults.length > 0) {
+                for (i = 0; i < userFormResults.length; i++) {
+                    userForms.push({
+                        Form: userFormResults[i]["Form"],
+                    });
 
-            var userForms = new Array();
-
-            $.ajax({
-                url: '/api/listUserFormByUserId/' + userResults.Id,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                success: function (userFormResults) {
                     var currentObject;
-                    if (userFormResults.length > 0) {
-                        for (i = 0; i < userFormResults.length; i++) {
-                            userForms.push({
-                                Form: userFormResults[i]["Form"],
-                            });
+                    currentObject = userFormResults[i].Form.indexOf(currentPage) >= 0;
 
-                            currentObject = userFormResults[i].Form.indexOf(currentPage) >= 0;
-
-                            if (currentObject == true) {
-                                break;
-                            }
-
-                        }
-
-                        if (currentObject == false) {
-                            $("#noRights").modal({
-                                show: true,
-                                backdrop: 'static'
-                            });
-                        }
-                    } else {
-                        $("#noRights").modal({
-                            show: true,
-                            backdrop: 'static'
-                        });
+                    if (currentObject == true) {
+                        break;
                     }
                 }
-            })
+
+                if (currentObject == false) {
+                    $("#noRights").modal({
+                        show: true,
+                        backdrop: 'static'
+                    });
+                }
+            } else {
+                $("#noRights").modal({
+                    show: true,
+                    backdrop: 'static'
+                });
+            }
         }
     });
 }

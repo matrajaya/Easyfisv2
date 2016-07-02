@@ -25,6 +25,8 @@ namespace easyfis.Controllers
                     string branchId = string.Concat((from d in db.MstUsers where d.UserId == userId select d.BranchId).SingleOrDefault());
                     string branch = string.Concat((from d in db.MstUsers where d.UserId == userId select d.MstBranch.Branch).SingleOrDefault());
                     string company = string.Concat((from d in db.MstUsers where d.UserId == userId select d.MstBranch.MstCompany.Company).SingleOrDefault());
+                    string mstUserId = string.Concat((from d in db.MstUsers where d.UserId == userId select d.Id).SingleOrDefault());
+                    string officialReceiptName = string.Concat((from d in db.MstUsers where d.UserId == userId select d.OfficialReceiptName).SingleOrDefault());
 
                     ViewData.Add("UserId", userId);
                     ViewData.Add("FullName", fullName);
@@ -34,6 +36,8 @@ namespace easyfis.Controllers
                     ViewData.Add("BranchId", branchId);
                     ViewData.Add("Branch", branch);
                     ViewData.Add("Company", company);
+                    ViewData.Add("MstUserId", mstUserId);
+                    ViewData.Add("OfficialReceiptName", officialReceiptName);
 
                 }
             }

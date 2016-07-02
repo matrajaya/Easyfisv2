@@ -216,6 +216,7 @@ namespace easyfis.Controllers
                         newMstUser.IncomeAccountId = account.FirstOrDefault().Id;
                         newMstUser.SupplierAdvancesAccountId = account.FirstOrDefault().Id;
                         newMstUser.CustomerAdvancesAccountId = account.FirstOrDefault().Id;
+                        newMstUser.OfficialReceiptName = "Official Receipt";
 
                         db.MstUsers.InsertOnSubmit(newMstUser);
                         db.SubmitChanges();

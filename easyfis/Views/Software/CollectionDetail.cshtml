@@ -191,9 +191,9 @@
                             <button class="btn btn-primary btn-sm" id="btnIdApplyAllSI" onclick="btnOnclickApplyAllSI()"><i class="fa fa-check"></i> Apply</button>
                         </div>
                     </div>
-                    <br />
                     <div class="row" align="left">
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" id="statusGrid">
+                            <br />
                             <div id="salesInvoiceStatusGrid" class="grid statusGrid" align="left"></div>
                         </div>
                         <center>
@@ -2739,11 +2739,12 @@
             $('#loadingSIStatus').show();
             $('#btnIdApplyAllSI').hide();
             $('#salesInvoiceStatusGrid').hide();
-
+            $('#statusGrid').hide();
             setTimeout(function () {
                 $('#loadingSIStatus').hide();
                 $('#btnIdApplyAllSI').show();
                 $('#salesInvoiceStatusGrid').show();
+                $('#statusGrid').show();
 
                 getReceivingStatusGrid();
                 window.getReceivingStatusGrid = function () {
@@ -2792,7 +2793,7 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            var userId = '@ViewData["UserId"]';
+            var userId = '@ViewData["MstUserId"]';
             rightsAccessValidation(userId);
 
             var collectonId = getParam("CollectonId");

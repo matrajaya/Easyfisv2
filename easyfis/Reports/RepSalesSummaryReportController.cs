@@ -66,20 +66,21 @@ namespace easyfis.Reports
 
             // Sales Invoices
             var salesInvoices = from d in db.TrnSalesInvoices
-                                      where d.BranchId == currentBranchId()
-                                      && d.SIDate >= Convert.ToDateTime(StartDate)
-                                      && d.SIDate <= Convert.ToDateTime(EndDate)
-                                      select new Models.TrnSalesInvoice
-                                      {
-                                          Id = d.Id,
-                                          Branch = d.MstBranch.Branch,
-                                          SINumber = d.SINumber,
-                                          SIDate = d.SIDate.ToShortDateString(),
-                                          Customer = d.MstArticle.Article,
-                                          Remarks = d.Remarks,
-                                          SoldBy = d.MstUser4.FullName,
-                                          Amount = d.Amount
-                                      };
+                                where d.BranchId == currentBranchId()
+                                && d.SIDate >= Convert.ToDateTime(StartDate)
+                                && d.SIDate <= Convert.ToDateTime(EndDate)
+                                && d.IsLocked == true
+                                select new Models.TrnSalesInvoice
+                                {
+                                    Id = d.Id,
+                                    Branch = d.MstBranch.Branch,
+                                    SINumber = d.SINumber,
+                                    SIDate = d.SIDate.ToShortDateString(),
+                                    Customer = d.MstArticle.Article,
+                                    Remarks = d.Remarks,
+                                    SoldBy = d.MstUser4.FullName,
+                                    Amount = d.Amount
+                                };
 
             Decimal total = 0;
 

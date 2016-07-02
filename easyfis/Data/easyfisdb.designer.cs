@@ -13289,6 +13289,8 @@ namespace easyfis.Data
 		
 		private int _CustomerAdvancesAccountId;
 		
+		private string _OfficialReceiptName;
+		
 		private EntitySet<MstAccount> _MstAccounts;
 		
 		private EntitySet<MstAccount> _MstAccounts1;
@@ -13501,6 +13503,8 @@ namespace easyfis.Data
     partial void OnSupplierAdvancesAccountIdChanged();
     partial void OnCustomerAdvancesAccountIdChanging(int value);
     partial void OnCustomerAdvancesAccountIdChanged();
+    partial void OnOfficialReceiptNameChanging(string value);
+    partial void OnOfficialReceiptNameChanged();
     #endregion
 		
 		public MstUser()
@@ -13917,6 +13921,26 @@ namespace easyfis.Data
 					this._CustomerAdvancesAccountId = value;
 					this.SendPropertyChanged("CustomerAdvancesAccountId");
 					this.OnCustomerAdvancesAccountIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OfficialReceiptName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string OfficialReceiptName
+		{
+			get
+			{
+				return this._OfficialReceiptName;
+			}
+			set
+			{
+				if ((this._OfficialReceiptName != value))
+				{
+					this.OnOfficialReceiptNameChanging(value);
+					this.SendPropertyChanging();
+					this._OfficialReceiptName = value;
+					this.SendPropertyChanged("OfficialReceiptName");
+					this.OnOfficialReceiptNameChanged();
 				}
 			}
 		}

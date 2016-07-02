@@ -52,6 +52,7 @@ namespace easyfis.Reports
             var address = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Address).SingleOrDefault();
             var contactNo = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.ContactNumber).SingleOrDefault();
             var branch = (from d in db.MstBranches where d.Id == currentBranchId() select d.Branch).SingleOrDefault();
+            var officialReceiptName = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.OfficialReceiptName).SingleOrDefault();
 
             // table main header
             PdfPTable tableHeaderPage = new PdfPTable(2);
@@ -59,7 +60,7 @@ namespace easyfis.Reports
             tableHeaderPage.SetWidths(widthsCellsheaderPage);
             tableHeaderPage.WidthPercentage = 100;
             tableHeaderPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Collection", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeaderPage.AddCell(new PdfPCell(new Phrase(officialReceiptName, fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
             tableHeaderPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
             tableHeaderPage.AddCell(new PdfPCell(new Phrase(branch, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
             tableHeaderPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
@@ -69,6 +70,7 @@ namespace easyfis.Reports
 
             var collectionHeaders = from d in db.TrnCollections
                                     where d.Id == CollectonId
+                                    && d.IsLocked == true
                                     select new Models.TrnCollection
                                     {
                                         Id = d.Id,
@@ -137,6 +139,7 @@ namespace easyfis.Reports
 
                 var collectionLines = from d in db.TrnCollectionLines
                                       where d.ORId == CollectonId
+                                      && d.TrnCollection.IsLocked == true
                                       select new Models.TrnCollectionLine
                                       {
                                           Id = d.Id,

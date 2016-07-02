@@ -69,6 +69,7 @@ namespace easyfis.Reports
                                     where d.TrnSalesInvoice.BranchId == currentBranchId()
                                     && d.TrnSalesInvoice.SIDate >= Convert.ToDateTime(StartDate)
                                     && d.TrnSalesInvoice.SIDate <= Convert.ToDateTime(EndDate)
+                                    && d.TrnSalesInvoice.IsLocked == true
                                     select new Models.TrnSalesInvoiceItem
                                     {
                                         Id = d.Id,

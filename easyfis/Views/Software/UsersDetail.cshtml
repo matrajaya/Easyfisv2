@@ -94,7 +94,7 @@
                                 <div class="well">
                                     <form class="form-horizontal" role="form">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-6">Default Company</label>
                                                     <div class="col-sm-6">
@@ -125,8 +125,14 @@
                                                         <div class="comboBox-wide" id="defaultCustomerAdvancesAccount"></div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-6">Default Official Receipt Name</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control input-70" id="defaultOfficialReceiptName" />
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6"></div>
+                                            <div class="col-md-4"></div>
                                         </div>
                                     </form>
                                 </div>
@@ -225,6 +231,7 @@
         var defaultIncomeAccountSelectedValue = "";
         var defaultSupplierAdvancesAccountSelectedValue = "";
         var defaultcustomerAdvancesAccountSelectedValue = "";
+        var defaultOfficialReceiptNameValue = "";
 
         // =======================
         // Get URL Parameter Value
@@ -260,17 +267,21 @@
                             defaultIncomeAccountSelectedValue = userResults.IncomeAccount;
                             defaultSupplierAdvancesAccountSelectedValue = userResults.SupplierAdvancesAccount;
                             defaultcustomerAdvancesAccountSelectedValue = userResults.CustomerAdvancesAccount;
+                            defaultOfficialReceiptNameValue = userResults.OfficialReceiptName;
 
                             document.getElementById("userDetail_Username").value = userResults.UserName;
                             document.getElementById("userDetail_Fullname").value = userResults.FullName;
+                            document.getElementById("defaultOfficialReceiptName").value = defaultOfficialReceiptNameValue;
                             NProgress.done();
                             if (userResults.IsLocked == true) {
                                 document.getElementById("userDetail_Fullname").disabled = true;
+                                document.getElementById("defaultOfficialReceiptName").disabled = true;
                                 $("#btnUserDetailLock").prop("disabled", true);
                                 $("#btnAddUserForm").prop("disabled", true);
                                 IsLocked = true;
                             } else {
                                 document.getElementById("userDetail_Fullname").disabled = false;
+                                document.getElementById("defaultOfficialReceiptName").disabled = false;
                                 $("#btnUserDetailUnLock").prop("disabled", true);
                                 $("#btnAddUserForm").prop("disabled", false);
                                 IsLocked = false;
@@ -398,6 +409,7 @@
                 userObject.IncomeAccountId = cboIncomeAccount.selectedItem["Id"];
                 userObject.SupplierAdvancesAccountId = cboSupplierAvancesAccount.selectedItem["Id"];
                 userObject.CustomerAdvancesAccountId = cboCustomerAdvancesAccount.selectedItem["Id"];
+                userObject.OfficialReceiptName = document.getElementById("defaultOfficialReceiptName").value;
                 var data = JSON.stringify(userObject);
 
                 $.ajax({
@@ -994,7 +1006,7 @@
         // On Load Page
         // ============
         $(document).ready(function () {
-            var userId = '@ViewData["UserId"]';
+            var userId = '@ViewData["MstUserId"]';
             rightsAccessValidation(userId);
             document.getElementById("userDetail_Username").disabled = true;
 

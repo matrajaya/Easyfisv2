@@ -59,7 +59,7 @@ namespace easyfis.Reports
             tableHeaderPage.SetWidths(widthsCellsheaderPage);
             tableHeaderPage.WidthPercentage = 100;
             tableHeaderPage.AddCell(new PdfPCell(new Phrase(companyName, fontArial17Bold)) { Border = 0 });
-            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Sales", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
+            tableHeaderPage.AddCell(new PdfPCell(new Phrase("Sales Invoice", fontArial17Bold)) { Border = 0, HorizontalAlignment = 2 });
             tableHeaderPage.AddCell(new PdfPCell(new Phrase(address, fontArial11)) { Border = 0, PaddingTop = 5f });
             tableHeaderPage.AddCell(new PdfPCell(new Phrase(branch, fontArial11)) { Border = 0, PaddingTop = 5f, HorizontalAlignment = 2, });
             tableHeaderPage.AddCell(new PdfPCell(new Phrase(contactNo, fontArial11)) { Border = 0, PaddingTop = 5f });
@@ -69,6 +69,7 @@ namespace easyfis.Reports
 
             var salesInvoiceHeaders = from d in db.TrnSalesInvoices
                                       where d.Id == SalesId
+                                      && d.IsLocked == true
                                       select new Models.TrnSalesInvoice
                                       {
                                           Id = d.Id,
@@ -153,6 +154,7 @@ namespace easyfis.Reports
 
                 var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                         where d.SIId == SalesId
+                                        && d.TrnSalesInvoice.IsLocked == true
                                         select new Models.TrnSalesInvoiceItem
                                         {
                                             Id = d.Id,

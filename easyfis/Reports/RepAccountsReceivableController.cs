@@ -110,6 +110,7 @@ namespace easyfis.Controllers
                                        where d.SIDate <= Convert.ToDateTime(DateAsOf)
                                        && d.MstBranch.CompanyId == CompanyId
                                        && d.BalanceAmount > 0
+                                       && d.IsLocked == true
                                        group d by new
                                        {
                                            AccountId = d.MstArticle.AccountId,

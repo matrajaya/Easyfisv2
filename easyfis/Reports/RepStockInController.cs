@@ -69,6 +69,7 @@ namespace easyfis.Views.Software
 
             var stockIns = from d in db.TrnStockIns
                            where d.Id == StockInId
+                           && d.IsLocked == true
                            select new Models.TrnStockIn
                            {
                                Id = d.Id,
@@ -134,6 +135,7 @@ namespace easyfis.Views.Software
 
                 var stockInItems = from d in db.TrnStockInItems
                                    where d.INId == StockInId
+                                   && d.TrnStockIn.IsLocked == true
                                    select new Models.TrnStockInItem
                                    {
                                        Id = d.Id,

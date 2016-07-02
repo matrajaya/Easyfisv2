@@ -69,6 +69,7 @@ namespace easyfis.Reports
 
             var stockTransfers = from d in db.TrnStockTransfers
                                  where d.Id == StockTransferId
+                                 && d.IsLocked == true
                                  select new Models.TrnStockTransfer
                                  {
                                      Id = d.Id,
@@ -137,6 +138,7 @@ namespace easyfis.Reports
 
                 var stockTransferItems = from d in db.TrnStockTransferItems
                                          where d.STId == StockTransferId
+                                         && d.TrnStockTransfer.IsLocked == true
                                          select new Models.TrnStockTransferItem
                                          {
                                              Id = d.Id,

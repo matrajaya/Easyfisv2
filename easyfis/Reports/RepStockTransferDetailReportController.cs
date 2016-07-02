@@ -118,6 +118,7 @@ namespace easyfis.Reports
 
                     var stockTransferItems = from d in db.TrnStockTransferItems
                                              where d.TrnStockTransfer.MstBranch1.Branch == stockTransfer.ToBranch
+                                             && d.TrnStockTransfer.IsLocked == true
                                              select new Models.TrnStockTransferItem
                                              {
                                                  Id = d.Id,

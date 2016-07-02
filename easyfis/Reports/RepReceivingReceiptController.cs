@@ -157,6 +157,7 @@ namespace easyfis.Reports
 
                 var receivingReceiptItems = from d in db.TrnReceivingReceiptItems
                                             where d.RRId == RRId
+                                            && d.TrnReceivingReceipt.IsLocked == true
                                             select new Models.TrnReceivingReceiptItem
                                             {
                                                 Id = d.Id,

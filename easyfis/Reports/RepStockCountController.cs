@@ -69,6 +69,7 @@ namespace easyfis.Reports
 
             var stockCounts = from d in db.TrnStockCounts
                               where d.Id == Id
+                              && d.IsLocked == true
                               select new Models.TrnStockCount
                               {
                                   Id = d.Id,
@@ -126,6 +127,7 @@ namespace easyfis.Reports
 
                 var stockCountItems = from d in db.TrnStockCountItems
                                       where d.SCId == Id
+                                      && d.TrnStockCount.IsLocked == true
                                       select new Models.TrnStockCountItem
                                       {
                                           Id = d.Id,

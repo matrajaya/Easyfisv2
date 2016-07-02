@@ -147,6 +147,7 @@ namespace easyfis.Reports
 
                 var purchaseOrderItems = from d in db.TrnPurchaseOrderItems
                                          where d.POId == POId
+                                         && d.TrnPurchaseOrder.IsLocked == true
                                          select new Models.TrnPurchaseOrderItem
                                          {
                                              Id = d.Id,
