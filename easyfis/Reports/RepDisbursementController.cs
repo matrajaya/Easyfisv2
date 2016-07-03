@@ -205,7 +205,7 @@ namespace easyfis.Reports
                     tableCVJournal.AddCell(new PdfPCell(new Phrase(journal.AccountCode, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableCVJournal.AddCell(new PdfPCell(new Phrase(journal.Account, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableCVJournal.AddCell(new PdfPCell(new Phrase(journal.Article, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableCVJournal.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableCVJournal.AddCell(new PdfPCell(new Phrase(journal.DebitAmount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
                     tableCVJournal.AddCell(new PdfPCell(new Phrase(journal.CreditAmount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     TotalDebit = TotalDebit + journal.DebitAmount;
@@ -270,7 +270,7 @@ namespace easyfis.Reports
                     tableCVLines.AddCell(new PdfPCell(new Phrase(disbursementLine.RR, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableCVLines.AddCell(new PdfPCell(new Phrase(disbursementLine.RRDate, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
                     tableCVLines.AddCell(new PdfPCell(new Phrase(disbursementLine.Particulars, fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
-                    tableCVLines.AddCell(new PdfPCell(new Phrase(disbursementLine.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 0, PaddingTop = 3f, PaddingBottom = 5f });
+                    tableCVLines.AddCell(new PdfPCell(new Phrase(disbursementLine.Amount.ToString("#,##0.00"), fontArial9)) { HorizontalAlignment = 2, PaddingTop = 3f, PaddingBottom = 5f });
 
                     TotalAmount = TotalAmount + disbursementLine.Amount;
                 }
@@ -330,23 +330,36 @@ namespace easyfis.Reports
 
                 string paidAmount = Convert.ToString(Math.Round(TotalAmount * 100) / 100);
 
+                var amountPhrase = new Phrase();
+                amountPhrase.Add(new Chunk("Representing Payment from " + companyName + "the amount of ", fontArial11));
+                amountPhrase.Add(new Chunk(getMoneyWord(paidAmount).ToUpper() + "PESOS ONLY", fontArial11Bold));
+
                 document.Add(Chunk.NEWLINE);
                 // Table for sign Footer
                 PdfPTable tableSignFooter = new PdfPTable(3);
                 tableSignFooter.WidthPercentage = 100;
-                float[] widthsSignFooterCells = new float[] { 50f, 100f, 150f };
+                float[] widthsSignFooterCells = new float[] { 50f, 130f, 180f };
                 tableSignFooter.SetWidths(widthsSignFooterCells);
-                tableSignFooter.AddCell(new PdfPCell(new Phrase("Check No.:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableSignFooter.AddCell(new PdfPCell(new Phrase(CheckNo, fontArial11)) { Border = 0, });
-                tableSignFooter.AddCell(new PdfPCell(new Phrase("Representing Payment from " + companyName + "the amount of", fontArial11)) { Border = 0, HorizontalAlignment = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("Check No.:", fontArial11Bold)) { HorizontalAlignment = 0, Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase(CheckNo, fontArial11)) { Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase(amountPhrase)) { HorizontalAlignment = 0, Rowspan = 3, Border = 0 });
 
-                tableSignFooter.AddCell(new PdfPCell(new Phrase("Check Date:", fontArial11Bold)) { Border = 0, });
-                tableSignFooter.AddCell(new PdfPCell(new Phrase(CheckDate, fontArial11)) { Border = 0, });
-                tableSignFooter.AddCell(new PdfPCell(new Phrase(getMoneyWord(paidAmount).ToUpper(), fontArial12Bold)) { Border = 0, Rowspan = 2, });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("Check Date:", fontArial11Bold)) { Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase(CheckDate, fontArial11)) { Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("Bank:", fontArial12Bold)) { Border = 0 });
 
-                tableSignFooter.AddCell(new PdfPCell(new Phrase("Bank:", fontArial11Bold)) { Border = 0, HorizontalAlignment = 0 });
-                tableSignFooter.AddCell(new PdfPCell(new Phrase(Bank, fontArial11)) { Border = 0, });
-                tableSignFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0, HorizontalAlignment = 1 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase(Bank, fontArial11)) { HorizontalAlignment = 0, Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("")) { HorizontalAlignment = 1, Border = 0 });
+
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+                tableSignFooter.AddCell(new PdfPCell(new Phrase("")) { Border = 0 });
+
                 document.Add(tableSignFooter);
 
                 document.Add(Chunk.NEWLINE);
