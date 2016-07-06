@@ -114,7 +114,7 @@ namespace easyfis.Controllers
         [Route("api/listArticleInventoryBybranchId/{branchId}")]
         public List<Models.MstArticleInventory> listArticleInventoryBybranchId(String branchId)
         {
-            var articleInventories = from d in db.MstArticleInventories
+            var articleInventories = from d in db.MstArticleInventories.OrderBy(d => d.MstArticle.Article)
                                      where d.BranchId == Convert.ToInt32(branchId)
                                      && d.Quantity > 0
                                      && d.MstArticle.IsInventory == true

@@ -350,7 +350,14 @@
                                     <span id="loadingItemQueryGrid"></span>
                                 </h4>
                             </center>
-                            <div id="itemQueryGrid" class="grid"></div>
+                            <div id="SIItemInventoryGridItemQuery">
+                                <div class="input-group input-group-sm  input-50">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterItemQueryGrid" placeholder="Search">
+                                </div>
+                                <br />
+                                <div id="itemQueryGrid" class="grid"></div>
+                            </div>
                         </div>
                         <div id="SIItemNonInventory" class="tab-pane fade in">
                             <center>
@@ -358,7 +365,15 @@
                                     <span id="loadingItemQueryGridNonInventory"></span>
                                 </h4>
                             </center>
-                            <div id="itemQueryGridNonInventory" class="grid"></div>
+
+                            <div id="SIItemInventoryGridItemQueryNonInventory">
+                                <div class="input-group input-group-sm  input-50">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="InputFilterItemQueryGridNonInventory" placeholder="Search">
+                                </div>
+                                <br />
+                                <div id="itemQueryGridNonInventory" class="grid"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2621,12 +2636,12 @@
             //$('#itemQueryGridNonInventory').hide();
             //$('#loadingItemQueryGridNonInventory').hide();
 
-            $('#itemQueryGrid').hide();
+            $('#SIItemInventoryGridItemQuery').hide();
             $('#loadingItemQueryGrid').show();
 
             setTimeout(function () {
                 $('#loadingItemQueryGrid').hide();
-                $('#itemQueryGrid').show();
+                $('#SIItemInventoryGridItemQuery').show();
                 
                 itemQueryFlexGrid(branchId);
                 window.itemQueryFlexGrid = function () {
@@ -2647,10 +2662,10 @@
             //$('#itemQueryGrid').hide();
             //$('#loadingItemQueryGrid').hide();
             
-            $('#itemQueryGridNonInventory').hide();
+            $('#SIItemInventoryGridItemQueryNonInventory').hide();
             $('#loadingItemQueryGridNonInventory').show();
             setTimeout(function () {
-                $('#itemQueryGridNonInventory').show();
+                $('#SIItemInventoryGridItemQueryNonInventory').show();
                 $('#loadingItemQueryGridNonInventory').hide();
 
                 itemQueryFlexGridNonInventory(branchId);
@@ -2659,6 +2674,17 @@
                 };
 
                 articleItemsNonInventory = new wijmo.collections.CollectionView(getArtcileForItemsNonIventory());
+                articleItemsNonInventory.canFilter = true;
+                
+                var filterText = '';
+                $('#InputFilterItemQueryGridNonInventory').keyup(function () {
+                    filterText = this.value.toLowerCase();
+                    articleItemsNonInventory.refresh();
+                });
+                articleItemsNonInventory.filter = function (item) {
+                    return !filterText || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1) 
+                        || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                }
 
                 itemQueryGridNonInventory.itemsSource = articleItemsNonInventory;
                 itemQueryGridNonInventory.trackChanges = true;
@@ -2676,10 +2702,10 @@
 
             var branchId = document.getElementById("SI_Branch_data").value;
             document.getElementById("loadingItemQueryGrid").innerHTML = "<br/><i class='fa fa-spinner fa-spin'></i> Please wait ... ";
-            $('#itemQueryGrid').hide();
+            $('#SIItemInventoryGridItemQuery').hide();
             $('#loadingItemQueryGrid').show();
             setTimeout(function () {
-                $('#itemQueryGrid').show();
+                $('#SIItemInventoryGridItemQuery').show();
                 $('#loadingItemQueryGrid').hide();
 
                 itemQueryFlexGrid(branchId);
@@ -2688,6 +2714,18 @@
                 };
 
                 articleInventories = new wijmo.collections.CollectionView(getArticleInventoryForItemQuery(branchId));
+                articleInventories.canFilter = true;
+                
+                var filterText = '';
+                $('#InputFilterItemQueryGrid').keyup(function () {
+                    filterText = this.value.toLowerCase();
+                    articleInventories.refresh();
+                });
+                articleInventories.filter = function (item) {
+                    return !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1) 
+                        || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1) 
+                        || (item.Article.toLowerCase().indexOf(filterText) > -1);
+                }
 
                 itemQueryGrid.itemsSource = articleInventories;
                 itemQueryGrid.trackChanges = true;
@@ -2698,6 +2736,18 @@
             isInventory = true;
 
             articleInventories = new wijmo.collections.CollectionView(getArticleInventoryForItemQuery(branchId));
+            articleInventories.canFilter = true;
+
+            var filterText = '';
+            $('#InputFilterItemQueryGrid').keyup(function () {
+                filterText = this.value.toLowerCase();
+                articleInventories.refresh();
+            });
+            articleInventories.filter = function (item) {
+                return !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1) 
+                    || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1) 
+                    || (item.Article.toLowerCase().indexOf(filterText) > -1);
+            }
 
             // Flex Grid for Item Query
             itemQueryGrid = new wijmo.grid.FlexGrid('#itemQueryGrid');
@@ -2763,6 +2813,17 @@
         function itemQueryFlexGridNonInventory(branchId) {
             isInventory = false;
             articleItemsNonInventory = new wijmo.collections.CollectionView(getArtcileForItemsNonIventory());
+            articleItemsNonInventory.canFilter = true;
+                
+            var filterText = '';
+            $('#InputFilterItemQueryGridNonInventory').keyup(function () {
+                filterText = this.value.toLowerCase();
+                articleItemsNonInventory.refresh();
+            });
+            articleItemsNonInventory.filter = function (item) {
+                return !filterText || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1) 
+                    || (item.Article.toLowerCase().indexOf(filterText) > -1);
+            }
 
             // Flex Grid for Item Query
             itemQueryGridNonInventory = new wijmo.grid.FlexGrid('#itemQueryGridNonInventory');
