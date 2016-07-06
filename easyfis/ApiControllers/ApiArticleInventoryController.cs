@@ -117,6 +117,7 @@ namespace easyfis.Controllers
             var articleInventories = from d in db.MstArticleInventories
                                      where d.BranchId == Convert.ToInt32(branchId)
                                      && d.Quantity > 0
+                                     && d.MstArticle.IsInventory == true
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,

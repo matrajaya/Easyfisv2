@@ -63,7 +63,7 @@ namespace easyfis.Controllers
 
             return userForms.ToList();
         }
-        
+
         // add user form
         [Authorize]
         [HttpPost]
@@ -142,6 +142,73 @@ namespace easyfis.Controllers
                 {
                     db.MstUserForms.DeleteOnSubmit(userForms.First());
                     db.SubmitChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+            }
+            catch
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+
+        // add user form
+        [Authorize]
+        [HttpPost]
+        [Route("api/userform/copyrights/{name}/{userId}")]
+        public HttpResponseMessage copyRightsUserForms(String name, String userId)
+        {
+            try
+            {
+               var userForms = from d in db.MstUserForms
+                                where d.MstUser.FullName == name
+                                || d.MstUser.UserName == name
+                                select new Models.MstUserForm
+                                {
+                                    Id = d.Id,
+                                    UserId = d.UserId,
+                                    User = d.MstUser.FullName,
+                                    FormId = d.FormId,
+                                    Form = d.SysForm.FormName,
+                                    Particulars = d.SysForm.Particulars,
+                                    CanAdd = d.CanAdd,
+                                    CanEdit = d.CanEdit,
+                                    CanDelete = d.CanDelete,
+                                    CanLock = d.CanLock,
+                                    CanUnlock = d.CanUnlock,
+                                    CanPrint = d.CanPrint
+                                };
+
+                if (userForms.Any())
+                {
+                    var deleteUserForms = from d in db.MstUserForms where d.UserId == Convert.ToInt32(userId) select d;
+
+                    if (deleteUserForms.Any())
+                    {
+                        db.MstUserForms.DeleteAllOnSubmit(deleteUserForms.ToList());
+                        db.SubmitChanges();
+
+                        foreach (var userForm in userForms)
+                        {
+                            Data.MstUserForm newUserForm = new Data.MstUserForm();
+
+                            newUserForm.UserId = Convert.ToInt32(userId);
+                            newUserForm.FormId = userForm.FormId;
+                            newUserForm.CanAdd = userForm.CanAdd;
+                            newUserForm.CanEdit = userForm.CanEdit;
+                            newUserForm.CanDelete = userForm.CanDelete;
+                            newUserForm.CanLock = userForm.CanLock;
+                            newUserForm.CanUnlock = userForm.CanUnlock;
+                            newUserForm.CanPrint = userForm.CanPrint;
+
+                            db.MstUserForms.InsertOnSubmit(newUserForm);
+                            db.SubmitChanges();
+                        }
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }

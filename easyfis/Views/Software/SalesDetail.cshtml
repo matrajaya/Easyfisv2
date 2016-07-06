@@ -228,7 +228,7 @@
                             <li role="presentation" class="active"><a data-toggle="tab" href="#SIItem" id="SIItemTabId">Items</a></li>
                             <li role="presentation"><a data-toggle="tab" href="#SITax" id="SITaxTabId">Tax</a></li>
                             @*
-                            <li role="presentation"><a data-toggle="tab" href="#SIBUC" id="SIBUCTabId">Basic Unit Conversion</a></li>*@
+                                <li role="presentation"><a data-toggle="tab" href="#SIBUC" id="SIBUCTabId">Basic Unit Conversion</a></li>*@
                         </ul>
                         <br />
                         <div class="tab-content">
@@ -250,7 +250,7 @@
                                     <dd>
                                         <div class="comboBox-wide" id="saleItem_InventoryCode"></div>
 
-                                        <input type="hidden" id="saleItem_InventoryCode_data" class="requiredSaleItem">
+                                        <input type="hidden" id="saleItem_InventoryCode_data">
                                         <input type="hidden" id="saleItem_InventoryCode_selectedValue" />
                                     </dd>
                                     <dt>Quantity</dt>
@@ -339,15 +339,31 @@
                     <h4 class="modal-title" id="saleItemsModalLabel">Item Query</h4>
                 </div>
                 <div class="modal-body">
-                    <center>
-                        <h4>
-                            <span id="loadingItemQueryGrid"></span>
-                        </h4>
-                    </center>
-                    <div id="itemQueryGrid" class="grid"></div>
+                    <ul class="nav nav-tabs" role="tablist" id="myTab">
+                        <li role="presentation" class="active"><a data-toggle="tab" href="#SIItemInventory" id="idSIItemInventory">Inventory Items</a></li>
+                        <li role="presentation"><a data-toggle="tab" href="#SIItemNonInventory" id="idSIItemNonInventory">Non-Inventory Items</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="SIItemInventory" class="tab-pane fade in active">
+                            <center>
+                                <h4>
+                                    <span id="loadingItemQueryGrid"></span>
+                                </h4>
+                            </center>
+                            <div id="itemQueryGrid" class="grid"></div>
+                        </div>
+                        <div id="SIItemNonInventory" class="tab-pane fade in">
+                            <center>
+                                <h4>
+                                    <span id="loadingItemQueryGridNonInventory"></span>
+                                </h4>
+                            </center>
+                            <div id="itemQueryGridNonInventory" class="grid"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -1869,10 +1885,10 @@
 
                 computeNetPrice();
                 computeAmount();
-                
+
                 var quantity = document.getElementById('saleItem_Quantity').value;
                 var price = document.getElementById('saleItem_PriceExVAT').value;
-                    
+
                 document.getElementById('saleItem_BUCQuantity').value = quantity;
                 document.getElementById('saleItem_BUCPrice').value = price;
 
@@ -2441,7 +2457,7 @@
                 var netPrice = PriceExVATPrice - newDiscountAmount;
 
                 document.getElementById('saleItem_NetPrice').value = netPrice.toLocaleString();
-                
+
             }
         }
 
@@ -2489,7 +2505,10 @@
 
         //}
         var articleInventories;
+        var articleItemsNonInventory;
         var itemQueryGrid;
+        var itemQueryGridNonInventory;
+        var isInventory = false;
 
         function getArticleInventoryForItemQuery(branchId) {
             var articleInventories = new wijmo.collections.ObservableArray();
@@ -2511,6 +2530,7 @@
                                 Article: articleInventoriesResults[i]["Article"],
                                 InventoryCode: articleInventoriesResults[i]["InventoryCode"],
                                 Quantity: articleInventoriesResults[i]["Quantity"],
+                                Price: articleInventoriesResults[i]["Price"],
                                 Cost: articleInventoriesResults[i]["Cost"],
                                 Amount: articleInventoriesResults[i]["Amount"],
                                 Particulars: articleInventoriesResults[i]["Particulars"],
@@ -2527,6 +2547,124 @@
             return articleInventories;
         }
 
+        // ==============================
+        // Get Data from MstArtcile Table
+        // ==============================
+        function getArtcileForItemsNonIventory() {
+            var items = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/article/list/ByNonInventory',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (itemResults) {
+                    if (itemResults.length > 0) {
+                        for (i = 0; i < itemResults.length; i++) {
+                            items.push({
+                                Pick: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdItemQueryPickNonInventory_Onclick()'><i class='fa fa-hand-o-right'></i> Pick</button>",
+                                Id: itemResults[i]["Id"],
+                                ArticleCode: itemResults[i]["ArticleCode"],
+                                ManualArticleCode: itemResults[i]["ManualArticleCode"],
+                                Article: itemResults[i]["Article"],
+                                Category: itemResults[i]["Category"],
+                                ArticleTypeId: itemResults[i]["ArticleTypeId"],
+                                ArticleType: itemResults[i]["ArticleType"],
+                                ArticleGroupId: itemResults[i]["ArticleGroupId"],
+                                ArticleGroup: itemResults[i]["ArticleGroup"],
+                                AccountId: itemResults[i]["AccountId"],
+                                Account: itemResults[i]["Account"],
+                                SalesAccountId: itemResults[i]["SalesAccountId"],
+                                CostAccountId: itemResults[i]["CostAccountId"],
+                                AssetAccountId: itemResults[i]["AssetAccountId"],
+                                ExpenseAccountId: itemResults[i]["ExpenseAccountId"],
+                                UnitId: itemResults[i]["UnitId"],
+                                Unit: itemResults[i]["Unit"],
+                                OutputTaxId: itemResults[i]["OutputTaxId"],
+                                InputTaxId: itemResults[i]["InputTaxId"],
+                                WTaxTypeId: itemResults[i]["WTaxTypeId"],
+                                Price: itemResults[i]["Price"],
+                                Cost: itemResults[i]["Cost"],
+                                IsInventory: itemResults[i]["IsInventory"],
+                                Particulars: itemResults[i]["Particulars"],
+                                Address: itemResults[i]["Address"],
+                                TermId: itemResults[i]["TermId"],
+                                ContactNumber: itemResults[i]["ContactNumber"],
+                                ContactPerson: itemResults[i]["ContactPerson"],
+                                TaxNumber: itemResults[i]["TaxNumber"],
+                                CreditLimit: itemResults[i]["CreditLimit"],
+                                DateAcquired: itemResults[i]["DateAcquired"],
+                                UsefulLife: itemResults[i]["UsefulLife"],
+                                SalvageValue: itemResults[i]["SalvageValue"],
+                                ManualArticleOldCode: itemResults[i]["ManualArticleOldCode"],
+                                IsLocked: itemResults[i]["IsLocked"],
+                                CreatedById: itemResults[i]["CreatedById"],
+                                CreatedBy: itemResults[i]["CreatedBy"],
+                                CreatedDateTime: itemResults[i]["CreatedDateTime"],
+                                UpdatedById: itemResults[i]["UpdatedById"],
+                                UpdatedBy: itemResults[i]["UpdatedBy"],
+                                UpdatedDateTime: itemResults[i]["UpdatedDateTime"]
+                            });
+                        }
+                    }
+                }
+            }).fail(function (xhr, textStatus, err) {
+                alert(err);
+            });
+            return items;
+        }
+
+        $('#idSIItemInventory').click(function () {
+            var branchId = document.getElementById("SI_Branch_data").value;
+            document.getElementById("loadingItemQueryGrid").innerHTML = "<br/><i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            
+            //$('#itemQueryGridNonInventory').hide();
+            //$('#loadingItemQueryGridNonInventory').hide();
+
+            $('#itemQueryGrid').hide();
+            $('#loadingItemQueryGrid').show();
+
+            setTimeout(function () {
+                $('#loadingItemQueryGrid').hide();
+                $('#itemQueryGrid').show();
+                
+                itemQueryFlexGrid(branchId);
+                window.itemQueryFlexGrid = function () {
+                    return true;
+                };
+
+                articleInventories = new wijmo.collections.CollectionView(getArticleInventoryForItemQuery(branchId));
+
+                itemQueryGrid.itemsSource = articleInventories;
+                itemQueryGrid.trackChanges = true;
+            }, 1000);
+        });
+
+        $('#idSIItemNonInventory').click(function () {
+            var branchId = document.getElementById("SI_Branch_data").value;
+            document.getElementById("loadingItemQueryGridNonInventory").innerHTML = "<br/><i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            
+            //$('#itemQueryGrid').hide();
+            //$('#loadingItemQueryGrid').hide();
+            
+            $('#itemQueryGridNonInventory').hide();
+            $('#loadingItemQueryGridNonInventory').show();
+            setTimeout(function () {
+                $('#itemQueryGridNonInventory').show();
+                $('#loadingItemQueryGridNonInventory').hide();
+
+                itemQueryFlexGridNonInventory(branchId);
+                window.itemQueryFlexGridNonInventory = function () {
+                    return true;
+                };
+
+                articleItemsNonInventory = new wijmo.collections.CollectionView(getArtcileForItemsNonIventory());
+
+                itemQueryGridNonInventory.itemsSource = articleItemsNonInventory;
+                itemQueryGridNonInventory.trackChanges = true;
+            }, 1000);
+        });
+
         // ==========
         // Item Query
         // ==========
@@ -2537,7 +2675,7 @@
             });
 
             var branchId = document.getElementById("SI_Branch_data").value;
-            document.getElementById("loadingItemQueryGrid").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            document.getElementById("loadingItemQueryGrid").innerHTML = "<br/><i class='fa fa-spinner fa-spin'></i> Please wait ... ";
             $('#itemQueryGrid').hide();
             $('#loadingItemQueryGrid').show();
             setTimeout(function () {
@@ -2557,6 +2695,8 @@
         }
 
         function itemQueryFlexGrid(branchId) {
+            isInventory = true;
+
             articleInventories = new wijmo.collections.CollectionView(getArticleInventoryForItemQuery(branchId));
 
             // Flex Grid for Item Query
@@ -2583,9 +2723,9 @@
                             },
                             {
                                 "header": "Price",
-                                "binding": "Cost",
+                                "binding": "Price",
                                 "allowSorting": true,
-                                "width": "1.8*",
+                                "width": "1.7*",
                             },
                             {
                                 "header": "On Hand Quantity",
@@ -2594,10 +2734,10 @@
                                 "width": "1.8*",
                             },
                             {
-                                "header": "I",
-                                "binding": "Inventory",
+                                "header": "Unit",
+                                "binding": "Unit",
                                 "allowSorting": true,
-                                "width": "0.5*",
+                                "width": "0.7*",
                             },
                             {
                                 "header": "Pick",
@@ -2620,7 +2760,105 @@
             itemQueryGrid.trackChanges = true;
         }
 
-        
+        function itemQueryFlexGridNonInventory(branchId) {
+            isInventory = false;
+            articleItemsNonInventory = new wijmo.collections.CollectionView(getArtcileForItemsNonIventory());
+
+            // Flex Grid for Item Query
+            itemQueryGridNonInventory = new wijmo.grid.FlexGrid('#itemQueryGridNonInventory');
+            itemQueryGridNonInventory.initialize({
+                columns: [
+                            {
+                                "header": "Code",
+                                "binding": "ManualArticleCode",
+                                "allowSorting": true,
+                                "width": "2*",
+                            },
+                            {
+                                "header": "Item",
+                                "binding": "Article",
+                                "allowSorting": true,
+                                "width": "2.5*",
+                            },
+                            {
+                                "header": "Price",
+                                "binding": "Price",
+                                "allowSorting": true,
+                                "width": "1.7*",
+                            },
+                            {
+                                "header": "Pick",
+                                "binding": "Pick",
+                                "width": 60,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            }
+                ],
+                autoGenerateColumns: false,
+                itemsSource: articleItemsNonInventory,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            itemQueryGridNonInventory.trackChanges = true;
+        }
+
+        function cmdItemQueryPickNonInventory_Onclick() {
+            articleItemsNonInventory.editItem(articleItemsNonInventory.currentItem);
+            $('#saleItemsEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            var articleItemNonInventory = articleItemsNonInventory.currentEditItem;
+
+            $("#cmdSaveSaleItemsButton").prop("disabled", false);
+            $("#cmdSaleItemsDetailCloseButton").prop("disabled", false);
+
+            $('.requiredSaleItem').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
+            document.getElementById('saleItem_ItemId_data').value = articleItemNonInventory.Id;
+            document.getElementById('saleItem_ItemCode_selectedValue').value = articleItemNonInventory.ManualArticleCode;
+            document.getElementById('saleItem_ItemDescription_selectedValue').value = articleItemNonInventory.Article;
+            document.getElementById('saleItem_Particulars').value = articleItemNonInventory.Particulars;
+            //document.getElementById('saleItem_InventoryCode_data').value = articleItemNonInventory.Id;
+            //document.getElementById('saleItem_InventoryCode_selectedValue').value = "";
+            document.getElementById('saleItem_Quantity').value = "0";
+            document.getElementById('saleItem_Unit_data').value = articleItemNonInventory.UnitId;
+            document.getElementById('saleItem_Unit_selectedValue').value = articleItemNonInventory.Unit;
+            //document.getElementById('saleItem_PriceExVAT').value = 0;
+            //document.getElementById('saleItem_Discont_data').value = '';
+            //document.getElementById('saleItem_Discont_selectedValue').value = '';
+            //document.getElementById('saleItem_DiscountRate').value = 0;
+            //document.getElementById('saleItem_DiscountAmount').value = 0;
+            //document.getElementById('saleItem_NetPrice').value = cboSalesItemPrice.selectedItem["Price"];
+            //document.getElementById('saleItem_Amount').value = 0;
+            //document.getElementById('saleItem_VAT_data').value = '';
+            //document.getElementById('saleItem_VAT_selectedValue').value = '';
+            //document.getElementById('saleItem_TAXInclusive').value = '';
+            //document.getElementById('saleItem_VATRate').value = 0;
+            //document.getElementById('saleItem_VATAmount').value = 0;
+            //document.getElementById('saleItem_BUCUnit_data').value = '';
+            document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
+            document.getElementById('saleItem_BUCQuantity').value = 0;
+            document.getElementById('saleItem_BUCPrice').value = 0;
+
+            getArticleItemForManualCodeAndComponent();
+            getDiscountForComboBox();
+
+            computeNetPrice();
+            computeAmount();
+
+        }
+
         function cmdItemQueryPick_Onclick() {
             articleInventories.editItem(articleInventories.currentItem);
             $('#saleItemsEdit').modal({
@@ -2638,7 +2876,7 @@
                     "border": "",
                 });
             });
-            
+
             document.getElementById('saleItem_ItemId_data').value = articleInventory.ArticleId;
             document.getElementById('saleItem_ItemCode_selectedValue').value = articleInventory.ManualArticleCode;
             document.getElementById('saleItem_ItemDescription_selectedValue').value = articleInventory.Article;
@@ -2664,7 +2902,7 @@
             document.getElementById('saleItem_BUCUnit_selectedValue').value = '';
             document.getElementById('saleItem_BUCQuantity').value = 0;
             document.getElementById('saleItem_BUCPrice').value = 0;
-            
+
             getArticleItemForManualCodeAndComponent();
             getDiscountForComboBox();
 
@@ -2672,6 +2910,8 @@
             computeAmount();
 
         }
+
+
 
         // =============
         // ADD Sale Item
@@ -2911,9 +3151,14 @@
                 document.getElementById("saleItem_ItemCode").style.border = "1px solid #C8C8C8";
                 document.getElementById("saleItem_ItemDescription").style.border = "1px solid #C8C8C8";
             }
-
-            if (document.getElementById('saleItem_InventoryCode_data').value == '') {
-                document.getElementById("saleItem_InventoryCode").style.border = "1px solid red";
+            
+            console.log(isInventory);
+            if(isInventory) {
+                if (document.getElementById('saleItem_InventoryCode_data').value == '') {
+                    document.getElementById("saleItem_InventoryCode").style.border = "1px solid red";
+                } else {
+                    document.getElementById("saleItem_InventoryCode").style.border = "1px solid #C8C8C8";
+                }
             } else {
                 document.getElementById("saleItem_InventoryCode").style.border = "1px solid #C8C8C8";
             }
@@ -2958,8 +3203,7 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-            }
-            else {
+            } else {
                 $("#cmdSaveSaleItemsButton").prop("disabled", true);
                 $("#cmdSaleItemsDetailCloseButton").prop("disabled", true);
                 if (saleItemId == 0) {

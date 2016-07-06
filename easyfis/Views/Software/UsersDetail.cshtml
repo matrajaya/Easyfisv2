@@ -79,6 +79,7 @@
                             <div id="UserForm" class="tab-pane fade in active">
                                 <div class="row">
                                     <div class="col-lg-12" align="right">
+                                        <button class="btn btn-success btn-sm" id="btnCopyUserRights" onclick="cmdCopyRights_OnClick()"><i class="fa fa-copy"></i> Copy rights</button>
                                         <button class="btn btn-primary btn-sm" id="btnAddUserForm" onclick="cmdAddUserForm_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                     </div>
                                 </div>
@@ -186,6 +187,31 @@
         </div>
     </div>
 
+    <!-- Copy Rights Modal Detail -->
+    <div class="modal fade" id="copyRightsModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Copy rights</h4>
+                </div>
+                <div class="modal-body">
+                    <dl class="dl-horizontal">
+                        <dt>Copy the rights of </dt>
+                        <dd>
+                            <input type="text" class="form-control input-sm" id="usernameOrFullName" placeholder="Username or Fullname"/>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="btnCopyUserRightsIdModal" onclick="btnCopyUserRights_OnClick()"><i class="fa fa-check"></i> Ok</button>
+                    <button id="btnCopyUserRightsIdModalClose" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- User Form Delete Modal Confirmation -->
     <div class="modal fade" id="deleteUserFormConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
@@ -278,12 +304,16 @@
                                 document.getElementById("defaultOfficialReceiptName").disabled = true;
                                 $("#btnUserDetailLock").prop("disabled", true);
                                 $("#btnAddUserForm").prop("disabled", true);
+                                $("#btnCopyUserRights").prop("disabled", true);
+                                
                                 IsLocked = true;
                             } else {
                                 document.getElementById("userDetail_Fullname").disabled = false;
                                 document.getElementById("defaultOfficialReceiptName").disabled = false;
                                 $("#btnUserDetailUnLock").prop("disabled", true);
                                 $("#btnAddUserForm").prop("disabled", false);
+                                $("#btnCopyUserRights").prop("disabled", false);
+
                                 IsLocked = false;
                             }
 
@@ -559,6 +589,54 @@
 
             formSelectedValue = "";
             getForm();
+        }
+
+        function cmdCopyRights_OnClick() {
+            $('#copyRightsModal').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            document.getElementById("usernameOrFullName").value = "";
+        }
+
+        function btnCopyUserRights_OnClick() {
+            $('#btnCopyUserRightsIdModal').prop('disabled', true);
+            $('#btnCopyUserRightsIdModalClose').prop('disabled', true);
+            var name = document.getElementById("usernameOrFullName").value;
+
+            $.ajax({
+                type: "POST",
+                url: '/api/userform/copyrights/' + name + '/' + userId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        $('#btnCopyUserRightsIdModal').prop('disabled', false);
+                        $('#btnCopyUserRightsIdModalClose').prop('disabled', false);
+
+                        toastr.success("Successfully Copied");
+                        $('#copyRightsModal').modal('hide');
+
+                        refreshUserFormGrid();
+                    },
+                    404: function () {
+                        $('#btnCopyUserRightsIdModal').prop('disabled', false);
+                        $('#btnCopyUserRightsIdModalClose').prop('disabled', false);
+
+                        toastr.error("Name not found");
+                    },
+                    400: function () {
+                        $('#btnCopyUserRightsIdModal').prop('disabled', false);
+                        $('#btnCopyUserRightsIdModalClose').prop('disabled', false);
+
+                        toastr.error("Cannot save record");
+                        $('#copyRightsModal').modal('hide');
+
+                        refreshUserFormGrid();
+                    }
+                }
+            });
         }
 
         // ===============
