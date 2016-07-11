@@ -1173,6 +1173,7 @@ namespace easyfis.Business
             // SI Items - Amount
             var salesInvoiceItemsForAmount = from d in db.TrnSalesInvoiceItems
                                              where d.SIId == SIId
+                                             && d.MstArticle.IsInventory == true
                                              group d by new
                                              {
                                                  SIId = d.SIId,
@@ -1188,6 +1189,7 @@ namespace easyfis.Business
             // SI Items - Inventory
             var salesInvoiceItemsForInventory = from d in db.TrnSalesInvoiceItems
                                                 where d.SIId == SIId
+                                                && d.MstArticle.IsInventory == true
                                                 group d by new
                                                 {
                                                     SIId = d.SIId,

@@ -164,9 +164,8 @@ namespace easyfis.Controllers
         {
             try
             {
-               var userForms = from d in db.MstUserForms
-                                where d.MstUser.FullName == name
-                                || d.MstUser.UserName == name
+                var userForms = from d in db.MstUserForms
+                                where d.MstUser.UserName == name
                                 select new Models.MstUserForm
                                 {
                                     Id = d.Id,
@@ -187,27 +186,24 @@ namespace easyfis.Controllers
                 {
                     var deleteUserForms = from d in db.MstUserForms where d.UserId == Convert.ToInt32(userId) select d;
 
-                    if (deleteUserForms.Any())
+                    db.MstUserForms.DeleteAllOnSubmit(deleteUserForms.ToList());
+                    db.SubmitChanges();
+
+                    foreach (var userForm in userForms)
                     {
-                        db.MstUserForms.DeleteAllOnSubmit(deleteUserForms.ToList());
+                        Data.MstUserForm newUserForm = new Data.MstUserForm();
+
+                        newUserForm.UserId = Convert.ToInt32(userId);
+                        newUserForm.FormId = userForm.FormId;
+                        newUserForm.CanAdd = userForm.CanAdd;
+                        newUserForm.CanEdit = userForm.CanEdit;
+                        newUserForm.CanDelete = userForm.CanDelete;
+                        newUserForm.CanLock = userForm.CanLock;
+                        newUserForm.CanUnlock = userForm.CanUnlock;
+                        newUserForm.CanPrint = userForm.CanPrint;
+
+                        db.MstUserForms.InsertOnSubmit(newUserForm);
                         db.SubmitChanges();
-
-                        foreach (var userForm in userForms)
-                        {
-                            Data.MstUserForm newUserForm = new Data.MstUserForm();
-
-                            newUserForm.UserId = Convert.ToInt32(userId);
-                            newUserForm.FormId = userForm.FormId;
-                            newUserForm.CanAdd = userForm.CanAdd;
-                            newUserForm.CanEdit = userForm.CanEdit;
-                            newUserForm.CanDelete = userForm.CanDelete;
-                            newUserForm.CanLock = userForm.CanLock;
-                            newUserForm.CanUnlock = userForm.CanUnlock;
-                            newUserForm.CanPrint = userForm.CanPrint;
-
-                            db.MstUserForms.InsertOnSubmit(newUserForm);
-                            db.SubmitChanges();
-                        }
                     }
 
                     return Request.CreateResponse(HttpStatusCode.OK);

@@ -933,6 +933,7 @@ namespace easyfis.Business
             // Sales invoice items
             var salesInvoiceItems = from d in db.TrnSalesInvoiceItems
                                     where d.SIId == SIId
+                                    && d.MstArticle.IsInventory == true
                                     select new Models.TrnSalesInvoiceItem
                                     {
                                         Id = d.Id,

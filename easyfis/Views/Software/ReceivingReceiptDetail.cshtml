@@ -44,7 +44,7 @@
                                 <button class="btn btn-primary btn-sm" id="cmdRRSave" onclick="RRSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
                                 <button class="btn btn-primary btn-sm" id="cmdRREdit" onclick="RREditButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
                                 <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="RRPrintButton_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button id="cmdRRClose" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software")'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                                <button id="cmdRRClose" onclick="window.location.href = '@Url.Action(" receivingreceipt", "Software" )'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
                             </div>
                         </div>
                     </div>
@@ -224,7 +224,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <form id="POLinesDetailForm">
                                 <dl class="dl-horizontal">
                                     <dt>Supplier</dt>
@@ -244,14 +244,13 @@
                                 </dl>
                             </form>
                         </div>
-                        <div class="col-md-4"></div>
+                        <div class="col-md-6"></div>
                     </div>
                     <hr />
                     <div class="POStatusContent">
                         <div class="row" id="seacrhIdinPOStatus">
                             <div class="col-lg-6"></div>
                             <div class="col-lg-6" align="right">
-                                <button class="btn btn-primary btn-sm" id="cmdApplyPOStatusButton" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply all</button>
                             </div>
                         </div>
                         <br />
@@ -270,6 +269,7 @@
                     <br />
                 </div>
                 <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdApplyPOStatusButton" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply</button>
                     <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
@@ -449,6 +449,32 @@
         </div>
     </div>
 
+    <!-- Modal for Edit Quantity -->
+    <div class="modal fade" id="EditQuantityModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Quantity</h4>
+                </div>
+                <div class="modal-body">
+                    <dl class="dl-horizontal">
+                        <dt>Quantity</dt>
+                        <dd>
+                            <input type="text" class="form-control numberField input-sm input-50 requiredRRLine" id="POBalanceQuantity" placeholder="0.00" />
+                        </dd>
+                    </dl>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" id="cmdSaveRRLinesButton" onclick="refreshPOQueryItemButton()"><i class="fa fa-check"></i> Ok</button>
+                    <button id="" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- RR PO Items Delete -->
     <div class="modal fade" id="deleteRRLinesConfirm" role="dialog">
         <div class="modal-dialog modal-sm">
@@ -476,10 +502,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Apply PO (All) <i class="fa fa-check"></i></h4>
+                    <h4 class="modal-title">Apply <i class="fa fa-check"></i></h4>
                 </div>
                 <div class="modal-body">
-                    Are you sure that you want to apply all these Purchase Order Items?
+                    Are you sure that you want to apply?
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAllPOStatusPOItems" onclick="btnConfrimApplyAllPOItems_OnClick()"><i class="fa fa-check"></i> Apply</button>
@@ -1508,6 +1534,11 @@
             window.location = "/RepReceivingReceipt/ReceivingReceipt?RRId=" + ReceivingReceiptId;
         }
 
+        var returnBool = false;
+        var emptyQuantity;
+
+        var index;
+
         // =========
         // PO Status
         // =========
@@ -1531,14 +1562,17 @@
             $('#POStatusGrid').hide();
             $('#POItem_Title').hide();
             $('#seacrhIdinPOStatus').hide();
+            
+            emptyQuantity = true;
 
             setTimeout(function () {
                 $('#POLinesDetailForm').show();
                 $('#loadingPOStatusGridList').hide();
 
                 POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
-                POstatusGrid.itemsSource = POStatus;
 
+                POstatusGrid.itemsSource = POStatus;
+                POstatusGrid.trackChanges = true;
 
             }, 1000);
 
@@ -1690,6 +1724,7 @@
             document.getElementById('POStatus_PONumber_data').value = POCollection.items[cboPONumberPOStatus.selectedIndex].POId;
         }
 
+        var QuantityBalance = new Array();
         // ========================================
         // Purchase Order Line / Item for PO Status
         // ========================================
@@ -1702,6 +1737,7 @@
 
             var POStatus = new wijmo.collections.ObservableArray;
             var POId = document.getElementById('POStatus_PONumber_data').value;
+
             $.ajax({
                 url: '/api/listPurchaseOrderItemForPOStatusByPOId/' + POId,
                 cache: false,
@@ -1712,9 +1748,43 @@
                     $('#loadingPOStatusGridList').hide();
                     if (Results.length > 0) {
                         $('#cmdApplyPOStatusButton').prop("disabled", false);
+
+                        var handbool;
+                        var icon;
+                        var btnColor;
+
                         for (i = 0; i < Results.length; i++) {
+                            if(emptyQuantity == false) {
+                                if(matchIndex() == i) {
+                                    if(bool() == true) {
+                                        if (QuantityBalance[index] !== 0) {
+                                            QuantityBalance[i] = QuantityBalance[index];
+                                            returnBool = true;
+                                        } else {
+                                            QuantityBalance[i] = Results[i]["Quantity"] - Results[i]["Received"];
+                                            returnBool = false;
+                                        }
+                                    } else {
+                                        QuantityBalance[i] = 0;
+                                    }
+                                }
+                            } else {
+                                QuantityBalance[i] = 0;
+                            }
+
+                            if (typeof QuantityBalance[i] !== 'undefined' && QuantityBalance[i] !== 0) {
+                                btnColor = "warning";
+                                icon = "<i class='fa fa-hand-o-left'></i>";
+                                handbool = false;
+                            } else {
+                                btnColor = "primary";
+                                icon = "<i class='fa fa-hand-o-right'></i>";
+                                handbool = true;
+                                QuantityBalance[i] = 0;
+                            }
+
                             POStatus.push({
-                                ApplyId: "<button class='btn btn-primary btn-xs' onclick='cmdApplyPOStatusButton_OnClick()'><i class='fa fa-check-square-o'></i> Pick</button>",
+                                ApplyId: "<button class='btn btn-primary btn-xs' onclick='cmdApplyPOStatusButton_OnClick()'><i class='fa fa-hand-o-right'></i> Pick</button>",
                                 Id: Results[i]["Id"],
                                 ItemId: Results[i]["ItemId"],
                                 Item: Results[i]["Item"],
@@ -1726,9 +1796,11 @@
                                 Particulars: Results[i]["Particulars"],
                                 Received: Results[i]["Received"],
                                 Balance: Results[i]["Quantity"] - Results[i]["Received"],
-                                QuantityBalance: Results[i]["Quantity"] - Results[i]["Received"],
+                                QuantityBalance: "<button class='btn btn-default btn-xs btn-block' style='text-align: right' onclick='editQuantity_OnClick("+ i + "," + handbool +")'>"+ QuantityBalance[i] +"</button>",
+                                QuantityBalanceValue: QuantityBalance[i],
                                 Cost: Results[i]["Cost"],
-                                Amount: Results[i]["Amount"]
+                                Amount: Results[i]["Amount"],
+                                Pick: "<button class='btn btn-"+ btnColor +" btn-xs' onclick='pickQuantity_OnClick("+ i + "," + handbool +")'>" + icon + "</button>"
                             });
                         }
                     } else {
@@ -1736,7 +1808,61 @@
                     }
                 }
             });
+
             return POStatus;
+        }
+
+        function bool() {
+            return returnBool;
+        }
+
+        function matchIndex() {
+            return index;
+        }
+
+        function pickQuantity_OnClick(i, handbool) {
+            if(handbool == true) {
+                returnBool = true;
+            } else {
+                returnBool = false;
+            }
+
+            index = i;
+            emptyQuantity = false;
+
+            POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+
+            // Flex Grid for Item
+            POstatusGrid.itemsSource = POStatus;
+            POstatusGrid.trackChanges = true;
+        }
+
+        function editQuantity_OnClick(i, handbool) {
+            POStatus.editItem(POStatus.currentItem);
+            var item = POStatus.currentEditItem;
+
+            document.getElementById("POBalanceQuantity").value = item.QuantityBalanceValue;
+
+            $('#EditQuantityModal').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            returnBool = true;
+
+            index = i;
+        }
+
+        function refreshPOQueryItemButton() {
+            $('#EditQuantityModal').modal('hide');
+
+            QuantityBalance[index] = document.getElementById("POBalanceQuantity").value;
+
+            POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+
+            // Flex Grid for Item
+            POstatusGrid.itemsSource = POStatus;
+            POstatusGrid.trackChanges = true;
         }
 
         // ===============
@@ -1750,61 +1876,67 @@
             POstatusGrid.initialize({
                 columns: [
                             {
-                                "header": "Pick",
-                                "binding": "ApplyId",
-                                "width": 75,
-                                "align": "center",
-                                "allowResizing": false,
-                                "allowSorting": false,
-                                "isContentHtml": true
-                            },
-                            {
                                 "header": "Code",
                                 "binding": "ItemCode",
                                 "allowSorting": true,
-                                "width": 70
+                                "width": 70,
+                                "isReadOnly": true,
                             },
                             {
                                 "header": "Item",
                                 "binding": "Item",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Unit",
                                 "binding": "Unit",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 110
                             },
                             {
                                 "header": "PO",
                                 "binding": "Quantity",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 100
                             },
                             {
                                 "header": "Received",
                                 "binding": "Received",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 110
                             },
                             {
                                 "header": "Balance",
                                 "binding": "Balance",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": 110
                             },
                             {
+                                "header": "Pick",
+                                "binding": "Pick",
+                                "width": 50,
+                                "align": "center",
+                                "isReadOnly": true,
+                                "isContentHtml": true
+                            },
+                            {
                                 "header": "Quantity",
-                                "binding": "QuantityBalance",
+                                "binding": "QuantityBalanceValue",
                                 "allowSorting": true,
-                                "width": 100
+                                "width": 100,
+                                "align": "right",
+                                "isReadOnly": false,
+                                "isContentHtml": true
                             },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: POStatus,
-                isReadOnly: true,
-                frozenColumns: 1,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -1819,26 +1951,25 @@
             POstatusGrid.columnHeaders.rows[0].allowMerging = true;
 
             POstatusGrid.columnHeaders.columns[0].allowMerging = true;
-            POstatusGrid.columnHeaders.setCellData(0, 0, 'Pick');
+            POstatusGrid.columnHeaders.setCellData(0, 0, 'Code');
 
             POstatusGrid.columnHeaders.columns[1].allowMerging = true;
-            POstatusGrid.columnHeaders.setCellData(0, 1, 'Code');
+            POstatusGrid.columnHeaders.setCellData(0, 1, 'Item');
 
             POstatusGrid.columnHeaders.columns[2].allowMerging = true;
-            POstatusGrid.columnHeaders.setCellData(0, 2, 'Item');
+            POstatusGrid.columnHeaders.setCellData(0, 2, 'Unit');
 
-            POstatusGrid.columnHeaders.columns[3].allowMerging = true;
-            POstatusGrid.columnHeaders.setCellData(0, 3, 'Unit');
-
-            for (var columnQuantityTopAssigned = 4; columnQuantityTopAssigned <= 6; columnQuantityTopAssigned++) {
+            for (var columnQuantityTopAssigned = 3; columnQuantityTopAssigned <= 5; columnQuantityTopAssigned++) {
                 POstatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Quantities');
             }
+
+            POstatusGrid.columnHeaders.columns[6].allowMerging = true;
+            POstatusGrid.columnHeaders.setCellData(0, 6, 'Pick');
 
             POstatusGrid.columnHeaders.columns[7].allowMerging = true;
             POstatusGrid.columnHeaders.setCellData(0, 7, 'Quantity');
 
-            //POstatusGrid.columnHeaders.columns[8].allowMerging = true;
-            //POstatusGrid.columnHeaders.setCellData(0, 8, 'Quantity');
+            // formatter to add checkboxes to boolean columns
         }
 
         // ==========================
@@ -1860,47 +1991,68 @@
             var ReceivingReceiptId = getParam('ReceivingReceiptId');
             var BranchId = document.getElementById('RRbranch_data').value;
             var POId = document.getElementById('POStatus_PONumber_data').value;
-            $.ajax({
-                url: '/api/applyAllPOItemToReceivingReceiptItem/' + ReceivingReceiptId + '/' + BranchId + '/' + POId,
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                statusCode: {
-                    200: function () {
-                        $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", true);
-                        $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", true);
-                        toastr.success("Successfully Applied");
 
-                        $('#applyAllConfirmPOStatus').modal('hide');
-                        $('#POStatus').modal('hide');
+            for (var i = 0; i < POStatus.items.length; i++) {
+                var item = POStatus.items[i];
+                if(item.QuantityBalanceValue > 0) {
 
-                        items = new wijmo.collections.CollectionView(getRRItem());
+                    var POItemObject = new Object();
+                    POItemObject.Id = item.Id;
+                    POItemObject.RRId = getParam('ReceivingReceiptId');
+                    POItemObject.POId = item.POId;
+                    POItemObject.ItemId = item.ItemId;
+                    POItemObject.Particulars = item.Particulars;
+                    POItemObject.UnitId = item.UnitId;
+                    POItemObject.Quantity = item.QuantityBalanceValue;
+                    POItemObject.Cost = item.Cost;
+                    POItemObject.Amount = item.Amount;
+                    POItemObject.BranchId = BranchId;
+                    var POItemObjectData = JSON.stringify(POItemObject);
 
-                        // Flex Grid for Item
-                        itemGrid.itemsSource = items;
-                        itemGrid.trackChanges = true;
+                    $.ajax({
+                        url: '/api/applyPurchaseOrderItems',
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: POItemObjectData,
+                        statusCode: {
+                            200: function () {
+                                $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", true);
+                                $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", true);
+                                toastr.success("Successfully Applied");
 
-                        POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
-                        // Flex Grid for Item
-                        POstatusGrid.itemsSource = POStatus;
-                        POstatusGrid.trackChanges = true;
-                    },
-                    404: function () {
-                        toastr.error("Request Not Found");
-                        $('#applyAllConfirmPOStatus').modal('hide');
-                        $('#POStatus').modal('hide');
-                        $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
-                        $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
-                    },
-                    400: function () {
-                        toastr.error("Bad Request");
-                        $('#applyAllConfirmPOStatus').modal('hide');
-                        $('#POStatus').modal('hide');
-                        $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
-                        $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
-                    }
+                                $('#applyAllConfirmPOStatus').modal('hide');
+                                $('#POStatus').modal('hide');
+
+                                items = new wijmo.collections.CollectionView(getRRItem());
+
+                                // Flex Grid for Item
+                                itemGrid.itemsSource = items;
+                                itemGrid.trackChanges = true;
+
+                                POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+                                // Flex Grid for Item
+                                POstatusGrid.itemsSource = POStatus;
+                                POstatusGrid.trackChanges = true;
+                            },
+                            404: function () {
+                                toastr.error("Request Not Found");
+                                $('#applyAllConfirmPOStatus').modal('hide');
+                                $('#POStatus').modal('hide');
+                                $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
+                                $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#applyAllConfirmPOStatus').modal('hide');
+                                $('#POStatus').modal('hide');
+                                $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
+                                $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
+                            }
+                        }
+                    });
                 }
-            });
+            }
         }
 
         // =====================
@@ -1923,8 +2075,6 @@
             POStatus.editItem(POStatus.currentItem);
             var POItem = POStatus.currentEditItem;
             var POStatusId = POItem.Id;
-
-            console.log(POStatusId);
 
             var ReceivingReceiptId = getParam('ReceivingReceiptId');
             var BranchId = document.getElementById('RRbranch_data').value;
@@ -2671,7 +2821,7 @@
                     //document.getElementById('RRLine_BUCUnit_selectedValue').value = POItemCollection.items[this.selectedIndex].Unit;
                     //getBUCUnitForComboBox();
 
-                    
+
                     getBUCUnitForComboBox(POItemCollection.items[this.selectedIndex].ItemId);
 
                     var items = new wijmo.collections.ObservableArray;
@@ -2786,7 +2936,7 @@
 
                 getUnitForComboBox(POItemCollection.items[cboItemDescription.selectedIndex].ItemId);
             }
-            
+
             getBUCUnitForComboBox(POItemCollection.items[cboItemDescription.selectedIndex].ItemId);
         }
 
@@ -3198,7 +3348,7 @@
                 success: function (results) {
                     UnitId = results.UnitId;
                     Unit = results.Unit;
-                    
+
                     document.getElementById('RRLine_BUCUnit_data').value = results.UnitId;
 
                     cboBUCUnit.dispose();
@@ -3221,7 +3371,7 @@
 
                 }
             });
-            
+
         }
 
         // =================
@@ -3305,7 +3455,7 @@
 
             $("#cmdSaveRRLinesButton").prop("disabled", false);
             $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
-            
+
             var POSupplierId = document.getElementById('POStatus_Supplier_data').value;
             POs = new wijmo.collections.ObservableArray();
             $.ajax({
@@ -3687,7 +3837,7 @@
                 document.getElementById('RRLine_Amount').value = amount.toLocaleString();
                 document.getElementById('RRLine_VATAmount').value = Math.round(((amount / (1 + VATRate / 100)) * (VATRate / 100)) * 100) / 100;
                 document.getElementById('RRLine_WTAXAmount').value = Math.round(((amount / (1 + VATRate / 100)) * (WTAXRate / 100)) * 100) / 100;
-                
+
                 var articleUnits = new wijmo.collections.ObservableArray();
                 var articleId = document.getElementById('RRLine_ItemId_data').value;
                 var unitId = document.getElementById('RRLine_BUCUnit_data').value;
