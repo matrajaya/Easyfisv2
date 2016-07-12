@@ -280,6 +280,7 @@
                                     </div>
                                     <div id="RRSR" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="receivingReceiptSummaryReportView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="receivingReceiptSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -985,12 +986,13 @@
         function getReceivingReceiptSummaryReportStartDate() {
             receivingReceiptSummaryReportStartDate.dispose();
             receivingReceiptSummaryReportStartDate = new wijmo.input.InputDate('#receivingReceiptSummaryReport_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('receivingReceiptSummaryReport_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('receivingReceiptSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('receivingReceiptSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('receivingReceiptSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getReceivingReceiptSummaryReportEndDate();
                     }, 50);
@@ -1002,12 +1004,13 @@
         function getReceivingReceiptSummaryReportEndDate() {
             receivingReceiptSummaryReportEndDate.dispose();
             receivingReceiptSummaryReportEndDate = new wijmo.input.InputDate('#receivingReceiptSummaryReport_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('receivingReceiptSummaryReport_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-999',
                 min: new Date(document.getElementById('receivingReceiptSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('receivingReceiptSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('receivingReceiptSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getReceivingReceiptSummaryReportStartDate();
                     }, 50);
@@ -1021,6 +1024,13 @@
             var receivingReceiptSummaryReportEndDate = document.getElementById('receivingReceiptSummaryReport_EndDate_data').value;
 
             window.location.href = '/RepReceivingReceiptSummaryReport/ReceivingReceiptSummaryReport?StartDate=' + receivingReceiptSummaryReportStartDate + '&EndDate=' + receivingReceiptSummaryReportEndDate;
+        }
+        // Purchase Summary report on click
+        function receivingReceiptSummaryReportView_OnClick() {
+            var receivingReceiptSummaryReport_StartDate_data = document.getElementById('receivingReceiptSummaryReport_StartDate_data').value;
+            var receivingReceiptSummaryReport_EndDate_data = document.getElementById('receivingReceiptSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/ReceivingReceiptSummaryReport?StartDate=' + receivingReceiptSummaryReport_StartDate_data + '&EndDate=' + receivingReceiptSummaryReport_EndDate_data;
         }
 
         // get Receiving Receipt Detail Report Start Date
@@ -1200,8 +1210,8 @@
             getPurchaseDetailReportEndDate();
 
             // Receiving Receipt Summary Report Dates
-            document.getElementById('receivingReceiptSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('receivingReceiptSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('receivingReceiptSummaryReport_StartDate_data').value = defaultDate;
+            document.getElementById('receivingReceiptSummaryReport_EndDate_data').value = defaultDate;
 
             receivingReceiptSummaryReportStartDate = new wijmo.input.InputDate('#receivingReceiptSummaryReport_StartDate');
             receivingReceiptSummaryReportEndDate = new wijmo.input.InputDate('#receivingReceiptSummaryReport_EndDate');
