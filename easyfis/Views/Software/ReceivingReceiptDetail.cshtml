@@ -223,17 +223,10 @@
                     <h4 class="modal-title" id="POStatusModalLabel">Purchase Order Status</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <form id="POLinesDetailForm">
+                    <form id="POLinesDetailForm">
+                        <div class="row">
+                            <div class="col-md-6">
                                 <dl class="dl-horizontal">
-                                    <dt>Supplier</dt>
-                                    <dd>
-                                        <div class="comboBox-wide" id="POStatus_Supplier"></div>
-
-                                        <input type="hidden" id="POStatus_Supplier_data" class="requiredPOLine">
-                                        <input type="hidden" id="POStatus_Supplier_selectedValue" />
-                                    </dd>
                                     <dt>PO Number</dt>
                                     <dd>
                                         <div class="comboBox-wide" id="POStatus_PONumber"></div>
@@ -242,20 +235,19 @@
                                         <input type="hidden" id="POStatus_PONumber_selectedValue" />
                                     </dd>
                                 </dl>
-                            </form>
+                            </div>
+                            <div class="col-md-6"></div>
                         </div>
-                        <div class="col-md-6"></div>
-                    </div>
+                    </form>
                     <hr />
                     <div class="POStatusContent">
-                        <div class="row" id="seacrhIdinPOStatus">
-                            <div class="col-lg-6"></div>
-                            <div class="col-lg-6" align="right">
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row" align="left">
+                        <div class="row">
                             <div class="col-lg-12">
+                                <div class="input-group input-group-sm  input-50" id="inputFilterPOItemSearch">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="inputFilterPOItem" placeholder="Search">
+                                </div>
+                                <br />
                                 <div id="POStatusGrid" class="grid statusGrid" align="left"></div>
                                 <center>
                                     <h4>
@@ -640,8 +632,8 @@
                             document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
                             document.getElementById('updatedDate').innerHTML = Results.UpdatedDateTime;
 
-                            document.getElementById('POStatus_Supplier_data').value = Results.SupplierId;
-                            document.getElementById('POStatus_Supplier_selectedValue').value = Results.Supplier;
+                            //document.getElementById('POStatus_Supplier_data').value = Results.SupplierId;
+                            //document.getElementById('POStatus_Supplier_selectedValue').value = Results.Supplier;
 
                             document.getElementById('RR_IsLocked').value = Results.IsLocked;
 
@@ -870,8 +862,8 @@
                 onSelectedIndexChanged: function () {
                     $("#RRSupplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
                     $("#RRSupplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
-                    $("#POStatus_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
-                    $("#POStatus_Supplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
+                    //$("#POStatus_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+                    //$("#POStatus_Supplier_selectedValue").val(supplierCollection.items[this.selectedIndex].Supplier);
 
                     document.getElementById('POStatus_PONumber_data').value = 0;
                     getPOInPOStatusForComboBox();
@@ -881,8 +873,8 @@
 
             document.getElementById('RRSupplier_data').value = supplierCollection.items[cboSupplier.selectedIndex].SupplierId;
             document.getElementById('RRSupplier_selectedValue').value = supplierCollection.items[cboSupplier.selectedIndex].Supplier;
-            document.getElementById('POStatus_Supplier_data').value = supplierCollection.items[cboSupplier.selectedIndex].SupplierId;
-            document.getElementById('POStatus_Supplier_selectedValue').value = supplierCollection.items[cboSupplier.selectedIndex].Supplier;
+            //document.getElementById('POStatus_Supplier_data').value = supplierCollection.items[cboSupplier.selectedIndex].SupplierId;
+            //document.getElementById('POStatus_Supplier_selectedValue').value = supplierCollection.items[cboSupplier.selectedIndex].Supplier;
         }
 
         // =======================
@@ -1549,7 +1541,7 @@
             });
 
             document.getElementById('POStatus_PONumber_data').value = 0;
-            getSupplierInPOStatusForComboBox();
+            //getSupplierInPOStatusForComboBox();
             getPOInPOStatusForComboBox();
             document.getElementById("loadingPOStatusGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading PO Status...';
             document.getElementById("loadingPOItemsGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Purchase Order Items...';
@@ -1562,14 +1554,27 @@
             $('#POStatusGrid').hide();
             $('#POItem_Title').hide();
             $('#seacrhIdinPOStatus').hide();
-            
+            $('#inputFilterPOItemSearch').hide();
+
             emptyQuantity = true;
 
             setTimeout(function () {
                 $('#POLinesDetailForm').show();
                 $('#loadingPOStatusGridList').hide();
+                $('#inputFilterPOItemSearch').show();
 
                 POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+
+                var filterText = '';
+                $('#inputFilterPOItem').keyup(function () {
+                    filterText = this.value.toLowerCase();
+                    POStatus.refresh();
+                });
+
+                POStatus.filter = function (item) {
+                    return !filterText || (item.ItemCode.toLowerCase().indexOf(filterText) > -1)
+                    || (item.Item.toLowerCase().indexOf(filterText) > -1);
+                }
 
                 POstatusGrid.itemsSource = POStatus;
                 POstatusGrid.trackChanges = true;
@@ -1578,79 +1583,79 @@
 
         }
 
-        // ====================================
-        // GET Supplier PO Status for Combo Box
-        // ====================================
-        function getSupplierInPOStatusForComboBox() {
-            POStatussuppliers = new wijmo.collections.ObservableArray();
-            $.ajax({
-                url: '/api/listArticleByArticleTypeId/3',
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (results) {
-                    if (results.length > 0) {
-                        for (i = 0; i < results.length; i++) {
-                            POStatussuppliers.push({
-                                SupplierId: results[i]["Id"],
-                                Supplier: results[i]["Article"]
-                            });
-                        }
-                        createCbosupplierPOStatus(POStatussuppliers);
-                    } else {
-                        createCbosupplierPOStatus(POStatussuppliers);
-                    }
-                }
-            });
-            return suppliers;
-        }
+        //// ====================================
+        //// GET Supplier PO Status for Combo Box
+        //// ====================================
+        //function getSupplierInPOStatusForComboBox() {
+        //    POStatussuppliers = new wijmo.collections.ObservableArray();
+        //    $.ajax({
+        //        url: '/api/listArticleByArticleTypeId/3',
+        //        cache: false,
+        //        type: 'GET',
+        //        contentType: 'application/json; charset=utf-8',
+        //        data: {},
+        //        success: function (results) {
+        //            if (results.length > 0) {
+        //                for (i = 0; i < results.length; i++) {
+        //                    POStatussuppliers.push({
+        //                        SupplierId: results[i]["Id"],
+        //                        Supplier: results[i]["Article"]
+        //                    });
+        //                }
+        //                createCbosupplierPOStatus(POStatussuppliers);
+        //            } else {
+        //                createCbosupplierPOStatus(POStatussuppliers);
+        //            }
+        //        }
+        //    });
+        //    return suppliers;
+        //}
 
-        // =================================
-        // Combo Box for Suppliers PO Status
-        // =================================
-        function createCbosupplierPOStatus(POStatussuppliers) {
-            var supplierCollection = new wijmo.collections.CollectionView(POStatussuppliers);
-            var supplierList = new Array();
-            for (var i = 0; i < supplierCollection.items.length; i++) {
-                supplierList.push(supplierCollection.items[i].Supplier);
-            }
+        //// =================================
+        //// Combo Box for Suppliers PO Status
+        //// =================================
+        //function createCbosupplierPOStatus(POStatussuppliers) {
+        //    var supplierCollection = new wijmo.collections.CollectionView(POStatussuppliers);
+        //    var supplierList = new Array();
+        //    for (var i = 0; i < supplierCollection.items.length; i++) {
+        //        supplierList.push(supplierCollection.items[i].Supplier);
+        //    }
 
-            var disabled;
-            if (POStatussuppliers == 0) {
-                disabled = true;
-            } else {
-                if (document.getElementById('RR_IsLocked').value == 'true') {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
+        //    var disabled;
+        //    if (POStatussuppliers == 0) {
+        //        disabled = true;
+        //    } else {
+        //        if (document.getElementById('RR_IsLocked').value == 'true') {
+        //            disabled = true;
+        //        } else {
+        //            disabled = false;
+        //        }
+        //    }
 
-            cboSuppliersPOStatus.dispose();
-            cboSuppliersPOStatus = new wijmo.input.ComboBox('#POStatus_Supplier', {
-                disabled: true,
-                placeholder: "Select Supplier",
-                itemsSource: supplierList,
-                isEditable: false,
-                required: false,
-                selectedValue: document.getElementById('POStatus_Supplier_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#POStatus_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
-                    document.getElementById('POStatus_PONumber_data').value = "";
-                    getPOInPOStatusForComboBox();
-                }
-            });
+        //    cboSuppliersPOStatus.dispose();
+        //    cboSuppliersPOStatus = new wijmo.input.ComboBox('#POStatus_Supplier', {
+        //        disabled: true,
+        //        placeholder: "Select Supplier",
+        //        itemsSource: supplierList,
+        //        isEditable: false,
+        //        required: false,
+        //        selectedValue: document.getElementById('POStatus_Supplier_selectedValue').value.toString(),
+        //        onSelectedIndexChanged: function () {
+        //            $("#POStatus_Supplier_data").val(supplierCollection.items[this.selectedIndex].SupplierId);
+        //            document.getElementById('POStatus_PONumber_data').value = "";
+        //            getPOInPOStatusForComboBox();
+        //        }
+        //    });
 
-            document.getElementById('POStatus_Supplier_data').value = supplierCollection.items[cboSuppliersPOStatus.selectedIndex].SupplierId;
-        }
+        //    document.getElementById('POStatus_Supplier_data').value = supplierCollection.items[cboSuppliersPOStatus.selectedIndex].SupplierId;
+        //}
 
         // ==================================
         // GET PO for PO Status for Combo Box
         // ==================================
         function getPOInPOStatusForComboBox() {
             POsPOStatus = new wijmo.collections.ObservableArray();
-            var POSupplierId = document.getElementById('POStatus_Supplier_data').value;
+            var POSupplierId = document.getElementById('RRSupplier_data').value;
             $.ajax({
                 url: '/api/listPurchaseOrderBySupplierId/' + POSupplierId,
                 cache: false,
@@ -1716,7 +1721,21 @@
 
                     setTimeout(function () {
                         POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+
+                        var filterText = '';
+                        $('#inputFilterPOItem').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            POStatus.refresh();
+                        });
+
+                        POStatus.filter = function (item) {
+                            return !filterText || (item.ItemCode.toLowerCase().indexOf(filterText) > -1)
+                            || (item.Item.toLowerCase().indexOf(filterText) > -1);
+                        }
+
+                        // Flex Grid for Item
                         POstatusGrid.itemsSource = POStatus;
+                        POstatusGrid.trackChanges = true;
                     }, 500);
                 }
             });
@@ -1870,6 +1889,18 @@
         // ===============
         function getPOBySupplierInPOStatus() {
             POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+            POStatus.canFilter = true;
+
+            var filterText = '';
+            $('#inputFilterPOItem').keyup(function () {
+                filterText = this.value.toLowerCase();
+                POStatus.refresh();
+            });
+
+            POStatus.filter = function (item) {
+                return !filterText || (item.ItemCode.toLowerCase().indexOf(filterText) > -1)
+                || (item.Item.toLowerCase().indexOf(filterText) > -1);
+            }
 
             // Flex Grid for Item
             POstatusGrid = new wijmo.grid.FlexGrid('#POStatusGrid');
@@ -2031,6 +2062,17 @@
                                 itemGrid.trackChanges = true;
 
                                 POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
+                                var filterText = '';
+                                $('#inputFilterPOItem').keyup(function () {
+                                    filterText = this.value.toLowerCase();
+                                    POStatus.refresh();
+                                });
+
+                                POStatus.filter = function (item) {
+                                    return !filterText || (item.ItemCode.toLowerCase().indexOf(filterText) > -1)
+                                    || (item.Item.toLowerCase().indexOf(filterText) > -1);
+                                }
+
                                 // Flex Grid for Item
                                 POstatusGrid.itemsSource = POStatus;
                                 POstatusGrid.trackChanges = true;
@@ -2051,6 +2093,11 @@
                             }
                         }
                     });
+                } else {
+                    $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
+                    $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
+
+                    $('#applyAllConfirmPOStatus').modal('hide');
                 }
             }
         }
@@ -2100,6 +2147,17 @@
 
                         POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
 
+                        var filterText = '';
+                        $('#inputFilterPOItem').keyup(function () {
+                            filterText = this.value.toLowerCase();
+                            POStatus.refresh();
+                        });
+
+                        POStatus.filter = function (item) {
+                            return !filterText || (item.ItemCode.toLowerCase().indexOf(filterText) > -1)
+                            || (item.Item.toLowerCase().indexOf(filterText) > -1);
+                        }
+
                         // Flex Grid for Item
                         POstatusGrid.itemsSource = POStatus;
                         POstatusGrid.trackChanges = true;
@@ -2148,7 +2206,7 @@
             $('#cmdApplyPOStatusButton').prop("disabled", true);
             document.getElementById('POStatus_PONumber_data').value = 0;
 
-            cboSuppliersPOStatus = new wijmo.input.ComboBox('#POStatus_Supplier');
+            //cboSuppliersPOStatus = new wijmo.input.ComboBox('#POStatus_Supplier');
             cboPONumberPOStatus = new wijmo.input.ComboBox('#POStatus_PONumber');
 
             getPOBySupplierInPOStatus();
@@ -3456,7 +3514,7 @@
             $("#cmdSaveRRLinesButton").prop("disabled", false);
             $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
 
-            var POSupplierId = document.getElementById('POStatus_Supplier_data').value;
+            var POSupplierId = document.getElementById('RRSupplier_data').value;
             POs = new wijmo.collections.ObservableArray();
             $.ajax({
                 url: '/api/listPurchaseOrderBySupplierId/' + POSupplierId,
