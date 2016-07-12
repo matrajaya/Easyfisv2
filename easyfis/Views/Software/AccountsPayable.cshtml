@@ -214,6 +214,7 @@
                                     </div>
                                     <div id="PSR" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="purchaseSummaryReportView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="purchaseSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -878,12 +879,13 @@
         function getPurchaseSummaryReportStartDate() {
             purchaseSummaryReportStartDate.dispose();
             purchaseSummaryReportStartDate = new wijmo.input.InputDate('#purchaseSummaryReport_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('purchaseSummaryReport_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('purchaseSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('purchaseSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('purchaseSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getPurchaseSummaryReportEndDate();
                     }, 50);
@@ -895,12 +897,13 @@
         function getPurchaseSummaryReportEndDate() {
             purchaseSummaryReportEndDate.dispose();
             purchaseSummaryReportEndDate = new wijmo.input.InputDate('#purchaseSummaryReport_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('purchaseSummaryReport_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('purchaseSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('purchaseSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('purchaseSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getPurchaseSummaryReportStartDate();
                     }, 50);
@@ -914,6 +917,14 @@
             var purchaseSummaryReportEndDate = document.getElementById('purchaseSummaryReport_EndDate_data').value;
 
             window.location.href = '/RepPurchaseSummaryReport/PurchaseSummaryReport?StartDate=' + purchaseSummaryReportStartDate + '&EndDate=' + purchaseSummaryReportEndDate;
+        }
+
+        // Purchase Summary report on click
+        function purchaseSummaryReportView_OnClick() {
+            var purchaseSummaryReportStartDate = document.getElementById('purchaseSummaryReport_StartDate_data').value;
+            var purchaseSummaryReportEndDate = document.getElementById('purchaseSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/PurchaseSummaryReport?StartDate=' + purchaseSummaryReportStartDate + '&EndDate=' + purchaseSummaryReportEndDate;
         }
 
         // get Purchase Detail Report Start Date
@@ -1133,6 +1144,9 @@
             var userId = '@ViewData["MstUserId"]';
             rightsAccessValidation(userId);
 
+            var newDate = new Date();
+            var defaultDate = [newDate.getMonth() + 1, newDate.getDate(), newDate.getFullYear()].join('-');
+
             // Input Vat Summary Dates
             document.getElementById('InputVATReport_StartDate_data').value = new Date().toLocaleDateString();
             document.getElementById('InputVATReport_EndDate_data').value = new Date().toLocaleDateString();
@@ -1154,8 +1168,8 @@
             getWithHoldingTAXReportEndDate();
 
             // Purchase Summary Report Dates
-            document.getElementById('purchaseSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('purchaseSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('purchaseSummaryReport_StartDate_data').value = defaultDate;
+            document.getElementById('purchaseSummaryReport_EndDate_data').value = defaultDate;
 
             purchaseSummaryReportStartDate = new wijmo.input.InputDate('#purchaseSummaryReport_StartDate');
             purchaseSummaryReportEndDate = new wijmo.input.InputDate('#purchaseSummaryReport_EndDate');
@@ -1223,9 +1237,6 @@
                     document.getElementById('accountsPaybleReport_DateAsOf_data').value = thisDateValue;
                 }
             });
-
-            var newDate = new Date();
-            var defaultDate = [newDate.getMonth() + 1, newDate.getDate(), newDate.getFullYear()].join('-');
 
             document.getElementById('accountsPaybleReport_DateAsOf_data').value = defaultDate;
             document.getElementById('accountsPaybleReport_Comapny_data').value = "";
