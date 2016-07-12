@@ -340,7 +340,7 @@
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
                             <li role="presentation" class="active"><a data-toggle="tab" href="#RRItem" id="RRItemTabId">Items</a></li>
                             <li role="presentation"><a data-toggle="tab" href="#RRTax" id="RRTaxTabId">Tax</a></li>
-                            <li role="presentation"><a data-toggle="tab" href="#RRBUC" id="RRBUCTabId">Basic Unit Conversion</a></li>
+                            @*<li role="presentation"><a data-toggle="tab" href="#RRBUC" id="RRBUCTabId">Basic Unit Conversion</a></li>*@
                         </ul>
                         <br />
                         <div class="tab-content">
@@ -454,7 +454,7 @@
                     <dl class="dl-horizontal">
                         <dt>Quantity</dt>
                         <dd>
-                            <input type="text" class="form-control numberField input-sm input-50 requiredRRLine" id="POBalanceQuantity" placeholder="0.00" />
+                            <input type="text" class="form-control numberField input-sm input-50" id="POBalanceQuantity" placeholder="0.00" />
                         </dd>
                     </dl>
                 </div>
@@ -3681,6 +3681,7 @@
                     });
                 }
             });
+
             if (isValid == false) {
                 toastr.error("Invalid Entry");
             }
