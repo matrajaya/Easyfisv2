@@ -67,6 +67,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult PurchaseDetailReport()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult Disbursement()
         {
             return View();

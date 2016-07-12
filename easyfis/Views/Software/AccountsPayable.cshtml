@@ -247,6 +247,7 @@
                                     </div>
                                     <div id="PDR" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="purchaseDetailReportView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="purchaseDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -931,12 +932,13 @@
         function getPurchaseDetailReportStartDate() {
             purchaseDetailReportStartDate.dispose();
             purchaseDetailReportStartDate = new wijmo.input.InputDate('#purchaseDetailReport_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('purchaseDetailReport_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('purchaseDetailReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('purchaseDetailReport_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('purchaseDetailReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getPurchaseDetailReportEndDate();
                     }, 50);
@@ -948,12 +950,13 @@
         function getPurchaseDetailReportEndDate() {
             purchaseDetailReportEndDate.dispose();
             purchaseDetailReportEndDate = new wijmo.input.InputDate('#purchaseDetailReport_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('purchaseDetailReport_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('purchaseDetailReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('purchaseDetailReport_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('purchaseDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getPurchaseDetailReportStartDate();
                     }, 50);
@@ -969,6 +972,15 @@
             window.location.href = '/RepPurchaseDetailReport/PurchaseDetailReport?StartDate=' + purchaseDetailReportStartDate + '&EndDate=' + purchaseDetailReportEndDate;
         }
 
+        // Purchase Detail report on click
+        function purchaseDetailReportView_OnClick() {
+            var purchaseDetailReportStartDate = document.getElementById('purchaseDetailReport_StartDate_data').value;
+            var purchaseDetailReportEndDate = document.getElementById('purchaseDetailReport_EndDate_data').value;
+
+            window.location.href = '/Software/PurchaseDetailReport?StartDate=' + purchaseDetailReportStartDate + '&EndDate=' + purchaseDetailReportEndDate;
+
+        }
+       
         // get Receiving Receipt Summary Report Start Date
         function getReceivingReceiptSummaryReportStartDate() {
             receivingReceiptSummaryReportStartDate.dispose();
@@ -1178,8 +1190,8 @@
             getPurchaseSummaryReportEndDate();
 
             // Purchase Detail Report Dates
-            document.getElementById('purchaseDetailReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('purchaseDetailReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('purchaseDetailReport_StartDate_data').value = defaultDate;
+            document.getElementById('purchaseDetailReport_EndDate_data').value = defaultDate;
 
             purchaseDetailReportStartDate = new wijmo.input.InputDate('#purchaseDetailReport_StartDate');
             purchaseDetailReportEndDate = new wijmo.input.InputDate('#purchaseDetailReport_EndDate');
