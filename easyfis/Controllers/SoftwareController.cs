@@ -82,6 +82,12 @@ namespace easyfis.Controllers
         public ActionResult ReceivingReceiptDetailReport()
         {
             return View();
+        }
+
+        [Authorize]
+        public ActionResult DisbursementSummaryReport()
+        {
+            return View();
         } 
 
         [Authorize]

@@ -304,6 +304,7 @@
                                     </div>
                                     <div id="DSR" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="disbursementSummaryReportView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="disbursementSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -883,12 +884,13 @@
         function getDisbursementSummaryReportStartDate() {
             disbursementSummaryReportStartDate.dispose();
             disbursementSummaryReportStartDate = new wijmo.input.InputDate('#disbursementSummaryReport_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('disbursementSummaryReport_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('disbursementSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('disbursementSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('disbursementSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getDisbursementSummaryReportEndDate();
                     }, 50);
@@ -900,12 +902,13 @@
         function getDisbursementSummaryReportEndDate() {
             disbursementSummaryReportEndDate.dispose();
             disbursementSummaryReportEndDate = new wijmo.input.InputDate('#disbursementSummaryReport_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('disbursementSummaryReport_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('disbursementSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('disbursementSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('disbursementSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getDisbursementSummaryReportStartDate();
                     }, 50);
@@ -919,6 +922,14 @@
             var disbursementSummaryReportEndDate = document.getElementById('disbursementSummaryReport_EndDate_data').value;
 
             window.location.href = '/RepDisbursementSummaryReport/DisbursementSummaryReport?StartDate=' + disbursementSummaryReportStartDate + '&EndDate=' + disbursementSummaryReportEndDate;
+        }
+
+        // Disbursement Summary report on click
+        function disbursementSummaryReportView_OnClick() {
+            var disbursementSummaryReport_StartDate_data = document.getElementById('disbursementSummaryReport_StartDate_data').value;
+            var disbursementSummaryReport_EndDate_data = document.getElementById('disbursementSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/DisbursementSummaryReport?StartDate=' + disbursementSummaryReport_StartDate_data + '&EndDate=' + disbursementSummaryReport_EndDate_data;
         }
 
         // get Disbursement Detail Report Start Date
@@ -1034,8 +1045,8 @@
             getReceivingReceiptDetailReportEndDate();
 
             // Disbursement Summary Report Dates
-            document.getElementById('disbursementSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('disbursementSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('disbursementSummaryReport_StartDate_data').value = defaultDate;
+            document.getElementById('disbursementSummaryReport_EndDate_data').value = defaultDate;
 
             disbursementSummaryReportStartDate = new wijmo.input.InputDate('#disbursementSummaryReport_StartDate');
             disbursementSummaryReportEndDate = new wijmo.input.InputDate('#disbursementSummaryReport_EndDate');
