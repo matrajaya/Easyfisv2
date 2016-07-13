@@ -223,42 +223,47 @@
                     <h4 class="modal-title" id="POStatusModalLabel">Purchase Order Status</h4>
                 </div>
                 <div class="modal-body">
-                    <form id="POLinesDetailForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <dl class="dl-horizontal">
-                                    <dt>PO Number</dt>
-                                    <dd>
-                                        <div class="comboBox-wide" id="POStatus_PONumber"></div>
-
-                                        <input type="hidden" id="POStatus_PONumber_data" class="requiredPOLine">
-                                        <input type="hidden" id="POStatus_PONumber_selectedValue" />
-                                    </dd>
-                                </dl>
-                            </div>
-                            <div class="col-md-6"></div>
-                        </div>
-                    </form>
-                    <hr />
                     <div class="POStatusContent">
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="input-group input-group-sm  input-50" id="inputFilterPOItemSearch">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="inputFilterPOItem" placeholder="Search">
+                                <div class="panel panel-default" id="panelGrid">
+                                    <div class="panel-heading">
+                                        <div class="row" id="inputFilterPOItemSearch">
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                    <input type="text" class="form-control input-sm" id="inputFilterPOItem" placeholder="Search">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-5">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>PO Number</b></span>
+                                                    <div class="comboBox-wide" id="POStatus_PONumber"></div>
+
+                                                    <input type="hidden" id="POStatus_PONumber_data" class="requiredPOLine">
+                                                    <input type="hidden" id="POStatus_PONumber_selectedValue" />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1"></div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="POStatusGrid" class="grid statusGrid" align="left"></div>
+                                        <center>
+                                            <h4>
+                                                <span id="loadingPOItemsGridList"></span>
+                                            </h4>
+                                        </center>
+                                    </div>
                                 </div>
-                                <br />
-                                <div id="POStatusGrid" class="grid statusGrid" align="left"></div>
                                 <center>
                                     <h4>
                                         <span id="loadingPOStatusGridList"></span>
-                                        <span id="loadingPOItemsGridList"></span>
                                     </h4>
                                 </center>
                             </div>
                         </div>
                     </div>
-                    <br />
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary btn-sm" id="cmdApplyPOStatusButton" onclick="cmdApplyAllPOStatusButton_OnClick()"><i class="fa fa-check"></i> Apply</button>
@@ -1543,11 +1548,13 @@
             document.getElementById('POStatus_PONumber_data').value = 0;
             //getSupplierInPOStatusForComboBox();
             getPOInPOStatusForComboBox();
-            document.getElementById("loadingPOStatusGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading PO Status...';
-            document.getElementById("loadingPOItemsGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading Purchase Order Items...';
+            document.getElementById("loadingPOStatusGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            document.getElementById("loadingPOItemsGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
 
             $('#POLinesDetailForm').hide();
             $('#loadingPOStatusGridList').show();
+
+            $('#panelGrid').hide();
 
             $('#loadingPOItemsGridList').hide();
             $('#footerModalPOStatusNavigationButtons').hide();
@@ -1562,6 +1569,8 @@
                 $('#POLinesDetailForm').show();
                 $('#loadingPOStatusGridList').hide();
                 $('#inputFilterPOItemSearch').show();
+                
+                $('#panelGrid').show();
 
                 POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
 
