@@ -1457,13 +1457,16 @@ namespace easyfis.Business
                                         group d by new
                                         {
                                             BranchId = d.BranchId,
-                                            AccountId = d.MstArticle.AccountId
-
+                                            AccountId = d.MstArticle.AccountId,
+                                            VATId = d.VATId,
+                                            RRId = d.RRId
                                         } into g
                                         select new Models.TrnReceivingReceiptItem
                                         {
                                             BranchId = g.Key.BranchId,
                                             ItemAccountId = g.Key.AccountId,
+                                            VATId = g.Key.VATId,
+                                            RRId = g.Key.RRId,
                                             VATAmount = g.Sum(d => d.VATAmount),
                                             WTAXAmount = g.Sum(d => d.WTAXAmount),
                                             Amount = g.Sum(d => d.Amount)
