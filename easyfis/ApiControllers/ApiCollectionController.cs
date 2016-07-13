@@ -21,103 +21,123 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
         }
 
-        // update AR
-        public void updateAR(Int32 SIId)
-        {
-            var salesInvoices = from d in db.TrnSalesInvoices
-                                where d.Id == SIId
-                                select new Models.TrnSalesInvoice
-                                {
-                                    Id = d.Id,
-                                    BranchId = d.BranchId,
-                                    Branch = d.MstBranch.Branch,
-                                    SINumber = d.SINumber,
-                                    SIDate = d.SIDate.ToShortDateString(),
-                                    CustomerId = d.CustomerId,
-                                    Customer = d.MstArticle.Article,
-                                    TermId = d.TermId,
-                                    Term = d.MstTerm.Term,
-                                    DocumentReference = d.DocumentReference,
-                                    ManualSINumber = d.ManualSINumber,
-                                    Remarks = d.Remarks,
-                                    Amount = d.Amount,
-                                    PaidAmount = d.PaidAmount,
-                                    AdjustmentAmount = d.AdjustmentAmount,
-                                    BalanceAmount = d.BalanceAmount,
-                                    SoldById = d.SoldById,
-                                    SoldBy = d.MstUser4.FullName,
-                                    PreparedById = d.PreparedById,
-                                    PreparedBy = d.MstUser3.FullName,
-                                    CheckedById = d.CheckedById,
-                                    CheckedBy = d.MstUser1.FullName,
-                                    ApprovedById = d.ApprovedById,
-                                    ApprovedBy = d.MstUser.FullName,
-                                    IsLocked = d.IsLocked,
-                                    CreatedById = d.CreatedById,
-                                    CreatedBy = d.MstUser2.FullName,
-                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                    UpdatedById = d.UpdatedById,
-                                    UpdatedBy = d.MstUser5.FullName,
-                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                };
-
-            if (salesInvoices.Any())
-            {
-                var salesInvoceUpdate = from d in db.TrnSalesInvoices where d.Id == SIId select d;
-                if (salesInvoceUpdate.Any())
-                {
-                    Decimal DebitAmount = 0;
-                    Decimal CreditAmount = 0;
-                    var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.ARSIId == SIId select d;
-                    if (journalVoucherLines.Any())
-                    {
-                        DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
-                        CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
-                    }
-
-                    Decimal PaidAmount = 0;
-                    Decimal AdjustmentAmount = 0;
-                    var collectionLinesORId = from d in db.TrnCollectionLines where d.SIId == SIId select d;
-                    if (collectionLinesORId.Any())
-                    {
-                        Boolean collectionHeaderLocked = (from d in db.TrnCollections where d.Id == collectionLinesORId.First().ORId select d.IsLocked).SingleOrDefault();
-
-                        var collectionLines = from d in db.TrnCollectionLines where d.SIId == SIId select d;
-                        if (collectionHeaderLocked == true)
-                        {
-                            PaidAmount = collectionLines.Sum(d => d.Amount);
-                            AdjustmentAmount = DebitAmount - CreditAmount;
-                        }
-                    }
-
-                    var updateSalesInvoice = salesInvoceUpdate.FirstOrDefault();
-                    updateSalesInvoice.PaidAmount = PaidAmount;
-                    updateSalesInvoice.AdjustmentAmount = AdjustmentAmount;
-                    db.SubmitChanges();
-
-                    Decimal SIAmount = 0;
-                    Decimal SIPaidAmount = 0;
-                    foreach (var salesInvoice in salesInvoices)
-                    {
-                        SIAmount = salesInvoice.Amount;
-                        SIPaidAmount = salesInvoice.PaidAmount;
-                    }
-
-                    updateSalesInvoice.BalanceAmount = (SIAmount - SIPaidAmount) + AdjustmentAmount;
-                    db.SubmitChanges();
-                }
-            }
-        }
-
         // update AR Collection
         public void UpdateARCollection(Int32 ORId)
         {
-            var collectionLines = from d in db.TrnCollectionLines where d.ORId == ORId select d;
+            var collectionLines = from d in db.TrnCollectionLines
+                                  where d.ORId == ORId
+                                  select new Models.TrnCollectionLine
+                                  {
+                                      Id = d.Id,
+                                      ORId = d.ORId,
+                                      OR = d.TrnCollection.ORNumber,
+                                      ORDate = d.TrnCollection.ORDate.ToShortDateString(),
+                                      Customer = d.TrnCollection.MstArticle.Article,
+                                      BranchId = d.BranchId,
+                                      Branch = d.MstBranch.Branch,
+                                      AccountId = d.AccountId,
+                                      Account = d.MstAccount.Account,
+                                      ArticleId = d.ArticleId,
+                                      Article = d.MstArticle.Article,
+                                      SIId = d.SIId,
+                                      SI = d.TrnSalesInvoice.SINumber,
+                                      Particulars = d.Particulars,
+                                      Amount = d.Amount,
+                                      PayTypeId = d.PayTypeId,
+                                      PayType = d.MstPayType.PayType,
+                                      CheckNumber = d.CheckNumber,
+                                      CheckDate = d.CheckDate.ToShortDateString(),
+                                      CheckBank = d.CheckBank,
+                                      DepositoryBankId = d.DepositoryBankId,
+                                      DepositoryBank = d.MstArticle1.Article,
+                                      IsClear = d.IsClear,
+                                      IsLocked = d.TrnCollection.IsLocked
+                                  };
+
             if (collectionLines.Any())
             {
-                if (collectionLines.First().SIId != null)
+                foreach (var collectionLine in collectionLines)
                 {
-                    updateAR(Convert.ToInt32(collectionLines.First().SIId));
+                    if (collectionLine.SIId != null)
+                    {
+                        Decimal DebitAmount = 0;
+                        Decimal CreditAmount = 0;
+                        var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.ARSIId == collectionLine.SIId select d;
+                        if (journalVoucherLines.Any())
+                        {
+                            DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
+                            CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
+                        }
+
+                        Decimal PaidAmount = 0;
+                        Decimal AdjustmentAmount = 0;
+                        var collectionLineAmount = from d in db.TrnCollectionLines where d.SIId == collectionLine.SIId select d;
+                        if (collectionLine.IsLocked == true)
+                        {
+                            PaidAmount = collectionLineAmount.Sum(d => d.Amount);
+                            AdjustmentAmount = DebitAmount - CreditAmount;
+                        }
+
+                        var salesInvoceUpdate = from d in db.TrnSalesInvoices where d.Id == collectionLine.SIId select d;
+                        if (salesInvoceUpdate.Any())
+                        {
+                            var updateSalesInvoice = salesInvoceUpdate.FirstOrDefault();
+                            updateSalesInvoice.PaidAmount = PaidAmount;
+                            updateSalesInvoice.AdjustmentAmount = AdjustmentAmount;
+                            db.SubmitChanges();
+
+                            var salesInvoices = from d in db.TrnSalesInvoices
+                                                where d.Id == collectionLine.SIId
+                                                select new Models.TrnSalesInvoice
+                                                {
+                                                    Id = d.Id,
+                                                    BranchId = d.BranchId,
+                                                    Branch = d.MstBranch.Branch,
+                                                    SINumber = d.SINumber,
+                                                    SIDate = d.SIDate.ToShortDateString(),
+                                                    CustomerId = d.CustomerId,
+                                                    Customer = d.MstArticle.Article,
+                                                    TermId = d.TermId,
+                                                    Term = d.MstTerm.Term,
+                                                    DocumentReference = d.DocumentReference,
+                                                    ManualSINumber = d.ManualSINumber,
+                                                    Remarks = d.Remarks,
+                                                    Amount = d.Amount,
+                                                    PaidAmount = d.PaidAmount,
+                                                    AdjustmentAmount = d.AdjustmentAmount,
+                                                    BalanceAmount = d.BalanceAmount,
+                                                    SoldById = d.SoldById,
+                                                    SoldBy = d.MstUser4.FullName,
+                                                    PreparedById = d.PreparedById,
+                                                    PreparedBy = d.MstUser3.FullName,
+                                                    CheckedById = d.CheckedById,
+                                                    CheckedBy = d.MstUser1.FullName,
+                                                    ApprovedById = d.ApprovedById,
+                                                    ApprovedBy = d.MstUser.FullName,
+                                                    IsLocked = d.IsLocked,
+                                                    CreatedById = d.CreatedById,
+                                                    CreatedBy = d.MstUser2.FullName,
+                                                    CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                                    UpdatedById = d.UpdatedById,
+                                                    UpdatedBy = d.MstUser5.FullName,
+                                                    UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                                };
+
+                            if (salesInvoices.Any())
+                            {
+                                Decimal SIAmount = 0;
+                                Decimal SIPaidAmount = 0;
+                                foreach (var salesInvoice in salesInvoices)
+                                {
+                                    SIAmount = salesInvoice.Amount;
+                                    SIPaidAmount = salesInvoice.PaidAmount;
+                                }
+
+                                updateSalesInvoice.BalanceAmount = (SIAmount - SIPaidAmount) + AdjustmentAmount;
+                                db.SubmitChanges();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -364,8 +384,9 @@ namespace easyfis.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }

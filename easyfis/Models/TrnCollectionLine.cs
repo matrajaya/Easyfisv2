@@ -32,6 +32,7 @@ namespace easyfis.Models
         public Int32? DepositoryBankId { get; set; }
         public String DepositoryBank { get; set; }
         public Boolean IsClear { get; set; }
+        public Boolean IsLocked { get; set; }
     }
 
 }

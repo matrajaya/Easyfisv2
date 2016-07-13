@@ -1982,7 +1982,8 @@
                 disabled: disabled,
                 placeholder: "Select SI Number",
                 itemsSource: SIList,
-                isEditable: false,
+                isEditable: true,
+                required: true,
                 selectedValue: document.getElementById('collectionLine_SINo_selectedValue').value.toString(),
                 onSelectedIndexChanged: function () {
                     $("#collectionLine_SINo_data").val(SICollections.items[this.selectedIndex].SIId);
@@ -2016,6 +2017,9 @@
                                 AccountAccount: results[i]["Account"]
                             });
                         }
+                        createCollectionLineCboForAccountCode(collectionLineAccounts);
+                        createCollectionLineCboForAccount(collectionLineAccounts);
+                    } else {
                         createCollectionLineCboForAccountCode(collectionLineAccounts);
                         createCollectionLineCboForAccount(collectionLineAccounts);
                     }
@@ -2055,8 +2059,10 @@
                 }
             });
 
-            document.getElementById('collectionLine_account_data').value = collectionLineAccountCollection.items[cboCollectionLineAccountCode.selectedIndex].AccountId;
-            document.getElementById('collectionLine_account_selectedValue').value = collectionLineAccountCollection.items[cboCollectionLineAccountCode.selectedIndex].AccountAccount;
+            if (collectionLineAccounts == 0) {
+                document.getElementById('collectionLine_account_data').value = collectionLineAccountCollection.items[cboCollectionLineAccountCode.selectedIndex].AccountId;
+                document.getElementById('collectionLine_account_selectedValue').value = collectionLineAccountCollection.items[cboCollectionLineAccountCode.selectedIndex].AccountAccount;
+            }
         }
 
         // ===============
@@ -2242,7 +2248,7 @@
             for (var i = 0; i < collectionLineArticlBankeCollections.items.length; i++) {
                 collectiontLineArticleBankList.push(collectionLineArticlBankeCollections.items[i].ArticleArticle);
             }
-            
+
             var disabled = false;
             if (collectionArticleBanks == 0) {
                 disabled = true;
