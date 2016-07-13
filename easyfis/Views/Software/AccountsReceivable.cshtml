@@ -150,6 +150,7 @@
                                     </div>
                                     <div id="SSR" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="SaleSummaryReportView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="SaleSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -509,12 +510,13 @@
         function getSaleSummaryReportStartDate() {
             saleSummaryReportStartDate.dispose();
             saleSummaryReportStartDate = new wijmo.input.InputDate('#SaleSummaryReport_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('SaleSummaryReport_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('SaleSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('SaleSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('SaleSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleSummaryReportEndDate();
                     }, 50);
@@ -526,12 +528,13 @@
         function getSaleSummaryReportEndDate() {
             saleSummaryReportEndDate.dispose();
             saleSummaryReportEndDate = new wijmo.input.InputDate('#SaleSummaryReport_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('SaleSummaryReport_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('SaleSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('SaleSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('SaleSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleSummaryReportStartDate();
                     }, 50);
@@ -545,6 +548,14 @@
             var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
 
             window.location.href = '/RepSalesSummaryReport/SalesSummaryReport?StartDate=' + saleSummaryReportStartDate + '&EndDate=' + saleSummaryReportEndDate;
+        }
+
+        // sale summary report on click
+        function SaleSummaryReportView_OnClick() {
+            var saleSummaryReportStartDate = document.getElementById('SaleSummaryReport_StartDate_data').value;
+            var saleSummaryReportEndDate = document.getElementById('SaleSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/SalesSummaryReport?StartDate=' + saleSummaryReportStartDate + '&EndDate=' + saleSummaryReportEndDate;
         }
 
         // get Sale Detail Report Start Date
@@ -726,8 +737,8 @@
             });
 
             // sale summary report
-            document.getElementById('SaleSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('SaleSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('SaleSummaryReport_StartDate_data').value = defaultDate;
+            document.getElementById('SaleSummaryReport_EndDate_data').value = defaultDate;
 
             saleSummaryReportStartDate = new wijmo.input.InputDate('#SaleSummaryReport_StartDate');
             saleSummaryReportEndDate = new wijmo.input.InputDate('#SaleSummaryReport_EndDate');
