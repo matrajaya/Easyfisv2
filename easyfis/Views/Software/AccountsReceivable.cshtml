@@ -216,6 +216,7 @@
                                     </div>
                                     <div id="CSR" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="CollectionSummaryReportView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="CollectionSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -615,12 +616,13 @@
         function getCollectionSummaryReportStartDate() {
             collectionSummaryReportStartDate.dispose();
             collectionSummaryReportStartDate = new wijmo.input.InputDate('#CollectionSummaryReport_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('CollectionSummaryReport_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('CollectionSummaryReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('CollectionSummaryReport_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('CollectionSummaryReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionSummaryReportEndDate();
                     }, 50);
@@ -632,12 +634,13 @@
         function getCollectionSummaryReportEndDate() {
             collectionSummaryReportEndDate.dispose();
             collectionSummaryReportEndDate = new wijmo.input.InputDate('#CollectionSummaryReport_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('CollectionSummaryReport_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('CollectionSummaryReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('CollectionSummaryReport_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('CollectionSummaryReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionSummaryReportStartDate();
                     }, 50);
@@ -651,6 +654,14 @@
             var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
 
             window.location.href = '/RepCollectionSummaryReport/CollectionSummaryReport?StartDate=' + collectionSummaryReportStartDate + '&EndDate=' + collectionSummaryReportEndDate;
+        }
+
+          // collection summary report on click
+        function CollectionSummaryReportView_OnClick() {
+            var collectionSummaryReportStartDate = document.getElementById('CollectionSummaryReport_StartDate_data').value;
+            var collectionSummaryReportEndDate = document.getElementById('CollectionSummaryReport_EndDate_data').value;
+
+            window.location.href = '/Software/CollectionSummaryReport?StartDate=' + collectionSummaryReportStartDate + '&EndDate=' + collectionSummaryReportEndDate;
         }
 
         // get Collection Detail Report Start Date
@@ -768,8 +779,8 @@
             getSaleDetailReportEndDate();
 
             // collection summary report
-            document.getElementById('CollectionSummaryReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('CollectionSummaryReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('CollectionSummaryReport_StartDate_data').value = defaultDate;
+            document.getElementById('CollectionSummaryReport_EndDate_data').value = defaultDate;
 
             collectionSummaryReportStartDate = new wijmo.input.InputDate('#CollectionSummaryReport_StartDate');
             collectionSummaryReportEndDate = new wijmo.input.InputDate('#CollectionSummaryReport_EndDate');

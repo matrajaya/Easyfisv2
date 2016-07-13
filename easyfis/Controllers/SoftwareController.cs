@@ -162,6 +162,13 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult CollectionSummaryReport()
+        {
+            return View();
+        }
+
+
+        [Authorize]
         public ActionResult Collection()
         {
             return View();
