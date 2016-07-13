@@ -156,6 +156,12 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult SalesDetailReport()
+        {
+            return View();
+        }
+
+        [Authorize]
         public ActionResult Collection()
         {
             return View();
