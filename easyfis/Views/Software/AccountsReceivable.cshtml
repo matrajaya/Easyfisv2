@@ -249,6 +249,7 @@
                                     </div>
                                     <div id="CDR" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="CollectionDetailReportView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-table"></i> View</button>
                                             <button onclick="CollectionDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -588,7 +589,7 @@
                 min: new Date(document.getElementById('SaleDetailReport_StartDate_data').value),
                 onValueChanged: function () {
                     var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
-                    document.getElementById('SaleDetailReport_EndDate_data').value = thisDateValue
+                    document.getElementById('SaleDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getSaleDetailReportStartDate();
                     }, 50);
@@ -668,12 +669,13 @@
         function getCollectionDetailReportStartDate() {
             collectionDetailReportStartDate.dispose();
             collectionDetailReportStartDate = new wijmo.input.InputDate('#CollectionDetailReport_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('CollectionDetailReport_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('CollectionDetailReport_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('CollectionDetailReport_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('CollectionDetailReport_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionDetailReportEndDate();
                     }, 50);
@@ -685,12 +687,13 @@
         function getCollectionDetailReportEndDate() {
             collectionDetailReportEndDate.dispose();
             collectionDetailReportEndDate = new wijmo.input.InputDate('#CollectionDetailReport_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('CollectionDetailReport_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('CollectionDetailReport_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('CollectionDetailReport_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('CollectionDetailReport_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getCollectionDetailReportStartDate();
                     }, 50);
@@ -704,6 +707,14 @@
             var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
 
             window.location.href = '/RepCollectionDetailReport/CollectionDetailReport?StartDate=' + collectionDetailReportStartDate + '&EndDate=' + collectionDetailReportEndDate;
+        }
+
+        // collection detail report on click
+        function CollectionDetailReportView_OnClick() {
+            var collectionDetailReportStartDate = document.getElementById('CollectionDetailReport_StartDate_data').value;
+            var collectionDetailReportEndDate = document.getElementById('CollectionDetailReport_EndDate_data').value;
+
+            window.location.href = '/Software/CollectionDetailReport?StartDate=' + collectionDetailReportStartDate + '&EndDate=' + collectionDetailReportEndDate;
         }
 
         // ============
@@ -789,8 +800,8 @@
             getCollectionSummaryReportEndDate();
 
             // collection detail report
-            document.getElementById('CollectionDetailReport_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('CollectionDetailReport_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('CollectionDetailReport_StartDate_data').value = defaultDate;
+            document.getElementById('CollectionDetailReport_EndDate_data').value = defaultDate;
 
             collectionDetailReportStartDate = new wijmo.input.InputDate('#CollectionDetailReport_StartDate');
             collectionDetailReportEndDate = new wijmo.input.InputDate('#CollectionDetailReport_EndDate');
