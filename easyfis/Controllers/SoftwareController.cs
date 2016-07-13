@@ -88,6 +88,11 @@ namespace easyfis.Controllers
         public ActionResult DisbursementSummaryReport()
         {
             return View();
+        }
+        [Authorize]
+        public ActionResult DisbursementDetailReport()
+        {
+            return View();
         } 
 
         [Authorize]

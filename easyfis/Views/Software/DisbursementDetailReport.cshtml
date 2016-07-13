@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- Title of the Page -->
+    <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
+    <title>Accounts Payable Report</title>
+
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Content/Software-css")
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
+        @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
+
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Disbursement Detail Report
+                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"> Dashboard</a></li>
+                    <li> <a href="/Software/AccountsPayable"> Accounts Payable </a></li>
+                    <li> Disbursement Detail Report </li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>
+                                    @ViewData["Company"]
+                                    <small>
+                                        <i class="fa fa-calendar fa-fw"></i> <span id="dateFrom"></span>
+                                    </small>
+                                </h4>
+                            </div>
+                            <div class="col-md-6" align="right">
+                                <button onclick="disbursementDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                <a href="/Software/AccountsPayable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div id="disbursementDetailReportGrid" class="grid"></div>
+                        <br /><br /><br />
+                        <div align="right">
+                            <div class="row">
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4">
+                                    <table class="table table-responsive table-bordered">
+                                        <tr>
+                                            <td align="right">
+                                                <b>Total: </b>
+                                            </td>
+                                            <td style="padding-left: 10px" align="right">
+                                                <span id="total">NA</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        @Html.Partial("_SoftwareFooter")
+    </div>
+
+    @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+
+        function disbursementDetailReportPDF_OnClick() {
+            window.location.href = '/RepDisbursementDetailReport/DisbursementDetailReport?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate");
+        }
+
+        function getDisbursementDetailReport() {
+            var disbursementDetailReport = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/disbursementDetailReport/list/' + getParam("StartDate") + '/' + getParam("EndDate"),
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (disbursementDetailReportResult) {
+                    if (disbursementDetailReportResult.length > 0) {
+                        var totalAmount = 0;
+
+                        for (i = 0; i < disbursementDetailReportResult.length; i++) {
+
+                            // Array Push
+                            disbursementDetailReport.push({
+
+
+                                Id: disbursementDetailReportResult[i]["Id"],
+                                CV : disbursementDetailReportResult[i]["CV"],
+                                CVDate: disbursementDetailReportResult[i]["CVDate"],
+                                Branch: disbursementDetailReportResult[i]["Branch"],
+                                Account: disbursementDetailReportResult[i]["Account"],
+                                Article: disbursementDetailReportResult[i]["Article"],
+                                RR: disbursementDetailReportResult[i]["RR"],
+                                Particulars: disbursementDetailReportResult[i]["Particulars"],
+                                Amount: disbursementDetailReportResult[i]["Amount"],
+
+                            });
+
+                            totalAmount += disbursementDetailReportResult[i]["Amount"];
+                        }
+
+                        document.getElementById("total").innerHTML = totalAmount.toLocaleString();
+                    }
+                    NProgress.done();
+                }
+            });
+
+            return disbursementDetailReport;
+        }
+
+        $(document).ready(function () {
+            NProgress.start();
+            document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+
+            var disbursementDetailReportCollection = new wijmo.collections.CollectionView(getDisbursementDetailReport());
+
+            // Flex Grid
+            var disbursementDetailReportGrid = new wijmo.grid.FlexGrid('#disbursementDetailReportGrid');
+            disbursementDetailReportGrid.initialize({
+                columns: [
+                            {
+                                "header": "CV Number  ",
+                                "binding": "Branch",
+                                "allowSorting": true,
+                                "width": "0.5*",
+                            },
+                            {
+                                "header": "CV Date",
+                                "binding": "CVDate",
+                                "allowSorting": true,
+                                "width": "0.3*"
+                            },
+                            {
+                                "header": "Account ",
+                                "binding": "Account",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Article",
+                                "binding": "Article",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "RR Number",
+                                "binding": "RR",
+                                "allowSorting": true,
+                                "width": "0.5*"
+                            },
+                            {
+                                "header": "Particulars",
+                                "binding": "Particulars",
+                                "allowSorting": true,
+                                "width": "0.8*"
+                            },
+                            {
+                               "header": "Amount",
+                               "binding": "Amount",
+                               "allowSorting": true,
+                               "width": "0.5*"
+                            }
+
+
+                ],
+                autoGenerateColumns: false,
+                itemsSource: disbursementDetailReportCollection,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            disbursementDetailReportGrid.trackChanges = true;
+        });
+
+    </script>
+</body>
+</html>
