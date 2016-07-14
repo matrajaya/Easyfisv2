@@ -24,5 +24,6 @@ namespace easyfis.Models
         public String RRDate { get; set; }
         public String Particulars { get; set; }
         public Decimal Amount { get; set; }
+        public Boolean IsLocked { get; set; }
     }
 }

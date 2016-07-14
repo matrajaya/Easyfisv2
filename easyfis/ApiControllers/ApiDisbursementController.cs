@@ -21,107 +21,116 @@ namespace easyfis.Controllers
         }
 
         // update AP
-        public void updateAP(Int32 RRId)
-        {
-            var receivingReceipts = from d in db.TrnReceivingReceipts
-                                    where d.Id == RRId
-                                    select new Models.TrnReceivingReceipt
-                                    {
-                                        Id = d.Id,
-                                        BranchId = d.BranchId,
-                                        Branch = d.MstBranch.Branch,
-                                        RRDate = d.RRDate.ToShortDateString(),
-                                        RRNumber = d.RRNumber,
-                                        SupplierId = d.SupplierId,
-                                        Supplier = d.MstArticle.Article,
-                                        TermId = d.TermId,
-                                        Term = d.MstTerm.Term,
-                                        DocumentReference = d.DocumentReference,
-                                        ManualRRNumber = d.ManualRRNumber,
-                                        Remarks = d.Remarks,
-                                        Amount = d.Amount,
-                                        WTaxAmount = d.WTaxAmount,
-                                        PaidAmount = d.PaidAmount,
-                                        AdjustmentAmount = d.AdjustmentAmount,
-                                        BalanceAmount = d.BalanceAmount,
-                                        ReceivedById = d.ReceivedById,
-                                        ReceivedBy = d.MstUser4.FullName,
-                                        PreparedById = d.PreparedById,
-                                        PreparedBy = d.MstUser3.FullName,
-                                        CheckedById = d.CheckedById,
-                                        CheckedBy = d.MstUser1.FullName,
-                                        ApprovedById = d.ApprovedById,
-                                        ApprovedBy = d.MstUser.FullName,
-                                        IsLocked = d.IsLocked,
-                                        CreatedById = d.CreatedById,
-                                        CreatedBy = d.MstUser2.FullName,
-                                        CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
-                                        UpdatedById = d.UpdatedById,
-                                        UpdatedBy = d.MstUser5.FullName,
-                                        UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
-                                    };
-
-            if (receivingReceipts.Any())
-            {
-                var receivingReceiptsUpdate = from d in db.TrnReceivingReceipts where d.Id == RRId select d;
-                if (receivingReceiptsUpdate.Any())
-                {
-                    Decimal DebitAmount = 0;
-                    Decimal CreditAmount = 0;
-
-                    var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.APRRId == RRId select d;
-                    if (journalVoucherLines.Any())
-                    {
-                        DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
-                        CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
-                    }
-
-                    Decimal PaidAmount = 0;
-                    Decimal AdjustmentAmount = 0;
-                    var disbursementLineCVId = from d in db.TrnDisbursementLines where d.RRId == RRId select d;
-                    if (disbursementLineCVId.Any())
-                    {
-                        Boolean disbursementHeaderIsLocked = (from d in db.TrnDisbursements where d.Id == disbursementLineCVId.First().CVId select d.IsLocked).SingleOrDefault();
-                        if (disbursementHeaderIsLocked == true)
-                        {
-                            var disbursementLines = from d in db.TrnDisbursementLines where d.RRId == RRId select d;
-
-                            PaidAmount = disbursementLines.Sum(d => d.Amount);
-                            AdjustmentAmount = CreditAmount - DebitAmount;
-                        }
-                    }
-
-                    var updateReceivingReceipt = receivingReceiptsUpdate.FirstOrDefault();
-                    updateReceivingReceipt.PaidAmount = PaidAmount;
-                    updateReceivingReceipt.AdjustmentAmount = AdjustmentAmount;
-                    db.SubmitChanges();
-
-                    Decimal ReceivingReceiptAmount = 0;
-                    Decimal ReceivingReceiptWTAXAmount = 0;
-                    Decimal ReceivingReceiptPaidAmount = 0;
-
-                    foreach (var receivingReceipt in receivingReceipts)
-                    {
-                        ReceivingReceiptAmount = receivingReceipt.Amount;
-                        ReceivingReceiptWTAXAmount = receivingReceipt.WTaxAmount;
-                        ReceivingReceiptPaidAmount = receivingReceipt.PaidAmount;
-                    }
-
-                    updateReceivingReceipt.BalanceAmount = (ReceivingReceiptAmount - ReceivingReceiptWTAXAmount - ReceivingReceiptPaidAmount) + AdjustmentAmount;
-                    db.SubmitChanges();
-                }
-            }
-        }
-
-        // update AP
         public void updateAPDisbursement(Int32 CVId)
         {
-            var disbursementLines = from d in db.TrnDisbursementLines where d.CVId == CVId select d;
+            var disbursementLines = from d in db.TrnDisbursementLines
+                                    where d.CVId == CVId
+                                    select new Models.TrnDisbursementLine
+                                    {
+                                        Id = d.Id,
+                                        CVId = d.CVId,
+                                        CV = d.TrnDisbursement.CVNumber,
+                                        BranchId = d.BranchId,
+                                        Branch = d.MstBranch.Branch,
+                                        AccountId = d.AccountId,
+                                        Account = d.MstAccount.Account,
+                                        ArticleId = d.ArticleId,
+                                        Article = d.MstArticle.Article,
+                                        RRId = d.RRId,
+                                        RR = d.TrnReceivingReceipt.RRNumber,
+                                        Particulars = d.Particulars,
+                                        Amount = d.Amount,
+                                        IsLocked = d.TrnDisbursement.IsLocked
+                                    };
+
             if (disbursementLines.Any())
             {
-                if (disbursementLines.First().RRId != null)
+                foreach (var disbursementLine in disbursementLines)
                 {
-                    updateAP(Convert.ToInt32(disbursementLines.First().RRId));
+                    if (disbursementLine.RRId != null)
+                    {
+                        Decimal DebitAmount = 0;
+                        Decimal CreditAmount = 0;
+
+                        var journalVoucherLines = from d in db.TrnJournalVoucherLines where d.APRRId == disbursementLine.RRId select d;
+                        if (journalVoucherLines.Any())
+                        {
+                            DebitAmount = journalVoucherLines.Sum(d => d.DebitAmount);
+                            CreditAmount = journalVoucherLines.Sum(d => d.CreditAmount);
+                        }
+
+                        Decimal PaidAmount = 0;
+                        Decimal AdjustmentAmount = 0;
+                        var disbursementLineAmount = from d in db.TrnDisbursementLines where d.RRId == disbursementLine.RRId select d;
+                        if (disbursementLine.IsLocked == true)
+                        {
+                            PaidAmount = disbursementLineAmount.Sum(d => d.Amount);
+                            AdjustmentAmount = CreditAmount - DebitAmount;
+                        }
+
+                        var receivingReceiptsUpdate = from d in db.TrnReceivingReceipts where d.Id == disbursementLine.RRId select d;
+                        if (receivingReceiptsUpdate.Any())
+                        {
+                            var updateReceivingReceipt = receivingReceiptsUpdate.FirstOrDefault();
+                            updateReceivingReceipt.PaidAmount = PaidAmount;
+                            updateReceivingReceipt.AdjustmentAmount = AdjustmentAmount;
+                            db.SubmitChanges();
+
+                            var receivingReceipts = from d in db.TrnReceivingReceipts
+                                                    where d.Id == disbursementLine.RRId
+                                                    select new Models.TrnReceivingReceipt
+                                                    {
+                                                        Id = d.Id,
+                                                        BranchId = d.BranchId,
+                                                        Branch = d.MstBranch.Branch,
+                                                        RRDate = d.RRDate.ToShortDateString(),
+                                                        RRNumber = d.RRNumber,
+                                                        SupplierId = d.SupplierId,
+                                                        Supplier = d.MstArticle.Article,
+                                                        TermId = d.TermId,
+                                                        Term = d.MstTerm.Term,
+                                                        DocumentReference = d.DocumentReference,
+                                                        ManualRRNumber = d.ManualRRNumber,
+                                                        Remarks = d.Remarks,
+                                                        Amount = d.Amount,
+                                                        WTaxAmount = d.WTaxAmount,
+                                                        PaidAmount = d.PaidAmount,
+                                                        AdjustmentAmount = d.AdjustmentAmount,
+                                                        BalanceAmount = d.BalanceAmount,
+                                                        ReceivedById = d.ReceivedById,
+                                                        ReceivedBy = d.MstUser4.FullName,
+                                                        PreparedById = d.PreparedById,
+                                                        PreparedBy = d.MstUser3.FullName,
+                                                        CheckedById = d.CheckedById,
+                                                        CheckedBy = d.MstUser1.FullName,
+                                                        ApprovedById = d.ApprovedById,
+                                                        ApprovedBy = d.MstUser.FullName,
+                                                        IsLocked = d.IsLocked,
+                                                        CreatedById = d.CreatedById,
+                                                        CreatedBy = d.MstUser2.FullName,
+                                                        CreatedDateTime = d.CreatedDateTime.ToShortDateString(),
+                                                        UpdatedById = d.UpdatedById,
+                                                        UpdatedBy = d.MstUser5.FullName,
+                                                        UpdatedDateTime = d.UpdatedDateTime.ToShortDateString()
+                                                    };
+
+                            if (receivingReceipts.Any())
+                            {
+                                Decimal ReceivingReceiptAmount = 0;
+                                Decimal ReceivingReceiptWTAXAmount = 0;
+                                Decimal ReceivingReceiptPaidAmount = 0;
+                                foreach (var receivingReceipt in receivingReceipts)
+                                {
+                                    ReceivingReceiptAmount = receivingReceipt.Amount;
+                                    ReceivingReceiptWTAXAmount = receivingReceipt.WTaxAmount;
+                                    ReceivingReceiptPaidAmount = receivingReceipt.PaidAmount;
+                                }
+
+                                updateReceivingReceipt.BalanceAmount = (ReceivingReceiptAmount - ReceivingReceiptWTAXAmount - ReceivingReceiptPaidAmount) + AdjustmentAmount;
+                                db.SubmitChanges();
+                            }
+                        }
+                    }
                 }
             }
         }
