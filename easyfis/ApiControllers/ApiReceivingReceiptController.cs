@@ -198,6 +198,7 @@ namespace easyfis.Controllers
                                         RRNumber = d.RRNumber,
                                         SupplierId = d.SupplierId,
                                         Supplier = d.MstArticle.Article,
+                                        AccountId = d.MstArticle.AccountId,
                                         TermId = d.TermId,
                                         Term = d.MstTerm.Term,
                                         DocumentReference = d.DocumentReference,

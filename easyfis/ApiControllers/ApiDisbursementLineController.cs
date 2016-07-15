@@ -49,71 +49,29 @@ namespace easyfis.Controllers
         // pick accounts payable from receiving receipts
         [Authorize]
         [HttpPost]
-        [Route("api/disbursementLine/applyAP/ByRRId/{RRId}/{CVId}")]
-        public HttpResponseMessage insertDisbursementLineAccountsPayable(Models.TrnDisbursementLine disbursementLine, String RRId, String CVId)
+        [Route("api/disbursementLine/applyAP/{CVId}")]
+        public HttpResponseMessage insertDisbursementLineAccountsPayable(Models.TrnReceivingReceipt receivingReceipt, String CVId)
         {
             try
             {
-                var receivingReceipts = from d in db.TrnReceivingReceipts
-                                        where d.BranchId == currentBranchId()
-                                        && d.Id == Convert.ToInt32(RRId)
-                                        select new Models.TrnReceivingReceipt
-                                        {
-                                            Id = d.Id,
-                                            BranchId = d.BranchId,
-                                            Branch = d.MstBranch.Branch,
-                                            RRDate = d.RRDate.ToShortDateString(),
-                                            RRNumber = d.RRNumber,
-                                            SupplierId = d.SupplierId,
-                                            Supplier = d.MstArticle.Article,
-                                            AccountId = d.MstArticle.AccountId,
-                                            TermId = d.TermId,
-                                            Term = d.MstTerm.Term,
-                                            DocumentReference = d.DocumentReference,
-                                            ManualRRNumber = d.ManualRRNumber,
-                                            Remarks = d.Remarks,
-                                            Amount = d.Amount,
-                                            WTaxAmount = d.WTaxAmount,
-                                            PaidAmount = d.PaidAmount,
-                                            AdjustmentAmount = d.AdjustmentAmount,
-                                            BalanceAmount = d.BalanceAmount,
-                                            ReceivedById = d.ReceivedById,
-                                            ReceivedBy = d.MstUser4.FullName,
-                                            PreparedById = d.PreparedById,
-                                            PreparedBy = d.MstUser3.FullName,
-                                            CheckedById = d.CheckedById,
-                                            CheckedBy = d.MstUser1.FullName,
-                                            ApprovedById = d.ApprovedById,
-                                            ApprovedBy = d.MstUser.FullName
-                                        };
+                Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
 
-                if (receivingReceipts.Any())
-                {
-                    Data.TrnDisbursementLine newDisbursementLine = new Data.TrnDisbursementLine();
+                newDisbursementLine.CVId = Convert.ToInt32(CVId);
+                newDisbursementLine.BranchId = receivingReceipt.BranchId;
+                newDisbursementLine.AccountId = receivingReceipt.AccountId;
+                newDisbursementLine.ArticleId = receivingReceipt.SupplierId;
+                newDisbursementLine.RRId = receivingReceipt.Id;
+                newDisbursementLine.Particulars = receivingReceipt.DocumentReference;
+                newDisbursementLine.Amount = receivingReceipt.Amount;
 
-                    foreach (var receivingReceipt in receivingReceipts)
-                    {
-                        newDisbursementLine.CVId = Convert.ToInt32(CVId);
-                        newDisbursementLine.BranchId = receivingReceipt.BranchId;
-                        newDisbursementLine.AccountId = receivingReceipt.AccountId;
-                        newDisbursementLine.ArticleId = receivingReceipt.SupplierId;
-                        newDisbursementLine.RRId = Convert.ToInt32(RRId);
-                        newDisbursementLine.Particulars = receivingReceipt.DocumentReference;
-                        newDisbursementLine.Amount = receivingReceipt.Amount;
-                    }
+                db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
+                db.SubmitChanges();
 
-                    db.TrnDisbursementLines.InsertOnSubmit(newDisbursementLine);
-                    db.SubmitChanges();
-
-                    return Request.CreateResponse(HttpStatusCode.OK);
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
+                return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
