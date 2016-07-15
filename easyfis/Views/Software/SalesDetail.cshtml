@@ -346,33 +346,40 @@
                     <div class="tab-content">
                         <div id="SIItemInventory" class="tab-pane fade in active">
                             <center>
-                                <h4>
-                                    <span id="loadingItemQueryGrid"></span>
-                                </h4>
+                                <span id="loadingItemQueryGrid"></span>
                             </center>
                             <div id="SIItemInventoryGridItemQuery">
-                                <div class="input-group input-group-sm  input-50">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterItemQueryGrid" placeholder="Search">
-                                </div>
                                 <br />
-                                <div id="itemQueryGrid" class="grid"></div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="input-group input-group-sm  input-50">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilterItemQueryGrid" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="itemQueryGrid" class="grid"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div id="SIItemNonInventory" class="tab-pane fade in">
                             <center>
-                                <h4>
-                                    <span id="loadingItemQueryGridNonInventory"></span>
-                                </h4>
+                                <span id="loadingItemQueryGridNonInventory"></span>
                             </center>
-
                             <div id="SIItemInventoryGridItemQueryNonInventory">
-                                <div class="input-group input-group-sm  input-50">
-                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control input-sm" id="InputFilterItemQueryGridNonInventory" placeholder="Search">
-                                </div>
                                 <br />
-                                <div id="itemQueryGridNonInventory" class="grid"></div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="input-group input-group-sm  input-50">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilterItemQueryGridNonInventory" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="itemQueryGridNonInventory" class="grid"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2631,8 +2638,8 @@
 
         $('#idSIItemInventory').click(function () {
             var branchId = document.getElementById("SI_Branch_data").value;
-            document.getElementById("loadingItemQueryGrid").innerHTML = "<br/><i class='fa fa-spinner fa-spin'></i> Please wait ... ";
-            
+            document.getElementById("loadingItemQueryGrid").innerHTML = "<br/><b><i class='fa fa-spinner fa-spin'></i></b>";
+
             //$('#itemQueryGridNonInventory').hide();
             //$('#loadingItemQueryGridNonInventory').hide();
 
@@ -2642,7 +2649,7 @@
             setTimeout(function () {
                 $('#loadingItemQueryGrid').hide();
                 $('#SIItemInventoryGridItemQuery').show();
-                
+
                 itemQueryFlexGrid(branchId);
                 window.itemQueryFlexGrid = function () {
                     return true;
@@ -2657,11 +2664,11 @@
 
         $('#idSIItemNonInventory').click(function () {
             var branchId = document.getElementById("SI_Branch_data").value;
-            document.getElementById("loadingItemQueryGridNonInventory").innerHTML = "<br/><i class='fa fa-spinner fa-spin'></i> Please wait ... ";
-            
+            document.getElementById("loadingItemQueryGridNonInventory").innerHTML = "<br/><b><i class='fa fa-spinner fa-spin'></i></b>";
+
             //$('#itemQueryGrid').hide();
             //$('#loadingItemQueryGrid').hide();
-            
+
             $('#SIItemInventoryGridItemQueryNonInventory').hide();
             $('#loadingItemQueryGridNonInventory').show();
             setTimeout(function () {
@@ -2675,14 +2682,14 @@
 
                 articleItemsNonInventory = new wijmo.collections.CollectionView(getArtcileForItemsNonIventory());
                 articleItemsNonInventory.canFilter = true;
-                
+
                 var filterText = '';
                 $('#InputFilterItemQueryGridNonInventory').keyup(function () {
                     filterText = this.value.toLowerCase();
                     articleItemsNonInventory.refresh();
                 });
                 articleItemsNonInventory.filter = function (item) {
-                    return !filterText || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1) 
+                    return !filterText || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1)
                         || (item.Article.toLowerCase().indexOf(filterText) > -1);
                 }
 
@@ -2701,7 +2708,7 @@
             });
 
             var branchId = document.getElementById("SI_Branch_data").value;
-            document.getElementById("loadingItemQueryGrid").innerHTML = "<br/><i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            document.getElementById("loadingItemQueryGrid").innerHTML = "<br/><b><i class='fa fa-spinner fa-spin'></i></b>";
             $('#SIItemInventoryGridItemQuery').hide();
             $('#loadingItemQueryGrid').show();
             setTimeout(function () {
@@ -2715,15 +2722,15 @@
 
                 articleInventories = new wijmo.collections.CollectionView(getArticleInventoryForItemQuery(branchId));
                 articleInventories.canFilter = true;
-                
+
                 var filterText = '';
                 $('#InputFilterItemQueryGrid').keyup(function () {
                     filterText = this.value.toLowerCase();
                     articleInventories.refresh();
                 });
                 articleInventories.filter = function (item) {
-                    return !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1) 
-                        || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1) 
+                    return !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1)
+                        || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1)
                         || (item.Article.toLowerCase().indexOf(filterText) > -1);
                 }
 
@@ -2744,8 +2751,8 @@
                 articleInventories.refresh();
             });
             articleInventories.filter = function (item) {
-                return !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1) 
-                    || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1) 
+                return !filterText || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1)
+                    || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1)
                     || (item.Article.toLowerCase().indexOf(filterText) > -1);
             }
 
@@ -2814,14 +2821,14 @@
             isInventory = false;
             articleItemsNonInventory = new wijmo.collections.CollectionView(getArtcileForItemsNonIventory());
             articleItemsNonInventory.canFilter = true;
-                
+
             var filterText = '';
             $('#InputFilterItemQueryGridNonInventory').keyup(function () {
                 filterText = this.value.toLowerCase();
                 articleItemsNonInventory.refresh();
             });
             articleItemsNonInventory.filter = function (item) {
-                return !filterText || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1) 
+                return !filterText || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1)
                     || (item.Article.toLowerCase().indexOf(filterText) > -1);
             }
 
@@ -3212,7 +3219,7 @@
                 document.getElementById("saleItem_ItemCode").style.border = "1px solid #C8C8C8";
                 document.getElementById("saleItem_ItemDescription").style.border = "1px solid #C8C8C8";
             }
-            
+
             console.log(isInventory);
             if(isInventory) {
                 if (document.getElementById('saleItem_InventoryCode_data').value == '') {

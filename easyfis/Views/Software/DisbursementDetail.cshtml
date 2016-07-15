@@ -441,10 +441,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Apply <i class="fa fa-check-square-o"></i></h4>
+                    <h4 class="modal-title">Apply <i class="fa fa-check"></i></h4>
                 </div>
                 <div class="modal-body">
-                    Apply Amount?
+                    Apply?
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAmount" onclick="btnConfrimApplyAmountOnClick()"><i class="fa fa-check"></i> Apply</button>
@@ -537,6 +537,12 @@
         var receivingReceipts;
         
         var balance = new Array();
+        
+        var returnBool = false;
+        var emptyBalance;
+
+        var index;
+
         function getReceivingReceiptBySupplierByBalance() {
             var receivingReceipts = new wijmo.collections.ObservableArray;
             $.ajax({
@@ -581,7 +587,6 @@
                                 handbool = true;
                                 balance[i] = 0;
                             }
-
 
                             receivingReceipts.push({
                                 Pick: "<button class='btn btn-"+ btnColor +" btn-xs' onclick='btnApplyRRStatusOnclick("+ i + "," + handbool +")'>" + icon + "</button>",
@@ -2920,12 +2925,6 @@
                 return true;
             };
         });
-
-        
-        var returnBool = false;
-        var emptyBalance;
-
-        var index;
 
         // ==
         // AP

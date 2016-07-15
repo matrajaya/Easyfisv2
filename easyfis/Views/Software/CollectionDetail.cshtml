@@ -185,26 +185,23 @@
                     <h4 class="modal-title" id="POStatusModalLabel">Sales Invoice Status</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6"></div>
-                        <div class="col-lg-6" align="right">
-                            <button class="btn btn-primary btn-sm" id="btnIdApplyAllSI" onclick="btnOnclickApplyAllSI()"><i class="fa fa-check"></i> Apply</button>
+                    <div class="panel panel-default" id="statusGrid">
+                        <div class="panel-heading">
+                            <div class="input-group input-group-sm input-50">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="SIStatusFilter" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div id="salesInvoiceStatusGrid" class="grid" align="left"></div>
                         </div>
                     </div>
-                    <div class="row" align="left">
-                        <div class="col-lg-12" id="statusGrid">
-                            <br />
-                            <div id="salesInvoiceStatusGrid" class="grid statusGrid" align="left"></div>
-                        </div>
-                        <center>
-                            <h4>
-                                <span id="loadingSIStatus"></span>
-                            </h4>
-                        </center>
-                    </div>
+                    <center>
+                        <span id="loadingSIStatus"></span>
+                    </center>
                 </div>
                 <div class="modal-footer">
-                    <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
+                    <button class="btn btn-primary btn-sm" id="btnIdApplyAllSI" onclick="btnOnclickApplyAllSI()"><i class="fa fa-check"></i> Apply</button>
                     <button type="button" id="cmdPOStatusCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
                 </div>
             </div>
@@ -221,16 +218,14 @@
                     <h4 class="modal-title" id="POStatusModalLabel">Customer Advances</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row" align="left">
-                        <div class="col-lg-12">
+                    <div class="panel panel-default" id="AdvancesGrid">
+                        <div class="panel-body">
                             <div id="SIAdvancesGrid" class="grid statusGrid" align="left"></div>
                         </div>
-                        <center>
-                            <h4>
-                                <span id="loadingSIAdvances"></span>
-                            </h4>
-                        </center>
                     </div>
+                    <center>
+                        <span id="loadingSIAdvances"></span>
+                    </center>
                 </div>
                 <div class="modal-footer">
                     <!--tton class="btn btn-primary btn-sm" id="cmdSaveJournalVoucherLineButton" onclick="cmdJournalVoucherLineSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>-->
@@ -431,10 +426,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Apply All <i class="fa fa-check"></i></h4>
+                    <h4 class="modal-title">Apply <i class="fa fa-check"></i></h4>
                 </div>
                 <div class="modal-body">
-                    Apply all Amount?
+                    Apply?
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary btn-sm" id="cmdConfirmApplyAllAmount" onclick="btnConfrimApplyAllAmount_OnClick()"><i class="fa fa-check"></i> Apply</button>
@@ -564,46 +559,71 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            $("#cmdConfirmApplyAllAmount").prop("disabled", false);
+            $("#cmdCloseButtonApplyAllAmount").prop("disabled", false);
         }
 
         function btnConfrimApplyAllAmount_OnClick() {
             $("#cmdConfirmApplyAllAmount").prop("disabled", true);
             $("#cmdCloseButtonApplyAllAmount").prop("disabled", true);
 
-            $.ajax({
-                type: "POST",
-                url: '/api/collectionLine/applyAllAR/ByCustomerId/' + document.getElementById('collection_Customer_data').value + '/' + getParam("CollectonId"),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                statusCode: {
-                    200: function () {
-                        toastr.success("Applied");
-                        $("#cmdConfirmApplyAllAmount").prop("disabled", false);
-                        $("#cmdCloseButtonApplyAllAmount").prop("disabled", false);
+            for (var i = 0; i < saleInvoiceStatus.items.length; i++) {
+                var item = saleInvoiceStatus.items[i];
 
-                        collectionLines = new wijmo.collections.CollectionView(getCollectionLines());
+                if(item.Balance > 0) {
+                    var salesInvoiceItemObject = new Object();
+                    salesInvoiceItemObject.BranchId = item.BranchId;
+                    salesInvoiceItemObject.AccountId = item.AccountId;
+                    salesInvoiceItemObject.CustomerId = item.CustomerId;
+                    salesInvoiceItemObject.Id = item.Id;
+                    salesInvoiceItemObject.DocumentReference = item.DocumentReference;
+                    salesInvoiceItemObject.Amount = item.Balance;
+                    var salesInvoiceItemObjects = JSON.stringify(salesInvoiceItemObject);
 
-                        // Flex Grid for Purchase Collection Line
-                        collectionLineGrid.itemsSource = collectionLines;
-                        collectionLineGrid.trackChanges = true;
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/collectionLine/applyAR/' + getParam("CollectonId"),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: salesInvoiceItemObjects,
+                        statusCode: {
+                            200: function () {
+                                toastr.success("Applied");
+                                $("#cmdConfirmApplyAllAmount").prop("disabled", false);
+                                $("#cmdCloseButtonApplyAllAmount").prop("disabled", false);
 
-                        $('#applyAllAmount').modal('hide');
-                        setTimeout(function () {
-                            $('#SalesStatus').modal('hide');
-                        }, 200);
-                    },
-                    404: function () {
-                        toastr.error("Not Found");
-                        $("#cmdConfirmApplyAllAmount").prop("disabled", false);
-                        $("#cmdCloseButtonApplyAllAmount").prop("disabled", false);
-                    },
-                    400: function () {
-                        toastr.error("Bad Request");
-                        $("#cmdConfirmApplyAllAmount").prop("disabled", false);
-                        $("#cmdCloseButtonApplyAllAmount").prop("disabled", false);
-                    }
+                                collectionLines = new wijmo.collections.CollectionView(getCollectionLines());
+
+                                // Flex Grid for Purchase Collection Line
+                                collectionLineGrid.itemsSource = collectionLines;
+                                collectionLineGrid.trackChanges = true;
+
+                                $('#applyAllAmount').modal('hide');
+
+                                setTimeout(function () {
+                                    $('#SalesStatus').modal('hide');
+                                }, 200);
+                            },
+                            404: function () {
+                                toastr.error("Not Found");
+                                $("#cmdConfirmApplyAllAmount").prop("disabled", false);
+                                $("#cmdCloseButtonApplyAllAmount").prop("disabled", false);
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $("#cmdConfirmApplyAllAmount").prop("disabled", false);
+                                $("#cmdCloseButtonApplyAllAmount").prop("disabled", false);
+                            }
+                        }
+                    });
+                } else {
+                    $('#applyAllAmount').modal('hide');
+
+                    $("#cmdConfirmApplyAllAmount").prop("disabled", false);
+                    $("#cmdCloseButtonApplyAllAmount").prop("disabled", false);
                 }
-            });
+            }
         }
 
         function btnApplyAdvancesOnclick() {
@@ -663,6 +683,12 @@
 
         }
 
+        var returnBool = false;
+        var emptyBalance;
+
+        var index;
+
+        var balance = new Array();
         function getSalesInvoiceBySupplierByBalance() {
             var saleInvoiceStatus = new wijmo.collections.ObservableArray;
             $.ajax({
@@ -673,7 +699,41 @@
                 data: {},
                 success: function (saleInvoiceResults) {
                     if (saleInvoiceResults.length > 0) {
+
+                        var handbool;
+                        var icon;
+                        var btnColor;
+
                         for (i = 0; i < saleInvoiceResults.length; i++) {
+                            if(emptyBalance == false) {
+                                if(matchIndex() == i) {
+                                    if(bool() == true) {
+                                        if (balance[index] !== 0) {
+                                            balance[i] = balance[index];
+                                            returnBool = true;
+                                        } else {
+                                            balance[i] = saleInvoiceResults[i]["BalanceAmount"];
+                                            returnBool = false;
+                                        }
+                                    } else {
+                                        balance[i] = 0;
+                                    }
+                                }
+                            } else {
+                                balance[i] = 0;
+                            }
+
+                            if (typeof balance[i] !== 'undefined' && balance[i] !== 0) {
+                                btnColor = "warning";
+                                icon = "<i class='fa fa-hand-o-left'></i>";
+                                handbool = false;
+                            } else {
+                                btnColor = "primary";
+                                icon = "<i class='fa fa-hand-o-right'></i>";
+                                handbool = true;
+                                balance[i] = 0;
+                            }
+
                             saleInvoiceStatus.push({
                                 Id: saleInvoiceResults[i]["Id"],
                                 BranchId: saleInvoiceResults[i]["BranchId"],
@@ -684,6 +744,7 @@
                                 Customer: saleInvoiceResults[i]["Customer"],
                                 TermId: saleInvoiceResults[i]["TermId"],
                                 Term: saleInvoiceResults[i]["Term"],
+                                AccountId: saleInvoiceResults[i]["AccountId"],
                                 DocumentReference: saleInvoiceResults[i]["DocumentReference"],
                                 ManualSINumber: saleInvoiceResults[i]["ManualSINumber"],
                                 Remarks: saleInvoiceResults[i]["Remarks"],
@@ -691,7 +752,8 @@
                                 PaidAmount: saleInvoiceResults[i]["PaidAmount"],
                                 AdjustmentAmount: saleInvoiceResults[i]["AdjustmentAmount"],
                                 BalanceAmount: saleInvoiceResults[i]["BalanceAmount"],
-                                Pick: "<button class='btn btn-primary btn-xs' onclick='btnApplyAmountOnclick()'> <i class='fa fa-hand-o-right'></i> Pick</button>",
+                                Balance: balance[i],
+                                Pick: "<button class='btn btn-"+ btnColor +" btn-xs' onclick='btnApplySIStatusOnclick("+ i + "," + handbool +")'>" + icon + "</button>"
                             });
                         }
                     }
@@ -700,72 +762,122 @@
             return saleInvoiceStatus;
         }
 
+        function bool() {
+            return returnBool;
+        }
+
+        function matchIndex() {
+            return index;
+        }
+
+        function btnApplySIStatusOnclick(i, handbool) {
+            if(handbool == true) {
+                returnBool = true;
+            } else {
+                returnBool = false;
+            }
+
+            index = i;
+            emptyBalance = false;
+
+            saleInvoiceStatus = new wijmo.collections.CollectionView(getSalesInvoiceBySupplierByBalance());
+
+            SIStatusGrid.itemsSource = saleInvoiceStatus;
+            SIStatusGrid.trackChanges = true;
+        }
+
+
         // =============================
         // Receiving Receipt Status Grid
         // =============================
         function getReceivingStatusGrid() {
             saleInvoiceStatus = new wijmo.collections.CollectionView(getSalesInvoiceBySupplierByBalance());
+            saleInvoiceStatus.canFilter = true;
 
-            // Flex Grid for Purchase Disbursement Line
+            var filterText = '';
+            $('#SIStatusFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                saleInvoiceStatus.refresh();
+            });
+
+            saleInvoiceStatus.filter = function (item) {
+                return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
+                || (item.ManualSINumber.toLowerCase().indexOf(filterText) > -1);
+            }
+
             SIStatusGrid = new wijmo.grid.FlexGrid('#salesInvoiceStatusGrid');
             SIStatusGrid.initialize({
                 columns: [
                             {
-                                "header": "Date",
-                                "binding": "SIDate",
-                                "allowSorting": true,
-                                "width": "2*",
-                            },
-                            {
                                 "header": "SI Number",
                                 "binding": "SINumber",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": "2*"
                             },
                             {
-                                "header": "Particulars",
-                                "binding": "DocumentReference",
+                                "header": "Manual SI No",
+                                "binding": "ManualSINumber",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "isReadOnly": true,
+                                "width": "2.3*"
+                            },
+                            {
+                                "header": "Date",
+                                "binding": "SIDate",
+                                "allowSorting": true,
+                                "isReadOnly": true,
+                                "width": "2*",
                             },
                             {
                                 "header": "SI Amount",
                                 "binding": "Amount",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Payments",
                                 "binding": "PaidAmount",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Adjustments",
                                 "binding": "AdjustmentAmount",
                                 "allowSorting": true,
-                                "width": "2*"
+                                "isReadOnly": true,
+                                "width": "2.3*"
                             },
                             {
                                 "header": "Balance",
                                 "binding": "BalanceAmount",
                                 "allowSorting": true,
+                                "isReadOnly": true,
                                 "width": "2*"
                             },
                             {
                                 "header": "Pick",
                                 "binding": "Pick",
                                 "allowSorting": true,
-                                "width": "2*",
+                                "isReadOnly": true,
+                                "width": 50,
                                 "align": "center",
                                 "allowResizing": false,
                                 "allowSorting": false,
                                 "isContentHtml": true
                             },
+                            {
+                                "header": "Balance",
+                                "binding": "Balance",
+                                "allowSorting": true,
+                                "isReadOnly": false,
+                                "width": "2*"
+                            },
                 ],
                 autoGenerateColumns: false,
                 itemsSource: saleInvoiceStatus,
-                isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -780,13 +892,13 @@
             SIStatusGrid.columnHeaders.rows[0].allowMerging = true;
 
             SIStatusGrid.columnHeaders.columns[0].allowMerging = true;
-            SIStatusGrid.columnHeaders.setCellData(0, 0, 'Date');
+            SIStatusGrid.columnHeaders.setCellData(0, 0, 'SI Number');
 
             SIStatusGrid.columnHeaders.columns[1].allowMerging = true;
-            SIStatusGrid.columnHeaders.setCellData(0, 1, 'SI Number');
+            SIStatusGrid.columnHeaders.setCellData(0, 1, 'Manual SI No');
 
             SIStatusGrid.columnHeaders.columns[2].allowMerging = true;
-            SIStatusGrid.columnHeaders.setCellData(0, 2, 'Particulars');
+            SIStatusGrid.columnHeaders.setCellData(0, 2, 'Date');
 
             for (var columnQuantityTopAssigned = 3; columnQuantityTopAssigned <= 6; columnQuantityTopAssigned++) {
                 SIStatusGrid.columnHeaders.setCellData(0, columnQuantityTopAssigned, 'Amount');
@@ -795,6 +907,8 @@
             SIStatusGrid.columnHeaders.columns[7].allowMerging = true;
             SIStatusGrid.columnHeaders.setCellData(0, 7, 'Pick');
 
+            SIStatusGrid.columnHeaders.columns[8].allowMerging = true;
+            SIStatusGrid.columnHeaders.setCellData(0, 8, 'Balance');
         }
 
         function getJournalByArticleId() {
@@ -2741,7 +2855,9 @@
                 backdrop: 'static'
             });
 
-            document.getElementById("loadingSIStatus").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            emptyBalance = true;
+
+            document.getElementById("loadingSIStatus").innerHTML = "<b><i class='fa fa-spinner fa-spin'></i></b>";
             $('#loadingSIStatus').show();
             $('#btnIdApplyAllSI').hide();
             $('#salesInvoiceStatusGrid').hide();
@@ -2758,6 +2874,18 @@
                 };
 
                 saleInvoiceStatus = new wijmo.collections.CollectionView(getSalesInvoiceBySupplierByBalance());
+                saleInvoiceStatus.canFilter = true;
+
+                var filterText = '';
+                $('#SIStatusFilter').keyup(function () {
+                    filterText = this.value.toLowerCase();
+                    saleInvoiceStatus.refresh();
+                });
+
+                saleInvoiceStatus.filter = function (item) {
+                    return !filterText || (item.SINumber.toLowerCase().indexOf(filterText) > -1)
+                    || (item.ManualSINumber.toLowerCase().indexOf(filterText) > -1);
+                }
 
                 // Flex Grid for Purchase Disbursement Line
                 SIStatusGrid.itemsSource = saleInvoiceStatus;
@@ -2774,7 +2902,7 @@
                 backdrop: 'static'
             });
 
-            document.getElementById("loadingSIAdvances").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Please wait ... ";
+            document.getElementById("loadingSIAdvances").innerHTML = "<b><i class='fa fa-spinner fa-spin'></i></b>";
             $('#loadingSIAdvances').show();
             $('#SIAdvancesGrid').hide();
             setTimeout(function () {
