@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using Microsoft.AspNet.Identity;
 using System.Web.Http;
 
 namespace easyfis.Controllers
@@ -11,6 +12,12 @@ namespace easyfis.Controllers
     {
         private Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
 
+        // current branch Id
+        public Int32 currentBranchId()
+        {
+            return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
+        }
+
         // list article inventory
         [Authorize]
         [HttpGet]
@@ -18,6 +25,10 @@ namespace easyfis.Controllers
         public List<Models.MstArticleInventory> listArticleInventory()
         {
             var articleInventories = from d in db.MstArticleInventories
+                                     where d.BranchId == currentBranchId()
+                                     && d.MstArticle.IsLocked == true
+                                     && d.MstArticle.IsInventory == true
+                                     && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,
@@ -33,6 +44,37 @@ namespace easyfis.Controllers
             return articleInventories.ToList();
         }
 
+        // list article inventory
+        [Authorize]
+        [HttpGet]
+        [Route("api/listArticleInventoryLocked")]
+        public List<Models.MstArticleInventory> listArticleInventoryLocked()
+        {
+            var articleInventories = from d in db.MstArticleInventories.OrderBy(d => d.MstArticle.Article)
+                                     where d.BranchId == currentBranchId()
+                                     && d.MstArticle.IsLocked == true
+                                     && d.MstArticle.IsInventory == true
+                                     && d.Quantity > 0
+                                     select new Models.MstArticleInventory
+                                     {
+                                         Id = d.Id,
+                                         BranchId = d.BranchId,
+                                         ArticleId = d.ArticleId,
+                                         ManualArticleCode = d.MstArticle.ManualArticleCode,
+                                         Article = d.MstArticle.Article,
+                                         InventoryCode = d.InventoryCode,
+                                         Price = d.MstArticle.Price,
+                                         Quantity = d.Quantity,
+                                         UnitId = d.MstArticle.UnitId,
+                                         Unit = d.MstArticle.MstUnit.Unit,
+                                         Cost = d.Cost,
+                                         Amount = d.Amount,
+                                         Particulars = d.Particulars
+                                     };
+
+            return articleInventories.ToList();
+        }
+
         // list article inventory by ArticleId
         [Authorize]
         [HttpGet]
@@ -40,7 +82,11 @@ namespace easyfis.Controllers
         public List<Models.MstArticleInventory> listArticleInventoryByArticleId(String articleId)
         {
             var articleInventories = from d in db.MstArticleInventories
-                                     where d.ArticleId == Convert.ToInt32(articleId)
+                                     where d.BranchId == currentBranchId()
+                                     && d.ArticleId == Convert.ToInt32(articleId)
+                                     && d.MstArticle.IsLocked == true
+                                     && d.MstArticle.IsInventory == true
+                                     && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,
@@ -65,8 +111,10 @@ namespace easyfis.Controllers
         public List<Models.MstArticleInventory> listArticleInventoryByBranchIdAndArticleId(String branchId, String articleId)
         {
             var articleInventories = from d in db.MstArticleInventories
-                                     where d.BranchId == Convert.ToInt32(branchId)
-                                     && d.ArticleId == Convert.ToInt32(articleId) 
+                                     where d.BranchId == currentBranchId()
+                                     && d.ArticleId == Convert.ToInt32(articleId)
+                                     && d.MstArticle.IsLocked == true
+                                     && d.MstArticle.IsInventory == true
                                      && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
@@ -90,8 +138,10 @@ namespace easyfis.Controllers
         public Models.MstArticleInventory getArticleInventoryByArticleId(String branchId, String articleId)
         {
             var articleInventories = from d in db.MstArticleInventories
-                                     where d.BranchId == Convert.ToInt32(branchId)
+                                     where d.BranchId == currentBranchId()
                                      && d.ArticleId == Convert.ToInt32(articleId) 
+                                     && d.MstArticle.IsLocked == true
+                                     && d.MstArticle.IsInventory == true
                                      && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
@@ -115,9 +165,10 @@ namespace easyfis.Controllers
         public List<Models.MstArticleInventory> listArticleInventoryBybranchId(String branchId)
         {
             var articleInventories = from d in db.MstArticleInventories.OrderBy(d => d.MstArticle.Article)
-                                     where d.BranchId == Convert.ToInt32(branchId)
-                                     && d.Quantity > 0
+                                     where d.BranchId == currentBranchId()
+                                     && d.MstArticle.IsLocked == true
                                      && d.MstArticle.IsInventory == true
+                                     && d.Quantity > 0
                                      select new Models.MstArticleInventory
                                      {
                                          Id = d.Id,

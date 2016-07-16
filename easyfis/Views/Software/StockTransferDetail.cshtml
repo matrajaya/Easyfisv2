@@ -159,6 +159,7 @@
                                 <div class="row">
                                     <div class="col-lg-12" align="right">
                                         <button class="btn btn-primary btn-sm" id="btnAddStockTransferItem" onclick="cmdAddStockTransferItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-primary btn-sm" id="btnItemQueryStockTransferItem" onclick="cmdItemQueryStockTransferItem_OnClick()"><i class="fa fa-search-plus"></i> Item Query</button>
                                     </div>
                                 </div>
                                 <br />
@@ -351,6 +352,60 @@
         </div>
     </div>
 
+    <!-- =============================== -->
+    <!-- Stock Transfer Item Query Modal -->
+    <!-- =============================== -->
+    <div class="modal fade" id="stockTransferItemsItemQuery" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Item Query</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-default" id="itemQueryPanel">
+                        <div class="panel-heading">
+                            <div class="input-group input-group-sm input-50">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control input-sm" id="itemQueryFilter" placeholder="Search">
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div id="itemQueryGrid" class="grid"></div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="btn-group col-md-7" id="naviagtionPageGridItemQuery">
+                                    <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridItemQuery">
+                                        <span class="glyphicon glyphicon-fast-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridItemQuery">
+                                        <span class="glyphicon glyphicon-step-backward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridItemQuery"></button>
+                                    <button type="button" class="btn btn-default" id="btnMoveToNextPageGridItemQuery">
+                                        <span class="glyphicon glyphicon-step-forward"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" id="btnMoveToLastPageGridItemQuery">
+                                        <span class="glyphicon glyphicon-fast-forward"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <center>
+                        <span id="loadingItemQuery"></span>
+                    </center>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
         // ================
@@ -364,6 +419,260 @@
         var cboPreparedBy;
         var cboCheckedBy;
         var cboApprovedBy;
+        
+        var itemQueryItemsCollection;
+        var itemQueryGrid;
+
+        var btnFirstPageGridItemQuery;
+        var btnPreviousPageGridItemQuery;
+        var btnNextPageGridItemQuery;
+        var btnLastPageGridItemQuery;
+        var btnCurrentPageGridItemQuery;
+
+        // Item Query Stock Transfer Item
+        function cmdItemQueryStockTransferItem_OnClick() {
+            $('#stockTransferItemsItemQuery').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            
+            $("#itemQueryPanel").hide();
+            $("#loadingItemQuery").show();
+            document.getElementById("loadingItemQuery").innerHTML = "<b><i class='fa fa-spinner fa-spin'></i></b>";
+
+            setTimeout(function() {
+                createFlexGridForItemQuery();
+                window.createFlexGridForItemQuery = function() {
+                    return true;
+                }
+
+                itemQueryItemsCollection = new wijmo.collections.CollectionView(getArticleInventoryForItemQuery());
+                itemQueryItemsCollection.canFilter = true;
+                itemQueryItemsCollection.pageSize = 7;
+
+                var filterText = '';
+                $('#itemQueryFilter').keyup(function () {
+                    filterText = this.value.toLowerCase();
+                    itemQueryItemsCollection.refresh();
+                });
+                itemQueryItemsCollection.filter = function (item) {
+                    return !filterText || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1)
+                    || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                    || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1);
+                }
+                itemQueryItemsCollection.collectionChanged.addHandler(function (sender, args) {
+                    updateNavigateButtonsItemQuery();
+                });
+
+                // Flex Grid for Purchase Order Line
+                itemQueryGrid.itemsSource = itemQueryItemsCollection;
+                itemQueryGrid.trackChanges = true;
+            }, 1000)
+        }
+
+        // get article inventory for stock transfer item query
+        function getArticleInventoryForItemQuery() {
+            var items = new wijmo.collections.ObservableArray();
+            $.ajax({
+                url: '/api/listArticleInventoryLocked',
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (articleInventoryItemsResult) {
+                    $("#itemQueryPanel").show();
+                    $("#loadingItemQuery").hide();
+
+                    for(i = 0; i < articleInventoryItemsResult.length; i++) {
+                        items.push({
+                            Id: articleInventoryItemsResult[i]["Id"],
+                            BranchId: articleInventoryItemsResult[i]["BranchId"],
+                            ArticleId: articleInventoryItemsResult[i]["ArticleId"],
+                            ManualArticleCode: articleInventoryItemsResult[i]["ManualArticleCode"],
+                            Article: articleInventoryItemsResult[i]["Article"],
+                            InventoryCode: articleInventoryItemsResult[i]["InventoryCode"],
+                            Price: articleInventoryItemsResult[i]["Price"],
+                            Quantity: articleInventoryItemsResult[i]["Quantity"],
+                            Cost: articleInventoryItemsResult[i]["Cost"],
+                            Amount: articleInventoryItemsResult[i]["Amount"],
+                            Particulars: articleInventoryItemsResult[i]["Particulars"],
+                            UnitId: articleInventoryItemsResult[i]["UnitId"],
+                            Unit: articleInventoryItemsResult[i]["Unit"],
+                            Pick: "<button class='btn btn-primary btn-xs btn-block' onclick='pickToApplyOnClick()'><i class='fa fa-hand-o-right'></i> Pick</button>",
+                        });
+                    }
+                }
+            });
+
+            return items;
+        }
+
+        // creates flexgrid for the item query
+        function createFlexGridForItemQuery() {
+            itemQueryItemsCollection = new wijmo.collections.CollectionView(getArticleInventoryForItemQuery());
+            itemQueryItemsCollection.canFilter = true;
+            itemQueryItemsCollection.pageSize = 7;
+
+            var filterText = '';
+            $('#itemQueryFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                itemQueryItemsCollection.refresh();
+            });
+            itemQueryItemsCollection.filter = function (item) {
+                return !filterText || (item.ManualArticleCode.toLowerCase().indexOf(filterText) > -1)
+                || (item.Article.toLowerCase().indexOf(filterText) > -1)
+                || (item.InventoryCode.toLowerCase().indexOf(filterText) > -1);
+            }
+            itemQueryItemsCollection.collectionChanged.addHandler(function (sender, args) {
+                updateNavigateButtonsItemQuery();
+            });
+          
+            // Flex Grid for Purchase Order Line
+            itemQueryGrid = new wijmo.grid.FlexGrid('#itemQueryGrid');
+            itemQueryGrid.initialize({
+                columns: [
+                            {
+                                "header": "Code",
+                                "binding": "ManualArticleCode",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Item",
+                                "binding": "Article",
+                                "allowSorting": true,
+                                "width": "1.5*"
+                            },
+                            {
+                                "header": "Inventory",
+                                "binding": "InventoryCode",
+                                "allowSorting": true,
+                                "width": "1.3*"
+                            },
+                            {
+                                "header": "Price",
+                                "binding": "Price",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Quantity",
+                                "binding": "Quantity",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Unit",
+                                "binding": "Unit",
+                                "allowSorting": true,
+                                "width": "0.5*"
+                            },
+                            {
+                                "header": "Pick",
+                                "binding": "Pick",
+                                "width": 70,
+                                "align": "center",
+                                "allowResizing": false,
+                                "allowSorting": false,
+                                "isContentHtml": true
+                            },
+                ],
+                autoGenerateColumns: false,
+                itemsSource: itemQueryItemsCollection,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            itemQueryGrid.trackChanges = true;
+
+            //Navigation button for account
+            btnFirstPageGridItemQuery = document.getElementById('btnMoveToFirstPageGridItemQuery');
+            btnPreviousPageGridItemQuery = document.getElementById('btnMoveToPreviousPageGridItemQuery');
+            btnNextPageGridItemQuery = document.getElementById('btnMoveToNextPageGridItemQuery');
+            btnLastPageGridItemQuery = document.getElementById('btnMoveToLastPageGridItemQuery');
+            btnCurrentPageGridItemQuery = document.getElementById('btnCurrentPageGridItemQuery');
+
+            updateNavigateButtonsItemQuery();
+
+            btnFirstPageGridItemQuery.addEventListener('click', function () {
+                itemQueryItemsCollection.moveToFirstPage();
+                updateNavigateButtonsItemQuery();
+            });
+            btnPreviousPageGridItemQuery.addEventListener('click', function () {
+                itemQueryItemsCollection.moveToPreviousPage();
+                updateNavigateButtonsItemQuery();
+            });
+            btnNextPageGridItemQuery.addEventListener('click', function () {
+                itemQueryItemsCollection.moveToNextPage();
+                updateNavigateButtonsItemQuery();
+            });
+            btnLastPageGridItemQuery.addEventListener('click', function () {
+                itemQueryItemsCollection.moveToLastPage();
+                updateNavigateButtonsItemQuery();
+            });
+        }
+        
+        // Navigation Buttons for Account
+        function updateNavigateButtonsItemQuery() {
+            if (itemQueryItemsCollection.pageSize <= 0) {
+                document.getElementById('naviagtionPageGridItemQuery').style.display = 'none';
+                return;
+            }
+            document.getElementById('naviagtionPageGridItemQuery').style.display = 'block';
+            if (itemQueryItemsCollection.pageIndex === 0) {
+                btnFirstPageGridItemQuery.setAttribute('disabled', 'disabled');
+                btnPreviousPageGridItemQuery.setAttribute('disabled', 'disabled');
+                btnNextPageGridItemQuery.removeAttribute('disabled');
+                btnLastPageGridItemQuery.removeAttribute('disabled');
+            } else if (itemQueryItemsCollection.pageIndex === (itemQueryItemsCollection.pageCount - 1)) {
+                btnFirstPageGridItemQuery.removeAttribute('disabled');
+                btnPreviousPageGridItemQuery.removeAttribute('disabled');
+                btnNextPageGridItemQuery.setAttribute('disabled', 'disabled');
+                btnLastPageGridItemQuery.setAttribute('disabled', 'disabled');
+            } else {
+                btnFirstPageGridItemQuery.removeAttribute('disabled');
+                btnPreviousPageGridItemQuery.removeAttribute('disabled');
+                btnNextPageGridItemQuery.removeAttribute('disabled');
+                btnLastPageGridItemQuery.removeAttribute('disabled');
+            }
+            btnCurrentPageGridItemQuery.innerHTML = (itemQueryItemsCollection.pageIndex + 1) + ' / ' + itemQueryItemsCollection.pageCount;
+        }
+
+        // pick
+        function pickToApplyOnClick() {
+            itemQueryItemsCollection.editItem(itemQueryItemsCollection.currentItem);
+            $('#stockTransferItemsEdit').modal({
+                show: true,
+                backdrop: 'static'
+            });
+
+            $("#cmdSaveStockTransferItemButton").prop("disabled", false);
+            $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
+
+            $('.requiredStockTransfer').each(function () {
+                $(this).css({
+                    "border": "",
+                });
+            });
+
+            var item = itemQueryItemsCollection.currentEditItem;
+            document.getElementById('stockTransferItem_Id').value = "0";
+            document.getElementById('stockTransferItem_ItemId_data').value = item.ArticleId;
+            document.getElementById('stockTransferItem_ItemCode_selectedValue').value = item.ManualArticleCode;
+            document.getElementById('stockTransferItem_ItemDescription_selectedValue').value = item.Article;
+            document.getElementById('stockTransferItem_Particulars').value = "NA";
+            document.getElementById('stockTransferItem_ItemInventoryCode_data').value = item.Id;
+            document.getElementById('stockTransferItem_ItemInventoryCode_selectedValue').value = item.InventoryCode;
+            document.getElementById('stockTransferItem_Quantity').value = "0";
+            document.getElementById('stockTransferItem_Unit_data').value = item.UnitId;
+            document.getElementById('stockTransferItem_Unit_selectedValue').value = item.Unit;
+            document.getElementById('stockTransferItem_Cost').value = item.Cost;
+            document.getElementById('stockTransferItem_Amount').value = item.Amount;
+            
+            getArticleItemForManualCodeAndComponent();
+        }
 
         // =======================
         // Get URL Parameter Value
@@ -458,11 +767,12 @@
                             $("#cmdStockTransferEdit").prop("disabled", false);
                             $("#cmdStockTransferPrint").prop("disabled", false);
                             $('#btnAddStockTransferItem').prop('disabled', true);
-
+                            $('#btnItemQueryStockTransferItem').prop('disabled', true);
 
                         } else if (document.getElementById('StockTransfer_IsLocked').value == 'false') {
                             document.getElementById('stockTransfer_Particulars').disabled = false;
                             document.getElementById('stockTransfer_ManualSTNumber').disabled = false;
+                            $('#btnItemQueryStockTransferItem').prop('disabled', false);
 
                             var STDate_date = Results.STDate;
                             STDate.dispose();
@@ -1488,8 +1798,8 @@
             document.getElementById("stockTransferItem_ItemCode_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemCode;
             document.getElementById("stockTransferItem_ItemDescription_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].ItemDescription;
             //document.getElementById("stockTransferItem_Particulars").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Particulars;
-            document.getElementById("stockTransferItem_ItemInventoryCode_data").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Id;
-            document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].InventoryCode;
+            //document.getElementById("stockTransferItem_ItemInventoryCode_data").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Id;
+            //document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].InventoryCode;
             //document.getElementById("stockTransferItem_Cost").value = ManualCodeCollections.items[cboManualCodeArticleItems.selectedIndex].Cost;
         }
 
@@ -1591,8 +1901,8 @@
             document.getElementById("stockTransferItem_ItemCode_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemCode;
             document.getElementById("stockTransferItem_ItemDescription_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemDescription;
             //document.getElementById("stockTransferItem_Particulars").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Particulars;
-            document.getElementById("stockTransferItem_ItemInventoryCode_data").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Id;
-            document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].InventoryCode;
+            //document.getElementById("stockTransferItem_ItemInventoryCode_data").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Id;
+            //document.getElementById("stockTransferItem_ItemInventoryCode_selectedValue").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].InventoryCode;
             //document.getElementById("stockTransferItem_Cost").value = ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].Cost;
 
             //$("#stockTransferItem_Unit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
@@ -2665,6 +2975,18 @@
             $('#Items').show();
             $('#InventoryEntries').hide();
             itemTab();
+            
+            $(document).on('show.bs.modal', '.modal', function (event) {
+                var zIndex = 1040 + (10 * $('.modal:visible').length);
+                $(this).css('z-index', zIndex);
+                setTimeout(function () {
+                    $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+                }, 0);
+            });
+
+            $(document).on('hidden.bs.modal', '.modal', function () {
+                $('.modal:visible').length && $(document.body).addClass('modal-open');
+            });
         });
     </script>
 </body>
