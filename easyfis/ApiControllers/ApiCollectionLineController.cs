@@ -308,67 +308,31 @@ namespace easyfis.Controllers
         // apply all accounts receivable from sales invoice
         [Authorize]
         [HttpPost]
-        [Route("api/collectionLine/applyAllAR/ByCustomerId/{CustomerId}/{ORId}")]
-        public HttpResponseMessage PostAllAR(String CustomerId, String ORId)
+        [Route("api/collectionLine/applyAR/{ORId}")]
+        public HttpResponseMessage PostAllAR(Models.TrnSalesInvoice salesInvoice, String ORId)
         {
             try
             {
-                var salesInvoices = from d in db.TrnSalesInvoices
-                                    where d.BranchId == currentBranchId()
-                                    && d.CustomerId == Convert.ToInt32(CustomerId)
-                                    && d.BalanceAmount > 0
-                                    && d.IsLocked == true
-                                    select new Models.TrnSalesInvoice
-                                    {
-                                        Id = d.Id,
-                                        BranchId = d.BranchId,
-                                        Branch = d.MstBranch.Branch,
-                                        SINumber = d.SINumber,
-                                        SIDate = d.SIDate.ToShortDateString(),
-                                        CustomerId = d.CustomerId,
-                                        Customer = d.MstArticle.Article,
-                                        TermId = d.TermId,
-                                        Term = d.MstTerm.Term,
-                                        DocumentReference = d.DocumentReference,
-                                        ManualSINumber = d.ManualSINumber,
-                                        Remarks = d.Remarks,
-                                        Amount = d.Amount,
-                                        PaidAmount = d.PaidAmount,
-                                        AdjustmentAmount = d.AdjustmentAmount,
-                                        BalanceAmount = d.BalanceAmount,
-                                        AccountId = d.MstArticle.MstAccount.Id
-                                    };
+                Data.TrnCollectionLine newCollectionLine = new Data.TrnCollectionLine();
 
-                if (salesInvoices.Any())
-                {
-                    foreach (var salesInvoice in salesInvoices)
-                    {
-                        Data.TrnCollectionLine newCollectionLine = new Data.TrnCollectionLine();
+                newCollectionLine.ORId = Convert.ToInt32(ORId);
+                newCollectionLine.BranchId = salesInvoice.BranchId;
+                newCollectionLine.AccountId = salesInvoice.AccountId;
+                newCollectionLine.ArticleId = salesInvoice.CustomerId;
+                newCollectionLine.SIId = salesInvoice.Id;
+                newCollectionLine.Particulars = salesInvoice.DocumentReference;
+                newCollectionLine.Amount = salesInvoice.Amount;
+                newCollectionLine.PayTypeId = (from d in db.MstPayTypes select d.Id).FirstOrDefault();
+                newCollectionLine.CheckNumber = "NA";
+                newCollectionLine.CheckDate = DateTime.Now;
+                newCollectionLine.CheckBank = "NA";
+                newCollectionLine.DepositoryBankId = (from d in db.MstArticles where d.ArticleTypeId == 5 select d.Id).FirstOrDefault();
+                newCollectionLine.IsClear = true;
 
-                        newCollectionLine.ORId = Convert.ToInt32(ORId);
-                        newCollectionLine.BranchId = salesInvoice.BranchId;
-                        newCollectionLine.AccountId = salesInvoice.AccountId;
-                        newCollectionLine.ArticleId = salesInvoice.CustomerId;
-                        newCollectionLine.SIId = salesInvoice.Id;
-                        newCollectionLine.Particulars = salesInvoice.DocumentReference;
-                        newCollectionLine.Amount = salesInvoice.Amount;
-                        newCollectionLine.PayTypeId = (from d in db.MstPayTypes select d.Id).FirstOrDefault();
-                        newCollectionLine.CheckNumber = "NA";
-                        newCollectionLine.CheckDate = DateTime.Now;
-                        newCollectionLine.CheckBank = "NA";
-                        newCollectionLine.DepositoryBankId = (from d in db.MstArticles where d.ArticleTypeId == 5 select d.Id).FirstOrDefault();
-                        newCollectionLine.IsClear = true;
+                db.TrnCollectionLines.InsertOnSubmit(newCollectionLine);
+                db.SubmitChanges();
 
-                        db.TrnCollectionLines.InsertOnSubmit(newCollectionLine);
-                        db.SubmitChanges();
-                    }
-
-                    return Request.CreateResponse(HttpStatusCode.OK);
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
+                return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch
             {
@@ -450,7 +414,7 @@ namespace easyfis.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);

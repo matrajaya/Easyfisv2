@@ -250,16 +250,12 @@
                                     <div class="panel-body">
                                         <div id="POStatusGrid" class="grid statusGrid" align="left"></div>
                                         <center>
-                                            <h4>
-                                                <span id="loadingPOItemsGridList"></span>
-                                            </h4>
+                                            <span id="loadingPOItemsGridList"></span>
                                         </center>
                                     </div>
                                 </div>
                                 <center>
-                                    <h4>
-                                        <span id="loadingPOStatusGridList"></span>
-                                    </h4>
+                                    <span id="loadingPOStatusGridList"></span>
                                 </center>
                             </div>
                         </div>
@@ -1548,8 +1544,8 @@
             document.getElementById('POStatus_PONumber_data').value = 0;
             //getSupplierInPOStatusForComboBox();
             getPOInPOStatusForComboBox();
-            document.getElementById("loadingPOStatusGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
-            document.getElementById("loadingPOItemsGridList").innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+            document.getElementById("loadingPOStatusGridList").innerHTML = '<b><i class="fa fa-spinner fa-spin"></i></b>';
+            document.getElementById("loadingPOItemsGridList").innerHTML = '<b><i class="fa fa-spinner fa-spin"></i></b>';
 
             $('#POLinesDetailForm').hide();
             $('#loadingPOStatusGridList').show();
@@ -1569,7 +1565,7 @@
                 $('#POLinesDetailForm').show();
                 $('#loadingPOStatusGridList').hide();
                 $('#inputFilterPOItemSearch').show();
-                
+
                 $('#panelGrid').show();
 
                 POStatus = new wijmo.collections.CollectionView(getPurchaseOrderItemForPOSTatus());
