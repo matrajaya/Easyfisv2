@@ -43,7 +43,7 @@
                                 </h4>
                             </div>
                             <div class="col-md-6" align="right">
-                                <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                <button onclick="accountsPayableReportCSVOnclick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                 <button onclick="accountsPayableReportPDFOnclick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                 <a href="/Software/AccountsPayable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                             </div>
@@ -169,6 +169,7 @@
                                 SupplierId: accountsPayableResults[i]["SupplierId"],
                                 Supplier: accountsPayableResults[i]["Supplier"],
                                 RRNumber: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + accountsPayableResults[i]["RRNumber"] + "</a>",
+                                RRNumberValue: accountsPayableResults[i]["RRNumber"],
                                 RRDate: accountsPayableResults[i]["RRDate"],
                                 DocumentReference: accountsPayableResults[i]["DocumentReference"],
                                 BalanceAmount: accountsPayableResults[i]["BalanceAmount"],
@@ -197,6 +198,76 @@
             return accountsPayables;
         }
 
+        var accountsPayableCollections;
+
+        function accountsPayableReportCSVOnclick() {
+            console.log(accountsPayableCollections.items);
+
+            var CSV = '';
+            var accountPayables = [];
+            var fileName = 'AccountsPayableReport.CSV';
+
+            for (i = 0; i < accountsPayableCollections.items.length; i++) {
+                accountPayables.push({
+                    RRNumber: accountsPayableCollections.items[i].RRNumberValue,
+                    AccountCode: accountsPayableCollections.items[i].AccountCode,
+                    Account: accountsPayableCollections.items[i].Account,
+                    Supplier: accountsPayableCollections.items[i].Supplier,
+                    RRDate: accountsPayableCollections.items[i].RRDate,
+                    DocumentReference: accountsPayableCollections.items[i].DocumentReference,
+                    DueDate: accountsPayableCollections.items[i].DueDate,
+                    BalanceAmount: accountsPayableCollections.items[i].BalanceAmount,
+                    CurrentAmount: accountsPayableCollections.items[i].CurrentAmount,
+                    Age30Amount: accountsPayableCollections.items[i].Age30Amount,
+                    Age60Amount: accountsPayableCollections.items[i].Age60Amount,
+                    Age90Amount: accountsPayableCollections.items[i].Age90Amount,
+                    Age120Amount: accountsPayableCollections.items[i].Age120Amount
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            // Rows
+            for (var i = 0; i < accountPayables.length; i++) {
+                var row = '';
+                for (var a in accountPayables[i]) {
+                    row += '"' + accountPayables[i][a] + '",';
+                }
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }        }
+
+
         function accountsPayableReportPDFOnclick() {
             window.location.href = '/RepAccountsPayable/AccountsPayable?DateAsOf=' + getParam("DateAsOf") + '&CompanyId=' + getParam("CompanyId");
         }
@@ -212,7 +283,7 @@
                 }
             });
 
-            var accountsPayableCollections = new wijmo.collections.CollectionView(getAccountsPayable());
+            accountsPayableCollections = new wijmo.collections.CollectionView(getAccountsPayable());
 
             // Flex Grid
             accountsPayableGrid = new wijmo.grid.FlexGrid('#accountsPayableGrid');
