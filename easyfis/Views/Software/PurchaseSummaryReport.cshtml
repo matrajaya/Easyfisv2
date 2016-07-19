@@ -43,7 +43,7 @@
                                 </h4>
                             </div>
                             <div class="col-md-6" align="right">
-                                <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                <button onclick="purchaseSummaryReportCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                 <button onclick="purchaseSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                 <a href="/Software/AccountsPayable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                             </div>
@@ -130,12 +130,78 @@
 
             return purchaseSummaryReports;
         }
+        var purchaseSummaryReportCollections;
+
+        function purchaseSummaryReportCSV_OnClick() {
+
+
+            var CSV = '';
+            var purchaseSummaryReport = [];
+            var fileName = 'PurchaseSummaryReport.CSV';
+
+            for (i = 0; i < purchaseSummaryReportCollections.items.length; i++) {
+                purchaseSummaryReport.push({
+                    Branch: purchaseSummaryReportCollections.items[i].Branch,
+                    PODate: purchaseSummaryReportCollections.items[i].PODate,
+                    PONumber: purchaseSummaryReportCollections.items[i].PONumber,
+                    Supplier: purchaseSummaryReportCollections.items[i].Supplier,
+                    Remarks: purchaseSummaryReportCollections.items[i].Remarks,
+                    IsClose: purchaseSummaryReportCollections.items[i].IsClose,
+                    Amount: purchaseSummaryReportCollections.items[i].Amount,
+                   
+                    
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            // Rows
+            for (var i = 0; i < purchaseSummaryReport.length; i++) {
+                var row = '';
+                for (var a in purchaseSummaryReport[i]) {
+                    row += '"' + purchaseSummaryReport[i][a] + '",';
+                }
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
+
 
         $(document).ready(function () {
             NProgress.start();
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            var purcahseSumamryReportCollections = new wijmo.collections.CollectionView(getPurchaseSummaryReport());
+            purchaseSummaryReportCollections = new wijmo.collections.CollectionView(getPurchaseSummaryReport());
 
             // Flex Grid
             var purchaseSummaryReportGrid = new wijmo.grid.FlexGrid('#purchaseSummaryReportGrid');
@@ -185,7 +251,7 @@
                             }
                 ],
                 autoGenerateColumns: false,
-                itemsSource: purcahseSumamryReportCollections,
+                itemsSource: purchaseSummaryReportCollections,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
