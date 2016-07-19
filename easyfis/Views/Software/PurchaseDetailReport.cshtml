@@ -43,7 +43,7 @@
                                 </h4>
                             </div>
                             <div class="col-md-6" align="right">
-                                <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                <button onclick="purchaseDetailReportCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                 <button onclick="purchaseDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                 <a href="/Software/AccountsPayable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                             </div>
@@ -109,8 +109,8 @@
 
                             // Array Push
                             purchaseDetailReport.push({
-                               
-                               
+
+
                                 PONumber: purchaseDetailReportResults[i]["PO"],
                                 PODate: purchaseDetailReportResults[i]["PODate"],
                                 Item: purchaseDetailReportResults[i]["Item"],
@@ -132,11 +132,79 @@
             return purchaseDetailReport;
         }
 
+        var purchaseDetailReportCollections;
+
+        function purchaseDetailReportCSV_OnClick() {
+
+
+            var CSV = '';
+            var purchaseDetailReport = [];
+            var fileName = 'PurchaseDetailReport.CSV';
+
+            for (i = 0; i < purchaseDetailReportCollections.items.length; i++) {
+                purchaseDetailReport.push({
+                    PONumber: purchaseDetailReportCollections.items[i].PONumber,
+                    PODate: purchaseDetailReportCollections.items[i].PODate,
+                    Item: purchaseDetailReportCollections.items[i].Item,
+                    Price: purchaseDetailReportCollections.items[i].Price,
+                    Unit: purchaseDetailReportCollections.items[i].Unit,
+                    Quantity: purchaseDetailReportCollections.items[i].Quantity,
+                    Amount: purchaseDetailReportCollections.items[i].Amount,
+
+
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            // Rows
+            for (var i = 0; i < purchaseDetailReport.length; i++) {
+                var row = '';
+                for (var a in purchaseDetailReport[i]) {
+                    row += '"' + purchaseDetailReport[i][a] + '",';
+                }
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
+
+
         $(document).ready(function () {
             NProgress.start();
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            var purchaseDetailsReportCollection = new wijmo.collections.CollectionView(getPurchaseDetailReport());
+            purchaseDetailReportCollections = new wijmo.collections.CollectionView(getPurchaseDetailReport());
 
             // Flex Grid
             var purchaseDetailReportGrid = new wijmo.grid.FlexGrid('#purchaseDetailReportGrid');
@@ -186,7 +254,7 @@
                             }
                 ],
                 autoGenerateColumns: false,
-                itemsSource: purchaseDetailsReportCollection,
+                itemsSource: purchaseDetailReportCollections,
                 isReadOnly: true,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,

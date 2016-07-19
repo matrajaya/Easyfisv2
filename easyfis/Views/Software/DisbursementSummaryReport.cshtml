@@ -43,7 +43,7 @@
                                 </h4>
                             </div>
                             <div class="col-md-6" align="right">
-                                <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                <button onclick="disbursementSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                 <button onclick="disbursementSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                 <a href="/Software/AccountsPayable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                             </div>
@@ -134,11 +134,76 @@
             return disbursementSummaryReport;
         }
 
+        var disbursementSummaryReportCollection;
+
+        function disbursementSummaryReportPDF_OnClick() {
+
+
+            var CSV = '';
+            var disbursementSummaryReport = [];
+            var fileName = 'DisbursementSummaryReport.CSV';
+
+            for (i = 0; i < disbursementSummaryReportCollection.items.length; i++) {
+                disbursementSummaryReport.push({
+                    Branch: disbursementSummaryReportCollection.items[i].Branch,
+                    CVDate: disbursementSummaryReportCollection.items[i].CVDate,
+                    CVNumber: disbursementSummaryReportCollection.items[i].CVNumber,
+                    Supplier: disbursementSummaryReportCollection.items[i].Supplier,
+                    CheckNumber: disbursementSummaryReportCollection.items[i].CheckNumber,
+                    Amount: disbursementSummaryReportCollection.items[i].Amount,
+
+
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            // Rows
+            for (var i = 0; i < disbursementSummaryReport.length; i++) {
+                var row = '';
+                for (var a in disbursementSummaryReport[i]) {
+                    row += '"' + disbursementSummaryReport[i][a] + '",';
+                }
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
         $(document).ready(function () {
             NProgress.start();
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            var disbursementSummaryReportCollection = new wijmo.collections.CollectionView(getDisbursementSummaryReport());
+            disbursementSummaryReportCollection = new wijmo.collections.CollectionView(getDisbursementSummaryReport());
 
             // Flex Grid
             var disbursementSummaryReportGrid = new wijmo.grid.FlexGrid('#disbursementSummaryReportGrid');
