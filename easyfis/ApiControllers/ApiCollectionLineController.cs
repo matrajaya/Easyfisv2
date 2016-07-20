@@ -131,7 +131,38 @@ namespace easyfis.Controllers
                                       IsClear = d.IsClear
                                   };
 
-            return collectionLines.ToList();
+            var collectionLinesIsNotClear = from d in db.TrnCollectionLines
+                                            where d.DepositoryBankId == Convert.ToInt32(depositoryBankId)
+                                            && d.TrnCollection.ORDate < Convert.ToDateTime(dateStart)
+                                            && d.IsClear == false
+                                            select new Models.TrnCollectionLine
+                                            {
+                                                Id = d.Id,
+                                                ORId = d.ORId,
+                                                OR = d.TrnCollection.ORNumber,
+                                                ORDate = d.TrnCollection.ORDate.ToShortDateString(),
+                                                Customer = d.TrnCollection.MstArticle.Article,
+                                                BranchId = d.BranchId,
+                                                Branch = d.MstBranch.Branch,
+                                                AccountId = d.AccountId,
+                                                Account = d.MstAccount.Account,
+                                                ArticleId = d.ArticleId,
+                                                Article = d.MstArticle.Article,
+                                                SIId = d.SIId,
+                                                SI = d.TrnSalesInvoice.SINumber,
+                                                Particulars = d.Particulars,
+                                                Amount = d.Amount,
+                                                PayTypeId = d.PayTypeId,
+                                                PayType = d.MstPayType.PayType,
+                                                CheckNumber = d.CheckNumber,
+                                                CheckDate = d.CheckDate.ToShortDateString(),
+                                                CheckBank = d.CheckBank,
+                                                DepositoryBankId = d.DepositoryBankId,
+                                                DepositoryBank = d.MstArticle1.Article,
+                                                IsClear = d.IsClear
+                                            };
+
+            return collectionLines.Union(collectionLinesIsNotClear).ToList();
         }
 
         // add collection line

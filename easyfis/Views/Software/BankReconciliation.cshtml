@@ -524,7 +524,9 @@
                     dataType: "json",
                     statusCode: {
                         200: function () {
-                            toastr.success("Cleared");
+                            if (collectionLineItem.InTransit == 0) {
+                                toastr.success("Cleared");
+                            }
                         },
                         404: function () {
                             toastr.error("Not Found");
@@ -808,7 +810,9 @@
                     dataType: "json",
                     statusCode: {
                         200: function () {
-                            toastr.success("Cleared");
+                            if (disbursementItem.OutstandingAmount == 0) {
+                                toastr.success("Cleared");
+                            }
                         },
                         404: function () {
                             toastr.error("Not Found");
@@ -1043,7 +1047,9 @@
                     dataType: "json",
                     statusCode: {
                         200: function () {
-                            toastr.success("Cleared");
+                            if (journalVoucherLineItem.Adjustments == 0) {
+                                toastr.success("Cleared");
+                            }
                         },
                         404: function () {
                             toastr.error("Not Found");

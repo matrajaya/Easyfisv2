@@ -83,7 +83,37 @@ namespace easyfis.Controllers
                                           IsClear = d.IsClear
                                       };
 
-            return journalVoucherLines.ToList();
+            var journalVoucherLinesIsNotClear = from d in db.TrnJournalVoucherLines
+                                                where d.ArticleId == Convert.ToInt32(ArticleId)
+                                                && d.TrnJournalVoucher.JVDate < Convert.ToDateTime(DateStart)
+                                                && d.IsClear == false
+                                                select new Models.TrnJournalVoucherLine
+                                                {
+                                                    Id = d.Id,
+                                                    JVId = d.JVId,
+                                                    JVNumber = d.TrnJournalVoucher.JVNumber,
+                                                    JVDate = d.TrnJournalVoucher.JVDate.ToShortDateString(),
+                                                    JVParticulars = d.TrnJournalVoucher.Particulars,
+                                                    BranchId = d.BranchId,
+                                                    Branch = d.MstBranch.Branch,
+                                                    AccountId = d.AccountId,
+                                                    Account = d.MstAccount.Account,
+                                                    ArticleId = d.ArticleId,
+                                                    Article = d.MstArticle.Article,
+                                                    Particulars = d.Particulars,
+                                                    DebitAmount = d.DebitAmount,
+                                                    CreditAmount = d.CreditAmount,
+                                                    APRRId = d.APRRId,
+                                                    APRR = d.TrnReceivingReceipt.RRNumber,
+                                                    APRRBranch = d.TrnReceivingReceipt.MstBranch.Branch,
+                                                    ARSIId = d.ARSIId,
+                                                    ARSI = d.TrnSalesInvoice.SINumber,
+                                                    ARSIBranch = d.TrnSalesInvoice.MstBranch.Branch,
+                                                    IsClear = d.IsClear
+                                                };
+
+
+            return journalVoucherLines.Union(journalVoucherLinesIsNotClear).ToList();
         }
 
         // list journal voucher lune by JVId
@@ -182,7 +212,7 @@ namespace easyfis.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
             }
-            catch 
+            catch
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
