@@ -43,7 +43,7 @@
                                 </h4>
                             </div>
                             <div class="col-md-6" align="right">
-                                <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                <button onclick="salesSummaryReportCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                 <button onclick="salesSummaryReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                 <a href="/Software/AccountsReceivable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                              </div>
@@ -134,12 +134,78 @@
 
             return salesSummaryReport;
         }
+        var salesSummaryReportCollection;
+
+        function salesSummaryReportCSV_OnClick() {
+
+
+            var CSV = '';
+            var salesSummaryReport = [];
+            var fileName = 'SalesSummaryReport.CSV';
+
+            for (i = 0; i < salesSummaryReportCollection.items.length; i++) {
+                salesSummaryReport.push({
+                    Branch: salesSummaryReportCollection.items[i].Branch,
+                    SIDate: salesSummaryReportCollection.items[i].SIDate,
+                    SINumber: salesSummaryReportCollection.items[i].SINumber,
+                    Customer: salesSummaryReportCollection.items[i].Customer,
+                    SoldBy: salesSummaryReportCollection.items[i].SoldBy,
+                    Remarks: salesSummaryReportCollection.items[i].Remarks,
+                    Amount: salesSummaryReportCollection.items[i].Amount,
+
+
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            // Rows
+            for (var i = 0; i < salesSummaryReport.length; i++) {
+                var row = '';
+                for (var a in salesSummaryReport[i]) {
+                    row += '"' + salesSummaryReport[i][a] + '",';
+                }
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
 
         $(document).ready(function () {
             NProgress.start();
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            var salesSummaryReportCollection = new wijmo.collections.CollectionView(getSalesSummaryReport());
+            salesSummaryReportCollection = new wijmo.collections.CollectionView(getSalesSummaryReport());
 
             // Flex Grid
             var salesSummaryReportGrid = new wijmo.grid.FlexGrid('#salesSummaryReportGrid');

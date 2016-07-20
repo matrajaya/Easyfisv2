@@ -17705,7 +17705,9 @@ namespace easyfis.Data
 			this.SendPropertyChanging();
 			entity.TrnCollection = null;
 		}
-	}
+
+        public decimal? Amount { get; set; }
+    }
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrnCollectionLine")]
 	public partial class TrnCollectionLine : INotifyPropertyChanging, INotifyPropertyChanged

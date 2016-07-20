@@ -237,7 +237,8 @@
                 }
                 row.slice(0, row.length - 1);
                 CSV += row + '\r\n';
-            }
+            }
+
             if (CSV == '') {
                 toastr.error("No data.");
             } else {
@@ -265,7 +266,8 @@
                 document.body.removeChild(link);
 
                 toastr.success("Dowload successful.");
-            }        }
+            }
+        }
 
 
         function accountsPayableReportPDFOnclick() {

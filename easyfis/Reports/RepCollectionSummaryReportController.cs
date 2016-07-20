@@ -76,7 +76,8 @@ namespace easyfis.Reports
                                   Branch = d.MstBranch.Branch,
                                   ORNumber = d.ORNumber,
                                   ORDate = d.ORDate.ToShortDateString(),
-                                  Customer = d.MstArticle.Article
+                                  Customer = d.MstArticle.Article,
+                                  Amount = d.Amount
                               };
 
             Decimal total = 0;

@@ -20,9 +20,13 @@ namespace easyfis.ApiControllers
 
         public Decimal getAmount(Int32 id)
         {
-            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.POId == id select d;
-            Decimal amount = purchaseOrderItems.Sum(d => d.Amount);
-
+            var collectionLines = from d in db.TrnCollectionLines where d.ORId == id select d;
+            Decimal amount = 0;
+            if (collectionLines.Any())
+            {
+                amount = collectionLines.Sum(d => d.Amount);
+            }
+            
             return amount;
         }
 
@@ -44,7 +48,8 @@ namespace easyfis.ApiControllers
                                   Branch = d.MstBranch.Branch,
                                   ORNumber = d.ORNumber,
                                   ORDate = d.ORDate.ToShortDateString(),
-                                  Customer = d.MstArticle.Article
+                                  Customer = d.MstArticle.Article,
+                                  Amount = getAmount(d.Id)
                               };
 
             return collections.ToList();

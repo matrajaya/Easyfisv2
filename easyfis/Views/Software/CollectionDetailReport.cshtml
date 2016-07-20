@@ -43,7 +43,7 @@
                                 </h4>
                             </div>
                             <div class="col-md-6" align="right">
-                                <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                <button onclick="collectionDetailReportCSV_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
                                 <button onclick="collectionDetailReportPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                 <a href="/Software/AccountsReceivable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
                             </div>
@@ -130,12 +130,78 @@
 
             return collectionDetailReport;
         }
+        var collectionDetailReportCollection;
+
+        function collectionDetailReportCSV_OnClick() {
+
+
+            var CSV = '';
+            var collectionDetailReport = [];
+            var fileName = 'CollectionDetailReport.CSV';
+
+            for (i = 0; i < collectionDetailReportCollection.items.length; i++) {
+                collectionDetailReport.push({
+                    OR: collectionDetailReportCollection.items[i].OR,
+                    ORDate: collectionDetailReportCollection.items[i].ORDate,
+                    PayType: collectionDetailReportCollection.items[i].PayType,
+                    SI: collectionDetailReportCollection.items[i].SI,
+                    DepositoryBank: collectionDetailReportCollection.items[i].DepositoryBank,
+                    Amount: collectionDetailReportCollection.items[i].Amount,
+
+
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            // Rows
+            for (var i = 0; i < collectionDetailReport.length; i++) {
+                var row = '';
+                for (var a in collectionDetailReport[i]) {
+                    row += '"' + collectionDetailReport[i][a] + '",';
+                }
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
+
 
         $(document).ready(function () {
             NProgress.start();
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            var collectionDetailReportCollection = new wijmo.collections.CollectionView(getCollectionDetailReport());
+            collectionDetailReportCollection = new wijmo.collections.CollectionView(getCollectionDetailReport());
 
             // Flex Grid
             var collectionDetailReportGrid = new wijmo.grid.FlexGrid('#collectionDetailReportGrid');
