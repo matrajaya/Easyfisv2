@@ -67,7 +67,8 @@
                                         <div class="form-group">
                                             <label class="control-label col-sm-6">Ending Balance as per Bank</label>
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control input-sm numberField input-50" id="bankReconciliationEndingBalanceAsPerBank" />
+                                                <input type="text" class="form-control input-sm numberField input-50" id="bankReconciliationEndingBalanceAsPerBank" placeholder="0.00" />
+                                                <input type="hidden" id="bankReconciliationEndingBalanceAsPerBankValue"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -1063,10 +1064,21 @@
         }
 
         function computeEndingBalancePerBank() {
-            var endingBalance = (deposit - withdrawal) + adjustment;
+            var endingbalance = document.getElementById("bankReconciliationEndingBalanceAsPerBankValue").value.toLocaleString();
+            var adjustedEndingBalance = ((endingbalance - deposit) + withdrawal) - adjustment;
 
-            document.getElementById("bankReconciliationAdjustedEndingBalanceAsPerBank").value = endingBalance.toLocaleString();
+            document.getElementById("bankReconciliationAdjustedEndingBalanceAsPerBank").value = adjustedEndingBalance.toLocaleString();
         }
+
+        $('#bankReconciliationEndingBalanceAsPerBank').keyup(function () {
+            if (this.value == "") {
+                document.getElementById("bankReconciliationEndingBalanceAsPerBankValue").value = 0;
+                computeEndingBalancePerBank();
+            } else {
+                document.getElementById("bankReconciliationEndingBalanceAsPerBankValue").value = this.value;
+                computeEndingBalancePerBank();
+            }
+        });
 
         // ============
         // On load page
@@ -1075,6 +1087,8 @@
             document.getElementById("bankReconciliationTotalDepositInTransit").value = "0.00";
             document.getElementById("bankReconciliationTotalAdjustments").value = "0.00";
             document.getElementById("bankReconciliationTotalOutstandingWithdrawals").value = "0.00";
+            document.getElementById("bankReconciliationEndingBalanceAsPerBank").value = 0;
+            document.getElementById("bankReconciliationEndingBalanceAsPerBankValue").value = 0;
 
             var userId = '@ViewData["MstUserId"]';
             rightsAccessValidation(userId);
