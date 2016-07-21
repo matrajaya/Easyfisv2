@@ -39,12 +39,25 @@ namespace easyfis.Controllers
             {
                 if (pageName.Equals(userForm.Form))
                 {
+                    ViewData.Add("CanAdd", userForm.CanAdd);
+                    ViewData.Add("CanEdit", userForm.CanEdit);
+                    ViewData.Add("CanDelete", userForm.CanDelete);
+                    ViewData.Add("CanLock", userForm.CanLock);
+                    ViewData.Add("CanUnlock", userForm.CanUnlock);
+                    ViewData.Add("CanPrint", userForm.CanPrint);
+
                     emptyPageName = userForm.Form;
                     break;
                 }
             }
 
             return emptyPageName;
+        }
+
+        [Authorize]
+        public ActionResult Forbidden()
+        {
+            return View();
         }
 
         [Authorize]
@@ -154,42 +167,92 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult AccountsPayableReport()
         {
-            return View();
+            if (pageAccess("AccountsPayableReport").Equals("AccountsPayableReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult PurchaseSummaryReport()
         {
-            return View();
+            if (pageAccess("PurchaseSummaryReport").Equals("PurchaseSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult PurchaseDetailReport()
         {
-            return View();
+            if (pageAccess("PurchaseDetailReport").Equals("PurchaseDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult ReceivingReceiptSummaryReport()
         {
-            return View();
+            if (pageAccess("ReceivingReceiptSummaryReport").Equals("ReceivingReceiptSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult ReceivingReceiptDetailReport()
         {
-            return View();
+            if (pageAccess("ReceivingReceiptDetailReport").Equals("ReceivingReceiptDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult DisbursementSummaryReport()
         {
-            return View();
+            if (pageAccess("DisbursementSummaryReport").Equals("DisbursementSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
+
         [Authorize]
         public ActionResult DisbursementDetailReport()
         {
-            return View();
+            if (pageAccess("DisbursementDetailReport").Equals("DisbursementDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
@@ -299,31 +362,66 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult AccountsReceivableReport()
         {
-            return View();
+            if (pageAccess("AccountsReceivableReport").Equals("AccountsReceivableReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult SalesSummaryReport()
         {
-            return View();
+            if (pageAccess("SalesSummaryReport").Equals("SalesSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult SalesDetailReport()
         {
-            return View();
+            if (pageAccess("SalesDetailReport").Equals("SalesDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult CollectionSummaryReport()
         {
-            return View();
+            if (pageAccess("CollectionSummaryReport").Equals("CollectionSummaryReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult CollectionDetailReport()
         {
-            return View();
+            if (pageAccess("CollectionDetailReport").Equals("CollectionDetailReport"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
@@ -601,13 +699,27 @@ namespace easyfis.Controllers
         [Authorize]
         public ActionResult TrialBalance()
         {
-            return View();
+            if (pageAccess("TrialBalance").Equals("TrialBalance"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
         public ActionResult AccountLedger()
         {
-            return View();
+            if (pageAccess("AccountLedger").Equals("AccountLedger"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
         }
 
         [Authorize]
@@ -647,12 +759,6 @@ namespace easyfis.Controllers
             {
                 return RedirectToAction("Forbidden", "Software");
             }
-        }
-
-        [Authorize]
-        public ActionResult Forbidden()
-        {
-            return View();
         }
     }
 }

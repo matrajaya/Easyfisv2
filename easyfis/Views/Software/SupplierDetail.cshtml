@@ -278,9 +278,18 @@
                                 document.getElementById('artcileSupplier_ContactPerson').disabled = true;
                                 $('#supplier_SaveButton').prop('disabled', true);
                                 $('#supplier_LockButton').prop('disabled', true);
-                                $('#supplier_UnlockButton').prop('disabled', false);
+                                //$('#supplier_UnlockButton').prop('disabled', false);
                                 $('#btnAddMoreContactInformation').prop('disabled', true);
                                 Islocked = true;
+
+                                var canUnLock = "@ViewData["CanUnlock"]";
+                                if (canUnLock == "True") {
+                                    $("#supplier_UnlockButton").prop("disabled", false)
+                                } else if (canUnLock == "False") {
+                                    $("#supplier_UnlockButton").prop("disabled", true)
+                                } else {
+                                    $("#supplier_UnlockButton").prop("disabled", true)
+                                }
                             } else {
                                 document.getElementById('artcileSupplier_Supplier').disabled = false;
                                 document.getElementById('artcileSupplier_Address').disabled = false;
@@ -289,10 +298,28 @@
                                 document.getElementById('artcileSupplier_ContactNo').disabled = false;
                                 document.getElementById('artcileSupplier_ContactPerson').disabled = false;
                                 $('#supplier_SaveButton').prop('disabled', false);
-                                $('#supplier_LockButton').prop('disabled', false);
+                                //$('#supplier_LockButton').prop('disabled', false);
                                 $('#supplier_UnlockButton').prop('disabled', true);
                                 $('#btnAddMoreContactInformation').prop('disabled', false);
                                 Islocked = false;
+
+                                var canLock = "@ViewData["CanLock"]";
+                                if (canLock == "True") {
+                                    $("#supplier_LockButton").prop("disabled", false)
+                                } else if (canLock == "False") {
+                                    $("#supplier_LockButton").prop("disabled", true)
+                                } else {
+                                    $("#supplier_LockButton").prop("disabled", true)
+                                }
+
+                                var canAdd = "@ViewData["CanAdd"]";
+                                if (canAdd == "True") {
+                                    $("#btnAddMoreContactInformation").prop("disabled", false)
+                                } else if (canAdd == "False") {
+                                    $("#btnAddMoreContactInformation").prop("disabled", true)
+                                } else {
+                                    $("#btnAddMoreContactInformation").prop("disabled", true)
+                                }
                             }
 
                             getLastArticleCode();
@@ -784,14 +811,14 @@
                 $('#supplier_UnlockButton').hide();
                 $('#btnAddMoreContactInformation').prop('disabled', true);
 
-                
+
             } else {
                 $('#supplier_SaveButton').hide();
                 $('#supplier_LockButton').show();
                 $('#supplier_UnlockButton').show();
             }
 
-          
+
 
             $(document).ajaxStop(function () {
                 if (document.location.search.length == 0) {
@@ -803,8 +830,8 @@
             });
         });
 
-       
-    </script>
+
+</script>
 
     <!-- ====================== -->
     <!-- Journal Ledger Scripts -->
