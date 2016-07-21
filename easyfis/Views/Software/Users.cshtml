@@ -275,9 +275,6 @@
         // On Load Page
         // ============
         $(document).ready(function () {
-            var userId = '@ViewData["MstUserId"]';
-            rightsAccessValidation(userId);
-
             users = new wijmo.collections.CollectionView(getUsers());
             users.canFilter = true;
             users.pageSize = 15;

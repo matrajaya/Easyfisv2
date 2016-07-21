@@ -343,9 +343,6 @@
         // On Page Load
         // ============
         $(document).ready(function () {
-            var userId = '@ViewData["MstUserId"]';
-            rightsAccessValidation(userId);
-
             companies = new wijmo.collections.CollectionView(getCompany());
             companies.canFilter = true;
             companies.pageSize = 15;

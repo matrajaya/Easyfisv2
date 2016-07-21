@@ -2129,9 +2129,6 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            var userId = '@ViewData["MstUserId"]';
-            rightsAccessValidation(userId);
-
             var PurchaseOrderId = getParam('PurchaseOrderId');
             if (document.location.search.length == 0) {
                 $('#cmdSaveLockPO').hide();

@@ -58,6 +58,7 @@ namespace easyfis.Controllers
                                       where d.ArticleId == Convert.ToInt32(ArticleId)
                                       && d.TrnJournalVoucher.JVDate >= Convert.ToDateTime(DateStart)
                                       && d.TrnJournalVoucher.JVDate <= Convert.ToDateTime(DateEnd)
+                                      && d.DebitAmount - d.CreditAmount != 0
                                       select new Models.TrnJournalVoucherLine
                                       {
                                           Id = d.Id,
@@ -87,6 +88,7 @@ namespace easyfis.Controllers
                                                 where d.ArticleId == Convert.ToInt32(ArticleId)
                                                 && d.TrnJournalVoucher.JVDate < Convert.ToDateTime(DateStart)
                                                 && d.IsClear == false
+                                                && d.DebitAmount - d.CreditAmount != 0
                                                 select new Models.TrnJournalVoucherLine
                                                 {
                                                     Id = d.Id,

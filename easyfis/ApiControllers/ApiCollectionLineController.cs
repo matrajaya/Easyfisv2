@@ -104,6 +104,7 @@ namespace easyfis.Controllers
                                   where d.DepositoryBankId == Convert.ToInt32(depositoryBankId)
                                   && d.TrnCollection.ORDate >= Convert.ToDateTime(dateStart)
                                   && d.TrnCollection.ORDate <= Convert.ToDateTime(dateEnd)
+                                  && d.Amount > 0
                                   select new Models.TrnCollectionLine
                                   {
                                       Id = d.Id,
@@ -135,6 +136,7 @@ namespace easyfis.Controllers
                                             where d.DepositoryBankId == Convert.ToInt32(depositoryBankId)
                                             && d.TrnCollection.ORDate < Convert.ToDateTime(dateStart)
                                             && d.IsClear == false
+                                            && d.Amount > 0
                                             select new Models.TrnCollectionLine
                                             {
                                                 Id = d.Id,

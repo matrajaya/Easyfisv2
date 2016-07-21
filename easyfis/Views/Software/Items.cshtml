@@ -369,9 +369,6 @@
         // Onload Page
         // ===========
         $(document).ready(function () {
-            var userId = '@ViewData["MstUserId"]';
-            rightsAccessValidation(userId);
-
             items = new wijmo.collections.CollectionView(getArtcileForItems());
             items.canFilter = true;
             items.pageSize = 15;

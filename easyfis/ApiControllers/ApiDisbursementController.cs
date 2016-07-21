@@ -333,6 +333,7 @@ namespace easyfis.Controllers
                                 where d.BankId == Convert.ToInt32(bankId)
                                 && d.CVDate >= Convert.ToDateTime(dateStart)
                                 && d.CVDate <= Convert.ToDateTime(dateEnd)
+                                && d.Amount > 0
                                 select new Models.TrnDisbursement
                                 {
                                     Id = d.Id,
@@ -373,6 +374,7 @@ namespace easyfis.Controllers
                                           where d.BankId == Convert.ToInt32(bankId)
                                           && d.CVDate < Convert.ToDateTime(dateStart)
                                           && d.IsClear == false
+                                          && d.Amount > 0
                                           select new Models.TrnDisbursement
                                           {
                                               Id = d.Id,

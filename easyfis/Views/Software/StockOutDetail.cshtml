@@ -1739,9 +1739,6 @@
         // OnLoad Page
         // ===========
         $(document).ready(function () {
-            var userId = '@ViewData["MstUserId"]';
-            rightsAccessValidation(userId);
-
             var stockOutId = getParam("StockOutId");
             if(document.location.search.length == 0) {
                 $('#cmdStockOutJournal').hide();
