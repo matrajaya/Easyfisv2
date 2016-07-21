@@ -106,13 +106,14 @@
                         var totalAmount = 0;
 
                         for (i = 0; i < salesDetailReportResult.length; i++) {
-
+                            var docLink = "/Software/SalesDetail?SalesId=" + salesDetailReportResult[i]["SIId"];
                             // Array Push
                             salesDetailReport.push({
                                 
-
+                                SIId: salesDetailReportResult["SIId"],
                                 Id: salesDetailReportResult[i]["Id"],
                                 SI: salesDetailReportResult[i]["SI"],
+                                SIButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" +  salesDetailReportResult[i]["SI"],
                                 SIDate: salesDetailReportResult[i]["SIDate"],
                                 Item: salesDetailReportResult[i]["Item"],
                                 ItemInventory: salesDetailReportResult[i]["ItemInventory"],
@@ -214,7 +215,8 @@
                 columns: [
                             {
                                 "header": "SI Number ",
-                                "binding": "SI",
+                                "binding": "SIButton",
+                                "isContentHtml": true,
                                 "allowSorting": true,
                                 "width": "0.5*",
                             },

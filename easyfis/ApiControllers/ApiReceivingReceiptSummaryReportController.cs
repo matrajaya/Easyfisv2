@@ -19,13 +19,7 @@ namespace easyfis.ApiControllers
             return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
         }
 
-        public Decimal getAmount(Int32 id)
-        {
-            var purchaseOrderItems = from d in db.TrnPurchaseOrderItems where d.POId == id select d;
-            Decimal amount = purchaseOrderItems.Sum(d => d.Amount);
-
-            return amount;
-        }
+      
 
         // list account
         [Authorize]
@@ -41,6 +35,7 @@ namespace easyfis.ApiControllers
                                     && d.IsLocked == true
                                     select new Models.TrnReceivingReceipt
                                     {
+                                       
                                         Id = d.Id,
                                         Branch = d.MstBranch.Branch,
                                         RRDate = d.RRDate.ToShortDateString(),

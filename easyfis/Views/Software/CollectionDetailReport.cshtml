@@ -106,12 +106,13 @@
                         var totalAmount = 0;
 
                         for (i = 0; i < collectionDetailReportResult.length; i++) {
-
+                            var docLink = "/Software/CollectionDetail?CollectonId=" + collectionDetailReportResult[i]["ORId"];
                             // Array Push
                             collectionDetailReport.push({
-                               
+                                ORId: collectionDetailReportResult[i]["Id"],
                                 Id: collectionDetailReportResult[i]["Id"],
                                 OR: collectionDetailReportResult[i]["OR"],
+                                ORButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" +  collectionDetailReportResult[i]["OR"],
                                 ORDate: collectionDetailReportResult[i]["ORDate"],
                                 SI: collectionDetailReportResult[i]["SI"],
                                 Amount: collectionDetailReportResult[i]["Amount"],
@@ -209,7 +210,8 @@
                 columns: [
                             {
                                 "header": "OR Number  ",
-                                "binding": "OR",
+                                "binding": "ORButton",
+                                "isContentHtml": true,
                                 "allowSorting": true,
                                 "width": "0.5*",
                             },

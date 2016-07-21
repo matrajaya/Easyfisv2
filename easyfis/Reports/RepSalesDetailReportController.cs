@@ -72,6 +72,7 @@ namespace easyfis.Reports
                                     && d.TrnSalesInvoice.IsLocked == true
                                     select new Models.TrnSalesInvoiceItem
                                     {
+                                        SIId = d.SIId,
                                         Id = d.Id,
                                         SI = d.TrnSalesInvoice.SINumber,
                                         SIDate = d.TrnSalesInvoice.SIDate.ToShortDateString(),

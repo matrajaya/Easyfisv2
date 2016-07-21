@@ -40,6 +40,7 @@ namespace easyfis.ApiControllers
                                   && d.TrnCollection.IsLocked == true
                                   select new Models.TrnCollectionLine
                                   {
+                                      ORId = d.ORId,
                                       Id = d.Id,
                                       OR = d.TrnCollection.ORNumber,
                                       ORDate = d.TrnCollection.ORDate.ToShortDateString(),

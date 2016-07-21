@@ -106,12 +106,13 @@
                         var totalAmount = 0;
 
                         for (i = 0; i < purchaseDetailReportResults.length; i++) {
-
+                            var docLink = "/Software/PurchaseOrderDetail?PurchaseOrderId=" + purchaseDetailReportResults[i]["POId"];
                             // Array Push
                             purchaseDetailReport.push({
 
-
+                                POId:purchaseDetailReportResults[i]["POId"],
                                 PONumber: purchaseDetailReportResults[i]["PO"],
+                                PONumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + purchaseDetailReportResults[i]["PO"],
                                 PODate: purchaseDetailReportResults[i]["PODate"],
                                 Item: purchaseDetailReportResults[i]["Item"],
                                 Price: purchaseDetailReportResults[i]["Price"],
@@ -212,7 +213,8 @@
                 columns: [
                             {
                                 "header": "PO Number",
-                                "binding": "PONumber",
+                                "binding": "PONumberButton",
+                                "isContentHtml": true,
                                 "allowSorting": true,
                                 "width": "0.5*",
                             },

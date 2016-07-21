@@ -106,15 +106,16 @@
                         var totalAmount = 0;
 
                         for (i = 0; i < receivingReceiptSummaryReportResults.length; i++) {
-
+                            var docLink = "/Software/ReceivingReceiptDetail?ReceivingReceiptId=" + receivingReceiptSummaryReportResults[i]["Id"];
                             // Array Push
                             receivingReceiptSummaryReport.push({
+                                
 
-                          
-
+                                Id: receivingReceiptSummaryReportResults[i]["Id"],
                                 Branch: receivingReceiptSummaryReportResults[i]["Branch"],
                                 RRDate: receivingReceiptSummaryReportResults[i]["RRDate"],
                                 RRNumber: receivingReceiptSummaryReportResults[i]["RRNumber"],
+                                RRNumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + receivingReceiptSummaryReportResults[i]["RRNumber"],
                                 DocumentReference: receivingReceiptSummaryReportResults[i]["DocumentReference"],
                                 Supplier: receivingReceiptSummaryReportResults[i]["Supplier"],
                                 Remarks: receivingReceiptSummaryReportResults[i]["Remarks"],
@@ -222,7 +223,8 @@
                             },
                             {
                                 "header": "RR Number ",
-                                "binding": "RRNumber",
+                                "binding": "RRNumberButton",
+                                "isContentHtml": true,
                                 "allowSorting": true,
                                 "width": "0.5*"
                             },

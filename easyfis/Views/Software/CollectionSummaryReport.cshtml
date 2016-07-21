@@ -106,7 +106,7 @@
                         var totalAmount = 0;
 
                         for (i = 0; i < collectionSummaryReportResult.length; i++) {
-
+                            var docLink = "/Software/CollectionDetail?CollectonId=" + collectionSummaryReportResult[i]["Id"];
                             // Array Push
                             collectionSummaryReport.push({
                               
@@ -114,6 +114,7 @@
                                 Id: collectionSummaryReportResult[i]["Id"],
                                 Branch: collectionSummaryReportResult[i]["Branch"],
                                 ORNumber: collectionSummaryReportResult[i]["ORNumber"],
+                                ORNumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + collectionSummaryReportResult[i]["ORNumber"],
                                 ORDate: collectionSummaryReportResult[i]["ORDate"],
                                 Customer: collectionSummaryReportResult[i]["Customer"],
                                 Amount: collectionSummaryReportResult[i]["Amount"],
@@ -224,7 +225,8 @@
                             },
                             {
                                 "header": "OR Number ",
-                                "binding": "ORNumber",
+                                "binding": "ORNumberButton",
+                                "isContentHtml": true,
                                 "allowSorting": true,
                                 "width": "0.5*"
                             },

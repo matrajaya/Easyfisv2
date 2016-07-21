@@ -106,7 +106,7 @@
                         var totalAmount = 0;
 
                         for (i = 0; i < disbursementSummaryReportResults.length; i++) {
-
+                            var docLink = "/Software/DisbursementDetail?DisbursementId=" + disbursementSummaryReportResults[i]["Id"];
                             // Array Push
                             disbursementSummaryReport.push({
 
@@ -115,6 +115,7 @@
                                 Id: disbursementSummaryReportResults[i]["Id"],
                                 Branch: disbursementSummaryReportResults[i]["Branch"],
                                 CVNumber: disbursementSummaryReportResults[i]["CVNumber"],
+                                CVNumberButton: "<a href='" + docLink + "' class='btn btn-default btn-xs btn-block' style='text-align: left'>" + disbursementSummaryReportResults[i]["CVNumber"],
                                 CVDate: disbursementSummaryReportResults[i]["CVDate"],
                                 Supplier: disbursementSummaryReportResults[i]["Supplier"],
                                 CheckNumber: disbursementSummaryReportResults[i]["CheckNumber"],
@@ -223,7 +224,8 @@
                             },
                             {
                                 "header": "CV Number ",
-                                "binding": "CVNumber",
+                                "binding": "CVNumberButton",
+                                "isContentHtml": true,
                                 "allowSorting": true,
                                 "width": "0.4*"
                             },

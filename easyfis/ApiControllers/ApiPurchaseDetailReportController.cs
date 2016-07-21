@@ -37,7 +37,9 @@ namespace easyfis.ApiControllers
                                      && d.TrnPurchaseOrder.PODate <= Convert.ToDateTime(endDate)
                                      && d.TrnPurchaseOrder.IsLocked == true
                                      select new Models.TrnPurchaseOrderItem
-                                     {
+                                     
+                                       {
+                                         POId = d.POId,
                                          Id = d.Id,
                                          PODate = d.TrnPurchaseOrder.PODate.ToShortDateString(),
                                          PO = d.TrnPurchaseOrder.PONumber,
@@ -48,7 +50,7 @@ namespace easyfis.ApiControllers
                                          Amount = d.Amount
                                      };
 
-            Decimal total = 0;
+
 
             return PurchaseOrderItems.ToList();
         }
