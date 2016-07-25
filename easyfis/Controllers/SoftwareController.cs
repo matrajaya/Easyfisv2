@@ -53,6 +53,42 @@ namespace easyfis.Controllers
 
             return emptyPageName;
         }
+        
+        public String accessToDetail(String page)
+        {
+            var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+            var userForms = from d in db.MstUserForms
+                            where d.UserId == userId
+                            select new Models.MstUserForm
+                            {
+                                Id = d.Id,
+                                UserId = d.UserId,
+                                User = d.MstUser.FullName,
+                                FormId = d.FormId,
+                                Form = d.SysForm.FormName,
+                                Particulars = d.SysForm.Particulars,
+                                CanAdd = d.CanAdd,
+                                CanEdit = d.CanEdit,
+                                CanDelete = d.CanDelete,
+                                CanLock = d.CanLock,
+                                CanUnlock = d.CanUnlock,
+                                CanPrint = d.CanPrint
+                            };
+
+            String pageName = page;
+            String emptyPageName = "";
+
+            foreach (var userForm in userForms)
+            {
+                if (pageName.Equals(userForm.Form))
+                {
+                    emptyPageName = userForm.Form;
+                    break;
+                }
+            }
+
+            return emptyPageName;
+        }
 
         [Authorize]
         public ActionResult Forbidden()
@@ -78,6 +114,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("Supplier").Equals("Supplier"))
             {
+                if (accessToDetail("SupplierDetail").Equals("SupplierDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+               
                 return View();
             }
             else
@@ -299,6 +344,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("Customer").Equals("Customer"))
             {
+                if (accessToDetail("CustomerDetail").Equals("CustomerDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else
@@ -468,6 +522,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("Items").Equals("Items"))
             {
+                if (accessToDetail("ItemDetail").Equals("ItemDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else

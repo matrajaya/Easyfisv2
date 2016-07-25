@@ -32,89 +32,94 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6" align="right">
-                                <button class="btn btn-primary btn-sm" id="supplier_SaveButton" onclick="supplierSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="supplier_LockButton" onclick="supplierLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary btn-sm" id="supplier_UnlockButton" onclick="supplierUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-danger btn-sm" id="supplier_CloseButton" onclick="supplierCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        <div class="well">
-                            <form class="form-horizontal" role="form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Code</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-30 input-sm requiredSupplier" id="artcileSupplier_code" placeholder="Code" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Supplier</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_Supplier" placeholder="Supplier" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Supplier Group</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-70" id="artcileSupplier_SupplierGroup"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Account</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-30" id="artcileSupplier_AccountCode"></div>
-                                                <div class="input-68" id="artcileSupplier_Account"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Term</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-70" id="artcileSupplier_Term"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Address</label>
-                                            <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Address" placeholder="Address"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Contact Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm input-50 requiredSupplier" id="artcileSupplier_ContactNo" placeholder="Contact No." />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Contact Person</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_ContactPerson" placeholder="Contact Person" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">TIN</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm input-50 requiredSupplier" id="artcileSupplier_TIN" placeholder="TIN Number" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Particulars</label>
-                                            <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Particulars" placeholder="Particulars"></textarea>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6" align="right">
+                                        @*<button class="btn btn-primary btn-sm" id="supplier_SaveButton" onclick="supplierSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                                        <button class="btn btn-primary btn-sm" id="supplier_LockButton" onclick="supplierLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                        <button class="btn btn-primary btn-sm" id="supplier_UnlockButton" onclick="supplierUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                        <button class="btn btn-danger btn-sm" id="supplier_CloseButton" onclick="supplierCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="panel-body">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Code</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-30 input-sm requiredSupplier" id="artcileSupplier_code" placeholder="Code" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Supplier</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_Supplier" placeholder="Supplier" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Supplier Group</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-70" id="artcileSupplier_SupplierGroup"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Account</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-30" id="artcileSupplier_AccountCode"></div>
+                                                        <div class="input-68" id="artcileSupplier_Account"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Term</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-70" id="artcileSupplier_Term"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Address</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Address" placeholder="Address"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Contact Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm input-50 requiredSupplier" id="artcileSupplier_ContactNo" placeholder="Contact No." />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Contact Person</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredSupplier" id="artcileSupplier_ContactPerson" placeholder="Contact Person" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">TIN</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm input-50 requiredSupplier" id="artcileSupplier_TIN" placeholder="TIN Number" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Particulars</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Particulars" placeholder="Particulars"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
+                       
                         <br />
                         <!-- Supplier line -->
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
@@ -134,15 +139,20 @@
 
                             <!-- More Contact Information List -->
                             <div id="ContactInformation" class="tab-pane fade in">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="btnAddMoreContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary btn-sm" id="btnAddMoreContactInformation" onclick="cmdAddContact_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div id="ContactInformationGrid" class="grid"></div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div id="ContactInformationGrid" class="grid"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -276,7 +286,7 @@
                                 document.getElementById('artcileSupplier_TIN').disabled = true;
                                 document.getElementById('artcileSupplier_ContactNo').disabled = true;
                                 document.getElementById('artcileSupplier_ContactPerson').disabled = true;
-                                $('#supplier_SaveButton').prop('disabled', true);
+                                //$('#supplier_SaveButton').prop('disabled', true);
                                 $('#supplier_LockButton').prop('disabled', true);
                                 //$('#supplier_UnlockButton').prop('disabled', false);
                                 $('#btnAddMoreContactInformation').prop('disabled', true);
@@ -297,7 +307,7 @@
                                 document.getElementById('artcileSupplier_TIN').disabled = false;
                                 document.getElementById('artcileSupplier_ContactNo').disabled = false;
                                 document.getElementById('artcileSupplier_ContactPerson').disabled = false;
-                                $('#supplier_SaveButton').prop('disabled', false);
+                                //$('#supplier_SaveButton').prop('disabled', false);
                                 //$('#supplier_LockButton').prop('disabled', false);
                                 $('#supplier_UnlockButton').prop('disabled', true);
                                 $('#btnAddMoreContactInformation').prop('disabled', false);
@@ -608,38 +618,38 @@
         // ====================
         // Save Supllier Button
         // ====================
-        function supplierSaveButton_OnClick() {
-            dropdownValidation();
-            if (supplierEntryValidation() == false) {
-                toastr.error("Invalid Entry");
-            } else {
-                document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                $('#supplier_SaveButton').prop('disabled', true);
-                $('#supplier_LockButton').prop('disabled', true);
-                $('#supplier_UnlockButton').prop('disabled', true);
-                $('#supplier_CloseButton').prop('disabled', true);
+        //function supplierSaveButton_OnClick() {
+        //    dropdownValidation();
+        //    if (supplierEntryValidation() == false) {
+        //        toastr.error("Invalid Entry");
+        //    } else {
+        //        document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+        //        $('#supplier_SaveButton').prop('disabled', true);
+        //        $('#supplier_LockButton').prop('disabled', true);
+        //        $('#supplier_UnlockButton').prop('disabled', true);
+        //        $('#supplier_CloseButton').prop('disabled', true);
 
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addArticle/3',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: dataSupplierObject(),
-                    success: function (id) {
-                        if (id > 0) {
-                            window.location = '/Software/SupplierDetail?SupplierId=' + id;
-                            document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                            $('#supplier_SaveButton').prop('disabled', true);
-                            $('#supplier_LockButton').prop('disabled', true);
-                            $('#supplier_UnlockButton').prop('disabled', true);
-                            $('#supplier_CloseButton').prop('disabled', true);
-                        } else {
-                            window.history.back();
-                        }
-                    }
-                });
-            }
-        }
+        //        $.ajax({
+        //            type: "POST",
+        //            url: '/api/addArticle/3',
+        //            contentType: "application/json; charset=utf-8",
+        //            dataType: "json",
+        //            data: dataSupplierObject(),
+        //            success: function (id) {
+        //                if (id > 0) {
+        //                    window.location = '/Software/SupplierDetail?SupplierId=' + id;
+        //                    document.getElementById('supplier_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+        //                    $('#supplier_SaveButton').prop('disabled', true);
+        //                    $('#supplier_LockButton').prop('disabled', true);
+        //                    $('#supplier_UnlockButton').prop('disabled', true);
+        //                    $('#supplier_CloseButton').prop('disabled', true);
+        //                } else {
+        //                    window.history.back();
+        //                }
+        //            }
+        //        });
+        //    }
+        //}
 
         // ====================
         // Lock Supplier Button
@@ -650,7 +660,7 @@
                 toastr.error("Invalid Entry");
             } else {
                 document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                $('#supplier_SaveButton').prop('disabled', true);
+                //$('#supplier_SaveButton').prop('disabled', true);
                 $('#supplier_LockButton').prop('disabled', true);
                 $('#supplier_UnlockButton').prop('disabled', true);
                 $('#supplier_CloseButton').prop('disabled', true);
@@ -664,7 +674,7 @@
                     statusCode: {
                         200: function () {
                             document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                            $('#supplier_SaveButton').prop('disabled', true);
+                            //$('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', true);
                             $('#supplier_UnlockButton').prop('disabled', true);
                             $('#supplier_CloseButton').prop('disabled', true);
@@ -675,7 +685,7 @@
                         },
                         404: function () {
                             document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#supplier_SaveButton').prop('disabled', true);
+                            //$('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', false);
                             $('#supplier_UnlockButton').prop('disabled', true);
                             $('#supplier_CloseButton').prop('disabled', false);
@@ -683,7 +693,7 @@
                         },
                         400: function () {
                             document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#supplier_SaveButton').prop('disabled', true);
+                            //$('#supplier_SaveButton').prop('disabled', true);
                             $('#supplier_LockButton').prop('disabled', false);
                             $('#supplier_UnlockButton').prop('disabled', true);
                             $('#supplier_CloseButton').prop('disabled', false);
@@ -699,7 +709,7 @@
         // ======================
         function supplierUnlockButton_OnClick() {
             document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-            $('#supplier_SaveButton').prop('disabled', true);
+            //$('#supplier_SaveButton').prop('disabled', true);
             $('#supplier_LockButton').prop('disabled', true);
             $('#supplier_UnlockButton').prop('disabled', true);
             $('#supplier_CloseButton').prop('disabled', true);
@@ -713,7 +723,7 @@
                 statusCode: {
                     200: function () {
                         document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-                        $('#supplier_SaveButton').prop('disabled', true);
+                        //$('#supplier_SaveButton').prop('disabled', true);
                         $('#supplier_LockButton').prop('disabled', true);
                         $('#supplier_UnlockButton').prop('disabled', true);
                         $('#supplier_CloseButton').prop('disabled', true);
@@ -724,7 +734,7 @@
                     },
                     404: function () {
                         document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#supplier_SaveButton').prop('disabled', true);
+                        //$('#supplier_SaveButton').prop('disabled', true);
                         $('#supplier_LockButton').prop('disabled', true);
                         $('#supplier_UnlockButton').prop('disabled', false);
                         $('#supplier_CloseButton').prop('disabled', false);
@@ -732,7 +742,7 @@
                     },
                     400: function () {
                         document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#supplier_SaveButton').prop('disabled', true);
+                        //$('#supplier_SaveButton').prop('disabled', true);
                         $('#supplier_LockButton').prop('disabled', true);
                         $('#supplier_UnlockButton').prop('disabled', false);
                         $('#supplier_CloseButton').prop('disabled', false);
@@ -785,7 +795,7 @@
                     }
                 });
 
-                $('#supplier_SaveButton').prop('disabled', false);
+                //$('#supplier_SaveButton').prop('disabled', false);
                 $('#supplier_LockButton').prop('disabled', true);
                 $('#supplier_UnlockButton').prop('disabled', true);
                 $('#supplier_CloseButton').prop('disabled', false);
@@ -806,31 +816,18 @@
             getArticleSupplierById();
 
             if (document.location.search.length == 0) {
-                $('#supplier_SaveButton').show();
+                //$('#supplier_SaveButton').show();
                 $('#supplier_LockButton').hide();
                 $('#supplier_UnlockButton').hide();
                 $('#btnAddMoreContactInformation').prop('disabled', true);
 
 
             } else {
-                $('#supplier_SaveButton').hide();
+                //$('#supplier_SaveButton').hide();
                 $('#supplier_LockButton').show();
                 $('#supplier_UnlockButton').show();
             }
-
-
-
-            $(document).ajaxStop(function () {
-                if (document.location.search.length == 0) {
-                    supplierSaveButton_OnClick();
-                    window.supplierSaveButton_OnClick = function () {
-                        return true;
-                    }
-                }
-            });
         });
-
-
 </script>
 
     <!-- ====================== -->
@@ -978,14 +975,37 @@
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
                                 success: function (supplierResults) {
+
+                                    var canEdit = "@ViewData["CanEdit"]";
+                                    var editDisabled = "disabled";
+
+                                    if (canEdit == "True") {
+                                        editDisabled = "";
+                                    } else if (canEdit == "False") {
+                                        editDisabled = "disabled";
+                                    } else {
+                                        editDisabled = "disabled";
+                                    }
+
+                                    var canDelete = "@ViewData["CanDelete"]";
+                                    var deleteDisabled = "disabled";
+
+                                    if (canDelete == "True") {
+                                        deleteDisabled = "";
+                                    } else if (canDelete == "False") {
+                                        deleteDisabled = "disabled";
+                                    } else {
+                                        deleteDisabled = "disabled";
+                                    }
+
                                     var btnEditId;
                                     var btnDeleteId;
                                     if (supplierResults.IsLocked == true) {
                                         btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                         btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                                     } else {
-                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
-                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditContact_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteContact_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                                     }
 
                                     for (i = 0; i < contactInformationResults.length; i++) {
@@ -1285,7 +1305,7 @@
             });
             contactInformationGrid.trackChanges = true;
         }
-    </script>
+</script>
 
     <!-- ================================ -->
     <!-- Tab Current Page on Load Scripts -->

@@ -32,112 +32,117 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6" align="right">
-                                <button class="btn btn-primary btn-sm" id="item_SaveButton" onclick="itemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="item_LockButton" onclick="itemLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary btn-sm" id="item_UnlockButton" onclick="itemUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-danger btn-sm" id="item_CloseButton" onclick="itemCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        <div class="well">
-                            <form class="form-horizontal" role="form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Code</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-30 input-sm requiredItem" id="articleItem_code" placeholder="Code" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Manual Code</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredItem" id="articleItem_manualCode" placeholder="Manual Code" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Item</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredItem" id="articleItem_item" placeholder="Item" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Item Group</label>
-                                            <div class="col-sm-8">
-                                                <div type="text" class="input-70" id="articleItem_itemGroup"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Category</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-70 input-sm requiredItem" id="articleItem_category" placeholder="Category" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Unit</label>
-                                            <div class="col-sm-8">
-                                                <div type="text" class="input-50" id="articleItem_unit"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Price</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-50 numberField input-sm requiredItem" id="articleItem_price" placeholder="0.00" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Particulars</label>
-                                            <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredItem" id="articleItem_particulars" placeholder="Particulars"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Input Tax:</label>
-                                            <div class="col-sm-8">
-                                                <div type="text" class="comboBox-wide" id="articleItem_inputTax"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Output Tax</label>
-                                            <div class="col-sm-8">
-                                                <div type="text" class="comboBox-wide" id="articleItem_outputTax"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Withholding Tax</label>
-                                            <div class="col-sm-8">
-                                                <div type="text" class="comboBox-wide" id="articleItem_withholdingTax"></div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Inventory</label>
-                                            <div class="col-sm-8">
-                                                <input type="checkbox" id="articleItem_Inventory" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Old Manual Code</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredItem" id="articleItem_oldManualCode" placeholder="Old Manual Code" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Manual Cost</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-50 numberField input-sm requiredItem" id="articleItem_manualCost" placeholder="0.00" />
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6" align="right">
+                                        <button class="btn btn-primary btn-sm" id="item_SaveButton" onclick="itemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                                        <button class="btn btn-primary btn-sm" id="item_LockButton" onclick="itemLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                        <button class="btn btn-primary btn-sm" id="item_UnlockButton" onclick="itemUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                        <button class="btn btn-danger btn-sm" id="item_CloseButton" onclick="itemCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="panel-body">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Code</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-30 input-sm requiredItem" id="articleItem_code" placeholder="Code" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Manual Code</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredItem" id="articleItem_manualCode" placeholder="Manual Code" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Item</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredItem" id="articleItem_item" placeholder="Item" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Item Group</label>
+                                                    <div class="col-sm-8">
+                                                        <div type="text" class="input-70" id="articleItem_itemGroup"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Category</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-70 input-sm requiredItem" id="articleItem_category" placeholder="Category" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Unit</label>
+                                                    <div class="col-sm-8">
+                                                        <div type="text" class="input-50" id="articleItem_unit"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Price</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-50 numberField input-sm requiredItem" id="articleItem_price" placeholder="0.00" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Particulars</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control textarea-custom requiredItem" id="articleItem_particulars" placeholder="Particulars"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Input Tax:</label>
+                                                    <div class="col-sm-8">
+                                                        <div type="text" class="comboBox-wide" id="articleItem_inputTax"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Output Tax</label>
+                                                    <div class="col-sm-8">
+                                                        <div type="text" class="comboBox-wide" id="articleItem_outputTax"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Withholding Tax</label>
+                                                    <div class="col-sm-8">
+                                                        <div type="text" class="comboBox-wide" id="articleItem_withholdingTax"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Inventory</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="checkbox" id="articleItem_Inventory" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Old Manual Code</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredItem" id="articleItem_oldManualCode" placeholder="Old Manual Code" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Manual Cost</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-50 numberField input-sm requiredItem" id="articleItem_manualCost" placeholder="0.00" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
+
                         <br />
                         <!-- Item Lines -->
                         <ul class="nav nav-tabs " role="tablist" id="myTab">
@@ -152,45 +157,60 @@
                         <div class="tab-content">
                             <!-- UnitConversion List -->
                             <div id="UnitConversion" class="tab-pane fade in active">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="btnAddUnitConversion" onclick="cmdAddUnitConversion_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary btn-sm" id="btnAddUnitConversion" onclick="cmdAddUnitConversion_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div id="UnitConversionGrid" class="grid"></div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div id="UnitConversionGrid" class="grid"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Component List -->
                             <div id="Component" class="tab-pane fade in">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="btnAddComponent" onclick="cmdAddComponent_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary btn-sm" id="btnAddComponent" onclick="cmdAddComponent_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div id="ComponentGrid" class="grid"></div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div id="ComponentGrid" class="grid"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Price List -->
                             <div id="Price" class="tab-pane fade in">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="btnAddPrice" onclick="cmdAddPrice_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary btn-sm" id="btnAddPrice" onclick="cmdAddPrice_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div id="PriceGrid" class="grid"></div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div id="PriceGrid" class="grid"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -207,82 +227,88 @@
 
                             <!-- GL Account  -->
                             <div id="GLAccount" class="tab-pane fade in">
-                                <br />
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Account</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-30" id="Item_AccountCode"></div>
-                                                        <div class="input-68" id="Item_Account"></div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Account</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="input-30" id="Item_AccountCode"></div>
+                                                                <div class="input-68" id="Item_Account"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Sales Account</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="input-30" id="Item_SalesAccountCode"></div>
+                                                                <div class="input-68" id="Item_SalesAccount"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Cost Account</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="input-30" id="Item_CostAccountCode"></div>
+                                                                <div class="input-68" id="Item_CostAccount"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Accum Dep Account</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="input-30" id="Item_AccumDepAccountCode"></div>
+                                                                <div class="input-68" id="Item_AccumDepAccount"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Expense Account</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="input-30" id="Item_ExpenseAccountCode"></div>
+                                                                <div class="input-68" id="Item_ExpenseAccount"></div>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    <div class="col-md-6"></div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Sales Account</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-30" id="Item_SalesAccountCode"></div>
-                                                        <div class="input-68" id="Item_SalesAccount"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Cost Account</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-30" id="Item_CostAccountCode"></div>
-                                                        <div class="input-68" id="Item_CostAccount"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Accum Dep Account</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-30" id="Item_AccumDepAccountCode"></div>
-                                                        <div class="input-68" id="Item_AccumDepAccount"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Expense Account</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="input-30" id="Item_ExpenseAccountCode"></div>
-                                                        <div class="input-68" id="Item_ExpenseAccount"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6"></div>
+                                            </form>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
 
                             <!-- Fixed Asset  -->
                             <div id="FixedAsset" class="tab-pane fade in">
-                                <br />
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Date Acquired</label>
-                                                    <div class="col-sm-8">
-                                                        <div class="comboBox-wide" id="Item_DateAcquired"></div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Date Acquired</label>
+                                                            <div class="col-sm-8">
+                                                                <div class="comboBox-wide" id="Item_DateAcquired"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Useful Life (Years)</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control input-50 numberField input-sm" id="Item_UsefulLife" placeholder="0.00" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-4">Salvage Value</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control input-50 numberField input-sm" id="Item_SalvageValue" placeholder="0.00" />
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    <div class="col-md-6"></div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Useful Life (Years)</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-50 numberField input-sm" id="Item_UsefulLife" placeholder="0.00" />
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-4">Salvage Value</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control input-50 numberField input-sm" id="Item_SalvageValue" placeholder="0.00" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6"></div>
+                                            </form>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -44,174 +44,183 @@
                         <div class="tab-content">
                             <!-- Account List -->
                             <div id="Account" class="tab-pane fade in active">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h4>Account</h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                    <input type="text" class="form-control input-sm" id="InputFilterAccount" placeholder="Search">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-8" align="right">
+                                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-danger btn-sm" onclick="cmdCloseAccount_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-8" align="right">
-                                        <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-danger btn-sm" onclick="cmdCloseAccount_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    <div class="panel-body">
+                                        <div class="row" align="left">
+                                            <div class="col-lg-12">
+                                                <div id="AccountGrid" class="grid" align="left"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="AccountGrid" class="grid" align="left"></div>
-                                    </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
-                                        <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
-                                            <span class="glyphicon glyphicon-fast-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
-                                            <span class="glyphicon glyphicon-step-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
-                                            <span class="glyphicon glyphicon-step-forward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
-                                            <span class="glyphicon glyphicon-fast-forward"></span>
-                                        </button>
+                                    <div class="panel-footer">
+                                        <div class="row">
+                                            <div class="btn-group col-md-7" id="naviagtionPageGridAccount">
+                                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccount">
+                                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccount">
+                                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccount"></button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccount">
+                                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccount">
+                                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="AccountType" class="tab-pane fade">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h4>Account Type</h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilterAccountType" placeholder="Search">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                    <input type="text" class="form-control input-sm" id="InputFilterAccountType" placeholder="Search">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-8" align="right">
+                                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountType_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-8" align="right">
-                                        <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountType_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    <div class="panel-body">
+                                        <div class="row" align="left">
+                                            <div class="col-lg-12">
+                                                <div id="AccountTypeGrid" class="grid" align="left"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="AccountTypeGrid" class="grid" align="left"></div>
-                                    </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="btn-group col-md-7" id="naviagtionPageGridAccountType">
-                                        <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountType">
-                                            <span class="glyphicon glyphicon-fast-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountType">
-                                            <span class="glyphicon glyphicon-step-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountType"></button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountType">
-                                            <span class="glyphicon glyphicon-step-forward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountType">
-                                            <span class="glyphicon glyphicon-fast-forward"></span>
-                                        </button>
+                                    <div class="panel-footer">
+                                        <div class="row">
+                                            <div class="btn-group col-md-7" id="naviagtionPageGridAccountType">
+                                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountType">
+                                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountType">
+                                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountType"></button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountType">
+                                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountType">
+                                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="AccountCashFlow" class="tab-pane fade">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h4>Account Cash Flow</h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilterAccountCashFlow" placeholder="Search">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                    <input type="text" class="form-control input-sm" id="InputFilterAccountCashFlow" placeholder="Search">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-8" align="right">
+                                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCashFlow_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-8" align="right">
-                                        <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCashFlow_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                    <div class="panel-body">
+                                        <div class="row" align="left">
+                                            <div class="col-lg-12">
+                                                <div id="AccountCashFlowGrid" class="grid" align="left"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="AccountCashFlowGrid" class="grid" align="left"></div>
-                                    </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="btn-group col-md-7" id="naviagtionPageGridAccountCashFlow">
-                                        <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountCashFlow">
-                                            <span class="glyphicon glyphicon-fast-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountCashFlow">
-                                            <span class="glyphicon glyphicon-step-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountCashFlow"></button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountCashFlow">
-                                            <span class="glyphicon glyphicon-step-forward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountCashFlow">
-                                            <span class="glyphicon glyphicon-fast-forward"></span>
-                                        </button>
+                                    <div class="panel-footer">
+                                        <div class="row">
+                                            <div class="btn-group col-md-7" id="naviagtionPageGridAccountCashFlow">
+                                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountCashFlow">
+                                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountCashFlow">
+                                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountCashFlow"></button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountCashFlow">
+                                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountCashFlow">
+                                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="AccountCategory" class="tab-pane fade">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                    <input type="text" class="form-control input-sm" id="InputFilterAccountCategory" placeholder="Search">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-8" align="right">
+                                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCategory_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row" align="left">
+                                            <div class="col-lg-12">
+                                                <div id="AccountCategoryGrid" class="grid" align="left"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <div class="row">
+                                            <div class="btn-group col-md-7" id="naviagtionPageGridAccountCategory">
+                                                <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountCategory">
+                                                    <span class="glyphicon glyphicon-fast-backward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountCategory">
+                                                    <span class="glyphicon glyphicon-step-backward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountCategory"></button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountCategory">
+                                                    <span class="glyphicon glyphicon-step-forward"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountCategory">
+                                                    <span class="glyphicon glyphicon-fast-forward"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <h4>Account Category</h4>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                            <input type="text" class="form-control input-sm" id="InputFilterAccountCategory" placeholder="Search">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8" align="right">
-                                        <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCategory_OnClick()"><i class=" fa fa-times"></i> Close</button>
-                                    </div>
-                                </div>
-                                <br />
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="AccountCategoryGrid" class="grid" align="left"></div>
-                                    </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="btn-group col-md-7" id="naviagtionPageGridAccountCategory">
-                                        <button type="button" class="btn btn-default" id="btnMoveToFirstPageGridAccountCategory">
-                                            <span class="glyphicon glyphicon-fast-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToPreviousPageGridAccountCategory">
-                                            <span class="glyphicon glyphicon-step-backward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" disabled style="width: 100px" id="btnCurrentPageGridAccountCategory"></button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToNextPageGridAccountCategory">
-                                            <span class="glyphicon glyphicon-step-forward"></span>
-                                        </button>
-                                        <button type="button" class="btn btn-default" id="btnMoveToLastPageGridAccountCategory">
-                                            <span class="glyphicon glyphicon-fast-forward"></span>
-                                        </button>
                                     </div>
                                 </div>
                             </div>

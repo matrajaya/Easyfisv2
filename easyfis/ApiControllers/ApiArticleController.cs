@@ -536,6 +536,19 @@ namespace easyfis.Controllers
             return articles.ToList();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // add article
         [Authorize]
         [HttpPost]
@@ -545,6 +558,16 @@ namespace easyfis.Controllers
             try
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
+
+                var lastArticleCode = from d in db.MstArticles.OrderByDescending(d => d.Id) where d.ArticleTypeId == Convert.ToInt32(articleTypeId) select d;
+                var articleCodeResult = "0000000001";
+
+                if (lastArticleCode.Any())
+                {
+                    var articleCode = Convert.ToInt32(lastArticleCode.FirstOrDefault().ArticleCode) + 0000000001;
+                    articleCodeResult = zeroFill(articleCode, 10);
+                }
+
 
                 Data.MstArticle newArticle = new Data.MstArticle();
                 if (Convert.ToInt32(articleTypeId) == 6)
@@ -660,17 +683,17 @@ namespace easyfis.Controllers
                 }
                 else if (Convert.ToInt32(articleTypeId) == 3)
                 {
-                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ArticleCode = articleCodeResult;
                     newArticle.ManualArticleCode = "NA";
-                    newArticle.Article = article.Article;
+                    newArticle.Article = "NA";
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
-                    newArticle.ArticleGroupId = article.ArticleGroupId;
-                    newArticle.AccountId = article.AccountId;
-                    newArticle.SalesAccountId = article.SalesAccountId;
-                    newArticle.CostAccountId = article.CostAccountId;
-                    newArticle.AssetAccountId = article.AssetAccountId;
-                    newArticle.ExpenseAccountId = article.ExpenseAccountId;
+                    newArticle.ArticleGroupId = (from d in db.MstArticleGroups where d.ArticleTypeId == 3 select d.Id).FirstOrDefault();
+                    newArticle.AccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 3 select d.AccountId).FirstOrDefault();
+                    newArticle.SalesAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 3 select d.SalesAccountId).FirstOrDefault();
+                    newArticle.CostAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 3 select d.CostAccountId).FirstOrDefault();
+                    newArticle.AssetAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 3 select d.AssetAccountId).FirstOrDefault();
+                    newArticle.ExpenseAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 3 select d.ExpenseAccountId).FirstOrDefault();
                     newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
                     newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
                     newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
@@ -678,17 +701,17 @@ namespace easyfis.Controllers
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
                     newArticle.IsInventory = false;
-                    newArticle.Particulars = article.Particulars;
-                    newArticle.Address = article.Address;
-                    newArticle.TermId = article.TermId;
-                    newArticle.ContactNumber = article.ContactNumber;
-                    newArticle.ContactPerson = article.ContactPerson;
-                    newArticle.TaxNumber = article.TaxNumber;
+                    newArticle.Particulars = "NA";
+                    newArticle.Address = "NA";
+                    newArticle.TermId = (from d in db.MstTerms select d.Id).FirstOrDefault();
+                    newArticle.ContactNumber = "NA";
+                    newArticle.ContactPerson = "NA";
+                    newArticle.TaxNumber = "NA";
                     newArticle.CreditLimit = 0;
                     newArticle.DateAcquired = DateTime.Now;
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
-                    newArticle.ManualArticleOldCode = " ";
+                    newArticle.ManualArticleOldCode = "NA";
                     newArticle.IsLocked = false;
                     newArticle.CreatedById = userId;
                     newArticle.CreatedDateTime = DateTime.Now;
@@ -697,17 +720,17 @@ namespace easyfis.Controllers
                 }
                 else if (Convert.ToInt32(articleTypeId) == 2)
                 {
-                    newArticle.ArticleCode = article.ArticleCode;
+                    newArticle.ArticleCode = articleCodeResult;
                     newArticle.ManualArticleCode = "NA";
-                    newArticle.Article = article.Article;
+                    newArticle.Article = "NA";
                     newArticle.Category = "NA";
                     newArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
-                    newArticle.ArticleGroupId = article.ArticleGroupId;
-                    newArticle.AccountId = article.AccountId;
-                    newArticle.SalesAccountId = article.SalesAccountId;
-                    newArticle.CostAccountId = article.CostAccountId;
-                    newArticle.AssetAccountId = article.AssetAccountId;
-                    newArticle.ExpenseAccountId = article.ExpenseAccountId;
+                    newArticle.ArticleGroupId = (from d in db.MstArticleGroups where d.ArticleTypeId == 2 select d.Id).FirstOrDefault();
+                    newArticle.AccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 2 select d.AccountId).FirstOrDefault();
+                    newArticle.SalesAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 2 select d.SalesAccountId).FirstOrDefault();
+                    newArticle.CostAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 2 select d.CostAccountId).FirstOrDefault();
+                    newArticle.AssetAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 2 select d.AssetAccountId).FirstOrDefault();
+                    newArticle.ExpenseAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 2 select d.ExpenseAccountId).FirstOrDefault();
                     newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
                     newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
                     newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
@@ -715,13 +738,13 @@ namespace easyfis.Controllers
                     newArticle.Price = 0;
                     newArticle.Cost = 0;
                     newArticle.IsInventory = false;
-                    newArticle.Particulars = article.Particulars;
-                    newArticle.Address = article.Address;
-                    newArticle.TermId = article.TermId;
-                    newArticle.ContactNumber = article.ContactNumber;
-                    newArticle.ContactPerson = article.ContactPerson;
-                    newArticle.TaxNumber = article.TaxNumber;
-                    newArticle.CreditLimit = article.CreditLimit;
+                    newArticle.Particulars = "NA";
+                    newArticle.Address = "NA";
+                    newArticle.TermId = (from d in db.MstTerms select d.Id).FirstOrDefault();
+                    newArticle.ContactNumber = "NA";
+                    newArticle.ContactPerson = "NA";
+                    newArticle.TaxNumber = "NA";
+                    newArticle.CreditLimit = 0;
                     newArticle.DateAcquired = DateTime.Now;
                     newArticle.UsefulLife = 0;
                     newArticle.SalvageValue = 0;
@@ -777,8 +800,9 @@ namespace easyfis.Controllers
 
                 return newArticle.Id;
             }
-            catch
+            catch(Exception e)
             {
+                Debug.WriteLine(e);
                 return 0;
             }
         }
