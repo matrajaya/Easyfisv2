@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- Title of the Page -->
+    <link rel="shortcut icon" href="~/Images/icon/easyfislogomini.ico">
+    <title>Stock Transfer Book</title>
+
+    <!-- CSS StyleSheets-->
+    @Styles.Render("~/Content/Software-css")
+</head>
+<body class="hold-transition skin-blue fixed sidebar-mini">
+    <div class="wrapper">
+        @Html.Partial("_SoftwareHeader")
+        @Html.Partial("_SoftwareSideBarMenu")
+
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Stock Transfer Book
+                    <small><i class="fa fa-building"></i> @ViewData["Company"] / @ViewData["Branch"]</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Software"> Dashboard</a></li>
+                    <li> <a href="/Software/FinancialStatements">Financial Statement </a></li>
+                    <li>Stock Transfer Book</li>
+                </ol>
+            </section>
+
+            <section class="content">
+                <div class="box box-default">
+                    <div class="box-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>
+                                    @ViewData["Company"]
+                                    <small>
+                                        <i class="fa fa-calendar fa-fw"></i> <span id="dateFrom"></span>
+                                    </small>
+                                </h4>
+                            </div>
+                            <div class="col-md-6" align="right">
+                                <button onclick="" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                <button onclick="stockTransferBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                <a href="/Software/FinancialStatements" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div id="stockTransferBookGrid" class="grid"></div>
+                        <br /><br /><br />
+                        <div align="right">
+                            <div class="row">
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4">
+                                    <table class="table table-responsive table-bordered">
+                                        <tr>
+                                            <td align="right">
+                                                <b>Total: </b>
+                                            </td>
+                                            <td style="padding-left: 10px" align="right">
+                                                <span id="total">NA</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        @Html.Partial("_SoftwareFooter")
+    </div>
+
+    @Scripts.Render("~/Scripts/Software-js")
+    <script type="text/javascript">
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+
+        function stockTransferBookPDF_OnClick() {
+            window.location.href = '/RepStockTransferBook/StockTransferBook?StartDate=' + getParam("StartDate") + '&EndDate=' + getParam("EndDate") + '&CompanyId=' + getParam("CompanyId");;
+        }
+
+        function getStockTransferBook() {
+            var stockTransferBook = new wijmo.collections.ObservableArray;
+            $.ajax({
+                url: '/api/StockTransferBook/list/' + getParam("StartDate") + '/' + getParam("EndDate") + '/' + getParam("CompanyId"),
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                success: function (stockTransferBookResults) {
+                    if (stockTransferBookResults.length > 0) {
+                        var totalAmount = 0;
+
+                        for (i = 0; i < stockTransferBookResults.length; i++) {
+                              // Array Push
+                            stockTransferBook.push({
+
+                                DocumentReference: stockTransferBookResults[i]["DocumentReference"],
+                                AccountCode: stockTransferBookResults[i]["AccountCode"],
+                                Account: stockTransferBookResults[i]["Account"],
+                                Article: stockTransferBookResults[i]["Article"],
+                                DebitAmount: stockTransferBookResults[i]["DebitAmount"],
+                                CreditAmount: stockTransferBookResults[i]["CreditAmount"],
+                                Balance: stockTransferBookResults[i]["Balance"],
+
+
+                            });
+
+                            totalAmount += stockTransferBookResults[i]["Amount"];
+                        }
+
+                        document.getElementById("total").innerHTML = totalAmount.toLocaleString();
+                    }
+                    NProgress.done();
+                }
+            });
+
+            return stockTransferBook;
+        }
+
+
+        $(document).ready(function () {
+            NProgress.start();
+            document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
+
+            var stockTransferBookCollections = new wijmo.collections.CollectionView(getStockTransferBook());
+
+            // Flex Grid
+            var stockTransferBookGrid = new wijmo.grid.FlexGrid('#stockTransferBookGrid');
+            stockTransferBookGrid.initialize({
+                columns: [
+                            {
+                                "header": "ST Number",
+                                "binding": "DocumentReference",
+                                "allowSorting": true,
+                                "width": "1*",
+                            },
+                            {
+                                "header": "Code",
+                                "binding": "AccountCode",
+                                "allowSorting": true,
+                                "width": "0.5*"
+                            },
+                            {
+                                "header": "Account",
+                                "binding": "Account",
+                                "allowSorting": true,
+                                "width": "1*"
+                            },
+                            {
+                                "header": "Article",
+                                "binding": "Article",
+                                "isContentHtml" : true,
+                                "allowSorting": true,
+                                "width": "1.5*"
+                            },
+                            {
+                                "header": "Debit",
+                                "binding": "DebitAmount",
+                                "allowSorting": true,
+                                "width": "0.5*"
+                            },
+                            {
+                                "header": "Credit",
+                                "binding": "CreditAmount",
+                                "allowSorting": true,
+                                "width": "0.5*"
+                            },
+                            {
+                                "header": "Balance",
+                                "binding": "Balance",
+                                "allowSorting": true,
+                                "width": "0.5*"
+                            },
+
+
+                ],
+                autoGenerateColumns: false,
+                itemsSource: stockTransferBookCollections,
+                isReadOnly: true,
+                autoSizeMode: wijmo.grid.AutoSizeMode.Both,
+                allowDragging: wijmo.grid.AllowDragging.None,
+                selectionMode: wijmo.grid.SelectionMode.Row
+            });
+
+            stockTransferBookGrid.trackChanges = true;
+        });
+    </script>
+</body>
+</html>

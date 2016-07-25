@@ -479,6 +479,111 @@ namespace easyfis.Controllers
         }
 
         [Authorize]
+        public ActionResult ReceivingReceiptBook()
+        {
+            if (pageAccess("ReceivingReceiptBook").Equals("ReceivingReceiptBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        [Authorize]
+        public ActionResult DisbursementBook()
+        {
+            if (pageAccess("DisbursementBook").Equals("DisbursementBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        [Authorize]
+        public ActionResult SalesBook()
+        {
+            if (pageAccess("SalesBook").Equals("SalesBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        [Authorize]
+        public ActionResult CollectionBook()
+        {
+            if (pageAccess("CollectionBook").Equals("CollectionBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        [Authorize]
+        public ActionResult StockInBook()
+        {
+            if (pageAccess("StockInBook").Equals("StockInBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        
+        }
+
+        [Authorize]
+        public ActionResult StockOutBook()
+        {
+            if (pageAccess("StockOutBook").Equals("StockOutBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        [Authorize]
+        public ActionResult StockTransferBook()
+        {
+            if (pageAccess("StockTransferBook").Equals("StockTransferBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        [Authorize]
+        public ActionResult JournalVoucherBook()
+        {
+            if (pageAccess("JournalVoucherBook").Equals("JournalVoucherBook"))
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Forbidden", "Software");
+            }
+        }
+
+        [Authorize]
         public ActionResult Collection()
         {
             if (pageAccess("Collection").Equals("Collection"))

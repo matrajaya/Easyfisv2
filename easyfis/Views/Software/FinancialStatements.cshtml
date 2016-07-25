@@ -250,6 +250,7 @@
                                     </div>
                                     <div id="RRB" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="FinancialStatementReceivingReceiptBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> View</button>
                                             <button onclick="FinancialStatementReceivingReceiptBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -287,6 +288,7 @@
                                     </div>
                                     <div id="DB" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="FinancialStatementDisbursementBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> View</button>
                                             <button onclick="FinancialStatementDisbursementBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -324,6 +326,7 @@
                                     </div>
                                     <div id="SB" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="FinancialStatementSalesBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> View</button>
                                             <button onclick="FinancialStatementSalesBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -361,6 +364,7 @@
                                     </div>
                                     <div id="CB" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="FinancialStatementCollectionBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> View</button>
                                             <button onclick="FinancialStatementCollectionBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -398,6 +402,7 @@
                                     </div>
                                     <div id="SIB" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="FinancialStatementStockInBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> View</button>
                                             <button onclick="FinancialStatementStockInBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -435,6 +440,7 @@
                                     </div>
                                     <div id="SOB" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="FinancialStatementStockOutBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> View</button>
                                             <button onclick="FinancialStatementStockOutBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -472,6 +478,7 @@
                                     </div>
                                     <div id="STB" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="FinancialStatementStockTransferBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> View</button>
                                             <button onclick="FinancialStatementStockTransferBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -509,6 +516,7 @@
                                     </div>
                                     <div id="JVB" class="tab-pane fade">
                                         <div align="right">
+                                            <button onclick="FinancialStatementJournalVoucherBookView_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> View</button>
                                             <button onclick="FinancialStatementJournalVoucherBookPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id=""><i class="fa fa-times"></i> Close</a>
                                         </div>
@@ -1021,12 +1029,13 @@
         function getFinancialReceivingReceiptBookStartDate() {
             FinancialReceivingReceiptBookStartDate.dispose();
             FinancialReceivingReceiptBookStartDate = new wijmo.input.InputDate('#FinancialReceivingReceiptBook_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-/yyyy',
                 value: new Date(document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialReceivingReceiptBookEndDate();
                     }, 50);
@@ -1038,29 +1047,31 @@
         function getFinancialReceivingReceiptBookEndDate() {
             FinancialReceivingReceiptBookEndDate.dispose();
             FinancialReceivingReceiptBookEndDate = new wijmo.input.InputDate('#FinancialReceivingReceiptBook_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialReceivingReceiptBookStartDate();
                     }, 50);
                 }
             });
         }
-
+       
         // get Financial Statement Disbursement Book Start Date
         function getFinancialStatementDisbursementBookStartDate() {
             FinancialStatementDisbursementBookStartDate.dispose();
             FinancialStatementDisbursementBookStartDate = new wijmo.input.InputDate('#FinancialStatementDisbursementBook_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementDisbursementBookEndDate();
                     }, 50);
@@ -1072,12 +1083,13 @@
         function getFinancialStatementDisbursementBookEndDate() {
             FinancialStatementDisbursementBookEndDate.dispose();
             FinancialStatementDisbursementBookEndDate = new wijmo.input.InputDate('#FinancialStatementDisbursementBook_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementDisbursementBookStartDate();
                     }, 50);
@@ -1089,12 +1101,13 @@
         function getFinancialStatementSalesBookStartDate() {
             FinancialStatementSalesBookStartDate.dispose();
             FinancialStatementSalesBookStartDate = new wijmo.input.InputDate('#FinancialStatementSalesBook_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementSalesBook_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementSalesBook_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementSalesBook_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementSalesBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementSalesBookEndDate();
                     }, 50);
@@ -1106,12 +1119,13 @@
         function getFinancialStatementSalesBookEndDate() {
             FinancialStatementSalesBookEndDate.dispose();
             FinancialStatementSalesBookEndDate = new wijmo.input.InputDate('#FinancialStatementSalesBook_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementSalesBook_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementSalesBook_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementSalesBook_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementSalesBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementSalesBookStartDate();
                     }, 50);
@@ -1123,12 +1137,13 @@
         function getFinancialStatementCollectionBookStartDate() {
             FinancialStatementCollectionBookStartDate.dispose();
             FinancialStatementCollectionBookStartDate = new wijmo.input.InputDate('#FinancialStatementCollectionBook_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementCollectionBook_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementCollectionBook_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementCollectionBook_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementCollectionBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementCollectionBookEndDate();
                     }, 50);
@@ -1140,12 +1155,13 @@
         function getFinancialStatementCollectionBookEndDate() {
             FinancialStatementCollectionBookEndDate.dispose();
             FinancialStatementCollectionBookEndDate = new wijmo.input.InputDate('#FinancialStatementCollectionBook_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementCollectionBook_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementCollectionBook_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementCollectionBook_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementCollectionBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementCollectionBookStartDate();
                     }, 50);
@@ -1157,12 +1173,13 @@
         function getFinancialStatementStockInBookStartDate() {
             FinancialStatementStockInBookStartDate.dispose();
             FinancialStatementStockInBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockInBook_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementStockInBook_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementStockInBook_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementStockInBook_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementStockInBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockInBookEndDate();
                     }, 50);
@@ -1174,12 +1191,13 @@
         function getFinancialStatementStockInBookEndDate() {
             FinancialStatementStockInBookEndDate.dispose();
             FinancialStatementStockInBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockInBook_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementStockInBook_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementStockInBook_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementStockInBook_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementStockInBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockInBookStartDate();
                     }, 50);
@@ -1191,12 +1209,13 @@
         function getFinancialStatementStockOutBookStartDate() {
             FinancialStatementStockOutBookStartDate.dispose();
             FinancialStatementStockOutBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockOutBook_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementStockOutBook_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementStockOutBook_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementStockOutBook_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementStockOutBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockOutBookEndDate();
                     }, 50);
@@ -1208,12 +1227,13 @@
         function getFinancialStatementStockOutBookEndDate() {
             FinancialStatementStockOutBookEndDate.dispose();
             FinancialStatementStockOutBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockOutBook_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementStockOutBook_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementStockOutBook_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementStockOutBook_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementStockOutBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockOutBookStartDate();
                     }, 50);
@@ -1225,12 +1245,13 @@
         function getFinancialStatementStockTransferBookStartDate() {
             FinancialStatementStockTransferBookStartDate.dispose();
             FinancialStatementStockTransferBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockTransferBook_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockTransferBookEndDate();
                     }, 50);
@@ -1242,12 +1263,13 @@
         function getFinancialStatementStockTransferBookEndDate() {
             FinancialStatementStockTransferBookEndDate.dispose();
             FinancialStatementStockTransferBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockTransferBook_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementStockTransferBookStartDate();
                     }, 50);
@@ -1259,12 +1281,13 @@
         function getFinancialStatementJournalVoucherBookStartDate() {
             FinancialStatementJournalVoucherBookStartDate.dispose();
             FinancialStatementJournalVoucherBookStartDate = new wijmo.input.InputDate('#FinancialStatementJournalVoucherBook_StartDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 max: new Date(document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementJournalVoucherBookEndDate();
                     }, 50);
@@ -1276,12 +1299,13 @@
         function getFinancialStatementJournalVoucherBookEndDate() {
             FinancialStatementJournalVoucherBookEndDate.dispose();
             FinancialStatementJournalVoucherBookEndDate = new wijmo.input.InputDate('#FinancialStatementJournalVoucherBook_EndDate', {
-                format: 'MM/dd/yyyy',
+                format: 'MM-dd-yyyy',
                 value: new Date(document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value),
-                mask: '99/99/9999',
+                mask: '99-99-9999',
                 min: new Date(document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value),
                 onValueChanged: function () {
-                    document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value = this.value.toLocaleDateString();
+                    var thisDateValue = [this.value.getMonth() + 1, this.value.getDate(), this.value.getFullYear()].join('-');
+                    document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value = thisDateValue;
                     setTimeout(function () {
                         getFinancialStatementJournalVoucherBookStartDate();
                     }, 50);
@@ -1412,7 +1436,8 @@
             }
         }
 
-        function FinancialStatementReceivingReceiptBookPDF_OnClick() {
+        //Financial Receiving Receipt Book View
+        function FinancialStatementReceivingReceiptBookView_OnClick() {
             var financialStatementReceivingReceiptBook_StartDate = document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value;
             var financialStatementReceivingReceiptBook_EndDate = document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value;
 
@@ -1424,11 +1449,28 @@
             } else {
                 companyId = document.getElementById('FinancialReceivingReceiptBook_Company_data').value;
                 document.getElementById('FinancialReceivingReceiptBook_Company').style.border = " ";
-                window.location.href = '/RepReceivingReceiptBook/ReceivingReceiptBook?StartDate=' + financialStatementReceivingReceiptBook_StartDate + '&EndDate=' + financialStatementReceivingReceiptBook_EndDate + '&CompanyId=' + companyId;
+                window.location.href = '/Software/ReceivingReceiptBook?StartDate=' + financialStatementReceivingReceiptBook_StartDate + '&EndDate=' + financialStatementReceivingReceiptBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
-        function FinancialStatementDisbursementBookPDF_OnClick() {
+        function FinancialStatementReceivingReceiptBookPDF_OnClick() {
+            var financialStatementReceivingReceiptBook_StartDate = document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value;
+            var financialStatementReceivingReceiptBook_EndDate = document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialReceivingReceiptBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialReceivingReceiptBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialReceivingReceiptBook_Company_data').value;
+                document.getElementById('FinancialReceivingReceiptBook_Company').style.border = " ";    
+                window.location.href = '/RepReceivingReceiptBook/ReceivingReceiptBook?StartDate=' + financialStatementReceivingReceiptBook_StartDate + '&EndDate=' + financialStatementReceivingReceiptBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+       
+        //Financial Disbursement Book View
+        function FinancialStatementDisbursementBookView_OnClick() {
             var financialStatementDisbursementBook_StartDate = document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value;
             var financialStatementDisbursementBook_EndDate = document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value;
 
@@ -1440,7 +1482,43 @@
             } else {
                 companyId = document.getElementById('FinancialStatementDisbursementBook_Company_data').value;
                 document.getElementById('FinancialStatementDisbursementBook_Company').style.border = " ";
+                window.location.href = '/Software/DisbursementBook?StartDate=' + financialStatementDisbursementBook_StartDate + '&EndDate=' + financialStatementDisbursementBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementDisbursementBookPDF_OnClick() {
+            var financialStatementDisbursementBook_StartDate = document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value;
+            var financialStatementDisbursementBook_EndDate = document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementDisbursementBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementDisbursementBook_Company').style.b
+                order = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementDisbursementBook_Company_data').value;
+                document.getElementById('FinancialStatementDisbursementBook_Company').style.border = " ";
                 window.location.href = '/RepDisbursementBook/DisbursementBook?StartDate=' + financialStatementDisbursementBook_StartDate + '&EndDate=' + financialStatementDisbursementBook_EndDate + '&CompanyId=' + companyId;
+            }
+            
+        }
+
+        // Financial Statement Sales Book View
+
+        function FinancialStatementSalesBookView_OnClick() {
+            var financialStatementSalesBook_StartDate = document.getElementById('FinancialStatementSalesBook_StartDate_data').value;
+            var financialStatementSalesBook_EndDate = document.getElementById('FinancialStatementSalesBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementSalesBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementSalesBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementSalesBook_Company_data').value;
+                document.getElementById('FinancialStatementSalesBook_Company').style.border = " ";
+                window.location.href = '/Software/SalesBook?StartDate=' + financialStatementSalesBook_StartDate + '&EndDate=' + financialStatementSalesBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -1460,6 +1538,25 @@
             }
         }
 
+
+        // Financial Statement Collection Book View
+
+        function FinancialStatementCollectionBookView_OnClick() {
+            var financialStatementCollectionBook_StartDate = document.getElementById('FinancialStatementCollectionBook_StartDate_data').value;
+            var financialStatementCollectionBook_EndDate = document.getElementById('FinancialStatementCollectionBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementCollectionBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementCollectionBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementCollectionBook_Company_data').value;
+                document.getElementById('FinancialStatementCollectionBook_Company').style.border = " ";
+                window.location.href = '/Software/CollectionBook?StartDate=' + financialStatementCollectionBook_StartDate + '&EndDate=' + financialStatementCollectionBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
         function FinancialStatementCollectionBookPDF_OnClick() {
             var financialStatementCollectionBook_StartDate = document.getElementById('FinancialStatementCollectionBook_StartDate_data').value;
             var financialStatementCollectionBook_EndDate = document.getElementById('FinancialStatementCollectionBook_EndDate_data').value;
@@ -1473,6 +1570,24 @@
                 companyId = document.getElementById('FinancialStatementCollectionBook_Company_data').value;
                 document.getElementById('FinancialStatementCollectionBook_Company').style.border = " ";
                 window.location.href = '/RepCollectionBook/CollectionBook?StartDate=' + financialStatementCollectionBook_StartDate + '&EndDate=' + financialStatementCollectionBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        // Financial Statement Stock In Book View
+
+        function FinancialStatementStockInBookView_OnClick() {
+            var financialStatementStockInBook_StartDate = document.getElementById('FinancialStatementStockInBook_StartDate_data').value;
+            var financialStatementStockInBook_EndDate = document.getElementById('FinancialStatementStockInBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementStockInBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementStockInBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementStockInBook_Company_data').value;
+                document.getElementById('FinancialStatementStockInBook_Company').style.border = " ";
+                window.location.href = '/Software/StockInBook?StartDate=' + financialStatementStockInBook_StartDate + '&EndDate=' + financialStatementStockInBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -1492,6 +1607,24 @@
             }
         }
 
+        //Financial Statement Stock Out View 
+
+        function FinancialStatementStockOutBookView_OnClick() {
+            var financialStatementStockOutBook_StartDate = document.getElementById('FinancialStatementStockOutBook_StartDate_data').value;
+            var financialStatementStockOutBook_EndDate = document.getElementById('FinancialStatementStockOutBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementStockOutBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementStockOutBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementStockOutBook_Company_data').value;
+                document.getElementById('FinancialStatementStockOutBook_Company').style.border = " ";
+                window.location.href = '/Software/StockOutBook?StartDate=' + financialStatementStockOutBook_StartDate + '&EndDate=' + financialStatementStockOutBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
         function FinancialStatementStockOutBookPDF_OnClick() {
             var financialStatementStockOutBook_StartDate = document.getElementById('FinancialStatementStockOutBook_StartDate_data').value;
             var financialStatementStockOutBook_EndDate = document.getElementById('FinancialStatementStockOutBook_EndDate_data').value;
@@ -1508,6 +1641,24 @@
             }
         }
 
+        //Financial Statement Stock Transfer View
+
+        function FinancialStatementStockTransferBookView_OnClick() {
+            var financialStatementStockTransferBook_StartDate = document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value;
+            var financialStatementStockTransferBook_EndDate = document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementStockTransferBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementStockTransferBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementStockTransferBook_Company_data').value;
+                document.getElementById('FinancialStatementStockTransferBook_Company').style.border = " ";
+                window.location.href = '/Software/StockTransferBook?StartDate=' + financialStatementStockTransferBook_StartDate + '&EndDate=' + financialStatementStockTransferBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
         function FinancialStatementStockTransferBookPDF_OnClick() {
             var financialStatementStockTransferBook_StartDate = document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value;
             var financialStatementStockTransferBook_EndDate = document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value;
@@ -1521,6 +1672,22 @@
                 companyId = document.getElementById('FinancialStatementStockTransferBook_Company_data').value;
                 document.getElementById('FinancialStatementStockTransferBook_Company').style.border = " ";
                 window.location.href = '/RepStockTransferBook/StockTransferBook?StartDate=' + financialStatementStockTransferBook_StartDate + '&EndDate=' + financialStatementStockTransferBook_EndDate + '&CompanyId=' + companyId;
+            }
+        }
+
+        function FinancialStatementJournalVoucherBookView_OnClick() {
+            var financialStatementJournalVoucherBook_StartDate = document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value;
+            var financialStatementJournalVoucherBook_EndDate = document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value;
+
+            var companyId;
+            if (document.getElementById('FinancialStatementJournalVoucherBook_Company_data').value == "") {
+                companyId = 0;
+                document.getElementById('FinancialStatementJournalVoucherBook_Company').style.border = "1px solid red";
+                toastr.error("Lacking Information");
+            } else {
+                companyId = document.getElementById('FinancialStatementJournalVoucherBook_Company_data').value;
+                document.getElementById('FinancialStatementJournalVoucherBook_Company').style.border = " ";
+                window.location.href = '/Software/JournalVoucherBook?StartDate=' + financialStatementJournalVoucherBook_StartDate + '&EndDate=' + financialStatementJournalVoucherBook_EndDate + '&CompanyId=' + companyId;
             }
         }
 
@@ -1604,8 +1771,8 @@
             getFinancialStatementAccountLedgerEndDate();
 
             // Financial Statement Receiving Receipt Book
-            document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('FinancialReceivingReceiptBook_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialReceivingReceiptBook_EndDate_data').value = defaultDate;
 
             FinancialReceivingReceiptBookStartDate = new wijmo.input.InputDate('#FinancialReceivingReceiptBook_StartDate');
             FinancialReceivingReceiptBookEndDate = new wijmo.input.InputDate('#FinancialReceivingReceiptBook_EndDate');
@@ -1614,8 +1781,8 @@
             getFinancialReceivingReceiptBookStartDate();
 
             // Financial Statement Disbursement Book
-            document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('FinancialStatementDisbursementBook_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialStatementDisbursementBook_EndDate_data').value = defaultDate;
 
             FinancialStatementDisbursementBookStartDate = new wijmo.input.InputDate('#FinancialStatementDisbursementBook_StartDate');
             FinancialStatementDisbursementBookEndDate = new wijmo.input.InputDate('#FinancialStatementDisbursementBook_EndDate');
@@ -1624,8 +1791,8 @@
             getFinancialStatementDisbursementBookStartDate();
 
             // Financial Statement Sales Book
-            document.getElementById('FinancialStatementSalesBook_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementSalesBook_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('FinancialStatementSalesBook_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialStatementSalesBook_EndDate_data').value = defaultDate;
 
             FinancialStatementSalesBookStartDate = new wijmo.input.InputDate('#FinancialStatementSalesBook_StartDate');
             FinancialStatementSalesBookEndDate = new wijmo.input.InputDate('#FinancialStatementSalesBook_EndDate');
@@ -1634,8 +1801,8 @@
             getFinancialStatementSalesBookEndDate();
 
             // Financial Statement Collection Book
-            document.getElementById('FinancialStatementCollectionBook_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementCollectionBook_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('FinancialStatementCollectionBook_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialStatementCollectionBook_EndDate_data').value = defaultDate;
 
             FinancialStatementCollectionBookStartDate = new wijmo.input.InputDate('#FinancialStatementCollectionBook_StartDate');
             FinancialStatementCollectionBookEndDate = new wijmo.input.InputDate('#FinancialStatementCollectionBook_EndDate');
@@ -1644,8 +1811,8 @@
             getFinancialStatementCollectionBookEndDate();
 
             // Financial Statement Stock In Book
-            document.getElementById('FinancialStatementStockInBook_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementStockInBook_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('FinancialStatementStockInBook_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialStatementStockInBook_EndDate_data').value = defaultDate;
 
             FinancialStatementStockInBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockInBook_StartDate');
             FinancialStatementStockInBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockInBook_EndDate');
@@ -1654,8 +1821,8 @@
             getFinancialStatementStockInBookEndDate();
 
             // Financial Statement Stock Out Book
-            document.getElementById('FinancialStatementStockOutBook_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementStockOutBook_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('FinancialStatementStockOutBook_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialStatementStockOutBook_EndDate_data').value = defaultDate;
 
             FinancialStatementStockOutBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockOutBook_StartDate');
             FinancialStatementStockOutBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockOutBook_EndDate');
@@ -1664,8 +1831,8 @@
             getFinancialStatementStockOutBookEndDate();
 
             // Financial Statement Stock Transfer Book
-            document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('FinancialStatementStockTransferBook_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialStatementStockTransferBook_EndDate_data').value = defaultDate;
 
             FinancialStatementStockTransferBookStartDate = new wijmo.input.InputDate('#FinancialStatementStockTransferBook_StartDate');
             FinancialStatementStockTransferBookEndDate = new wijmo.input.InputDate('#FinancialStatementStockTransferBook_EndDate');
@@ -1674,8 +1841,8 @@
             getFinancialStatementStockTransferBookEndDate();
 
             // Financial Statement Journal Voucher Book
-            document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value = new Date().toLocaleDateString();
-            document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value = new Date().toLocaleDateString();
+            document.getElementById('FinancialStatementJournalVoucherBook_StartDate_data').value = defaultDate;
+            document.getElementById('FinancialStatementJournalVoucherBook_EndDate_data').value = defaultDate;
 
             FinancialStatementJournalVoucherBookStartDate = new wijmo.input.InputDate('#FinancialStatementJournalVoucherBook_StartDate');
             FinancialStatementJournalVoucherBookEndDate = new wijmo.input.InputDate('#FinancialStatementJournalVoucherBook_EndDate');
