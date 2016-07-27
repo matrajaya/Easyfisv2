@@ -568,7 +568,6 @@ namespace easyfis.Controllers
                     articleCodeResult = zeroFill(articleCode, 10);
                 }
 
-
                 Data.MstArticle newArticle = new Data.MstArticle();
                 if (Convert.ToInt32(articleTypeId) == 6)
                 {
@@ -757,35 +756,35 @@ namespace easyfis.Controllers
                 }
                 else if (Convert.ToInt32(articleTypeId) == 1)
                 {
-                    newArticle.ArticleCode = article.ArticleCode;
-                    newArticle.ManualArticleCode = article.ManualArticleCode;
-                    newArticle.Article = article.Article;
-                    newArticle.Category = article.Category;
+                    newArticle.ArticleCode = articleCodeResult;
+                    newArticle.ManualArticleCode = "NA";
+                    newArticle.Article = "NA";
+                    newArticle.Category = "NA";
                     newArticle.ArticleTypeId = Convert.ToInt32(articleTypeId);
-                    newArticle.ArticleGroupId = article.ArticleGroupId;
-                    newArticle.AccountId = article.AccountId;
-                    newArticle.SalesAccountId = article.SalesAccountId;
-                    newArticle.CostAccountId = article.CostAccountId;
-                    newArticle.AssetAccountId = article.AssetAccountId;
-                    newArticle.ExpenseAccountId = article.ExpenseAccountId;
-                    newArticle.UnitId = article.UnitId;
-                    newArticle.OutputTaxId = article.OutputTaxId;
-                    newArticle.InputTaxId = article.InputTaxId;
-                    newArticle.WTaxTypeId = article.WTaxTypeId;
-                    newArticle.Price = article.Price;
-                    newArticle.Cost = article.Cost;
-                    newArticle.IsInventory = article.IsInventory;
-                    newArticle.Particulars = article.Particulars;
-                    newArticle.TermId = db.MstTerms.FirstOrDefault().Id;
+                    newArticle.ArticleGroupId = (from d in db.MstArticleGroups where d.ArticleTypeId == 1 select d.Id).FirstOrDefault();
+                    newArticle.AccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 1 select d.AccountId).FirstOrDefault();
+                    newArticle.SalesAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 1 select d.SalesAccountId).FirstOrDefault();
+                    newArticle.CostAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 1 select d.CostAccountId).FirstOrDefault();
+                    newArticle.AssetAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 1 select d.AssetAccountId).FirstOrDefault();
+                    newArticle.ExpenseAccountId = (from d in db.MstArticleGroups where d.ArticleTypeId == 1 select d.ExpenseAccountId).FirstOrDefault();
+                    newArticle.UnitId = db.MstUnits.FirstOrDefault().Id;
+                    newArticle.OutputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.InputTaxId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.WTaxTypeId = db.MstTaxTypes.FirstOrDefault().Id;
+                    newArticle.Price = 0;
+                    newArticle.Cost = 0;
+                    newArticle.IsInventory = false;
+                    newArticle.Particulars = "NA";
+                    newArticle.TermId = (from d in db.MstTerms select d.Id).FirstOrDefault();
                     newArticle.Address = "NA";
                     newArticle.ContactNumber = "NA";
                     newArticle.ContactPerson = "NA";
                     newArticle.TaxNumber = "NA";
                     newArticle.CreditLimit = 0;
-                    newArticle.DateAcquired = Convert.ToDateTime(article.DateAcquired);
-                    newArticle.UsefulLife = article.UsefulLife;
-                    newArticle.SalvageValue = article.SalvageValue;
-                    newArticle.ManualArticleOldCode = article.ManualArticleOldCode;
+                    newArticle.DateAcquired = DateTime.Now;
+                    newArticle.UsefulLife = 0;
+                    newArticle.SalvageValue = 0;
+                    newArticle.ManualArticleOldCode = "NA";
                     newArticle.IsLocked = false;
                     newArticle.CreatedById = userId;
                     newArticle.CreatedDateTime = DateTime.Now;

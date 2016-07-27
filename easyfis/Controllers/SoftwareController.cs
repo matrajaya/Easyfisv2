@@ -149,6 +149,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("PurchaseOrder").Equals("PurchaseOrder"))
             {
+                if (accessToDetail("PurchaseOrderDetail").Equals("PurchaseOrderDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else
@@ -175,6 +184,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("ReceivingReceipt").Equals("ReceivingReceipt"))
             {
+                if (accessToDetail("ReceivingReceiptDetail").Equals("ReceivingReceiptDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else
@@ -305,6 +323,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("Disbursement").Equals("Disbursement"))
             {
+                if (accessToDetail("DisbursementDetail").Equals("DisbursementDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+               
                 return View();
             }
             else

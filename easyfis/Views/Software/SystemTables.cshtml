@@ -46,353 +46,361 @@
                     </div>
                     <div class="box-body">
                         <div id="Discount" class="tab-pane fade in active">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h4>Discount</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilterDiscount" placeholder="Search">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                <input type="text" class="form-control input-sm" id="InputFilterDiscount" placeholder="Search">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8" align="right">
+                                            <button class="btn btn-primary btn-sm" onclick="btnDiscountAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
-                                    <button class="btn btn-primary btn-sm" onclick="btnDiscountAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                <div class="panel-body">
+                                    <div class="row" align="left">
+                                        <div class="col-lg-12">
+                                            <div id="DiscountGrid" class="grid" align="left"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="DiscountGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="navigationPageGridDiscount">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridDiscount">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridDiscount">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridDiscount"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridDiscount">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridDiscount">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="btn-group col-md-7" id="navigationPageGridDiscount">
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridDiscount">
+                                                <span class="glyphicon glyphicon-fast-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridDiscount">
+                                                <span class="glyphicon glyphicon-step-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridDiscount"></button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridDiscount">
+                                                <span class="glyphicon glyphicon-step-forward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridDiscount">
+                                                <span class="glyphicon glyphicon-fast-forward"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Pay Type -->
                         <div id="PayType" class="tab-pane fade">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h4>Pay Type</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilterPayType" placeholder="Search">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                <input type="text" class="form-control input-sm" id="InputFilterPayType" placeholder="Search">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8" align="right">
+                                            <button class="btn btn-primary btn-sm" onclick="btnPayTypeAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
-                                    <button class="btn btn-primary btn-sm" onclick="btnPayTypeAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                <div class="panel-body">
+                                    <div class="row" align="left">
+                                        <div class="col-lg-12">
+                                            <div id="PayTypeGrid" class="grid" align="left"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="PayTypeGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="navigationPageGridPayType">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridPayType">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridPayType">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridPayType"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridPayType">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridPayType">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="btn-group col-md-7" id="navigationPageGridPayType">
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridPayType">
+                                                <span class="glyphicon glyphicon-fast-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridPayType">
+                                                <span class="glyphicon glyphicon-step-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridPayType"></button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridPayType">
+                                                <span class="glyphicon glyphicon-step-forward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridPayType">
+                                                <span class="glyphicon glyphicon-fast-forward"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Tax -->
                         <div id="Tax" class="tab-pane fade">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h4>Tax</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilterTax" placeholder="Search">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                <input type="text" class="form-control input-sm" id="InputFilterTax" placeholder="Search">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8" align="right">
+                                            <button class="btn btn-primary btn-sm" onclick="btnTaxAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
-                                    <button class="btn btn-primary btn-sm" onclick="btnTaxAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                <div class="panel-body">
+                                    <div class="row" align="left">
+                                        <div class="col-lg-12">
+                                            <div id="TaxGrid" class="grid" align="left"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="TaxGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="navigationPageGridTax">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridTax">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridTax">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridTax"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridTax">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridTax">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="btn-group col-md-7" id="navigationPageGridTax">
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridTax">
+                                                <span class="glyphicon glyphicon-fast-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridTax">
+                                                <span class="glyphicon glyphicon-step-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridTax"></button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridTax">
+                                                <span class="glyphicon glyphicon-step-forward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridTax">
+                                                <span class="glyphicon glyphicon-fast-forward"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Unit -->
                         <div id="Unit" class="tab-pane fade">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h4>Unit</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilterUnit" placeholder="Search">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                <input type="text" class="form-control input-sm" id="InputFilterUnit" placeholder="Search">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8" align="right">
+                                            <buton class="btn btn-primary btn-sm" onclick="btnUnitAdd_OnClick()"><i class="fa fa-plus"></i> Add</buton>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
-                                    <buton class="btn btn-primary btn-sm" onclick="btnUnitAdd_OnClick()"><i class="fa fa-plus"></i> Add</buton>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                <div class="panel-body">
+                                    <div class="row" align="left">
+                                        <div class="col-lg-12">
+                                            <div id="UnitGrid" class="grid" align="left"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="UnitGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="navigationPageGridUnit">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridUnit">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridUnit">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridUnit"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridUnit">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridUnit">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="btn-group col-md-7" id="navigationPageGridUnit">
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridUnit">
+                                                <span class="glyphicon glyphicon-fast-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridUnit">
+                                                <span class="glyphicon glyphicon-step-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridUnit"></button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridUnit">
+                                                <span class="glyphicon glyphicon-step-forward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridUnit">
+                                                <span class="glyphicon glyphicon-fast-forward"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Terms -->
                         <div id="Term" class="tab-pane fade">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h4>Term</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilterTerm" placeholder="Search">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                <input type="text" class="form-control input-sm" id="InputFilterTerm" placeholder="Search">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8" align="right">
+                                            <a href="#" class="btn btn-primary btn-sm" onclick="btnTermAdd_OnClick()"><i class="fa fa-plus"></i> Add</a>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
-                                    <a href="#" class="btn btn-primary btn-sm" onclick="btnTermAdd_OnClick()"><i class="fa fa-plus"></i> Add</a>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                <div class="panel-body">
+                                    <div class="row" align="left">
+                                        <div class="col-lg-12">
+                                            <div id="TermGrid" class="grid" align="left"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="TermGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="navigationPageGridTerm">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridTerm">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridTerm">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridTerm"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridTerm">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridTerm">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="btn-group col-md-7" id="navigationPageGridTerm">
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridTerm">
+                                                <span class="glyphicon glyphicon-fast-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridTerm">
+                                                <span class="glyphicon glyphicon-step-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridTerm"></button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridTerm">
+                                                <span class="glyphicon glyphicon-step-forward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridTerm">
+                                                <span class="glyphicon glyphicon-fast-forward"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Employees -->
                         <div id="Employee" class="tab-pane fade">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h4>Employee</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilterEmployee" placeholder="Search">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                <input type="text" class="form-control input-sm" id="InputFilterEmployee" placeholder="Search">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8" align="right">
+                                            <button class="btn btn-primary btn-sm" onclick="btnEmployeeAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
-                                    <button class="btn btn-primary btn-sm" onclick="btnEmployeeAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                <div class="panel-body">
+                                    <div class="row" align="left">
+                                        <div class="col-lg-12">
+                                            <div id="EmployeeGrid" class="grid" align="left"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="EmployeeGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="navigationPageGridEmployee">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridEmployee">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridEmployee">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridEmployee"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridEmployee">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridEmployee">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="btn-group col-md-7" id="navigationPageGridEmployee">
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridEmployee">
+                                                <span class="glyphicon glyphicon-fast-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridEmployee">
+                                                <span class="glyphicon glyphicon-step-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridEmployee"></button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridEmployee">
+                                                <span class="glyphicon glyphicon-step-forward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridEmployee">
+                                                <span class="glyphicon glyphicon-fast-forward"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Article Group -->
                         <div id="ArticleGroup" class="tab-pane fade">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h4>Article Groups</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilterArticleGroup" placeholder="Search">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                <input type="text" class="form-control input-sm" id="InputFilterArticleGroup" placeholder="Search">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8" align="right">
+                                            <button class="btn btn-primary btn-sm" onclick="btnAddArtileGroup_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
-                                    <button class="btn btn-primary btn-sm" onclick="btnAddArtileGroup_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                <div class="panel-body">
+                                    <div class="row" align="left">
+                                        <div class="col-lg-12">
+                                            <div id="ArticleGroupGrid" class="grid" align="left"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="ArticleGroupGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="navigationPageGridArticleGroup">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridArticleGroup">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridArticleGroup">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridArticleGroup"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridArticleGroup">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridArticleGroup">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="btn-group col-md-7" id="navigationPageGridArticleGroup">
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridArticleGroup">
+                                                <span class="glyphicon glyphicon-fast-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridArticleGroup">
+                                                <span class="glyphicon glyphicon-step-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridArticleGroup"></button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridArticleGroup">
+                                                <span class="glyphicon glyphicon-step-forward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridArticleGroup">
+                                                <span class="glyphicon glyphicon-fast-forward"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Other Article -->
                         <div id="OtherArticle" class="tab-pane fade">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h4>Other Article</h4>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilterOtherArticle" placeholder="Search">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                                <input type="text" class="form-control input-sm" id="InputFilterOtherArticle" placeholder="Search">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8" align="right">
+                                            <button class="btn btn-primary btn-sm" onclick="btnAddArticle_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-8" align="right">
-                                    <button class="btn btn-primary btn-sm" onclick="btnAddArticle_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
+                                <div class="panel-body">
+                                    <div class="row" align="left">
+                                        <div class="col-lg-12">
+                                            <div id="OtherArticleGrid" class="grid" align="left"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="OtherArticleGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="navigationPageGridOtherArticle">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridOtherArticle">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridOtherArticle">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridOtherArticle"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridOtherArticle">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridOtherArticle">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
+                                <div class="panel-footer">
+                                    <div class="row">
+                                        <div class="btn-group col-md-7" id="navigationPageGridOtherArticle">
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGridOtherArticle">
+                                                <span class="glyphicon glyphicon-fast-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGridOtherArticle">
+                                                <span class="glyphicon glyphicon-step-backward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGridOtherArticle"></button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGridOtherArticle">
+                                                <span class="glyphicon glyphicon-step-forward"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGridOtherArticle">
+                                                <span class="glyphicon glyphicon-fast-forward"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

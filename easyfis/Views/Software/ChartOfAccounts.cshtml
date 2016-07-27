@@ -54,7 +54,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-8" align="right">
-                                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-primary btn-sm" id="btnAddAccount" onclick="cmdAddNewAccount_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                                 <button class="btn btn-danger btn-sm" onclick="cmdCloseAccount_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                             </div>
                                         </div>
@@ -98,7 +98,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-8" align="right">
-                                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-primary btn-sm" id="btnAddAccountType" onclick="cmdAddNewAccountType_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                                 <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountType_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                             </div>
                                         </div>
@@ -142,7 +142,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-8" align="right">
-                                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-primary btn-sm" id="btnAddAccountCashFlow" onclick="cmdAddNewAccountCashFlow_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                                 <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCashFlow_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                             </div>
                                         </div>
@@ -186,7 +186,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-8" align="right">
-                                                <button class="btn btn-primary btn-sm" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-primary btn-sm" id="btnAddAccountCategory" onclick="cmdAddNewAccountCategory_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                                 <button class="btn btn-danger btn-sm" onclick="cmdCloseAccountCategory_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                             </div>
                                         </div>
@@ -216,11 +216,6 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h4>Account Category</h4>
                                     </div>
                                 </div>
                             </div>
@@ -269,18 +264,23 @@
                     <hr id="hrAccountArticleType" />
                     <center><label id="loadingAccountArtitleType"></label></center>
                     <div id="accountArticleTypeDiv">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <label>Account Article Type</label>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label>Account Article Type</label>
+                                    </div>
+                                    <div class="col-lg-6" align="right">
+                                        <button class="btn btn-primary btn-sm" id="btnAddACcountArticleType" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-lg-6" align="right">
-                                <button class="btn btn-primary btn-sm" id="btnAddACcountArticleType" onclick="btnAddAccountArticleType()"><i class="fa fa-plus"></i> Add</button>
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row" align="left">
-                            <div class="col-lg-12">
-                                <div id="AccountArticleTypeGrid" class="grid" align="left"></div>
+                            <div class="panel-body">
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="AccountArticleTypeGrid" class="grid" align="left"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -710,16 +710,37 @@
                 success: function (accountResults) {
                     if (accountResults.length > 0) {
                         for (i = 0; i < accountResults.length; i++) {
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
 
                             var btnDeleteId;
                             if (accountResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteLockButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             accounts.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='btnAccountEditButton' onclick='cmdAccountEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='btnAccountEditButton' onclick='cmdAccountEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: accountResults[i]["Id"],
                                 AccountCode: accountResults[i]["AccountCode"],
@@ -956,19 +977,14 @@
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         data: data,
-                        success: function(id) {
+                        success: function (id) {
                             if (id > 0) {
-                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                                $("#cmdSaveAccountButton").prop("disabled", true);
-                                $("#cmdAccountDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
                                 $('#accountEdit').modal('hide');
                                 refreshAccoungFlexgrid();
                             } else {
-                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountButton").prop("disabled", false);
-                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
+                                $('#accountEdit').modal('hide');
                             }
                         }
                     });
@@ -981,24 +997,17 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
-                                $("#cmdSaveAccountButton").prop("disabled", true);
-                                $("#cmdAccountDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
                                 $('#accountEdit').modal('hide');
                                 refreshAccoungFlexgrid();
                             },
                             404: function () {
-                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountButton").prop("disabled", false);
-                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
+                                $('#accountEdit').modal('hide');
                             },
                             400: function () {
-                                document.getElementById('cmdSaveAccountButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountButton").prop("disabled", false);
-                                $("#cmdAccountDetailCloseButton").prop("disabled", false);
-                                toastr.error("Cannot update new record");
+                                toastr.error("Bad Request");
+                                $('#accountEdit').modal('hide');
                             }
                         }
                     });
@@ -1034,26 +1043,17 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-                        $("#cmdConfirmDeleteAccount").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
                         $('#deleteAccountConfirm').modal('hide');
                         refreshAccoungFlexgrid();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $("#cmdConfirmDeleteAccount").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", false);
+                        toastr.error("Not Found");
                         $('#deleteAccountConfirm').modal('hide');
-                        toastr.error("Delete request not found");
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeleteAccount').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $("#cmdConfirmDeleteAccount").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccount").prop("disabled", false);
+                        toastr.error("Bad Request");
                         $('#deleteAccountConfirm').modal('hide');
-                        toastr.error("Cannot delete record");
                     }
                 }
             });
@@ -1120,6 +1120,27 @@
                 success: function (accountArticleTypeResults) {
                     if (accountArticleTypeResults.length > 0) {
                         for (i = 0; i < accountArticleTypeResults.length; i++) {
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
+                            }
 
                             var btnEditId;
                             var btnDeleteId;
@@ -1127,8 +1148,8 @@
                                 btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                 btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditAccountArticleType_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteAccountArticleType_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             accountArticleTypes.push({
@@ -1306,26 +1327,17 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-                        $("#cmdConfirmDeleteAccountArticleType").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
                         $('#deleteAccountArticleTypeConfirm').modal('hide');
                         refreshAccountArticleTypeFlexgrid();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $("#cmdConfirmDeleteAccountArticleType").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", false);
+                        toastr.error("Not Found");
                         $('#deleteAccountArticleTypeConfirm').modal('hide');
-                        toastr.error("Delete request not found");
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeleteAccountArticleType').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $("#cmdConfirmDeleteAccountArticleType").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccountArticleType").prop("disabled", false);
+                        toastr.error("Bad Request");
                         $('#deleteAccountArticleTypeConfirm').modal('hide');
-                        toastr.error("Cannot delete record");
                     }
                 }
             });
@@ -1384,17 +1396,12 @@
                         data: accountArticleTypeData,
                         success: function (id) {
                             if (id > 0) {
-                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", true);
-                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
                                 $('#accountArticleTypeModal').modal('hide');
                                 refreshAccountArticleTypeFlexgrid();
                             } else {
-                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
-                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
+                                $('#accountArticleTypeModal').modal('hide');
                             }
                         }
                     });
@@ -1407,26 +1414,17 @@
                         data: accountArticleTypeData,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
-                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", true);
-                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
                                 $('#accountArticleTypeModal').modal('hide');
                                 refreshAccountArticleTypeFlexgrid();
                             },
                             404: function () {
-                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
-                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+                                toastr.error("Not Found");
                                 $('#accountArticleTypeModal').modal('hide');
-                                toastr.error("Update request not found");
                             },
                             400: function () {
-                                document.getElementById('cmdSaveaccountArticleTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveaccountArticleTypeButton").prop("disabled", false);
-                                $("#cmdaccountArticleTypeDetailCloseButton").prop("disabled", false);
+                                toastr.error("Bad Request");
                                 $('#accountArticleTypeModal').modal('hide');
-                                toastr.error("Cannot update record");
                             }
                         }
                     });
@@ -1592,6 +1590,18 @@
             });
 
             accountArticleTypeGrid();
+
+            var canAdd = "@ViewData["CanAdd"]";
+            if (canAdd == "True") {
+                $("#btnAddAccount").prop("disabled", false)
+                $("#btnAddACcountArticleType").prop("disabled", false)
+            } else if (canAdd == "False") {
+                $("#btnAddAccount").prop("disabled", true)
+                $("#btnAddACcountArticleType").prop("disabled", true)
+            } else {
+                $("#btnAddAccount").prop("disabled", true)
+                $("#btnAddACcountArticleType").prop("disabled", true)
+            }
         }
     </script>
 
@@ -1692,16 +1702,37 @@
                 success: function (accountTypeResults) {
                     if (accountTypeResults.length > 0) {
                         for (i = 0; i < accountTypeResults.length; i++) {
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
+                            }
 
                             var btnDeleteId;
                             if (accountTypeResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteLockButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountTypeDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             accountTypes.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountTypeEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: accountTypeResults[i]["Id"],
                                 AccountTypeCode: accountTypeResults[i]["AccountTypeCode"],
@@ -1909,17 +1940,12 @@
                         data: data,
                         success: function (id) {
                             if (id > 0) {
-                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                                $("#cmdSaveAccountTypeButton").prop("disabled", true);
-                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+                                toastr.success("Save Successful");
                                 $('#accountTypeEdit').modal('hide');
-                                toastr.success("Successfully saved");
                                 refreshAccountTypeFlexgrid();
                             } else {
-                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
-                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
+                                $('#accountTypeEdit').modal('hide');
                             }
                         }
                     });
@@ -1932,26 +1958,17 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
-                                $("#cmdSaveAccountTypeButton").prop("disabled", true);
-                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", true);
+                                toastr.success("Update Successful");
                                 $('#accountTypeEdit').modal('hide');
-                                toastr.success("Successfully updated");
                                 refreshAccountTypeFlexgrid();
                             },
                             404: function () {
-                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
-                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
+                                toastr.error("Not Found");
                                 $('#accountTypeEdit').modal('hide');
-                                toastr.error("Update request not found");
                             },
                             400: function () {
-                                document.getElementById('cmdSaveAccountTypeButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountTypeButton").prop("disabled", false);
-                                $("#cmdAccountTypeDetailCloseButton").prop("disabled", false);
+                                toastr.error("Bad Request");
                                 $('#accountTypeEdit').modal('hide');
-                                toastr.error("Cannot update record");
                             }
                         }
                     });
@@ -1994,26 +2011,17 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-                        $("#cmdConfirmDeleteAccountType").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", true);
+                        toastr.success("Delete Successful");
                         $('#deleteAccountTypeConfirm').modal('hide');
-                        toastr.success("Successfully deleted");
                         refreshAccountTypeFlexgrid();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $("#cmdConfirmDeleteAccountType").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", false);
+                        toastr.error("Not Found");
                         $('#deleteAccountTypeConfirm').modal('hide');
-                        toastr.error("Delete request not found");
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeleteAccountType').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $("#cmdConfirmDeleteAccountType").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccountType").prop("disabled", false);
+                        toastr.error("Bad Request");
                         $('#deleteAccountTypeConfirm').modal('hide');
-                        toastr.error("Cannot delete record");
                     }
                 }
             });
@@ -2172,6 +2180,15 @@
                 accountTypes.moveToLastPage();
                 updateNavigateButtonsAccountType();
             });
+
+            var canAdd = "@ViewData["CanAdd"]";
+            if (canAdd == "True") {
+                $("#btnAddAccountType").prop("disabled", false)
+            } else if (canAdd == "False") {
+                $("#btnAddAccountType").prop("disabled", true)
+            } else {
+                $("#btnAddAccountType").prop("disabled", true)
+            }
         }
     </script>
 
@@ -2205,16 +2222,37 @@
                 success: function (accountCashFlowResults) {
                     if (accountCashFlowResults.length > 0) {
                         for (i = 0; i < accountCashFlowResults.length; i++) {
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
+                            }
 
                             var btnDeleteId;
                             if (accountCashFlowResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteLockButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCashFlowDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             accountCashFlows.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCashFlowEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: accountCashFlowResults[i]["Id"],
                                 AccountCashFlowCode: accountCashFlowResults[i]["AccountCashFlowCode"],
@@ -2359,18 +2397,12 @@
                         data: data,
                         success: function (id) {
                             if (id > 0) {
-                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                                $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
-                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
                                 $('#accountCashFlowEdit').modal('hide');
                                 refreshAccountCashFlowFlexgrid();
                             } else {
-                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
-                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
-
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
+                                $('#accountCashFlowEdit').modal('hide');
                             }
                         }
                     });
@@ -2383,26 +2415,17 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
-                                $("#cmdSaveAccountCashFlowButton").prop("disabled", true);
-                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
                                 $('#accountCashFlowEdit').modal('hide');
                                 refreshAccountCashFlowFlexgrid();
                             },
                             404: function () {
-                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
-                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
+                                toastr.error("Not Found");
                                 $('#accountCashFlowEdit').modal('hide');
-                                toastr.error("Update request not found");
                             },
                             400: function () {
-                                document.getElementById('cmdSaveAccountCashFlowButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountCashFlowButton").prop("disabled", false);
-                                $("#cmdAccountCashFlowDetailCloseButton").prop("disabled", false);
+                                toastr.error("Bad Request");
                                 $('#accountCashFlowEdit').modal('hide');
-                                toastr.error("Cannot update record");
                             }
                         }
                     });
@@ -2482,26 +2505,17 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-                        $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Delete Successful");
                         $('#deleteAccountCashFlowConfirm').modal('hide');
                         refreshAccountCashFlowFlexgrid();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", false);
+                        toastr.error("Not Found");
                         $('#deleteAccountCashFlowConfirm').modal('hide');
-                        toastr.error("Delete request not found");
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeleteAccountCashFlow').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $("#cmdConfirmDeleteAccountCashFlow").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccountCashFlow").prop("disabled", false);
+                        toastr.error("Bad Request");
                         $('#deleteAccountCashFlowConfirm').modal('hide');
-                        toastr.error("Cannot delete record");
                     }
                 }
             });
@@ -2646,6 +2660,15 @@
                 accountCashFlows.moveToLastPage();
                 updateNavigateButtonsAccountCashFlow();
             });
+
+            var canAdd = "@ViewData["CanAdd"]";
+            if (canAdd == "True") {
+                $("#btnAddAccountCashFlow").prop("disabled", false)
+            } else if (canAdd == "False") {
+                $("#btnAddAccountCashFlow").prop("disabled", true)
+            } else {
+                $("#btnAddAccountCashFlow").prop("disabled", true)
+            }
         }
     </script>
 
@@ -2679,16 +2702,37 @@
                 success: function (accountCategoryResults) {
                     if (accountCategoryResults.length > 0) {
                         for (i = 0; i < accountCategoryResults.length; i++) {
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
+                            }
 
                             var btnDeleteId;
                             if (accountCategoryResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteLockButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdAccountCategoryDeleteButton_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             }
 
                             accountCategories.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='cmdAccountCategoryEditButton_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: accountCategoryResults[i]["Id"],
                                 AccountCategoryCode: accountCategoryResults[i]["AccountCategoryCode"],
@@ -2871,17 +2915,12 @@
                         data: data,
                         success: function (id) {
                             if (id > 0) {
-                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                                $("#cmdSaveAccountCategoryButton").prop("disabled", true);
-                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
                                 $('#accountCategoryEdit').modal('hide');
                                 refreshAccountCategoryFlexgrid();
                             } else {
-                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
-                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
+                                $('#accountCategoryEdit').modal('hide');
                             }
                         }
                     });
@@ -2894,26 +2933,17 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
-                                $("#cmdSaveAccountCategoryButton").prop("disabled", true);
-                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
                                 $('#accountCategoryEdit').modal('hide');
                                 refreshAccountCategoryFlexgrid();
                             },
                             404: function () {
-                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
-                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
+                                toastr.error("Not Found");
                                 $('#accountCategoryEdit').modal('hide');
-                                toastr.error("Update request not found");
                             },
                             400: function () {
-                                document.getElementById('cmdSaveAccountCategoryButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $("#cmdSaveAccountCategoryButton").prop("disabled", false);
-                                $("#cmdAccountCategoryDetailCloseButton").prop("disabled", false);
+                                toastr.error("Bad Request");
                                 $('#accountCategoryEdit').modal('hide');
-                                toastr.error("Cannot update record");
                             }
                         }
                     });
@@ -2956,26 +2986,17 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-                        $("#cmdConfirmDeleteAccountCategory").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", true);
                         $('#deleteAccountCategoryConfirm').modal('hide');
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
                         refreshAccountCategoryFlexgrid();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-trash'></i> Delete";
+                        toastr.error("Not Found");
                         $('#deleteAccountCategoryConfirm').modal('hide');
-                        $("#cmdConfirmDeleteAccountCategory").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", false);
-                        toastr.error("Delete request not found");
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeleteAccountCategory').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $("#cmdConfirmDeleteAccountCategory").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonAccountCategory").prop("disabled", false);
+                        toastr.error("Bad Request");
                         $('#deleteAccountCategoryConfirm').modal('hide');
-                        toastr.error("Cannot delete record");
                     }
                 }
             });
@@ -3120,6 +3141,15 @@
                 accountCashFlows.moveToLastPage();
                 updateNavigateButtonsAccountCashFlow();
             });
+
+            var canAdd = "@ViewData["CanAdd"]";
+            if (canAdd == "True") {
+                $("#btnAddAccountCategory").prop("disabled", false)
+            } else if (canAdd == "False") {
+                $("#btnAddAccountCategory").prop("disabled", true)
+            } else {
+                $("#btnAddAccountCategory").prop("disabled", true)
+            }
         }
     </script>
 

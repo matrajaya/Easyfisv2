@@ -19,6 +19,19 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // get purchase order amount by POId
         public Decimal getPurchaseOrderAmountByPOId(Int32 POId)
         {
@@ -273,21 +286,30 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastPONumber = from d in db.TrnPurchaseOrders.OrderByDescending(d => d.Id) select d;
+                var PONumberResult = "0000000001";
+
+                if (lastPONumber.Any())
+                {
+                    var PONumber = Convert.ToInt32(lastPONumber.FirstOrDefault().PONumber) + 0000000001;
+                    PONumberResult = zeroFill(PONumber, 10);
+                }
+
                 Data.TrnPurchaseOrder newPurchaseOrder = new Data.TrnPurchaseOrder();
-                newPurchaseOrder.BranchId = purchaseOrder.BranchId;
-                newPurchaseOrder.PONumber = purchaseOrder.PONumber;
-                newPurchaseOrder.PODate = Convert.ToDateTime(purchaseOrder.PODate);
-                newPurchaseOrder.SupplierId = purchaseOrder.SupplierId;
-                newPurchaseOrder.TermId = purchaseOrder.TermId;
-                newPurchaseOrder.ManualRequestNumber = purchaseOrder.ManualRequestNumber;
-                newPurchaseOrder.ManualPONumber = purchaseOrder.ManualPONumber;
-                newPurchaseOrder.DateNeeded = Convert.ToDateTime(purchaseOrder.DateNeeded);
-                newPurchaseOrder.Remarks = purchaseOrder.Remarks;
-                newPurchaseOrder.IsClose = purchaseOrder.IsClose;
-                newPurchaseOrder.RequestedById = purchaseOrder.RequestedById;
-                newPurchaseOrder.PreparedById = purchaseOrder.PreparedById;
-                newPurchaseOrder.CheckedById = purchaseOrder.CheckedById;
-                newPurchaseOrder.ApprovedById = purchaseOrder.ApprovedById;
+                newPurchaseOrder.BranchId = currentBranchId();
+                newPurchaseOrder.PONumber = PONumberResult;
+                newPurchaseOrder.PODate = DateTime.Today;
+                newPurchaseOrder.SupplierId = (from d in db.MstArticles where d.ArticleTypeId == 3 select d.Id).FirstOrDefault();
+                newPurchaseOrder.TermId = (from d in db.MstTerms select d.Id).FirstOrDefault();
+                newPurchaseOrder.ManualRequestNumber = "NA";
+                newPurchaseOrder.ManualPONumber = "NA";
+                newPurchaseOrder.DateNeeded = DateTime.Today;
+                newPurchaseOrder.Remarks = "NA";
+                newPurchaseOrder.IsClose = false;
+                newPurchaseOrder.RequestedById = userId;
+                newPurchaseOrder.PreparedById = userId;
+                newPurchaseOrder.CheckedById = userId;
+                newPurchaseOrder.ApprovedById = userId;
                 newPurchaseOrder.IsLocked = false;
                 newPurchaseOrder.CreatedById = userId;
                 newPurchaseOrder.CreatedDateTime = DateTime.Now;

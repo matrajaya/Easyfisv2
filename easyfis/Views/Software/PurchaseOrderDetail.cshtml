@@ -35,151 +35,155 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6" align="right">
-                                <button class="btn btn-primary btn-sm" id="cmdSaveLockPO" onclick="btnSaveLockPO_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdSavePO" onclick="btnSavePO_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="cmdEditPO" onclick="btnEditPO_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdPrintPO" onclick="btnPrintPO_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button onclick="window.location.href = '@Url.Action("PurchaseOrder", "Software")'" class="btn btn-danger btn-sm" id="cmdClosePO"><i class="fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        <div class="well">
-                            <form class="form-horizontal" role="form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Branch</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="PO_Branch"></div>
-
-                                                <input type="hidden" class="requiredPO" id="PO_Branch_data" />
-                                                <input type="hidden" id="PO_Branch_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">PO Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-30 input-sm requiredPO" id="PO_PONumber_Display" />
-                                                <input type="hidden" id="PO_PONumber" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">PO Date</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-50" id="PO_Date"></div>
-                                                <input type="hidden" class="requiredPO" id="PO_Date_data" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Manual PO Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredPO" id="PO_ManualPONumber" placeholder="Manual PO Number" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Supplier</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="PO_Supplier"></div>
-
-                                                <input type="hidden" class="requiredPO" id="PO_Supplier_data" />
-                                                <input type="hidden" id="PO_Supplier_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Term</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-70" id="PO_Term"></div>
-
-                                                <input type="hidden" class="requiredPO" id="PO_Term_data" />
-                                                <input type="hidden" id="PO_Term_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Remarks</label>
-                                            <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredPO" id="PO_Remarks" placeholder="Remarks"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Request Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredPO" id="PO_RequestNumber" placeholder="Request Number">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Date Needed</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-50" id="PO_DateNeeded"></div>
-                                                <input type="hidden" class="requiredPO" id="PO_DateNeeded_data" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Requested by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="RequestedBy"></div>
-
-                                                <input type="hidden" class="requiredPO" id="RequestedBy_data" />
-                                                <input type="hidden" id="RequestedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Prepared by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="PreparedBy"></div>
-
-                                                <input type="hidden" class="requiredPO" id="PreparedBy_data" />
-                                                <input type="hidden" id="PreparedBy_selectedValue" />
-                                                <input type="hidden" id="userId_data" value="@userId" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Checked by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="CheckedBy"></div>
-
-                                                <input type="hidden" class="requiredPO" id="CheckedBy_data" />
-                                                <input type="hidden" id="CheckedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Approved by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="ApprovedBy"></div>
-
-                                                <input type="hidden" class="requiredPO" id="ApprovedBy_data" />
-                                                <input type="hidden" id="ApprovedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Close PO</label>
-                                            <div class="col-sm-8">
-                                                <input type="checkbox" id="PO_ClosePO">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Lock</label>
-                                            <div class="col-sm-8">
-                                                <input type="checkbox" id="PO_Lock">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-4"></div>
-                                            <div class="col-sm-8">
-                                                <input type="hidden" id="PO_IsLocked">
-                                                <input type="hidden" id="PO_IsLocked_defaultTrue">
-                                                <input type="hidden" id="PO_IsLocked_defaultFalse">
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6" align="right">
+                                        <button class="btn btn-primary btn-sm" id="cmdSaveLockPO" onclick="btnSaveLockPO_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                        @*<button class="btn btn-primary btn-sm" id="cmdSavePO" onclick="btnSavePO_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                                        <button class="btn btn-primary btn-sm" id="cmdEditPO" onclick="btnEditPO_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdPrintPO" onclick="btnPrintPO_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                        <button onclick="window.location.href = '/Software/PurchaseOrder'" class="btn btn-danger btn-sm" id="cmdClosePO"><i class="fa fa-times"></i> Close</button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="panel-body">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="PO_Branch"></div>
+
+                                                        <input type="hidden" class="requiredPO" id="PO_Branch_data" />
+                                                        <input type="hidden" id="PO_Branch_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">PO Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-30 input-sm requiredPO" id="PO_PONumber_Display" />
+                                                        <input type="hidden" id="PO_PONumber" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">PO Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-50" id="PO_Date"></div>
+                                                        <input type="hidden" class="requiredPO" id="PO_Date_data" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Manual PO Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredPO" id="PO_ManualPONumber" placeholder="Manual PO Number" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Supplier</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="PO_Supplier"></div>
+
+                                                        <input type="hidden" class="requiredPO" id="PO_Supplier_data" />
+                                                        <input type="hidden" id="PO_Supplier_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Term</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-70" id="PO_Term"></div>
+
+                                                        <input type="hidden" class="requiredPO" id="PO_Term_data" />
+                                                        <input type="hidden" id="PO_Term_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Remarks</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control textarea-custom requiredPO" id="PO_Remarks" placeholder="Remarks"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Request Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredPO" id="PO_RequestNumber" placeholder="Request Number">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Date Needed</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-50" id="PO_DateNeeded"></div>
+                                                        <input type="hidden" class="requiredPO" id="PO_DateNeeded_data" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Requested by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="RequestedBy"></div>
+
+                                                        <input type="hidden" class="requiredPO" id="RequestedBy_data" />
+                                                        <input type="hidden" id="RequestedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Prepared by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="PreparedBy"></div>
+
+                                                        <input type="hidden" class="requiredPO" id="PreparedBy_data" />
+                                                        <input type="hidden" id="PreparedBy_selectedValue" />
+                                                        <input type="hidden" id="userId_data" value="@userId" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Checked by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="CheckedBy"></div>
+
+                                                        <input type="hidden" class="requiredPO" id="CheckedBy_data" />
+                                                        <input type="hidden" id="CheckedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Approved by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="ApprovedBy"></div>
+
+                                                        <input type="hidden" class="requiredPO" id="ApprovedBy_data" />
+                                                        <input type="hidden" id="ApprovedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Close PO</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="checkbox" id="PO_ClosePO">
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-group">
+                                                        <label class="control-label col-sm-4">Lock</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="checkbox" id="PO_Lock">
+                                                        </div>
+                                                    </div>*@
+                                                <div class="form-group">
+                                                    <div class="col-sm-4"></div>
+                                                    <div class="col-sm-8">
+                                                        <input type="hidden" id="PO_IsLocked">
+                                                        <input type="hidden" id="PO_IsLocked_defaultTrue">
+                                                        <input type="hidden" id="PO_IsLocked_defaultFalse">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                         <br />
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
@@ -188,16 +192,21 @@
                         <br />
                         <div class="tab-content">
                             <div id="Item" class="tab-pane fade in active">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="cmdPOLineAddButton" onclick="cmdPOLineAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-primary btn-sm" id="cmdPOLineItemQueryButton" onclick="cmdPOLineItemQueryButton_OnClick()"><i class="fa fa-search-plus"></i> Item Query</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary btn-sm" id="cmdPOLineAddButton" onclick="cmdPOLineAddButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-primary btn-sm" id="cmdPOLineItemQueryButton" onclick="cmdPOLineItemQueryButton_OnClick()"><i class="fa fa-search-plus"></i> Item Query</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="POGrid" class="grid"></div>
+                                    <div class="panel-body">
+                                        <div class="row" align="left">
+                                            <div class="col-lg-12">
+                                                <div id="POGrid" class="grid"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -383,7 +392,7 @@
         var cboItemCode;
         var cboItemDescription;
         var cboUnit;
-        
+
         var itemQueryItemsCollection;
         var itemQueryGrid;
 
@@ -404,7 +413,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#itemQueryPanel").hide();
             $("#loadingItemQuery").show();
             document.getElementById("loadingItemQuery").innerHTML = "<b><i class='fa fa-spinner fa-spin'></i></b>";
@@ -516,7 +525,8 @@
                 show: true,
                 backdrop: 'static'
             });
-
+            
+            document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSavePOLinesButton").prop("disabled", false);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
 
@@ -554,7 +564,7 @@
             itemQueryItemsCollection.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsItemQuery();
             });
-          
+
             // Flex Grid for Purchase Order Line
             itemQueryGrid = new wijmo.grid.FlexGrid('#itemQueryGrid');
             itemQueryGrid.initialize({
@@ -731,7 +741,7 @@
                             document.getElementById('CheckedBy_selectedValue').value = Results.CheckedBy;
                             document.getElementById('ApprovedBy_data').value = Results.ApprovedById;
                             document.getElementById('ApprovedBy_selectedValue').value = Results.ApprovedBy;
-                            document.getElementById('PO_Lock').checked = Results.IsLocked;
+                            //document.getElementById('PO_Lock').checked = Results.IsLocked;
 
                             document.getElementById('createdBy').innerHTML = Results.CreatedBy;
                             document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
@@ -741,7 +751,7 @@
                             document.getElementById('PO_IsLocked').value = Results.IsLocked;
 
                             NProgress.done();
-                            if (document.getElementById('PO_IsLocked').value == 'true') {
+                            if (Results.IsLocked == true) {
                                 document.getElementById('PO_PONumber_Display').disabled = true;
                                 document.getElementById('PO_ManualPONumber').disabled = true;
                                 document.getElementById('PO_Remarks').disabled = true;
@@ -777,7 +787,16 @@
                                 $("#cmdPrintPO").prop("disabled", false);
                                 $("#cmdPOLineAddButton").prop("disabled", true);
                                 $("#cmdPOLineItemQueryButton").prop("disabled", true);
-                            } else if (document.getElementById('PO_IsLocked').value == 'false') {
+
+                                var canUnLock = "@ViewData["CanUnlock"]";
+                                if (canUnLock == "True") {
+                                    $("#cmdEditPO").prop("disabled", false)
+                                } else if (canUnLock == "False") {
+                                    $("#cmdEditPO").prop("disabled", true)
+                                } else {
+                                    $("#cmdEditPO").prop("disabled", true)
+                                }
+                            } else {
                                 document.getElementById('PO_ManualPONumber').disabled = false;
                                 document.getElementById('PO_Remarks').disabled = false;
                                 document.getElementById('PO_RequestNumber').disabled = false;
@@ -813,8 +832,35 @@
                                 $("#cmdPrintPO").prop("disabled", true);
                                 $("#cmdPOLineAddButton").prop("disabled", false);
 
+                                var canLock = "@ViewData["CanLock"]";
+                                if (canLock == "True") {
+                                    $("#cmdSaveLockPO").prop("disabled", false)
+                                } else if (canLock == "False") {
+                                    $("#cmdSaveLockPO").prop("disabled", true)
+                                } else {
+                                    $("#cmdSaveLockPO").prop("disabled", true)
+                                }
+
+                                var canAdd = "@ViewData["CanAdd"]";
+                                if (canAdd == "True") {
+                                    $("#cmdPOLineAddButton").prop("disabled", false)
+                                    $("#cmdPOLineItemQueryButton").prop("disabled", false)
+                                } else if (canAdd == "False") {
+                                    $("#cmdPOLineAddButton").prop("disabled", true)
+                                    $("#cmdPOLineItemQueryButton").prop("disabled", true)
+                                } else {
+                                    $("#cmdPOLineAddButton").prop("disabled", true)
+                                    $("#cmdPOLineItemQueryButton").prop("disabled", true)
+                                }
+                            }
+
+                            var canPrint = "@ViewData["CanPrint"]";
+                            if (canPrint == "True") {
+                                $("#cmdPrintPO").prop("disabled", false)
+                            } else if (canPrint == "False") {
+                                $("#cmdPrintPO").prop("disabled", true)
                             } else {
-                                console.log("Invalid Lock");
+                                $("#cmdPrintPO").prop("disabled", true)
                             }
 
                             getBranchesForComboBox();
@@ -1265,143 +1311,97 @@
             return result;
         }
 
-        // ======
-        // ADD PO
-        // ======
-        function btnSavePO_OnClick() {
-            var POObject = new Object();
-            var PurchaseOrderId = getParam('PurchaseOrderId');
-            POObject.BranchId = document.getElementById('PO_Branch_data').value;
-            POObject.PONumber = document.getElementById('PO_PONumber_Display').value;
-            POObject.PODate = document.getElementById('PO_Date_data').value;
-            POObject.SupplierId = document.getElementById('PO_Supplier_data').value;
-            POObject.TermId = document.getElementById('PO_Term_data').value;
-            POObject.ManualRequestNumber = document.getElementById('PO_RequestNumber').value;
-            POObject.ManualPONumber = document.getElementById('PO_ManualPONumber').value;
-            POObject.DateNeeded = document.getElementById('PO_DateNeeded_data').value;
-            POObject.Remarks = document.getElementById('PO_Remarks').value;
-            POObject.IsClose = document.getElementById('PO_ClosePO').checked;
-            POObject.RequestedById = document.getElementById('RequestedBy_data').value;
-            POObject.PreparedById = document.getElementById('PreparedBy_data').value;
-            POObject.CheckedById = document.getElementById('CheckedBy_data').value;
-            POObject.ApprovedById = document.getElementById('ApprovedBy_data').value;
-            var data = JSON.stringify(POObject);
+        //// ======
+        //// ADD PO
+        //// ======
+        //function btnSavePO_OnClick() {
+        //    var POObject = new Object();
+        //    var PurchaseOrderId = getParam('PurchaseOrderId');
+        //    POObject.BranchId = document.getElementById('PO_Branch_data').value;
+        //    POObject.PONumber = document.getElementById('PO_PONumber_Display').value;
+        //    POObject.PODate = document.getElementById('PO_Date_data').value;
+        //    POObject.SupplierId = document.getElementById('PO_Supplier_data').value;
+        //    POObject.TermId = document.getElementById('PO_Term_data').value;
+        //    POObject.ManualRequestNumber = document.getElementById('PO_RequestNumber').value;
+        //    POObject.ManualPONumber = document.getElementById('PO_ManualPONumber').value;
+        //    POObject.DateNeeded = document.getElementById('PO_DateNeeded_data').value;
+        //    POObject.Remarks = document.getElementById('PO_Remarks').value;
+        //    POObject.IsClose = document.getElementById('PO_ClosePO').checked;
+        //    POObject.RequestedById = document.getElementById('RequestedBy_data').value;
+        //    POObject.PreparedById = document.getElementById('PreparedBy_data').value;
+        //    POObject.CheckedById = document.getElementById('CheckedBy_data').value;
+        //    POObject.ApprovedById = document.getElementById('ApprovedBy_data').value;
+        //    var data = JSON.stringify(POObject);
 
-            if (document.getElementById('PO_Branch_data').value == '') {
-                document.getElementById("PO_Branch").style.border = "1px solid red";
-            } else {
-                document.getElementById("PO_Branch").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('PO_Branch_data').value == '') {
+        //        document.getElementById("PO_Branch").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("PO_Branch").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('PO_Supplier_data').value == '') {
-                document.getElementById("PO_Supplier").style.border = "1px solid red";
-            } else {
-                document.getElementById("PO_Supplier").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('PO_Supplier_data').value == '') {
+        //        document.getElementById("PO_Supplier").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("PO_Supplier").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('PO_Term_data').value == '') {
-                document.getElementById("PO_Term").style.border = "1px solid red";
-            } else {
-                document.getElementById("PO_Term").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('PO_Term_data').value == '') {
+        //        document.getElementById("PO_Term").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("PO_Term").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('RequestedBy_data').value == '') {
-                document.getElementById("RequestedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("RequestedBy").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('RequestedBy_data').value == '') {
+        //        document.getElementById("RequestedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("RequestedBy").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('CheckedBy_data').value == '') {
-                document.getElementById("CheckedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("CheckedBy").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('CheckedBy_data').value == '') {
+        //        document.getElementById("CheckedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("CheckedBy").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('ApprovedBy_data').value == '') {
-                document.getElementById("ApprovedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("ApprovedBy").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('ApprovedBy_data').value == '') {
+        //        document.getElementById("ApprovedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("ApprovedBy").style.border = "1px solid #C8C8C8";
+        //    }
 
-            var isValid = true;
-            $('.requiredPO').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "1px solid red"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
+        //    var isValid = true;
+        //    $('.requiredPO').each(function () {
+        //        if ($.trim($(this).val()) == '') {
+        //            isValid = false;
+        //            $(this).css({
+        //                "border": "1px solid red"
+        //            });
+        //        } else {
+        //            $(this).css({
+        //                "border": "",
+        //            });
+        //        }
+        //    });
 
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addPurchaseOrder',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id) {
-                            if(id > 0) {
-                                $("#cmdSaveLockPO").prop("disabled", true);
-                                $("#cmdSavePO").prop("disabled", true);
-                                $("#cmdEditPO").prop("disabled", true);
-                                $("#cmdPrintPO").prop("disabled", true);
-                                $("#cmdClosePO").prop("disabled", true);
-                                window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + id;
-                            } else {
-                                window.history.back();
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updatePurchaseOrder/' + PurchaseOrderId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdSaveLockPO").prop("disabled", true);
-                                $("#cmdSavePO").prop("disabled", true);
-                                $("#cmdEditPO").prop("disabled", true);
-                                $("#cmdPrintPO").prop("disabled", true);
-                                $("#cmdClosePO").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdSaveLockPO").prop("disabled", false);
-                                $("#cmdSavePO").prop("disabled", false);
-                                $("#cmdEditPO").prop("disabled", false);
-                                $("#cmdPrintPO").prop("disabled", false);
-                                $("#cmdClosePO").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdSaveLockPO").prop("disabled", false);
-                                $("#cmdSavePO").prop("disabled", false);
-                                $("#cmdEditPO").prop("disabled", false);
-                                $("#cmdPrintPO").prop("disabled", false);
-                                $("#cmdClosePO").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
-            }
-        }
+        //    if (isValid == false) {
+        //        toastr.error("Invalid Entry");
+        //    } else {
+        //        $.ajax({
+        //            type: "POST",
+        //            url: '/api/addPurchaseOrder',
+        //            contentType: "application/json; charset=utf-8",
+        //            dataType: "json",
+        //            data: data,
+        //            success: function(id) {
+        //                if(id > 0) {
+        //                    window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + id;
+        //                } else {
+        //                    window.history.back();
+        //                }
+        //            }
+        //        });
+        //    }
+        //}
 
         // ==================
         // Save Lock PO Lines
@@ -1479,66 +1479,37 @@
 
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addPurchaseOrder',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id) {
-                            if(id > 0) {
-                                $("#cmdSaveLockPO").prop("disabled", true);
-                                $("#cmdSavePO").prop("disabled", true);
-                                $("#cmdEditPO").prop("disabled", true);
-                                $("#cmdPrintPO").prop("disabled", true);
-                                $("#cmdClosePO").prop("disabled", true);
-                                window.location = '/Software/PurchaseOrderDetail?PurchaseOrderId=' + id;
-                            } else {
-                                window.history.back();
-                            }
+            } else {
+                document.getElementById('cmdSaveLockPO').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+                $("#cmdSaveLockPO").prop("disabled", true);
+                //$("#cmdSavePO").prop("disabled", true);
+                $("#cmdEditPO").prop("disabled", true);
+                $("#cmdPrintPO").prop("disabled", true);
+                $("#cmdClosePO").prop("disabled", true);
+
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updatePurchaseOrder/' + PurchaseOrderId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            toastr.success("Lock Successful");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Not Found");
+                            $("#cmdClosePO").prop("disabled", false);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            $("#cmdClosePO").prop("disabled", false);
                         }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updatePurchaseOrder/' + PurchaseOrderId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdSaveLockPO").prop("disabled", true);
-                                $("#cmdSavePO").prop("disabled", true);
-                                $("#cmdEditPO").prop("disabled", true);
-                                $("#cmdPrintPO").prop("disabled", true);
-                                $("#cmdClosePO").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdSaveLockPO").prop("disabled", false);
-                                $("#cmdSavePO").prop("disabled", false);
-                                $("#cmdEditPO").prop("disabled", false);
-                                $("#cmdPrintPO").prop("disabled", false);
-                                $("#cmdClosePO").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdSaveLockPO").prop("disabled", false);
-                                $("#cmdSavePO").prop("disabled", false);
-                                $("#cmdEditPO").prop("disabled", false);
-                                $("#cmdPrintPO").prop("disabled", false);
-                                $("#cmdClosePO").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             }
         }
 
@@ -1550,6 +1521,14 @@
             var PurchaseOrderId = getParam('PurchaseOrderId');
             POObject.IsLocked = false;
             var data = JSON.stringify(POObject);
+
+            document.getElementById("cmdEditPO").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+            $("#cmdSaveLockPO").prop("disabled", true);
+            //$("#cmdSavePO").prop("disabled", true);
+            $("#cmdEditPO").prop("disabled", true);
+            $("#cmdPrintPO").prop("disabled", true);
+            $("#cmdClosePO").prop("disabled", true);
+
             $.ajax({
                 type: "PUT",
                 url: '/api/updatePurchaseOrderIsLocked/' + PurchaseOrderId,
@@ -1558,31 +1537,16 @@
                 data: data,
                 statusCode: {
                     200: function () {
-                        $("#cmdSaveLockPO").prop("disabled", true);
-                        $("#cmdSavePO").prop("disabled", true);
-                        $("#cmdEditPO").prop("disabled", true);
-                        $("#cmdPrintPO").prop("disabled", true);
-                        $("#cmdClosePO").prop("disabled", true);
-                        toastr.success("Unlocked");
+                        toastr.success("Unlock Successful");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
                     },
                     404: function () {
-                        toastr.error("Can't Unlock");
-                        $("#cmdSaveLockPO").prop("disabled", false);
-                        $("#cmdSavePO").prop("disabled", false);
-                        $("#cmdEditPO").prop("disabled", false);
-                        $("#cmdPrintPO").prop("disabled", false);
-                        $("#cmdClosePO").prop("disabled", false);
+                        toastr.error("Not Found");
                     },
                     400: function () {
                         toastr.error("Bad Request");
-                        $("#cmdSaveLockPO").prop("disabled", false);
-                        $("#cmdSavePO").prop("disabled", false);
-                        $("#cmdEditPO").prop("disabled", false);
-                        $("#cmdPrintPO").prop("disabled", false);
-                        $("#cmdClosePO").prop("disabled", false);
                     }
                 }
             });
@@ -1622,42 +1586,55 @@
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
                                 success: function (POResults) {
-                                    if (POResults.IsLocked == true) {
-                                        for (i = 0; i < Results.length; i++) {
-                                            POLines.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditPOLines_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeletePOLines_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                ItemId: Results[i]["ItemId"],
-                                                Item: Results[i]["Item"],
-                                                ItemCode: Results[i]["ItemCode"],
-                                                POId: Results[i]["POId"],
-                                                Quantity: Results[i]["Quantity"],
-                                                UnitId: Results[i]["UnitId"],
-                                                Unit: Results[i]["Unit"],
-                                                Particulars: Results[i]["Particulars"],
-                                                Cost: Results[i]["Cost"],
-                                                Amount: Results[i]["Amount"]
-                                            });
-                                        }
+
+                                    var canEdit = "@ViewData["CanEdit"]";
+                                    var editDisabled = "disabled";
+
+                                    if (canEdit == "True") {
+                                        editDisabled = "";
+                                    } else if (canEdit == "False") {
+                                        editDisabled = "disabled";
                                     } else {
-                                        for (i = 0; i < Results.length; i++) {
-                                            POLines.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditPOLines_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeletePOLines_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                ItemId: Results[i]["ItemId"],
-                                                Item: Results[i]["Item"],
-                                                ItemCode: Results[i]["ItemCode"],
-                                                POId: Results[i]["POId"],
-                                                Quantity: Results[i]["Quantity"],
-                                                UnitId: Results[i]["UnitId"],
-                                                Unit: Results[i]["Unit"],
-                                                Particulars: Results[i]["Particulars"],
-                                                Cost: Results[i]["Cost"],
-                                                Amount: Results[i]["Amount"]
-                                            });
-                                        }
+                                        editDisabled = "disabled";
+                                    }
+
+                                    var canDelete = "@ViewData["CanDelete"]";
+                                    var deleteDisabled = "disabled";
+
+                                    if (canDelete == "True") {
+                                        deleteDisabled = "";
+                                    } else if (canDelete == "False") {
+                                        deleteDisabled = "disabled";
+                                    } else {
+                                        deleteDisabled = "disabled";
+                                    }
+
+                                    var btnEditId;
+                                    var btnDeleteId;
+                                    if (POResults.IsLocked == true) {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPOLines_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId =  "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePOLines_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                    } else {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPOLines_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePOLines_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                                    }
+
+                                    for (i = 0; i < Results.length; i++) {
+                                        POLines.push({
+                                            EditId: btnEditId,
+                                            DeleteId: btnDeleteId,
+                                            Id: Results[i]["Id"],
+                                            ItemId: Results[i]["ItemId"],
+                                            Item: Results[i]["Item"],
+                                            ItemCode: Results[i]["ItemCode"],
+                                            POId: Results[i]["POId"],
+                                            Quantity: Results[i]["Quantity"],
+                                            UnitId: Results[i]["UnitId"],
+                                            Unit: Results[i]["Unit"],
+                                            Particulars: Results[i]["Particulars"],
+                                            Cost: Results[i]["Cost"],
+                                            Amount: Results[i]["Amount"]
+                                        });
                                     }
                                 }
                             });
@@ -1907,7 +1884,8 @@
                 show: true,
                 backdrop: 'static'
             });
-
+            
+            document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSavePOLinesButton").prop("disabled", false);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
 
@@ -1936,7 +1914,8 @@
                 show: true,
                 backdrop: 'static'
             });
-
+            
+            document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSavePOLinesButton").prop("disabled", false);
             $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
 
@@ -1964,12 +1943,14 @@
                 show: true,
                 backdrop: 'static'
             });
-
+            
+            document.getElementById('cmdConfirmDeletePOLines').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $("#cmdConfirmDeletePOLines").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
         // POItem Confirm Delete
         function cmdPOLinesConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeletePOLines').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeletePOLines").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
 
@@ -1984,7 +1965,7 @@
                     200: function () {
                         $("#cmdConfirmDeletePOLines").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Delete Successful");
                         $('#deletePOLinesConfirm').modal('hide');
 
                         POLines = new wijmo.collections.CollectionView(getPurchaseOrderItem());
@@ -1994,7 +1975,7 @@
                         POLineGrid.trackChanges = true;
                     },
                     404: function () {
-                        toastr.error("Request Not Found");
+                        toastr.error("Not Found");
                         $('#deletePOLinesConfirm').modal('hide');
                         $("#cmdConfirmDeletePOLines").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
@@ -2061,6 +2042,7 @@
                 toastr.error("Invalid Entry");
             }
             else {
+                document.getElementById('cmdSavePOLinesButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSavePOLinesButton").prop("disabled", true);
                 $("#cmdPOLinesDetailCloseButton").prop("disabled", true);
 
@@ -2075,7 +2057,7 @@
                             if(id > 0) {
                                 $("#cmdSavePOLinesButton").prop("disabled", true);
                                 $("#cmdPOLinesDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Saved");
+                                toastr.success("Save Successful");
                                 $('#POLinesEdit').modal('hide');
 
                                 POLines = new wijmo.collections.CollectionView(getPurchaseOrderItem());
@@ -2086,7 +2068,7 @@
                             } else {
                                 $("#cmdSavePOLinesButton").prop("disabled", false);
                                 $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -2101,7 +2083,7 @@
                             200: function () {
                                 $("#cmdSavePOLinesButton").prop("disabled", true);
                                 $("#cmdPOLinesDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Updated");
+                                toastr.success("Update Successful");
                                 $('#POLinesEdit').modal('hide');
 
                                 POLines = new wijmo.collections.CollectionView(getPurchaseOrderItem());
@@ -2110,7 +2092,7 @@
                                 POLineGrid.trackChanges = true;
                             },
                             404: function () {
-                                toastr.error("Can't Update");
+                                toastr.error("Not Found");
                                 $("#cmdSavePOLinesButton").prop("disabled", false);
                                 $("#cmdPOLinesDetailCloseButton").prop("disabled", false);
                             },
@@ -2132,14 +2114,14 @@
             var PurchaseOrderId = getParam('PurchaseOrderId');
             if (document.location.search.length == 0) {
                 $('#cmdSaveLockPO').hide();
-                $('#cmdSavePO').show();
+                //$('#cmdSavePO').show();
                 $('#cmdEditPO').hide();
                 $("#cmdPrintPO").prop("disabled", true);
                 $('#cmdPOLineAddButton').prop('disabled', true);
 
             } else {
                 $('#cmdSaveLockPO').show();
-                $('#cmdSavePO').hide();
+                //$('#cmdSavePO').hide();
                 $('#cmdEditPO').prop('disabled', true);
             }
 
@@ -2169,7 +2151,7 @@
 
             document.getElementById('PO_Branch').disabled = true;
             document.getElementById('PO_PONumber_Display').disabled = true;
-            document.getElementById('PO_Lock').disabled = true;
+            //document.getElementById('PO_Lock').disabled = true;
 
             cboBranch = new wijmo.input.ComboBox('#PO_Branch');
 
@@ -2323,15 +2305,15 @@
 
             POLineGrid.trackChanges = true;
 
-            $(document).ajaxStop(function () {
-                if (document.location.search.length == 0) {
-                    btnSavePO_OnClick();
-                    window.btnSavePO_OnClick = function () {
-                        return true;
-                    }
-                }
-            });
-            
+            //$(document).ajaxStop(function () {
+            //    if (document.location.search.length == 0) {
+            //        btnSavePO_OnClick();
+            //        window.btnSavePO_OnClick = function () {
+            //            return true;
+            //        }
+            //    }
+            //});
+
             $(document).on('show.bs.modal', '.modal', function (event) {
                 var zIndex = 1040 + (10 * $('.modal:visible').length);
                 $(this).css('z-index', zIndex);

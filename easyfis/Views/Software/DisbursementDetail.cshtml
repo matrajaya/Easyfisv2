@@ -35,170 +35,173 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-12" align="right">
-                                <button class="btn btn-primary btn-sm" id="cmdDisbursementJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                <button class="btn btn-primary btn-sm" id="cmdDisbursementSaveLock" onclick="btnDisbursementSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdDisbursementSave" onclick="btnDisbursementSave_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="cmdDisbursementEdit" onclick="btnDisbursementEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdDisbursementPrint" onclick="btnDisbursementPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button id="cmdDisbursementClose" onclick="window.location.href = '/Software/Disbursement'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        @*<hr />*@
-                        <div class="well">
-                            <form class="form-horizontal" role="form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Branch</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="disbursement_Branch"></div>
+                                    <div class="col-md-12" align="right">
+                                        <button class="btn btn-primary btn-sm" id="cmdDisbursementJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdDisbursementSaveLock" onclick="btnDisbursementSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                        @*<button class="btn btn-primary btn-sm" id="cmdDisbursementSave" onclick="btnDisbursementSave_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                                        <button class="btn btn-primary btn-sm" id="cmdDisbursementEdit" onclick="btnDisbursementEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdDisbursementPrint" onclick="btnDisbursementPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                        <button id="cmdDisbursementClose" onclick="window.location.href = '/Software/Disbursement'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="disbursement_Branch"></div>
 
-                                                <input type="hidden" id="disbursement_Branch_data" class="requiredDisbursement" />
-                                                <input type="hidden" id="disbursement_Branch_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">CV Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-30 input-sm requiredDisbursement" id="disbursement_CVNumber_Display" />
-                                                <input type="hidden" id="disbursement_CVNumber" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">CV Date</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-68" id="disbursement_CVDate"></div>
-                                                <input type="hidden" id="disbursement_CVDate_data" class="requiredDisbursement" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Manual CV Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_ManualCVNumber" placeholder="Manual CV Number" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Supplier</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group">
-                                                    <div class="comboBox-wide" id="disbursement_Supplier"></div>
+                                                        <input type="hidden" id="disbursement_Branch_data" class="requiredDisbursement" />
+                                                        <input type="hidden" id="disbursement_Branch_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">CV Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-30 input-sm requiredDisbursement" id="disbursement_CVNumber_Display" />
+                                                        <input type="hidden" id="disbursement_CVNumber" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">CV Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-68" id="disbursement_CVDate"></div>
+                                                        <input type="hidden" id="disbursement_CVDate_data" class="requiredDisbursement" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Manual CV Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_ManualCVNumber" placeholder="Manual CV Number" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Supplier</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <div class="comboBox-wide" id="disbursement_Supplier"></div>
 
-                                                    <input type="hidden" id="disbursement_Supplier_data" class="requiredDisbursement" />
-                                                    <input type="hidden" id="disbursement_Supplier_selectedValue" />
-                                                    <div class="input-group-btn">
-                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdAP" onclick="btnnOclickAP()">AP</button>
-                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="btnnOclickAdvances()">Advances</button>
+                                                            <input type="hidden" id="disbursement_Supplier_data" class="requiredDisbursement" />
+                                                            <input type="hidden" id="disbursement_Supplier_selectedValue" />
+                                                            <div class="input-group-btn">
+                                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAP" onclick="btnnOclickAP()">AP</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="btnnOclickAdvances()">Advances</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Payee</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_Payee" placeholder="Payee" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Pay Type</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-70" id="disbursement_PayType"></div>
+
+                                                        <input type="hidden" id="disbursement_PayType_data" class="requiredDisbursement" />
+                                                        <input type="hidden" id="disbursement_PayType_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Particulars</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control textarea-custom requiredDisbursement" id="disbursement_Particulars" placeholder="Particulars"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Bank</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="disbursement_Bank"></div>
+
+                                                        <input type="hidden" id="disbursement_Bank_data" class="requiredDisbursement" />
+                                                        <input type="hidden" id="disbursement_Bank_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Check Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_CheckNumber" placeholder="Check Number" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Check Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-50" id="disbursement_CheckDate"></div>
+                                                        <input type="hidden" id="disbursement_CheckDate_data" class="requiredDisbursement" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Amount</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-50 numberField input-sm requiredDisbursement" id="disbursement_Amount" placeholder="0.00" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Cross Check</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="checkbox" id="disbursement_CrossCheck">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Prepared by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="disbursement_PreparedBy"></div>
+
+                                                        <input type="hidden" id="disbursement_PreparedBy_data" class="requiredDisbursement" />
+                                                        <input type="hidden" id="disbursement_PreparedBy_selectedValue" />
+                                                        <input type="hidden" id="userId_data" value="@userId" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Checked by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="disbursement_CheckedBy"></div>
+
+                                                        <input type="hidden" id="disbursement_CheckedBy_data" class="requiredDisbursement" />
+                                                        <input type="hidden" id="disbursement_CheckedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Approved by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="disbursement_ApprovedBy"></div>
+
+                                                        <input type="hidden" id="disbursement_ApprovedBy_data" class="requiredDisbursement" />
+                                                        <input type="hidden" id="disbursement_ApprovedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-group">
+                                                        <label class="control-label col-sm-4">Lock</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="checkbox" id="disbursement_Lock">
+                                                        </div>
+                                                    </div>*@
+                                                <div class="form-group">
+                                                    <div class="col-sm-4"></div>
+                                                    <div class="col-sm-8">
+                                                        <input type="hidden" id="disbursement_IsLocked">
+                                                        <input type="hidden" id="disbursement_IsLocked_defaultTrue">
+                                                        <input type="hidden" id="disbursement_IsLocked_defaultFalse">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Payee</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_Payee" placeholder="Payee" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Pay Type</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-70" id="disbursement_PayType"></div>
-
-                                                <input type="hidden" id="disbursement_PayType_data" class="requiredDisbursement" />
-                                                <input type="hidden" id="disbursement_PayType_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Particulars</label>
-                                            <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredDisbursement" id="disbursement_Particulars" placeholder="Particulars"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Bank</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="disbursement_Bank"></div>
-
-                                                <input type="hidden" id="disbursement_Bank_data" class="requiredDisbursement" />
-                                                <input type="hidden" id="disbursement_Bank_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Check Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredDisbursement" id="disbursement_CheckNumber" placeholder="Check Number" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Check Date</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-50" id="disbursement_CheckDate"></div>
-                                                <input type="hidden" id="disbursement_CheckDate_data" class="requiredDisbursement" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Amount</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-50 numberField input-sm requiredDisbursement" id="disbursement_Amount" placeholder="0.00" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Cross Check</label>
-                                            <div class="col-sm-8">
-                                                <input type="checkbox" id="disbursement_CrossCheck">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Prepared by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="disbursement_PreparedBy"></div>
-
-                                                <input type="hidden" id="disbursement_PreparedBy_data" class="requiredDisbursement" />
-                                                <input type="hidden" id="disbursement_PreparedBy_selectedValue" />
-                                                <input type="hidden" id="userId_data" value="@userId" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Checked by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="disbursement_CheckedBy"></div>
-
-                                                <input type="hidden" id="disbursement_CheckedBy_data" class="requiredDisbursement" />
-                                                <input type="hidden" id="disbursement_CheckedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Approved by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="disbursement_ApprovedBy"></div>
-
-                                                <input type="hidden" id="disbursement_ApprovedBy_data" class="requiredDisbursement" />
-                                                <input type="hidden" id="disbursement_ApprovedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Lock</label>
-                                            <div class="col-sm-8">
-                                                <input type="checkbox" id="disbursement_Lock">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-4"></div>
-                                            <div class="col-sm-8">
-                                                <input type="hidden" id="disbursement_IsLocked">
-                                                <input type="hidden" id="disbursement_IsLocked_defaultTrue">
-                                                <input type="hidden" id="disbursement_IsLocked_defaultFalse">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                         <br />
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
@@ -207,15 +210,20 @@
                         <br />
                         <div class="tab-content">
                             <div id="DisbursementLine" class="tab-pane fade in active">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button type="submit" class="btn btn-primary btn-sm" id="btnAddDisbursementLine" onclick="cmdAddDisbursementLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button type="submit" class="btn btn-primary btn-sm" id="btnAddDisbursementLine" onclick="cmdAddDisbursementLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div id="DisbursementLineGrid" class="grid"></div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div id="DisbursementLineGrid" class="grid"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -248,7 +256,6 @@
                         <div class="panel-body">
                             <div id="receivingStatusGrid" class="grid" align="left"></div>
                         </div>
-                      
                     </div>
                     <center>
                         <span id="loadingRRStatus"></span>
@@ -274,11 +281,11 @@
                 <div class="modal-body">
                     <div class="panel panel-default" id="AdvancesGrid">
                         @*<div class="panel-heading">
-                            <div class="input-group input-group-sm input-50">
-                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" class="form-control input-sm" id="RRAdvancesFilter" placeholder="Search">
-                            </div>
-                        </div>*@
+                                <div class="input-group input-group-sm input-50">
+                                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control input-sm" id="RRAdvancesFilter" placeholder="Search">
+                                </div>
+                            </div>*@
                         <div class="panel-body">
                             <div id="RRAdvancesGrid" class="grid statusGrid"></div>
                         </div>
@@ -535,9 +542,9 @@
         var RRAdvancesGrid;
         var journalAdvancesCollections;
         var receivingReceipts;
-        
+
         var balance = new Array();
-        
+
         var returnBool = false;
         var emptyBalance;
 
@@ -553,7 +560,7 @@
                 data: {},
                 success: function (receivingReceiptResults) {
                     if (receivingReceiptResults.length > 0) {
-                        
+
                         var handbool;
                         var icon;
                         var btnColor;
@@ -780,9 +787,14 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('cmdConfirmApplyAdvances').innerHTML = "<i class='fa fa-check-square-o'></i> Apply";
+            $("#cmdConfirmApplyAdvances").prop("disabled", false);
+            $("#cmdCloseButtonApplyAdvances").prop("disabled", false);
         }
 
         function btnConfrimApplyAdvances_OnClick() {
+            document.getElementById('cmdConfirmApplyAdvances').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Applying";
             $("#cmdConfirmApplyAdvances").prop("disabled", true);
             $("#cmdCloseButtonApplyAdvances").prop("disabled", true);
 
@@ -836,6 +848,9 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdConfirmApplyAmount').innerHTML = "<i class='fa fa-check'></i> Apply";
+            $("#cmdConfirmApplyAmount").prop("disabled", false);
+            $("#cmdCloseButtonApplyAmount").prop("disabled", false);
         }
 
         function btnConfrimApplyAllAmount_OnClick() {
@@ -877,7 +892,7 @@
                 }
             });
         }
-        
+
         function bool() {
             return returnBool;
         }
@@ -921,67 +936,76 @@
         }
 
         function btnConfrimApplyAmountOnClick() {
+            document.getElementById('cmdConfirmApplyAmount').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Applying";
             $("#cmdConfirmApplyAmount").prop("disabled", true);
             $("#cmdCloseButtonApplyAmount").prop("disabled", true);
 
-            for (var i = 0; i < receivingReceipts.items.length; i++) {
-                var item = receivingReceipts.items[i];
+            if(receivingReceipts.items.length > 0) {
 
-                if(item.Balance > 0) {
-                    var receivingReceitItemObject = new Object();
-                    receivingReceitItemObject.BranchId = item.BranchId;
-                    receivingReceitItemObject.AccountId = item.AccountId;
-                    receivingReceitItemObject.SupplierId = item.SupplierId;
-                    receivingReceitItemObject.Id = item.Id;
-                    receivingReceitItemObject.DocumentReference = item.DocumentReference;
-                    receivingReceitItemObject.Amount = item.Balance;
-                    var receivingReceitItemsObjects = JSON.stringify(receivingReceitItemObject);
+                for (var i = 0; i < receivingReceipts.items.length; i++) {
+                    var item = receivingReceipts.items[i];
 
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/disbursementLine/applyAP/' + getParam("DisbursementId"),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: receivingReceitItemsObjects,
-                        statusCode: {
-                            200: function () {
-                                toastr.success("Applied");
-                                $("#cmdConfirmApplyAmount").prop("disabled", false);
-                                $("#cmdCloseButtonApplyAmount").prop("disabled", false);
+                    if(item.Balance > 0) {
+                        var receivingReceitItemObject = new Object();
+                        receivingReceitItemObject.BranchId = item.BranchId;
+                        receivingReceitItemObject.AccountId = item.AccountId;
+                        receivingReceitItemObject.SupplierId = item.SupplierId;
+                        receivingReceitItemObject.Id = item.Id;
+                        receivingReceitItemObject.DocumentReference = item.DocumentReference;
+                        receivingReceitItemObject.Amount = item.Balance;
+                        var receivingReceitItemsObjects = JSON.stringify(receivingReceitItemObject);
 
-                                disbursementLines = new wijmo.collections.CollectionView(getDisbursementLines());
-                                
-                                // Flex Grid for disbursement Line
-                                disbursementGrid.itemsSource = disbursementLines;
-                                disbursementGrid.trackChanges = true;
-                                
-                                $('#RRStatus').modal('hide');
-                                $('#applyAmount').modal('hide');
+                        $.ajax({
+                            type: "POST",
+                            url: '/api/disbursementLine/applyAP/' + getParam("DisbursementId"),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: receivingReceitItemsObjects,
+                            statusCode: {
+                                200: function () {
+                                    toastr.success("Applied");
+                                    $("#cmdConfirmApplyAmount").prop("disabled", false);
+                                    $("#cmdCloseButtonApplyAmount").prop("disabled", false);
 
-                                receivingReceipts = new wijmo.collections.CollectionView(getReceivingReceiptBySupplierByBalance());
+                                    disbursementLines = new wijmo.collections.CollectionView(getDisbursementLines());
 
-                                // Flex Grid for Purchase Disbursement Line
-                                receivingStatusGrid.itemsSource = receivingReceipts;
-                                receivingStatusGrid.trackChanges = true;
-                            },
-                            404: function () {
-                                toastr.error("Not Found");
-                                $("#cmdConfirmApplyAmount").prop("disabled", false);
-                                $("#cmdCloseButtonApplyAmount").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdConfirmApplyAmount").prop("disabled", false);
-                                $("#cmdCloseButtonApplyAmount").prop("disabled", false);
+                                    // Flex Grid for disbursement Line
+                                    disbursementGrid.itemsSource = disbursementLines;
+                                    disbursementGrid.trackChanges = true;
+
+                                    $('#RRStatus').modal('hide');
+                                    $('#applyAmount').modal('hide');
+
+                                    receivingReceipts = new wijmo.collections.CollectionView(getReceivingReceiptBySupplierByBalance());
+
+                                    // Flex Grid for Purchase Disbursement Line
+                                    receivingStatusGrid.itemsSource = receivingReceipts;
+                                    receivingStatusGrid.trackChanges = true;
+                                },
+                                404: function () {
+                                    toastr.error("Not Found");
+                                    $("#cmdConfirmApplyAmount").prop("disabled", false);
+                                    $("#cmdCloseButtonApplyAmount").prop("disabled", false);
+                                },
+                                400: function () {
+                                    toastr.error("Bad Request");
+                                    $("#cmdConfirmApplyAmount").prop("disabled", false);
+                                    $("#cmdCloseButtonApplyAmount").prop("disabled", false);
+                                }
                             }
-                        }
-                    });
-                } else {
-                    $('#applyAmount').modal('hide');
+                        });
+                    } else {
+                        $('#applyAmount').modal('hide');
 
-                    $("#cmdConfirmApplyAmount").prop("disabled", false);
-                    $("#cmdCloseButtonApplyAmount").prop("disabled", false);
+                        $("#cmdConfirmApplyAmount").prop("disabled", false);
+                        $("#cmdCloseButtonApplyAmount").prop("disabled", false);
+                    }
                 }
+            } else {
+                $('#applyAmount').modal('hide');
+
+                $("#cmdConfirmApplyAmount").prop("disabled", false);
+                $("#cmdCloseButtonApplyAmount").prop("disabled", false);
             }
         }
 
@@ -990,7 +1014,7 @@
         // ===============================
         function getAdvancesGrid() {
             journalAdvancesCollections = new wijmo.collections.CollectionView(getJournalByArticleId());
-          
+
             // Flex Grid for Purchase Disbursement Line
             RRAdvancesGrid = new wijmo.grid.FlexGrid('#RRAdvancesGrid');
             RRAdvancesGrid.initialize({
@@ -1133,7 +1157,7 @@
                         document.getElementById('disbursement_CheckedBy_selectedValue').value = Results.CheckedBy;
                         document.getElementById('disbursement_ApprovedBy_data').value = Results.ApprovedById;
                         document.getElementById('disbursement_ApprovedBy_selectedValue').value = Results.ApprovedBy;
-                        document.getElementById('disbursement_Lock').checked = Results.IsLocked;
+                        //document.getElementById('disbursement_Lock').checked = Results.IsLocked;
                         document.getElementById('createdBy').innerHTML = Results.CreatedBy;
                         document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
                         document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
@@ -1143,7 +1167,7 @@
 
                         NProgress.done();
 
-                        if (document.getElementById('disbursement_IsLocked').value == 'true') {
+                        if (Results.IsLocked == true) {
 
                             var CVDate_date = Results.CVDate;
                             CVDate.dispose();
@@ -1177,7 +1201,7 @@
 
                             $("#cmdDisbursementJournal").prop("disabled", false);
                             $("#cmdDisbursementSaveLock").prop("disabled", true);
-                            $("#cmdDisbursementSave").prop("disabled", true);
+                            //$("#cmdDisbursementSave").prop("disabled", true);
                             $("#cmdDisbursementEdit").prop("disabled", false);
                             $("#cmdDisbursementPrint").prop("disabled", false);
 
@@ -1185,7 +1209,15 @@
                             $("#cmdAdvances").prop("disabled", true);
                             $("#btnAddDisbursementLine").prop("disabled", true);
 
-                        } else if (document.getElementById('disbursement_IsLocked').value == 'false') {
+                            var canUnLock = "@ViewData["CanUnlock"]";
+                            if (canUnLock == "True") {
+                                $("#cmdDisbursementEdit").prop("disabled", false)
+                            } else if (canUnLock == "False") {
+                                $("#cmdDisbursementEdit").prop("disabled", true)
+                            } else {
+                                $("#cmdDisbursementEdit").prop("disabled", true)
+                            }
+                        } else {
 
                             var CVDate_date = Results.CVDate;
                             CVDate.dispose();
@@ -1218,7 +1250,7 @@
 
                             $("#cmdDisbursementJournal").prop("disabled", true);
                             $("#cmdDisbursementSaveLock").prop("disabled", false);
-                            $("#cmdDisbursementSave").prop("disabled", true);
+                            //$("#cmdDisbursementSave").prop("disabled", true);
                             $("#cmdDisbursementEdit").prop("disabled", true);
                             $("#cmdDisbursementPrint").prop("disabled", true);
 
@@ -1226,8 +1258,38 @@
                             $("#cmdAdvances").prop("disabled", false);
                             $("#btnAddDisbursementLine").prop("disabled", false);
 
+                            var canLock = "@ViewData["CanLock"]";
+                            if (canLock == "True") {
+                                $("#cmdDisbursementSaveLock").prop("disabled", false)
+                            } else if (canLock == "False") {
+                                $("#cmdDisbursementSaveLock").prop("disabled", true)
+                            } else {
+                                $("#cmdDisbursementSaveLock").prop("disabled", true)
+                            }
+
+                            var canAdd = "@ViewData["CanAdd"]";
+                            if (canAdd == "True") {
+                                $("#btnAddDisbursementLine").prop("disabled", false)
+                                $("#cmdAP").prop("disabled", false)
+                                $("#cmdAdvances").prop("disabled", false)
+                            } else if (canAdd == "False") {
+                                $("#btnAddDisbursementLine").prop("disabled", true)
+                                $("#cmdAP").prop("disabled", true)
+                                $("#cmdAdvances").prop("disabled", true)
+                            } else {
+                                $("#btnAddDisbursementLine").prop("disabled", true)
+                                $("#cmdAP").prop("disabled", true)
+                                $("#cmdAdvances").prop("disabled", true)
+                            }
+                        }
+
+                        var canPrint = "@ViewData["CanPrint"]";
+                        if (canPrint == "True") {
+                            $("#cmdDisbursementPrint").prop("disabled", false)
+                        } else if (canPrint == "False") {
+                            $("#cmdDisbursementPrint").prop("disabled", true)
                         } else {
-                            console.log("Invalid IsLocked");
+                            $("#cmdDisbursementPrint").prop("disabled", true)
                         }
 
                         getBranchesForComboBox();
@@ -1711,166 +1773,166 @@
         // ================
         // ADD Disbursement
         // ================
-        function btnDisbursementSave_OnClick() {
-            var disbursementObject = new Object();
-            var disbursementId = getParam("DisbursementId");
-            disbursementObject.BranchId = document.getElementById('disbursement_Branch_data').value;
-            disbursementObject.CVNumber = document.getElementById('disbursement_CVNumber_Display').value;
-            disbursementObject.CVDate = document.getElementById('disbursement_CVDate_data').value;
-            disbursementObject.SupplierId = document.getElementById('disbursement_Supplier_data').value;
-            disbursementObject.Payee = document.getElementById('disbursement_Payee').value;
-            disbursementObject.PayTypeId = document.getElementById('disbursement_PayType_data').value;
-            disbursementObject.BankId = document.getElementById('disbursement_Bank_data').value;
-            disbursementObject.ManualCVNumber = document.getElementById('disbursement_ManualCVNumber').value;
-            disbursementObject.Particulars = document.getElementById('disbursement_Particulars').value;
-            disbursementObject.CheckNumber = document.getElementById('disbursement_CheckNumber').value;
-            disbursementObject.CheckDate = document.getElementById('disbursement_CheckDate_data').value;
-            disbursementObject.Amount = document.getElementById('disbursement_Amount').value;
-            disbursementObject.IsCrossCheck = document.getElementById('disbursement_CrossCheck').checked;
-            disbursementObject.IsClear = false;
-            disbursementObject.PreparedById = document.getElementById('disbursement_PreparedBy_data').value;
-            disbursementObject.CheckedById = document.getElementById('disbursement_CheckedBy_data').value;
-            disbursementObject.ApprovedById = document.getElementById('disbursement_ApprovedBy_data').value;
-            var data = JSON.stringify(disbursementObject);
+        //function btnDisbursementSave_OnClick() {
+        //    var disbursementObject = new Object();
+        //    var disbursementId = getParam("DisbursementId");
+        //    disbursementObject.BranchId = document.getElementById('disbursement_Branch_data').value;
+        //    disbursementObject.CVNumber = document.getElementById('disbursement_CVNumber_Display').value;
+        //    disbursementObject.CVDate = document.getElementById('disbursement_CVDate_data').value;
+        //    disbursementObject.SupplierId = document.getElementById('disbursement_Supplier_data').value;
+        //    disbursementObject.Payee = document.getElementById('disbursement_Payee').value;
+        //    disbursementObject.PayTypeId = document.getElementById('disbursement_PayType_data').value;
+        //    disbursementObject.BankId = document.getElementById('disbursement_Bank_data').value;
+        //    disbursementObject.ManualCVNumber = document.getElementById('disbursement_ManualCVNumber').value;
+        //    disbursementObject.Particulars = document.getElementById('disbursement_Particulars').value;
+        //    disbursementObject.CheckNumber = document.getElementById('disbursement_CheckNumber').value;
+        //    disbursementObject.CheckDate = document.getElementById('disbursement_CheckDate_data').value;
+        //    disbursementObject.Amount = document.getElementById('disbursement_Amount').value;
+        //    disbursementObject.IsCrossCheck = document.getElementById('disbursement_CrossCheck').checked;
+        //    disbursementObject.IsClear = false;
+        //    disbursementObject.PreparedById = document.getElementById('disbursement_PreparedBy_data').value;
+        //    disbursementObject.CheckedById = document.getElementById('disbursement_CheckedBy_data').value;
+        //    disbursementObject.ApprovedById = document.getElementById('disbursement_ApprovedBy_data').value;
+        //    var data = JSON.stringify(disbursementObject);
 
-            if (document.getElementById('disbursement_Branch_data').value == '') {
-                document.getElementById("disbursement_Branch").style.border = "1px solid red";
-            } else {
-                document.getElementById("disbursement_Branch").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('disbursement_Branch_data').value == '') {
+        //        document.getElementById("disbursement_Branch").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("disbursement_Branch").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('disbursement_CVDate_data').value == '') {
-                document.getElementById("disbursement_CVDate").style.border = "1px solid red";
-            } else {
-                document.getElementById("disbursement_CVDate").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('disbursement_CVDate_data').value == '') {
+        //        document.getElementById("disbursement_CVDate").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("disbursement_CVDate").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('disbursement_Supplier_data').value == '') {
-                document.getElementById("disbursement_Supplier").style.border = "1px solid red";
-            } else {
-                document.getElementById("disbursement_Supplier").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('disbursement_Supplier_data').value == '') {
+        //        document.getElementById("disbursement_Supplier").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("disbursement_Supplier").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('disbursement_PayType_data').value == '') {
-                document.getElementById("disbursement_PayType").style.border = "1px solid red";
-            } else {
-                document.getElementById("disbursement_PayType").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('disbursement_PayType_data').value == '') {
+        //        document.getElementById("disbursement_PayType").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("disbursement_PayType").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('disbursement_Bank_data').value == '') {
-                document.getElementById("disbursement_Bank").style.border = "1px solid red";
-            } else {
-                document.getElementById("disbursement_Bank").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('disbursement_Bank_data').value == '') {
+        //        document.getElementById("disbursement_Bank").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("disbursement_Bank").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('disbursement_CheckDate_data').value == '') {
-                document.getElementById("disbursement_CheckDate").style.border = "1px solid red";
-            } else {
-                document.getElementById("disbursement_CheckDate").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('disbursement_CheckDate_data').value == '') {
+        //        document.getElementById("disbursement_CheckDate").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("disbursement_CheckDate").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('disbursement_PreparedBy_data').value == '') {
-                document.getElementById("disbursement_PreparedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("disbursement_PreparedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('disbursement_PreparedBy_data').value == '') {
+        //        document.getElementById("disbursement_PreparedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("disbursement_PreparedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('disbursement_CheckedBy_data').value == '') {
-                document.getElementById("disbursement_CheckedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("disbursement_CheckedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('disbursement_CheckedBy_data').value == '') {
+        //        document.getElementById("disbursement_CheckedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("disbursement_CheckedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('disbursement_ApprovedBy_data').value == '') {
-                document.getElementById("disbursement_ApprovedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("disbursement_ApprovedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('disbursement_ApprovedBy_data').value == '') {
+        //        document.getElementById("disbursement_ApprovedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("disbursement_ApprovedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            var isValid = true;
-            $('.requiredDisbursement').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "1px solid red"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
+        //    var isValid = true;
+        //    $('.requiredDisbursement').each(function () {
+        //        if ($.trim($(this).val()) == '') {
+        //            isValid = false;
+        //            $(this).css({
+        //                "border": "1px solid red"
+        //            });
+        //        }
+        //        else {
+        //            $(this).css({
+        //                "border": "",
+        //            });
+        //        }
+        //    });
 
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-                e.preventDefault();
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addDisbursement',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id){
-                            if(id > 0) {
-                                $("#cmdDisbursementJournal").prop("disabled", true);
-                                $("#cmdDisbursementSaveLock").prop("disabled", true);
-                                $("#cmdDisbursementSave").prop("disabled", true);
-                                $("#cmdDisbursementEdit").prop("disabled", true);
-                                $("#cmdDisbursementPrint").prop("disabled", true);
-                                $("#cmdDisbursementClose").prop("disabled", true);
-                                window.location = '/Software/DisbursementDetail?DisbursementId=' + id;
-                            } else {
-                                window.history.back();
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateDisbursement/' + disbursementId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdDisbursementJournal").prop("disabled", true);
-                                $("#cmdDisbursementSaveLock").prop("disabled", true);
-                                $("#cmdDisbursementSave").prop("disabled", true);
-                                $("#cmdDisbursementEdit").prop("disabled", true);
-                                $("#cmdDisbursementPrint").prop("disabled", true);
-                                $("#cmdDisbursementClose").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdDisbursementJournal").prop("disabled", false);
-                                $("#cmdDisbursementSaveLock").prop("disabled", false);
-                                $("#cmdDisbursementSave").prop("disabled", false);
-                                $("#cmdDisbursementEdit").prop("disabled", false);
-                                $("#cmdDisbursementPrint").prop("disabled", false);
-                                $("#cmdDisbursementClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdDisbursementJournal").prop("disabled", false);
-                                $("#cmdDisbursementSaveLock").prop("disabled", false);
-                                $("#cmdDisbursementSave").prop("disabled", false);
-                                $("#cmdDisbursementEdit").prop("disabled", false);
-                                $("#cmdDisbursementPrint").prop("disabled", false);
-                                $("#cmdDisbursementClose").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
-            }
-        }
+        //    if (isValid == false) {
+        //        toastr.error("Invalid Entry");
+        //        e.preventDefault();
+        //    }
+        //    else {
+        //        if (document.location.search.length == 0) {
+        //            $.ajax({
+        //                type: "POST",
+        //                url: '/api/addDisbursement',
+        //                contentType: "application/json; charset=utf-8",
+        //                dataType: "json",
+        //                data: data,
+        //                success: function(id){
+        //                    if(id > 0) {
+        //                        $("#cmdDisbursementJournal").prop("disabled", true);
+        //                        $("#cmdDisbursementSaveLock").prop("disabled", true);
+        //                        $("#cmdDisbursementSave").prop("disabled", true);
+        //                        $("#cmdDisbursementEdit").prop("disabled", true);
+        //                        $("#cmdDisbursementPrint").prop("disabled", true);
+        //                        $("#cmdDisbursementClose").prop("disabled", true);
+        //                        window.location = '/Software/DisbursementDetail?DisbursementId=' + id;
+        //                    } else {
+        //                        window.history.back();
+        //                    }
+        //                }
+        //            });
+        //        } else {
+        //            $.ajax({
+        //                type: "PUT",
+        //                url: '/api/updateDisbursement/' + disbursementId,
+        //                contentType: "application/json; charset=utf-8",
+        //                dataType: "json",
+        //                data: data,
+        //                statusCode: {
+        //                    200: function () {
+        //                        $("#cmdDisbursementJournal").prop("disabled", true);
+        //                        $("#cmdDisbursementSaveLock").prop("disabled", true);
+        //                        $("#cmdDisbursementSave").prop("disabled", true);
+        //                        $("#cmdDisbursementEdit").prop("disabled", true);
+        //                        $("#cmdDisbursementPrint").prop("disabled", true);
+        //                        $("#cmdDisbursementClose").prop("disabled", true);
+        //                        toastr.success("Successfully Updated");
+        //                        window.setTimeout(function () {
+        //                            location.reload()
+        //                        }, 1000);
+        //                    },
+        //                    404: function () {
+        //                        toastr.error("Can't Save");
+        //                        $("#cmdDisbursementJournal").prop("disabled", false);
+        //                        $("#cmdDisbursementSaveLock").prop("disabled", false);
+        //                        $("#cmdDisbursementSave").prop("disabled", false);
+        //                        $("#cmdDisbursementEdit").prop("disabled", false);
+        //                        $("#cmdDisbursementPrint").prop("disabled", false);
+        //                        $("#cmdDisbursementClose").prop("disabled", false);
+        //                    },
+        //                    400: function () {
+        //                        toastr.error("Bad Request");
+        //                        $("#cmdDisbursementJournal").prop("disabled", false);
+        //                        $("#cmdDisbursementSaveLock").prop("disabled", false);
+        //                        $("#cmdDisbursementSave").prop("disabled", false);
+        //                        $("#cmdDisbursementEdit").prop("disabled", false);
+        //                        $("#cmdDisbursementPrint").prop("disabled", false);
+        //                        $("#cmdDisbursementClose").prop("disabled", false);
+        //                    }
+        //                }
+        //            });
+        //        }
+        //    }
+        //}
 
         // =============================
         // Save Lock Disbursement - lock
@@ -1970,70 +2032,37 @@
             if (isValid == false) {
                 toastr.error("Invalid Entry");
                 e.preventDefault();
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addDisbursement',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id){
-                            if(id > 0) {
-                                $("#cmdDisbursementJournal").prop("disabled", true);
-                                $("#cmdDisbursementSaveLock").prop("disabled", true);
-                                $("#cmdDisbursementSave").prop("disabled", true);
-                                $("#cmdDisbursementEdit").prop("disabled", true);
-                                $("#cmdDisbursementPrint").prop("disabled", true);
-                                $("#cmdDisbursementClose").prop("disabled", true);
-                                window.location = '/Software/DisbursementDetail?DisbursementId=' + id;
-                            } else {
-                                window.history.back();
-                            }
+            } else {
+                document.getElementById('cmdDisbursementSaveLock').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+                $("#cmdDisbursementJournal").prop("disabled", true);
+                $("#cmdDisbursementSaveLock").prop("disabled", true);
+                $("#cmdDisbursementEdit").prop("disabled", true);
+                $("#cmdDisbursementPrint").prop("disabled", true);
+                $("#cmdDisbursementClose").prop("disabled", true);
+
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateDisbursement/' + disbursementId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            toastr.success("Lock Succesful");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Not Found");
+                            $("#cmdDisbursementClose").prop("disabled", false);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            $("#cmdDisbursementClose").prop("disabled", false);
                         }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateDisbursement/' + disbursementId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdDisbursementJournal").prop("disabled", true);
-                                $("#cmdDisbursementSaveLock").prop("disabled", true);
-                                $("#cmdDisbursementSave").prop("disabled", true);
-                                $("#cmdDisbursementEdit").prop("disabled", true);
-                                $("#cmdDisbursementPrint").prop("disabled", true);
-                                $("#cmdDisbursementClose").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdDisbursementJournal").prop("disabled", false);
-                                $("#cmdDisbursementSaveLock").prop("disabled", false);
-                                $("#cmdDisbursementSave").prop("disabled", false);
-                                $("#cmdDisbursementEdit").prop("disabled", false);
-                                $("#cmdDisbursementPrint").prop("disabled", false);
-                                $("#cmdDisbursementClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdDisbursementJournal").prop("disabled", false);
-                                $("#cmdDisbursementSaveLock").prop("disabled", false);
-                                $("#cmdDisbursementSave").prop("disabled", false);
-                                $("#cmdDisbursementEdit").prop("disabled", false);
-                                $("#cmdDisbursementPrint").prop("disabled", false);
-                                $("#cmdDisbursementClose").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             }
         }
 
@@ -2045,6 +2074,15 @@
             var disbursementId = getParam("DisbursementId");
             disbursementObject.IsLocked = false;
             var data = JSON.stringify(disbursementObject);
+
+            document.getElementById('cmdDisbursementEdit').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+            $("#cmdDisbursementJournal").prop("disabled", true);
+            $("#cmdDisbursementSaveLock").prop("disabled", true);
+            // $("#cmdDisbursementSave").prop("disabled", true);
+            $("#cmdDisbursementEdit").prop("disabled", true);
+            $("#cmdDisbursementPrint").prop("disabled", true);
+            $("#cmdDisbursementClose").prop("disabled", true);
+
             $.ajax({
                 type: "PUT",
                 url: '/api/updateDisbursementIsLocked/' + disbursementId,
@@ -2053,33 +2091,17 @@
                 data: data,
                 statusCode: {
                     200: function () {
-                        $("#cmdDisbursementJournal").prop("disabled", true);
-                        $("#cmdDisbursementSaveLock").prop("disabled", true);
-                        $("#cmdDisbursementSave").prop("disabled", true);
-                        $("#cmdDisbursementEdit").prop("disabled", true);
-                        $("#cmdDisbursementPrint").prop("disabled", true);
-                        $("#cmdDisbursementClose").prop("disabled", true);
-                        toastr.success("Unlocked");
+                        toastr.success("Unlock Successful");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
                     },
                     404: function () {
-                        toastr.error("Can't Save");
-                        $("#cmdDisbursementJournal").prop("disabled", false);
-                        $("#cmdDisbursementSaveLock").prop("disabled", false);
-                        $("#cmdDisbursementSave").prop("disabled", false);
-                        $("#cmdDisbursementEdit").prop("disabled", false);
-                        $("#cmdDisbursementPrint").prop("disabled", false);
+                        toastr.error("Not Found");
                         $("#cmdDisbursementClose").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
-                        $("#cmdDisbursementJournal").prop("disabled", false);
-                        $("#cmdDisbursementSaveLock").prop("disabled", false);
-                        $("#cmdDisbursementSave").prop("disabled", false);
-                        $("#cmdDisbursementEdit").prop("disabled", false);
-                        $("#cmdDisbursementPrint").prop("disabled", false);
                         $("#cmdDisbursementClose").prop("disabled", false);
                     }
                 }
@@ -2127,46 +2149,57 @@
                                         });
                                     }
 
-                                    if (DisbursementResults.IsLocked == true) {
-                                        for (i = 0; i < Results.length; i++) {
-                                            disbursementLines.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                CVId: Results[i]["CVId"],
-                                                CV: Results[i]["CV"],
-                                                BranchId: Results[i]["BranchId"],
-                                                Branch: Results[i]["Branch"],
-                                                AccountId: Results[i]["AccountId"],
-                                                Account: Results[i]["Account"],
-                                                ArticleId: Results[i]["ArticleId"],
-                                                Article: Results[i]["Article"],
-                                                RRId: Results[i]["RRId"],
-                                                RR: Results[i]["RR"],
-                                                Particulars: Results[i]["Particulars"],
-                                                Amount: Results[i]["Amount"]
-                                            });
-                                        }
+                                    var canEdit = "@ViewData["CanEdit"]";
+                                    var editDisabled = "disabled";
+
+                                    if (canEdit == "True") {
+                                        editDisabled = "";
+                                    } else if (canEdit == "False") {
+                                        editDisabled = "disabled";
                                     } else {
-                                        for (i = 0; i < Results.length; i++) {
-                                            disbursementLines.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                CVId: Results[i]["CVId"],
-                                                CV: Results[i]["CV"],
-                                                BranchId: Results[i]["BranchId"],
-                                                Branch: Results[i]["Branch"],
-                                                AccountId: Results[i]["AccountId"],
-                                                Account: Results[i]["Account"],
-                                                ArticleId: Results[i]["ArticleId"],
-                                                Article: Results[i]["Article"],
-                                                RRId: Results[i]["RRId"],
-                                                RR: Results[i]["RR"],
-                                                Particulars: Results[i]["Particulars"],
-                                                Amount: Results[i]["Amount"]
-                                            });
-                                        }
+                                        editDisabled = "disabled";
+                                    }
+
+                                    var canDelete = "@ViewData["CanDelete"]";
+                                    var deleteDisabled = "disabled";
+
+                                    if (canDelete == "True") {
+                                        deleteDisabled = "";
+                                    } else if (canDelete == "False") {
+                                        deleteDisabled = "disabled";
+                                    } else {
+                                        deleteDisabled = "disabled";
+                                    }
+
+
+                                    var btnEditId;
+                                    var btnDeleteId;
+                                    if (DisbursementResults.IsLocked == true) {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId =  "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                    } else {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditDisbursementLine_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteDisbursementLine_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                                    }
+
+                                    for (i = 0; i < Results.length; i++) {
+                                        disbursementLines.push({
+                                            EditId: btnEditId,
+                                            DeleteId: btnDeleteId,
+                                            Id: Results[i]["Id"],
+                                            CVId: Results[i]["CVId"],
+                                            CV: Results[i]["CV"],
+                                            BranchId: Results[i]["BranchId"],
+                                            Branch: Results[i]["Branch"],
+                                            AccountId: Results[i]["AccountId"],
+                                            Account: Results[i]["Account"],
+                                            ArticleId: Results[i]["ArticleId"],
+                                            Article: Results[i]["Article"],
+                                            RRId: Results[i]["RRId"],
+                                            RR: Results[i]["RR"],
+                                            Particulars: Results[i]["Particulars"],
+                                            Amount: Results[i]["Amount"]
+                                        });
                                     }
                                 }
                             });
@@ -2524,6 +2557,7 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdSaveDisbursementLineButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveDisbursementLineButton").prop("disabled", false);
             $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
 
@@ -2562,6 +2596,7 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdSaveDisbursementLineButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveDisbursementLineButton").prop("disabled", false);
             $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
 
@@ -2600,12 +2635,14 @@
                 backdrop: 'static'
             });
 
-            $("#cmdSaveDisbursementLineButton").prop("disabled", false);
+            document.getElementById('cmdConfirmDeleteDisbursementLine').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $("#cmdConfirmDeleteDisbursementLine").prop("disabled", false);
             $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
         }
         // Confirm Delete Disbursement Line
         function cmdDisbursementLineConfirmDeleteButton_OnClick() {
-            $("#cmdSaveDisbursementLineButton").prop("disabled", true);
+            document.getElementById('cmdConfirmDeleteDisbursementLine').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+            $("#cmdConfirmDeleteDisbursementLine").prop("disabled", true);
             $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
 
             disbursementLines.editItem(disbursementLines.currentItem);
@@ -2619,7 +2656,7 @@
                     200: function () {
                         $("#cmdSaveDisbursementLineButton").prop("disabled", true);
                         $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deleteDisbursementLineConfirm').modal('hide');
 
@@ -2630,7 +2667,7 @@
                         disbursementGrid.trackChanges = true;
                     },
                     404: function () {
-                        toastr.error("Request Not Found");
+                        toastr.error("Not Found");
                         $('#deleteDisbursementLineConfirm').modal('hide');
                         $("#cmdSaveDisbursementLineButton").prop("disabled", false);
                         $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
@@ -2701,12 +2738,14 @@
                     });
                 }
             });
+
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-            }
-            else {
+            } else {
+                document.getElementById('cmdSaveDisbursementLineButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSaveDisbursementLineButton").prop("disabled", true);
                 $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
+
                 if (disbursementLineId == 0) {
                     $.ajax({
                         type: "POST",
@@ -2718,7 +2757,7 @@
                             if(id > 0) {
                                 $("#cmdSaveDisbursementLineButton").prop("disabled", true);
                                 $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Saved");
+                                toastr.success("Save Successful");
 
                                 $('#disbursementLineEdit').modal('hide');
 
@@ -2730,7 +2769,7 @@
                             } else {
                                 $("#cmdSaveDisbursementLineButton").prop("disabled", false);
                                 $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -2745,7 +2784,7 @@
                             200: function () {
                                 $("#cmdSaveDisbursementLineButton").prop("disabled", true);
                                 $("#cmdDisbursementLineDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Updated");
+                                toastr.success("Update Successful");
 
                                 $('#disbursementLineEdit').modal('hide');
 
@@ -2756,7 +2795,7 @@
                                 disbursementGrid.trackChanges = true;
                             },
                             404: function () {
-                                toastr.error("Can't Update");
+                                toastr.error("Not Found");
                                 $('#disbursementLineEdit').modal('hide');
                                 $("#cmdSaveDisbursementLineButton").prop("disabled", false);
                                 $("#cmdDisbursementLineDetailCloseButton").prop("disabled", false);
@@ -2934,7 +2973,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             emptyBalance = true;
 
             document.getElementById("loadingRRStatus").innerHTML = "<b><i class='fa fa-spinner fa-spin'></i></b>";
@@ -2950,7 +2989,7 @@
                 window.getReceivingStatusGrid = function () {
                     return true;
                 };
-                
+
                 receivingReceipts = new wijmo.collections.CollectionView(getReceivingReceiptBySupplierByBalance());
                 receivingReceipts.canFilter = true;
 
@@ -3007,7 +3046,7 @@
             if (document.location.search.length == 0) {
                 $('#cmdDisbursementJournal').hide();
                 $('#cmdDisbursementSaveLock').hide();
-                $('#cmdDisbursementSave').show();
+                //$('#cmdDisbursementSave').show();
                 $('#cmdDisbursementEdit').hide();
                 $("#cmdDisbursementPrint").prop("disabled", true);
                 $('#btnAddDisbursementLine').prop('disabled', true);
@@ -3016,7 +3055,7 @@
                 document.getElementById('disbursement_Amount').value = 0;
             } else {
                 $('#cmdDisbursementSaveLock').show();
-                $('#cmdDisbursementSave').hide();
+                //$('#cmdDisbursementSave').hide();
                 $('#cmdDisbursementEdit').show();
             }
 
@@ -3029,7 +3068,7 @@
             cboDisbursementLineRR = new wijmo.input.ComboBox('#disbursementLine_RRNo');
 
             document.getElementById('disbursement_CVNumber_Display').disabled = true;
-            document.getElementById('disbursement_Lock').disabled = true;
+            //document.getElementById('disbursement_Lock').disabled = true;
 
             cboBranch = new wijmo.input.ComboBox('#disbursement_Branch');
 
@@ -3181,14 +3220,14 @@
                 $('.modal:visible').length && $(document.body).addClass('modal-open');
             });
 
-            $(document).ajaxStop(function () {
-                if (document.location.search.length == 0) {
-                    btnDisbursementSave_OnClick();
-                    window.btnDisbursementSave_OnClick = function () {
-                        return true;
-                    }
-                }
-            });
+            //$(document).ajaxStop(function () {
+            //    if (document.location.search.length == 0) {
+            //        btnDisbursementSave_OnClick();
+            //        window.btnDisbursementSave_OnClick = function () {
+            //            return true;
+            //        }
+            //    }
+            //});
         });
     </script>
 </body>

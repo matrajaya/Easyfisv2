@@ -35,144 +35,148 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-6"> </div>
-                            <div class="col-md-6" align="right">
-                                <button class="btn btn-primary btn-sm" id="cmdRRJournal" onclick="RRJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                <button class="btn btn-primary btn-sm" id="cmdSaveRRSave" onclick="RRSaveSaveButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdRRSave" onclick="RRSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="cmdRREdit" onclick="RREditButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="RRPrintButton_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button id="cmdRRClose" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software" )'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        <div class="well">
-                            <form class="form-horizontal" role="form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Branch:</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="RRbranch"></div>
+                                    <div class="col-md-6"> </div>
+                                    <div class="col-md-6" align="right">
+                                        <button class="btn btn-primary btn-sm" id="cmdRRJournal" onclick="RRJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdSaveRRSave" onclick="RRSaveSaveButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                        @*<button class="btn btn-primary btn-sm" id="cmdRRSave" onclick="RRSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
+                                        <button class="btn btn-primary btn-sm" id="cmdRREdit" onclick="RREditButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdRRPrint" onclick="RRPrintButton_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                        <button id="cmdRRClose" onclick="window.location.href = '@Url.Action("ReceivingReceipt", "Software" )'" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch:</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="RRbranch"></div>
 
-                                                <input type="hidden" id="RRbranch_data" class="requiredRR" />
-                                                <input type="hidden" id="RRbranch_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">RR Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-30 input-sm requiredRR" id="RRRRNumber_Display" />
-                                                <input type="hidden" id="RRRRNumber" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">RR Date</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-50" id="RRRRDate"></div>
-                                                <input type="hidden" id="RRRRDate_data" class="requiredRR" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Doc Reference</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredRR" id="RRDocReference" placeholder="Document Reference">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Supplier</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group">
-                                                    <div class="comboBox-wide" id="RRSupplier"></div>
+                                                        <input type="hidden" id="RRbranch_data" class="requiredRR" />
+                                                        <input type="hidden" id="RRbranch_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">RR Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-30 input-sm requiredRR" id="RRRRNumber_Display" />
+                                                        <input type="hidden" id="RRRRNumber" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">RR Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-50" id="RRRRDate"></div>
+                                                        <input type="hidden" id="RRRRDate_data" class="requiredRR" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Doc Reference</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredRR" id="RRDocReference" placeholder="Document Reference">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Supplier</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <div class="comboBox-wide" id="RRSupplier"></div>
 
-                                                    <input type="hidden" id="RRSupplier_data" class="requiredRR" />
-                                                    <input type="hidden" id="RRSupplier_selectedValue" />
-                                                    <div class="input-group-btn">
-                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdRRForPOSupplier" onclick="RRForPOSupplier_OnClick()">PO</button>
+                                                            <input type="hidden" id="RRSupplier_data" class="requiredRR" />
+                                                            <input type="hidden" id="RRSupplier_selectedValue" />
+                                                            <div class="input-group-btn">
+                                                                <button type="button" class="btn btn-primary btn-sm" id="cmdRRForPOSupplier" onclick="RRForPOSupplier_OnClick()">PO</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Term</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-70" id="RRTerm"></div>
+
+                                                        <input type="hidden" id="RRTerm_data" class="requiredRR" />
+                                                        <input type="hidden" id="RRTerm_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Remarks</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control textarea-custom requiredRR" id="RRRemarks" placeholder="Remarks"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Manual RR Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredRR" id="RRManualRRNumber" placeholder="Manual RR Number">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Received by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="RRReceivedBy"></div>
+
+                                                        <input type="hidden" id="RRReceivedBy_data" class="requiredRR" />
+                                                        <input type="hidden" id="RRReceivedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Prepared by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="RRPreparedBy"></div>
+
+                                                        <input type="hidden" id="RRPreparedBy_data" class="requiredRR" />
+                                                        <input type="hidden" id="RRPreparedBy_selectedValue" />
+                                                        <input type="hidden" id="userId_data" value="@userId" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Checked by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="RRCheckedBy"></div>
+
+                                                        <input type="hidden" id="RRCheckedBy_data" class="requiredRR" />
+                                                        <input type="hidden" id="RRCheckedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Approved by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="RRApprovedBy"></div>
+
+                                                        <input type="hidden" id="RRApprovedBy_data" class="requiredRR" />
+                                                        <input type="hidden" id="RRApprovedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Lock</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="checkbox" id="RR_Lock">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-sm-4"></div>
+                                                    <div class="col-sm-8">
+                                                        <input type="hidden" id="RR_IsLocked">
+                                                        <input type="hidden" id="RR_IsLocked_defaultTrue">
+                                                        <input type="hidden" id="RR_IsLocked_defaultFalse">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Term</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-70" id="RRTerm"></div>
-
-                                                <input type="hidden" id="RRTerm_data" class="requiredRR" />
-                                                <input type="hidden" id="RRTerm_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Remarks</label>
-                                            <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredRR" id="RRRemarks" placeholder="Remarks"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Manual RR Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredRR" id="RRManualRRNumber" placeholder="Manual RR Number">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Received by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="RRReceivedBy"></div>
-
-                                                <input type="hidden" id="RRReceivedBy_data" class="requiredRR" />
-                                                <input type="hidden" id="RRReceivedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Prepared by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="RRPreparedBy"></div>
-
-                                                <input type="hidden" id="RRPreparedBy_data" class="requiredRR" />
-                                                <input type="hidden" id="RRPreparedBy_selectedValue" />
-                                                <input type="hidden" id="userId_data" value="@userId" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Checked by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="RRCheckedBy"></div>
-
-                                                <input type="hidden" id="RRCheckedBy_data" class="requiredRR" />
-                                                <input type="hidden" id="RRCheckedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Approved by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="RRApprovedBy"></div>
-
-                                                <input type="hidden" id="RRApprovedBy_data" class="requiredRR" />
-                                                <input type="hidden" id="RRApprovedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Lock</label>
-                                            <div class="col-sm-8">
-                                                <input type="checkbox" id="RR_Lock">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-4"></div>
-                                            <div class="col-sm-8">
-                                                <input type="hidden" id="RR_IsLocked">
-                                                <input type="hidden" id="RR_IsLocked_defaultTrue">
-                                                <input type="hidden" id="RR_IsLocked_defaultFalse">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                         <br />
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
@@ -182,21 +186,24 @@
                         <br />
                         <div class="tab-content">
                             <div id="Item" class="tab-pane fade in active">
-                                <!-- Item List -->
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="btnRRLineItem" onclick="btnAddItemRRLine_OnClick()"><i class="fa fa-plus"></i> add</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary btn-sm" id="btnRRLineItem" onclick="btnAddItemRRLine_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="ItemGrid" class="grid" align="left"></div>
+                                    <div class="panel-body">
+                                        <div class="row" align="left">
+                                            <div class="col-lg-12">
+                                                <div id="ItemGrid" class="grid" align="left"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div id="InventoryEntry" class="tab-pane fade in active">
-                                <!-- Inventory Entry List -->
                                 <br />
                                 <div class="row" align="left">
                                     <div class="col-lg-12">
@@ -638,7 +645,7 @@
 
                             document.getElementById('RR_IsLocked').value = Results.IsLocked;
 
-                            if (document.getElementById('RR_IsLocked').value == 'true') {
+                            if (Results.IsLocked == true) {
                                 document.getElementById('RRDocReference').disabled = true;
                                 document.getElementById('RRRemarks').disabled = true;
                                 document.getElementById('RRManualRRNumber').disabled = true;
@@ -657,13 +664,23 @@
 
                                 $("#cmdRRJournal").prop("disabled", false);
                                 $("#cmdSaveRRSave").prop("disabled", true);
-                                $("#cmdRRSave").prop("disabled", true);
+                                //$("#cmdRRSave").prop("disabled", true);
                                 $("#cmdRREdit").prop("disabled", false);
                                 $("#cmdRRPrint").prop("disabled", false);
                                 $("#cmdRRForPOSupplier").prop("disabled", true);
                                 $("#btnRRLineItem").prop("disabled", true);
 
-                            } else if (document.getElementById('RR_IsLocked').value == 'false') {
+
+                                var canUnLock = "@ViewData["CanUnlock"]";
+                                if (canUnLock == "True") {
+                                    $("#cmdRREdit").prop("disabled", false)
+                                } else if (canUnLock == "False") {
+                                    $("#cmdRREdit").prop("disabled", true)
+                                } else {
+                                    $("#cmdRREdit").prop("disabled", true)
+                                }
+
+                            } else {
                                 document.getElementById('RRDocReference').disabled = false;
                                 document.getElementById('RRRemarks').disabled = false;
                                 document.getElementById('RRManualRRNumber').disabled = false;
@@ -682,14 +699,42 @@
 
                                 $("#cmdRRJournal").prop("disabled", true);
                                 $("#cmdSaveRRSave").prop("disabled", false);
-                                $("#cmdRRSave").prop("disabled", false);
+                                //$("#cmdRRSave").prop("disabled", false);
                                 $("#cmdRREdit").prop("disabled", true);
                                 $("#cmdRRPrint").prop("disabled", true);
                                 $("#cmdRRForPOSupplier").prop("disabled", false);
                                 $("#btnRRLineItem").prop("disabled", false);
 
+
+                                var canLock = "@ViewData["CanLock"]";
+                                if (canLock == "True") {
+                                    $("#cmdSaveRRSave").prop("disabled", false)
+                                } else if (canLock == "False") {
+                                    $("#cmdSaveRRSave").prop("disabled", true)
+                                } else {
+                                    $("#cmdSaveRRSave").prop("disabled", true)
+                                }
+
+                                var canAdd = "@ViewData["CanAdd"]";
+                                if (canAdd == "True") {
+                                    $("#cmdRRForPOSupplier").prop("disabled", false)
+                                    $("#btnRRLineItem").prop("disabled", false)
+                                } else if (canAdd == "False") {
+                                    $("#cmdRRForPOSupplier").prop("disabled", true)
+                                    $("#btnRRLineItem").prop("disabled", true)
+                                } else {
+                                    $("#cmdRRForPOSupplier").prop("disabled", true)
+                                    $("#btnRRLineItem").prop("disabled", true)
+                                }
+                            }
+
+                            var canPrint = "@ViewData["CanPrint"]";
+                            if (canPrint == "True") {
+                                $("#cmdRRPrint").prop("disabled", false)
+                            } else if (canPrint == "False") {
+                                $("#cmdRRPrint").prop("disabled", true)
                             } else {
-                                console.log("Invalid Lock");
+                                $("#cmdRRPrint").prop("disabled", true)
                             }
 
                             getBranchesForComboBox();
@@ -1167,156 +1212,156 @@
             return result;
         }
 
-        // ======
-        // ADD RR
-        // ======
-        function RRSaveButton_OnClick() {
-            var RRObject = new Object();
-            var ReceivingReceiptId = getParam('ReceivingReceiptId');
-            RRObject.BranchId = document.getElementById('RRbranch_data').value;
-            RRObject.RRDate = document.getElementById('RRRRDate_data').value;
-            RRObject.RRNumber = document.getElementById('RRRRNumber_Display').value;
-            RRObject.SupplierId = document.getElementById('RRSupplier_data').value;
-            RRObject.TermId = document.getElementById('RRTerm_data').value;
-            RRObject.DocumentReference = document.getElementById('RRDocReference').value;
-            RRObject.ManualRRNumber = document.getElementById('RRManualRRNumber').value;
-            RRObject.Remarks = document.getElementById('RRRemarks').value;
-            //RRObject.Amount = 0;
-            //RRObject.WTaxAmount = 0;
-            //RRObject.PaidAmount = 0;
-            //RRObject.AdjustmentAmount = 0;
-            //RRObject.BalanceAmount = 0;
-            RRObject.ReceivedById = document.getElementById('RRReceivedBy_data').value;
-            RRObject.PreparedById = document.getElementById('RRPreparedBy_data').value;
-            RRObject.CheckedById = document.getElementById('RRCheckedBy_data').value;
-            RRObject.ApprovedById = document.getElementById('RRApprovedBy_data').value;
-            var data = JSON.stringify(RRObject);
+        //// ======
+        //// ADD RR
+        //// ======
+        //function RRSaveButton_OnClick() {
+        //    var RRObject = new Object();
+        //    var ReceivingReceiptId = getParam('ReceivingReceiptId');
+        //    RRObject.BranchId = document.getElementById('RRbranch_data').value;
+        //    RRObject.RRDate = document.getElementById('RRRRDate_data').value;
+        //    RRObject.RRNumber = document.getElementById('RRRRNumber_Display').value;
+        //    RRObject.SupplierId = document.getElementById('RRSupplier_data').value;
+        //    RRObject.TermId = document.getElementById('RRTerm_data').value;
+        //    RRObject.DocumentReference = document.getElementById('RRDocReference').value;
+        //    RRObject.ManualRRNumber = document.getElementById('RRManualRRNumber').value;
+        //    RRObject.Remarks = document.getElementById('RRRemarks').value;
+        //    //RRObject.Amount = 0;
+        //    //RRObject.WTaxAmount = 0;
+        //    //RRObject.PaidAmount = 0;
+        //    //RRObject.AdjustmentAmount = 0;
+        //    //RRObject.BalanceAmount = 0;
+        //    RRObject.ReceivedById = document.getElementById('RRReceivedBy_data').value;
+        //    RRObject.PreparedById = document.getElementById('RRPreparedBy_data').value;
+        //    RRObject.CheckedById = document.getElementById('RRCheckedBy_data').value;
+        //    RRObject.ApprovedById = document.getElementById('RRApprovedBy_data').value;
+        //    var data = JSON.stringify(RRObject);
 
-            if (document.getElementById('RRbranch_data').value == '') {
-                document.getElementById("RRbranch").style.border = "1px solid red";
-            } else {
-                document.getElementById("RRbranch").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('RRbranch_data').value == '') {
+        //        document.getElementById("RRbranch").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("RRbranch").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('RRSupplier_data').value == '') {
-                document.getElementById("RRSupplier").style.border = "1px solid red";
-            } else {
-                document.getElementById("RRSupplier").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('RRSupplier_data').value == '') {
+        //        document.getElementById("RRSupplier").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("RRSupplier").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('RRTerm_data').value == '') {
-                document.getElementById("RRTerm").style.border = "1px solid red";
-            } else {
-                document.getElementById("RRTerm").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('RRTerm_data').value == '') {
+        //        document.getElementById("RRTerm").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("RRTerm").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('RRReceivedBy_data').value == '') {
-                document.getElementById("RRReceivedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("RRReceivedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('RRReceivedBy_data').value == '') {
+        //        document.getElementById("RRReceivedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("RRReceivedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('RRPreparedBy_data').value == '') {
-                document.getElementById("RRPreparedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("RRPreparedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('RRPreparedBy_data').value == '') {
+        //        document.getElementById("RRPreparedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("RRPreparedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('RRCheckedBy_data').value == '') {
-                document.getElementById("RRCheckedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("RRCheckedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('RRCheckedBy_data').value == '') {
+        //        document.getElementById("RRCheckedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("RRCheckedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('RRApprovedBy_data').value == '') {
-                document.getElementById("RRApprovedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("RRApprovedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('RRApprovedBy_data').value == '') {
+        //        document.getElementById("RRApprovedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("RRApprovedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            var isValid = true;
-            $('.requiredRR').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "1px solid red"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
+        //    var isValid = true;
+        //    $('.requiredRR').each(function () {
+        //        if ($.trim($(this).val()) == '') {
+        //            isValid = false;
+        //            $(this).css({
+        //                "border": "1px solid red"
+        //            });
+        //        }
+        //        else {
+        //            $(this).css({
+        //                "border": "",
+        //            });
+        //        }
+        //    });
 
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addReceivingReceipt',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id){
-                            if(id > 0) {
-                                $("#cmdRRJournal").prop("disabled", true);
-                                $("#cmdSaveRRSave").prop("disabled", true);
-                                $("#cmdRRSave").prop("disabled", true);
-                                $("#cmdRREdit").prop("disabled", true);
-                                $("#cmdRRPrint").prop("disabled", true);
-                                $("#cmdRRClose").prop("disabled", true);
-                                window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + id;
-                            } else {
-                                window.history.back();
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateReceivingReceipt/' + ReceivingReceiptId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdRRJournal").prop("disabled", true);
-                                $("#cmdSaveRRSave").prop("disabled", true);
-                                $("#cmdRRSave").prop("disabled", true);
-                                $("#cmdRREdit").prop("disabled", true);
-                                $("#cmdRRPrint").prop("disabled", true);
-                                $("#cmdRRClose").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdRRJournal").prop("disabled", false);
-                                $("#cmdSaveRRSave").prop("disabled", false);
-                                $("#cmdRRSave").prop("disabled", false);
-                                $("#cmdRREdit").prop("disabled", false);
-                                $("#cmdRRPrint").prop("disabled", false);
-                                $("#cmdRRClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdRRJournal").prop("disabled", false);
-                                $("#cmdSaveRRSave").prop("disabled", false);
-                                $("#cmdRRSave").prop("disabled", false);
-                                $("#cmdRREdit").prop("disabled", false);
-                                $("#cmdRRPrint").prop("disabled", false);
-                                $("#cmdRRClose").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
-            }
-        }
+        //    if (isValid == false) {
+        //        toastr.error("Invalid Entry");
+        //    }
+        //    else {
+        //        if (document.location.search.length == 0) {
+        //            $.ajax({
+        //                type: "POST",
+        //                url: '/api/addReceivingReceipt',
+        //                contentType: "application/json; charset=utf-8",
+        //                dataType: "json",
+        //                data: data,
+        //                success: function(id){
+        //                    if(id > 0) {
+        //                        $("#cmdRRJournal").prop("disabled", true);
+        //                        $("#cmdSaveRRSave").prop("disabled", true);
+        //                        $("#cmdRRSave").prop("disabled", true);
+        //                        $("#cmdRREdit").prop("disabled", true);
+        //                        $("#cmdRRPrint").prop("disabled", true);
+        //                        $("#cmdRRClose").prop("disabled", true);
+        //                        window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + id;
+        //                    } else {
+        //                        window.history.back();
+        //                    }
+        //                }
+        //            });
+        //        } else {
+        //            $.ajax({
+        //                type: "PUT",
+        //                url: '/api/updateReceivingReceipt/' + ReceivingReceiptId,
+        //                contentType: "application/json; charset=utf-8",
+        //                dataType: "json",
+        //                data: data,
+        //                statusCode: {
+        //                    200: function () {
+        //                        $("#cmdRRJournal").prop("disabled", true);
+        //                        $("#cmdSaveRRSave").prop("disabled", true);
+        //                        $("#cmdRRSave").prop("disabled", true);
+        //                        $("#cmdRREdit").prop("disabled", true);
+        //                        $("#cmdRRPrint").prop("disabled", true);
+        //                        $("#cmdRRClose").prop("disabled", true);
+        //                        toastr.success("Successfully Updated");
+        //                        window.setTimeout(function () {
+        //                            location.reload()
+        //                        }, 1000);
+        //                    },
+        //                    404: function () {
+        //                        toastr.error("Can't Save");
+        //                        $("#cmdRRJournal").prop("disabled", false);
+        //                        $("#cmdSaveRRSave").prop("disabled", false);
+        //                        $("#cmdRRSave").prop("disabled", false);
+        //                        $("#cmdRREdit").prop("disabled", false);
+        //                        $("#cmdRRPrint").prop("disabled", false);
+        //                        $("#cmdRRClose").prop("disabled", false);
+        //                    },
+        //                    400: function () {
+        //                        toastr.error("Bad Request");
+        //                        $("#cmdRRJournal").prop("disabled", false);
+        //                        $("#cmdSaveRRSave").prop("disabled", false);
+        //                        $("#cmdRRSave").prop("disabled", false);
+        //                        $("#cmdRREdit").prop("disabled", false);
+        //                        $("#cmdRRPrint").prop("disabled", false);
+        //                        $("#cmdRRClose").prop("disabled", false);
+        //                    }
+        //                }
+        //            });
+        //        }
+        //    }
+        //}
 
         // ==================
         // Save RR - IsLocked
@@ -1403,70 +1448,38 @@
 
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addReceivingReceipt',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id){
-                            if(id > 0) {
-                                $("#cmdRRJournal").prop("disabled", true);
-                                $("#cmdSaveRRSave").prop("disabled", true);
-                                $("#cmdRRSave").prop("disabled", true);
-                                $("#cmdRREdit").prop("disabled", true);
-                                $("#cmdRRPrint").prop("disabled", true);
-                                $("#cmdRRClose").prop("disabled", true);
-                                window.location = '/Software/ReceivingReceiptDetail?ReceivingReceiptId=' + id;
-                            } else {
-                                window.history.back();
-                            }
+            } else {
+                document.getElementById('cmdSaveRRSave').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+                $("#cmdRRJournal").prop("disabled", true);
+                $("#cmdSaveRRSave").prop("disabled", true);
+                //$("#cmdRRSave").prop("disabled", true);
+                $("#cmdRREdit").prop("disabled", true);
+                $("#cmdRRPrint").prop("disabled", true);
+                $("#cmdRRClose").prop("disabled", true);
+
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateReceivingReceipt/' + ReceivingReceiptId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            toastr.success("Lock Successful");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Not Found");
+                            $("#cmdRRClose").prop("disabled", false);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            $("#cmdRRClose").prop("disabled", false);
                         }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateReceivingReceipt/' + ReceivingReceiptId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdRRJournal").prop("disabled", true);
-                                $("#cmdSaveRRSave").prop("disabled", true);
-                                $("#cmdRRSave").prop("disabled", true);
-                                $("#cmdRREdit").prop("disabled", true);
-                                $("#cmdRRPrint").prop("disabled", true);
-                                $("#cmdRRClose").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdRRJournal").prop("disabled", false);
-                                $("#cmdSaveRRSave").prop("disabled", false);
-                                $("#cmdRRSave").prop("disabled", false);
-                                $("#cmdRREdit").prop("disabled", false);
-                                $("#cmdRRPrint").prop("disabled", false);
-                                $("#cmdRRClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdRRJournal").prop("disabled", false);
-                                $("#cmdSaveRRSave").prop("disabled", false);
-                                $("#cmdRRSave").prop("disabled", false);
-                                $("#cmdRREdit").prop("disabled", false);
-                                $("#cmdRRPrint").prop("disabled", false);
-                                $("#cmdRRClose").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             }
         }
 
@@ -1478,6 +1491,15 @@
             var ReceivingReceiptId = getParam('ReceivingReceiptId');
             RRObject.IsLocked = false;
             var data = JSON.stringify(RRObject);
+
+            document.getElementById('cmdRREdit').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+            $("#cmdRRJournal").prop("disabled", true);
+            $("#cmdSaveRRSave").prop("disabled", true);
+            //$("#cmdRRSave").prop("disabled", true);
+            $("#cmdRREdit").prop("disabled", true);
+            $("#cmdRRPrint").prop("disabled", true);
+            $("#cmdRRClose").prop("disabled", true);
+
             $.ajax({
                 type: "PUT",
                 url: '/api/updateReceivingReceiptIsLocked/' + ReceivingReceiptId,
@@ -1486,33 +1508,17 @@
                 data: data,
                 statusCode: {
                     200: function () {
-                        $("#cmdRRJournal").prop("disabled", true);
-                        $("#cmdSaveRRSave").prop("disabled", true);
-                        $("#cmdRRSave").prop("disabled", true);
-                        $("#cmdRREdit").prop("disabled", true);
-                        $("#cmdRRPrint").prop("disabled", true);
-                        $("#cmdRRClose").prop("disabled", true);
-                        toastr.success("Unlocked");
+                        toastr.success("Unlock Successful");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
                     },
                     404: function () {
-                        toastr.error("Can't Save");
-                        $("#cmdRRJournal").prop("disabled", false);
-                        $("#cmdSaveRRSave").prop("disabled", false);
-                        $("#cmdRRSave").prop("disabled", false);
-                        $("#cmdRREdit").prop("disabled", false);
-                        $("#cmdRRPrint").prop("disabled", false);
+                        toastr.error("Not Found");
                         $("#cmdRRClose").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
-                        $("#cmdRRJournal").prop("disabled", false);
-                        $("#cmdSaveRRSave").prop("disabled", false);
-                        $("#cmdRRSave").prop("disabled", false);
-                        $("#cmdRREdit").prop("disabled", false);
-                        $("#cmdRRPrint").prop("disabled", false);
                         $("#cmdRRClose").prop("disabled", false);
                     }
                 }
@@ -2017,11 +2023,13 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdConfirmApplyAllPOStatusPOItems').innerHTML = "<i class='fa fa-check'></i> Apply";
             $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
             $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", false);
         }
         // Confirm Apply ALL PO
         function btnConfrimApplyAllPOItems_OnClick() {
+            document.getElementById('cmdConfirmApplyAllPOStatusPOItems').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Applying";
             $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", true);
             $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", true);
             var ReceivingReceiptId = getParam('ReceivingReceiptId');
@@ -2055,7 +2063,7 @@
                             200: function () {
                                 $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", true);
                                 $("#cmdCloseButtonApplyAllPOStatusPOItems").prop("disabled", true);
-                                toastr.success("Successfully Applied");
+                                toastr.success("Apply Successful");
 
                                 $('#applyAllConfirmPOStatus').modal('hide');
                                 $('#POStatus').modal('hide');
@@ -2083,7 +2091,7 @@
                                 POstatusGrid.trackChanges = true;
                             },
                             404: function () {
-                                toastr.error("Request Not Found");
+                                toastr.error("Not Found");
                                 $('#applyAllConfirmPOStatus').modal('hide');
                                 $('#POStatus').modal('hide');
                                 $("#cmdConfirmApplyAllPOStatusPOItems").prop("disabled", false);
@@ -2191,7 +2199,7 @@
             if (document.location.search.length == 0) {
                 $('#cmdRRJournal').hide();
                 $('#cmdSaveRRSave').hide();
-                $('#cmdRRSave').show();
+                //$('#cmdRRSave').show();
                 $('#cmdRREdit').hide();
 
                 $("#cmdRRPrint").prop("disabled", true);
@@ -2201,7 +2209,7 @@
                 //$('#btnAddContactInformation').prop('disabled', true);
             } else {
                 $('#cmdRRJournal').show();
-                $('#cmdRRSave').hide();
+                //$('#cmdRRSave').hide();
                 $('#cmdRREdit').show();
             }
 
@@ -2271,14 +2279,14 @@
                 });
             }
 
-            $(document).ajaxStop(function () {
-                if (document.location.search.length == 0) {
-                    RRSaveSaveButton_OnClick();
-                    window.RRSaveSaveButton_OnClick = function () {
-                        return true;
-                    }
-                }
-            });
+            //$(document).ajaxStop(function () {
+            //    if (document.location.search.length == 0) {
+            //        RRSaveSaveButton_OnClick();
+            //        window.RRSaveSaveButton_OnClick = function () {
+            //            return true;
+            //        }
+            //    }
+            //});
         });
     </script>
 
@@ -2344,6 +2352,28 @@
                                             IsLocked: RRResults.IsLocked
                                         });
                                     }
+                                    
+                                    var canDelete = "@ViewData["CanDelete"]";
+                                    var deleteDisabled;
+
+                                    if (canDelete == "True") {
+                                        deleteDisabled = "";
+                                    } else if (canDelete == "False") {
+                                        deleteDisabled = "disabled";
+                                    } else {
+                                        deleteDisabled = "disabled";
+                                    }
+                                    
+                                    var canEdit = "@ViewData["CanEdit"]";
+                                    var editDisabled;
+
+                                    if (canEdit == "True") {
+                                        editDisabled = "";
+                                    } else if (canEdit == "False") {
+                                        editDisabled = "disabled";
+                                    } else {
+                                        editDisabled = "disabled";
+                                    }
 
                                     if (RRResults.IsLocked == true) {
                                         for (i = 0; i < Results.length; i++) {
@@ -2385,8 +2415,8 @@
                                     } else {
                                         for (i = 0; i < Results.length; i++) {
                                             items.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnItemRRLinesEdit_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnItemRRLinesDelete_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
+                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnItemRRLinesEdit_OnClick()' " + editDisabled +"><i class='fa fa-edit'></i> Edit</button>",
+                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnItemRRLinesDelete_OnClick()' "+ deleteDisabled +"><i class='fa fa-trash'></i> Delete</button>",
                                                 Id: Results[i]["Id"],
                                                 RRId: Results[i]["RRId"],
                                                 RR: Results[i]["RR"],
@@ -3443,6 +3473,7 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveRRLinesButton").prop("disabled", false);
             $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
 
@@ -3513,6 +3544,7 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveRRLinesButton").prop("disabled", false);
             $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
 
@@ -3688,6 +3720,7 @@
                 toastr.error("Invalid Entry");
             }
             else {
+                document.getElementById('cmdSaveRRLinesButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSaveRRLinesButton").prop("disabled", true);
                 $("#cmdRRLinesDetailCloseButton").prop("disabled", true);
                 if (RRLineId == 0) {
@@ -3701,7 +3734,7 @@
                             if(id > 0) {
                                 $("#cmdSaveRRLinesButton").prop("disabled", true);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Saved");
+                                toastr.success("Save Successful");
                                 $('#RRLinesEdit').modal('hide');
 
                                 items = new wijmo.collections.CollectionView(getRRItem());
@@ -3712,7 +3745,7 @@
                             } else {
                                 $("#cmdSaveRRLinesButton").prop("disabled", false);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -3727,7 +3760,7 @@
                             200: function () {
                                 $("#cmdSaveRRLinesButton").prop("disabled", true);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Updated");
+                                toastr.success("Update Successful");
 
                                 $('#RRLinesEdit').modal('hide');
 
@@ -3738,7 +3771,7 @@
                                 itemGrid.trackChanges = true;
                             },
                             404: function () {
-                                toastr.error("Can't Update");
+                                toastr.error("Not Found");
                                 $('#RRLinesEdit').modal('hide');
                                 $("#cmdSaveRRLinesButton").prop("disabled", false);
                                 $("#cmdRRLinesDetailCloseButton").prop("disabled", false);
@@ -3764,11 +3797,13 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdConfirmDeleteRRLines').innerHTML = "<i class='fa fa-tash'></i> Delete";
             $("#cmdConfirmDeleteRRLines").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", false);
         }
         // RR lines Confirm Delete Button
         function cmdRRLinesConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeleteRRLines').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteRRLines").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", true);
 
@@ -3782,9 +3817,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        $("#cmdConfirmDeleteRRLines").prop("disabled", true);
-                        $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deleteRRLinesConfirm').modal('hide');
 
@@ -3795,16 +3828,12 @@
                         itemGrid.trackChanges = true;
                     },
                     404: function () {
-                        toastr.error("Request Not Found");
+                        toastr.error("Not Found");
                         $('#deleteRRLinesConfirm').modal('hide');
-                        $("#cmdConfirmDeleteRRLines").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
                         $('#deleteRRLinesConfirm').modal('hide');
-                        $("#cmdConfirmDeleteRRLines").prop("disabled", false);
-                        $("#cmdConfirmDeleteCloseButtonRRLines").prop("disabled", false);
                     }
                 }
             });

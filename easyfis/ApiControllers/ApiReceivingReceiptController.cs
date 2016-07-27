@@ -22,6 +22,19 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // get amount in receiving items
         public Decimal getAmountReceivingReceiptItem(Int32 RRId)
         {
@@ -333,24 +346,33 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastRRNumber = from d in db.TrnReceivingReceipts.OrderByDescending(d => d.Id) select d;
+                var RRNumberResult = "0000000001";
+
+                if (lastRRNumber.Any())
+                {
+                    var PONumber = Convert.ToInt32(lastRRNumber.FirstOrDefault().RRNumber) + 0000000001;
+                    RRNumberResult = zeroFill(PONumber, 10);
+                }
+
                 Data.TrnReceivingReceipt newReceivingReceipt = new Data.TrnReceivingReceipt();
-                newReceivingReceipt.BranchId = receivingReceipt.BranchId;
-                newReceivingReceipt.RRDate = Convert.ToDateTime(receivingReceipt.RRDate);
-                newReceivingReceipt.RRNumber = receivingReceipt.RRNumber;
-                newReceivingReceipt.SupplierId = receivingReceipt.SupplierId;
-                newReceivingReceipt.TermId = receivingReceipt.TermId;
-                newReceivingReceipt.DocumentReference = receivingReceipt.DocumentReference;
-                newReceivingReceipt.ManualRRNumber = receivingReceipt.ManualRRNumber;
-                newReceivingReceipt.Remarks = receivingReceipt.Remarks;
+                newReceivingReceipt.BranchId = currentBranchId();
+                newReceivingReceipt.RRDate = DateTime.Today;
+                newReceivingReceipt.RRNumber = RRNumberResult;
+                newReceivingReceipt.SupplierId = (from d in db.MstArticles where d.ArticleTypeId == 3 select d.Id).FirstOrDefault();
+                newReceivingReceipt.TermId = (from d in db.MstTerms select d.Id).FirstOrDefault();
+                newReceivingReceipt.DocumentReference = "NA";
+                newReceivingReceipt.ManualRRNumber = "NA";
+                newReceivingReceipt.Remarks = "NA";
                 newReceivingReceipt.Amount = 0;
                 newReceivingReceipt.WTaxAmount = 0;
                 newReceivingReceipt.PaidAmount = 0;
                 newReceivingReceipt.AdjustmentAmount = 0;
                 newReceivingReceipt.BalanceAmount = 0;
-                newReceivingReceipt.ReceivedById = receivingReceipt.ReceivedById;
-                newReceivingReceipt.PreparedById = receivingReceipt.PreparedById;
-                newReceivingReceipt.CheckedById = receivingReceipt.CheckedById;
-                newReceivingReceipt.ApprovedById = receivingReceipt.ApprovedById;
+                newReceivingReceipt.ReceivedById = userId;
+                newReceivingReceipt.PreparedById = userId;
+                newReceivingReceipt.CheckedById = userId;
+                newReceivingReceipt.ApprovedById = userId;
                 newReceivingReceipt.IsLocked = false;
                 newReceivingReceipt.CreatedById = userId;
                 newReceivingReceipt.CreatedDateTime = DateTime.Now;

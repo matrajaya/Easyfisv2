@@ -20,6 +20,19 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // update AP
         public void updateAPDisbursement(Int32 CVId)
         {
@@ -424,24 +437,33 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastCVBNumber = from d in db.TrnDisbursements.OrderByDescending(d => d.Id) select d;
+                var CVNumberResult = "0000000001";
+
+                if (lastCVBNumber.Any())
+                {
+                    var CVNumber = Convert.ToInt32(lastCVBNumber.FirstOrDefault().CVNumber) + 0000000001;
+                    CVNumberResult = zeroFill(CVNumber, 10);
+                }
+
                 Data.TrnDisbursement newDisbursement = new Data.TrnDisbursement();
-                newDisbursement.BranchId = disbursement.BranchId;
-                newDisbursement.CVNumber = disbursement.CVNumber;
-                newDisbursement.CVDate = Convert.ToDateTime(disbursement.CVDate);
-                newDisbursement.SupplierId = disbursement.SupplierId;
-                newDisbursement.Payee = disbursement.Payee;
-                newDisbursement.PayTypeId = disbursement.PayTypeId;
-                newDisbursement.BankId = disbursement.BankId;
-                newDisbursement.ManualCVNumber = disbursement.ManualCVNumber;
-                newDisbursement.Particulars = disbursement.Particulars;
-                newDisbursement.CheckNumber = disbursement.CheckNumber;
-                newDisbursement.CheckDate = Convert.ToDateTime(disbursement.CheckDate);
-                newDisbursement.Amount = disbursement.Amount;
-                newDisbursement.IsCrossCheck = disbursement.IsCrossCheck;
-                newDisbursement.IsClear = disbursement.IsClear;
-                newDisbursement.PreparedById = disbursement.PreparedById;
-                newDisbursement.CheckedById = disbursement.CheckedById;
-                newDisbursement.ApprovedById = disbursement.ApprovedById;
+                newDisbursement.BranchId = currentBranchId();
+                newDisbursement.CVNumber = CVNumberResult;
+                newDisbursement.CVDate = DateTime.Today;
+                newDisbursement.SupplierId = (from d in db.MstArticles where d.ArticleTypeId == 3 select d.Id).FirstOrDefault();
+                newDisbursement.Payee = "NA";
+                newDisbursement.PayTypeId = (from d in db.MstPayTypes select d.Id).FirstOrDefault();
+                newDisbursement.BankId = (from d in db.MstArticles where d.ArticleTypeId == 5 select d.Id).FirstOrDefault();
+                newDisbursement.ManualCVNumber = "NA";
+                newDisbursement.Particulars = "NA";
+                newDisbursement.CheckNumber = "NA";
+                newDisbursement.CheckDate = DateTime.Today;
+                newDisbursement.Amount = 0;
+                newDisbursement.IsCrossCheck = false;
+                newDisbursement.IsClear = false;
+                newDisbursement.PreparedById = userId;
+                newDisbursement.CheckedById = userId;
+                newDisbursement.ApprovedById = userId;
                 newDisbursement.IsLocked = false;
                 newDisbursement.CreatedById = userId;
                 newDisbursement.CreatedDateTime = DateTime.Now;

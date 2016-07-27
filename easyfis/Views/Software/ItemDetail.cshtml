@@ -38,7 +38,7 @@
                                 <div class="row">
                                     <div class="col-md-6"></div>
                                     <div class="col-md-6" align="right">
-                                        <button class="btn btn-primary btn-sm" id="item_SaveButton" onclick="itemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
+                                        @*<button class="btn btn-primary btn-sm" id="item_SaveButton" onclick="itemSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>*@
                                         <button class="btn btn-primary btn-sm" id="item_LockButton" onclick="itemLockButton_OnClick()"><i class="fa fa-lock"></i> Lock</button>
                                         <button class="btn btn-primary btn-sm" id="item_UnlockButton" onclick="itemUnlockButton_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
                                         <button class="btn btn-danger btn-sm" id="item_CloseButton" onclick="itemCloseButton_OnClick()"><i class=" fa fa-times"></i> Close</button>
@@ -489,120 +489,129 @@
 
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
-        // ================
-        // Global Variables
-        // ================
-        var items;
-        var dateAcquired;
-        var articleItemGroups;
-        var articleItemUnits;
-        var taxTypes;
-        var accounts;
-        var cboAccountCode;
-        var cboAccount;
-        var cboSaleAccountCode;
-        var cboSaleAccount;
-        var cboCostAccountCode;
-        var cboCostAccount;
-        var cboAccumDepAccountCode;
-        var cboAccumDepAccount;
-        var cboExpenseAccountCode;
-        var cboExpenseAccount;
-        var cboArticleGroupForItem;
-        var cboArticleUnitForItem;
-        var cboArticleInputTaxTypeForItem;
-        var cboArticleOutputTaxTypeForItem;
-        var cboArticleWithholdingTaxTypeForItem;
-        var itemArticleGroupSelectedValue = "";
-        var itemUnitSelectedValue = "";
-        var itemInputTaxSelectedValue = "";
-        var itemOutputTaxSelectedValue = "";
-        var itemWithHoldingTaxSelectedValue = "";
-        var accountSelectedValue = "";
-        var salesAccountSelectedValue = "";
-        var costAccountSelectedValue = "";
-        var accumDepAccountSelectedValue = "";
-        var expenseAccountSelectedValue = "";
-        var IsLocked;
-        var itemId = getParam('ItemId');
+    // ================
+    // Global Variables
+    // ================
+    var items;
+    var dateAcquired;
+    var articleItemGroups;
+    var articleItemUnits;
+    var taxTypes;
+    var accounts;
+    var cboAccountCode;
+    var cboAccount;
+    var cboSaleAccountCode;
+    var cboSaleAccount;
+    var cboCostAccountCode;
+    var cboCostAccount;
+    var cboAccumDepAccountCode;
+    var cboAccumDepAccount;
+    var cboExpenseAccountCode;
+    var cboExpenseAccount;
+    var cboArticleGroupForItem;
+    var cboArticleUnitForItem;
+    var cboArticleInputTaxTypeForItem;
+    var cboArticleOutputTaxTypeForItem;
+    var cboArticleWithholdingTaxTypeForItem;
+    var itemArticleGroupSelectedValue = "";
+    var itemUnitSelectedValue = "";
+    var itemInputTaxSelectedValue = "";
+    var itemOutputTaxSelectedValue = "";
+    var itemWithHoldingTaxSelectedValue = "";
+    var accountSelectedValue = "";
+    var salesAccountSelectedValue = "";
+    var costAccountSelectedValue = "";
+    var accumDepAccountSelectedValue = "";
+    var expenseAccountSelectedValue = "";
+    var IsLocked;
+    var itemId = getParam('ItemId');
 
-        // =======================
-        // Get URL Parameter Value
-        // =======================
-        function getParam(name) {
-            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-            var regexS = "[\\?&]" + name + "=([^&#]*)";
-            var regex = new RegExp(regexS);
-            var results = regex.exec(window.location.href);
-            if (results == null) {
-                return "";
-            } else {
-                return results[1];
-            }
+    // =======================
+    // Get URL Parameter Value
+    // =======================
+    function getParam(name) {
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(window.location.href);
+        if (results == null) {
+            return "";
+        } else {
+            return results[1];
         }
+    }
 
-        // ==============================
-        // Get Article for item by its ID
-        // ==============================
-        function getArticleItemById() {
-            var items = new wijmo.collections.ObservableArray;
-            if (document.location.search.length > 0) {
-                NProgress.start();
-                $.ajax({
-                    url: '/api/article/' + itemId,
-                    cache: false,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    data: {},
-                    success: function (itemResults) {
-                        if (itemResults != null) {
-                            document.getElementById('Item_UsefulLife').value = itemResults.UsefulLife;
-                            document.getElementById('Item_SalvageValue').value = itemResults.SalvageValue;
-                            document.getElementById('articleItem_code').value = itemResults.ArticleCode;
-                            document.getElementById('articleItem_manualCode').value = itemResults.ManualArticleCode;
-                            document.getElementById('articleItem_item').value = itemResults.Article;
-                            document.getElementById('articleItem_category').value = itemResults.Category;
-                            document.getElementById('articleItem_price').value = itemResults.Price;
-                            document.getElementById('articleItem_particulars').value = itemResults.Particulars;
-                            document.getElementById('articleItem_Inventory').checked = itemResults.IsInventory;
-                            document.getElementById('articleItem_oldManualCode').value = itemResults.ManualArticleOldCode;
-                            document.getElementById('articleItem_manualCost').value = itemResults.Cost;
-                            document.getElementById('createdBy').innerHTML = itemResults.CreatedBy;
-                            document.getElementById('createdDate').innerHTML = itemResults.CreatedDateTime;
-                            document.getElementById('updatedBy').innerHTML = itemResults.UpdatedBy;
-                            document.getElementById('updatedDate').innerHTML = itemResults.UpdatedDateTime;
-                            itemArticleGroupSelectedValue = itemResults.ArticleGroup;
-                            itemUnitSelectedValue = itemResults.Unit;
-                            itemInputTaxSelectedValue = itemResults.InputTax;
-                            itemOutputTaxSelectedValue = itemResults.OutputTax;
-                            itemWithHoldingTaxSelectedValue = itemResults.WTaxType;
-                            accountSelectedValue = itemResults.Account;
-                            salesAccountSelectedValue = itemResults.SalesAccount;
-                            costAccountSelectedValue = itemResults.CostAccount;
-                            accumDepAccountSelectedValue = itemResults.AssetAccount;
-                            expenseAccountSelectedValue = itemResults.ExpenseAccount;
-                            NProgress.done();
+    // ==============================
+    // Get Article for item by its ID
+    // ==============================
+    function getArticleItemById() {
+        var items = new wijmo.collections.ObservableArray;
+        if (document.location.search.length > 0) {
+            NProgress.start();
+            $.ajax({
+                url: '/api/article/' + itemId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (itemResults) {
+                    if (itemResults != null) {
+                        document.getElementById('Item_UsefulLife').value = itemResults.UsefulLife;
+                        document.getElementById('Item_SalvageValue').value = itemResults.SalvageValue;
+                        document.getElementById('articleItem_code').value = itemResults.ArticleCode;
+                        document.getElementById('articleItem_manualCode').value = itemResults.ManualArticleCode;
+                        document.getElementById('articleItem_item').value = itemResults.Article;
+                        document.getElementById('articleItem_category').value = itemResults.Category;
+                        document.getElementById('articleItem_price').value = itemResults.Price;
+                        document.getElementById('articleItem_particulars').value = itemResults.Particulars;
+                        document.getElementById('articleItem_Inventory').checked = itemResults.IsInventory;
+                        document.getElementById('articleItem_oldManualCode').value = itemResults.ManualArticleOldCode;
+                        document.getElementById('articleItem_manualCost').value = itemResults.Cost;
+                        document.getElementById('createdBy').innerHTML = itemResults.CreatedBy;
+                        document.getElementById('createdDate').innerHTML = itemResults.CreatedDateTime;
+                        document.getElementById('updatedBy').innerHTML = itemResults.UpdatedBy;
+                        document.getElementById('updatedDate').innerHTML = itemResults.UpdatedDateTime;
+                        itemArticleGroupSelectedValue = itemResults.ArticleGroup;
+                        itemUnitSelectedValue = itemResults.Unit;
+                        itemInputTaxSelectedValue = itemResults.InputTax;
+                        itemOutputTaxSelectedValue = itemResults.OutputTax;
+                        itemWithHoldingTaxSelectedValue = itemResults.WTaxType;
+                        accountSelectedValue = itemResults.Account;
+                        salesAccountSelectedValue = itemResults.SalesAccount;
+                        costAccountSelectedValue = itemResults.CostAccount;
+                        accumDepAccountSelectedValue = itemResults.AssetAccount;
+                        expenseAccountSelectedValue = itemResults.ExpenseAccount;
+                        NProgress.done();
 
-                            if (itemResults.IsLocked == true) {
-                                document.getElementById('articleItem_manualCode').disabled = true;
-                                document.getElementById('articleItem_item').disabled = true;
-                                document.getElementById('articleItem_category').disabled = true;
-                                document.getElementById('articleItem_price').disabled = true;
-                                document.getElementById('articleItem_particulars').disabled = true;
-                                document.getElementById('articleItem_Inventory').disabled = true;
-                                document.getElementById('articleItem_oldManualCode').disabled = true;
-                                document.getElementById('articleItem_manualCost').disabled = true;
-                                document.getElementById('Item_UsefulLife').disabled = true;
-                                document.getElementById('Item_SalvageValue').disabled = true;
-                                $('#item_SaveButton').prop('disabled', true);
-                                $('#item_LockButton').prop('disabled', true);
-                                $('#item_UnlockButton').prop('disabled', false);
-                                $('#item_CloseButton').prop('disabled', false);
-                                $('#btnAddUnitConversion').prop('disabled', true);
-                                $('#btnAddPrice').prop('disabled', true);
-                                $('#btnAddComponent').prop('disabled', true);
-                                createInputDateForDateAquired(true, itemResults.DateAcquired);
-                                IsLocked = true;
+                        if (itemResults.IsLocked == true) {
+                            document.getElementById('articleItem_manualCode').disabled = true;
+                            document.getElementById('articleItem_item').disabled = true;
+                            document.getElementById('articleItem_category').disabled = true;
+                            document.getElementById('articleItem_price').disabled = true;
+                            document.getElementById('articleItem_particulars').disabled = true;
+                            document.getElementById('articleItem_Inventory').disabled = true;
+                            document.getElementById('articleItem_oldManualCode').disabled = true;
+                            document.getElementById('articleItem_manualCost').disabled = true;
+                            document.getElementById('Item_UsefulLife').disabled = true;
+                            document.getElementById('Item_SalvageValue').disabled = true;
+                            //$('#item_SaveButton').prop('disabled', true);
+                            $('#item_LockButton').prop('disabled', true);
+                            $('#item_UnlockButton').prop('disabled', false);
+                            $('#item_CloseButton').prop('disabled', false);
+                            $('#btnAddUnitConversion').prop('disabled', true);
+                            $('#btnAddPrice').prop('disabled', true);
+                            $('#btnAddComponent').prop('disabled', true);
+                            createInputDateForDateAquired(true, itemResults.DateAcquired);
+                            IsLocked = true;
+
+                            var canUnLock = "@ViewData["CanUnlock"]";
+                                if (canUnLock == "True") {
+                                    $("#item_UnlockButton").prop("disabled", false)
+                                } else if (canUnLock == "False") {
+                                    $("#item_UnlockButton").prop("disabled", true)
+                                } else {
+                                    $("#item_UnlockButton").prop("disabled", true)
+                                }
                             } else {
                                 document.getElementById('articleItem_manualCode').disabled = false;
                                 document.getElementById('articleItem_item').disabled = false;
@@ -614,7 +623,7 @@
                                 document.getElementById('articleItem_manualCost').disabled = false;
                                 document.getElementById('Item_UsefulLife').disabled = false;
                                 document.getElementById('Item_SalvageValue').disabled = false;
-                                $('#item_SaveButton').prop('disabled', true);
+                                //$('#item_SaveButton').prop('disabled', true);
                                 $('#item_LockButton').prop('disabled', false);
                                 $('#item_UnlockButton').prop('disabled', true);
                                 $('#item_CloseButton').prop('disabled', false);
@@ -623,6 +632,30 @@
                                 $('#btnAddComponent').prop('disabled', false);
                                 createInputDateForDateAquired(false, itemResults.DateAcquired);
                                 IsLocked = false;
+
+                                var canLock = "@ViewData["CanLock"]";
+                                if (canLock == "True") {
+                                    $("#item_LockButton").prop("disabled", false)
+                                } else if (canLock == "False") {
+                                    $("#item_LockButton").prop("disabled", true)
+                                } else {
+                                    $("#item_LockButton").prop("disabled", true)
+                                }
+                                
+                                var canAdd = "@ViewData["CanAdd"]";
+                                if (canAdd == "True") {
+                                    $("#btnAddUnitConversion").prop("disabled", false)
+                                    $("#btnAddComponent").prop("disabled", false)
+                                    $('#btnAddPrice').prop('disabled', false);
+                                } else if (canAdd == "False") {
+                                    $("#btnAddUnitConversion").prop("disabled", true)
+                                    $("#btnAddComponent").prop("disabled", true)
+                                    $('#btnAddPrice').prop('disabled', true);
+                                } else {
+                                    $("#btnAddUnitConversion").prop("disabled", true)
+                                    $("#btnAddComponent").prop("disabled", true)
+                                    $('#btnAddPrice').prop('disabled', true);
+                                }
                             }
 
                             getLastArticleCode();
@@ -1132,41 +1165,41 @@
             return data;
         }
 
-        // =========
-        // Save Item
-        // =========
-        function itemSaveButton_OnClick() {
-            dropdownValidation();
-            if (itemEntryValidation() == false) {
-                toastr.error("Invalid Entry");
-            } else {
-                document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                $('#item_SaveButton').prop('disabled', true);
-                $('#item_LockButton').prop('disabled', true);
-                $('#item_UnlockButton').prop('disabled', true);
-                $('#item_CloseButton').prop('disabled', true);
+        //// =========
+        //// Save Item
+        //// =========
+        //function itemSaveButton_OnClick() {
+        //    dropdownValidation();
+        //    if (itemEntryValidation() == false) {
+        //        toastr.error("Invalid Entry");
+        //    } else {
+        //        document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+        //        $('#item_SaveButton').prop('disabled', true);
+        //        $('#item_LockButton').prop('disabled', true);
+        //        $('#item_UnlockButton').prop('disabled', true);
+        //        $('#item_CloseButton').prop('disabled', true);
 
-                $.ajax({
-                    type: "POST",
-                    url: '/api/addArticle/1',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    data: itemDataObject(),
-                    success: function (id) {
-                        if (id > 0) {
-                            document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                            $('#item_SaveButton').prop('disabled', true);
-                            $('#item_LockButton').prop('disabled', true);
-                            $('#item_UnlockButton').prop('disabled', true);
-                            $('#item_CloseButton').prop('disabled', true);
-                            window.location = '/Software/ItemDetail?ItemId=' + id;
-                        } else {
-                            window.history.back();
-                        }
-                    }
-                });
-            }
-        }
+        //        $.ajax({
+        //            type: "POST",
+        //            url: '/api/addArticle/1',
+        //            contentType: "application/json; charset=utf-8",
+        //            dataType: "json",
+        //            data: itemDataObject(),
+        //            success: function (id) {
+        //                if (id > 0) {
+        //                    document.getElementById('item_SaveButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
+        //                    $('#item_SaveButton').prop('disabled', true);
+        //                    $('#item_LockButton').prop('disabled', true);
+        //                    $('#item_UnlockButton').prop('disabled', true);
+        //                    $('#item_CloseButton').prop('disabled', true);
+        //                    window.location = '/Software/ItemDetail?ItemId=' + id;
+        //                } else {
+        //                    window.history.back();
+        //                }
+        //            }
+        //        });
+        //    }
+        //}
 
         // =========
         // Lock Item
@@ -1177,7 +1210,6 @@
                 toastr.error("Invalid Entry");
             } else {
                 document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                $('#item_SaveButton').prop('disabled', true);
                 $('#item_LockButton').prop('disabled', true);
                 $('#item_UnlockButton').prop('disabled', true);
                 $('#item_CloseButton').prop('disabled', true);
@@ -1190,31 +1222,18 @@
                     data: itemDataObject(),
                     statusCode: {
                         200: function () {
-                            document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                            $('#item_SaveButton').prop('disabled', true);
-                            $('#item_LockButton').prop('disabled', true);
-                            $('#item_UnlockButton').prop('disabled', true);
-                            $('#item_CloseButton').prop('disabled', true);
-                            toastr.success("Locked");
+                            toastr.success("Lock Successful");
                             window.setTimeout(function () {
                                 location.reload()
                             }, 1000);
                         },
                         404: function () {
-                            document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#item_SaveButton').prop('disabled', false);
-                            $('#item_LockButton').prop('disabled', false);
-                            $('#item_UnlockButton').prop('disabled', true);
+                            toastr.error("Not Found");
                             $('#item_CloseButton').prop('disabled', false);
-                            toastr.error("Lock request not found");
                         },
                         400: function () {
-                            document.getElementById('item_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            $('#item_SaveButton').prop('disabled', false);
-                            $('#item_LockButton').prop('disabled', false);
-                            $('#item_UnlockButton').prop('disabled', true);
+                            toastr.error("Bad Request");
                             $('#item_CloseButton').prop('disabled', false);
-                            toastr.error("Cannot lock record");
                         }
                     }
                 });
@@ -1226,7 +1245,7 @@
         // ===========
         function itemUnlockButton_OnClick() {
             document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-            $('#item_SaveButton').prop('disabled', true);
+            //$('#item_SaveButton').prop('disabled', true);
             $('#item_LockButton').prop('disabled', true);
             $('#item_UnlockButton').prop('disabled', true);
             $('#item_CloseButton').prop('disabled', true);
@@ -1239,31 +1258,18 @@
                 data: {},
                 statusCode: {
                     200: function () {
-                        document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-                        $('#item_SaveButton').prop('disabled', true);
-                        $('#item_LockButton').prop('disabled', true);
-                        $('#item_UnlockButton').prop('disabled', true);
-                        $('#item_CloseButton').prop('disabled', true);
-                        toastr.success("Unlocked");
+                        toastr.success("Unlock Successful");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
                     },
                     404: function () {
-                        document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#item_SaveButton').prop('disabled', true);
-                        $('#item_LockButton').prop('disabled', true);
-                        $('#item_UnlockButton').prop('disabled', false);
+                        toastr.error("Not Found");
                         $('#item_CloseButton').prop('disabled', false);
-                        toastr.error("Unlock request not found");
                     },
                     400: function () {
-                        document.getElementById('item_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        $('#item_SaveButton').prop('disabled', true);
-                        $('#item_LockButton').prop('disabled', true);
-                        $('#item_UnlockButton').prop('disabled', false);
+                        toastr.error("Bad Request");
                         $('#item_CloseButton').prop('disabled', false);
-                        toastr.error("Cannot unlock record");
                     }
                 }
             });
@@ -1313,7 +1319,7 @@
                     }
                 });
 
-                $('#item_SaveButton').prop('disabled', false);
+                //$('#item_SaveButton').prop('disabled', false);
                 $('#item_LockButton').prop('disabled', true);
                 $('#item_UnlockButton').prop('disabled', true);
                 $('#item_CloseButton').prop('disabled', false);
@@ -1347,7 +1353,7 @@
             getArticleItemById();
 
             if (document.location.search.length == 0) {
-                $('#item_SaveButton').show();
+                //$('#item_SaveButton').show();
                 $("#item_LockButton").hide();
                 $('#item_UnlockButton').hide();
 
@@ -1355,7 +1361,7 @@
                 $('#btnAddPrice').prop('disabled', true);
                 $('#btnAddComponent').prop('disabled', true);
             } else {
-                $('#item_SaveButton').hide();
+                //$('#item_SaveButton').hide();
                 $("#item_LockButton").show();
                 $('#item_UnlockButton').show();
 
@@ -1364,14 +1370,14 @@
                 $('#btnAddComponent').prop('disabled', false);
             }
 
-            $(document).ajaxStop(function () {
-                if (document.location.search.length == 0) {
-                    itemSaveButton_OnClick();
-                    window.itemSaveButton_OnClick = function () {
-                        return true;
-                    }
-                }
-            });
+            //$(document).ajaxStop(function () {
+            //    if (document.location.search.length == 0) {
+            //        itemSaveButton_OnClick();
+            //        window.itemSaveButton_OnClick = function () {
+            //            return true;
+            //        }
+            //    }
+            //});
         });
     </script>
 
@@ -1411,14 +1417,36 @@
                                 data: {},
                                 success: function (itemResults) {
 
+                                    var canEdit = "@ViewData["CanEdit"]";
+                                    var editDisabled = "disabled";
+
+                                    if (canEdit == "True") {
+                                        editDisabled = "";
+                                    } else if (canEdit == "False") {
+                                        editDisabled = "disabled";
+                                    } else {
+                                        editDisabled = "disabled";
+                                    }
+
+                                    var canDelete = "@ViewData["CanDelete"]";
+                                    var deleteDisabled = "disabled";
+
+                                    if (canDelete == "True") {
+                                        deleteDisabled = "";
+                                    } else if (canDelete == "False") {
+                                        deleteDisabled = "disabled";
+                                    } else {
+                                        deleteDisabled = "disabled";
+                                    }
+
                                     var btnEditId;
                                     var btnDeleteId;
                                     if (itemResults.IsLocked == true) {
                                         btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditUnitConversion_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                         btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteUnitConversion_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                                     } else {
-                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditUnitConversion_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
-                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteUnitConversion_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditUnitConversion_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteUnitConversion_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                                     }
 
                                     for (i = 0; i < unitConversionResults.length; i++) {
@@ -1513,6 +1541,10 @@
 
             unitConversionUnitSelectedValue = '';
             getUnitConversionUnit();
+
+            document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
+            $('#cmdSaveUnitConversionButton').prop('disabled', false);
+            $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
         }
 
         // ====================
@@ -1532,6 +1564,10 @@
 
             unitConversionUnitSelectedValue = unitConversion.Unit;
             getUnitConversionUnit();
+
+            document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
+            $('#cmdSaveUnitConversionButton').prop('disabled', false);
+            $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
         }
 
         // ======================
@@ -1542,6 +1578,10 @@
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
+            $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
         }
         // confirm delete Unit Conversion
         function cmdUnitConversionConfirmDeleteButton_OnClick() {
@@ -1558,26 +1598,17 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
-                        $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
                         $('#deleteUnitConversionConfirm').modal('hide');
                         refreshUnitConversions();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
-                        $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
+                        toastr.error("Not Found");
                         $('#deleteUnitConversionConfirm').modal('hide');
-                        toastr.error("Delete request not found");
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeleteUnitConversion').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteUnitConversion').prop('disabled', false);
-                        $('#cmdConfirmDeleteUnitConversionCloseButton').prop('disabled', false);
+                        toastr.error("Bad Request");
                         $('#deleteUnitConversionConfirm').modal('hide');
-                        toastr.error("Cannot delete record");
                     }
                 }
             });
@@ -1632,17 +1663,12 @@
                         data: data,
                         success: function (id) {
                             if (id > 0) {
-                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
-                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
                                 $('#unitConversionEdit').modal('hide');
                                 refreshUnitConversions();
                             } else {
-                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
-                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
+                                $('#unitConversionEdit').modal('hide');
                             }
                         }
                     });
@@ -1655,25 +1681,16 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
-                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
                                 $('#unitConversionEdit').modal('hide');
                                 refreshUnitConversions();
                             },
                             404: function () {
-                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
-                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#unitConversionEdit').modal('hide');
                             },
                             400: function () {
-                                document.getElementById('cmdSaveUnitConversionButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveUnitConversionButton').prop('disabled', false);
-                                $('#cmdUnitConversionDetailCloseButton').prop('disabled', false);
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#unitConversionEdit').modal('hide');
                             }
                         }
@@ -1759,6 +1776,7 @@
                 autoGenerateColumns: false,
                 itemsSource: unitConversions,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -1806,14 +1824,37 @@
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
                                 success: function (itemResults) {
+
+                                    var canEdit = "@ViewData["CanEdit"]";
+                                    var editDisabled = "disabled";
+
+                                    if (canEdit == "True") {
+                                        editDisabled = "";
+                                    } else if (canEdit == "False") {
+                                        editDisabled = "disabled";
+                                    } else {
+                                        editDisabled = "disabled";
+                                    }
+
+                                    var canDelete = "@ViewData["CanDelete"]";
+                                    var deleteDisabled = "disabled";
+
+                                    if (canDelete == "True") {
+                                        deleteDisabled = "";
+                                    } else if (canDelete == "False") {
+                                        deleteDisabled = "disabled";
+                                    } else {
+                                        deleteDisabled = "disabled";
+                                    }
+
                                     var btnEditId;
                                     var btnDeleteId;
                                     if (itemResults.IsLocked == true) {
                                         btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditCompoent_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                         btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteCompoent_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                                     } else {
-                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditCompoent_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
-                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteCompoent_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditCompoent_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteCompoent_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                                     }
 
                                     for (i = 0; i < componentResults.length; i++) {
@@ -2083,6 +2124,7 @@
                 autoGenerateColumns: false,
                 itemsSource: components,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
@@ -2123,14 +2165,35 @@
                                 contentType: 'application/json; charset=utf-8',
                                 data: {},
                                 success: function (itemResults) {
+
+                                    var canEdit = "@ViewData["CanEdit"]";
+                                    if (canEdit == "True") {
+                                        editDisabled = "";
+                                    } else if (canEdit == "False") {
+                                        editDisabled = "disabled";
+                                    } else {
+                                        editDisabled = "disabled";
+                                    }
+
+                                    var canDelete = "@ViewData["CanDelete"]";
+                                    var deleteDisabled = "disabled";
+
+                                    if (canDelete == "True") {
+                                        deleteDisabled = "";
+                                    } else if (canDelete == "False") {
+                                        deleteDisabled = "disabled";
+                                    } else {
+                                        deleteDisabled = "disabled";
+                                    }
+
                                     var btnEditId;
                                     var btnDeleteId;
                                     if (itemResults.IsLocked == true) {
                                         btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPrice_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
                                         btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePrice_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
                                     } else {
-                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPrice_OnClick()'><i class='fa fa-edit'></i> Edit</button>";
-                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePrice_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditPrice_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletePrice_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                                     }
 
                                     for (i = 0; i < priceResults.length; i++) {
@@ -2257,26 +2320,17 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-                        $('#cmdConfirmDeletePrice').prop('disabled', true);
-                        $('#cmdConfirmDeletePriceCloseButton').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
                         $('#deletPriceConfirm').modal('hide');
                         refreshPriceFlexgrid();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeletePrice').prop('disabled', true);
-                        $('#cmdConfirmDeletePriceCloseButton').prop('disabled', true);
+                        toastr.error("Not Found");
                         $('#deletPriceConfirm').modal('hide');
-                        toastr.error("Delete request not found");
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeletePrice').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeletePrice').prop('disabled', true);
-                        $('#cmdConfirmDeletePriceCloseButton').prop('disabled', true);
+                        toastr.error("Bad Request");
                         $('#deletPriceConfirm').modal('hide');
-                        toastr.error("Cannot delete record");
                     }
                 }
             });
@@ -2310,17 +2364,12 @@
                         data: data,
                         success: function (id) {
                             if (id > 0) {
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                                $('#cmdSavePriceButton').prop('disabled', true);
-                                $('#cmdPriceDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
                                 $('#priceEdit').modal('hide');
                                 refreshPriceFlexgrid();
                             } else {
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSavePriceButton').prop('disabled', false);
-                                $('#cmdPriceDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
+                                $('#priceEdit').modal('hide');
                             }
                         }
                     });
@@ -2333,25 +2382,16 @@
                         data: data,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
-                                $('#cmdSavePriceButton').prop('disabled', true);
-                                $('#cmdPriceDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
                                 $('#priceEdit').modal('hide');
                                 refreshPriceFlexgrid();
                             },
                             404: function () {
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSavePriceButton').prop('disabled', false);
-                                $('#cmdPriceDetailCloseButton').prop('disabled', false);
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#priceEdit').modal('hide');
                             },
                             400: function () {
-                                document.getElementById('cmdSavePriceButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSavePriceButton').prop('disabled', false);
-                                $('#cmdPriceDetailCloseButton').prop('disabled', false);
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#priceEdit').modal('hide');
                             }
                         }
@@ -2410,13 +2450,14 @@
                 autoGenerateColumns: false,
                 itemsSource: prices,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
             priceGrid.trackChanges = true;
         }
-    </script>
+</script>
 
     <!-- ================= -->
     <!-- Inventory Scripts -->

@@ -119,7 +119,7 @@
                                 </div>
                             </div>
                         </div>
-                       
+
                         <br />
                         <!-- Supplier line -->
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
@@ -341,22 +341,12 @@
                         }
                     }
                 }).fail(function () {
-                    confirm("URL Not Found");
+                    confirm("Not Found");
                     window.location = '/Software/Supplier';
                 });
             } else {
-                getLastArticleCode();
-                getArticleSupplierGroupForComboBox();
-                getArticleTermForComboBox();
-
-                document.getElementById('artcileSupplier_Supplier').value = "NA";
-                document.getElementById('artcileSupplier_Address').value = "NA";
-                document.getElementById('artcileSupplier_Particulars').value = "NA";
-                document.getElementById('artcileSupplier_TIN').value = "NA";
-                document.getElementById('artcileSupplier_ContactNo').value = "NA";
-                document.getElementById('artcileSupplier_ContactPerson').value = "NA";
-
-                NProgress.done();
+                confirm("Not Found");
+                window.location = '/Software/Supplier';
             }
         }
 
@@ -673,31 +663,18 @@
                     data: dataSupplierObject(),
                     statusCode: {
                         200: function () {
-                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                            //$('#supplier_SaveButton').prop('disabled', true);
-                            $('#supplier_LockButton').prop('disabled', true);
-                            $('#supplier_UnlockButton').prop('disabled', true);
-                            $('#supplier_CloseButton').prop('disabled', true);
-                            toastr.success("Locked");
+                            toastr.success("Lock Successful");
                             window.setTimeout(function () {
                                 location.reload()
                             }, 1000);
                         },
                         404: function () {
-                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            //$('#supplier_SaveButton').prop('disabled', true);
-                            $('#supplier_LockButton').prop('disabled', false);
-                            $('#supplier_UnlockButton').prop('disabled', true);
+                            toastr.error("Not Found");
                             $('#supplier_CloseButton').prop('disabled', false);
-                            toastr.error("Lock request not found");
                         },
                         400: function () {
-                            document.getElementById('supplier_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            //$('#supplier_SaveButton').prop('disabled', true);
-                            $('#supplier_LockButton').prop('disabled', false);
-                            $('#supplier_UnlockButton').prop('disabled', true);
+                            toastr.error("Bad Request");
                             $('#supplier_CloseButton').prop('disabled', false);
-                            toastr.error("Cannot lock record");
                         }
                     }
                 });
@@ -709,7 +686,6 @@
         // ======================
         function supplierUnlockButton_OnClick() {
             document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-            //$('#supplier_SaveButton').prop('disabled', true);
             $('#supplier_LockButton').prop('disabled', true);
             $('#supplier_UnlockButton').prop('disabled', true);
             $('#supplier_CloseButton').prop('disabled', true);
@@ -722,31 +698,18 @@
                 data: {},
                 statusCode: {
                     200: function () {
-                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-                        //$('#supplier_SaveButton').prop('disabled', true);
-                        $('#supplier_LockButton').prop('disabled', true);
-                        $('#supplier_UnlockButton').prop('disabled', true);
-                        $('#supplier_CloseButton').prop('disabled', true);
-                        toastr.success("Unlocked");
+                        toastr.success("Unlock Successful");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
                     },
                     404: function () {
-                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        //$('#supplier_SaveButton').prop('disabled', true);
-                        $('#supplier_LockButton').prop('disabled', true);
-                        $('#supplier_UnlockButton').prop('disabled', false);
                         $('#supplier_CloseButton').prop('disabled', false);
-                        toastr.error("Unlock request not found");
+                        toastr.error("Not Found");
                     },
                     400: function () {
-                        document.getElementById('supplier_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        //$('#supplier_SaveButton').prop('disabled', true);
-                        $('#supplier_LockButton').prop('disabled', true);
-                        $('#supplier_UnlockButton').prop('disabled', false);
                         $('#supplier_CloseButton').prop('disabled', false);
-                        toastr.error("Cannot unlock record");
+                        toastr.error("Bad Request");
                     }
                 }
             });
@@ -828,7 +791,7 @@
                 $('#supplier_UnlockButton').show();
             }
         });
-</script>
+    </script>
 
     <!-- ====================== -->
     <!-- Journal Ledger Scripts -->
@@ -1144,17 +1107,12 @@
                         data: contactData,
                         success: function (id) {
                             if (id > 0) {
-                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
-                                $('#cmdSaveContactButton').prop('disabled', true);
-                                $('#cmdContactDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
                                 $('#contactEdit').modal('hide');
                                 refreshMoreContactInformation();
                             } else {
-                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveContactButton').prop('disabled', false);
-                                $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
+                                $('#contactEdit').modal('hide');
                             }
                         }
                     });
@@ -1167,24 +1125,17 @@
                         data: contactData,
                         statusCode: {
                             200: function () {
-                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Updating";
-                                $('#cmdSaveContactButton').prop('disabled', true);
-                                $('#cmdContactDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
                                 $('#contactEdit').modal('hide');
                                 refreshMoreContactInformation();
                             },
                             404: function () {
-                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Update";
-                                t$('#cmdSaveContactButton').prop('disabled', false);
-                                $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
+                                $('#contactEdit').modal('hide');
                             },
                             400: function () {
-                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Update";
-                                $('#cmdSaveContactButton').prop('disabled', false);
-                                $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
+                                $('#contactEdit').modal('hide');
                             }
                         }
                     });
@@ -1220,25 +1171,16 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-                        $('#cmdConfirmDeleteContact').prop('disabled', true);
-                        $('#cmdConfirmDeleteContactCloseButton').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
                         $('#deleteContactConfirm').modal('hide');
                         refreshMoreContactInformation();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteContact').prop('disabled', false);
-                        $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#deleteContactConfirm').modal('hide');
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteContact').prop('disabled', false);
-                        $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#deleteContactConfirm').modal('hide');
                     }
                 }
@@ -1299,13 +1241,14 @@
                 autoGenerateColumns: false,
                 itemsSource: contactInformations,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row
             });
             contactInformationGrid.trackChanges = true;
         }
-</script>
+    </script>
 
     <!-- ================================ -->
     <!-- Tab Current Page on Load Scripts -->

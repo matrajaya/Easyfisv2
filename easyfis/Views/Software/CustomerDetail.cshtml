@@ -668,7 +668,6 @@
                 toastr.error("Invalid Entry");
             } else {
                 document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                //$('#customer_SaveButton').prop('disabled', true);
                 $('#customer_LockButton').prop('disabled', true);
                 $('#customer_UnlockButton').prop('disabled', true);
                 $('#customer_CloseButton').prop('disabled', true);
@@ -681,31 +680,18 @@
                     data: dataCustomerObject(),
                     statusCode: {
                         200: function () {
-                            document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
-                            // $('#customer_SaveButton').prop('disabled', true);
-                            $('#customer_LockButton').prop('disabled', true);
-                            $('#customer_UnlockButton').prop('disabled', true);
-                            $('#customer_CloseButton').prop('disabled', true);
-                            toastr.success("Locked");
+                            toastr.success("Lock Successful");
                             window.setTimeout(function () {
                                 location.reload();
                             }, 1000);
                         },
                         404: function () {
-                            document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            //$('#customer_SaveButton').prop('disabled', true);
-                            $('#customer_LockButton').prop('disabled', false);
-                            $('#customer_UnlockButton').prop('disabled', true);
-                            $('#customer_CloseButton').prop('disabled', false);
-                            toastr.error("Lock request not found");
+                            $('#customer_CloseButton').prop('disabled', true);
+                            toastr.error("Not Found");
                         },
                         400: function () {
-                            document.getElementById('customer_LockButton').innerHTML = "<i class='fa fa-lock'></i> Lock";
-                            //$('#customer_SaveButton').prop('disabled', true);
-                            $('#customer_LockButton').prop('disabled', false);
-                            $('#customer_UnlockButton').prop('disabled', true);
-                            $('#customer_CloseButton').prop('disabled', false);
-                            toastr.error("Cannot lock record");
+                            $('#customer_CloseButton').prop('disabled', true);
+                            toastr.error("Bad Request");
                         }
                     }
                 });
@@ -730,32 +716,19 @@
                 data: {},
                 statusCode: {
                     200: function () {
-                        document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
-                        //$('#customer_SaveButton').prop('disabled', true);
-                        $('#customer_LockButton').prop('disabled', true);
-                        $('#customer_UnlockButton').prop('disabled', true);
-                        $('#customer_CloseButton').prop('disabled', true);
-                        toastr.success("Unlocked");
+                        toastr.success("Unlock Successful");
                         window.setTimeout(function () {
                             location.reload();
                         }, 1000);
                     },
                     404: function () {
-                        document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        //$('#customer_SaveButton').prop('disabled', true);
-                        $('#customer_LockButton').prop('disabled', false);
-                        $('#customer_UnlockButton').prop('disabled', true);
+                        toastr.error("Not Found");
                         $('#customer_CloseButton').prop('disabled', false);
-                        toastr.error("Unlock request not found");
 
                     },
                     400: function () {
-                        document.getElementById('customer_UnlockButton').innerHTML = "<i class='fa fa-unlock'></i> Unlock";
-                        //$('#customer_SaveButton').prop('disabled', true);
-                        $('#customer_LockButton').prop('disabled', false);
-                        $('#customer_UnlockButton').prop('disabled', true);
+                        toastr.error("Bad Request");
                         $('#customer_CloseButton').prop('disabled', false);
-                        toastr.error("Cannot unlock record");
                     }
                 }
             });
@@ -1156,16 +1129,12 @@
                         data: contactData,
                         success: function (id) {
                             if (id > 0) {
-                                $('#cmdSaveContactButton').prop('disabled', true);
-                                $('#cmdContactDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
                                 $('#contactEdit').modal('hide');
                                 refreshMoreContactInformation();
                             } else {
-                                document.getElementById('cmdSaveContactButton').innerHTML = "<i class='fa fa-save'></i> Save";
-                                $('#cmdSaveContactButton').prop('disabled', false);
-                                $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
+                                $('#contactEdit').modal('hide');
                             }
                         }
                     });
@@ -1178,21 +1147,17 @@
                         data: contactData,
                         statusCode: {
                             200: function () {
-                                $('#cmdSaveContactButton').prop('disabled', true);
-                                $('#cmdContactDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
                                 $('#contactEdit').modal('hide');
                                 refreshMoreContactInformation();
                             },
                             404: function () {
-                                $('#cmdSaveContactButton').prop('disabled', false);
-                                $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
+                                $('#contactEdit').modal('hide');
                             },
                             400: function () {
-                                $('#cmdSaveContactButton').prop('disabled', false);
-                                $('#cmdContactDetailCloseButton').prop('disabled', false);
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
+                                $('#contactEdit').modal('hide');
                             }
                         }
                     });
@@ -1227,25 +1192,16 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-                        $('#cmdConfirmDeleteContact').prop('disabled', true);
-                        $('#cmdConfirmDeleteContactCloseButton').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
                         $('#deleteContactConfirm').modal('hide');
                         refreshMoreContactInformation();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteContact').prop('disabled', false);
-                        $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#deleteContactConfirm').modal('hide');
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeleteContact').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteContact').prop('disabled', false);
-                        $('#cmdConfirmDeleteContactCloseButton').prop('disabled', false);
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#deleteContactConfirm').modal('hide');
                     }
                 }
@@ -1306,6 +1262,7 @@
                 autoGenerateColumns: false,
                 itemsSource: contactInformations,
                 isReadOnly: true,
+                frozenColumns: 2,
                 autoSizeMode: wijmo.grid.AutoSizeMode.Both,
                 allowDragging: wijmo.grid.AllowDragging.None,
                 selectionMode: wijmo.grid.SelectionMode.Row

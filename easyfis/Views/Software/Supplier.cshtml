@@ -290,19 +290,12 @@
                     success: function (id) {
                         if (id > 0) {
                             window.location = '/Software/SupplierDetail?SupplierId=' + id;
-                            $('#btnAddSupplier').prop('disabled', true);
-                            $('#btnCloseSupplier').prop('disabled', true);
                         } else {
-                            document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
-                            $('#btnAddSupplier').prop('disabled', false);
-                            $('#btnCloseSupplier').prop('disabled', false);
+                            toastr.error("Internal Server Error");
                         }
                     }
                 });
             } else if (canAccessToDetailPage == "False") {
-                document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
-                $('#btnAddSupplier').prop('disabled', false);
-                $('#btnCloseSupplier').prop('disabled', false);
                 window.location = '/Software/Forbidden';
             } else {
                 document.getElementById('btnAddSupplier').innerHTML = "<i class='fa fa-plus'></i> Add";
@@ -357,24 +350,16 @@
                 statusCode: {
                     200: function () {
                         document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
-                        $('#cmdConfirmDeleteSupplier').prop('disabled', true);
-                        $('#cmdConfirmDeleteCloseButton').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
                         $('#deleteSupplierConfirm').modal('hide');
                         refreshSupplierFlexgrid();
                     },
                     404: function () {
-                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteSupplier').prop('disabled', false);
-                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#deleteSupplierConfirm').modal('hide');
                     },
                     400: function () {
-                        document.getElementById('cmdConfirmDeleteSupplier').innerHTML = "<i class='fa fa-trash'></i> Delete";
-                        $('#cmdConfirmDeleteSupplier').prop('disabled', false);
-                        $('#cmdConfirmDeleteCloseButton').prop('disabled', false);
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#deleteSupplierConfirm').modal('hide');
                     }
                 }
