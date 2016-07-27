@@ -32,59 +32,63 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4>
-                                    <span id="companyname">Company</span>
-                                    <small>
-                                        <i class="fa fa-calendar fa-fw"></i> <span id="jdate"></span>
-                                    </small>
-                                </h4>
-                            </div>
-                            <div class="col-md-6" align="right">
-                                <button onclick="FinancialStatementAccountLedgerPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                <a href="/Software/FinancialStatements" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        <h5>
-                            <span id="accountTitle">Account</span>
-                        </h5>
-                        <div id="accountLedgerGrid" class="grid"></div>
-                        <br /><br /><br />
-                        <div align="right">
-                            <div class="row">
-                                <div class="col-md-8"></div>
-                                <div class="col-md-4">
-                                    <table class="table table-responsive table-bordered">
-                                        <tr>
-                                            <td align="right">
-                                                <b>Total Debit: </b>
-                                            </td>
-                                            <td style="padding-left: 10px" align="right">
-                                                <span id="totalDebit">NA</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">
-                                                <b>Total Credit: </b>
-                                            </td>
-                                            <td style="padding-left: 10px" align="right">
-                                                <span id="totalCredit">NA</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">
-                                                <b>Balance: </b>
-                                            </td>
-                                            <td style="padding-left: 10px" align="right">
-                                                <span id="totalBalance">NA</span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <hr />
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>
+                                            <span id="companyname">Company</span>
+                                            <small>
+                                                <i class="fa fa-calendar fa-fw"></i> <span id="jdate"></span>
+                                            </small>
+                                        </h4>
+                                    </div>
+                                    <div class="col-md-6" align="right">
+                                        <button onclick="FinancialStatementAccountLedgerPDF_OnClick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                        <a href="/Software/FinancialStatements" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <h5>
+                                    <span id="accountTitle">Account</span>
+                                </h5>
+                                <div id="accountLedgerGrid" class="grid"></div>
+                            </div>
+                            <div class="panel-footer">
+                                <div align="right">
+                                    <div class="row">
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-4">
+                                            <table class="table table-responsive table-bordered">
+                                                <tr>
+                                                    <td align="right">
+                                                        <b>Total Debit: </b>
+                                                    </td>
+                                                    <td style="padding-left: 10px" align="right">
+                                                        <span id="totalDebit">NA</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">
+                                                        <b>Total Credit: </b>
+                                                    </td>
+                                                    <td style="padding-left: 10px" align="right">
+                                                        <span id="totalCredit">NA</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">
+                                                        <b>Balance: </b>
+                                                    </td>
+                                                    <td style="padding-left: 10px" align="right">
+                                                        <span id="totalBalance">NA</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

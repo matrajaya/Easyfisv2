@@ -33,41 +33,45 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4 id=""></h4>
-                            </div>
-                            <div class="col-md-6" align="right">
-                                <button class="btn btn-primary btn-sm" id="btnUserDetailLock" onclick="btnUserDetailLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary btn-sm" id="btnUserDetailUnLock" onclick="btnUserDetailUnLock_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-danger btn-sm" id="btnUserDetailClose" onclick="btnUserDetailClose_OnClick()"><i class="fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        <div class="well">
-                            <form class="form-horizontal" role="form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Username</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm" id="userDetail_Username" placeholder="Username" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Fullname</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredUser" id="userDetail_Fullname" placeholder="Fullname" />
-                                            </div>
-                                        </div>
+                                        <h4 id=""></h4>
                                     </div>
-                                    <div class="col-md-6">
-
+                                    <div class="col-md-6" align="right">
+                                        <button class="btn btn-primary btn-sm" id="btnUserDetailLock" onclick="btnUserDetailLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                        <button class="btn btn-primary btn-sm" id="btnUserDetailUnLock" onclick="btnUserDetailUnLock_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                        <button class="btn btn-danger btn-sm" id="btnUserDetailClose" onclick="btnUserDetailClose_OnClick()"><i class="fa fa-times"></i> Close</button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="panel-body">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Username</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm" id="userDetail_Username" placeholder="Username" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Fullname</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredUser" id="userDetail_Fullname" placeholder="Fullname" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                         <br />
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
@@ -77,65 +81,74 @@
                         <br />
                         <div class="tab-content">
                             <div id="UserForm" class="tab-pane fade in active">
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="btnCopyUserRights" onclick="cmdCopyRights_OnClick()"><i class="fa fa-copy"></i> Copy rights</button>
-                                        <button class="btn btn-primary btn-sm" id="btnAddUserForm" onclick="cmdAddUserForm_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary btn-sm" id="btnCopyUserRights" onclick="cmdCopyRights_OnClick()"><i class="fa fa-copy"></i> Copy rights</button>
+                                                <button class="btn btn-primary btn-sm" id="btnAddUserForm" onclick="cmdAddUserForm_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="userDetailUserFormGrid" class="grid" align="left"></div>
+                                    <div class="panel-body">
+                                        <div class="row" align="left">
+                                            <div class="col-lg-12">
+                                                <div id="userDetailUserFormGrid" class="grid" align="left"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div id="UserDefaults" class="tab-pane fade in">
-                                <div class="well">
-                                    <form class="form-horizontal" role="form">
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Company</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultCompany"></div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="well">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-6">Default Company</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="defaultCompany"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-6">Default Branch</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="defaultBranch"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-6">Default Income Account</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="defaultIncomeAccount"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-6">Default Supplier Advances Account</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="defaultSupplierAdvancesAccount"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-6">Default Customer Advances Account</label>
+                                                            <div class="col-sm-6">
+                                                                <div class="comboBox-wide" id="defaultCustomerAdvancesAccount"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-sm-6">Default Official Receipt Name</label>
+                                                            <div class="col-sm-6">
+                                                                <input type="text" class="form-control input-70" id="defaultOfficialReceiptName" />
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                    <div class="col-md-4"></div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Branch</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultBranch"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Income Account</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultIncomeAccount"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Supplier Advances Account</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultSupplierAdvancesAccount"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Customer Advances Account</label>
-                                                    <div class="col-sm-6">
-                                                        <div class="comboBox-wide" id="defaultCustomerAdvancesAccount"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label col-sm-6">Default Official Receipt Name</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control input-70" id="defaultOfficialReceiptName" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4"></div>
+                                            </form>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

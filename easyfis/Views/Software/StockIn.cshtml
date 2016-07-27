@@ -31,50 +31,53 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-
-                    </div>
                     <div class="box-body">
-                        <!-- Stock In List -->
-                        <div id="stockInList">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                        <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon">IN Date</span>
+                                            <div id="filterDate"></div>
+                                            <input type="hidden" id="filterDate_data" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" align="right">
+                                        <button class="btn btn-primary btn-sm" onclick="btnAddStockIn_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-danger btn-sm" onclick="btnCloseStockIn_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
-                                    <div id="filterDate"></div>
-                                    <input type="hidden" id="filterDate_data" />
-                                </div>
-                                <div class="col-lg-6" align="right">
-                                    <button class="btn btn-primary btn-sm" onclick="btnAddStockIn_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                    <button class="btn btn-danger btn-sm" onclick="btnCloseStockIn_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row" align="left">
+                                    <div class="col-lg-12">
+                                        <div id="StockInGrid" class="grid" align="left"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <br />
-                            <div class="row" align="left">
-                                <div class="col-lg-12">
-                                    <div id="StockInGrid" class="grid" align="left"></div>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="btn-group col-md-7" id="naviagtionPageGrid">
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
-                                        <span class="glyphicon glyphicon-fast-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
-                                        <span class="glyphicon glyphicon-step-backward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
-                                        <span class="glyphicon glyphicon-step-forward"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
-                                        <span class="glyphicon glyphicon-fast-forward"></span>
-                                    </button>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="btn-group col-md-7" id="naviagtionPageGrid">
+                                        <button type="button" class="btn btn-default border-custom" id="btnMoveToFirstPageGrid">
+                                            <span class="glyphicon glyphicon-fast-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default border-custom" id="btnMoveToPreviousPageGrid">
+                                            <span class="glyphicon glyphicon-step-backward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default border-custom" disabled style="width: 100px" id="btnCurrentPageGrid"></button>
+                                        <button type="button" class="btn btn-default border-custom" id="btnMoveToNextPageGrid">
+                                            <span class="glyphicon glyphicon-step-forward"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-default border-custom" id="btnMoveToLastPageGrid">
+                                            <span class="glyphicon glyphicon-fast-forward"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -494,7 +497,7 @@
                                 "width": "0.5*"
                             },
                             {
-                                "header": "Lock",
+                                "header": "L",
                                 "binding": "IsLocked",
                                 "allowSorting": true,
                                 "width": "0.5*"

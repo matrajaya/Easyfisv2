@@ -158,12 +158,12 @@
                                                         <input type="hidden" id="RRApprovedBy_selectedValue" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     <label class="control-label col-sm-4">Lock</label>
                                                     <div class="col-sm-8">
                                                         <input type="checkbox" id="RR_Lock">
                                                     </div>
-                                                </div>
+                                                </div>*@
                                                 <div class="form-group">
                                                     <div class="col-sm-4"></div>
                                                     <div class="col-sm-8">
@@ -633,7 +633,7 @@
                             document.getElementById('RRCheckedBy_selectedValue').value = Results.CheckedBy;
                             document.getElementById('RRApprovedBy_data').value = Results.ApprovedById;
                             document.getElementById('RRApprovedBy_selectedValue').value = Results.ApprovedBy;
-                            document.getElementById('RR_Lock').checked = Results.IsLocked;
+                            //document.getElementById('RR_Lock').checked = Results.IsLocked;
 
                             document.getElementById('createdBy').innerHTML = Results.CreatedBy;
                             document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
@@ -2220,7 +2220,7 @@
             cboPONumberPOStatus = new wijmo.input.ComboBox('#POStatus_PONumber');
 
             getPOBySupplierInPOStatus();
-            document.getElementById('RR_Lock').disabled = true;
+            //document.getElementById('RR_Lock').disabled = true;
             document.getElementById('RRRRNumber_Display').disabled = true;
 
             cboBranch = new wijmo.input.ComboBox('#RRbranch');

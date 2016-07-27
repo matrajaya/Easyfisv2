@@ -32,81 +32,85 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4>
-                                    <span id="companyname"></span>
-                                    <small>
-                                        <i class="fa fa-calendar fa-fw"></i> <span id="dateAsOf"></span>
-                                    </small>
-                                </h4>
-                            </div>
-                            <div class="col-md-6" align="right">
-                                <button onclick="accountsReceivableReportCSVOnclick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
-                                <button onclick="accountsReceivableReportPDFOnclick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
-                                <a href="/Software/AccountsReceivable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        <div id="accountsReceivableGrid" class="grid"></div>
-                        <br /><br /><br />
-                        <div align="right">
-                            <div class="row">
-                                <div class="col-md-8"></div>
-                                <div class="col-md-4">
-                                    <table class="table table-responsive table-bordered">
-                                        <tr>
-                                            <td align="right">
-                                                <b>Total Balance: </b>
-                                            </td>
-                                            <td style="padding-left: 10px" align="right">
-                                                <span id="totalBalance">NA</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">
-                                                <b>Total Current Amount: </b>
-                                            </td>
-                                            <td style="padding-left: 10px" align="right">
-                                                <span id="totalCurrentAmount">NA</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">
-                                                <b>Total Amount in 30 Days: </b>
-                                            </td>
-                                            <td style="padding-left: 10px" align="right">
-                                                <span id="totalAmount30Days">NA</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">
-                                                <b>Total Amount in 60 Days: </b>
-                                            </td>
-                                            <td style="padding-left: 10px" align="right">
-                                                <span id="totalAmount60Days">NA</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">
-                                                <b>Total Amount in 90 Days: </b>
-                                            </td>
-                                            <td style="padding-left: 10px" align="right">
-                                                <span id="totalAmount90Days">NA</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right">
-                                                <b>Total Amount Over 120 Days: </b>
-                                            </td>
-                                            <td style="padding-left: 10px" align="right">
-                                                <span id="totalAmountOver120Days">NA</span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <hr />
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>
+                                            <span id="companyname"></span>
+                                            <small>
+                                                <i class="fa fa-calendar fa-fw"></i> <span id="dateAsOf"></span>
+                                            </small>
+                                        </h4>
+                                    </div>
+                                    <div class="col-md-6" align="right">
+                                        <button onclick="accountsReceivableReportCSVOnclick()" class="btn btn-primary btn-sm"><i class="fa fa-file-excel-o" aria-hidden="true"></i> CSV</button>
+                                        <button onclick="accountsReceivableReportPDFOnclick()" class="btn btn-primary btn-sm"><i class="fa fa-print"></i> Print</button>
+                                        <a href="/Software/AccountsReceivable" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Close</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div id="accountsReceivableGrid" class="grid"></div>
+                            </div>
+                            <div class="panel-footer">
+                                <div align="right">
+                                    <div class="row">
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-4">
+                                            <table class="table table-responsive table-bordered">
+                                                <tr>
+                                                    <td align="right">
+                                                        <b>Total Balance: </b>
+                                                    </td>
+                                                    <td style="padding-left: 10px" align="right">
+                                                        <span id="totalBalance">NA</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">
+                                                        <b>Total Current Amount: </b>
+                                                    </td>
+                                                    <td style="padding-left: 10px" align="right">
+                                                        <span id="totalCurrentAmount">NA</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">
+                                                        <b>Total Amount in 30 Days: </b>
+                                                    </td>
+                                                    <td style="padding-left: 10px" align="right">
+                                                        <span id="totalAmount30Days">NA</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">
+                                                        <b>Total Amount in 60 Days: </b>
+                                                    </td>
+                                                    <td style="padding-left: 10px" align="right">
+                                                        <span id="totalAmount60Days">NA</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">
+                                                        <b>Total Amount in 90 Days: </b>
+                                                    </td>
+                                                    <td style="padding-left: 10px" align="right">
+                                                        <span id="totalAmount90Days">NA</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">
+                                                        <b>Total Amount Over 120 Days: </b>
+                                                    </td>
+                                                    <td style="padding-left: 10px" align="right">
+                                                        <span id="totalAmountOver120Days">NA</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -406,6 +406,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("Sales").Equals("Sales"))
             {
+                if (accessToDetail("SalesDetail").Equals("SalesDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else

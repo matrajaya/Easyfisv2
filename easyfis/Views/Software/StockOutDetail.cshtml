@@ -35,133 +35,138 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6" align="right">
-                                <button class="btn btn-primary btn-sm" id="cmdStockOutJournal" onclick="stockOutJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                <button class="btn btn-primary btn-sm" id="cmdStockOutSaveLock" onclick="btnStockOutSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdStockOutSave" onclick="btnStockOutSave_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="cmdStockOutEdit" onclick="btnStockOutEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdStockOutPrint" onclick="btnStockOutPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button onclick="window.location.href = '@Url.Action("StockOut", "Software")'" class="btn btn-danger btn-sm" id="cmdStockOutClose"><i class="fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        <div class="well">
-                            <form class="form-horizontal" role="form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Branch</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="StockOut_Branch"></div>
-
-                                                <input type="hidden" id="StockOut_Branch_data" class="requiredStockOut" />
-                                                <input type="hidden" id="StockOut_Branch_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">OT Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-30 input-sm requiredStockOut" id="StockOut_OTNumber_Display" />
-                                                <input type="hidden" id="StockOut_OTNumber" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">OT Date</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-50" id="StockOut_OTDate"></div>
-                                                <input type="hidden" id="StockOut_OTDate_data" class="requiredStockOut" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Account</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-30" id="StockOut_AccountCode"></div>
-                                                <div class="input-68" id="StockOut_Account"></div>
-
-                                                <input type="hidden" id="StockOut_Account_data" class="requiredStockOut" />
-                                                <input type="hidden" id="StockOut_Account_selectedValue" />
-                                                <input type="hidden" id="StockOut_AccountCode_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Article</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="StockOut_Article"></div>
-
-                                                <input type="hidden" id="StockOut_Article_data" class="requiredStockOut" />
-                                                <input type="hidden" id="StockOut_Article_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Particulars</label>
-                                            <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredStockOut" id="StockOut_Particulars" placeholder="Particulars"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Manual OT Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredStockOut" id="StockOUt_ManualOTNumber" placeholder="Manual OT Number">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Prepared by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="StockOut_PreparedBy"></div>
-
-                                                <input type="hidden" id="StockOut_PreparedBy_data" class="requiredStockOut" />
-                                                <input type="hidden" id="StockOut_PreparedBy_selectedValue" />
-                                                <input type="hidden" id="userId_data" value="@userId" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Checked by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="StockOut_CheckedBy"></div>
-
-                                                <input type="hidden" id="StockOut_CheckedBy_data" class="requiredStockOut" />
-                                                <input type="hidden" id="StockOut_CheckedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Approved by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="StockOut_ApprovedBy"></div>
-
-                                                <input type="hidden" id="StockOut_ApprovedBy_data" class="requiredStockOut" />
-                                                <input type="hidden" id="StockOut_ApprovedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Lock</label>
-                                            <div class="col-sm-8">
-                                                <input type="checkbox" id="StockOut_Lock">
-                                            </div>
-                                        </div>
-                                        @*<div class="form-group">
-                                                <div class="col-sm-4"></div>
-                                                <div class="col-sm-8">
-                                                    <button type="button" class="btn btn-primary btn-sm">FA Disposal</button>
-                                                </div>
-                                            </div>*@
-                                        <div class="form-group">
-                                            <div class="col-sm-4"></div>
-                                            <div class="col-sm-8">
-                                                <input type="hidden" id="StockOut_IsLocked">
-                                                <input type="hidden" id="StockOut_IsLocked_defaultTrue">
-                                                <input type="hidden" id="StockOut_IsLocked_defaultFalse">
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6" align="right">
+                                        <button class="btn btn-primary btn-sm" id="cmdStockOutJournal" onclick="stockOutJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdStockOutSaveLock" onclick="btnStockOutSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdStockOutSave" onclick="btnStockOutSave_OnClick()"><i class="fa fa-save"></i> Save</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdStockOutEdit" onclick="btnStockOutEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdStockOutPrint" onclick="btnStockOutPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                        <button onclick="window.location.href = '@Url.Action("StockOut", "Software")'" class="btn btn-danger btn-sm" id="cmdStockOutClose"><i class="fa fa-times"></i> Close</button>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            <div class="panel-body">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="StockOut_Branch"></div>
+
+                                                        <input type="hidden" id="StockOut_Branch_data" class="requiredStockOut" />
+                                                        <input type="hidden" id="StockOut_Branch_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">OT Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-30 input-sm requiredStockOut" id="StockOut_OTNumber_Display" />
+                                                        <input type="hidden" id="StockOut_OTNumber" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">OT Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-50" id="StockOut_OTDate"></div>
+                                                        <input type="hidden" id="StockOut_OTDate_data" class="requiredStockOut" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Account</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-30" id="StockOut_AccountCode"></div>
+                                                        <div class="input-68" id="StockOut_Account"></div>
+
+                                                        <input type="hidden" id="StockOut_Account_data" class="requiredStockOut" />
+                                                        <input type="hidden" id="StockOut_Account_selectedValue" />
+                                                        <input type="hidden" id="StockOut_AccountCode_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Article</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="StockOut_Article"></div>
+
+                                                        <input type="hidden" id="StockOut_Article_data" class="requiredStockOut" />
+                                                        <input type="hidden" id="StockOut_Article_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Particulars</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control textarea-custom requiredStockOut" id="StockOut_Particulars" placeholder="Particulars"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Manual OT Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredStockOut" id="StockOUt_ManualOTNumber" placeholder="Manual OT Number">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Prepared by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="StockOut_PreparedBy"></div>
+
+                                                        <input type="hidden" id="StockOut_PreparedBy_data" class="requiredStockOut" />
+                                                        <input type="hidden" id="StockOut_PreparedBy_selectedValue" />
+                                                        <input type="hidden" id="userId_data" value="@userId" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Checked by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="StockOut_CheckedBy"></div>
+
+                                                        <input type="hidden" id="StockOut_CheckedBy_data" class="requiredStockOut" />
+                                                        <input type="hidden" id="StockOut_CheckedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Approved by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="StockOut_ApprovedBy"></div>
+
+                                                        <input type="hidden" id="StockOut_ApprovedBy_data" class="requiredStockOut" />
+                                                        <input type="hidden" id="StockOut_ApprovedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Lock</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="checkbox" id="StockOut_Lock">
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-group">
+                                                        <div class="col-sm-4"></div>
+                                                        <div class="col-sm-8">
+                                                            <button type="button" class="btn btn-primary btn-sm">FA Disposal</button>
+                                                        </div>
+                                                    </div>*@
+                                                <div class="form-group">
+                                                    <div class="col-sm-4"></div>
+                                                    <div class="col-sm-8">
+                                                        <input type="hidden" id="StockOut_IsLocked">
+                                                        <input type="hidden" id="StockOut_IsLocked_defaultTrue">
+                                                        <input type="hidden" id="StockOut_IsLocked_defaultFalse">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
+
                         <br />
                         <!-- Stock Out line -->
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
@@ -171,17 +176,24 @@
                         <br />
                         <div class="tab-content">
                             <div id="Items" class="tab-pane fade in active">
-                                <!-- Item  List -->
-                                <div class="row">
-                                    <div class="col-lg-12" align="right">
-                                        <button class="btn btn-primary btn-sm" id="btnStockOutAddItem" onclick="cmdStockOutItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-primary btn-sm" id="btnItemQueryStockOutItem" onclick="cmdItemQueryStockOutItem_OnClick()"><i class="fa fa-search-plus"></i> Item Query</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12" align="right">
+                                                <button class="btn btn-primary btn-sm" id="btnStockOutAddItem" onclick="cmdStockOutItem_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                                <button class="btn btn-primary btn-sm" id="btnItemQueryStockOutItem" onclick="cmdItemQueryStockOutItem_OnClick()"><i class="fa fa-search-plus"></i> Item Query</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div id="ItemGrid" class="grid"></div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div id="ItemGrid" class="grid"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer">
+
                                     </div>
                                 </div>
                             </div>
@@ -450,7 +462,7 @@
         var cboPreparedBy;
         var cboCheckedBy;
         var cboApprovedBy;
-        
+
         var itemQueryItemsCollection;
         var itemQueryGrid;
 
@@ -459,14 +471,14 @@
         var btnNextPageGridItemQuery;
         var btnLastPageGridItemQuery;
         var btnCurrentPageGridItemQuery;
-        
+
         // Item Query Stock Transfer Item
         function cmdItemQueryStockOutItem_OnClick() {
             $('#stockOutItemsItemQuery').modal({
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#itemQueryPanel").hide();
             $("#loadingItemQuery").show();
             document.getElementById("loadingItemQuery").innerHTML = "<b><i class='fa fa-spinner fa-spin'></i></b>";
@@ -556,7 +568,7 @@
             itemQueryItemsCollection.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsItemQuery();
             });
-          
+
             // Flex Grid for Purchase Order Line
             itemQueryGrid = new wijmo.grid.FlexGrid('#itemQueryGrid');
             itemQueryGrid.initialize({
@@ -643,7 +655,7 @@
                 updateNavigateButtonsItemQuery();
             });
         }
-        
+
         // Navigation Buttons for Account
         function updateNavigateButtonsItemQuery() {
             if (itemQueryItemsCollection.pageSize <= 0) {
@@ -669,7 +681,7 @@
             }
             btnCurrentPageGridItemQuery.innerHTML = (itemQueryItemsCollection.pageIndex + 1) + ' / ' + itemQueryItemsCollection.pageCount;
         }
-        
+
         // pick
         function pickToApplyOnClick() {
             itemQueryItemsCollection.editItem(itemQueryItemsCollection.currentItem);
@@ -706,7 +718,7 @@
             //document.getElementById('stockOutItem_BUCCost').value = item.BaseCost;
             //document.getElementById('stockOutItem_ExpenseAccount_data').value = item.ExpenseAccountId;
             //document.getElementById('stockOutItem_ExpenseAccount_selectedValue').value = item.ExpenseAccount;
-            
+
             getArticleItemForManualCodeAndComponent();
             //getStockOutItemUnitForComboBox();
             getStockOutItemAccountForComboBox();
@@ -1809,7 +1821,7 @@
                             document.getElementById('StockOut_OTNumber').value = zerofill(OT_Num_Results, 10);
                             document.getElementById('StockOut_OTNumber_Display').value = zerofill(OT_Num_Results, 10);
                         }
-                       
+
                     }
                 });
             }
@@ -2350,7 +2362,7 @@
             document.getElementById("stockOutItem_Cost").value = Math.round((cost / StockOutUnitCollection.items[cboStockOutUnit.selectedIndex].Multiplier) * 100) / 100;
             document.getElementById('stockOutItem_Amount').value =  Math.round((quantity * document.getElementById("stockOutItem_Cost").value) * 100) / 100;
         }
-        
+
         // =======================================
         // Get Item Unit for Basic Unit Conversion
         // =======================================
@@ -2410,7 +2422,7 @@
                 success: function (results) {
                     UnitId = results.UnitId;
                     Unit = results.Unit;
-                    
+
                     cboBaseUnit.dispose();
                     cboBaseUnit = new wijmo.input.ComboBox('#stockOutItem_BUCUnit', {
                         disabled: true,
@@ -2426,7 +2438,7 @@
                             //$("#stockOutItem_Unit_selectedValue").val(StockOutBaseUnitCollection.items[this.selectedIndex].Unit);
                         }
                     });
-                    
+
                     if (stockOutUnits == 0) {
                         document.getElementById('stockOutItem_BUCUnit_data').value =  "";
                     } else {
@@ -3384,7 +3396,7 @@
             $('#Items').show();
             $('#InventoryEntries').hide();
             itemTab();
-            
+
             $(document).on('show.bs.modal', '.modal', function (event) {
                 var zIndex = 1040 + (10 * $('.modal:visible').length);
                 $(this).css('z-index', zIndex);

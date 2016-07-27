@@ -35,134 +35,144 @@
 
             <section class="content">
                 <div class="box box-default">
-                    <div class="box-header">
-                        <div class="row">
-                            <div class="col-md-12" align="right">
-                                <button class="btn btn-primary btn-sm" id="cmdCollectionJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
-                                <button class="btn btn-primary btn-sm" id="cmdCollectionSaveLock" onclick="btnCollectionSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>
-                                <button class="btn btn-primary btn-sm" id="cmdCollectionEdit" onclick="btnCollectionEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
-                                <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="btnCollectionPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
-                                <button onclick="window.location.href = '/Software/Collection'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="box-body">
-                        <div class="well">
-                            <form class="form-horizontal" role="form">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Branch</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="collection_Branch"></div>
+                                    <div class="col-md-12" align="right">
+                                        <button class="btn btn-primary btn-sm" id="cmdCollectionJournal" onclick="btnJournalDetail_OnClick()"><i class="fa fa-book"></i> Journal</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdCollectionSaveLock" onclick="btnCollectionSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdCollectionSave" onclick="btnCollectionSave_OnClick()"><i class="fa fa-save"></i> Save</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdCollectionEdit" onclick="btnCollectionEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
+                                        <button class="btn btn-primary btn-sm" id="cmdCollectionPrint" onclick="btnCollectionPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
+                                        <button onclick="window.location.href = '/Software/Collection'" class="btn btn-danger btn-sm" id="cmdCollectionClose"><i class="fa fa-times"></i> Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="well">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Branch</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="collection_Branch"></div>
 
-                                                <input type="hidden" id="collection_Branch_data" class="requiredCollection" />
-                                                <input type="hidden" id="collection_Branch_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">OR Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-30 input-sm requiredCollection" id="collection_ORNumber_Display" />
-                                                <input type="hidden" id="collection_ORNumber" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">OR Date</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-50" id="collection_ORDate"></div>
-                                                <input type="hidden" id="collection_ORDate_data" class="requiredCollection" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Manual OR Number</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control input-sm requiredCollection" id="collection_ManualORNumber" placeholder="Manual OR Number" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Customer</label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group">
-                                                    <div class="comboBox-wide" id="collection_Customer"></div>
+                                                        <input type="hidden" id="collection_Branch_data" class="requiredCollection" />
+                                                        <input type="hidden" id="collection_Branch_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">OR Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-30 input-sm requiredCollection" id="collection_ORNumber_Display" />
+                                                        <input type="hidden" id="collection_ORNumber" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">OR Date</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-50" id="collection_ORDate"></div>
+                                                        <input type="hidden" id="collection_ORDate_data" class="requiredCollection" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Manual OR Number</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm requiredCollection" id="collection_ManualORNumber" placeholder="Manual OR Number" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Customer</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <div class="comboBox-wide" id="collection_Customer"></div>
 
-                                                    <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
-                                                    <input type="hidden" id="collection_Customer_selectedValue" />
-                                                    <div class="input-group-btn">
-                                                        <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
-                                                        <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>
+                                                            <input type="hidden" id="collection_Customer_data" class="requiredCollection" />
+                                                            <input type="hidden" id="collection_Customer_selectedValue" />
+                                                            <div class="input-group-btn">
+                                                                <button type="button" class=" btn btn-primary btn-sm" id="cmdAR" onclick="collectionAR_OnClick()">AR</button>
+                                                                <button type="button" class="btn btn-primary btn-sm" id="cmdAdvances" onclick="collectionAdvances_OnClick()">Advances</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Particulars</label>
+                                                    <div class="col-sm-8">
+                                                        <textarea class="form-control textarea-custom requiredCollection" id="collection_Particulars" placeholder="Particulars"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Prepared by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="collection_PreparedBy"></div>
+
+                                                        <input type="hidden" id="collection_PreparedBy_data" class="requiredCollection" />
+                                                        <input type="hidden" id="collection_PreparedBy_selectedValue" />
+                                                        <input type="hidden" id="userId_data" value="@userId" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Checked by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="collection_CheckedBy"></div>
+
+                                                        <input type="hidden" id="collection_CheckedBy_data" class="requiredCollection" />
+                                                        <input type="hidden" id="collection_CheckedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Approved by</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="comboBox-wide" id="collection_ApprovedBy"></div>
+
+                                                        <input type="hidden" id="collection_ApprovedBy_data" class="requiredCollection" />
+                                                        <input type="hidden" id="collection_ApprovedBy_selectedValue" />
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-group">
+                                                    <label class="control-label col-sm-4">Lock</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="checkbox" id="collection_Lock">
+                                                    </div>
+                                                </div>*@
+                                                <div class="form-group">
+                                                    <div class="col-sm-4"></div>
+                                                    <div class="col-sm-8">
+                                                        <input type="hidden" id="collection_IsLocked">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Particulars</label>
-                                            <div class="col-sm-8">
-                                                <textarea class="form-control textarea-custom requiredCollection" id="collection_Particulars" placeholder="Particulars"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Prepared by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="collection_PreparedBy"></div>
-
-                                                <input type="hidden" id="collection_PreparedBy_data" class="requiredCollection" />
-                                                <input type="hidden" id="collection_PreparedBy_selectedValue" />
-                                                <input type="hidden" id="userId_data" value="@userId" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Checked by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="collection_CheckedBy"></div>
-
-                                                <input type="hidden" id="collection_CheckedBy_data" class="requiredCollection" />
-                                                <input type="hidden" id="collection_CheckedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Approved by</label>
-                                            <div class="col-sm-8">
-                                                <div class="comboBox-wide" id="collection_ApprovedBy"></div>
-
-                                                <input type="hidden" id="collection_ApprovedBy_data" class="requiredCollection" />
-                                                <input type="hidden" id="collection_ApprovedBy_selectedValue" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-4">Lock</label>
-                                            <div class="col-sm-8">
-                                                <input type="checkbox" id="collection_Lock">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-4"></div>
-                                            <div class="col-sm-8">
-                                                <input type="hidden" id="collection_IsLocked">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
                         </div>
+                        <br />
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
                             <li role="presentation" class="active"><a data-toggle="tab" href="#CollectionLine" id="itemTabId">Collection Line</a></li>
                         </ul>
                         <br />
                         <div class="tab-content">
                             <div id="CollectionLine" class="tab-pane fade in active">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <button type="submit" class="btn btn-primary pull-right btn-sm" id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <button type="submit" class="btn btn-primary pull-right btn-sm" id="btnAddCollectionLine" onclick="cmdAddCollectionLineButton_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="row" align="left">
-                                    <div class="col-lg-12">
-                                        <div id="CollectionLineGrid" class="grid" align="left"></div>
+                                    <div class="panel-body">
+                                        <div class="row" align="left">
+                                            <div class="col-lg-12">
+                                                <div id="CollectionLineGrid" class="grid" align="left"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1078,7 +1088,7 @@
                         document.getElementById('collection_CheckedBy_selectedValue').value = Results.CheckedBy;
                         document.getElementById('collection_ApprovedBy_data').value = Results.ApprovedById;
                         document.getElementById('collection_ApprovedBy_selectedValue').value = Results.ApprovedBy;
-                        document.getElementById('collection_Lock').checked = Results.IsLocked;
+                        //document.getElementById('collection_Lock').checked = Results.IsLocked;
                         document.getElementById('createdBy').innerHTML = Results.CreatedBy;
                         document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
                         document.getElementById('updatedBy').innerHTML = Results.UpdatedBy;
@@ -2962,7 +2972,7 @@
             });
 
             document.getElementById('collection_ORNumber_Display').disabled = true;
-            document.getElementById('collection_Lock').disabled = true;
+            //document.getElementById('collection_Lock').disabled = true;
 
             cboBranch = new wijmo.input.ComboBox('#collection_Branch');
             cboCustomer = new wijmo.input.ComboBox('#collection_Customer');

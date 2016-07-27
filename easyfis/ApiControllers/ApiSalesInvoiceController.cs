@@ -21,6 +21,19 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // get amount in sales
         public Decimal getAmountSalesInvoiceItem(Int32 SIId)
         {
@@ -326,23 +339,32 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastSINumber = from d in db.TrnSalesInvoices.OrderByDescending(d => d.Id) select d;
+                var SINumberResult = "0000000001";
+
+                if (lastSINumber.Any())
+                {
+                    var SINumber = Convert.ToInt32(lastSINumber.FirstOrDefault().SINumber) + 0000000001;
+                    SINumberResult = zeroFill(SINumber, 10);
+                }
+
                 Data.TrnSalesInvoice newSalesInvoice = new Data.TrnSalesInvoice();
-                newSalesInvoice.BranchId = sales.BranchId;
-                newSalesInvoice.SINumber = sales.SINumber;
-                newSalesInvoice.SIDate = Convert.ToDateTime(sales.SIDate);
-                newSalesInvoice.CustomerId = sales.CustomerId;
-                newSalesInvoice.TermId = sales.TermId;
-                newSalesInvoice.DocumentReference = sales.DocumentReference;
-                newSalesInvoice.ManualSINumber = sales.ManualSINumber;
-                newSalesInvoice.Remarks = sales.Remarks;
+                newSalesInvoice.BranchId = currentBranchId();
+                newSalesInvoice.SINumber = SINumberResult;
+                newSalesInvoice.SIDate = DateTime.Today;
+                newSalesInvoice.CustomerId = (from d in db.MstArticles where d.ArticleTypeId == 2 select d.Id).FirstOrDefault();
+                newSalesInvoice.TermId = (from d in db.MstTerms select d.Id).FirstOrDefault();
+                newSalesInvoice.DocumentReference = "NA";
+                newSalesInvoice.ManualSINumber = "NA";
+                newSalesInvoice.Remarks = "NA";
                 newSalesInvoice.Amount = 0;
                 newSalesInvoice.PaidAmount = 0;
                 newSalesInvoice.AdjustmentAmount = 0;
                 newSalesInvoice.BalanceAmount = 0;
-                newSalesInvoice.SoldById = sales.SoldById;
-                newSalesInvoice.PreparedById = sales.PreparedById;
-                newSalesInvoice.CheckedById = sales.CheckedById;
-                newSalesInvoice.ApprovedById = sales.ApprovedById;
+                newSalesInvoice.SoldById = userId;
+                newSalesInvoice.PreparedById = userId;
+                newSalesInvoice.CheckedById = userId;
+                newSalesInvoice.ApprovedById = userId;
                 newSalesInvoice.IsLocked = false;
                 newSalesInvoice.CreatedById = userId;
                 newSalesInvoice.CreatedDateTime = DateTime.Now;
