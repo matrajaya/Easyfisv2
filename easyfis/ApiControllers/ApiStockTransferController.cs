@@ -21,6 +21,19 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // list stock transfer 
         [Authorize]
         [HttpGet]
@@ -179,16 +192,25 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastSTNumber = from d in db.TrnStockTransfers.OrderByDescending(d => d.Id) select d;
+                var STNumberResult = "0000000001";
+
+                if (lastSTNumber.Any())
+                {
+                    var STNumber = Convert.ToInt32(lastSTNumber.FirstOrDefault().STNumber) + 0000000001;
+                    STNumberResult = zeroFill(STNumber, 10);
+                }
+
                 Data.TrnStockTransfer newStockTransfer = new Data.TrnStockTransfer();
-                newStockTransfer.BranchId = stockTransfer.BranchId;
-                newStockTransfer.STNumber = stockTransfer.STNumber;
-                newStockTransfer.STDate = Convert.ToDateTime(stockTransfer.STDate);
-                newStockTransfer.ToBranchId = stockTransfer.ToBranchId;
-                newStockTransfer.Particulars = stockTransfer.Particulars;
-                newStockTransfer.ManualSTNumber = stockTransfer.ManualSTNumber;
-                newStockTransfer.PreparedById = stockTransfer.PreparedById;
-                newStockTransfer.CheckedById = stockTransfer.CheckedById;
-                newStockTransfer.ApprovedById = stockTransfer.ApprovedById;
+                newStockTransfer.BranchId = currentBranchId();
+                newStockTransfer.STNumber = STNumberResult;
+                newStockTransfer.STDate = DateTime.Today;
+                newStockTransfer.ToBranchId = (from d in db.MstBranches where d.Id != currentBranchId() && d.MstUser.Id == userId select d.Id).FirstOrDefault();
+                newStockTransfer.Particulars = "NA";
+                newStockTransfer.ManualSTNumber = "NA";
+                newStockTransfer.PreparedById = userId;
+                newStockTransfer.CheckedById = userId;
+                newStockTransfer.ApprovedById = userId;
                 newStockTransfer.IsLocked = false;
                 newStockTransfer.CreatedById = userId;
                 newStockTransfer.CreatedDateTime = DateTime.Now;

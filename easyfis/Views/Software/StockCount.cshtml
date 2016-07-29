@@ -51,8 +51,8 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6" align="right">
-                                        <a href="/Software/StockCountDetail" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add</a>
-                                        <a href="/Software" class="btn btn-danger btn-sm"><i class=" fa fa-times"></i> Close</a>
+                                        <button class="btn btn-primary btn-sm" id="btnAddStockCount" onclick="btnAddStockCount_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-danger btn-sm" id="btnCloseStockCount" onclick="btnCloseStockCount_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -155,19 +155,39 @@
                 success: function (stockCountResults) {
                     if (stockCountResults.length > 0) {
                         for (i = 0; i < stockCountResults.length; i++) {
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
 
-                            // Delete Lock
-                            var btnDeleteOnClick;
-                            if (stockCountResults[i]["IsLocked"] == true) {
-                                btnDeleteOnClick = "btnOnclickStockCountDeleteLock()";
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
                             } else {
-                                btnDeleteOnClick = "btnOnclickStockCountDelete()";
+                                deleteDisabled = "disabled";
+                            }
+
+                            var btnDeleteId;
+                            if (stockCountResults[i]["IsLocked"] == true) {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnOnclickStockCountDeleteLock()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            } else {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnOnclickStockCountDelete()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             // Array Push
                             stockCounts.push({
-                                Edit: "<button class='btn btn-primary btn-xs btn-block' id='btnStockCountEdit' onclick='btnOnclickStockCountEdit()'><i class='fa fa-edit'></i> Edit</button>",
-                                Delete: "<button class='btn btn-danger btn-xs btn-block' id='btnStockCountDelete' onclick='" + btnDeleteOnClick + "'><i class='fa fa-trash'></i> Delete</button>",
+                                Edit: "<button class='btn btn-primary btn-xs btn-block' id='btnStockCountEdit' onclick='btnOnclickStockCountEdit()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
+                                Delete: btnDeleteId,
                                 Id: stockCountResults[i]["Id"],
                                 BranchId: stockCountResults[i]["BranchId"],
                                 Branch: stockCountResults[i]["Branch"],
@@ -194,6 +214,38 @@
                 }
             });
             return stockCounts;
+        }
+
+        function btnAddStockCount_OnClick() {
+            document.getElementById('btnAddStockCount').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
+            $('#btnAddStockCount').prop('disabled', true);
+            $('#btnCloseStockCount').prop('disabled', true);
+
+            var canAccessToDetailPage = "@ViewData["CanAccessToDetailPage"]";
+            if (canAccessToDetailPage == "True") {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/stockCount/save',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (id) {
+                        if (id > 0) {
+                            window.location = '/Software/StockCountDetail?Id=' + id;
+                        } else {
+                            toastr.error("Internal Server Error");
+                        }
+                    }
+                });
+            } else if (canAccessToDetailPage == "False") {
+                window.location = '/Software/Forbidden';
+            } else {
+                document.getElementById('btnAddStockCount').innerHTML = "<i class='fa fa-plus'></i> Add";
+                $('#btnAddStockCount').prop('disabled', false);
+                $('#btnCloseStockCount').prop('disabled', false);
+            }
+        }
+
+        function btnCloseStockCount_OnClick() {
+            window.location = '/Software';
         }
 
         // Stock Count Edit
@@ -231,7 +283,7 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Delete Successful");
                         $('#divIdStockCountConfirmDeleteModal').modal('hide');
                         refreshStockCountFlexGrid(stockCountSCDateValue);
                     },
@@ -464,6 +516,15 @@
                 stockCounts.moveToLastPage();
                 updateNavigateButtonsStockCount();
             });
+
+            var canAdd = "@ViewData["CanAdd"]";
+            if (canAdd == "True") {
+                $("#btnAddStockCount").prop("disabled", false)
+            } else if (canAdd == "False") {
+                $("#btnAddStockCount").prop("disabled", true)
+            } else {
+                $("#btnAddStockCount").prop("disabled", true)
+            }
         });
     </script>
 </body>

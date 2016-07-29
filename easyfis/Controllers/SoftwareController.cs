@@ -624,6 +624,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("Collection").Equals("Collection"))
             {
+                if (accessToDetail("CollectionDetail").Equals("CollectionDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else
@@ -698,6 +707,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("StockIn").Equals("StockIn"))
             {
+                if (accessToDetail("StockInDetail").Equals("StockInDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else
@@ -724,6 +742,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("StockOut").Equals("StockOut"))
             {
+                if (accessToDetail("StockOutDetail").Equals("StockOutDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else
@@ -775,6 +802,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("StockTransfer").Equals("StockTransfer"))
             {
+                if (accessToDetail("StockTransferDetail").Equals("StockTransferDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else
@@ -801,6 +837,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("StockCount").Equals("StockCount"))
             {
+                if (accessToDetail("StockCountDetail").Equals("StockCountDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else

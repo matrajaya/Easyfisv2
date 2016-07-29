@@ -21,6 +21,19 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // list stock in
         [Authorize]
         [HttpGet]
@@ -195,18 +208,27 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastINNumber = from d in db.TrnStockIns.OrderByDescending(d => d.Id) select d;
+                var INNumberResult = "0000000001";
+
+                if (lastINNumber.Any())
+                {
+                    var INNumber = Convert.ToInt32(lastINNumber.FirstOrDefault().INNumber) + 0000000001;
+                    INNumberResult = zeroFill(INNumber, 10);
+                }
+
                 Data.TrnStockIn newStockIn = new Data.TrnStockIn();
-                newStockIn.BranchId = stockIn.BranchId;
-                newStockIn.INNumber = stockIn.INNumber;
-                newStockIn.INDate = Convert.ToDateTime(stockIn.INDate);
-                newStockIn.AccountId = stockIn.AccountId;
-                newStockIn.ArticleId = stockIn.ArticleId;
-                newStockIn.Particulars = stockIn.Particulars;
-                newStockIn.ManualINNumber = stockIn.ManualINNumber;
-                newStockIn.IsProduced = stockIn.IsProduced;
-                newStockIn.PreparedById = stockIn.PreparedById;
-                newStockIn.CheckedById = stockIn.CheckedById;
-                newStockIn.ApprovedById = stockIn.ApprovedById;
+                newStockIn.BranchId = currentBranchId();
+                newStockIn.INNumber = INNumberResult;
+                newStockIn.INDate = DateTime.Today;
+                newStockIn.AccountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault();
+                newStockIn.ArticleId = (from d in db.MstArticles where d.ArticleTypeId == 6 && d.AccountId == newStockIn.AccountId select d.Id).FirstOrDefault();
+                newStockIn.Particulars = "NA";
+                newStockIn.ManualINNumber = "NA";
+                newStockIn.IsProduced = false;
+                newStockIn.PreparedById = userId;
+                newStockIn.CheckedById = userId;
+                newStockIn.ApprovedById = userId;
                 newStockIn.IsLocked = false;
                 newStockIn.CreatedById = userId;
                 newStockIn.CreatedDateTime = DateTime.Now;

@@ -56,7 +56,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8" align="right">
-                                            <button class="btn btn-primary btn-sm" onclick="btnDiscountAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <button class="btn btn-primary btn-sm" id="btnAddDiscount" onclick="btnDiscountAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -101,7 +101,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8" align="right">
-                                            <button class="btn btn-primary btn-sm" onclick="btnPayTypeAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <button class="btn btn-primary btn-sm" id="btnAddPayType" onclick="btnPayTypeAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -146,7 +146,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8" align="right">
-                                            <button class="btn btn-primary btn-sm" onclick="btnTaxAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <button class="btn btn-primary btn-sm" id="btnAddTax" onclick="btnTaxAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -191,7 +191,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8" align="right">
-                                            <buton class="btn btn-primary btn-sm" onclick="btnUnitAdd_OnClick()"><i class="fa fa-plus"></i> Add</buton>
+                                            <button class="btn btn-primary btn-sm" id="btnAddUnit" onclick="btnUnitAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -236,7 +236,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8" align="right">
-                                            <a href="#" class="btn btn-primary btn-sm" onclick="btnTermAdd_OnClick()"><i class="fa fa-plus"></i> Add</a>
+                                            <button class="btn btn-primary btn-sm" id="btnAddTerm" onclick="btnTermAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -281,7 +281,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8" align="right">
-                                            <button class="btn btn-primary btn-sm" onclick="btnEmployeeAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <button class="btn btn-primary btn-sm" id="btnAddEmployee" onclick="btnEmployeeAdd_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -326,7 +326,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8" align="right">
-                                            <button class="btn btn-primary btn-sm" onclick="btnAddArtileGroup_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <button class="btn btn-primary btn-sm" id="btnAddArticleGroup" onclick="btnAddArtileGroup_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -371,7 +371,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-8" align="right">
-                                            <button class="btn btn-primary btn-sm" onclick="btnAddArticle_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                            <button class="btn btn-primary btn-sm" id="btnAddOtherArticle" onclick="btnAddArticle_OnClick()"><i class="fa fa-plus"></i> Add</button>
                                             <a href="@Url.Action("Index", "Software")" class="btn btn-danger btn-sm" id="cmdCloseButtonCompany"><i class="fa fa-times"></i> Close</a>
                                         </div>
                                     </div>
@@ -1001,15 +1001,37 @@
                     if (discountResults.length > 0) {
                         for (i = 0; i < discountResults.length; i++) {
 
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
                             var btnDeleteId;
                             if (discountResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' id='cmdDiscountDelete' onclick='btnDiscountDeleteLock_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDiscountDeleteLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' id='cmdDiscountDelete' onclick='btnDiscountDelete_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDiscountDelete_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             discounts.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='cmdDiscountEdit' onclick='btnDiscountEdit_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='cmdDiscountEdit' onclick='btnDiscountEdit_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: discountResults[i]["Id"],
                                 Discount: discountResults[i]["Discount"],
@@ -1615,15 +1637,37 @@
                     if (payTypeResults.length > 0) {
                         for (i = 0; i < payTypeResults.length; i++) {
 
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
                             var btnDeleteId;
                             if (payTypeResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnPayTypeDeleteLock_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnPayTypeDeleteLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnPayTypeDelete_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnPayTypeDelete_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             paytypes.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnPayTypeEdit_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnPayTypeEdit_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: payTypeResults[i]["Id"],
                                 PayType: payTypeResults[i]["PayType"],
@@ -2201,15 +2245,37 @@
                     if (taxResults.length > 0) {
                         for (i = 0; i < taxResults.length; i++) {
 
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
                             var btnDeleteId;
                             if (taxResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnTaxDeleteLock_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnTaxDeleteLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnTaxDelete_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnTaxDelete_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             taxes.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnTaxEdit_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnTaxEdit_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: taxResults[i]["Id"],
                                 TaxType: taxResults[i]["TaxType"],
@@ -2808,15 +2874,37 @@
                     if (unitResults.length > 0) {
                         for (i = 0; i < unitResults.length; i++) {
 
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
                             var btnDeleteId;
                             if (unitResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletetUnitLock_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletetUnitLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletetUnit_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeletetUnit_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             units.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditUnit_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditUnit_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: unitResults[i]["Id"],
                                 Unit: unitResults[i]["Unit"],
@@ -3242,15 +3330,37 @@
                     if (termResults.length > 0) {
                         for (i = 0; i < termResults.length; i++) {
 
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
                             var btnDeleteId;
                             if (termResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteTermLock_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteTermLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteTerm_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteTerm_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             terms.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditTerm_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditTerm_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: termResults[i]["Id"],
                                 Term: termResults[i]["Term"],
@@ -3697,15 +3807,37 @@
                     if (employeeResults.length > 0) {
                         for (i = 0; i < employeeResults.length; i++) {
 
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
                             var btnDeleteId;
                             if (employeeResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteEmployeeLock_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteEmployeeLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteEmployee_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteEmployee_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             employees.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditEmployee_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditEmployee_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: employeeResults[i]["Id"],
                                 ArticleCode: employeeResults[i]["ArticleCode"],
@@ -4375,15 +4507,37 @@
                     if (articleGroupResults.length > 0) {
                         for (i = 0; i < articleGroupResults.length; i++) {
 
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
                             var btnDeleteId;
                             if (articleGroupResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroupLock_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroupLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroup_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleGroup_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             articlegroups.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditArticleGroup_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditArticleGroup_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: articleGroupResults[i]["Id"],
                                 ArticleGroup: articleGroupResults[i]["ArticleGroup"],
@@ -5282,15 +5436,37 @@
                     if (otherArticleResults.length > 0) {
                         for (i = 0; i < otherArticleResults.length; i++) {
 
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
+                            } else {
+                                deleteDisabled = "disabled";
+                            }
+
                             var btnDeleteId;
                             if (otherArticleResults[i]["IsLocked"] == true) {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleLock_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticleLock_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
                             } else {
-                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticle_OnClick()'><i class='fa fa-trash'></i> Delete</button>";
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteArticle_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
                             }
 
                             otherarticles.push({
-                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditArticle_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditArticle_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
                                 DeleteId: btnDeleteId,
                                 Id: otherArticleResults[i]["Id"],
                                 ArticleCode: otherArticleResults[i]["ArticleCode"],
@@ -6199,6 +6375,36 @@
             $('#AccountType').hide();
 
             discountTab();
+
+            var canAdd = "@ViewData["CanAdd"]";
+            if (canAdd == "True") {
+                $("#btnAddDiscount").prop("disabled", false);
+                $("#btnAddPayType").prop("disabled", false);
+                $("#btnAddTax").prop("disabled", false);
+                $("#btnAddUnit").prop("disabled", false);
+                $("#btnAddTerm").prop("disabled", false);
+                $("#btnAddEmployee").prop("disabled", false);
+                $("#btnAddArticleGroup").prop("disabled", false);
+                $("#btnAddOtherArticle").prop("disabled", false);
+            } else if (canAdd == "False") {
+                $("#btnAddDiscount").prop("disabled", true);
+                $("#btnAddPayType").prop("disabled", true);
+                $("#btnAddTax").prop("disabled", true);
+                $("#btnAddUnit").prop("disabled", true);
+                $("#btnAddTerm").prop("disabled", true);
+                $("#btnAddEmployee").prop("disabled", true);
+                $("#btnAddArticleGroup").prop("disabled", true);
+                $("#btnAddOtherArticle").prop("disabled", true);
+            } else {
+                $("#btnAddDiscount").prop("disabled", true);
+                $("#btnAddPayType").prop("disabled", true);
+                $("#btnAddTax").prop("disabled", true);
+                $("#btnAddUnit").prop("disabled", true);
+                $("#btnAddTerm").prop("disabled", true);
+                $("#btnAddEmployee").prop("disabled", true);
+                $("#btnAddArticleGroup").prop("disabled", true);
+                $("#btnAddOtherArticle").prop("disabled", true);
+            }
         });
     </script>
 </body>

@@ -43,7 +43,7 @@
                                     <div class="col-md-6" align="right">
                                         <button class="btn btn-primary btn-sm" id="cmdStockInJournal" onclick="stockInJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
                                         <button class="btn btn-primary btn-sm" id="cmdStockInSaveLock" onclick="btnStockInSaveLock_OnClick()"><i class=" fa fa-lock"></i> Lock</button>
-                                        <button class="btn btn-primary btn-sm" id="cmdStockInSave" onclick="btnStockInSave_OnClick()"><i class=" fa fa-save"></i> Save</button>
+                                        @*<button class="btn btn-primary btn-sm" id="cmdStockInSave" onclick="btnStockInSave_OnClick()"><i class=" fa fa-save"></i> Save</button>*@
                                         <button class="btn btn-primary btn-sm" id="cmdStockInEdit" onclick="btnStockInEdit_OnClick()"><i class=" fa fa-unlock"></i> Unlock</button>
                                         <button class="btn btn-primary btn-sm" id="cmdStockInPrint" onclick="btnStockInPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
                                         <button onclick="window.location.href = '@Url.Action("StockIn", "Software")'" class="btn btn-danger btn-sm" id="cmdStockInClose"><i class=" fa fa-times"></i> Close</button>
@@ -147,11 +147,11 @@
                                                     </div>
                                                 </div>
                                                 @*<div class="form-group">
-                                                    <label class="control-label col-sm-4">Lock</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="checkbox" id="StockIn_Lock">
-                                                    </div>
-                                                </div>*@
+                                                        <label class="control-label col-sm-4">Lock</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="checkbox" id="StockIn_Lock">
+                                                        </div>
+                                                    </div>*@
                                                 <div class="form-group">
                                                     <div class="col-sm-4"></div>
                                                     <div class="col-sm-8">
@@ -166,7 +166,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <br />
                         <!-- Stock In line -->
                         <ul class="nav nav-tabs" role="tablist" id="myTab">
@@ -436,7 +436,7 @@
         var cboPreparedBy;
         var cboCheckedBy;
         var cboApprovedBy;
-        
+
         var itemQueryItemsCollection;
         var itemQueryGrid;
 
@@ -452,7 +452,7 @@
                 show: true,
                 backdrop: 'static'
             });
-            
+
             $("#itemQueryPanel").hide();
             $("#loadingItemQuery").show();
             document.getElementById("loadingItemQuery").innerHTML = "<b><i class='fa fa-spinner fa-spin'></i></b>";
@@ -571,6 +571,7 @@
                 });
             });
 
+            document.getElementById('cmdSaveStockInItemButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveStockInItemButton").prop("disabled", false);
             $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
 
@@ -591,7 +592,7 @@
             //document.getElementById('stockInItem_BUCUnit_selectedValue').value = item.BaseUnit;
             //document.getElementById('stockInItem_BUCQuantity').value = "0";
             //document.getElementById('stockInItem_BUCCost').value = "0";
-            
+
             getArticleItemForManualCodeAndComponent();
             //getStockInItemUnitForComboBox();
 
@@ -614,7 +615,7 @@
             itemQueryItemsCollection.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsItemQuery();
             });
-          
+
             // Flex Grid for Purchase Order Line
             itemQueryGrid = new wijmo.grid.FlexGrid('#itemQueryGrid');
             itemQueryGrid.initialize({
@@ -793,7 +794,7 @@
 
                             NProgress.done();
 
-                            if (document.getElementById('StockIn_IsLocked').value == 'true') {
+                            if (Results.IsLocked == true) {
                                 document.getElementById('StockIn_Particulars').disabled = true;
                                 document.getElementById('StockIn_ManualINNumber').disabled = true;
 
@@ -811,14 +812,23 @@
 
                                 $("#cmdStockInJournal").prop("disabled", false);
                                 $("#cmdStockInSaveLock").prop("disabled", true);
-                                $("#cmdStockInSave").prop("disabled", true);
+                                //$("#cmdStockInSave").prop("disabled", true);
                                 $("#cmdStockInEdit").prop("disabled", false);
                                 $("#cmdStockInPrint").prop("disabled", false);
                                 $("#btnAddStockInItem").prop("disabled", true);
                                 $("#cmdINLineItemQueryButton").prop("disabled", true);
 
                                 document.getElementById('StockIn_Produce').disabled = true;
-                            } else if (document.getElementById('StockIn_IsLocked').value == 'false') {
+
+                                var canUnLock = "@ViewData["CanUnlock"]";
+                                if (canUnLock == "True") {
+                                    $("#cmdStockInEdit").prop("disabled", false)
+                                } else if (canUnLock == "False") {
+                                    $("#cmdStockInEdit").prop("disabled", true)
+                                } else {
+                                    $("#cmdStockInEdit").prop("disabled", true)
+                                }
+                            } else {
                                 document.getElementById('StockIn_Particulars').disabled = false;
                                 document.getElementById('StockIn_ManualINNumber').disabled = false;
                                 $("#cmdINLineItemQueryButton").prop("disabled", false);
@@ -837,14 +847,42 @@
 
                                 $("#cmdStockInJournal").prop("disabled", true);
                                 $("#cmdStockInSaveLock").prop("disabled", false);
-                                $("#cmdStockInSave").prop("disabled", true);
+                                //$("#cmdStockInSave").prop("disabled", true);
                                 $("#cmdStockInEdit").prop("disabled", true);
                                 $("#cmdStockInPrint").prop("disabled", true);
                                 $("#btnAddStockInItem").prop("disabled", false);
 
                                 document.getElementById('StockIn_Produce').disabled = false;
+
+                                var canLock = "@ViewData["CanLock"]";
+                                if (canLock == "True") {
+                                    $("#cmdStockInSaveLock").prop("disabled", false)
+                                } else if (canLock == "False") {
+                                    $("#cmdStockInSaveLock").prop("disabled", true)
+                                } else {
+                                    $("#cmdStockInSaveLock").prop("disabled", true)
+                                }
+
+                                var canAdd = "@ViewData["CanAdd"]";
+                                if (canAdd == "True") {
+                                    $("#btnAddStockInItem").prop("disabled", false)
+                                    $("#cmdINLineItemQueryButton").prop("disabled", false)
+                                } else if (canAdd == "False") {
+                                    $("#btnAddStockInItem").prop("disabled", true)
+                                    $("#cmdINLineItemQueryButton").prop("disabled", true)
+                                } else {
+                                    $("#btnAddStockInItem").prop("disabled", true)
+                                    $("#cmdINLineItemQueryButton").prop("disabled", true)
+                                }
+                            }
+
+                            var canPrint = "@ViewData["CanPrint"]";
+                            if (canPrint == "True") {
+                                $("#cmdStockInPrint").prop("disabled", false)
+                            } else if (canPrint == "False") {
+                                $("#cmdStockInPrint").prop("disabled", true)
                             } else {
-                                console.log("Invalid IsLocked");
+                                $("#cmdStockInPrint").prop("disabled", true)
                             }
 
                             getBranchesForComboBox();
@@ -907,7 +945,7 @@
             }).fail(function (xhr, textStatus, err) {
                 alert(err);
             }
-                );
+        );
             return branches;
         }
 
@@ -983,7 +1021,7 @@
                         document.getElementById('StockIn_Account_data').value = "";
                     } else {
                         document.getElementById('StockIn_Account_data').value = accountCollection.items[cboForAccount.selectedIndex].AccountId;
-                        getArticlesForComboBox();
+                        //getArticlesForComboBox();
                     }
                 }
             }).fail(function (xhr, textStatus, err) {
@@ -1416,136 +1454,135 @@
         // ============
         // ADD Stock In
         // ============
-        function btnStockInSave_OnClick() {
-            var stockInObject = new Object();
-            var stockInId = getParam("StockInId");
-            stockInObject.BranchId = document.getElementById('StockIn_Branch_data').value;
-            stockInObject.INNumber = document.getElementById('StockIn_INnumber_Display').value;
-            stockInObject.INDate = document.getElementById('StockIn_InDate_data').value;
-            stockInObject.AccountId = document.getElementById('StockIn_Account_data').value;
-            stockInObject.ArticleId = document.getElementById('StockIn_Article_data').value;
-            stockInObject.Particulars = document.getElementById('StockIn_Particulars').value;
-            stockInObject.ManualINNumber = document.getElementById('StockIn_ManualINNumber').value;
-            stockInObject.IsProduced = document.getElementById('StockIn_Produce').checked;
-            stockInObject.PreparedById = document.getElementById('StockIn_PreparedBy_data').value;
-            stockInObject.CheckedById = document.getElementById('StockIn_CheckedBy_data').value;
-            stockInObject.ApprovedById = document.getElementById('StockIn_ApprovedBy_data').value;
-            var data = JSON.stringify(stockInObject);
+        //function btnStockInSave_OnClick() {
+        //    var stockInObject = new Object();
+        //    var stockInId = getParam("StockInId");
+        //    stockInObject.BranchId = document.getElementById('StockIn_Branch_data').value;
+        //    stockInObject.INNumber = document.getElementById('StockIn_INnumber_Display').value;
+        //    stockInObject.INDate = document.getElementById('StockIn_InDate_data').value;
+        //    stockInObject.AccountId = document.getElementById('StockIn_Account_data').value;
+        //    stockInObject.ArticleId = document.getElementById('StockIn_Article_data').value;
+        //    stockInObject.Particulars = document.getElementById('StockIn_Particulars').value;
+        //    stockInObject.ManualINNumber = document.getElementById('StockIn_ManualINNumber').value;
+        //    stockInObject.IsProduced = document.getElementById('StockIn_Produce').checked;
+        //    stockInObject.PreparedById = document.getElementById('StockIn_PreparedBy_data').value;
+        //    stockInObject.CheckedById = document.getElementById('StockIn_CheckedBy_data').value;
+        //    stockInObject.ApprovedById = document.getElementById('StockIn_ApprovedBy_data').value;
+        //    var data = JSON.stringify(stockInObject);
 
-            if (document.getElementById('StockIn_Account_data').value == '') {
-                document.getElementById("StockIn_Account").style.border = "1px solid red";
-            } else {
-                document.getElementById("StockIn_Account").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('StockIn_Account_data').value == '') {
+        //        document.getElementById("StockIn_Account").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("StockIn_Account").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('StockIn_Article_data').value == '') {
-                document.getElementById("StockIn_Article").style.border = "1px solid red";
-            } else {
-                document.getElementById("StockIn_Article").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('StockIn_Article_data').value == '') {
+        //        document.getElementById("StockIn_Article").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("StockIn_Article").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('StockIn_PreparedBy_data').value == '') {
-                document.getElementById("StockIn_PreparedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("StockIn_PreparedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('StockIn_PreparedBy_data').value == '') {
+        //        document.getElementById("StockIn_PreparedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("StockIn_PreparedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('StockIn_CheckedBy_data').value == '') {
-                document.getElementById("StockIn_CheckedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("StockIn_CheckedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('StockIn_CheckedBy_data').value == '') {
+        //        document.getElementById("StockIn_CheckedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("StockIn_CheckedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            if (document.getElementById('StockIn_ApprovedBy_data').value == '') {
-                document.getElementById("StockIn_ApprovedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("StockIn_ApprovedBy").style.border = "1px solid #C8C8C8   ";
-            }
+        //    if (document.getElementById('StockIn_ApprovedBy_data').value == '') {
+        //        document.getElementById("StockIn_ApprovedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("StockIn_ApprovedBy").style.border = "1px solid #C8C8C8   ";
+        //    }
 
-            var isValid = true;
-            $('.requiredStockIn').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "1px solid red"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
+        //    var isValid = true;
+        //    $('.requiredStockIn').each(function () {
+        //        if ($.trim($(this).val()) == '') {
+        //            isValid = false;
+        //            $(this).css({
+        //                "border": "1px solid red"
+        //            });
+        //        }
+        //        else {
+        //            $(this).css({
+        //                "border": "",
+        //            });
+        //        }
+        //    });
 
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-                e.preventDefault();
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addStockIn',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id) {
-                            if(id > 0) {
-                                $("#cmdStockInJournal").prop("disabled", true);
-                                $("#cmdStockInSaveLock").prop("disabled", true);
-                                $("#cmdStockInSave").prop("disabled", true);
-                                $("#cmdStockInEdit").prop("disabled", true);
-                                $("#cmdStockInPrint").prop("disabled", true);
-                                $("#cmdStockInClose").prop("disabled", true);
-                                window.location = '/Software/StockInDetail?StockInId=' + id;
-                            } else {
-                                window.history.back();
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateStockIn/' + stockInId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdStockInJournal").prop("disabled", true);
-                                $("#cmdStockInSaveLock").prop("disabled", true);
-                                $("#cmdStockInSave").prop("disabled", true);
-                                $("#cmdStockInEdit").prop("disabled", true);
-                                $("#cmdStockInPrint").prop("disabled", true);
-                                $("#cmdStockInClose").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdStockInJournal").prop("disabled", false);
-                                $("#cmdStockInSaveLock").prop("disabled", false);
-                                $("#cmdStockInSave").prop("disabled", false);
-                                $("#cmdStockInEdit").prop("disabled", false);
-                                $("#cmdStockInPrint").prop("disabled", false);
-                                $("#cmdStockInClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdStockInJournal").prop("disabled", false);
-                                $("#cmdStockInSaveLock").prop("disabled", false);
-                                $("#cmdStockInSave").prop("disabled", false);
-                                $("#cmdStockInEdit").prop("disabled", false);
-                                $("#cmdStockInPrint").prop("disabled", false);
-                                $("#cmdStockInClose").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
-            }
-        }
+        //    if (isValid == false) {
+        //        toastr.error("Invalid Entry");
+        //        e.preventDefault();
+        //    } else {
+        //        if (document.location.search.length == 0) {
+        //            $.ajax({
+        //                type: "POST",
+        //                url: '/api/addStockIn',
+        //                contentType: "application/json; charset=utf-8",
+        //                dataType: "json",
+        //                data: data,
+        //                success: function(id) {
+        //                    if(id > 0) {
+        //                        $("#cmdStockInJournal").prop("disabled", true);
+        //                        $("#cmdStockInSaveLock").prop("disabled", true);
+        //                        $("#cmdStockInSave").prop("disabled", true);
+        //                        $("#cmdStockInEdit").prop("disabled", true);
+        //                        $("#cmdStockInPrint").prop("disabled", true);
+        //                        $("#cmdStockInClose").prop("disabled", true);
+        //                        window.location = '/Software/StockInDetail?StockInId=' + id;
+        //                    } else {
+        //                        window.history.back();
+        //                    }
+        //                }
+        //            });
+        //        } else {
+        //            $.ajax({
+        //                type: "PUT",
+        //                url: '/api/updateStockIn/' + stockInId,
+        //                contentType: "application/json; charset=utf-8",
+        //                dataType: "json",
+        //                data: data,
+        //                statusCode: {
+        //                    200: function () {
+        //                        $("#cmdStockInJournal").prop("disabled", true);
+        //                        $("#cmdStockInSaveLock").prop("disabled", true);
+        //                        $("#cmdStockInSave").prop("disabled", true);
+        //                        $("#cmdStockInEdit").prop("disabled", true);
+        //                        $("#cmdStockInPrint").prop("disabled", true);
+        //                        $("#cmdStockInClose").prop("disabled", true);
+        //                        toastr.success("Successfully Updated");
+        //                        window.setTimeout(function () {
+        //                            location.reload()
+        //                        }, 1000);
+        //                    },
+        //                    404: function () {
+        //                        toastr.error("Can't Save");
+        //                        $("#cmdStockInJournal").prop("disabled", false);
+        //                        $("#cmdStockInSaveLock").prop("disabled", false);
+        //                        $("#cmdStockInSave").prop("disabled", false);
+        //                        $("#cmdStockInEdit").prop("disabled", false);
+        //                        $("#cmdStockInPrint").prop("disabled", false);
+        //                        $("#cmdStockInClose").prop("disabled", false);
+        //                    },
+        //                    400: function () {
+        //                        toastr.error("Bad Request");
+        //                        $("#cmdStockInJournal").prop("disabled", false);
+        //                        $("#cmdStockInSaveLock").prop("disabled", false);
+        //                        $("#cmdStockInSave").prop("disabled", false);
+        //                        $("#cmdStockInEdit").prop("disabled", false);
+        //                        $("#cmdStockInPrint").prop("disabled", false);
+        //                        $("#cmdStockInClose").prop("disabled", false);
+        //                    }
+        //                }
+        //            });
+        //        }
+        //    }
+        //}
 
         // ====================
         // Stock IN Save - Lock
@@ -1614,71 +1651,37 @@
 
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-                e.preventDefault();
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addStockIn',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id) {
-                            if(id > 0) {
-                                $("#cmdStockInJournal").prop("disabled", true);
-                                $("#cmdStockInSaveLock").prop("disabled", true);
-                                $("#cmdStockInSave").prop("disabled", true);
-                                $("#cmdStockInEdit").prop("disabled", true);
-                                $("#cmdStockInPrint").prop("disabled", true);
-                                $("#cmdStockInClose").prop("disabled", true);
-                                window.location = '/Software/StockInDetail?StockInId=' + stockInId;
-                            } else {
-                                window.history.back();
-                            }
+            } else {
+                document.getElementById('cmdStockInSaveLock').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+                $("#cmdStockInJournal").prop("disabled", true);
+                $("#cmdStockInSaveLock").prop("disabled", true);
+                $("#cmdStockInEdit").prop("disabled", true);
+                $("#cmdStockInPrint").prop("disabled", true);
+                $("#cmdStockInClose").prop("disabled", true);
+
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateStockIn/' + stockInId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            toastr.success("Lock Successful");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Not Found");
+                            $("#cmdStockInClose").prop("disabled", false);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            $("#cmdStockInClose").prop("disabled", false);
                         }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateStockIn/' + stockInId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdStockInJournal").prop("disabled", true);
-                                $("#cmdStockInSaveLock").prop("disabled", true);
-                                $("#cmdStockInSave").prop("disabled", true);
-                                $("#cmdStockInEdit").prop("disabled", true);
-                                $("#cmdStockInPrint").prop("disabled", true);
-                                $("#cmdStockInClose").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdStockInJournal").prop("disabled", false);
-                                $("#cmdStockInSaveLock").prop("disabled", false);
-                                $("#cmdStockInSave").prop("disabled", false);
-                                $("#cmdStockInEdit").prop("disabled", false);
-                                $("#cmdStockInPrint").prop("disabled", false);
-                                $("#cmdStockInClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdStockInJournal").prop("disabled", false);
-                                $("#cmdStockInSaveLock").prop("disabled", false);
-                                $("#cmdStockInSave").prop("disabled", false);
-                                $("#cmdStockInEdit").prop("disabled", false);
-                                $("#cmdStockInPrint").prop("disabled", false);
-                                $("#cmdStockInClose").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             }
         }
 
@@ -1691,6 +1694,13 @@
             stockInObject.IsLocked = false;
             var data = JSON.stringify(stockInObject);
 
+            document.getElementById('cmdStockInEdit').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+            $("#cmdStockInJournal").prop("disabled", true);
+            $("#cmdStockInSaveLock").prop("disabled", true);
+            $("#cmdStockInEdit").prop("disabled", true);
+            $("#cmdStockInPrint").prop("disabled", true);
+            $("#cmdStockInClose").prop("disabled", true);
+
             $.ajax({
                 type: "PUT",
                 url: '/api/updateStockInIsLocked/' + stockInId,
@@ -1699,33 +1709,17 @@
                 data: data,
                 statusCode: {
                     200: function () {
-                        $("#cmdStockInJournal").prop("disabled", true);
-                        $("#cmdStockInSaveLock").prop("disabled", true);
-                        $("#cmdStockInSave").prop("disabled", true);
-                        $("#cmdStockInEdit").prop("disabled", true);
-                        $("#cmdStockInPrint").prop("disabled", true);
-                        $("#cmdStockInClose").prop("disabled", true);
-                        toastr.success("Unlocked");
+                        toastr.success("Unlock Successful");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
                     },
                     404: function () {
-                        toastr.error("Can't Save");
-                        $("#cmdStockInJournal").prop("disabled", false);
-                        $("#cmdStockInSaveLock").prop("disabled", false);
-                        $("#cmdStockInSave").prop("disabled", false);
-                        $("#cmdStockInEdit").prop("disabled", false);
-                        $("#cmdStockInPrint").prop("disabled", false);
+                        toastr.error("Not Found");
                         $("#cmdStockInClose").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
-                        $("#cmdStockInJournal").prop("disabled", false);
-                        $("#cmdStockInSaveLock").prop("disabled", false);
-                        $("#cmdStockInSave").prop("disabled", false);
-                        $("#cmdStockInEdit").prop("disabled", false);
-                        $("#cmdStockInPrint").prop("disabled", false);
                         $("#cmdStockInClose").prop("disabled", false);
                     }
                 }
@@ -1748,7 +1742,7 @@
             if (document.location.search.length == 0) {
                 $('#cmdStockInJournal').hide();
                 $('#cmdStockInSaveLock').hide();
-                $('#cmdStockInSave').show();
+                //$('#cmdStockInSave').show();
                 $('#cmdStockInEdit').hide();
 
                 $("#cmdStockInPrint").prop("disabled", true);
@@ -1757,7 +1751,7 @@
                 //$('#btnAddContactInformation').prop('disabled', true);
             } else {
                 $('#cmdStockInJournal').show();
-                $('#cmdStockInSave').hide();
+                //$('#cmdStockInSave').hide();
                 $('#cmdStockInEdit').show();
             }
 
@@ -1879,52 +1873,59 @@
                                         });
                                     }
 
-                                    if (StockInResults.IsLocked == true) {
-                                        for (i = 0; i < Results.length; i++) {
-                                            items.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()' disabled><i class='fa fa-edit'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                INId: Results[i]["INId"],
-                                                IN: Results[i]["IN"],
-                                                ItemId: Results[i]["ItemId"],
-                                                ItemCode: Results[i]["ItemCode"],
-                                                Item: Results[i]["Item"],
-                                                Particulars: Results[i]["Particulars"],
-                                                UnitId: Results[i]["UnitId"],
-                                                Unit: Results[i]["Unit"],
-                                                Quantity: Results[i]["Quantity"],
-                                                Cost: Results[i]["Cost"],
-                                                Amount: Results[i]["Amount"],
-                                                BaseUnitId: Results[i]["BaseUnitId"],
-                                                BaseUnit: Results[i]["BaseUnit"],
-                                                BaseQuantity: Results[i]["BaseQuantity"],
-                                                BaseCost: Results[i]["BaseCost"]
-                                            });
-                                        }
+                                    var canEdit = "@ViewData["CanEdit"]";
+                                    var editDisabled = "disabled";
+
+                                    if (canEdit == "True") {
+                                        editDisabled = "";
+                                    } else if (canEdit == "False") {
+                                        editDisabled = "disabled";
                                     } else {
-                                        for (i = 0; i < Results.length; i++) {
-                                            items.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()'><i class='fa fa-edit'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()'><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                INId: Results[i]["INId"],
-                                                IN: Results[i]["IN"],
-                                                ItemId: Results[i]["ItemId"],
-                                                ItemCode: Results[i]["ItemCode"],
-                                                Item: Results[i]["Item"],
-                                                Particulars: Results[i]["Particulars"],
-                                                UnitId: Results[i]["UnitId"],
-                                                Unit: Results[i]["Unit"],
-                                                Quantity: Results[i]["Quantity"],
-                                                Cost: Results[i]["Cost"],
-                                                Amount: Results[i]["Amount"],
-                                                BaseUnitId: Results[i]["BaseUnitId"],
-                                                BaseUnit: Results[i]["BaseUnit"],
-                                                BaseQuantity: Results[i]["BaseQuantity"],
-                                                BaseCost: Results[i]["BaseCost"]
-                                            });
-                                        }
+                                        editDisabled = "disabled";
+                                    }
+
+                                    var canDelete = "@ViewData["CanDelete"]";
+                                    var deleteDisabled = "disabled";
+
+                                    if (canDelete == "True") {
+                                        deleteDisabled = "";
+                                    } else if (canDelete == "False") {
+                                        deleteDisabled = "disabled";
+                                    } else {
+                                        deleteDisabled = "disabled";
+                                    }
+
+                                    var btnEditId;
+                                    var btnDeleteId;
+                                    if (StockInResults.IsLocked == true) {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId =  "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                    } else {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockInItem_Onclick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockInItem_Onclick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                                    }
+
+                                    for (i = 0; i < Results.length; i++) {
+                                        items.push({
+                                            EditId: btnEditId,
+                                            DeleteId: btnDeleteId,
+                                            Id: Results[i]["Id"],
+                                            INId: Results[i]["INId"],
+                                            IN: Results[i]["IN"],
+                                            ItemId: Results[i]["ItemId"],
+                                            ItemCode: Results[i]["ItemCode"],
+                                            Item: Results[i]["Item"],
+                                            Particulars: Results[i]["Particulars"],
+                                            UnitId: Results[i]["UnitId"],
+                                            Unit: Results[i]["Unit"],
+                                            Quantity: Results[i]["Quantity"],
+                                            Cost: Results[i]["Cost"],
+                                            Amount: Results[i]["Amount"],
+                                            BaseUnitId: Results[i]["BaseUnitId"],
+                                            BaseUnit: Results[i]["BaseUnit"],
+                                            BaseQuantity: Results[i]["BaseQuantity"],
+                                            BaseCost: Results[i]["BaseCost"]
+                                        });
                                     }
                                 }
                             });
@@ -2281,7 +2282,7 @@
                 document.getElementById('stockInItem_Unit_selectedValue').value = "";
             }
         }
-        
+
         // =======================================
         // Get Item Unit for Basic Unit Conversion
         // =======================================
@@ -2330,7 +2331,7 @@
                 success: function (results) {
                     UnitId = results.UnitId;
                     Unit = results.Unit;
-                    
+
                     document.getElementById('stockInItem_BUCUnit_data').value = results.UnitId;
                     cboBaseUnit.dispose();
                     cboBaseUnit = new wijmo.input.ComboBox('#stockInItem_BUCUnit', {
@@ -2369,6 +2370,7 @@
                 });
             });
 
+            document.getElementById('cmdSaveStockInItemButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveStockInItemButton").prop("disabled", false);
             $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
 
@@ -2407,6 +2409,7 @@
                 });
             });
 
+            document.getElementById('cmdSaveStockInItemButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveStockInItemButton").prop("disabled", false);
             $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
 
@@ -2439,11 +2442,13 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdConfirmDeleteStockInItems').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $("#cmdConfirmDeleteStockInItems").prop("disabled", false);
             $("#cmdConfirmDeleteStockInItemsCloseButton").prop("disabled", false);
         }
         // confirm delete stock in items
         function cmdStockInItemsConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeleteStockInItems').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteStockInItems").prop("disabled", true);
             $("#cmdConfirmDeleteStockInItemsCloseButton").prop("disabled", true);
 
@@ -2458,7 +2463,7 @@
                     200: function () {
                         $("#cmdConfirmDeleteStockInItems").prop("disabled", true);
                         $("#cmdConfirmDeleteStockInItemsCloseButton").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deletStockInItemsConfirm').modal('hide');
 
@@ -2469,7 +2474,7 @@
                         itemGrid.trackChanges = true;
                     },
                     404: function () {
-                        toastr.error("Request Not Found");
+                        toastr.error("Not Found");
                         $('#deletStockInItemsConfirm').modal('hide');
                         $("#cmdConfirmDeleteStockInItems").prop("disabled", false);
                         $("#cmdConfirmDeleteStockInItemsCloseButton").prop("disabled", false);
@@ -2541,10 +2546,11 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-            }
-            else {
+            } else {
+                document.getElementById('cmdSaveStockInItemButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSaveStockInItemButton").prop("disabled", true);
                 $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
+
                 if (stockInItemId == 0) {
                     $.ajax({
                         type: "POST",
@@ -2556,7 +2562,7 @@
                             if(id > 0) {
                                 $("#cmdSaveStockInItemButton").prop("disabled", true);
                                 $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Saved");
+                                toastr.success("Save Successful");
 
                                 $('#stockInItemsEdit').modal('hide');
 
@@ -2568,7 +2574,7 @@
                             } else {
                                 $("#cmdSaveStockInItemButton").prop("disabled", false);
                                 $("#cmdStockInItemDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -2583,7 +2589,7 @@
                             200: function () {
                                 $("#cmdSaveStockInItemButton").prop("disabled", true);
                                 $("#cmdStockInItemDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Updated");
+                                toastr.success("Update Successful");
 
                                 $('#stockInItemsEdit').modal('hide');
 
@@ -2594,7 +2600,7 @@
                                 itemGrid.trackChanges = true;
                             },
                             404: function () {
-                                toastr.error("Can't Update");
+                                toastr.error("Not Found");
                                 $('#stockInItemsEdit').modal('hide');
                                 $("#cmdSaveStockInItemButton").prop("disabled", false);
                                 $("#cmdStockInItemDetailCloseButton").prop("disabled", false);

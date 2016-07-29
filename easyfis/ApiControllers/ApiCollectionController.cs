@@ -21,6 +21,19 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == identityUserId select d.BranchId).SingleOrDefault();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // update AR Collection
         public void UpdateARCollection(Int32 ORId)
         {
@@ -318,16 +331,25 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastORNumber = from d in db.TrnCollections.OrderByDescending(d => d.Id) select d;
+                var ORNumberResult = "0000000001";
+
+                if (lastORNumber.Any())
+                {
+                    var ORNumber = Convert.ToInt32(lastORNumber.FirstOrDefault().ORNumber) + 0000000001;
+                    ORNumberResult = zeroFill(ORNumber, 10);
+                }
+
                 Data.TrnCollection newCollection = new Data.TrnCollection();
-                newCollection.BranchId = collection.BranchId;
-                newCollection.ORNumber = collection.ORNumber;
-                newCollection.ORDate = Convert.ToDateTime(collection.ORDate);
-                newCollection.CustomerId = collection.CustomerId;
-                newCollection.Particulars = collection.Particulars;
-                newCollection.ManualORNumber = collection.ManualORNumber;
-                newCollection.PreparedById = collection.PreparedById;
-                newCollection.CheckedById = collection.CheckedById;
-                newCollection.ApprovedById = collection.ApprovedById;
+                newCollection.BranchId = currentBranchId();
+                newCollection.ORNumber = ORNumberResult;
+                newCollection.ORDate = DateTime.Today;
+                newCollection.CustomerId = (from d in db.MstArticles where d.ArticleTypeId == 2 select d.Id).FirstOrDefault();
+                newCollection.Particulars = "NA";
+                newCollection.ManualORNumber = "NA";
+                newCollection.PreparedById = userId;
+                newCollection.CheckedById = userId;
+                newCollection.ApprovedById = userId;
                 newCollection.IsLocked = false;
                 newCollection.CreatedById = userId;
                 newCollection.CreatedDateTime = DateTime.Now;

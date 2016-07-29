@@ -49,8 +49,8 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6" align="right">
-                                        <button class="btn btn-primary btn-sm" onclick="btnAddStockTransfer_OnClick()"><i class="fa fa-plus"></i> Add</button>
-                                        <button class="btn btn-danger btn-sm" onclick="btnCloseStockTransfer_OnClick()"><i class=" fa fa-times"></i> Close</button>
+                                        <button class="btn btn-primary btn-sm" id="btnAddStockTransfer" onclick="btnAddStockTransfer_OnClick()"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="btn btn-danger btn-sm" id="btnCloseStockTransfer" onclick="btnCloseStockTransfer_OnClick()"><i class=" fa fa-times"></i> Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -158,61 +158,62 @@
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            if (Results[i]["IsLocked"] == true) {
-                                stockTransfers.push({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='StockTransferEditButton' onclick='cmdStockTransferEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='StockTransferDeleteButton' onclick='cmdStockTransferDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    BranchId: Results[i]["BranchId"],
-                                    Branch: Results[i]["Branch"],
-                                    STNumber: Results[i]["STNumber"],
-                                    STDate: Results[i]["STDate"],
-                                    ToBranchId: Results[i]["ToBranchId"],
-                                    ToBranch: Results[i]["ToBranch"],
-                                    Particulars: Results[i]["Particulars"],
-                                    ManualSTNumber: Results[i]["ManualSTNumber"],
-                                    PreparedById: Results[i]["PreparedById"],
-                                    PreparedBy: Results[i]["PreparedBy"],
-                                    CheckedById: Results[i]["CheckedById"],
-                                    CheckedBy: Results[i]["CheckedBy"],
-                                    ApprovedById: Results[i]["ApprovedById"],
-                                    ApprovedBy: Results[i]["ApprovedBy"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
                             } else {
-                                stockTransfers.push({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='StockTransferEditButton' onclick='cmdStockTransferEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='StockTransferDeleteButton' onclick='cmdStockTransferDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    BranchId: Results[i]["BranchId"],
-                                    Branch: Results[i]["Branch"],
-                                    STNumber: Results[i]["STNumber"],
-                                    STDate: Results[i]["STDate"],
-                                    ToBranchId: Results[i]["ToBranchId"],
-                                    ToBranch: Results[i]["ToBranch"],
-                                    Particulars: Results[i]["Particulars"],
-                                    ManualSTNumber: Results[i]["ManualSTNumber"],
-                                    PreparedById: Results[i]["PreparedById"],
-                                    PreparedBy: Results[i]["PreparedBy"],
-                                    CheckedById: Results[i]["CheckedById"],
-                                    CheckedBy: Results[i]["CheckedBy"],
-                                    ApprovedById: Results[i]["ApprovedById"],
-                                    ApprovedBy: Results[i]["ApprovedBy"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+                                deleteDisabled = "disabled";
                             }
+
+                            var btnDeleteId;
+                            if (Results[i]["IsLocked"] == true) {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdStockTransferDeleteLockButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            } else {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdStockTransferDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
+                            }
+
+                            stockTransfers.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='StockTransferEditButton' onclick='cmdStockTransferEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: btnDeleteId,
+                                Id: Results[i]["Id"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                STNumber: Results[i]["STNumber"],
+                                STDate: Results[i]["STDate"],
+                                ToBranchId: Results[i]["ToBranchId"],
+                                ToBranch: Results[i]["ToBranch"],
+                                Particulars: Results[i]["Particulars"],
+                                ManualSTNumber: Results[i]["ManualSTNumber"],
+                                PreparedById: Results[i]["PreparedById"],
+                                PreparedBy: Results[i]["PreparedBy"],
+                                CheckedById: Results[i]["CheckedById"],
+                                CheckedBy: Results[i]["CheckedBy"],
+                                ApprovedById: Results[i]["ApprovedById"],
+                                ApprovedBy: Results[i]["ApprovedBy"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
                         }
                     }
                     NProgress.done();
@@ -237,7 +238,33 @@
         // Stock Transfer Add Button
         // =========================
         function btnAddStockTransfer_OnClick() {
-            window.location = '/Software/StockTransferDetail';
+            //window.location = '/Software/StockTransferDetail';
+            document.getElementById('btnAddStockTransfer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Adding";
+            $('#btnAddStockTransfer').prop('disabled', true);
+            $('#btnCloseStockTransfer').prop('disabled', true);
+
+            var canAccessToDetailPage = "@ViewData["CanAccessToDetailPage"]";
+            if (canAccessToDetailPage == "True") {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/addStockTransfer',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (id) {
+                        if (id > 0) {
+                            window.location = '/Software/StockTransferDetail?StockTransferId=' + id;
+                        } else {
+                            toastr.error("Internal Server Error");
+                        }
+                    }
+                });
+            } else if (canAccessToDetailPage == "False") {
+                window.location = '/Software/Forbidden';
+            } else {
+                document.getElementById('btnAddStockTransfer').innerHTML = "<i class='fa fa-plus'></i> Add";
+                $('#btnAddStockTransfer').prop('disabled', false);
+                $('#btnCloseStockTransfer').prop('disabled', false);
+
+            }
         }
 
         // ===========================
@@ -266,11 +293,13 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdConfirmDeleteStockTransfer').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $("#cmdConfirmDeleteStockTransfer").prop("disabled", false);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
         }
         // Company Confirm Delete Button
         function cmdStockTransferConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeleteStockTransfer').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteStockTransfer").prop("disabled", true);
             $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
 
@@ -285,7 +314,7 @@
                     200: function () {
                         $("#cmdConfirmDeleteStockTransfer").prop("disabled", true);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deleteStockTransferConfirm').modal('hide');
 
@@ -314,13 +343,13 @@
                         stockTransferGrid.trackChanges = true;
                     },
                     404: function () {
-                        toastr.error("Request Not Found");
+                        toastr.error("Not Found");
                         $('#deleteStockTransferConfirm').modal('hide');
                         $("#cmdConfirmDeleteStockTransfer").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
                     },
                     400: function () {
-                        toastr.error("Can't be deleted");
+                        toastr.error("Bad Request");
                         $('#deleteStockTransferConfirm').modal('hide');
                         $("#cmdConfirmDeleteStockTransfer").prop("disabled", false);
                         $("#cmdConfirmDeleteCloseButton").prop("disabled", false);
@@ -526,8 +555,16 @@
                 stockTransfers.moveToLastPage();
                 updateNavigateButtonsStockTransfer();
             });
-        });
 
+            var canAdd = "@ViewData["CanAdd"]";
+            if (canAdd == "True") {
+                $("#btnAddStockTransfer").prop("disabled", false)
+            } else if (canAdd == "False") {
+                $("#btnAddStockTransfer").prop("disabled", true)
+            } else {
+                $("#btnAddStockTransfer").prop("disabled", true)
+            }
+        });
     </script>
 </body>
 </html>

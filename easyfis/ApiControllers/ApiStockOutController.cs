@@ -20,6 +20,19 @@ namespace easyfis.Controllers
         {
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
+        
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
 
         // list stock out
         [Authorize]
@@ -187,17 +200,26 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastOTNumber = from d in db.TrnStockOuts.OrderByDescending(d => d.Id) select d;
+                var OTNumberResult = "0000000001";
+
+                if (lastOTNumber.Any())
+                {
+                    var OTNumber = Convert.ToInt32(lastOTNumber.FirstOrDefault().OTNumber) + 0000000001;
+                    OTNumberResult = zeroFill(OTNumber, 10);
+                }
+
                 Data.TrnStockOut newStockOut = new Data.TrnStockOut();
-                newStockOut.BranchId = stockOut.BranchId;
-                newStockOut.OTNumber = stockOut.OTNumber;
-                newStockOut.OTDate = Convert.ToDateTime(stockOut.OTDate);
-                newStockOut.AccountId = stockOut.AccountId;
-                newStockOut.ArticleId = stockOut.ArticleId;
-                newStockOut.Particulars = stockOut.Particulars;
-                newStockOut.ManualOTNumber = stockOut.ManualOTNumber;
-                newStockOut.PreparedById = stockOut.PreparedById;
-                newStockOut.CheckedById = stockOut.CheckedById;
-                newStockOut.ApprovedById = stockOut.ApprovedById;
+                newStockOut.BranchId = currentBranchId();
+                newStockOut.OTNumber = OTNumberResult;
+                newStockOut.OTDate = DateTime.Today;
+                newStockOut.AccountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault(); ;
+                newStockOut.ArticleId = (from d in db.MstArticles where d.ArticleTypeId == 6 && d.AccountId == newStockOut.AccountId select d.Id).FirstOrDefault();
+                newStockOut.Particulars = "NA";
+                newStockOut.ManualOTNumber = "NA";
+                newStockOut.PreparedById = userId;
+                newStockOut.CheckedById = userId;
+                newStockOut.ApprovedById = userId;
                 newStockOut.IsLocked = false;
                 newStockOut.CreatedById = userId;
                 newStockOut.CreatedDateTime = DateTime.Now;

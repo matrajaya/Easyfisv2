@@ -45,7 +45,7 @@
                                     <div class="col-md-6" align="right">
                                         <button class="btn btn-primary btn-sm" id="cmdStockTransferJournal" onclick="stockTransferJournal_OnClick()"><i class="fa fa-book"></i> Journal</button>
                                         <button class="btn btn-primary btn-sm" id="cmdStockTransferSaveLock" onclick="btnStockTransferSaveLock_OnClick()"><i class="fa fa-lock"></i> Lock</button>
-                                        <button class="btn btn-primary btn-sm" id="cmdStockTransferSave" onclick="btnStockTransferSave_OnClick()"><i class="fa fa-save"></i> Save</button>
+                                        @*<button class="btn btn-primary btn-sm" id="cmdStockTransferSave" onclick="btnStockTransferSave_OnClick()"><i class="fa fa-save"></i> Save</button>*@
                                         <button class="btn btn-primary btn-sm" id="cmdStockTransferEdit" onclick="btnStockTransferEdit_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
                                         <button class="btn btn-primary btn-sm" id="cmdStockTransferPrint" onclick="btnStockTransferPrint_OnClick()"><i class="fa fa-print"></i> Print</button>
                                         <button onclick="window.location.href = '/Software/StockTransfer'" class="btn btn-danger btn-sm" id="cmdStockTransferClose"><i class="fa fa-times"></i> Close</button>
@@ -132,11 +132,11 @@
                                                     </div>
                                                 </div>
                                                 @*<div class="form-group">
-                                                    <label class="control-label col-sm-4">Lock</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="checkbox" id="StockTransfer_Lock">
-                                                    </div>
-                                                </div>*@
+                                                        <label class="control-label col-sm-4">Lock</label>
+                                                        <div class="col-sm-8">
+                                                            <input type="checkbox" id="StockTransfer_Lock">
+                                                        </div>
+                                                    </div>*@
                                                 <div class="form-group">
                                                     <div class="col-sm-4"></div>
                                                     <div class="col-sm-8">
@@ -427,7 +427,7 @@
         var cboPreparedBy;
         var cboCheckedBy;
         var cboApprovedBy;
-        
+
         var itemQueryItemsCollection;
         var itemQueryGrid;
 
@@ -444,7 +444,7 @@
                 backdrop: 'static'
             });
 
-            
+
             $("#itemQueryPanel").hide();
             $("#loadingItemQuery").show();
             document.getElementById("loadingItemQuery").innerHTML = "<b><i class='fa fa-spinner fa-spin'></i></b>";
@@ -534,7 +534,7 @@
             itemQueryItemsCollection.collectionChanged.addHandler(function (sender, args) {
                 updateNavigateButtonsItemQuery();
             });
-          
+
             // Flex Grid for Purchase Order Line
             itemQueryGrid = new wijmo.grid.FlexGrid('#itemQueryGrid');
             itemQueryGrid.initialize({
@@ -621,7 +621,7 @@
                 updateNavigateButtonsItemQuery();
             });
         }
-        
+
         // Navigation Buttons for Account
         function updateNavigateButtonsItemQuery() {
             if (itemQueryItemsCollection.pageSize <= 0) {
@@ -656,6 +656,7 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdSaveStockTransferItemButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveStockTransferItemButton").prop("disabled", false);
             $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
 
@@ -678,7 +679,7 @@
             document.getElementById('stockTransferItem_Unit_selectedValue').value = item.Unit;
             document.getElementById('stockTransferItem_Cost').value = item.Cost;
             document.getElementById('stockTransferItem_Amount').value = item.Amount;
-            
+
             getArticleItemForManualCodeAndComponent();
         }
 
@@ -753,7 +754,7 @@
 
                         NProgress.done();
 
-                        if (document.getElementById('StockTransfer_IsLocked').value == 'true') {
+                        if (Results.IsLocked == true) {
                             document.getElementById('stockTransfer_Particulars').disabled = true;
                             document.getElementById('stockTransfer_ManualSTNumber').disabled = true;
 
@@ -771,13 +772,21 @@
 
                             $("#cmdStockTransferJournal").prop("disabled", false);
                             $("#cmdStockTransferSaveLock").prop("disabled", true);
-                            $("#cmdStockTransferSave").prop("disabled", true);
+                            //$("#cmdStockTransferSave").prop("disabled", true);
                             $("#cmdStockTransferEdit").prop("disabled", false);
                             $("#cmdStockTransferPrint").prop("disabled", false);
                             $('#btnAddStockTransferItem').prop('disabled', true);
                             $('#btnItemQueryStockTransferItem').prop('disabled', true);
 
-                        } else if (document.getElementById('StockTransfer_IsLocked').value == 'false') {
+                            var canUnLock = "@ViewData["CanUnlock"]";
+                            if (canUnLock == "True") {
+                                $("#cmdStockTransferEdit").prop("disabled", false)
+                            } else if (canUnLock == "False") {
+                                $("#cmdStockTransferEdit").prop("disabled", true)
+                            } else {
+                                $("#cmdStockTransferEdit").prop("disabled", true)
+                            }
+                        } else {
                             document.getElementById('stockTransfer_Particulars').disabled = false;
                             document.getElementById('stockTransfer_ManualSTNumber').disabled = false;
                             $('#btnItemQueryStockTransferItem').prop('disabled', false);
@@ -796,13 +805,40 @@
 
                             $("#cmdStockTransferJournal").prop("disabled", true);
                             $("#cmdStockTransferSaveLock").prop("disabled", false);
-                            $("#cmdStockTransferSave").prop("disabled", true);
+                            //$("#cmdStockTransferSave").prop("disabled", true);
                             $("#cmdStockTransferEdit").prop("disabled", true);
                             $("#cmdStockTransferPrint").prop("disabled", true);
                             $('#btnAddStockTransferItem').prop('disabled', false);
 
+                            var canLock = "@ViewData["CanLock"]";
+                            if (canLock == "True") {
+                                $("#cmdStockTransferSaveLock").prop("disabled", false)
+                            } else if (canLock == "False") {
+                                $("#cmdStockTransferSaveLock").prop("disabled", true)
+                            } else {
+                                $("#cmdStockTransferSaveLock").prop("disabled", true)
+                            }
+
+                            var canAdd = "@ViewData["CanAdd"]";
+                            if (canAdd == "True") {
+                                $("#btnAddStockTransferItem").prop("disabled", false)
+                                $("#btnItemQueryStockTransferItem").prop("disabled", false)
+                            } else if (canAdd == "False") {
+                                $("#btnAddStockTransferItem").prop("disabled", true)
+                                $("#btnItemQueryStockTransferItem").prop("disabled", true)
+                            } else {
+                                $("#btnAddStockTransferItem").prop("disabled", true)
+                                $("#btnItemQueryStockTransferItem").prop("disabled", true)
+                            }
+                        }
+
+                        var canPrint = "@ViewData["CanPrint"]";
+                        if (canPrint == "True") {
+                            $("#cmdStockTransferPrint").prop("disabled", false)
+                        } else if (canPrint == "False") {
+                            $("#cmdStockTransferPrint").prop("disabled", true)
                         } else {
-                            console.log("Invalid IsLocked");
+                            $("#cmdStockTransferPrint").prop("disabled", true)
                         }
 
                         getBranchesForComboBox();
@@ -1132,142 +1168,142 @@
         // ==================
         // Add Stock Transfer
         // ==================
-        function btnStockTransferSave_OnClick() {
-            var stockTransferObject = new Object();
-            var stockTransferId = getParam("StockTransferId");
-            stockTransferObject.BranchId = document.getElementById('stockTransfer_Branch_data').value;
-            stockTransferObject.STNumber = document.getElementById('stockTransfer_STNumber_Display').value;
-            stockTransferObject.STDate = document.getElementById('stockTransfer_STDate_data').value;
-            stockTransferObject.ToBranchId = document.getElementById('stockTransfer_ToBranch_data').value;
-            stockTransferObject.Particulars = document.getElementById('stockTransfer_Particulars').value;
-            stockTransferObject.ManualSTNumber = document.getElementById('stockTransfer_ManualSTNumber').value;
-            stockTransferObject.PreparedById = document.getElementById('stockTransfer_PreparedBy_data').value;
-            stockTransferObject.CheckedById = document.getElementById('stockTransfer_CheckedBy_data').value;
-            stockTransferObject.ApprovedById = document.getElementById('stockTransfer_ApprovedBy_data').value;
-            var data = JSON.stringify(stockTransferObject);
+        //function btnStockTransferSave_OnClick() {
+        //    var stockTransferObject = new Object();
+        //    var stockTransferId = getParam("StockTransferId");
+        //    stockTransferObject.BranchId = document.getElementById('stockTransfer_Branch_data').value;
+        //    stockTransferObject.STNumber = document.getElementById('stockTransfer_STNumber_Display').value;
+        //    stockTransferObject.STDate = document.getElementById('stockTransfer_STDate_data').value;
+        //    stockTransferObject.ToBranchId = document.getElementById('stockTransfer_ToBranch_data').value;
+        //    stockTransferObject.Particulars = document.getElementById('stockTransfer_Particulars').value;
+        //    stockTransferObject.ManualSTNumber = document.getElementById('stockTransfer_ManualSTNumber').value;
+        //    stockTransferObject.PreparedById = document.getElementById('stockTransfer_PreparedBy_data').value;
+        //    stockTransferObject.CheckedById = document.getElementById('stockTransfer_CheckedBy_data').value;
+        //    stockTransferObject.ApprovedById = document.getElementById('stockTransfer_ApprovedBy_data').value;
+        //    var data = JSON.stringify(stockTransferObject);
 
-            if (document.getElementById('stockTransfer_Branch_data').value == '') {
-                document.getElementById("stockTransfer_Branch").style.border = "1px solid red";
-            } else {
-                document.getElementById("stockTransfer_Branch").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('stockTransfer_Branch_data').value == '') {
+        //        document.getElementById("stockTransfer_Branch").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("stockTransfer_Branch").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('stockTransfer_STDate_data').value == '') {
-                document.getElementById("stockTransfer_STDate").style.border = "1px solid red";
-            } else {
-                document.getElementById("stockTransfer_STDate").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('stockTransfer_STDate_data').value == '') {
+        //        document.getElementById("stockTransfer_STDate").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("stockTransfer_STDate").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('stockTransfer_ToBranch_data').value == '') {
-                document.getElementById("stockTransfer_ToBranch").style.border = "1px solid red";
-            } else {
-                document.getElementById("stockTransfer_ToBranch").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('stockTransfer_ToBranch_data').value == '') {
+        //        document.getElementById("stockTransfer_ToBranch").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("stockTransfer_ToBranch").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('stockTransfer_PreparedBy_data').value == '') {
-                document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('stockTransfer_PreparedBy_data').value == '') {
+        //        document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("stockTransfer_PreparedBy").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('stockTransfer_CheckedBy_data').value == '') {
-                document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('stockTransfer_CheckedBy_data').value == '') {
+        //        document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("stockTransfer_CheckedBy").style.border = "1px solid #C8C8C8";
+        //    }
 
-            if (document.getElementById('stockTransfer_ApprovedBy_data').value == '') {
-                document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid red";
-            } else {
-                document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid #C8C8C8";
-            }
+        //    if (document.getElementById('stockTransfer_ApprovedBy_data').value == '') {
+        //        document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid red";
+        //    } else {
+        //        document.getElementById("stockTransfer_ApprovedBy").style.border = "1px solid #C8C8C8";
+        //    }
 
-            var isValid = true;
-            $('.requiredStockTransfer').each(function () {
-                if ($.trim($(this).val()) == '') {
-                    isValid = false;
-                    $(this).css({
-                        "border": "1px solid red"
-                    });
-                }
-                else {
-                    $(this).css({
-                        "border": "",
-                    });
-                }
-            });
+        //    var isValid = true;
+        //    $('.requiredStockTransfer').each(function () {
+        //        if ($.trim($(this).val()) == '') {
+        //            isValid = false;
+        //            $(this).css({
+        //                "border": "1px solid red"
+        //            });
+        //        }
+        //        else {
+        //            $(this).css({
+        //                "border": "",
+        //            });
+        //        }
+        //    });
 
-            if (isValid == false) {
-                toastr.error("Invalid Entry");
-                e.preventDefault();
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addStockTransfer',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id){
-                            if(id > 0) {
-                                $("#cmdStockTransferJournal").prop("disabled", true);
-                                $("#cmdStockTransferSaveLock").prop("disabled", true);
-                                $("#cmdStockTransferSave").prop("disabled", true);
-                                $("#cmdStockTransferEdit").prop("disabled", true);
-                                $("#cmdStockTransferPrint").prop("disabled", true);
-                                $("#cmdStockTransferClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                window.location = '/Software/StockTransferDetail?StockTransferId=' + id;
-                            } else {
-                                window.history.back();
+        //    if (isValid == false) {
+        //        toastr.error("Invalid Entry");
+        //        e.preventDefault();
+        //    }
+        //    else {
+        //        if (document.location.search.length == 0) {
+        //            $.ajax({
+        //                type: "POST",
+        //                url: '/api/addStockTransfer',
+        //                contentType: "application/json; charset=utf-8",
+        //                dataType: "json",
+        //                data: data,
+        //                success: function(id){
+        //                    if(id > 0) {
+        //                        $("#cmdStockTransferJournal").prop("disabled", true);
+        //                        $("#cmdStockTransferSaveLock").prop("disabled", true);
+        //                        $("#cmdStockTransferSave").prop("disabled", true);
+        //                        $("#cmdStockTransferEdit").prop("disabled", true);
+        //                        $("#cmdStockTransferPrint").prop("disabled", true);
+        //                        $("#cmdStockTransferClose").prop("disabled", true);
+        //                        toastr.success("Successfully Saved");
+        //                        window.location = '/Software/StockTransferDetail?StockTransferId=' + id;
+        //                    } else {
+        //                        window.history.back();
 
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateStockTransfer/' + stockTransferId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdStockTransferJournal").prop("disabled", true);
-                                $("#cmdStockTransferSaveLock").prop("disabled", true);
-                                $("#cmdStockTransferSave").prop("disabled", true);
-                                $("#cmdStockTransferEdit").prop("disabled", true);
-                                $("#cmdStockTransferPrint").prop("disabled", true);
-                                $("#cmdStockTransferClose").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdStockTransferJournal").prop("disabled", false);
-                                $("#cmdStockTransferSaveLock").prop("disabled", false);
-                                $("#cmdStockTransferSave").prop("disabled", false);
-                                $("#cmdStockTransferEdit").prop("disabled", false);
-                                $("#cmdStockTransferPrint").prop("disabled", false);
-                                $("#cmdStockTransferClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdStockTransferJournal").prop("disabled", false);
-                                $("#cmdStockTransferSaveLock").prop("disabled", false);
-                                $("#cmdStockTransferSave").prop("disabled", false);
-                                $("#cmdStockTransferEdit").prop("disabled", false);
-                                $("#cmdStockTransferPrint").prop("disabled", false);
-                                $("#cmdStockTransferClose").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
-            }
-        }
+        //                    }
+        //                }
+        //            });
+        //        } else {
+        //            $.ajax({
+        //                type: "PUT",
+        //                url: '/api/updateStockTransfer/' + stockTransferId,
+        //                contentType: "application/json; charset=utf-8",
+        //                dataType: "json",
+        //                data: data,
+        //                statusCode: {
+        //                    200: function () {
+        //                        $("#cmdStockTransferJournal").prop("disabled", true);
+        //                        $("#cmdStockTransferSaveLock").prop("disabled", true);
+        //                        $("#cmdStockTransferSave").prop("disabled", true);
+        //                        $("#cmdStockTransferEdit").prop("disabled", true);
+        //                        $("#cmdStockTransferPrint").prop("disabled", true);
+        //                        $("#cmdStockTransferClose").prop("disabled", true);
+        //                        toastr.success("Successfully Updated");
+        //                        window.setTimeout(function () {
+        //                            location.reload()
+        //                        }, 1000);
+        //                    },
+        //                    404: function () {
+        //                        toastr.error("Can't Save");
+        //                        $("#cmdStockTransferJournal").prop("disabled", false);
+        //                        $("#cmdStockTransferSaveLock").prop("disabled", false);
+        //                        $("#cmdStockTransferSave").prop("disabled", false);
+        //                        $("#cmdStockTransferEdit").prop("disabled", false);
+        //                        $("#cmdStockTransferPrint").prop("disabled", false);
+        //                        $("#cmdStockTransferClose").prop("disabled", false);
+        //                    },
+        //                    400: function () {
+        //                        toastr.error("Bad Request");
+        //                        $("#cmdStockTransferJournal").prop("disabled", false);
+        //                        $("#cmdStockTransferSaveLock").prop("disabled", false);
+        //                        $("#cmdStockTransferSave").prop("disabled", false);
+        //                        $("#cmdStockTransferEdit").prop("disabled", false);
+        //                        $("#cmdStockTransferPrint").prop("disabled", false);
+        //                        $("#cmdStockTransferClose").prop("disabled", false);
+        //                    }
+        //                }
+        //            });
+        //        }
+        //    }
+        //}
 
         // ==========================
         // Stock Transfer Save - Lock
@@ -1341,72 +1377,38 @@
             if (isValid == false) {
                 toastr.error("Invalid Entry");
                 e.preventDefault();
-            }
-            else {
-                if (document.location.search.length == 0) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/addStockTransfer',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        success: function(id){
-                            if(id > 0) {
-                                $("#cmdStockTransferJournal").prop("disabled", true);
-                                $("#cmdStockTransferSaveLock").prop("disabled", true);
-                                $("#cmdStockTransferSave").prop("disabled", true);
-                                $("#cmdStockTransferEdit").prop("disabled", true);
-                                $("#cmdStockTransferPrint").prop("disabled", true);
-                                $("#cmdStockTransferClose").prop("disabled", true);
-                                toastr.success("Successfully Saved");
-                                window.location = '/Software/StockTransferDetail?StockTransferId=' + id;
-                            } else {
-                                window.history.back();
+            } else {
+                document.getElementById('cmdStockTransferSaveLock').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Locking";
+                $("#cmdStockTransferJournal").prop("disabled", true);
+                $("#cmdStockTransferSaveLock").prop("disabled", true);
+                //$("#cmdStockTransferSave").prop("disabled", true);
+                $("#cmdStockTransferEdit").prop("disabled", true);
+                $("#cmdStockTransferPrint").prop("disabled", true);
+                $("#cmdStockTransferClose").prop("disabled", true);
 
-                            }
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/updateStockTransfer/' + stockTransferId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: data,
+                    statusCode: {
+                        200: function () {
+                            toastr.success("Lock Successful");
+                            window.setTimeout(function () {
+                                location.reload()
+                            }, 1000);
+                        },
+                        404: function () {
+                            toastr.error("Not Found");
+                            $("#cmdStockTransferClose").prop("disabled", false);
+                        },
+                        400: function () {
+                            toastr.error("Bad Request");
+                            $("#cmdStockTransferClose").prop("disabled", false);
                         }
-                    });
-                } else {
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/updateStockTransfer/' + stockTransferId,
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: data,
-                        statusCode: {
-                            200: function () {
-                                $("#cmdStockTransferJournal").prop("disabled", true);
-                                $("#cmdStockTransferSaveLock").prop("disabled", true);
-                                $("#cmdStockTransferSave").prop("disabled", true);
-                                $("#cmdStockTransferEdit").prop("disabled", true);
-                                $("#cmdStockTransferPrint").prop("disabled", true);
-                                $("#cmdStockTransferClose").prop("disabled", true);
-                                toastr.success("Successfully Updated");
-                                window.setTimeout(function () {
-                                    location.reload()
-                                }, 1000);
-                            },
-                            404: function () {
-                                toastr.error("Can't Save");
-                                $("#cmdStockTransferJournal").prop("disabled", false);
-                                $("#cmdStockTransferSaveLock").prop("disabled", false);
-                                $("#cmdStockTransferSave").prop("disabled", false);
-                                $("#cmdStockTransferEdit").prop("disabled", false);
-                                $("#cmdStockTransferPrint").prop("disabled", false);
-                                $("#cmdStockTransferClose").prop("disabled", false);
-                            },
-                            400: function () {
-                                toastr.error("Bad Request");
-                                $("#cmdStockTransferJournal").prop("disabled", false);
-                                $("#cmdStockTransferSaveLock").prop("disabled", false);
-                                $("#cmdStockTransferSave").prop("disabled", false);
-                                $("#cmdStockTransferEdit").prop("disabled", false);
-                                $("#cmdStockTransferPrint").prop("disabled", false);
-                                $("#cmdStockTransferClose").prop("disabled", false);
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             }
         }
 
@@ -1418,6 +1420,15 @@
             var stockTransferId = getParam("StockTransferId");
             stockTransferObject.IsLocked = false;
             var data = JSON.stringify(stockTransferObject);
+
+            document.getElementById('cmdStockTransferEdit').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Unlocking";
+            $("#cmdStockTransferJournal").prop("disabled", true);
+            $("#cmdStockTransferSaveLock").prop("disabled", true);
+            //$("#cmdStockTransferSave").prop("disabled", true);
+            $("#cmdStockTransferEdit").prop("disabled", true);
+            $("#cmdStockTransferPrint").prop("disabled", true);
+            $("#cmdStockTransferClose").prop("disabled", true);
+
             $.ajax({
                 type: "PUT",
                 url: '/api/updateStockTransferIsLocked/' + stockTransferId,
@@ -1426,33 +1437,17 @@
                 data: data,
                 statusCode: {
                     200: function () {
-                        $("#cmdStockTransferJournal").prop("disabled", true);
-                        $("#cmdStockTransferSaveLock").prop("disabled", true);
-                        $("#cmdStockTransferSave").prop("disabled", true);
-                        $("#cmdStockTransferEdit").prop("disabled", true);
-                        $("#cmdStockTransferPrint").prop("disabled", true);
-                        $("#cmdStockTransferClose").prop("disabled", true);
-                        toastr.success("Unlocked");
+                        toastr.success("Unlock Successful");
                         window.setTimeout(function () {
                             location.reload()
                         }, 1000);
                     },
                     404: function () {
-                        toastr.error("Can't Save");
-                        $("#cmdStockTransferJournal").prop("disabled", false);
-                        $("#cmdStockTransferSaveLock").prop("disabled", false);
-                        $("#cmdStockTransferSave").prop("disabled", false);
-                        $("#cmdStockTransferEdit").prop("disabled", false);
-                        $("#cmdStockTransferPrint").prop("disabled", false);
+                        toastr.error("Not Found");
                         $("#cmdStockTransferClose").prop("disabled", false);
                     },
                     400: function () {
                         toastr.error("Bad Request");
-                        $("#cmdStockTransferJournal").prop("disabled", false);
-                        $("#cmdStockTransferSaveLock").prop("disabled", false);
-                        $("#cmdStockTransferSave").prop("disabled", false);
-                        $("#cmdStockTransferEdit").prop("disabled", false);
-                        $("#cmdStockTransferPrint").prop("disabled", false);
                         $("#cmdStockTransferClose").prop("disabled", false);
                     }
                 }
@@ -1475,14 +1470,14 @@
             if (document.location.search.length == 0) {
                 $('#cmdStockTransferJournal').hide();
                 $('#cmdStockTransferSaveLock').hide();
-                $('#cmdStockTransferSave').show();
+                //$('#cmdStockTransferSave').show();
                 $('#cmdStockTransferEdit').hide();
                 $("#cmdStockTransferPrint").prop("disabled", true);
                 $('#btnAddStockTransferItem').prop('disabled', true);
 
             } else {
                 $('#cmdStockTransferSaveLock').show();
-                $('#cmdStockTransferSave').hide();
+                //$('#cmdStockTransferSave').hide();
                 $('#cmdStockTransferEdit').show();
             }
 
@@ -1540,14 +1535,14 @@
                 });
             }
 
-            $(document).ajaxStop(function () {
-                if (document.location.search.length == 0) {
-                    btnStockTransferSave_OnClick();
-                    window.btnStockTransferSave_OnClick = function () {
-                        return true;
-                    }
-                }
-            });
+            //$(document).ajaxStop(function () {
+            //    if (document.location.search.length == 0) {
+            //        btnStockTransferSave_OnClick();
+            //        window.btnStockTransferSave_OnClick = function () {
+            //            return true;
+            //        }
+            //    }
+            //});
         });
     </script>
 
@@ -1607,56 +1602,61 @@
                                         });
                                     }
 
-                                    if (StockTransferResults.IsLocked == true) {
-                                        for (i = 0; i < Results.length; i++) {
-                                            items.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockTransferItem_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockTransferItem_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                STId: Results[i]["STId"],
-                                                ST: Results[i]["ST"],
-                                                ItemId: Results[i]["ItemId"],
-                                                ItemCode: Results[i]["ItemCode"],
-                                                Item: Results[i]["Item"],
-                                                ItemInventoryId: Results[i]["ItemInventoryId"],
-                                                ItemInventory: Results[i]["ItemInventory"],
-                                                Particulars: Results[i]["Particulars"],
-                                                UnitId: Results[i]["UnitId"],
-                                                Unit: Results[i]["Unit"],
-                                                Quantity: Results[i]["Quantity"],
-                                                Cost: Results[i]["Cost"],
-                                                Amount: Results[i]["Amount"],
-                                                BaseUnitId: Results[i]["BaseUnitId"],
-                                                BaseUnit: Results[i]["BaseUnit"],
-                                                BaseQuantity: Results[i]["BaseQuantity"],
-                                                BaseCost: Results[i]["BaseCost"],
-                                            });
-                                        }
+                                    var canEdit = "@ViewData["CanEdit"]";
+                                    var editDisabled = "disabled";
+
+                                    if (canEdit == "True") {
+                                        editDisabled = "";
+                                    } else if (canEdit == "False") {
+                                        editDisabled = "disabled";
                                     } else {
-                                        for (i = 0; i < Results.length; i++) {
-                                            items.push({
-                                                EditId: "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockTransferItem_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                                DeleteId: "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockTransferItem_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                                Id: Results[i]["Id"],
-                                                STId: Results[i]["STId"],
-                                                ST: Results[i]["ST"],
-                                                ItemId: Results[i]["ItemId"],
-                                                ItemCode: Results[i]["ItemCode"],
-                                                Item: Results[i]["Item"],
-                                                ItemInventoryId: Results[i]["ItemInventoryId"],
-                                                ItemInventory: Results[i]["ItemInventory"],
-                                                Particulars: Results[i]["Particulars"],
-                                                UnitId: Results[i]["UnitId"],
-                                                Unit: Results[i]["Unit"],
-                                                Quantity: Results[i]["Quantity"],
-                                                Cost: Results[i]["Cost"],
-                                                Amount: Results[i]["Amount"],
-                                                BaseUnitId: Results[i]["BaseUnitId"],
-                                                BaseUnit: Results[i]["BaseUnit"],
-                                                BaseQuantity: Results[i]["BaseQuantity"],
-                                                BaseCost: Results[i]["BaseCost"],
-                                            });
-                                        }
+                                        editDisabled = "disabled";
+                                    }
+
+                                    var canDelete = "@ViewData["CanDelete"]";
+                                    var deleteDisabled = "disabled";
+
+                                    if (canDelete == "True") {
+                                        deleteDisabled = "";
+                                    } else if (canDelete == "False") {
+                                        deleteDisabled = "disabled";
+                                    } else {
+                                        deleteDisabled = "disabled";
+                                    }
+
+                                    var btnEditId;
+                                    var btnDeleteId;
+                                    if (StockTransferResults.IsLocked == true) {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockTransferItem_OnClick()' disabled><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId =  "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockTransferItem_OnClick()' disabled><i class='fa fa-trash'></i> Delete</button>";
+                                    } else {
+                                        btnEditId = "<button class='btn btn-primary btn-xs btn-block' onclick='btnEditStockTransferItem_OnClick()' " + editDisabled + "><i class='fa fa-edit'></i> Edit</button>";
+                                        btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteStockTransferItem_OnClick()'" + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                                    }
+
+                                    for (i = 0; i < Results.length; i++) {
+                                        items.push({
+                                            EditId: btnEditId,
+                                            DeleteId: btnDeleteId,
+                                            Id: Results[i]["Id"],
+                                            STId: Results[i]["STId"],
+                                            ST: Results[i]["ST"],
+                                            ItemId: Results[i]["ItemId"],
+                                            ItemCode: Results[i]["ItemCode"],
+                                            Item: Results[i]["Item"],
+                                            ItemInventoryId: Results[i]["ItemInventoryId"],
+                                            ItemInventory: Results[i]["ItemInventory"],
+                                            Particulars: Results[i]["Particulars"],
+                                            UnitId: Results[i]["UnitId"],
+                                            Unit: Results[i]["Unit"],
+                                            Quantity: Results[i]["Quantity"],
+                                            Cost: Results[i]["Cost"],
+                                            Amount: Results[i]["Amount"],
+                                            BaseUnitId: Results[i]["BaseUnitId"],
+                                            BaseUnit: Results[i]["BaseUnit"],
+                                            BaseQuantity: Results[i]["BaseQuantity"],
+                                            BaseCost: Results[i]["BaseCost"],
+                                        });
                                     }
                                 }
                             });
@@ -1723,7 +1723,7 @@
             for (var i = 0; i < ManualCodeCollections.items.length; i++) {
                 ManualCodeList.push(ManualCodeCollections.items[i].ItemCode);
             }
-        
+
             var disabled = false;
             if (articleItems == 0) {
                 disabled = true;
@@ -1817,7 +1817,7 @@
             for (var i = 0; i < ItemDescriptionCollections.items.length; i++) {
                 ItemDescriptionList.push(ItemDescriptionCollections.items[i].ItemDescription);
             }
-            
+
             var disabled = false;
             if (articleItems == 0) {
                 disabled = true;
@@ -1937,7 +1937,7 @@
             for (var i = 0; i < InventoryCodeCollection.items.length; i++) {
                 InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
             }
-            
+
             var disabled = false;
             if (inventories == 0) {
                 disabled = true;
@@ -2116,7 +2116,7 @@
                 success: function (results) {
                     UnitId = results.UnitId;
                     Unit = results.Unit;
-                    
+
                     document.getElementById('stockTransferItem_BUCUnit_data').value = results.UnitId;
                     cboStockTransferBaseUnit.dispose();
                     cboStockTransferBaseUnit = new wijmo.input.ComboBox('#stockTransferItem_BUCUnit', {
@@ -2153,6 +2153,7 @@
             getArticleItemForManualCodeAndComponent();
             //getStockTransferItemUnitForComboBox();
 
+            document.getElementById('cmdSaveStockTransferItemButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveStockTransferItemButton").prop("disabled", false);
             $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
 
@@ -2193,6 +2194,7 @@
             getArticleItemForManualCodeAndComponent();
             //getStockTransferItemUnitForComboBox();
 
+            document.getElementById('cmdSaveStockTransferItemButton').innerHTML = "<i class='fa fa-save'></i> Save";
             $("#cmdSaveStockTransferItemButton").prop("disabled", false);
             $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
 
@@ -2230,11 +2232,13 @@
                 backdrop: 'static'
             });
 
+            document.getElementById('cmdConfirmDeleteStockTransferItems').innerHTML = "<i class='fa fa-trash'></i> Delete";
             $("#cmdConfirmDeleteStockTransferItems").prop("disabled", false);
             $("#cmdConfirmDeleteStockTransferItemsCloseButton").prop("disabled", false);
         }
         // Confirm Delete Stock Transfer item
         function cmdStockTransferItemsConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeleteStockTransferItems').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
             $("#cmdConfirmDeleteStockTransferItems").prop("disabled", true);
             $("#cmdConfirmDeleteStockTransferItemsCloseButton").prop("disabled", true);
 
@@ -2249,7 +2253,7 @@
                     200: function () {
                         $("#cmdConfirmDeleteCollectionLine").prop("disabled", true);
                         $("#cmdConfirmDeleteCollectionLineCloseButton").prop("disabled", true);
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deleteStockTransferItemsConfirm').modal('hide');
 
@@ -2259,7 +2263,7 @@
                         itemGrid.trackChanges = true;
                     },
                     404: function () {
-                        toastr.error("Request Not Found");
+                        toastr.error("Not Found");
                         $('#deleteStockTransferItemsConfirm').modal('hide');
                         $("#cmdConfirmDeleteStockTransferItems").prop("disabled", false);
                         $("#cmdConfirmDeleteStockTransferItemsCloseButton").prop("disabled", false);
@@ -2338,8 +2342,8 @@
             });
             if (isValid == false) {
                 toastr.error("Invalid Entry");
-            }
-            else {
+            } else {
+                document.getElementById('cmdSaveStockTransferItemButton').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving";
                 $("#cmdSaveStockTransferItemButton").prop("disabled", true);
                 $("#cmdStockTransferItemDetailCloseButton").prop("disabled", true);
 
@@ -2354,7 +2358,7 @@
                             if(id > 0) {
                                 $("#cmdSaveStockTransferItemButton").prop("disabled", true);
                                 $("#cmdStockTransferItemDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Saved");
+                                toastr.success("Save Successful");
 
                                 $('#stockTransferItemsEdit').modal('hide');
 
@@ -2366,7 +2370,7 @@
                             } else {
                                 $("#cmdSaveStockTransferItemButton").prop("disabled", false);
                                 $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -2381,7 +2385,7 @@
                             200: function () {
                                 $("#cmdSaveStockTransferItemButton").prop("disabled", true);
                                 $("#cmdStockTransferItemDetailCloseButton").prop("disabled", true);
-                                toastr.success("Successfully Updated");
+                                toastr.success("Update Successful");
 
                                 $('#stockTransferItemsEdit').modal('hide');
 
@@ -2392,7 +2396,7 @@
                                 itemGrid.trackChanges = true;
                             },
                             404: function () {
-                                toastr.error("Can't Update");
+                                toastr.error("Not Found");
                                 $('#stockTransferItemsEdit').modal('hide');
                                 $("#cmdSaveStockTransferItemButton").prop("disabled", false);
                                 $("#cmdStockTransferItemDetailCloseButton").prop("disabled", false);
@@ -2980,7 +2984,7 @@
             $('#Items').show();
             $('#InventoryEntries').hide();
             itemTab();
-            
+
             $(document).on('show.bs.modal', '.modal', function (event) {
                 var zIndex = 1040 + (10 * $('.modal:visible').length);
                 $(this).css('z-index', zIndex);

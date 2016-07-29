@@ -18,6 +18,20 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
+
         // list stock count
         [Authorize]
         [HttpGet]
@@ -164,14 +178,23 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastSCNumber = from d in db.TrnStockCounts.OrderByDescending(d => d.Id) select d;
+                var SCNumberResult = "0000000001";
+
+                if (lastSCNumber.Any())
+                {
+                    var SCNumber = Convert.ToInt32(lastSCNumber.FirstOrDefault().SCNumber) + 0000000001;
+                    SCNumberResult = zeroFill(SCNumber, 10);
+                }
+
                 Data.TrnStockCount newStockCount = new Data.TrnStockCount();
-                newStockCount.BranchId = stockCount.BranchId;
-                newStockCount.SCNumber = stockCount.SCNumber;
-                newStockCount.SCDate = Convert.ToDateTime(stockCount.SCDate);
-                newStockCount.Particulars = stockCount.Particulars;
-                newStockCount.PreparedById = stockCount.PreparedById;
-                newStockCount.CheckedById = stockCount.CheckedById;
-                newStockCount.ApprovedById = stockCount.ApprovedById;
+                newStockCount.BranchId = currentBranchId();
+                newStockCount.SCNumber = SCNumberResult;
+                newStockCount.SCDate = DateTime.Today;
+                newStockCount.Particulars = "NA";
+                newStockCount.PreparedById = userId;
+                newStockCount.CheckedById = userId;
+                newStockCount.ApprovedById = userId;
                 newStockCount.IsLocked = false;
                 newStockCount.CreatedById = userId;
                 newStockCount.CreatedDateTime = DateTime.Now;
