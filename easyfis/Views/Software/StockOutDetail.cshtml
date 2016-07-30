@@ -140,12 +140,12 @@
                                                         <input type="hidden" id="StockOut_ApprovedBy_selectedValue" />
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                @*<div class="form-group">
                                                     <label class="control-label col-sm-4">Lock</label>
                                                     <div class="col-sm-8">
                                                         <input type="checkbox" id="StockOut_Lock">
                                                     </div>
-                                                </div>
+                                                </div>*@
                                                 @*<div class="form-group">
                                                         <div class="col-sm-4"></div>
                                                         <div class="col-sm-8">
@@ -794,7 +794,7 @@
                             document.getElementById('StockOut_CheckedBy_selectedValue').value = Results.CheckedBy;
                             document.getElementById('StockOut_ApprovedBy_data').value = Results.ApprovedById;
                             document.getElementById('StockOut_ApprovedBy_selectedValue').value = Results.ApprovedBy;
-                            document.getElementById('StockOut_Lock').checked = Results.IsLocked;
+                            //document.getElementById('StockOut_Lock').checked = Results.IsLocked;
 
                             document.getElementById('createdBy').innerHTML = Results.CreatedBy;
                             document.getElementById('createdDate').innerHTML = Results.CreatedDateTime;
@@ -1769,7 +1769,7 @@
             }
 
             document.getElementById('StockOut_OTNumber_Display').disabled = true;
-            document.getElementById('StockOut_Lock').disabled = true;
+            //document.getElementById('StockOut_Lock').disabled = true;
 
             cboBranch = new wijmo.input.ComboBox('#StockOut_Branch');
 

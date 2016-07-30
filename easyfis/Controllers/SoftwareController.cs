@@ -885,6 +885,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("JournalVoucher").Equals("JournalVoucher"))
             {
+                if (accessToDetail("JournalVoucherDetail").Equals("JournalVoucherDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else
@@ -911,6 +920,15 @@ namespace easyfis.Controllers
         {
             if (pageAccess("Company").Equals("Company"))
             {
+                if (accessToDetail("CompanyDetail").Equals("CompanyDetail"))
+                {
+                    ViewData.Add("CanAccessToDetailPage", "True");
+                }
+                else
+                {
+                    ViewData.Add("CanAccessToDetailPage", "False");
+                }
+
                 return View();
             }
             else

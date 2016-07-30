@@ -159,63 +159,64 @@
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            if (Results[i]["IsLocked"] == true) {
-                                collections.push({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='collectionEditButton' onclick='cmdCollectionEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='collectionDeleteButton' onclick='cmdCollectionDeleteLockButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    BranchId: Results[i]["BranchId"],
-                                    Branch: Results[i]["Branch"],
-                                    ORNumber: Results[i]["ORNumber"],
-                                    ORDate: Results[i]["ORDate"],
-                                    CustomerId: Results[i]["CustomerId"],
-                                    Customer: Results[i]["Customer"],
-                                    Particulars: Results[i]["Particulars"],
-                                    ManualORNumber: Results[i]["ManualORNumber"],
-                                    Amount: Results[i]["Amount"],
-                                    PreparedById: Results[i]["PreparedById"],
-                                    PreparedBy: Results[i]["PreparedBy"],
-                                    CheckedById: Results[i]["CheckedById"],
-                                    CheckedBy: Results[i]["CheckedBy"],
-                                    ApprovedById: Results[i]["ApprovedById"],
-                                    ApprovedBy: Results[i]["ApprovedBy"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
                             } else {
-                                collections.push({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='collectionEditButton' onclick='cmdCollectionEditButton_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='collectionDeleteButton' onclick='cmdCollectionDeleteButton_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    BranchId: Results[i]["BranchId"],
-                                    Branch: Results[i]["Branch"],
-                                    ORNumber: Results[i]["ORNumber"],
-                                    ORDate: Results[i]["ORDate"],
-                                    CustomerId: Results[i]["CustomerId"],
-                                    Customer: Results[i]["Customer"],
-                                    Particulars: Results[i]["Particulars"],
-                                    ManualORNumber: Results[i]["ManualORNumber"],
-                                    Amount: Results[i]["Amount"],
-                                    PreparedById: Results[i]["PreparedById"],
-                                    PreparedBy: Results[i]["PreparedBy"],
-                                    CheckedById: Results[i]["CheckedById"],
-                                    CheckedBy: Results[i]["CheckedBy"],
-                                    ApprovedById: Results[i]["ApprovedById"],
-                                    ApprovedBy: Results[i]["ApprovedBy"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+                                deleteDisabled = "disabled";
                             }
+
+                            var btnDeleteId;
+                            if (Results[i]["IsLocked"] == true) {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdCollectionDeleteLockButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            } else {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='cmdCollectionDeleteButton_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
+                            }
+
+                            collections.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='collectionEditButton' onclick='cmdCollectionEditButton_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: btnDeleteId,
+                                Id: Results[i]["Id"],
+                                BranchId: Results[i]["BranchId"],
+                                Branch: Results[i]["Branch"],
+                                ORNumber: Results[i]["ORNumber"],
+                                ORDate: Results[i]["ORDate"],
+                                CustomerId: Results[i]["CustomerId"],
+                                Customer: Results[i]["Customer"],
+                                Particulars: Results[i]["Particulars"],
+                                ManualORNumber: Results[i]["ManualORNumber"],
+                                Amount: Results[i]["Amount"],
+                                PreparedById: Results[i]["PreparedById"],
+                                PreparedBy: Results[i]["PreparedBy"],
+                                CheckedById: Results[i]["CheckedById"],
+                                CheckedBy: Results[i]["CheckedBy"],
+                                ApprovedById: Results[i]["ApprovedById"],
+                                ApprovedBy: Results[i]["ApprovedBy"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
+
                         }
                     }
                     NProgress.done();
@@ -565,6 +566,15 @@
                 collections.moveToLastPage();
                 updateNavigateButtonsCollections();
             });
+
+            var canAdd = "@ViewData["CanAdd"]";
+            if (canAdd == "True") {
+                $("#btnAddCollection").prop("disabled", false)
+            } else if (canAdd == "False") {
+                $("#btnAddCollection").prop("disabled", true)
+            } else {
+                $("#btnAddCollection").prop("disabled", true)
+            }
         });
 
     </script>

@@ -217,12 +217,14 @@ namespace easyfis.Controllers
                     INNumberResult = zeroFill(INNumber, 10);
                 }
 
+                var accountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault();
+
                 Data.TrnStockIn newStockIn = new Data.TrnStockIn();
                 newStockIn.BranchId = currentBranchId();
                 newStockIn.INNumber = INNumberResult;
                 newStockIn.INDate = DateTime.Today;
                 newStockIn.AccountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault();
-                newStockIn.ArticleId = (from d in db.MstArticles where d.ArticleTypeId == 6 && d.AccountId == newStockIn.AccountId select d.Id).FirstOrDefault();
+                newStockIn.ArticleId = (from d in db.MstArticles where d.AccountId == accountId select d.Id).FirstOrDefault();
                 newStockIn.Particulars = "NA";
                 newStockIn.ManualINNumber = "NA";
                 newStockIn.IsProduced = false;

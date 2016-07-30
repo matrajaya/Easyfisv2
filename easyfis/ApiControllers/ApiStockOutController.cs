@@ -209,12 +209,14 @@ namespace easyfis.Controllers
                     OTNumberResult = zeroFill(OTNumber, 10);
                 }
 
+                var accountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault();
+
                 Data.TrnStockOut newStockOut = new Data.TrnStockOut();
                 newStockOut.BranchId = currentBranchId();
                 newStockOut.OTNumber = OTNumberResult;
                 newStockOut.OTDate = DateTime.Today;
                 newStockOut.AccountId = (from d in db.MstAccounts.OrderBy(d => d.Account) select d.Id).FirstOrDefault(); ;
-                newStockOut.ArticleId = (from d in db.MstArticles where d.ArticleTypeId == 6 && d.AccountId == newStockOut.AccountId select d.Id).FirstOrDefault();
+                newStockOut.ArticleId = (from d in db.MstArticles where d.AccountId == accountId select d.Id).FirstOrDefault();
                 newStockOut.Particulars = "NA";
                 newStockOut.ManualOTNumber = "NA";
                 newStockOut.PreparedById = userId;

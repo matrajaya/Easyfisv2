@@ -108,10 +108,10 @@ namespace easyfis.Controllers
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
                 Data.MstCompany newCompany = new Data.MstCompany();
-                newCompany.Company = company.Company;
-                newCompany.Address = company.Address;
-                newCompany.ContactNumber = company.ContactNumber;
-                newCompany.TaxNumber = company.TaxNumber;
+                newCompany.Company = "NA";
+                newCompany.Address = "NA";
+                newCompany.ContactNumber = "NA";
+                newCompany.TaxNumber = "NA";
                 newCompany.IsLocked = false;
                 newCompany.CreatedById = userId;
                 newCompany.CreatedDateTime = DateTime.Now;

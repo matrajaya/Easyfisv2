@@ -20,6 +20,19 @@ namespace easyfis.Controllers
             return (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.BranchId).SingleOrDefault();
         }
 
+        public String zeroFill(Int32 number, Int32 length)
+        {
+            var result = number.ToString();
+            var pad = length - result.Length;
+            while (pad > 0)
+            {
+                result = '0' + result;
+                pad--;
+            }
+
+            return result;
+        }
+
         // list journal voucher
         [Authorize]
         [HttpGet]
@@ -169,15 +182,24 @@ namespace easyfis.Controllers
             {
                 var userId = (from d in db.MstUsers where d.UserId == User.Identity.GetUserId() select d.Id).SingleOrDefault();
 
+                var lastJVNumber = from d in db.TrnJournalVouchers.OrderByDescending(d => d.Id) select d;
+                var JVNumberResult = "0000000001";
+
+                if (lastJVNumber.Any())
+                {
+                    var JVNumber = Convert.ToInt32(lastJVNumber.FirstOrDefault().JVNumber) + 0000000001;
+                    JVNumberResult = zeroFill(JVNumber, 10);
+                }
+
                 Data.TrnJournalVoucher newJournalVoucher = new Data.TrnJournalVoucher();
-                newJournalVoucher.BranchId = journalVoucher.BranchId;
-                newJournalVoucher.JVNumber = journalVoucher.JVNumber;
-                newJournalVoucher.ManualJVNumber = journalVoucher.ManualJVNumber;
-                newJournalVoucher.JVDate = Convert.ToDateTime(journalVoucher.JVDate);
-                newJournalVoucher.Particulars = journalVoucher.Particulars;
-                newJournalVoucher.PreparedById = journalVoucher.PreparedById;
-                newJournalVoucher.CheckedById = journalVoucher.CheckedById;
-                newJournalVoucher.ApprovedById = journalVoucher.ApprovedById;
+                newJournalVoucher.BranchId = currentBranchId();
+                newJournalVoucher.JVNumber = JVNumberResult;
+                newJournalVoucher.ManualJVNumber = "NA";
+                newJournalVoucher.JVDate = DateTime.Today;
+                newJournalVoucher.Particulars = "NA";
+                newJournalVoucher.PreparedById = userId;
+                newJournalVoucher.CheckedById = userId;
+                newJournalVoucher.ApprovedById = userId;
                 newJournalVoucher.IsLocked = false;
                 newJournalVoucher.CreatedById = userId;
                 newJournalVoucher.CreatedDateTime = DateTime.Now;

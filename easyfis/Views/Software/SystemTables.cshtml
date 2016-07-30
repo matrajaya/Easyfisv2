@@ -1387,7 +1387,7 @@
                             if(id > 0) {
                                 $('#cmdSaveDiscountButton').prop('disable', true);
                                 $('#cmdDiscountDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
 
                                 $('#discountEdit').modal('hide');
 
@@ -1395,7 +1395,7 @@
                             } else {
                                 $('#cmdSaveDiscountButton').prop('disable', false);
                                 $('#cmdDiscountDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -1410,19 +1410,19 @@
                             200: function () {
                                 $('#cmdSaveDiscountButton').prop('disable', true);
                                 $('#cmdDiscountDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
 
                                 $('#discountEdit').modal('hide');
 
                                 refreshDiscountFlexgrid();
                             },
                             404: function () {
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#cmdSaveDiscountButton').prop('disable', false);
                                 $('#cmdDiscountDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#cmdSaveDiscountButton').prop('disable', false);
                                 $('#cmdDiscountDetailCloseButton').prop('disabled', false);
                             }
@@ -1461,20 +1461,20 @@
                     200: function () {
                         $('#cmdConfirmDeleteDiscount').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButtonDiscount').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deleteDiscountConfirm').modal('hide');
 
                         refreshDiscountFlexgrid()
                     },
                     404: function () {
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#cmdConfirmDeleteDiscount').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonDiscount').prop('disabled', false);
                         $('#deleteDiscountConfirm').modal('hide');
                     },
                     400: function () {
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#cmdConfirmDeleteDiscount').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonDiscount').prop('disabled', false);
                         $('#deleteDiscountConfirm').modal('hide');
@@ -2011,7 +2011,7 @@
                             if(id > 0) {
                                 $('#cmdSavePayTypeButton').prop('disabled', true);
                                 $('#cmdPayTypeDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
 
                                 $('#payTypeEdit').modal('hide');
 
@@ -2019,7 +2019,7 @@
                             } else {
                                 $('#cmdSavePayTypeButton').prop('disabled', false);
                                 $('#cmdPayTypeDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -2034,19 +2034,19 @@
                             200: function () {
                                 $('#cmdSavePayTypeButton').prop('disabled', true);
                                 $('#cmdPayTypeDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
 
                                 $('#payTypeEdit').modal('hide');
 
                                 refreshPayTypeFlexgrid();
                             },
                             404: function () {
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#cmdSavePayTypeButton').prop('disabled', false);
                                 $('#cmdPayTypeDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#cmdSavePayTypeButton').prop('disabled', false);
                                 $('#cmdPayTypeDetailCloseButton').prop('disabled', false);
                             }
@@ -2084,20 +2084,20 @@
                     200: function () {
                         $('#cmdConfirmDeletePayType').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButtonPayType').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deletePayTypeConfirm').modal('hide');
 
                         refreshPayTypeFlexgrid();
                     },
                     404: function () {
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#cmdConfirmDeletePayType').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonPayType').prop('disabled', false);
                         $('#deletePayTypeConfirm').modal('hide');
                     },
                     400: function () {
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#cmdConfirmDeletePayType').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonPayType').prop('disabled', false);
                         $('#deletePayTypeConfirm').modal('hide');
@@ -2630,7 +2630,7 @@
                             if(id > 0) {
                                 $('#cmdSaveTaxTypeButton').prop('disabled', true);
                                 $('#cmdTaxTypeDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
 
                                 $('#taxEdit').modal('hide');
 
@@ -2638,7 +2638,7 @@
                             } else {
                                 $('#cmdSaveTaxTypeButton').prop('disabled', false);
                                 $('#cmdTaxTypeDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -2653,19 +2653,19 @@
                             200: function () {
                                 $('#cmdSaveTaxTypeButton').prop('disabled', true);
                                 $('#cmdTaxTypeDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
 
                                 $('#taxEdit').modal('hide');
 
                                 refreshTaxTypeFlexgrid();
                             },
                             404: function () {
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#cmdSaveTaxTypeButton').prop('disabled', false);
                                 $('#cmdTaxTypeDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#cmdSaveTaxTypeButton').prop('disabled', false);
                                 $('#cmdTaxTypeDetailCloseButton').prop('disabled', false);
                             }
@@ -2703,21 +2703,21 @@
                     200: function () {
                         $('#cmdConfirmDeleteTaxType').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButtonTaxType').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Save Successful");
 
                         $('#deleteTaxTypeConfirm').modal('hide');
 
                         refreshTaxTypeFlexgrid();
                     },
                     404: function () {
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#cmdConfirmDeleteTaxType').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonTaxType').prop('disabled', false);
                         $('#deleteTaxTypeConfirm').modal('hide');
 
                     },
                     400: function () {
-                        toastr.error("Cannot delete record");
+                        toastr.success("Delete Successful");
                         $('#cmdConfirmDeleteTaxType').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonTaxType').prop('disabled', false);
                         $('#deleteTaxTypeConfirm').modal('hide');
@@ -3108,7 +3108,7 @@
                             if(id > 0) {
                                 $('#cmdSaveUnitButton').prop('disabled', true);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
 
                                 $('#unitEdit').modal('hide');
 
@@ -3116,7 +3116,7 @@
                             } else {
                                 $('#cmdSaveUnitButton').prop('disabled', false);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -3131,19 +3131,19 @@
                             200: function () {
                                 $('#cmdSaveUnitButton').prop('disabled', true);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
 
                                 $('#unitEdit').modal('hide');
 
                                 refreshUnitFlexgrid();
                             },
                             404: function () {
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#cmdSaveUnitButton').prop('disabled', false);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#cmdSaveUnitButton').prop('disabled', false);
                                 $('#cmdUnitDetailCloseButton').prop('disabled', false);
                             }
@@ -3181,20 +3181,20 @@
                     200: function () {
                         $('#cmdConfirmDeleteUnit').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButtonUnit').prop('disabled', true);
-                        toastr.success("Successfully Deleted");
+                        toastr.success("Update Successful");
 
                         $('#deleteUnitConfirm').modal('hide');
 
                         refreshUnitFlexgrid();
                     },
                     404: function () {
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#cmdConfirmDeleteUnit').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonUnit').prop('disabled', false);
                         $('#deleteUnitConfirm').modal('hide');
                     },
                     400: function () {
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#cmdConfirmDeleteUnit').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonUnit').prop('disabled', false);
                         $('#deleteUnitConfirm').modal('hide');
@@ -3576,7 +3576,7 @@
                             if(id > 0) {
                                 $('#cmdSaveTermButton').prop('disabled', true);
                                 $('#cmdTermDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
 
                                 $('#termEdit').modal('hide');
 
@@ -3584,7 +3584,7 @@
                             } else {
                                 $('#cmdSaveTermButton').prop('disabled', false);
                                 $('#cmdTermDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -3599,19 +3599,19 @@
                             200: function () {
                                 $('#cmdSaveTermButton').prop('disabled', true);
                                 $('#cmdTermDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
 
                                 $('#termEdit').modal('hide');
 
                                 refreshTermFlexgrid();
                             },
                             404: function () {
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#cmdSaveTermButton').prop('disabled', false);
                                 $('#cmdTermDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#cmdSaveTermButton').prop('disabled', false);
                                 $('#cmdTermDetailCloseButton').prop('disabled', false);
                             }
@@ -3649,20 +3649,20 @@
                     200: function () {
                         $('#cmdConfirmDeleteTerm').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButtonTerm').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deleteTermConfirm').modal('hide');
 
                         refreshTermFlexgrid();
                     },
                     404: function () {
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#cmdConfirmDeleteTerm').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonTerm').prop('disabled', false);
                         $('#deleteTermConfirm').modal('hide');
                     },
                     400: function () {
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#cmdConfirmDeleteTerm').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonTerm').prop('disabled', false);
                         $('#deleteTermConfirm').modal('hide');
@@ -4256,7 +4256,7 @@
                             if(id > 0) {
                                 $('#cmdSaveEmployeeButton').prop('disabled', true);
                                 $('#cmdEmployeeDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
 
                                 $('#employeeEdit').modal('hide');
 
@@ -4264,7 +4264,7 @@
                             } else {
                                 $('#cmdSaveEmployeeButton').prop('disabled', false);
                                 $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -4279,19 +4279,19 @@
                             200: function () {
                                 $('#cmdSaveEmployeeButton').prop('disabled', true);
                                 $('#cmdEmployeeDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
 
                                 $('#employeeEdit').modal('hide');
 
                                 refreshEmployeeFlexgrid();
                             },
                             404: function () {
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#cmdSaveEmployeeButton').prop('disabled', false);
                                 $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#cmdSaveEmployeeButton').prop('disabled', false);
                                 $('#cmdEmployeeDetailCloseButton').prop('disabled', false);
                             }
@@ -4329,20 +4329,20 @@
                     200: function () {
                         $('#cmdConfirmDeleteEmployee').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deleteEmployeeConfirm').modal('hide');
 
                         refreshEmployeeFlexgrid();
                     },
                     404: function () {
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#cmdConfirmDeleteEmployee').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', false);
                         $('#deleteEmployeeConfirm').modal('hide');
                     },
                     400: function () {
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#cmdConfirmDeleteEmployee').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonEmployee').prop('disabled', false);
                         $('#deleteEmployeeConfirm').modal('hide');
@@ -5192,7 +5192,7 @@
                             if(id > 0) {
                                 $('#cmdSaveArticleGroupButton').prop('disabled', true);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
 
                                 $('#articleGroupEdit').modal('hide');
 
@@ -5200,7 +5200,7 @@
                             } else {
                                 $('#cmdSaveArticleGroupButton').prop('disabled', false);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -5215,19 +5215,19 @@
                             200: function () {
                                 $('#cmdSaveArticleGroupButton').prop('disabled', true);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
 
                                 $('#articleGroupEdit').modal('hide');
 
                                 refreshArticleGroupFlexgrid();
                             },
                             404: function () {
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#cmdSaveArticleGroupButton').prop('disabled', false);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#cmdSaveArticleGroupButton').prop('disabled', false);
                                 $('#cmdArticleGroupDetailCloseButton').prop('disabled', false);
                             }
@@ -5265,21 +5265,21 @@
                     200: function () {
                         $('#cmdConfirmDeleteArticleGroup').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButtonArticleGroup').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deleteArticleGroupConfirm').modal('hide');
 
                         refreshArticleGroupFlexgrid();
                     },
                     404: function () {
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#cmdConfirmDeleteArticleGroup').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonArticleGroup').prop('disabled', false);
                         $('#deleteArticleGroupConfirm').modal('hide');
 
                     },
                     400: function () {
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#cmdConfirmDeleteArticleGroup').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonArticleGroup').prop('disabled', false);
                         $('#deleteArticleGroupConfirm').modal('hide');
@@ -5886,7 +5886,7 @@
                             if(id > 0) {
                                 $('#cmdSaveArticleButton').prop('disabled', true);
                                 $('#cmdArticleDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully saved");
+                                toastr.success("Save Successful");
 
                                 $('#articleEdit').modal('hide');
 
@@ -5894,7 +5894,7 @@
                             } else {
                                 $('#cmdSaveArticleButton').prop('disabled', false);
                                 $('#cmdArticleDetailCloseButton').prop('disabled', false);
-                                toastr.error("Save unsuccessful");
+                                toastr.error("Internal Server Error");
                             }
                         }
                     });
@@ -5909,19 +5909,19 @@
                             200: function () {
                                 $('#cmdSaveArticleButton').prop('disabled', true);
                                 $('#cmdArticleDetailCloseButton').prop('disabled', true);
-                                toastr.success("Successfully updated");
+                                toastr.success("Update Successful");
 
                                 $('#articleEdit').modal('hide');
 
                                 refreshOtherArticleFlexgrid();
                             },
                             404: function () {
-                                toastr.error("Update request not found");
+                                toastr.error("Not Found");
                                 $('#cmdSaveArticleButton').prop('disabled', false);
                                 $('#cmdArticleDetailCloseButton').prop('disabled', false);
                             },
                             400: function () {
-                                toastr.error("Cannot update record");
+                                toastr.error("Bad Request");
                                 $('#cmdSaveArticleButton').prop('disabled', false);
                                 $('#cmdArticleDetailCloseButton').prop('disabled', false);
                             }
@@ -5959,20 +5959,20 @@
                     200: function () {
                         $('#cmdConfirmDeleteArticle').prop('disabled', true);
                         $('#cmdConfirmDeleteCloseButtonArticle').prop('disabled', true);
-                        toastr.success("Successfully deleted");
+                        toastr.success("Delete Successful");
 
                         $('#deleteArticleConfirm').modal('hide');
 
                         refreshOtherArticleFlexgrid();
                     },
                     404: function () {
-                        toastr.error("Delete request not found");
+                        toastr.error("Not Found");
                         $('#cmdConfirmDeleteArticle').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonArticle').prop('disabled', false);
                         $('#deleteArticleConfirm').modal('hide');
                     },
                     400: function () {
-                        toastr.error("Cannot delete record");
+                        toastr.error("Bad Request");
                         $('#cmdConfirmDeleteArticle').prop('disabled', false);
                         $('#cmdConfirmDeleteCloseButtonArticle').prop('disabled', false);
                         $('#deleteArticleConfirm').modal('hide');

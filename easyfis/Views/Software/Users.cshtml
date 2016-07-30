@@ -146,41 +146,54 @@
                 success: function (Results) {
                     if (Results.length > 0) {
                         for (i = 0; i < Results.length; i++) {
-                            if (Results[i]["IsLocked"] == true) {
-                                users.push({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditUser_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeleteLockUser_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    FullName: Results[i]["FullName"],
-                                    UserName: Results[i]["UserName"],
-                                    Password: Results[i]["Password"],
-                                    UserId: Results[i]["UserId"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+
+                            var canDelete = "@ViewData["CanDelete"]";
+                            var deleteDisabled;
+
+                            if (canDelete == "True") {
+                                deleteDisabled = "";
+                            } else if (canDelete == "False") {
+                                deleteDisabled = "disabled";
                             } else {
-                                users.push({
-                                    EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditUser_OnClick()'><i class='fa fa-edit'></i> Edit</button>",
-                                    DeleteId: "<button class='btn btn-danger btn-xs btn-block' id='' onclick='btnDeleteUser_OnClick()'><i class='fa fa-trash'></i> Delete</button>",
-                                    Id: Results[i]["Id"],
-                                    FullName: Results[i]["FullName"],
-                                    UserName: Results[i]["UserName"],
-                                    Password: Results[i]["Password"],
-                                    UserId: Results[i]["UserId"],
-                                    IsLocked: Results[i]["IsLocked"],
-                                    CreatedById: Results[i]["CreatedById"],
-                                    CreatedBy: Results[i]["CreatedBy"],
-                                    CreatedDateTime: Results[i]["CreatedDateTime"],
-                                    UpdatedById: Results[i]["UpdatedById"],
-                                    UpdatedBy: Results[i]["UpdatedBy"],
-                                    UpdatedDateTime: Results[i]["UpdatedDateTime"]
-                                });
+                                deleteDisabled = "disabled";
                             }
+
+                            var btnDeleteId;
+                            if (Results[i]["IsLocked"] == true) {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteLockUser_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            } else {
+                                btnDeleteId = "<button class='btn btn-danger btn-xs btn-block' onclick='btnDeleteUser_OnClick()' " + deleteDisabled + "><i class='fa fa-trash'></i> Delete</button>";
+                            }
+
+                            var canEdit = "@ViewData["CanEdit"]";
+                            var editDisabled;
+
+                            if (canEdit == "True") {
+                                editDisabled = "";
+                            } else if (canEdit == "False") {
+                                editDisabled = "disabled";
+                            } else {
+                                editDisabled = "disabled";
+                            }
+
+                            console.log(canEdit);
+
+                            users.push({
+                                EditId: "<button class='btn btn-primary btn-xs btn-block' id='' onclick='btnEditUser_OnClick()'" + editDisabled + "><i class='fa fa-edit'></i> Edit</button>",
+                                DeleteId: btnDeleteId,
+                                Id: Results[i]["Id"],
+                                FullName: Results[i]["FullName"],
+                                UserName: Results[i]["UserName"],
+                                Password: Results[i]["Password"],
+                                UserId: Results[i]["UserId"],
+                                IsLocked: Results[i]["IsLocked"],
+                                CreatedById: Results[i]["CreatedById"],
+                                CreatedBy: Results[i]["CreatedBy"],
+                                CreatedDateTime: Results[i]["CreatedDateTime"],
+                                UpdatedById: Results[i]["UpdatedById"],
+                                UpdatedBy: Results[i]["UpdatedBy"],
+                                UpdatedDateTime: Results[i]["UpdatedDateTime"]
+                            });
                         }
                     }
                     NProgress.done();
