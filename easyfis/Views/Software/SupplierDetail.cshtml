@@ -113,6 +113,13 @@
                                                         <textarea class="form-control textarea-custom requiredSupplier" id="artcileSupplier_Particulars" placeholder="Particulars"></textarea>
                                                     </div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">E-mail</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control input-sm input-50 requiredSupplier" id="artcileSupplier_Email" placeholder="E-mail here.." />
+               
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -601,6 +608,7 @@
             supplierObject.ContactPerson = document.getElementById('artcileSupplier_ContactPerson').value;
             supplierObject.TaxNumber = document.getElementById('artcileSupplier_TIN').value;
             supplierObject.Particulars = document.getElementById('artcileSupplier_Particulars').value;
+            supplierObject.EmailAddress = document.getElementById('artcileSupplier_Email').value;
             var supplierData = JSON.stringify(supplierObject);
             return supplierData;
         }

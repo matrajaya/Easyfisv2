@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using System.Diagnostics;
+using System.Net.Mail;
+
 
 namespace easyfis.Controllers
 {
@@ -406,7 +408,7 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
-
+        
         // delete purchase order
         [Authorize]
         [HttpDelete]
@@ -430,6 +432,62 @@ namespace easyfis.Controllers
             }
             catch
             {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+        
+        // send email purchase order
+
+
+        [Authorize]
+        [HttpPut]
+        [Route("api/purchaseOrder/sendEmail")]
+        public HttpResponseMessage sendEmail()
+        {
+            try
+            {              
+                string smtpAddress = "smtp.gmail.com";
+                int portNumber = 587;
+                bool enableSSL = true;
+               
+                
+
+                string emailFrom = "easyfisv2@gmail.com";
+                string password = "@innosoft123";
+                string emailTo = "mahilumphil@gmail.com";
+                string subject = "Hello";
+                string body = "";
+
+               
+
+
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress(emailFrom);
+                    mail.To.Add(emailTo);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+                    // Can set to false, if you are sending pure text.
+
+                    //mail.Attachments.Add(new Attachment("C:\\SomeFile.txt"));
+                    //mail.Attachments.Add(new Attachment("C:\\SomeZip.zip"));
+                    
+
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                    {
+                        smtp.Credentials = new NetworkCredential(emailFrom, password);
+                        smtp.EnableSsl = enableSSL;
+                        smtp.Send(mail);
+                    }
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }

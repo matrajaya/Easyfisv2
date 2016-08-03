@@ -41,6 +41,7 @@
                                 <div class="row">
                                     <div class="col-md-6"></div>
                                     <div class="col-md-6" align="right">
+                                        <button class="btn btn-primary btn-sm" id="" onclick="sendEmailPO_Onclick()"><i class="fa fa-envelope"></i> Send E-mail</button>
                                         <button class="btn btn-primary btn-sm" id="cmdSaveLockPO" onclick="btnSaveLockPO_OnClick()"><i class="fa fa-lock"></i> Lock</button>
                                         @*<button class="btn btn-primary btn-sm" id="cmdSavePO" onclick="btnSavePO_OnClick()"><i class="fa fa-save"></i> Save</button>*@
                                         <button class="btn btn-primary btn-sm" id="cmdEditPO" onclick="btnEditPO_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
@@ -401,6 +402,26 @@
         var btnNextPageGridItemQuery;
         var btnLastPageGridItemQuery;
         var btnCurrentPageGridItemQuery;
+
+        function sendEmailPO_Onclick() {
+            $.ajax({
+                type: "PUT",
+                url: '/api/purchaseOrder/sendEmail',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        toastr.info("Send Email Successful");
+                    },
+                    404: function () {
+                        toastr.error("Not Found");
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                    }
+                }
+            });
+        }
 
         function btnConfrimApplyPOItems_OnClick() {
             $("#btnConfirmApply").prop("disabled", true);
@@ -1406,6 +1427,9 @@
         // ==================
         // Save Lock PO Lines
         // ==================
+
+
+
         function btnSaveLockPO_OnClick() {
             var POObject = new Object();
             var PurchaseOrderId = getParam('PurchaseOrderId');
@@ -1549,8 +1573,11 @@
                         toastr.error("Bad Request");
                     }
                 }
+
             });
+
         }
+        
 
         // =========
         // Print PO
