@@ -42,6 +42,8 @@ namespace easyfis.Controllers
         {
             var articleComponents = from d in db.MstArticleComponents
                                     where d.ArticleId == Convert.ToInt32(articleId)
+                                    && d.ComponentArticleId != Convert.ToInt32(articleId)
+                                    && d.MstArticle1.Kitting == 2
                                     select new Models.MstArticleComponent
                                     {
                                         Id = d.Id,

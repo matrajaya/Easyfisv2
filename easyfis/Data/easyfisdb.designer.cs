@@ -186,7 +186,7 @@ namespace easyfis.Data
     #endregion
 		
 		public easyfisdbDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, mappingSource)
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["easyfisConnectionString"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -4839,6 +4839,8 @@ namespace easyfis.Data
 		
 		private string _ContactPerson;
 		
+		private string _EmailAddress;
+		
 		private string _TaxNumber;
 		
 		private decimal _CreditLimit;
@@ -4850,6 +4852,8 @@ namespace easyfis.Data
 		private decimal _SalvageValue;
 		
 		private string _ManualArticleOldCode;
+		
+		private int _Kitting;
 		
 		private bool _IsLocked;
 		
@@ -4995,6 +4999,8 @@ namespace easyfis.Data
     partial void OnContactNumberChanged();
     partial void OnContactPersonChanging(string value);
     partial void OnContactPersonChanged();
+    partial void OnEmailAddressChanging(string value);
+    partial void OnEmailAddressChanged();
     partial void OnTaxNumberChanging(string value);
     partial void OnTaxNumberChanged();
     partial void OnCreditLimitChanging(decimal value);
@@ -5007,6 +5013,8 @@ namespace easyfis.Data
     partial void OnSalvageValueChanged();
     partial void OnManualArticleOldCodeChanging(string value);
     partial void OnManualArticleOldCodeChanged();
+    partial void OnKittingChanging(int value);
+    partial void OnKittingChanged();
     partial void OnIsLockedChanging(bool value);
     partial void OnIsLockedChanged();
     partial void OnCreatedByIdChanging(int value);
@@ -5593,6 +5601,26 @@ namespace easyfis.Data
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmailAddress", DbType="NVarChar(100)")]
+		public string EmailAddress
+		{
+			get
+			{
+				return this._EmailAddress;
+			}
+			set
+			{
+				if ((this._EmailAddress != value))
+				{
+					this.OnEmailAddressChanging(value);
+					this.SendPropertyChanging();
+					this._EmailAddress = value;
+					this.SendPropertyChanged("EmailAddress");
+					this.OnEmailAddressChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TaxNumber", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
 		public string TaxNumber
 		{
@@ -5709,6 +5737,26 @@ namespace easyfis.Data
 					this._ManualArticleOldCode = value;
 					this.SendPropertyChanged("ManualArticleOldCode");
 					this.OnManualArticleOldCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Kitting", DbType="Int NOT NULL")]
+		public int Kitting
+		{
+			get
+			{
+				return this._Kitting;
+			}
+			set
+			{
+				if ((this._Kitting != value))
+				{
+					this.OnKittingChanging(value);
+					this.SendPropertyChanging();
+					this._Kitting = value;
+					this.SendPropertyChanged("Kitting");
+					this.OnKittingChanged();
 				}
 			}
 		}
@@ -13925,7 +13973,7 @@ namespace easyfis.Data
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OfficialReceiptName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OfficialReceiptName", DbType="NVarChar(50)")]
 		public string OfficialReceiptName
 		{
 			get
@@ -17705,9 +17753,7 @@ namespace easyfis.Data
 			this.SendPropertyChanging();
 			entity.TrnCollection = null;
 		}
-
-        public decimal? Amount { get; set; }
-    }
+	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TrnCollectionLine")]
 	public partial class TrnCollectionLine : INotifyPropertyChanging, INotifyPropertyChanged
