@@ -185,8 +185,8 @@ namespace easyfis.Data
     partial void DeleteTrnStockTransfer(TrnStockTransfer instance);
     #endregion
 		
-		public easyfisdbDataContext() :
-        base(global::System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, mappingSource)
+		public easyfisdbDataContext() : 
+				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
