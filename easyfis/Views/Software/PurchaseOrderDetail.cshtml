@@ -41,7 +41,7 @@
                                 <div class="row">
                                     <div class="col-md-6"></div>
                                     <div class="col-md-6" align="right">
-                                        <button class="btn btn-primary btn-sm" id="" onclick="sendEmailPO_Onclick()"><i class="fa fa-envelope"></i> Send E-mail</button>
+                                        <button class="btn btn-primary btn-sm" id="sendEmailPO" onclick="sendEmailPO_Onclick()"><i class="fa fa-envelope"></i> Send E-mail</button>
                                         <button class="btn btn-primary btn-sm" id="cmdSaveLockPO" onclick="btnSaveLockPO_OnClick()"><i class="fa fa-lock"></i> Lock</button>
                                         @*<button class="btn btn-primary btn-sm" id="cmdSavePO" onclick="btnSavePO_OnClick()"><i class="fa fa-save"></i> Save</button>*@
                                         <button class="btn btn-primary btn-sm" id="cmdEditPO" onclick="btnEditPO_OnClick()"><i class="fa fa-unlock"></i> Unlock</button>
@@ -404,6 +404,8 @@
         var btnCurrentPageGridItemQuery;
 
         function sendEmailPO_Onclick() {
+            document.getElementById("sendEmailPO").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Sending E-mail";
+            $("#sendEmailPO").prop("disabled", true);
             $.ajax({
                 type: "PUT",
                 url: '/api/purchaseOrder/sendEmail',
@@ -411,12 +413,18 @@
                 dataType: "json",
                 statusCode: {
                     200: function () {
+                        document.getElementById("sendEmailPO").innerHTML = "<i class='fa fa-envelope'></i> Send E-mail";
+                        $("#sendEmailPO").prop("disabled", false);
                         toastr.info("Send Email Successful");
                     },
                     404: function () {
+                        document.getElementById("sendEmailPO").innerHTML = "<i class='fa fa-envelope'></i> Send E-mail";
+                        $("#sendEmailPO").prop("disabled", false);
                         toastr.error("Not Found");
                     },
                     400: function () {
+                        document.getElementById("sendEmailPO").innerHTML = "<i class='fa fa-envelope'></i> Send E-mail";
+                        $("#sendEmailPO").prop("disabled", false);
                         toastr.error("Bad Request");
                     }
                 }

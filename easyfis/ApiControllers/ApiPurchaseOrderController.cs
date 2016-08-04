@@ -7,6 +7,14 @@ using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using System.Diagnostics;
 using System.Net.Mail;
+using System.Data;
+using System.IO;
+using System.Web.UI;
+using System.Text;
+using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
+
 
 
 namespace easyfis.Controllers
@@ -408,7 +416,7 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
-        
+
         // delete purchase order
         [Authorize]
         [HttpDelete]
@@ -435,9 +443,8 @@ namespace easyfis.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
-        
-        // send email purchase order
 
+        // send email purchase order    
 
         [Authorize]
         [HttpPut]
@@ -445,47 +452,63 @@ namespace easyfis.Controllers
         public HttpResponseMessage sendEmail()
         {
             try
-            {              
-                string smtpAddress = "smtp.gmail.com";
-                int portNumber = 587;
-                bool enableSSL = true;
-               
-                
-
-                string emailFrom = "easyfisv2@gmail.com";
-                string password = "@innosoft123";
-                string emailTo = "mahilumphil@gmail.com";
-                string subject = "Hello";
-                string body = "";
-
-               
-
-
-                using (MailMessage mail = new MailMessage())
+            {
+                using (StringWriter sw = new StringWriter())
                 {
-                    mail.From = new MailAddress(emailFrom);
-                    mail.To.Add(emailTo);
-                    mail.Subject = subject;
-                    mail.Body = body;
-                    mail.IsBodyHtml = true;
-                    // Can set to false, if you are sending pure text.
-
-                    //mail.Attachments.Add(new Attachment("C:\\SomeFile.txt"));
-                    //mail.Attachments.Add(new Attachment("C:\\SomeZip.zip"));
-                    
-
-                    using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
+                    using (HtmlTextWriter hw = new HtmlTextWriter(sw))
                     {
-                        smtp.Credentials = new NetworkCredential(emailFrom, password);
-                        smtp.EnableSsl = enableSSL;
-                        smtp.Send(mail);
+                        Data.easyfisdbDataContext db = new Data.easyfisdbDataContext();
+
+                        // Company Detail
+                        var companyName = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Company).SingleOrDefault();
+                        var address = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.Address).SingleOrDefault();
+                        var contactNo = (from d in db.MstBranches where d.Id == currentBranchId() select d.MstCompany.ContactNumber).SingleOrDefault();
+                        var branch = (from d in db.MstBranches where d.Id == currentBranchId() select d.Branch).SingleOrDefault();
+
+
+
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("<table width='100%' border='1'");
+                        sb.Append("<tr><td valign='top'><b style='font-size: 30px;'>" + companyName + "</b></td><td align='right' valign='top'><b>Purchase Order</b></td></tr>");
+                        sb.Append("<tr><td valign='top'>" + address + "</td><td align='right' valign='top'>" + branch + "</td></tr>");
+                        sb.Append("</table>");
+
+                        StringReader sr = new StringReader(sb.ToString());
+                        Rectangle rectangle = new Rectangle(PageSize.A3);
+                        Document pdfDoc = new Document(rectangle, 30, 30, 30, 30);
+                        HTMLWorker htmlparser = new HTMLWorker(pdfDoc);
+                        using (MemoryStream memoryStream = new MemoryStream())
+                        {
+                            PdfWriter writer = PdfWriter.GetInstance(pdfDoc, memoryStream);
+                            pdfDoc.Open();
+                            htmlparser.Parse(sr);
+                            pdfDoc.Close();
+                            byte[] bytes = memoryStream.ToArray();
+                            memoryStream.Close();
+
+                            MailMessage mm = new MailMessage("easyfisv2@gmail.com", "mahilumphil@gmail.com");
+                            mm.Subject = "iTextSharp PDF";
+                            mm.Body = "Purchase Order";
+                            mm.Attachments.Add(new Attachment(new MemoryStream(bytes), "iTextSharpPDF.pdf"));
+                            mm.IsBodyHtml = true;
+                            SmtpClient smtp = new SmtpClient();
+                            smtp.Host = "smtp.gmail.com";
+                            smtp.EnableSsl = true;
+                            NetworkCredential NetworkCred = new NetworkCredential();
+                            NetworkCred.UserName = "easyfisv2@gmail.com";
+                            NetworkCred.Password = "@innosoft123";
+                            smtp.UseDefaultCredentials = true;
+                            smtp.Credentials = NetworkCred;
+                            smtp.Port = 587;
+                            smtp.Send(mm);
+                        }
                     }
                 }
 
                 return Request.CreateResponse(HttpStatusCode.OK);
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine(e);
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
