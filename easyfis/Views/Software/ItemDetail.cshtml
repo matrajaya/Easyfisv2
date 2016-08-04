@@ -115,7 +115,7 @@
                                                 <div class="form-group">
                                                     <label class="control-label col-sm-4">Withholding Tax</label>
                                                     <div class="col-sm-8">
-                                                        <div type="text" class="comboBox-wide" id="articleItem_withholdingTax"></div>
+                                                        <div class="comboBox-wide" id="articleItem_withholdingTax"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -134,6 +134,12 @@
                                                     <label class="control-label col-sm-4">Manual Cost</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control input-50 numberField input-sm requiredItem" id="articleItem_manualCost" placeholder="0.00" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label col-sm-4">Kitting</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-70" id="articleItem_Kitting"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -395,15 +401,21 @@
                                 <div class="input-68" id="component_Component"></div>
                             </dd>
                             <dt>Quantity</dt>
-                            <dd><input type="text" class="form-control input-50 numberField input-sm" id="component_Quantity" placeholder="0.00" /></dd>
+                            <dd>
+                                <input type="text" class="form-control input-50 numberField input-sm requiredComponent" id="component_Quantity" placeholder="0.00" />
+                                <input type="hidden" id="component_QuantityValue" placeholder="0.00" />
+                            </dd>
                             <dt>Unit</dt>
                             <dd>
                                 <div class="input-50" id="component_unit"></div>
                             </dd>
                             <dt>Cost</dt>
-                            <dd><input type="text" class="form-control input-50 numberField input-sm requiredComponent" id="component_cost" placeholder="0.00" /></dd>
+                            <dd>
+                                <input type="text" class="form-control input-50 numberField input-sm" id="component_cost" placeholder="0.00" />
+                                <input type="hidden" id="component_costValue" placeholder="0.00" />
+                            </dd>
                             <dt>Amount</dt>
-                            <dd><input type="text" class="form-control input-50 numberField input-sm requiredComponent" id="component_amount" placeholder="0.00" /></dd>
+                            <dd><input type="text" class="form-control input-50 numberField input-sm" id="component_amount" placeholder="0.00" /></dd>
                             <dt>Particulars</dt>
                             <dd><textarea class="form-control textarea-custom requiredComponent" id="component_particulars" placeholder="Particulars"></textarea></dd>
                         </dl>
@@ -411,7 +423,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary btn-sm" id="cmdSaveComponenetButton" onclick="cmdComponenetSaveButton_OnClick()"><i class="fa fa-save"></i> Save</button>
-                    <button id="cmdUnitComponenetDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                    <button id="cmdComponenetDetailCloseButton" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -489,122 +501,135 @@
 
     @Scripts.Render("~/Scripts/Software-js")
     <script type="text/javascript">
-    // ================
-    // Global Variables
-    // ================
-    var items;
-    var dateAcquired;
-    var articleItemGroups;
-    var articleItemUnits;
-    var taxTypes;
-    var accounts;
-    var cboAccountCode;
-    var cboAccount;
-    var cboSaleAccountCode;
-    var cboSaleAccount;
-    var cboCostAccountCode;
-    var cboCostAccount;
-    var cboAccumDepAccountCode;
-    var cboAccumDepAccount;
-    var cboExpenseAccountCode;
-    var cboExpenseAccount;
-    var cboArticleGroupForItem;
-    var cboArticleUnitForItem;
-    var cboArticleInputTaxTypeForItem;
-    var cboArticleOutputTaxTypeForItem;
-    var cboArticleWithholdingTaxTypeForItem;
-    var itemArticleGroupSelectedValue = "";
-    var itemUnitSelectedValue = "";
-    var itemInputTaxSelectedValue = "";
-    var itemOutputTaxSelectedValue = "";
-    var itemWithHoldingTaxSelectedValue = "";
-    var accountSelectedValue = "";
-    var salesAccountSelectedValue = "";
-    var costAccountSelectedValue = "";
-    var accumDepAccountSelectedValue = "";
-    var expenseAccountSelectedValue = "";
-    var IsLocked;
-    var itemId = getParam('ItemId');
+        // ================
+        // Global Variables
+        // ================
+        var items;
+        var dateAcquired;
+        var articleItemGroups;
+        var articleItemUnits;
+        var taxTypes;
+        var accounts;
+        var cboAccountCode;
+        var cboAccount;
+        var cboSaleAccountCode;
+        var cboSaleAccount;
+        var cboCostAccountCode;
+        var cboCostAccount;
+        var cboAccumDepAccountCode;
+        var cboAccumDepAccount;
+        var cboExpenseAccountCode;
+        var cboExpenseAccount;
+        var cboArticleGroupForItem;
+        var cboArticleUnitForItem;
+        var cboArticleInputTaxTypeForItem;
+        var cboArticleOutputTaxTypeForItem;
+        var cboArticleWithholdingTaxTypeForItem;
+        var itemArticleGroupSelectedValue = "";
+        var itemUnitSelectedValue = "";
+        var itemInputTaxSelectedValue = "";
+        var itemOutputTaxSelectedValue = "";
+        var itemWithHoldingTaxSelectedValue = "";
+        var accountSelectedValue = "";
+        var salesAccountSelectedValue = "";
+        var costAccountSelectedValue = "";
+        var accumDepAccountSelectedValue = "";
+        var expenseAccountSelectedValue = "";
+        var IsLocked;
+        var itemId = getParam('ItemId');
+        var cboKitting;
 
-    // =======================
-    // Get URL Parameter Value
-    // =======================
-    function getParam(name) {
-        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-        var regexS = "[\\?&]" + name + "=([^&#]*)";
-        var regex = new RegExp(regexS);
-        var results = regex.exec(window.location.href);
-        if (results == null) {
-            return "";
-        } else {
-            return results[1];
+        // =======================
+        // Get URL Parameter Value
+        // =======================
+        function getParam(name) {
+            name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\?&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(window.location.href);
+            if (results == null) {
+                return "";
+            } else {
+                return results[1];
+            }
         }
-    }
 
-    // ==============================
-    // Get Article for item by its ID
-    // ==============================
-    function getArticleItemById() {
-        var items = new wijmo.collections.ObservableArray;
-        if (document.location.search.length > 0) {
-            NProgress.start();
-            $.ajax({
-                url: '/api/article/' + itemId,
-                cache: false,
-                type: 'GET',
-                contentType: 'application/json; charset=utf-8',
-                data: {},
-                success: function (itemResults) {
-                    if (itemResults != null) {
-                        document.getElementById('Item_UsefulLife').value = itemResults.UsefulLife;
-                        document.getElementById('Item_SalvageValue').value = itemResults.SalvageValue;
-                        document.getElementById('articleItem_code').value = itemResults.ArticleCode;
-                        document.getElementById('articleItem_manualCode').value = itemResults.ManualArticleCode;
-                        document.getElementById('articleItem_item').value = itemResults.Article;
-                        document.getElementById('articleItem_category').value = itemResults.Category;
-                        document.getElementById('articleItem_price').value = itemResults.Price;
-                        document.getElementById('articleItem_particulars').value = itemResults.Particulars;
-                        document.getElementById('articleItem_Inventory').checked = itemResults.IsInventory;
-                        document.getElementById('articleItem_oldManualCode').value = itemResults.ManualArticleOldCode;
-                        document.getElementById('articleItem_manualCost').value = itemResults.Cost;
-                        document.getElementById('createdBy').innerHTML = itemResults.CreatedBy;
-                        document.getElementById('createdDate').innerHTML = itemResults.CreatedDateTime;
-                        document.getElementById('updatedBy').innerHTML = itemResults.UpdatedBy;
-                        document.getElementById('updatedDate').innerHTML = itemResults.UpdatedDateTime;
-                        itemArticleGroupSelectedValue = itemResults.ArticleGroup;
-                        itemUnitSelectedValue = itemResults.Unit;
-                        itemInputTaxSelectedValue = itemResults.InputTax;
-                        itemOutputTaxSelectedValue = itemResults.OutputTax;
-                        itemWithHoldingTaxSelectedValue = itemResults.WTaxType;
-                        accountSelectedValue = itemResults.Account;
-                        salesAccountSelectedValue = itemResults.SalesAccount;
-                        costAccountSelectedValue = itemResults.CostAccount;
-                        accumDepAccountSelectedValue = itemResults.AssetAccount;
-                        expenseAccountSelectedValue = itemResults.ExpenseAccount;
-                        NProgress.done();
+        // ==============================
+        // Get Article for item by its ID
+        // ==============================
+        function getArticleItemById() {
+            var items = new wijmo.collections.ObservableArray;
+            if (document.location.search.length > 0) {
+                NProgress.start();
+                $.ajax({
+                    url: '/api/article/' + itemId,
+                    cache: false,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    data: {},
+                    success: function (itemResults) {
+                        if (itemResults != null) {
+                            document.getElementById('Item_UsefulLife').value = itemResults.UsefulLife;
+                            document.getElementById('Item_SalvageValue').value = itemResults.SalvageValue;
+                            document.getElementById('articleItem_code').value = itemResults.ArticleCode;
+                            document.getElementById('articleItem_manualCode').value = itemResults.ManualArticleCode;
+                            document.getElementById('articleItem_item').value = itemResults.Article;
+                            document.getElementById('articleItem_category').value = itemResults.Category;
+                            document.getElementById('articleItem_price').value = itemResults.Price;
+                            document.getElementById('articleItem_particulars').value = itemResults.Particulars;
+                            document.getElementById('articleItem_Inventory').checked = itemResults.IsInventory;
+                            document.getElementById('articleItem_oldManualCode').value = itemResults.ManualArticleOldCode;
+                            document.getElementById('articleItem_manualCost').value = itemResults.Cost;
+                            document.getElementById('createdBy').innerHTML = itemResults.CreatedBy;
+                            document.getElementById('createdDate').innerHTML = itemResults.CreatedDateTime;
+                            document.getElementById('updatedBy').innerHTML = itemResults.UpdatedBy;
+                            document.getElementById('updatedDate').innerHTML = itemResults.UpdatedDateTime;
+                            itemArticleGroupSelectedValue = itemResults.ArticleGroup;
+                            itemUnitSelectedValue = itemResults.Unit;
+                            itemInputTaxSelectedValue = itemResults.InputTax;
+                            itemOutputTaxSelectedValue = itemResults.OutputTax;
+                            itemWithHoldingTaxSelectedValue = itemResults.WTaxType;
+                            accountSelectedValue = itemResults.Account;
+                            salesAccountSelectedValue = itemResults.SalesAccount;
+                            costAccountSelectedValue = itemResults.CostAccount;
+                            accumDepAccountSelectedValue = itemResults.AssetAccount;
+                            expenseAccountSelectedValue = itemResults.ExpenseAccount;
 
-                        if (itemResults.IsLocked == true) {
-                            document.getElementById('articleItem_manualCode').disabled = true;
-                            document.getElementById('articleItem_item').disabled = true;
-                            document.getElementById('articleItem_category').disabled = true;
-                            document.getElementById('articleItem_price').disabled = true;
-                            document.getElementById('articleItem_particulars').disabled = true;
-                            document.getElementById('articleItem_Inventory').disabled = true;
-                            document.getElementById('articleItem_oldManualCode').disabled = true;
-                            document.getElementById('articleItem_manualCost').disabled = true;
-                            document.getElementById('Item_UsefulLife').disabled = true;
-                            document.getElementById('Item_SalvageValue').disabled = true;
-                            //$('#item_SaveButton').prop('disabled', true);
-                            $('#item_LockButton').prop('disabled', true);
-                            $('#item_UnlockButton').prop('disabled', false);
-                            $('#item_CloseButton').prop('disabled', false);
-                            $('#btnAddUnitConversion').prop('disabled', true);
-                            $('#btnAddPrice').prop('disabled', true);
-                            $('#btnAddComponent').prop('disabled', true);
-                            createInputDateForDateAquired(true, itemResults.DateAcquired);
-                            IsLocked = true;
+                            if (itemResults.Kitting == 0) {
+                                cboKitting.selectedValue = "None";
+                            } else if (itemResults.Kitting == 1) {
+                                cboKitting.selectedValue = "Component";
+                            } else if (itemResults.Kitting == 2) {
+                                cboKitting.selectedValue = "Package";
+                            } else {
+                                cboKitting.itemsSource = 0;
+                            }
 
-                            var canUnLock = "@ViewData["CanUnlock"]";
+                            NProgress.done();
+
+                            if (itemResults.IsLocked == true) {
+                                document.getElementById('articleItem_manualCode').disabled = true;
+                                document.getElementById('articleItem_item').disabled = true;
+                                document.getElementById('articleItem_category').disabled = true;
+                                document.getElementById('articleItem_price').disabled = true;
+                                document.getElementById('articleItem_particulars').disabled = true;
+                                document.getElementById('articleItem_Inventory').disabled = true;
+                                document.getElementById('articleItem_oldManualCode').disabled = true;
+                                document.getElementById('articleItem_manualCost').disabled = true;
+                                document.getElementById('Item_UsefulLife').disabled = true;
+                                document.getElementById('Item_SalvageValue').disabled = true;
+                                //$('#item_SaveButton').prop('disabled', true);
+                                $('#item_LockButton').prop('disabled', true);
+                                $('#item_UnlockButton').prop('disabled', false);
+                                $('#item_CloseButton').prop('disabled', false);
+                                $('#btnAddUnitConversion').prop('disabled', true);
+                                $('#btnAddPrice').prop('disabled', true);
+                                $('#btnAddComponent').prop('disabled', true);
+                                cboKitting.disabled = true;
+                                createInputDateForDateAquired(true, itemResults.DateAcquired);
+                                IsLocked = true;
+
+                                var canUnLock = "@ViewData["CanUnlock"]";
                                 if (canUnLock == "True") {
                                     $("#item_UnlockButton").prop("disabled", false)
                                 } else if (canUnLock == "False") {
@@ -641,7 +666,7 @@
                                 } else {
                                     $("#item_LockButton").prop("disabled", true)
                                 }
-                                
+
                                 var canAdd = "@ViewData["CanAdd"]";
                                 if (canAdd == "True") {
                                     $("#btnAddUnitConversion").prop("disabled", false)
@@ -1161,6 +1186,17 @@
             itemObject.UsefulLife = document.getElementById('Item_UsefulLife').value;
             itemObject.SalvageValue = document.getElementById('Item_SalvageValue').value;
             itemObject.ManualArticleOldCode = document.getElementById('articleItem_oldManualCode').value;
+
+            if (cboKitting.selectedValue == "None") {
+                itemObject.Kitting = 0;
+            } else if (cboKitting.selectedValue == "Component") {
+                itemObject.Kitting = 1;
+            } else if (cboKitting.selectedValue == "Package") {
+                itemObject.Kitting = 2;
+            } else {
+                console.log("No Kitting Selected");
+            }
+
             var data = JSON.stringify(itemObject);
             return data;
         }
@@ -1351,6 +1387,12 @@
                 mask: '99/99/9999'
             });
             getArticleItemById();
+
+            var kittingArray = new Array("None", "Component", "Package");
+            cboKitting = new wijmo.input.ComboBox('#articleItem_Kitting', {
+                itemsSource: kittingArray,
+                isEditable: false,
+            });
 
             if (document.location.search.length == 0) {
                 //$('#item_SaveButton').show();
@@ -1868,6 +1910,7 @@
                                             Quantity: componentResults[i]["Quantity"],
                                             Unit: componentResults[i]["Unit"],
                                             Cost: componentResults[i]["Cost"],
+                                            Amount: componentResults[i]["Quantity"] * componentResults[i]["Cost"],
                                             Particulars: componentResults[i]["Particulars"]
                                         });
                                     }
@@ -1889,7 +1932,7 @@
         function getArticleItemForManualCodeAndComponent() {
             articleComponenetsItems = new wijmo.collections.ObservableArray();
             $.ajax({
-                url: '/api/listArticleByArticleTypeId/1',
+                url: '/api/articleItems/' + itemId,
                 cache: false,
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -1902,7 +1945,8 @@
                                 ItemCode: articleComponentItemsResults[i]["ManualArticleCode"],
                                 ItemComponent: articleComponentItemsResults[i]["Article"],
                                 UnitId: articleComponentItemsResults[i]["UnitId"],
-                                Unit: articleComponentItemsResults[i]["Unit"]
+                                Unit: articleComponentItemsResults[i]["Unit"],
+                                Cost: articleComponentItemsResults[i]["Cost"],
                             });
                         }
                         createCboForItemComponent(articleComponenetsItems);
@@ -1932,10 +1976,15 @@
                     componentUnitSelectedValue = this.selectedItem["Unit"].toString();
                     createCboForManualCode(articleComponenetsItems, this.selectedItem["ItemCode"]);
                     getComponentUnitForComboBox(this.selectedItem["Unit"]);
+                    document.getElementById("component_cost").value = this.selectedItem["Cost"];
+                    document.getElementById("component_costValue").value = this.selectedItem["Cost"];
+                    computeComponentAmount();
                 }
             });
             getComponentUnitForComboBox(cboComponentArticleItem.selectedItem["Unit"]);
             createCboForManualCode(articleComponenetsItems, cboComponentArticleItem.selectedItem["ItemCode"]);
+            document.getElementById("component_cost").value = cboComponentArticleItem.selectedItem["Cost"];
+            document.getElementById("component_costValue").value = cboComponentArticleItem.selectedItem["Cost"];
         }
 
         // ===============
@@ -2007,11 +2056,20 @@
                 backdrop: 'static'
             });
 
+            document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-save'></i> Save"
+            $("#cmdSaveComponenetButton").prop("disabled", false);
+            $("#cmdComponenetDetailCloseButton").prop("disabled", false);
+
             document.getElementById('component_Quantity').value = 0;
+            document.getElementById('component_QuantityValue').value = 0;
             document.getElementById('component_Id').value = 0;
             document.getElementById('component_cost').value = 0;
+            document.getElementById('component_costValue').value = 0;
             document.getElementById('component_amount').value = 0;
             document.getElementById('component_particulars').value = 'NA';
+            document.getElementById('component_amount').disabled = true;
+            document.getElementById('component_cost').disabled = true;
+
             getArticleItemForManualCodeAndComponent();
         }
 
@@ -2024,31 +2082,194 @@
                 backdrop: 'static'
             });
 
+            document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-save'></i> Save"
+            $("#cmdSaveComponenetButton").prop("disabled", false);
+            $("#cmdComponenetDetailCloseButton").prop("disabled", false);
+
             components.editItem(components.currentItem);
             var component = components.currentEditItem;
             document.getElementById('component_Id').value = component.Id;
-            document.getElementById('component_Quantity').value = component.Quantity;
-            document.getElementById('component_cost').value = component.Cost;
-            document.getElementById('component_amount').value = '';
+            document.getElementById('component_Quantity').value = (component.Quantity).toLocaleString();
+            document.getElementById('component_QuantityValue').value = (component.Quantity).toLocaleString();
+            document.getElementById('component_cost').value = (component.Cost).toLocaleString();
+            document.getElementById('component_costValue').value = component.Cost;
+            document.getElementById('component_amount').value = (component.Quantity * component.Cost).toLocaleString();
             document.getElementById('component_particulars').value = component.Particulars;
+
+            document.getElementById('component_cost').disabled = true;
+            document.getElementById('component_amount').disabled = true;
 
             getArticleItemForManualCodeAndComponent();
         }
 
+        // ==========================
+        // Component entry Validation
+        // ==========================
+        function componentEntryValidation() {
+            var isValid = true;
+            $('.requiredComponent').each(function () {
+                if ($.trim($(this).val()) == '') {
+                    isValid = false;
+                    $(this).css({
+                        "border": "1px solid red"
+                    });
+                }
+                else {
+                    $(this).css({
+                        "border": "",
+                    });
+                }
+            });
+            return isValid;
+        }
+
         // ==============
+        // Save component
+        // ==============
+        function cmdComponenetSaveButton_OnClick() {
+            if (componentEntryValidation()) {
+                document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-spinner fa-spin'></i> Saving"
+                $("#cmdSaveComponenetButton").prop("disabled", true);
+                $("#cmdComponenetDetailCloseButton").prop("disabled", true);
+
+                var componentObject = new Object();
+                componentObject.ArticleId = itemId;
+                componentObject.ComponentArticleId = cboComponentArticleItem.selectedItem["ItemId"];
+                componentObject.Quantity = document.getElementById("component_Quantity").value;
+                componentObject.Particulars = document.getElementById("component_particulars").value;
+                var data = JSON.stringify(componentObject);
+
+                if (document.getElementById('component_Id').value == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/addArticleComponent',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        success: function (id) {
+                            if (id > 0) {
+                                toastr.success("Save Successful");
+                                $('#componentEdit').modal('hide');
+                                refreshComponents();
+                            } else {
+                                toastr.error("Internal Server Error");
+                                $('#componentEdit').modal('hide');
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/updateArticleComponent/' + document.getElementById('component_Id').value,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: data,
+                        statusCode: {
+                            200: function () {
+                                toastr.success("Update Successful");
+                                $('#componentEdit').modal('hide');
+                                refreshComponents();
+                            },
+                            404: function () {
+                                toastr.error("Not Found");
+                                $('#componentEdit').modal('hide');
+                            },
+                            400: function () {
+                                toastr.error("Bad Request");
+                                $('#componentEdit').modal('hide');
+                            }
+                        }
+                    });
+                }
+            } else {
+                toastr.error("Invalid Entry");
+            }
+        }
+
+        // ================
         // Delete component
-        // ==============
+        // ================
         function btnDeleteCompoent_OnClick() {
             $('#deleteComponenetConfirm').modal({
                 show: true,
                 backdrop: 'static'
             });
+
+            document.getElementById('cmdConfirmDeleteComponenet').innerHTML = "<i class='fa fa-trash'></i> Delete";
+            $('#cmdConfirmDeleteComponenet').prop('disabled', false);
+            $('#cmdConfirmDeleteComponenetCloseButton').prop('disabled', false);
+        }
+
+        // ========================
+        // Confirm Delete component
+        // ========================
+        function cmdComponenetConfirmDeleteButton_OnClick() {
+            document.getElementById('cmdConfirmDeleteComponenet').innerHTML = "<i class='fa fa-spinner fa-spin'></i> Deleting";
+            $('#cmdConfirmDeleteComponenet').prop('disabled', true);
+            $('#cmdConfirmDeleteComponenetCloseButton').prop('disabled', true);
+
+            components.editItem(components.currentItem);
+            var component = components.currentEditItem;
+            $.ajax({
+                url: '/api/deleteArticleComponent/' + component.Id,
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                statusCode: {
+                    200: function () {
+                        toastr.success("Delete Successful");
+                        $('#deleteComponenetConfirm').modal('hide');
+                        refreshComponents();
+                    },
+                    404: function () {
+                        toastr.error("Not Found");
+                        $('#deleteComponenetConfirm').modal('hide');
+                    },
+                    400: function () {
+                        toastr.error("Bad Request");
+                        $('#deleteComponenetConfirm').modal('hide');
+                    }
+                }
+            });
+        }
+
+        // =================
+        // Compute component
+        // =================
+        function computeComponentAmount() {
+            var quantity = document.getElementById('component_QuantityValue').value;
+            var cost = document.getElementById('component_costValue').value;
+            var roundAmount = Math.round((quantity * cost) * 100) / 100
+
+            document.getElementById('component_amount').value = roundAmount.toLocaleString();
+        }
+
+        // =================
+        // Refresh Component
+        // =================
+        function refreshComponents() {
+            components = new wijmo.collections.CollectionView(getComponent());
+
+            // Flex Grid for Component
+            componentGrid.itemsSource = components;
+            componentGrid.trackChanges = true;
         }
 
         // ==========
         //  Component
         // ==========
         function componentTab() {
+            $('#component_Quantity').keyup(function () {
+                document.getElementById('component_QuantityValue').value = this.value;
+                var quantity = document.getElementById('component_QuantityValue').value;
+                var cost = document.getElementById('component_costValue').value;
+                var roundAmount = Math.round((quantity * cost) * 100) / 100
+
+                document.getElementById('component_amount').value = roundAmount.toLocaleString();
+            });
+
+            document.getElementById('component_cost').disabled = true;
+            document.getElementById('component_amount').disabled = true;
             cboManualCodeArticleItems = new wijmo.input.ComboBox('#component_ManualCode');
             cboComponentArticleItem = new wijmo.input.ComboBox('#component_Component');
             cboComponentUnit = new wijmo.input.ComboBox('#component_unit');
@@ -2109,7 +2330,7 @@
                             },
                             {
                                 "header": "Amount",
-                                "binding": "Account",
+                                "binding": "Amount",
                                 "allowSorting": true,
                                 "width": "2*"
                             },
@@ -2454,7 +2675,7 @@
             });
             priceGrid.trackChanges = true;
         }
-</script>
+    </script>
 
     <!-- ================= -->
     <!-- Inventory Scripts -->
