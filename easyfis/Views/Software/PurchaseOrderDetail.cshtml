@@ -408,7 +408,7 @@
             $("#sendEmailPO").prop("disabled", true);
             $.ajax({
                 type: "PUT",
-                url: '/api/purchaseOrder/sendEmail',
+                url: '/api/purchaseOrder/sendEmail/' + getParam("PurchaseOrderId"),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -825,12 +825,23 @@
                                 } else {
                                     $("#cmdEditPO").prop("disabled", true)
                                 }
+                                
+                                var canPrint = "@ViewData["CanPrint"]";
+                                if (canPrint == "True") {
+                                    $("#cmdPrintPO").prop("disabled", false)
+                                } else if (canPrint == "False") {
+                                    $("#cmdPrintPO").prop("disabled", true)
+                                } else {
+                                    $("#cmdPrintPO").prop("disabled", true)
+                                }
+
                             } else {
                                 document.getElementById('PO_ManualPONumber').disabled = false;
                                 document.getElementById('PO_Remarks').disabled = false;
                                 document.getElementById('PO_RequestNumber').disabled = false;
                                 document.getElementById('PO_ClosePO').disabled = false;
                                 $("#cmdPOLineItemQueryButton").prop("disabled", false);
+                                $("#sendEmailPO").prop("disabled", true);
 
                                 var PODate_Result = Results.PODate
                                 PODate.dispose();
@@ -881,15 +892,6 @@
                                     $("#cmdPOLineAddButton").prop("disabled", true)
                                     $("#cmdPOLineItemQueryButton").prop("disabled", true)
                                 }
-                            }
-
-                            var canPrint = "@ViewData["CanPrint"]";
-                            if (canPrint == "True") {
-                                $("#cmdPrintPO").prop("disabled", false)
-                            } else if (canPrint == "False") {
-                                $("#cmdPrintPO").prop("disabled", true)
-                            } else {
-                                $("#cmdPrintPO").prop("disabled", true)
                             }
 
                             getBranchesForComboBox();
