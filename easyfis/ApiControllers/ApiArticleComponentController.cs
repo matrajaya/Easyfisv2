@@ -26,7 +26,7 @@ namespace easyfis.Controllers
                                         ComponentArticleId = d.ComponentArticleId,
                                         ComponentArticle = d.MstArticle1.Article,
                                         Quantity = d.Quantity,
-                                        Unit = d.MstArticle.MstUnit.Unit,
+                                        Unit = d.MstArticle1.MstUnit.Unit,
                                         Cost = Convert.ToDecimal(d.MstArticle.Cost),
                                         Particulars = d.Particulars,
                                     };
@@ -42,8 +42,6 @@ namespace easyfis.Controllers
         {
             var articleComponents = from d in db.MstArticleComponents
                                     where d.ArticleId == Convert.ToInt32(articleId)
-                                    && d.ComponentArticleId != Convert.ToInt32(articleId)
-                                    && d.MstArticle1.Kitting == 2
                                     select new Models.MstArticleComponent
                                     {
                                         Id = d.Id,
@@ -52,7 +50,7 @@ namespace easyfis.Controllers
                                         ComponentArticleId = d.ComponentArticleId,
                                         ComponentArticle = d.MstArticle1.Article,
                                         Quantity = d.Quantity,
-                                        Unit = d.MstArticle.MstUnit.Unit,
+                                        Unit = d.MstArticle1.MstUnit.Unit,
                                         Cost = Convert.ToDecimal(d.MstArticle1.Cost),
                                         Particulars = d.Particulars,
                                     };
@@ -76,7 +74,7 @@ namespace easyfis.Controllers
                                         ComponentArticleId = d.ComponentArticleId,
                                         ComponentArticle = d.MstArticle1.Article,
                                         Quantity = d.Quantity,
-                                        Unit = d.MstArticle.MstUnit.Unit,
+                                        Unit = d.MstArticle1.MstUnit.Unit,
                                         Cost = Convert.ToDecimal(d.MstArticle1.Cost),
                                         Particulars = d.Particulars,
                                     };
@@ -177,6 +175,8 @@ namespace easyfis.Controllers
             var articles = from d in db.MstArticles.OrderBy(d => d.Article)
                            where d.ArticleTypeId == 1
                            && d.Id != Convert.ToInt32(articleId)
+                           && d.Kitting != 2
+                           && d.IsLocked == true
                            select new Models.MstArticle
                            {
                                Id = d.Id,

@@ -1835,6 +1835,7 @@
         // ==============================
         var components;
         var componentGrid;
+        var componentSelectedValue = "";
         var articleComponenetsItems;
         var cboManualCodeArticleItems;
         var cboComponentArticleItem;
@@ -1970,7 +1971,7 @@
                 displayMemberPath: "ItemComponent",
                 isEditable: false,
                 selectedValuePath: "ItemComponent",
-                // selectedValue: cboManualCodeArticleItems.selectedItem["ItemComponent"].toString(),
+                selectedValue: componentSelectedValue,
                 onSelectedIndexChanged: function () {
                     manualCodeSelectedValue = this.selectedItem["ItemCode"].toString();
                     componentUnitSelectedValue = this.selectedItem["Unit"].toString();
@@ -2059,7 +2060,6 @@
             document.getElementById("cmdSaveComponenetButton").innerHTML = "<i class='fa fa-save'></i> Save"
             $("#cmdSaveComponenetButton").prop("disabled", false);
             $("#cmdComponenetDetailCloseButton").prop("disabled", false);
-
             document.getElementById('component_Quantity').value = 0;
             document.getElementById('component_QuantityValue').value = 0;
             document.getElementById('component_Id').value = 0;
@@ -2070,6 +2070,7 @@
             document.getElementById('component_amount').disabled = true;
             document.getElementById('component_cost').disabled = true;
 
+            componentSelectedValue = "";
             getArticleItemForManualCodeAndComponent();
         }
 
@@ -2099,6 +2100,7 @@
             document.getElementById('component_cost').disabled = true;
             document.getElementById('component_amount').disabled = true;
 
+            componentSelectedValue = component.ComponentArticle;
             getArticleItemForManualCodeAndComponent();
         }
 
