@@ -408,7 +408,7 @@
             $("#sendEmailPO").prop("disabled", true);
             $.ajax({
                 type: "PUT",
-                url: '/api/purchaseOrder/sendEmail/' + getParam("PurchaseOrderId"),
+                url: '/api/purchaseOrder/sendEmail/' + getParam("PurchaseOrderId") + "/" + document.getElementById("PO_Supplier_data").value,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 statusCode: {
@@ -420,7 +420,7 @@
                     404: function () {
                         document.getElementById("sendEmailPO").innerHTML = "<i class='fa fa-envelope'></i> Send E-mail";
                         $("#sendEmailPO").prop("disabled", false);
-                        toastr.error("Not Found");
+                        toastr.error("Email Not Found");
                     },
                     400: function () {
                         document.getElementById("sendEmailPO").innerHTML = "<i class='fa fa-envelope'></i> Send E-mail";
