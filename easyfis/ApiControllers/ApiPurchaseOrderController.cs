@@ -680,33 +680,43 @@ namespace easyfis.Controllers
 
         [Authorize]
         [HttpPut]
-        [Route("api/purchaseOrder/sendEmail/{POId}")]
-        public HttpResponseMessage sendEmail(Int32 POId)
+        [Route("api/purchaseOrder/sendEmail/{POId}/{SupplierId}")]
+        public HttpResponseMessage sendEmail(Int32 POId, Int32 SupplierId)
         {
             try
             {
                 StringWriter sw = new StringWriter();
                 HtmlTextWriter hw = new HtmlTextWriter(sw);
 
-                MailMessage mm = new MailMessage("easyfisv2@gmail.com", "mahilumphil@gmail.com");
-                mm.Subject = "Purchase Order";
-                mm.Body = "Purchase Order";
-                mm.Attachments.Add(new Attachment(new MemoryStream(PODetailReport(POId)), "PurchaseOrder.pdf"));
-                mm.IsBodyHtml = true;
+                var supplierEmailAddress = from d in db.MstArticles where d.Id == SupplierId select d;
 
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.gmail.com";
-                smtp.EnableSsl = true;
+                if (supplierEmailAddress.Any())
+                {
+                    MailMessage mm = new MailMessage("easyfisv2@gmail.com", supplierEmailAddress.FirstOrDefault().EmailAddress);
+                    mm.Subject = "Purchase Order";
+                    mm.Body = "Purchase Order";
+                    mm.Attachments.Add(new Attachment(new MemoryStream(PODetailReport(POId)), "PurchaseOrder.pdf"));
+                    mm.IsBodyHtml = true;
 
-                NetworkCredential NetworkCred = new NetworkCredential();
-                NetworkCred.UserName = "easyfisv2@gmail.com";
-                NetworkCred.Password = "@innosoft123";
-                smtp.UseDefaultCredentials = true;
-                smtp.Credentials = NetworkCred;
-                smtp.Port = 587;
-                smtp.Send(mm);
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.EnableSsl = true;
 
-                return Request.CreateResponse(HttpStatusCode.OK);
+                    NetworkCredential NetworkCred = new NetworkCredential();
+                    NetworkCred.UserName = "easyfisv2@gmail.com";
+                    NetworkCred.Password = "@innosoft123";
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = NetworkCred;
+                    smtp.Port = 587;
+                    smtp.Send(mm);
+
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+              
             }
             catch (Exception e)
             {
