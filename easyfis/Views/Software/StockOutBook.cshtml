@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="stockOutBookGrid" class="grid"></div>
                             </div>
@@ -143,7 +154,20 @@
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
             var stockOutBookCollections = new wijmo.collections.CollectionView(getStockOutBook());
+            stockOutBookCollections.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockOutBookCollections.refresh();
+            });
+            stockOutBookCollections.filter = function (item) {
+                return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
+                || !filterText || (item.AccountCode.toLowerCase().indexOf(filterText) > -1)
+                || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+
+            }
             // Flex Grid
             var stockOutBookGrid = new wijmo.grid.FlexGrid('#stockOutBookGrid');
             stockOutBookGrid.initialize({

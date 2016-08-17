@@ -51,6 +51,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="receivingReceiptBookGrid" class="grid"></div>
                             </div>
@@ -136,14 +147,112 @@
 
             return receivingReceiptBook;
         }
-       
+        var receivingReceiptBookCollections;
+
+        function receivingReceiptBookCSV_OnClick() {
+            
+            var CSV = '';
+            var receivingReceiptBook = [];
+            var fileName = 'ReceivingReceiptBook.CSV';
+
+            for (i = 0; i < receivingReceiptBookCollections.items.length; i++) {
+                receivingReceiptBook.push({
+                    DocumentReference: receivingReceiptBookCollections.items[i].DocumentReference,
+                    AccountCode: receivingReceiptBookCollections.items[i].AccountCode,
+                    Account: receivingReceiptBookCollections.items[i].Account,
+                    Article: receivingReceiptBookCollections.items[i].Article,
+                    DebitAmount: receivingReceiptBookCollections.items[i].DebitAmount,
+                    CreditAmount: receivingReceiptBookCollections.items[i].CreditAmount,
+                    Balance: receivingReceiptBookCollections.items[i].Balance,
+                  
+                });
+            }
+
+            //for (var i = 0; i < symbols.length; i++) {
+            //    CSV += '"' + symbols[i].AccountCode + '"\r\n';
+            //}
+
+            var Headers = [];
+            Headers.push({
+                DocumentReference: "RR Number",
+                AccountCode: "Code",
+                Account: "Account",
+                Article: "Article",
+                DebitAmount: "Debit",
+                CreditAmount: "Credit",
+                Balance: "Balance",
+
+            });
+
+            var header = '';
+            // Rows
+            for (var b in Headers[0]) {
+                header += '"' + Headers[0][b] + '",';
+            }
+
+
+
+            CSV = header + '\r\n';
+            for (var i = 0; i < receivingReceiptBook.length; i++) {
+                var row = '';
+                for (var a in receivingReceiptBook[i]) {
+                    row += '"' + receivingReceiptBook[i][a] + '",';
+                }
+
+                row.slice(0, row.length - 1);
+                CSV += row + '\r\n';
+            }
+
+
+            if (CSV == '') {
+                toastr.error("No data.");
+            } else {
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var blob = new Blob([CSV], { type: 'text/csv;charset=utf-8;' });
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", fileName);
+                    link.style = "visibility:hidden";
+                }
+
+                if (navigator.msSaveBlob) {
+                    link.addEventListener("click", function (event) {
+                        var blob = new Blob([CSV], {
+                            "type": "text/csv;charset=utf-8;"
+                        });
+                        navigator.msSaveBlob(blob, fileName);
+                    }, false);
+                }
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                toastr.success("Dowload successful.");
+            }
+        }
 
         $(document).ready(function () {
             NProgress.start();
             document.getElementById("dateFrom").innerHTML = "Date from " + getParam("StartDate") + " to " + getParam("EndDate");
 
-            var receivingReceiptBookCollections = new wijmo.collections.CollectionView(getReceivingReceiptBook());
+            receivingReceiptBookCollections = new wijmo.collections.CollectionView(getReceivingReceiptBook());
+            receivingReceiptBookCollections.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                receivingReceiptBookCollections.refresh();
+            });
+            receivingReceiptBookCollections.filter = function (item) {
+                return !filterText || (item.DocumentReference.toLowerCase().indexOf(filterText) > -1)
+                || !filterText || (item.AccountCode.toLowerCase().indexOf(filterText) > -1)
+                || !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                || !filterText || (item.Article.toLowerCase().indexOf(filterText) > -1)
+
+            }
             // Flex Grid
             var receivingReceiptBookGrid = new wijmo.grid.FlexGrid('#receivingReceiptBookGrid');
             receivingReceiptBookGrid.initialize({

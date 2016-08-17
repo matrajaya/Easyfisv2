@@ -50,6 +50,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div id="trialBalanceGrid" class="grid"></div>
                             </div>
@@ -174,7 +185,17 @@
 
         $(document).ready(function () {
             var trialBalances = new wijmo.collections.CollectionView(getTrialBalance());
+            trialBalances.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                trialBalances.refresh();
+            });
+            trialBalances.filter = function (item) {
+                return !filterText || (item.Account.toLowerCase().indexOf(filterText) > -1)
+                
+            }
             // Flex Grid
             trialBalanceGrid = new wijmo.grid.FlexGrid('#trialBalanceGrid');
             trialBalanceGrid.initialize({

@@ -50,6 +50,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                            <input type="text" class="form-control input-sm" id="InputFilter" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8"></div>
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <h5>
                                     <span id="branchTitle">branch</span>
@@ -161,6 +172,7 @@
                                 Branch: Results[i]["Branch"],
                                 BranchCode: Results[i]["BranchCode"],
                                 DocumentReference: "<a href='" + docRefLink + "' class='btn btn-default btn-xs btn-block'>" + docRef + " </a>",
+                                DocumentReferenceValue: docRef,
                                 InventoryDate: Results[i]["InventoryDate"],
                                 ArticleId: Results[i]["ArticleId"],
                                 Article: Results[i]["Article"],
@@ -212,7 +224,17 @@
 
         $(document).ready(function () {
             var stockCards = new wijmo.collections.CollectionView(getStockCard());
+            stockCards.canFilter = true;
 
+            var filterText = '';
+            $('#InputFilter').keyup(function () {
+                filterText = this.value.toLowerCase();
+                stockCards.refresh();
+            });
+            stockCards.filter = function (item) {
+                return !filterText || (item.DocumentReferenceValue.toLowerCase().indexOf(filterText) > -1)
+                  
+            }
             // Flex Grid
             stockCardGrid = new wijmo.grid.FlexGrid('#stockCardGrid');
             stockCardGrid.initialize({
