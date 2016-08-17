@@ -201,11 +201,14 @@ namespace easyfis.Controllers
                     STNumberResult = zeroFill(STNumber, 10);
                 }
 
+                var users = from d in db.MstUsers where d.Id == userId select d;
+                var branches = from d in db.MstBranches where d.Id != currentBranchId() && d.CompanyId == users.FirstOrDefault().CompanyId select d;
+
                 Data.TrnStockTransfer newStockTransfer = new Data.TrnStockTransfer();
                 newStockTransfer.BranchId = currentBranchId();
                 newStockTransfer.STNumber = STNumberResult;
                 newStockTransfer.STDate = DateTime.Today;
-                newStockTransfer.ToBranchId = (from d in db.MstBranches where d.Id != currentBranchId() && d.MstUser.Id == userId select d.Id).FirstOrDefault();
+                newStockTransfer.ToBranchId = branches.FirstOrDefault().Id;
                 newStockTransfer.Particulars = "NA";
                 newStockTransfer.ManualSTNumber = "NA";
                 newStockTransfer.PreparedById = userId;

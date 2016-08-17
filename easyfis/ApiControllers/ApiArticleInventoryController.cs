@@ -147,12 +147,19 @@ namespace easyfis.Controllers
                                      {
                                          Id = d.Id,
                                          BranchId = d.BranchId,
+                                         Branch = d.MstBranch.Branch,
                                          ArticleId = d.ArticleId,
+                                         Article = d.MstArticle.Article,
                                          InventoryCode = d.InventoryCode,
                                          Quantity = d.Quantity,
                                          Cost = d.Cost,
                                          Amount = d.Amount,
-                                         Particulars = d.Particulars
+                                         Particulars = d.Particulars,
+                                         ManualArticleCode = d.MstArticle.ManualArticleCode,
+                                         UnitId = d.MstArticle.UnitId,
+                                         Unit = d.MstArticle.MstUnit.Unit,
+                                         Inventory = d.MstArticle.IsInventory,
+                                         Price = d.MstArticle.Price
                                      };
 
             return (Models.MstArticleInventory)articleInventories.FirstOrDefault();
@@ -169,23 +176,22 @@ namespace easyfis.Controllers
                                      && d.MstArticle.IsLocked == true
                                      && d.MstArticle.IsInventory == true
                                      && d.Quantity > 0
-                                     select new Models.MstArticleInventory
+                                     group d by new 
                                      {
-                                         Id = d.Id,
-                                         BranchId = d.BranchId,
-                                         Branch = d.MstBranch.Branch,
                                          ArticleId = d.ArticleId,
                                          Article = d.MstArticle.Article,
-                                         InventoryCode = d.InventoryCode,
-                                         Quantity = d.Quantity,
-                                         Cost = d.Cost,
-                                         Amount = d.Amount,
-                                         Particulars = d.Particulars,
-                                         ManualArticleCode = d.MstArticle.ManualArticleCode,
                                          UnitId = d.MstArticle.UnitId,
                                          Unit = d.MstArticle.MstUnit.Unit,
-                                         Inventory = d.MstArticle.IsInventory,
-                                         Price = d.MstArticle.Price
+                                         ManualArticleCode = d.MstArticle.ManualArticleCode
+                                     } into g
+                                     select new Models.MstArticleInventory
+                                     {
+                                         ArticleId = g.Key.ArticleId,
+                                         Article = g.Key.Article,
+                                         UnitId = g.Key.UnitId,
+                                         Unit = g.Key.Unit,
+                                         ManualArticleCode = g.Key.ManualArticleCode,
+                                         Cost = g.Sum(d => d.Cost),
                                      };
 
             return articleInventories.ToList();

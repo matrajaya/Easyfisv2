@@ -712,7 +712,7 @@
             document.getElementById('stockOutItem_Particulars').value = "NA";
             document.getElementById('stockOutItem_ItemInventoryCode_data').value = item.Id;
             document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = item.InventoryCode;
-            document.getElementById('stockOutItem_Quantity').value = "0";
+            document.getElementById('stockOutItem_Quantity').value = item.Quantity;
             document.getElementById('stockOutItem_Unit_data').value = item.UnitId;
             document.getElementById('stockOutItem_Unit_selectedValue').value = item.Unit;
             document.getElementById('stockOutItem_Cost').value = item.Cost;
@@ -1992,18 +1992,12 @@
                         for (i = 0; i < articleInventoryResults.length; i++) {
                             articleInventories.push({
                                 Id: articleInventoryResults[i]["Id"],
-                                BranchId: articleInventoryResults[i]["BranchId"],
                                 ItemId: articleInventoryResults[i]["ArticleId"],
                                 ItemDescription: articleInventoryResults[i]["Article"],
-                                InventoryCode: articleInventoryResults[i]["InventoryCode"],
-                                Quantity: articleInventoryResults[i]["Quantity"],
                                 Cost: articleInventoryResults[i]["Cost"],
-                                Amount: articleInventoryResults[i]["Amount"],
-                                Particulars: articleInventoryResults[i]["Particulars"],
                                 ItemCode: articleInventoryResults[i]["ManualArticleCode"],
                                 Unit: articleInventoryResults[i]["Unit"],
                                 UnitId: articleInventoryResults[i]["UnitId"]
-
                             });
 
                             //articleItems = new wijmo.collections.ObservableArray();
@@ -2035,11 +2029,9 @@
 
                         createCboForManualCode(articleInventories);
                         createCboForItemDescription(articleInventories);
-                        createCboForInventoryCode(articleInventories);
                     } else {
                         createCboForManualCode(articleInventories);
                         createCboForItemDescription(articleInventories);
-                        createCboForInventoryCode(articleInventories);
                     }
                 }
             });
@@ -2082,12 +2074,10 @@
                     //$("#stockOutItem_BUCUnit_data").val(ManualCodeCollections.items[this.selectedIndex].UnitId);
                     //$("#stockOutItem_BUCUnit_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].Unit);
                     //$("#stockOutItem_Particulars").val(ManualCodeCollections.items[this.selectedIndex].Particulars);
-                    $("#stockOutItem_ItemInventoryCode_data").val(ManualCodeCollections.items[this.selectedIndex].Id);
-                    $("#stockOutItem_ItemInventoryCode_selectedValue").val(ManualCodeCollections.items[this.selectedIndex].InventoryCode);
-                    $("#stockOutItem_Cost").val(ManualCodeCollections.items[this.selectedIndex].Cost);
+                    //$("#stockOutItem_Cost").val(ManualCodeCollections.items[this.selectedIndex].Cost);
 
                     createCboForItemDescription(articleItems);
-                    createCboForInventoryCode(articleItems);
+                    createCboForInventoryCode(ManualCodeCollections.items[this.selectedIndex].ItemId);
 
                     //getStockOutItemUnitForComboBox();
 
@@ -2141,12 +2131,10 @@
                     //$("#stockOutItem_BUCUnit_data").val(ItemDescriptionCollections.items[this.selectedIndex].UnitId);
                     //$("#stockOutItem_BUCUnit_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].Unit);
                     ///$("#stockOutItem_Particulars").val(ItemDescriptionCollections.items[this.selectedIndex].Particulars);
-                    $("#stockOutItem_ItemInventoryCode_data").val(ItemDescriptionCollections.items[this.selectedIndex].Id);
-                    $("#stockOutItem_ItemInventoryCode_selectedValue").val(ItemDescriptionCollections.items[this.selectedIndex].InventoryCode);
-                    $("#stockOutItem_Cost").val(ItemDescriptionCollections.items[this.selectedIndex].Cost);
+                    //$("#stockOutItem_Cost").val(ItemDescriptionCollections.items[this.selectedIndex].Cost);
 
                     createCboForManualCode(articleItems);
-                    createCboForInventoryCode(articleItems);
+                    createCboForInventoryCode(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
 
                     getStockOutItemUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
                     getBUCUnitForComboBox(ItemDescriptionCollections.items[this.selectedIndex].ItemId);
@@ -2190,92 +2178,114 @@
 
                 getStockOutItemUnitForComboBox(ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId);
                 getBUCUnitForComboBox(ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId);
+                createCboForInventoryCode(ItemDescriptionCollections.items[cboItemDescriptionArticleItems.selectedIndex].ItemId);
             }
         }
 
         // ===========================
         // CBO for Item Inventory Code
         // ===========================
-        function createCboForInventoryCode(articleInventories) {
-            var InventoryCodeCollection = new wijmo.collections.CollectionView(articleInventories);
-            var InventoryCodeList = new Array();
-            for (var i = 0; i < InventoryCodeCollection.items.length; i++) {
-                InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
-            }
+        function createCboForInventoryCode(ItemId) {
+            var articleInventories = [];
+            $.ajax({
+                url: '/api/listArticleInventoryByArticleId/' + ItemId,
+                cache: false,
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {},
+                success: function (articleInventoryResults) {
+                    if (articleInventoryResults.length > 0) {
+                        for (i = 0; i < articleInventoryResults.length; i++) {
+                            articleInventories.push({
+                                Id: articleInventoryResults[i]["Id"],
+                                BranchId: articleInventoryResults[i]["BranchId"],
+                                ItemId: articleInventoryResults[i]["ArticleId"],
+                                ItemDescription: articleInventoryResults[i]["Article"],
+                                InventoryCode: articleInventoryResults[i]["InventoryCode"],
+                                Quantity: articleInventoryResults[i]["Quantity"],
+                                Cost: articleInventoryResults[i]["Cost"],
+                                Amount: articleInventoryResults[i]["Amount"],
+                                Particulars: articleInventoryResults[i]["Particulars"],
+                                ItemCode: articleInventoryResults[i]["ManualArticleCode"],
+                                Unit: articleInventoryResults[i]["Unit"],
+                                UnitId: articleInventoryResults[i]["UnitId"]
+                            });
+                        }
 
-            var disabled;
-            if(articleInventories == 0) {
-                disabled = true;
-            } else {
-                if(document.getElementById('StockOut_IsLocked').value == 'true') {
-                    disabled = true;
-                } else {
-                    disabled = false;
-                }
-            }
+                        var InventoryCodeCollection = new wijmo.collections.CollectionView(articleInventories);
+                        var InventoryCodeList = new Array();
+                        for (var i = 0; i < InventoryCodeCollection.items.length; i++) {
+                            InventoryCodeList.push(InventoryCodeCollection.items[i].InventoryCode);
+                        }
 
-            cboInventoryCode.dispose();
-            cboInventoryCode = new wijmo.input.ComboBox('#stockOutItem_ItemInventoryCode', {
-                disabled: disabled,
-                placeholder: "Select Inventory Code",
-                itemsSource: InventoryCodeList,
-                isEditable: false,
-                selectedValue: document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value.toString(),
-                onSelectedIndexChanged: function () {
-                    $("#stockOutItem_ItemId_data").val(InventoryCodeCollection.items[this.selectedIndex].ItemId);
-                    $("#stockOutItem_ItemCode_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].ItemCode);
-                    $("#stockOutItem_ItemDescription_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].ItemDescription);
-                    //$("#stockOutItem_Unit_data").val(InventoryCodeCollection.items[this.selectedIndex].UnitId);
-                    //$("#stockOutItem_Unit_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].Unit);
-                    //$("#stockOutItem_BUCUnit_data").val(InventoryCodeCollection.items[this.selectedIndex].UnitId);
-                    //$("#stockOutItem_BUCUnit_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].Unit);
-                    //$("#stockOutItem_Particulars").val(InventoryCodeCollection.items[this.selectedIndex].Particulars);
-                    $("#stockOutItem_ItemInventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
-                    $("#stockOutItem_ItemInventoryCode_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].InventoryCode);
-                    $("#stockOutItem_Cost").val(InventoryCodeCollection.items[this.selectedIndex].Cost);
+                        var disabled;
+                        if(articleInventories == 0) {
+                            disabled = true;
+                        } else {
+                            if(document.getElementById('StockOut_IsLocked').value == 'true') {
+                                disabled = true;
+                            } else {
+                                disabled = false;
+                            }
+                        }
 
-                    createCboForManualCode(articleInventories);
-                    createCboForItemDescription(articleInventories);
+                        cboInventoryCode.dispose();
+                        cboInventoryCode = new wijmo.input.ComboBox('#stockOutItem_ItemInventoryCode', {
+                            disabled: disabled,
+                            placeholder: "Select Inventory Code",
+                            itemsSource: InventoryCodeList,
+                            isEditable: false,
+                            selectedValue: document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value.toString(),
+                            onSelectedIndexChanged: function () {
+                                $("#stockOutItem_ItemInventoryCode_data").val(InventoryCodeCollection.items[this.selectedIndex].Id);
+                                $("#stockOutItem_ItemInventoryCode_selectedValue").val(InventoryCodeCollection.items[this.selectedIndex].InventoryCode);
+                                $("#stockOutItem_Cost").val( Math.round( InventoryCodeCollection.items[this.selectedIndex].Cost * 100 ) / 100);
 
-                    //getStockOutItemUnitForComboBox();
+                                var stockOut_Quantity = document.getElementById('stockOutItem_Quantity').value;
+                                var stockOut_Cost = document.getElementById('stockOutItem_Cost').value;
 
-                    var stockOut_Quantity = document.getElementById('stockOutItem_Quantity').value;
-                    var stockOut_Cost = document.getElementById('stockOutItem_Cost').value;
+                                document.getElementById('stockOutItem_Amount').value = Math.round(( stockOut_Quantity * stockOut_Cost ) * 100 ) / 100;
+                                if(document.getElementById('stockOutItem_BUCQuantity').value == 0) {
+                                    document.getElementById('stockOutItem_BUCCost').value = 0;
+                                } else {
+                                    document.getElementById('stockOutItem_BUCCost').value = Math.round( stockOut_Cost * 100 ) / 100;
+                                }
+                            }
+                        });
 
-                    document.getElementById('stockOutItem_Amount').value = Math.round(( stockOut_Quantity * stockOut_Cost ) * 100 ) / 100;
-                    if(document.getElementById('stockOutItem_BUCQuantity').value == 0) {
-                        document.getElementById('stockOutItem_BUCCost').value = 0;
+                        if(articleInventories == 0) {
+                            document.getElementById('stockOutItem_ItemId_data').value = "";
+                            document.getElementById('stockOutItem_ItemCode_selectedValue').value = "";
+                            document.getElementById('stockOutItem_ItemDescription_selectedValue').value = "";
+                            document.getElementById('stockOutItem_Unit_data').value = "";
+                            document.getElementById('stockOutItem_Unit_selectedValue').value = "";
+                            //document.getElementById('stockOutItem_BUCUnit_data').value = "";
+                            //document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
+                            //document.getElementById('stockOutItem_Particulars').value = "";
+                            document.getElementById('stockOutItem_ItemInventoryCode_data').value = "";
+                            document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
+                            //document.getElementById('stockOutItem_Cost').value = "";
+                        } else {
+                            document.getElementById('stockOutItem_ItemId_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemId;
+                            document.getElementById('stockOutItem_ItemCode_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemCode;
+                            document.getElementById('stockOutItem_ItemDescription_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemDescription;
+                            //document.getElementById('stockOutItem_Unit_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].UnitId;
+                            //document.getElementById('stockOutItem_Unit_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Unit;
+                            //document.getElementById('stockOutItem_BUCUnit_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].UnitId;
+                            //document.getElementById('stockOutItem_BUCUnit_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Unit;
+                            //document.getElementById('stockOutItem_Particulars').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Particulars;
+                            document.getElementById('stockOutItem_ItemInventoryCode_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Id;
+                            document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].InventoryCode;
+                            //document.getElementById('stockOutItem_Cost').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Cost;
+                            
+                            $("#stockOutItem_Cost").val( Math.round( InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Cost * 100 ) / 100);
+                        }
+
                     } else {
-                        document.getElementById('stockOutItem_BUCCost').value = stockOut_Cost;
+
                     }
                 }
             });
-
-            if(articleInventories == 0) {
-                document.getElementById('stockOutItem_ItemId_data').value = "";
-                document.getElementById('stockOutItem_ItemCode_selectedValue').value = "";
-                document.getElementById('stockOutItem_ItemDescription_selectedValue').value = "";
-                document.getElementById('stockOutItem_Unit_data').value = "";
-                document.getElementById('stockOutItem_Unit_selectedValue').value = "";
-                //document.getElementById('stockOutItem_BUCUnit_data').value = "";
-                //document.getElementById('stockOutItem_BUCUnit_selectedValue').value = "";
-                //document.getElementById('stockOutItem_Particulars').value = "";
-                document.getElementById('stockOutItem_ItemInventoryCode_data').value = "";
-                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = "";
-                //document.getElementById('stockOutItem_Cost').value = "";
-            } else {
-                document.getElementById('stockOutItem_ItemId_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemId;
-                document.getElementById('stockOutItem_ItemCode_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemCode;
-                document.getElementById('stockOutItem_ItemDescription_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].ItemDescription;
-                //document.getElementById('stockOutItem_Unit_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].UnitId;
-                //document.getElementById('stockOutItem_Unit_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Unit;
-                //document.getElementById('stockOutItem_BUCUnit_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].UnitId;
-                //document.getElementById('stockOutItem_BUCUnit_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Unit;
-                //document.getElementById('stockOutItem_Particulars').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Particulars;
-                document.getElementById('stockOutItem_ItemInventoryCode_data').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Id;
-                document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].InventoryCode;
-                //document.getElementById('stockOutItem_Cost').value = InventoryCodeCollection.items[cboInventoryCode.selectedIndex].Cost;
-            }
         }
 
         // =============
@@ -2623,7 +2633,7 @@
             document.getElementById('stockOutItem_ItemId_data').value = '';
             document.getElementById('stockOutItem_ItemCode_selectedValue').value = '';
             document.getElementById('stockOutItem_ItemDescription_selectedValue').value = '';
-            document.getElementById('stockOutItem_Particulars').value = '';
+            document.getElementById('stockOutItem_Particulars').value = 'NA';
             document.getElementById('stockOutItem_ItemInventoryCode_data').value = '';
             document.getElementById('stockOutItem_ItemInventoryCode_selectedValue').value = '';
             document.getElementById('stockOutItem_Quantity').value = 0;
